@@ -1,0 +1,6 @@
+.alert.text-danger {
+  background: #fa594414;
+}
+.alert.text-green {
+  background: rgb(32 183 153 / 9%);
+}

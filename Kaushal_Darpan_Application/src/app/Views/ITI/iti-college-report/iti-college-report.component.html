@@ -1,0 +1,853 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Collage Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI Collage Report</a>-->
+      <a [routerLink]="['/ITICollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Collage Report</a>
+    </div>
+
+
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+
+  <div class="card">
+    <div class="card-body p-5">
+      <form [formGroup]="ReportForm" id="HrMasterFormGroup" class="form-horizontal">
+        <div class="mb-8">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add ITI Details</b>
+          </div>
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name</label>
+              <input type="text" class="form-input disabled" id="ApplicationId" formControlName="txtName" [(ngModel)]="request.CollegeName">
+
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Year</label>
+              <input type="text" class="form-input disabled" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="txtYear" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
+              <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
+                <p *ngIf="!_ReportForm.txtYear.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LokSabha Constituency<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="Loksabha" [(ngModel)]="request.Loksabha" placeholder="Enter LokSabha Constituency">
+              <div *ngIf="isSubmitted && _ReportForm.Loksabha.errors" class="text-danger">
+                <p *ngIf="_ReportForm.Loksabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">
+              <div *ngIf="isSubmitted && _ReportForm.Vidhansabha.errors" class="text-danger">
+                <p *ngIf="_ReportForm.Vidhansabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Available (Bigha/Hector)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="LandAvailable" [(ngModel)]="request.LandAvailable" placeholder="Enter Land Available">
+              <div *ngIf="isSubmitted && _ReportForm.LandAvailable.errors" class="text-danger">
+                <p *ngIf="_ReportForm.LandAvailable.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Distance From Panchayat Samiti HQ(Km)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="PanchayatDis" [(ngModel)]="request.PanchayatDis" placeholder="Enter Distance From Panchayat Samiti HQ">
+              <div *ngIf="isSubmitted && _ReportForm.PanchayatDis.errors" class="text-danger">
+                <p *ngIf="_ReportForm.PanchayatDis.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order No<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="SanctionOrderNo" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">
+              <div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
+                <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order Date<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" id="ApplicationId" formControlName="SanctionOrderDate" [(ngModel)]="request.SanctionOrderDate">
+              <div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
+                <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Santion Order Copy<span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
+
+                <label for="SanctionOrderCopy">
+                  <span>Choose File</span>
+                  {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
+                     *ngIf="this.request.SanctionOrderCopy  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </div>
+            </div>
+
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order No<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="TradeOrderNo" [(ngModel)]="request.TradeOrderNo" placeholder="Enter Trade Sanction Order No">
+              <div *ngIf="isSubmitted && _ReportForm.TradeOrderNo.errors" class="text-danger">
+                <p *ngIf="_ReportForm.TradeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order Date<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" id="ApplicationId" formControlName="TradeOrderDate" [(ngModel)]="request.TradeOrderDate">
+              <div *ngIf="isSubmitted && _ReportForm.TradeOrderDate.errors" class="text-danger">
+                <p *ngIf="_ReportForm.TradeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Trade Santion Order Copy<span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="TradeCopy" type="file" (change)="onFilechange($event,'TradeCopy')" />
+
+                <label for="TradeCopy">
+                  <span>Choose File</span>
+                  {{ request.TradeCopy === '' ? 'No File Chosen' : request.TradeCopy }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.TradeCopy}}"
+                     *ngIf="this.request.TradeCopy  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                         [(ngModel)]="request.ApproachRoad" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                         [(ngModel)]="request.ApproachRoad" value="No" /> No
+                </label>
+
+
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.ApproachRoad.errors" class="text-danger">
+                <p *ngIf="_ReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                         [(ngModel)]="request.InternalRoad" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                         [(ngModel)]="request.InternalRoad" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.InternalRoad.errors" class="text-danger">
+                <p *ngIf="_ReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Water Supply Source<span class="StarMarking">*</span></label>
+              <select class="form-select" name="DistrictID" id="ddlDistrictID" formControlName="WaterSupply"
+                      [(ngModel)]="request.WaterSupply">
+                <option value="">Choose Option</option>
+                <option value="Boring">
+                  Boring
+                </option>
+                <option value="PHED">
+                  PHED
+                </option>
+                <option value="Other">
+                  Other
+                </option>
+              </select>
+
+
+
+              <div *ngIf="isSubmitted&&_ReportForm.WaterSupply.errors" class="text-danger">
+                <p *ngIf="_ReportForm.WaterSupply.errors.required">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                         [(ngModel)]="request.Harvesting" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                         [(ngModel)]="request.Harvesting" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.Harvesting.errors" class="text-danger">
+                <p *ngIf="_ReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
+              <div *ngIf="isSubmitted && _ReportForm.ElectPhaserequired.errors" class="text-danger">
+                <p *ngIf="_ReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId"  (keypress) = "numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
+              <!--<div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
+            <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                         [(ngModel)]="request.ElectPhase" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                         [(ngModel)]="request.ElectPhase" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.ElectPhase.errors" class="text-danger">
+                <p *ngIf="!_ReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection"  (keypress) = "numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
+              <div *ngIf="isSubmitted && _ReportForm.ElectConnection.errors" class="text-danger">
+                <p *ngIf="_ReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+                         [(ngModel)]="request.IsSolarPanel" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+                         [(ngModel)]="request.IsSolarPanel" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.IsSolarPanel.errors" class="text-danger">
+                <p *ngIf="_ReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div *ngIf="request.IsSolarPanel=='Yes'">
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity"  (keypress) = "numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
+              <div *ngIf="isSubmitted && _ReportForm.PanelCapacity.errors" class="text-danger">
+                <p *ngIf="_ReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+                         [(ngModel)]="request.IsBoundaryWall" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+                         [(ngModel)]="request.IsBoundaryWall" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.IsBoundaryWall.errors" class="text-danger">
+                <p *ngIf="_ReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
+
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
+                         [(ngModel)]="request.IsHostel" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
+                         [(ngModel)]="request.IsHostel" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.IsHostel.errors" class="text-danger">
+                <p *ngIf="_ReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+                         [(ngModel)]="request.HostelUtilized" value="Yes" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+                         [(ngModel)]="request.HostelUtilized" value="No" /> No
+                </label>
+              </div>
+              <div *ngIf="isSubmitted && _ReportForm.HostelUtilized.errors" class="text-danger">
+                <p *ngIf="_ReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree"  (keypress) = "numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
+              <div *ngIf="isSubmitted && _ReportForm.NoOfTree.errors" class="text-danger">
+                <p *ngIf="_ReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
+              <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
+              <div *ngIf="isSubmitted && _ReportForm.Remarks.errors" class="text-danger">
+                <p *ngIf="_ReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Front View of Main Campus<span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="FrontPhoto" type="file" (change)="onFilechange($event,'FrontPhoto')" />
+
+                <label for="FrontPhoto">
+                  <span>Choose File</span>
+                  {{ request.FrontPhoto === '' ? 'No File Chosen' : request.FrontPhoto }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FrontPhoto}}"
+                     *ngIf="this.request.FrontPhoto  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Side View of Main Campus<span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="SidePhoto" type="file" (change)="onFilechange($event,'SidePhoto')" />
+
+                <label for="SidePhoto">
+                  <span>Choose File</span>
+                  {{ request.SidePhoto === '' ? 'No File Chosen' : request.SidePhoto }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SidePhoto}}"
+                     *ngIf="this.request.SidePhoto  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </div>
+            </div>
+
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo of Interior View of Main Campus<span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="InteriorPhoto" type="file" (change)="onFilechange($event,'InteriorPhoto')" />
+
+                <label for="InteriorPhoto">
+                  <span>Choose File</span>
+                  {{ request.InteriorPhoto === '' ? 'No File Chosen' : request.InteriorPhoto }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.InteriorPhoto}}"
+                     *ngIf="this.request.InteriorPhoto  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </div>
+            </div>
+
+
+
+            <!--<div class="col-span-3 text-center">-->
+            <!--<button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
+            <!--</div>-->
+
+          </div>
+
+
+        </div>
+      </form>
+
+      <div *ngIf="request.IsNewCollege==1" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">For New Establish ITI</b>
+      </div>
+
+      <form [formGroup]="NewReportFormGroup">
+        <div *ngIf="request.IsNewCollege==1" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Construction Agency<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ConstructionAgency" [(ngModel)]="request.ConstructionAgency" placeholder="Enter Construction Agency">
+            <div *ngIf="isSubmitted && _NewReportForm.ConstructionAgency.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ConstructionAgency.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Project Director<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PDName" [(ngModel)]="request.PDName" placeholder="Enter Name Of Project Director">
+            <div *ngIf="isSubmitted && _NewReportForm.PDName.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.PDName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Project Director<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PDMobile"  (keypress) = "numberOnly($event)" [(ngModel)]="request.PDMobile" placeholder="Enter Mobile No Of Project Director">
+            <div *ngIf="isSubmitted && _NewReportForm.PDMobile.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.PDMobile.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Contractor<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorName" [(ngModel)]="request.ContractorName" placeholder="Enter Name Of Contractor">
+            <div *ngIf="isSubmitted && _NewReportForm.ContractorName.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ContractorName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Contractor<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorMobile"  (keypress) = "numberOnly($event)" maxlength="10" [(ngModel)]="request.ContractorMobile" placeholder="Enter Mobile No Of Contractor">
+            <div *ngIf="isSubmitted && _NewReportForm.ContractorMobile.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ContractorMobile.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Land Disputed<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsDispute" id="IsDispute" formControlName="IsDispute"
+                       [(ngModel)]="request.IsDispute" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsDispute" id="IsDispute" formControlName="IsDispute"
+                       [(ngModel)]="request.IsDispute" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _NewReportForm.IsDispute.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.IsDispute.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
+            <div *ngIf="isSubmitted && _NewReportForm.AdministrativeeOrderNo.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
+            <div *ngIf="isSubmitted && _NewReportForm.AdministrativeOrderDate.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
+
+              <label for="AdministrativeCopy">
+                <span>Choose File</span>
+                {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
+                   *ngIf="this.request.AdministrativeCopy  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+
+
+
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Santion of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="FinancialSanction"  (keypress) = "numberOnly($event)" [(ngModel)]="request.FinancialSanction" placeholder="Enter Financial Sanction">
+            <div *ngIf="isSubmitted && _NewReportForm.FinancialSanction.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.FinancialSanction.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Santion Order Copy<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="FinancialCopy" type="file" (change)="onFilechange($event,'FinancialCopy')" />
+
+              <label for="FinancialCopy">
+                <span>Choose File</span>
+                {{ request.FinancialCopy === '' ? 'No File Chosen' : request.FinancialCopy }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FinancialCopy}}"
+                   *ngIf="this.request.FinancialCopy  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork"  (keypress) = "numberOnly($event)" [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
+            <div *ngIf="isSubmitted && _NewReportForm.PercentCivilWork.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
+            <div *ngIf="isSubmitted && _NewReportForm.PercentCivilDate.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.PercentCivilDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                       [(ngModel)]="request.IsPurposeHall" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                       [(ngModel)]="request.IsPurposeHall" value="No" /> No
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                       [(ngModel)]="request.IsPurposeHall" value="UnAvailable" /> UnAvailable
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _NewReportForm.IsPurposeHall.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.IsPurposeHall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                       [(ngModel)]="request.IsMainITI" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                       [(ngModel)]="request.IsMainITI" value="No" /> No
+              </label>
+
+            </div>
+            <div *ngIf="isSubmitted && _NewReportForm.IsMainITI.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.IsMainITI.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                       [(ngModel)]="request.IsBuildingTaken" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                       [(ngModel)]="request.IsBuildingTaken" value="No" /> No
+              </label>
+
+            </div>
+            <div *ngIf="isSubmitted && _NewReportForm.IsBuildingTaken.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.IsBuildingTaken.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div *ngIf="request.IsBuildingTaken=='Yes'">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
+            <div *ngIf="isSubmitted && _NewReportForm.TakenOverDate.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.TakenOverDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Operating Own Building/Camp<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsOperatingOwn" id="IsOperatingOwn" formControlName="IsOperatingOwn"
+                       [(ngModel)]="request.IsOperatingOwn" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsOperatingOwn" id="IsBuildingTaken" formControlName="IsOperatingOwn"
+                       [(ngModel)]="request.IsOperatingOwn" value="No" /> No
+              </label>
+
+            </div>
+            <div *ngIf="isSubmitted && _NewReportForm.IsOperatingOwn.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.IsOperatingOwn.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [(ngModel)]="request.ShilanyasDate">
+            <div *ngIf="isSubmitted && _NewReportForm.ShilanyasDate.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ShilanyasDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Dignitary Name<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasName" [(ngModel)]="request.ShilanyasName" placeholder="Enter Dignitary Name">
+            <div *ngIf="isSubmitted && _NewReportForm.ShilanyasName.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ShilanyasName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Dignitary Post<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasPost" [(ngModel)]="request.ShilanyasPost" placeholder="Enter Post Name">
+            <div *ngIf="isSubmitted && _NewReportForm.ShilanyasPost.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.ShilanyasPost.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="LokarpanDate" [(ngModel)]="request.LokarpanDate">
+            <div *ngIf="isSubmitted && _NewReportForm.LokarpanDate.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.LokarpanDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Dignitary Name<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanName" [(ngModel)]="request.LokarpanName" placeholder="Enter Dignitary Name">
+            <div *ngIf="isSubmitted && _NewReportForm.LokarpanName.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.LokarpanName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Post<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanPost" [(ngModel)]="request.LokarpanPost" placeholder="Enter Post Name">
+            <div *ngIf="isSubmitted && _NewReportForm.LokarpanPost.errors" class="text-danger">
+              <p *ngIf="_NewReportForm.LokarpanPost.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.IsOperatingOwn=='Yes'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Land Allotment Letter<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="AllotmentLetter" type="file" (change)="onFilechange($event,'AllotmentLetter')" />
+
+              <label for="FinancialCopy">
+                `
+                <span>Choose File</span>
+                {{ request.AllotmentLetter === '' ? 'No File Chosen' : request.AllotmentLetter }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AllotmentLetter}}"
+                   *ngIf="this.request.AllotmentLetter  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.IsOperatingOwn=='Yes'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Building Plan Copy<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="BuildingPlanCopy" type="file" (change)="onFilechange($event,'BuildingPlanCopy')" />
+
+              <label for="BuildingPlanCopy">
+                <span>Choose File</span>
+                {{ request.BuildingPlanCopy === '' ? 'No File Chosen' : request.BuildingPlanCopy }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.BuildingPlanCopy}}"
+                   *ngIf="this.request.BuildingPlanCopy  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Photo Of Front View Dome<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="DomeViewCopy" type="file" (change)="onFilechange($event,'DomeViewCopy')" />
+
+              <label for="DomeViewCopy">
+                <span>Choose File</span>
+                {{ request.DomeViewCopy === '' ? 'No File Chosen' : request.DomeViewCopy }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.DomeViewCopy}}"
+                   *ngIf="this.request.DomeViewCopy  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+
+      </form>
+
+      <div class="card-footer text-center">
+
+        <button type="button" class="btn bg-success text-white mt-6" (click)="SaveData()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetrow()">Reset</button>
+        <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
+
+      </div>
+    </div>
+
+  </div>
+
+
+

@@ -1,0 +1,218 @@
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration List (ITI Pass Out)</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <!--<a href="/AddITITimeTable" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit ITI Time Table</a>-->
+      <a [routerLink]="['/AddITITimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">Apprenticeship Registration (ITI Pass Out)</a>
+    </div>
+  </div>
+  <!--<a href="/ItiTimeTable" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>-->
+  <a (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+<!-- Page Title End -->
+<!-- Form Start -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> आई.टी.आई ग्रेजुएट के पंजीरण की सूची</b>
+
+        <div class="flex justify-between items-center">
+          <!--<div class="flex items-center me-3">
+            <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>-->
+            <!--<div class="flex fileUploader bg-gray-100">
+
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>-->
+          <!--</div>-->
+          <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelData()"><i class="ti ti-download"></i> Sample Format Semester</a> -->
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>
+        </div>
+      </div>
+      <form [formGroup]="ITITimeTableForm">
+        <div class="mb-3">
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                संस्थान का नाम : <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="InstituteID" [(ngModel)]="request.InstituteID">
+                <option value="0">--Select--</option>
+
+                <option *ngFor="let row of ExamShiftList" [value]="row.ID">{{row.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_TimeTableForm.InstituteID.errors" class="text-danger">
+                <p *ngIf="!_TimeTableForm.InstituteID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर पंजीकरण करने की तिथि <span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" [(ngModel)]="request.RegDate" formControlName="RegDate">
+              <div *ngIf="isSubmitted && _TimeTableForm.RegDate.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.RegDate.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">पंजीकरण संख्या: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Registration Count" [(ngModel)]="request.RegCount" formControlName="RegCount">
+              <div *ngIf="isSubmitted && _TimeTableForm.RegCount.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.RegCount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Remarks" [(ngModel)]="request.Remarks" formControlName="Remarks">
+              <div *ngIf="isSubmitted && _TimeTableForm.Remarks.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.Remarks.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="fileStudentPhoto2">
+                एक्सेल अपलोड करें
+              </label>
+              <div class="flex fileUploader">
+                <input [disabled]="sSOLoginDataModel.RoleID != 97" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo')" formControlName="FileNameDoc">
+                <label for="fileStudentPhoto2">
+                  <span>Choose File</span>
+                  {{request.Dis_FilePath === '' ? 'No File Choosen' : request.Dis_FilePath}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}"
+                     *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
+                </div>
+              </div>
+            </div>
+            <div *ngIf="sSOLoginDataModel.RoleID == 97" class="flex justify-center items-center">
+              <button *ngIf="!IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="saveData()">Submit</button>
+              <button *ngIf="!IsUpdateCase" type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+                <i class="ti ti-refresh"></i> Reset
+              </button>
+              <!--<button *ngIf="IsUpdateCase" type="submit" class="btn bg-info text-white" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>-->
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5">Trade and Subject List </b>
+  </div>
+
+  <div class="overflow-auto">
+    <table class="w-full table-border" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+        <tr>
+          <th>#</th>
+          <th class="text-left">Trade Name</th>
+          <th class="text-left">Subject Name</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of request.TradeSubjectDataModel; let idx = index;">
+          <td class="text-left">{{idx+1}}</td>
+          <td class="text-left">{{row.TradeName}}</td>
+          <td class="text-left">{{row.SubjectName}}</td>
+          <td class="text-center">
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+              <i class="ti ti-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div> -->
+
+</div>
+<!-- Form End -->
+
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <div class="text-center">
+          <b><i class="ti ti-plus"></i>Excel Data</b>
+        </div>
+        <a href="javascript:void(0);" style="display:none" class="btn bg-info text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export To Excel</a>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Trade</th>
+                  <th class="text-left">Semester</th>
+                  <th class="text-left">Exam Date</th>
+                  <th class="text-left">Shift</th>
+                  <th class="text-left">Subject</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of ImportExcelList; let idx = index;">
+                  <td class="text-left">{{idx+1}}</td>
+                  <td align="left">{{row.TradeName}}</td>
+                  <td align="left">{{row.SemesterID}}</td>
+                  <td align="left">{{row.ExamDate}}</td>
+                  <td align="left">{{row.ShiftID}}</td>
+                  <td align="left">{{row.SubjectName}}</td>
+
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+        </div>
+        <div>
+          <button type="submit"
+                  id="btnSave"
+                  class="btn bg-info text-white mt-6" (click)="SaveImportExcelData()">
+            Submit
+          </button>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+

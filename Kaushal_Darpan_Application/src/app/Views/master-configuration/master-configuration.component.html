@@ -1,0 +1,28 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Master Configuration</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Master Configuration</a>
+    </div>
+  </div>
+</div>
+<div class="flex items-center tabMenu">
+  <a href="javascript:void(0);" class="active" *ngFor="let tab of tabs; let i = index"
+     [class.active]="i === selectedTabIndex"
+     [class.disabled]="!completedTabs[i] && i !== selectedTabIndex"
+     (click)="selectTab(i)">
+    <i class="{{tab.TabIcon}}"></i>
+    <span>
+      {{ tab.TabName }}
+    </span>
+  </a>
+</div>
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels">
+    <div class="tab-content card tab-panels">
+      <ng-container #tabContent></ng-container>
+    </div>
+  </div>
+</div>

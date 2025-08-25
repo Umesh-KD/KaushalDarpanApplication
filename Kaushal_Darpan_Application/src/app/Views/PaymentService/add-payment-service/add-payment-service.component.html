@@ -1,0 +1,272 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/add-payment-service" class="text-sm font-medium text-slate-700" aria-current="page">Add Payment Service</a>
+    </div>
+  </div>
+  <a routerLink="/payment-service" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
+      class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<form [formGroup]="PaymentServiceForm">
+  <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+    <div class="card">
+      <div class="card-body p-5">
+        <div class="mb-8">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Payment Service</b>
+          </div>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme Id: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter SchemeId" formControlName="SchemeId" [(ngModel)]="request.SchemeId">
+                <div *ngIf="isSubmitted && paymentServiceForm.SchemeId.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.SchemeId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Service Name: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Service Name" formControlName="ServiceName" [(ngModel)]="request.ServiceName">
+                <div *ngIf="isSubmitted && paymentServiceForm.ServiceName.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.ServiceName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Service Id: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Service Id" formControlName="ServiceId" [(ngModel)]="request.ServiceId">
+                <div *ngIf="isSubmitted && paymentServiceForm.ServiceId.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.ServiceId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sub Service Id: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Sub Service Id" formControlName="SubServiceId" [(ngModel)]="request.SubServiceId">
+                <div *ngIf="isSubmitted && paymentServiceForm.SubServiceId.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.SubServiceId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Merchant Code: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Merchant Code" formControlName="MerchantCode" [(ngModel)]="request.MerchantCode">
+                <div *ngIf="isSubmitted && paymentServiceForm.MerchantCode.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.MerchantCode.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Revenue Head: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Revenue Head" formControlName="RevenueHead" [(ngModel)]="request.RevenueHead">
+                <div *ngIf="isSubmitted && paymentServiceForm.RevenueHead.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.RevenueHead.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Comm Type: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Comm Type" formControlName="CommType" [(ngModel)]="request.CommType">
+                <div *ngIf="isSubmitted && paymentServiceForm.CommType.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.CommType.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office Code: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Office Code" formControlName="OfficeCode" [(ngModel)]="request.OfficeCode">
+                <div *ngIf="isSubmitted && paymentServiceForm.OfficeCode.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.OfficeCode.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Service URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Service URL" formControlName="ServiceURL" [(ngModel)]="request.ServiceURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.ServiceURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.ServiceURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Encryption Key: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Encryption Key" formControlName="EncryptionKey" [(ngModel)]="request.EncryptionKey">
+                <div *ngIf="isSubmitted && paymentServiceForm.EncryptionKey.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.EncryptionKey.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Verify URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Verify URL" formControlName="VerifyURL" [(ngModel)]="request.VerifyURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.VerifyURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.VerifyURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Flag: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Flag" formControlName="Flag" [(ngModel)]="request.Flag">
+                <div *ngIf="isSubmitted && paymentServiceForm.Flag.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.Flag.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">View Name: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter View Name" formControlName="ViewName" [(ngModel)]="request.ViewName">
+                <div *ngIf="isSubmitted && paymentServiceForm.ViewName.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.ViewName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Controller Name: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Controller Name" formControlName="ControllerName" [(ngModel)]="request.ControllerName">
+                <div *ngIf="isSubmitted && paymentServiceForm.ControllerName.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.ControllerName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Janaadhaar Scheme Code: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Janaadhaar Scheme Code" formControlName="JanaadhaarSchemeCode" [(ngModel)]="request.JanaadhaarSchemeCode">
+                <div *ngIf="isSubmitted && paymentServiceForm.JanaadhaarSchemeCode.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.JanaadhaarSchemeCode.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">CHECKSUM KEY: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter CHECKSUM KEY" formControlName="CHECKSUMKEY" [(ngModel)]="request.CHECKSUMKEY">
+                <div *ngIf="isSubmitted && paymentServiceForm.CHECKSUMKEY.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.CHECKSUMKEY.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">REDIRECT URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter REDIRECT URL" formControlName="REDIRECTURL" [(ngModel)]="request.REDIRECTURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.REDIRECTURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.REDIRECTURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Web Service URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Web Service URL" formControlName="WebServiceURL" [(ngModel)]="request.WebServiceURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.WebServiceURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.WebServiceURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Success Failed URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Success Failed URL" formControlName="SuccessFailedURL" [(ngModel)]="request.SuccessFailedURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.SuccessFailedURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.SuccessFailedURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Success URL: <span
+                    class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Success URL" formControlName="SuccessURL" [(ngModel)]="request.SuccessURL">
+                <div *ngIf="isSubmitted && paymentServiceForm.SuccessURL.errors" class="text-danger">
+                    <p *ngIf="paymentServiceForm.SuccessURL.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Student Status: <span
+                    class="StarMarking">*</span></label>
+
+                <select class="form-select" id="ddlMaritalStatus" formControlName="ExamStudentStatus" [(ngModel)]="request.ExamStudentStatus">
+                    <option value="0">Select option</option>
+                    <option value="1">select for exam</option>
+                    <option value="2">rligible for exam</option>
+                </select>
+                <div *ngIf="isSubmitted&&paymentServiceForm.ExamStudentStatus.errors" class="text-danger">
+                    <p *ngIf="!paymentServiceForm.ExamStudentStatus.errors.DropdownValidators">
+                        <i aria-hidden="true"></i>This field is required .!
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Course Type: <span
+                    class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlMaritalStatus" formControlName="CourseType" [(ngModel)]="request.CourseType">
+                    <option value="0">Select (Course Type)</option>
+                    <option *ngFor="let item of CourseTypeList" value="{{item.StreamTypeID}}">{{item.StreamType}}</option>            
+                </select>
+                <div *ngIf="isSubmitted&&paymentServiceForm.CourseType.errors" class="text-danger">
+                    <p *ngIf="!paymentServiceForm.CourseType.errors.DropdownValidators">
+                        <i aria-hidden="true"></i>This field is required .!
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <label class="block">Is Live</label>
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.IsLive"
+                         formControlName="IsLive" onchange="js_StatusYesNoActiveInActive(this);">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle"></span>
+                  </span>
+                </label>
+              </div>
+
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <label class="block">Is Kiosk</label>
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.IsKiosk"
+                         formControlName="IsKiosk" onchange="js_StatusYesNoActiveInActive(this);">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle"></span>
+                  </span>
+                </label>
+              </div>
+
+            <div class="col-span-4 text-center">
+              <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i
+                  class="ti ti-refresh"></i> Reset</button>
+            </div>
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</form>

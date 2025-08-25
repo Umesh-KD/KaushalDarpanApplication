@@ -1,0 +1,60 @@
+.HideShow {
+display:none;
+}
+.ThInputBoxIcon {
+display:none;
+}
+input {
+width:100% !important;
+}
+
+.tableMinInput50 tr input {
+  min-width: 35px !important
+}
+
+.tableMinInput50 td, .tableMinInput50 th, .tableMinInput50 input {
+  font-size: 12px !important;
+      padding:3px !important
+}
+.tableMinInput50 input {
+    text-align:center;
+}
+td.stickyColumn {
+    position:sticky;
+    left:0px;
+    z-index:999;
+    background:#fff !important;
+}
+
+th.stickyColumn {
+    position:sticky;
+    left:0px;
+    z-index:999;
+}
+
+
+.red_td input {
+  border: 1px solid red !important;
+}
+
+
+.MatSelect, .MatSelect:focus {
+  display: block;
+  width: 100%;
+  border-radius: 0.25rem;
+  --tw-border-opacity: 1;
+  border: 1px solid rgb(229 231 235 / var(--tw-border-opacity)) !important;
+  --tw-bg-opacity: 1;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.mdc-data-table__cell {
+  padding: 16px;
+}

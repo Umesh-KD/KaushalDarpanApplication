@@ -1,0 +1,16 @@
+.hideDteInfoPage
+ {
+    display:none !important;
+}
+/*.dteHeader {
+  position: sticky;
+  top: 0px;
+  z-index: 9;
+}*/
+.dteHeader, .dteFooter {
+ /* background: #373737 !important;*/
+  background: #fff !important;
+}
+.contentArea {
+  min-height: calc(100vh - 385px);
+}

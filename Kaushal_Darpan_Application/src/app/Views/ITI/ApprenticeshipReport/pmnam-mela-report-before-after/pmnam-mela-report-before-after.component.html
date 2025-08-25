@@ -1,0 +1,90 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">PMNAM Mela Report (Before/After)</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">PMNAM Mela Report</a>
+    </div>
+  </div>
+  <a  routerLink="/PMNAM-MelaReportBeforeAfter-List"  class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>PMNAM Before Report</b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3" id="HrMasterFormGroup">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              दिनांक: <span class="StarMarking">*</span>
+            </label>
+            <input type="date" class="form-input"  [(ngModel)]="BeforeDate"
+                   [disabled]="IsDisable">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या: <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter number of registered establishments" [(ngModel)]="EstablishmentsRegisterNoBefore" [disabled]="IsDisable" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Number of Seat registered" [(ngModel)]="NumberofSeatBefore" [disabled]="IsDisable" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर नियोंजित शिक्षुओं की संख्या: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Number of Apprentices Appointed" [(ngModel)]="NumberofEmployedStudentBefore" [disabled]="IsDisable" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>PMNAM After Report</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3" id="ApprenticeshipAfterReport">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              दिनांक: <span class="StarMarking">*</span>
+            </label>
+            <input type="date" class="form-input" [(ngModel)]="AfterDate"
+                   [disabled]="IsDisable">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या: <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter number of registered establishments" [disabled]="IsDisable" [(ngModel)]="EstablishmentsRegisterNoAfter" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Number of Seat registered" [disabled]="IsDisable" [(ngModel)]="NumberofSeatAfter" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर नियोंजित शिक्षुओं की संख्या: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Number of Apprentices Appointed" [disabled]="IsDisable" [(ngModel)]="NumberofEmployedStudentAfter" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3" *ngIf="SSOLoginDataModel.RoleID == 97 && IsDisable==false">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="Submit()">{{buttonLabel}}</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearAll()">Clear</button>
+          </div>
+        </div>
+
+      </div>
+
+      </div>
+  </div>
+</div>

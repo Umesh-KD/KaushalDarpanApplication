@@ -1,0 +1,204 @@
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <form [formGroup]="searchssoform">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Search Application  </b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Challan No.<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Challan No" formControlName="ChallanNo" [(ngModel)]="searchRequest.ChallanNo">
+            <div *ngIf="isSubmitted && _searchssoform.ChallanNo.errors" class="text-danger">
+              <p *ngIf="_searchssoform.ChallanNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="isShowGrid">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+    </div>
+    <div class="overflow-x-auto " *ngIf="isShowGrid">
+
+
+      <div class="overflow-x-auto w-full">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <!--<th class="text-left">Department</th>-->
+              <th class="text-left">Student Name</th>
+              <th class="text-left">Father Name</th>
+              <th class="text-left">Mother Name</th>
+              <th class="text-left">Email</th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Status</th>
+              <th class="text-Center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of encryptedRows ; let idx=index;">
+           
+              <td>{{idx+1}}</td>
+              <!--<td>{{row.Department}}</td>-->
+              <td>{{row.StudentName}}</td>
+              <td>{{row.FatherName}}</td>
+              <td>{{row.MotherName}}</td>
+              <td>{{row.Email}}</td>
+              <td>{{row.ApplicationNo}}</td>
+              <td>{{row.Status}}</td>
+              <td class="text-center">
+
+                <!--<a *ngIf="row.IsFinalSubmit == 2 " [routerLink]="row.DepartmentID==_EnumDepartment.BTER?'/PreviewForm':'/Itipreviewform'" [queryParams]="{AppID:row.ApplicationID}"
+                   class="btn bg-info text-white btn-sm">
+                  View
+                </a>-->
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsAllotmentDownload==1"
+                   (click)="DownloadAllotmentLetter(row.ApplicationID)"
+                   class="btn bg-info text-white btn-sm"> Download Letter</a>-->
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit !== 2"
+                   [routerLink]="'/Applicationform'" [queryParams]="{AppID:row.ApplicationID}"
+                   class="btn bg-info text-white btn-sm"> Complete Application</a>-->
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true"
+                   [routerLink]="'/PreviewForm'" [queryParams]="{AppID:row.encryptedApplicationID}"
+                   class="btn bg-info text-white btn-sm">View & Make Payment</a>
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI"
+    [routerLink]="'/Itipreviewform'" [queryParams]="{AppID:row.ApplicationID}"
+    class="btn bg-info text-white btn-sm"> View</a>-->
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2"
+                   [routerLink]="'/ApplicationFormTab'" [queryParams]="{AppID:row.ApplicationID}"
+                   class="btn bg-info text-white btn-sm" element.style="cursor: pointer;"> Complete Application</a>-->
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true"
+                   [routerLink]="'/Itipreviewform'" [queryParams]="{AppID:row.encryptedApplicationID}"
+                   class="btn bg-info text-white btn-sm">View & Make Payment</a>
+
+                <!--<button *ngIf="row.StatusID==_EnumVerfication.Notified" class="btn bg-success text-white btn-sm" (click)="openModal(modal_Open,row.ApplicationID)" type="button">Action</button>-->
+              </td>
+            </tr>
+            <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No Pending Fee Found</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- end row-->
+
+
+
+    </div>
+  </div>
+</div>
+
+
+<!--Modal Popup Start-->
+<ng-template #modal_viewPaper let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Paper List of {{SemesterName}}
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">SubjectName</th>
+                <th class="text-left">SubjectCode</th>
+                <th class="text-left">SubjectCategory </th>
+                <th class="text-left">StreamSubjectcode</th>
+                <th class="text-left">IsTheory</th>
+                <th class="text-left">IsPractical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of StudentSubjectList ; let idx=index; ">
+                <td>{{idx+1}}</td>
+                <td>{{item.SubjectName}}</td>
+                <td>{{item.SubjectCode}}</td>
+                <td>{{item.SubjectCategory}}</td>
+                <td>{{item.StreamSubjectcode}}</td>
+                <td> {{item.strIsTheory}}</td>
+                <td>{{item.strIsPractical}}</td>
+              </tr>
+              <tr *ngIf="StudentSubjectList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_viewTransaction let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;View Transaction Details
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Prn No</th>
+                <th class="text-left">Fee For</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Status Message</th>
+                <th class="text-left">Trans Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StudenetTranList ; let idx=index;">
+                <td>{{idx+1}}</td>
+                <td>
+                  {{row.PRN}}
+                </td>
+                <td>{{row.FeeFor}}</td>
+                <td>{{row.TransAmt}}</td>
+                <td>{{row.TransctionStatus}}</td>
+                <td>{{row.TransctionMSG}}</td>
+                <td>{{row.TransctionDate}}</td>
+              </tr>
+              <tr *ngIf="StudenetTranList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--End Modal Popup Start-->

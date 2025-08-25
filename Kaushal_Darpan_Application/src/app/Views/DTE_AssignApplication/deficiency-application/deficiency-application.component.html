@@ -1,0 +1,296 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Applications</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Applications</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application ID</label>
+          <input type="text" class="form-input" placeholder="Application ID" id="ApplicationID" [(ngModel)]="searchRequest.ApplicationID">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Applicant Name</label>
+          <input type="text" class="form-input" placeholder="Applicant Name" id="StudentName" [(ngModel)]="searchRequest.StudentName">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile Number</label>
+          <input type="text" class="form-input" placeholder="Mobile Number" id="MobileNo" [(ngModel)]="searchRequest.MobileNumber">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.Gender">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.DistrictID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of DistrictList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+        </div>
+
+        <!-- ------------------------------------------------------------------------------------------------------------------------------------------ -->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category A:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryA">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">
+              {{item.CasteCategoryName}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category B:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryB">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryBlist" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category C:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryC">
+            <option value="0">Choose Option</option>
+            <option value="69">Physically Handicapped (PH)</option>
+            <option value="70">None</option>
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category D:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryD">
+            <option value="0">Choose Option</option>
+          </select>
+        </div>-->
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData(1)">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">
+          <i class="ti ti-refresh"></i>
+          Reset
+        </button>
+      </div>
+
+
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetAllData(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!-- <div class="">
+    <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+  </div> -->
+      <div>
+        <a href="javascript:void(0);" (click)="NotifyCandidate()" class="btn bg-success btn-sm text-white" *ngIf="UrlStatus=='total-deficiency'">
+          <i class="fa fa-envelope"></i> Notify Candidate
+        </a>
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th class="text-left" *ngIf="UrlStatus=='total-deficiency'">
+              <input *ngIf="ApplicationList?.length>0" type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                     [checked]="AllSelect"
+                     (change)="checkboxthView_checkboxchange($event.target.checked)">
+
+            </th>
+            <th>Sr.No.</th>
+
+            <th class="text-left cursorHand {{sortColumn=='ApplicationNo' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('ApplicationNo')">
+              Application ID
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ApplicationID'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand {{sortColumn=='StudentName' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('StudentName')">
+              Applicant Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <!--<th class="text-left cursorHand {{sortColumn=='FatherName' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('FatherName')">
+    Father Name
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th>
+
+
+  <th class="text-left cursorHand {{sortColumn=='MotherName' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('MotherName')">
+    Mother Name
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th>-->
+            <!--<th class="text-left cursorHand {{sortColumn=='DOB' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('DOB')">
+    DOB
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th>
+
+  <th class="text-left cursorHand {{sortColumn=='Gender' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('Gender')">
+    Gender
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th>-->
+
+            <th class="text-left cursorHand {{sortColumn=='CategoryA' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryA')">
+              Cat.A(By Candidate)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand {{sortColumn=='CategoryA' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryA')">
+              Cat.A(By Checker)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand {{sortColumn=='CategoryB' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryB')">
+              Cat.B
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand {{sortColumn=='CategoryC' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('CategoryC')">
+              Cat.C
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Gender'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <!--<th class="text-left">Cat.D</th>-->
+            <th class="text-left cursorHand {{sortColumn=='Gender' && sortOrder=='ASC'?'cursorHandDown':'cursorHandUP'}}" title="Click to sorting" (click)="sortData('StatusLabel')">
+              Status
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='StatusLabel'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-center">View</th>
+            <th class="text-center">Download</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ApplicationList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td *ngIf="UrlStatus=='total-deficiency'">
+              <input type="checkbox" name="MarkCheck"
+                     [(ngModel)]="row.Selected" />
+            </td>
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>
+  <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MotherName}}</td>
+  <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB}}</td>
+  <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Gender}}</td>-->
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryA}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryAbyChecker}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryB}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryC}}</td>
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryE}}  </td>-->
+            <!--<td>{{row.StatusLabel}}</td>-->
+            <td [ngSwitch]="row.Action">
+              <span *ngSwitchCase="1">Pending</span>
+              <span *ngSwitchCase="2">Accepted</span>
+              <span *ngSwitchCase="3">Deficiency Marked</span>
+              <span *ngSwitchCase="4">Reject</span>
+              <span *ngSwitchCase="5">Deficiency Uploaded</span>
+              <span *ngSwitchCase="6">Notified</span>
+              <span *ngSwitchDefault>{{ row.StatusLabel || row.Name }}</span>
+            </td>
+
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Download" (click)="openViewApplicationPopup(row.ApplicationID,row.SSOID)"><i class="ti ti-eye"></i></a>
+              </div>
+
+            </td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="row.IsFinalSubmit==2" href="javascript:void(0);" title="Download" (click)="DownloadApplicationForm(row.ApplicationID,row.FolderName)"><i class="ti ti-download"></i></a>
+              </div>
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a (click)="Onrouting(row.ApplicationID)" title="Document Mark"><i class="ti ti-check"></i></a>
+                
+              </div>
+            </td>
+
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <!--<div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>-->
+
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ApplicationList?.length }} of {{ApplicationList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetAllData(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="ApplicationList[0]?.TotalRecords==0" (change)="GetAllData(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetAllData(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+
+
+    <!--end pagination-->
+  </div>
+</div>
+<!-- end row -->
+
+
+<app-application-view #ViewAppModal></app-application-view>
+
+

@@ -1,0 +1,158 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Generate Roll No ITI</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Generate Roll No ITI</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+      </div>-->
+      <form [formGroup]="SearchForm">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.InstituteID" formControlName="ddlInstitute" (change)="GetTradeListDDL()">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade</label>
+            <select class="form-select" id="StreamID" formControlName="ddlStream" [(ngModel)]="searchRequest.StreamID">
+              <option value="0">--Choose Option--</option>
+              <option *ngFor="let item of ItiTradeList" value="{{item.Id}}">
+                {{item.TradeName}}
+              </option>
+            </select>
+          </div>-->
+
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Verifier Status</label>
+            <select class="form-select" id="VerifierStatusID" [(ngModel)]="searchRequest.VerifierStatus"
+                    formControlName="VerifierStatusID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of VerifierStatusDDL" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+          </div> -->
+          <!--<div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">
+              Search
+            </button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+          </div>-->
+
+        </div>
+
+      </form>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div class="">
+          <!--<select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>-->
+        </div>
+        <div class="">
+          <!--<label for="initial value">Initial value</label>-->
+          <!--<input class="form-input" style="width:100px" maxlength="4" type="text"
+          id="LandlineStd" placeholder="Initial value" [(ngModel)]="InitialValue" title="Please Enter Starting Value of Roll No." >-->
+          <button type="button" class="btn bg-info text-white" (click)="SaveAllData()">Generate Roll No</button>
+
+        </div>
+        <div class="">
+          <button class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP)" type="button">Publish (Generated Roll No)</button>
+
+        </div>
+
+
+
+        <div class="flex items-center">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+
+        </div>
+
+
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Student Name </th>
+              <th class="text-left">Father's Name</th>
+              <th class="text-left">Institute Name   </th>
+              <th class="text-left">Trade Name </th>
+              <th class="text-left">Year Name</th>
+              <th class="text-left">Enrollment No</th>
+              <th class="text-left">Roll No</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StudentList | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td class="text-left">{{row.StudentName}} </td>
+              <td class="text-left">{{row.FatherName}}</td>
+              <td class="text-left">{{row.InstituteName}}</td>
+              <td class="text-left">{{row.StreamName}}</td>
+              <td class="text-left">{{row.SemesterName}}</td>
+              <td class="text-left">{{row.EnrollmentNo}}</td>
+              <td class="text-left">{{row.RollNumber}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="StudentList.length === 0">
+          No Data Found
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

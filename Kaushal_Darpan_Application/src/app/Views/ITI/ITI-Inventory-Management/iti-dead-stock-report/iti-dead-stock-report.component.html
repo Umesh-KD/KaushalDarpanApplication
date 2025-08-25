@@ -1,0 +1,190 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dead Stock Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Items Master</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<div *ngIf="(sSOLoginDataModel.RoleID === EnumRole.StoreKeeper || sSOLoginDataModel.RoleID === EnumRole.Admin || sSOLoginDataModel.RoleID === EnumRole.Principal) && this.sSOLoginDataModel.InstituteID === 0">-->
+        <!--<div>
+          <a [routerLink]="['/iti-add-item-master']"
+             class="btn bg-success btn-sm text-white">
+            <i class="ti ti-plus"></i> Add New
+          </a>
+        </div>-->
+
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Institute / Building Name:
+          </label>
+          <select class="form-select" [(ngModel)]="Searchrequest.CollegeId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment:
+          </label>
+          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.EquipmentsId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Institute / Building Name</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Equipment</th>
+            <th class="text-left">Initial Quantity</th>
+            <th class="text-left">Available Quantity</th>
+            <th class="text-left">Price Per Unit</th>
+            <th class="text-left">Total Price</th>
+            <th class="text-left">Auctioned</th>
+            <th class="text-left">Working</th>
+            <th class="text-left">Not Working</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <!--{{ItemMasterList | json}}-->
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <!--@if(item.InstituteID == 0 && item.OfficeID == 2){
+      <td align="left">
+        DTE training: T2 (establishment)
+      </td>
+      }
+      @if(item.InstituteID == 0 && item.OfficeID == 1){
+      <td align="left">
+        RCVT ADMIN
+      </td>
+      }
+      @else if(item.InstituteID > 0){-->
+            <td align="left">
+              {{item.CollegeName}}
+            </td>
+            <!--}-->
+
+            <td align="left">{{item.ItemCategoryName}}</td>
+            <td align="left">{{item.EquipmentsName}}</td>
+            <td align="left">{{item.InitialQuantity}}</td>
+            <td align="left">
+              @if (item.Status != 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT) && sSOLoginDataModel.InstituteID == item.InstituteID)
+              {
+              <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)">
+                {{item.AvailableQuantity}}
+              </span>
+              }
+              @else if (item.Status == 0 && sSOLoginDataModel.InstituteID > 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT))
+              {
+              <span>
+                {{item.AvailableQuantity}}
+              </span>
+              }  @else if (sSOLoginDataModel.InstituteID == 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT))
+              {
+              <span>
+                {{item.AvailableQuantity}}
+              </span>
+              } @else if (sSOLoginDataModel.InstituteID != 0 || sSOLoginDataModel.RoleID != EnumRole.StoreKeeper_NCVT && sSOLoginDataModel.RoleID != EnumRole.StoreKeeper_SCVT)
+              {
+              <span>
+                {{item.AvailableQuantity}}
+              </span>
+              }
+            </td>
+            <td align="left">{{item.PricePerUnit}}</td>
+            <td align="left">{{item.TotalPrice}}</td>
+            <td align="left">{{item.Actioned}}</td>
+            <td align="left">{{item.Working}}</td>
+            <td align="left">{{item.NotWorking}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+
+
+                <!--<button class="btn btn-sm text-white" *ngIf="sSOLoginDataModel.RoleID != EnumRole.StoreKeeper_NCVT"
+                  (click)="item.Status <= 0 && (item.InstituteID == sSOLoginDataModel.InstituteID && item.OfficeID == sSOLoginDataModel.OfficeID ) ? btnEquipmentsStatus_OnClick(item) : null"
+                  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                  [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+
+            {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : 'Pending' }}
+          </button>-->
+
+                <button class="btn btn-sm text-white"
+                        *ngIf="sSOLoginDataModel.RoleID != EnumRole.StoreKeeper_NCVT
+                && !(item.Status == 0 || item.Status == '0' || item.Status == null)"
+                        (click)="item.Status <= 0 && (item.InstituteID == sSOLoginDataModel.InstituteID && item.OfficeID == sSOLoginDataModel.OfficeID ) ? btnEquipmentsStatus_OnClick(item) : null"
+                        [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
+                        [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+
+                  {{ item.Status == 1 ? 'Approved' : 'Pending' }}
+                </button>
+
+
+                @if(item.Status == 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT)){
+                <a [routerLink]="['/iti-edit-item-master']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
+                }
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

@@ -1,0 +1,405 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Nodal Officer Exminer Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/nodal-officer-exminer-report" class="text-sm font-medium text-slate-700" aria-current="page">Nodal Officer Exminer Report</a>
+    </div>
+  </div>
+  <a routerLink="/nodal-officer-exminer-report-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <form [formGroup]="AddNodalOfficerExminerFromGroup">
+      <div class="card-body p-5">
+        <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> प्रायोगिक परीक्षा नोडल अधिकारी द्वारा सदस्य सचिव जिला परीक्षा संचालन समिति को भेजी जाने वाली रिपोर्ट का प्रपत्र</b>
+          <span class="text-danger"> (*) Marking Fields Mandatory</span>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">अपने क्षेत्राधिकार के परीक्षा केन्द्रो का नाम <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.ExamCenterUnderYourAreaID" formControlName="ddlExamCenterUnderYourAreaID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of ExamCenterList" [value]="item.ID">{{item.Name}}</option>
+            </select>-->
+        <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.ddlExamCenterUnderYourAreaID.errors" class="text-danger">
+         <p *ngIf="!_AddNodalOfficerExminerFromGroup.ddlExamCenterUnderYourAreaID.errors.DropdownValidators">
+         <i aria-hidden="true"></i>This field is required .!
+         </p>
+        </div>-->
+        <!--</div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रश्न पत्र किस माध्यम से भेजा गया: <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtMediumQuestionPaperSent" name="txtMediumQuestionPaperSent" formControlName="txtMediumQuestionPaperSent" [(ngModel)]="formData.MediumQuestionPaperSent" placeholder="Medium Question Paper Sent" />-->
+        <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtMediumQuestionPaperSent.errors" class="text-danger">
+        <p *ngIf="_AddNodalOfficerExminerFromGroup.txtMediumQuestionPaperSent.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+        </div>-->
+        <!--</div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date <span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="txtDate" name="txtDate" formControlName="txtDate" [(ngModel)]="formData.Date" />-->
+        <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtDate.errors" class="text-danger">
+         <p *ngIf="_AddNodalOfficerExminerFromGroup.txtDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+        </div>-->
+        <!--</div>
+        </div>-->
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light  mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Details of Coordinator</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या सभी कार्डिनेटर समय पर पहुँच गये (विवरण दें) <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="CoordinatorReachOnTime" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="CoordinatorReachOnTime" /> No</label>
+            </div>
+          </div>-->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> क्या सभी कार्डिनेटर समय पर पहुँच गये (विवरण दें) <span class="StarMarking">*</span> </label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" (change)="CoordinatorReachOnTimeCondition()" class="me-1" name="RadioCoordinatorReachOnTime" formControlName="RadioCoordinatorReachOnTime"
+                                                           [(ngModel)]="formData.CoordinatorReachOnTime" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" (change)="CoordinatorReachOnTimeCondition()" class="me-1" name="RadioCoordinatorReachOnTime" formControlName="RadioCoordinatorReachOnTime" [(ngModel)]="formData.CoordinatorReachOnTime" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioCoordinatorReachOnTime.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioCoordinatorReachOnTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+             </div>-->
+          </div>
+
+
+
+          <div *ngIf="!isDetailsOfCoordinator">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">How Many Coordinator Not Reached: <span class="StarMarking">*</span></label>
+            <input oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" type="text" class="form-input" id="txtCoordinatorNotReached" name="txtCoordinatorNotReached" formControlName="txtCoordinatorNotReached" [(ngModel)]="formData.CoordinatorNotReached" placeholder="Enter No. of Coordinator Not Reached" />
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtCoordinatorNotReached.errors" class="text-danger">
+              <p *ngIf="!_AddNodalOfficerExminerFromGroup.txtCoordinatorNotReached.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="!isDetailsOfCoordinator">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reason: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtReason" name="txtReason" formControlName="txtReason" [(ngModel)]="formData.Reason" placeholder="Enter Reason" />
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtReason.errors" class="text-danger">
+              <p *ngIf="_AddNodalOfficerExminerFromGroup.txtReason.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supporting Document: <span class="StarMarking">*</span></label>
+            <div class="flex">
+
+
+              <input type="file" class="form-input" style="padding: 5px;" id="fileUploadGuidlinesDoc" (change)="onFilechange($event)" formControlName="SDfile">
+
+              <label style="width: 210px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 5px;" for="fileUploadGuidlinesDoc">
+
+                {{UploadedPaperFileName === '' ? 'No File Choosen' : UploadedPaperFileName}}
+              </label>
+              <div class="flex">
+                <a href="{{ appsettingConfig.StaticFileRootPathURL + 'ITINodalOfficerExminerReport/' + UploadedPaperFileName}}" *ngIf="UploadedPaperFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+              <!-- Validation Messages -->
+              <!--<div *ngIf="SDfileControl.invalid && (SDfileControl.dirty || SDfileControl.touched)" class="text-red-500 text-sm mt-1">
+    <div *ngIf="SDfileControl.hasError('required')">File is required.</div>
+  </div>-->
+              <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.SDfile.errors" class="text-danger">
+                <p *ngIf="_AddNodalOfficerExminerFromGroup.SDfile.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supporting Document: <span class="StarMarking">*</span></label>
+            <input class="form-input" type="file" />
+          </div>-->
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <div class="flex justify-between flex-wrap">
+            <b class="text-1xl-5 me-3"><i class="ti ti-plus"></i> क्या आप द्वारा परीक्षा केन्द्रो का निरीक्षण किया (यदि हाँ तो निम्न विवरण दें)</b>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" (change)="InspectTheExaminationCentersCondition()" class="me-1" name="RadioInspectTheExaminationCenters" formControlName="RadioInspectTheExaminationCenters" [(ngModel)]="formData.InspectTheExaminationCenters" [value]="true" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" (change)="InspectTheExaminationCentersCondition()" class="me-1" name="RadioInspectTheExaminationCenters" formControlName="RadioInspectTheExaminationCenters" [(ngModel)]="formData.InspectTheExaminationCenters" [value]="false" /> No</label>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="isInspectTheExaminationCenters" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षा केन्द्र का नाम <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="InspectExaminationCentersData.NameOfExaminationCentreID" formControlName="ddlNameOfExaminationCentreID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of NameOfExaminationCentreList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.ddlNameOfExaminationCentreID.errors" class="text-danger">
+             <p *ngIf="!_AddNodalOfficerExminerFromGroup.ddlNameOfExaminationCentreID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+             </p>
+             </div>-->
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">निरीक्षण का दिनांक व समय <span class="StarMarking">*</span></label>
+            <input type="datetime-local" class="form-input" id="txtMediumQuestionPaperSent" name="txtDateAndTimeOfInspection" formControlName="txtDateAndTimeOfInspection" [(ngModel)]="InspectExaminationCentersData.DateAndTimeOfInspection" />
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtDateAndTimeOfInspection.errors" class="text-danger">
+             <p *ngIf="_AddNodalOfficerExminerFromGroup.txtDateAndTimeOfInspection.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कुल कितने परीक्षार्थी नामांकित थेः <span class="StarMarking">*</span></label>
+            <input oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" type="text" class="form-input" id="txtTotalNumberOfCandidatesEnrolled" name="txtTotalNumberOfCandidatesEnrolled" formControlName="txtTotalNumberOfCandidatesEnrolled" [(ngModel)]="InspectExaminationCentersData.TotalNumberOfCandidatesEnrolled" placeholder="Enter Total Number Of Candidates Enrolled" />
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtTotalNumberOfCandidatesEnrolled.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.txtTotalNumberOfCandidatesEnrolled.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">निरीक्षण के समय कितने परीक्षार्थी परीक्षा देकर घर जा चुके थेः <span class="StarMarking">*</span></label>
+            <input oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" type="text" class="form-input" id="txtCandidatesHadLeftAfterCompletingTheExam" name="txtCandidatesHadLeftAfterCompletingTheExam" formControlName="txtCandidatesHadLeftAfterCompletingTheExam" [(ngModel)]="InspectExaminationCentersData.CandidatesHadLeftAfterCompletingTheExam" placeholder="Enter Candidates Had Left After Completing The Exam" />
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtCandidatesHadLeftAfterCompletingTheExam.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.txtCandidatesHadLeftAfterCompletingTheExam.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जॉब कितने बनाये गये थे <span class="StarMarking">*</span></label>
+            <input oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" type="text" class="form-input" id="txtJobsCreated" name="txtJobsCreated" formControlName="txtJobsCreated" [(ngModel)]="InspectExaminationCentersData.JobsCreated" placeholder="Enter Jobs Created" />
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtJobsCreated.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.txtJobsCreated.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जॉब कितने बनाये जा रहे थे <span class="StarMarking">*</span></label>
+            <input oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" type="text" class="form-input" id="txtJobsBeingCreated" name="txtJobsBeingCreated" formControlName="txtJobsBeingCreated" [(ngModel)]="InspectExaminationCentersData.JobsBeingCreated" placeholder="Enter Jobs Being Created" />
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtJobsBeingCreated.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.txtJobsBeingCreated.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">viva voce लिया गया था <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioVivaConducted" formControlName="RadioVivaConducted" [(ngModel)]="InspectExaminationCentersData.VivaConducted" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioVivaConducted" formControlName="RadioVivaConducted" [(ngModel)]="InspectExaminationCentersData.VivaConducted" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioVivaConducted.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioVivaConducted.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+             </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रायोगिक प्रश्न का line diagram बनाया था <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioLineDiagramPrepared" formControlName="RadioLineDiagramPrepared" [(ngModel)]="InspectExaminationCentersData.LineDiagramPrepared" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioLineDiagramPrepared" formControlName="RadioLineDiagramPrepared" [(ngModel)]="InspectExaminationCentersData.LineDiagramPrepared" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioLineDiagramPrepared.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioLineDiagramPrepared.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+             </div>-->
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">रीडिंग ली गई थीः <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioReadingTaken" formControlName="RadioReadingTaken" [(ngModel)]="InspectExaminationCentersData.ReadingTaken" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioReadingTaken" formControlName="RadioReadingTaken" [(ngModel)]="InspectExaminationCentersData.ReadingTaken" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioReadingTaken.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioReadingTaken.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+             </div>-->
+          </div>
+
+
+          <div class="pt-4">
+            <button id="btnAdd" class="btn btn-sm bg-info text-white" (click)="AddInspectExaminationCenters()" type="button">Add</button>
+          </div>
+        </div>
+
+        <div *ngIf="isInspectTheExaminationCenters" class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">परीक्षा केन्द्र का नाम </th>
+                <th class="text-left">निरीक्षण का दिनांक व समय </th>
+                <th class="text-left">कुल कितने परीक्षार्थी नामांकित थे</th>
+                <th class="text-left">निरीक्षण के समय कितने परीक्षार्थी परीक्षा देकर घर जा चुके थे</th>
+                <th class="text-left">जॉब कितने बनाये गये थे</th>
+                <th class="text-left">जॉब कितने बनाये जा रहे थे </th>
+                <th class="text-left">Viva Voce लिया गया था </th>
+                <th class="text-left">प्रायोगिक प्रश्न का Line Diagram बनाया था</th>
+                <th class="text-left">रीडिंग ली गई थी</th>
+                <th style="width:125px;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of InspectExaminationCentersList; let idx = index;">
+                <td>{{idx+1}}</td>
+                <td>{{row.NameOfExaminationCentre}}</td>
+                <td>{{row.DateAndTimeOfInspection}}</td>
+                <td>{{row.TotalNumberOfCandidatesEnrolled}}</td>
+                <td>{{row.CandidatesHadLeftAfterCompletingTheExam}}</td>
+                <td>{{row.JobsCreated}}</td>
+                <td>{{row.JobsBeingCreated}}</td>
+                <td>{{row.VivaConducted}}</td>
+                <td>{{row.LineDiagramPrepared}}</td>
+                <td>{{row.ReadingTaken}}</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0);" (click)="DeleteRow(row)" title="Delete"><i class="ti ti-trash"></i></a>
+                    <a *ngIf="row.ID > 0" (click)="GetNodalReportDetails(row.ID)" title="Edit"><i class="ti ti-pencil"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">अन्य कोई विवरण/तथ्य/ घटना जिनका वितरण आप देना चाहे तो पृथक रूप से संलग्न करे <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" (change)="AdditionalDetailsCondition()" class="me-1" name="RadioAdditionalDetails" formControlName="RadioAdditionalDetails" [(ngModel)]="formData.AdditionalDetails" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" (change)="AdditionalDetailsCondition()" class="me-1" name="RadioAdditionalDetails" formControlName="RadioAdditionalDetails" [(ngModel)]="formData.AdditionalDetails" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioAdditionalDetails.errors" class="text-danger">
+            <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioAdditionalDetails.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+             </div>-->
+          </div>
+
+
+          <div *ngIf="isAdditionalDetails">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document: <span class="StarMarking">*</span></label>
+            <div class="flex">
+              <input type="file" style="padding:5px;" class="form-input" id="fileUpload" (change)="onFilechangeUpload($event)" formControlName="UploadDocumentfile">
+              <label style="width: 210px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left: 5px;" for="fileUploadGuidlinesDoc">
+
+                {{UploadedFileName === '' ? 'No File Choosen' : UploadedFileName}}
+              </label>
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + 'ITINodalOfficerExminerReport/' + UploadedFileName}}" *ngIf="UploadedFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+            <!-- Validation message for file upload -->
+            <!--<div *ngIf="UploadDocfileControl.invalid && (UploadDocfileControl.dirty || UploadDocfileControl.touched)" class="text-red-500 text-sm mt-1">
+              <div *ngIf="UploadDocfileControl.errors?.['required']">File is required.</div>
+            </div>-->
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.UploadDocumentfile.errors" class="text-danger">
+              <p *ngIf="_AddNodalOfficerExminerFromGroup.UploadDocumentfile.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+
+          </div>
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document:</label>
+            <input class="form-input" type="file" />
+          </div>-->
+
+
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light  mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Other Info</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या सभी जगह परीक्षाएँ सुचारू रूप से सम्पादित हुई <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioExamSmooth" formControlName="RadioExamSmooth" [(ngModel)]="formData.ExamSmooth" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioExamSmooth" formControlName="RadioExamSmooth" [(ngModel)]="formData.ExamSmooth" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioExamSmooth.errors" class="text-danger">
+    <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioExamSmooth.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+     </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या सभी परीक्षकों ने अंको के लिफाफे, प्रायोगिक जॉब व मानदेय बिल आपको सुपुई कर दिये <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioDocumentsSubmitted" formControlName="RadioDocumentsSubmitted" [(ngModel)]="formData.DocumentsSubmitted" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioDocumentsSubmitted" formControlName="RadioDocumentsSubmitted" [(ngModel)]="formData.DocumentsSubmitted" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioDocumentsSubmitted.errors" class="text-danger">
+    <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioDocumentsSubmitted.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+     </div>-->
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षा के दौरान घटित कोई घटना जिससे परीक्षा की निष्पक्षता व गोपनीयता प्रभावित हुई हों <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" name="RadioExamIncident" formControlName="RadioExamIncident" [(ngModel)]="formData.ExamIncident" [value]="true" />Yes</label>
+              <label class="flex items-center me-2"> <input type="radio" class="me-1" name="RadioExamIncident" formControlName="RadioExamIncident" [(ngModel)]="formData.ExamIncident" [value]="false" /> No </label>
+            </div>
+            <!--<div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.RadioReadingTaken.errors" class="text-danger">
+    <p *ngIf="_AddNodalOfficerExminerFromGroup.RadioReadingTaken.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+     </div>-->
+          </div>
+          <div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षा संचालन बाबत् समग्र टिप्पणीः <span class="StarMarking">*</span></label>
+              <textarea class="form-input" formControlName="txtExamRemarks" [(ngModel)]="formData.ExamRemarks" placeholder="Enter Exam Remarks"></textarea>
+            </div>
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtExamRemarks.errors" class="text-danger">
+              <p *ngIf="_AddNodalOfficerExminerFromGroup.txtExamRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">भविष्य में संबंधित संस्थानों को परीक्षा केन्द्र बनाने के बारे में टिप्पणी  <span class="StarMarking">*</span></label>
+              <textarea class="form-input" formControlName="txtFutureCentreRemarks" [(ngModel)]="formData.FutureCentreRemarks" placeholder="Enter Exam Future Centre Remarks"></textarea>
+            </div>
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtFutureCentreRemarks.errors" class="text-danger">
+              <p *ngIf="_AddNodalOfficerExminerFromGroup.txtFutureCentreRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+
+         
+          <div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">अन्य कोई सुझाव जो भविष्य में परीक्षा आयोजन हेतु लाभप्रद हों  <span class="StarMarking">*</span></label>
+              <textarea class="form-input" formControlName="txtFutureExamSuggestions" [(ngModel)]="formData.FutureExamSuggestions" placeholder="Enter Future Exam Suggestions"></textarea>
+            </div>
+            <div *ngIf="isSubmitted&&_AddNodalOfficerExminerFromGroup.txtFutureExamSuggestions.errors" class="text-danger">
+              <p *ngIf="_AddNodalOfficerExminerFromGroup.txtFutureExamSuggestions.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
+          <div class="text-center">
+            <button id="btnSave" class="btn btn-sm bg-info text-white" (click)="SaveData()" type="button">Submit</button>
+            <button class="btn btn-sm bg-danger text-white" (click)="ResetControl()" type="button">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

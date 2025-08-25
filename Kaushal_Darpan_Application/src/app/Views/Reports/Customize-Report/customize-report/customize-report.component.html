@@ -1,0 +1,184 @@
+ <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <!--<a href="javascript:void(0);" class="btn bg-info mt-6 text-white" (click)="RetsetReport()">Reset Report</a>-->
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/CustomizeReport" class="text-sm font-medium text-slate-700" aria-current="page">Report</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+
+  
+
+  <form [formGroup]="groupForm" (ngSubmit)="SubmitData()">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Select Columns</b>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-3">
+        <div>
+          <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-4 grid-cols-2 gap-3">
+            <div *ngFor="let column of displayedColumns">
+              <label>
+                <input type="checkbox" [(ngModel)]="column.selected" (change)="toggleColumnSelection(column)">
+                {{ column.name }}
+              </label>
+            </div>
+            </div>
+          </div>
+        </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Filter</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <h3 class="text-gray-800 text-sm font-medium m-0"> Gender</h3>
+          <label *ngFor="let gender of GenderList" class="mr-1">
+            <input type="checkbox"
+                   [(ngModel)]="gender.selected"
+                   [value]="gender.ID"
+                   formControlName="gender" />
+            {{ gender.Name }}
+          </label>
+          <br />
+          <br />
+          <h3 class="text-gray-800 text-sm font-medium m-0"> Caste Category</h3>
+          <label *ngFor="let CategaryCast of CategaryCastList" class="mr-1">
+            <input type="checkbox"
+                   [(ngModel)]="CategaryCast.selected"
+                   [value]="CategaryCast.ID"
+                   formControlName="CategaryCast" />
+            {{ CategaryCast.Name }}
+          </label>
+        </div>
+        <!--<div>
+          
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SemesterID" [(ngModel)]="filter.SemesterID" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of SemesterMasterList; track item) {
+            <option [value]="item.SemesterID">{{item.SemesterName}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="StreamID" [(ngModel)]="filter.StreamID" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of StreamMasterList; track item) {
+            <option [value]="item.StreamID">{{item.StreamName}}</option>
+            }
+          </select>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> State</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="StateId" [(ngModel)]="filter.StateID"
+                  (change)="ddlState_Change()">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of StateList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="District" [(ngModel)]="filter.District" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of DistrictList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> StudentType</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="StudentType" [(ngModel)]="filter.StudentType" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of StudentTypeList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Block</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="Block" [(ngModel)]="filter.Block" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of BlockList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Course Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="CourseType" [(ngModel)]="filter.CourseType" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of CourseTypeList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="Institute" [(ngModel)]="filter.Institute" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of InstituteList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> EndTerm</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTerm" [(ngModel)]="filter.EndTerm" (change)="applyFilter($event.target.value)">
+            <option value="all" ng-reflect-value="0">--All--</option>
+            @for (item of EndTermList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info mt-6 text-white">Search</button>
+        </div>
+        <div >
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info mt-6 text-white">
+            <i class="ti ti-download"></i> Export Execl
+          </a>
+        </div>
+      </div>
+      </div>
+  </form>
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Filtered Data</b>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="CustomizeReportCoulmnDataPush.length>0">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngFor="let column of displayedColumns" [hidden]="!column.selected">{{ column.name }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of CustomizeReportCoulmnDataPush; let idx = index;">
+
+
+
+            <td *ngFor="let column of displayedColumns" [hidden]="!column.selected">
+              {{ row[column.key]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+

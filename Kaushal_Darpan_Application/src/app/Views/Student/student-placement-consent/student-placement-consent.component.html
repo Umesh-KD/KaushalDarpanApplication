@@ -1,0 +1,139 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Placement</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student Placement Consent</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i>  Student Placement Consent  </b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+
+              <th class="text-left">Sr.No.</th>
+              <th class="text-left">Campus ID</th>
+              <th class="text-left">TPO Details</th>
+              <th class="text-left">Company</th>
+              <!--<th class="text-left">HR Details</th>-->
+              <th class="text-left">Venue Details</th>
+              <th class="text-left">Role Details</th>
+         
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of CampusValidationListData | tableSearchFilter:Table_SearchText;let idx=index;">
+
+
+              <td>{{idx+1}}</td>
+              <td width="120px">{{row.PostNo}}</td>
+              <td>
+                <p><b>{{row.TPOCollegeName}}</b></p>
+                <p>{{row.TPOSSOID}}</p>
+              </td>
+
+              <td>
+                <p><b>{{row.CompanyName}}</b></p>
+                <p>{{row.Address}}</p>
+                <p><a href="{{row.Website}}" target="_blank">{{row.Website}}</a></p>
+              </td>
+              <!--<td>
+                <p><b>{{row.HR_Name}}</b></p>
+                <p style="white-space:nowrap"><i class="ti ti-phone"></i> +91-{{row.HR_MobileNo}}</p>
+                <p style="white-space:nowrap"><i class="ti ti-mail"></i> {{row.HR_Email}}</p>
+              </td>-->
+
+              <td>
+                <p><b>{{row.CampusVenue}}</b></p>
+                <p style="white-space:nowrap">{{row.CampusFromDate}} to {{row.CampusToDate}}</p>
+                <p style="white-space:nowrap">{{row.CampusAddress}}</p>
+              </td>
+
+              <td><div [innerHtml]="row.RoleDetails"> </div></td>
+           
+              <td align="center">
+                <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                  <button class="btn bg-info text-white btn-sm" (click)="openModal(modal_Open,row.PostID)" type="button">View</button>
+                  <button *ngIf="row.ConsentID==0" class="btn bg-success text-white btn-sm" (click)="Savedata(row.PostID)" type="button">Consent</button>
+                  <button *ngIf="row.ConsentID!=0" class="btn bg-success text-white btn-sm" type="button">Already consent</button>
+
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="CampusValidationListData?.length === 0"><td colspan="15"> No records found</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Campus Details </b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body p-5">
+          <div class="p-6">
+            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr class="text-left">
+                    <th>Company Info</th>
+                    <th>Requirement</th>
+                    <th>Eligibility</th>
+                    <th>JobDescription</th>
+                    <th>Date / Venue</th> 
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td rowspan="3" valign="top">
+                      <div>
+                        <b>{{CampusPostDetail.CompanyName}}</b>
+                        <p>Post: {{CampusPostDetail.PostNo}}</p>
+                        <a href="{{CampusPostDetail.Website}}" target="_blank">
+                          <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
+                        </a>
+                      </div>
+                    </td>
+                    <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
+                    <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
+                    <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
+                    <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
+
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer text-center">
+              <!--<button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>-->
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+

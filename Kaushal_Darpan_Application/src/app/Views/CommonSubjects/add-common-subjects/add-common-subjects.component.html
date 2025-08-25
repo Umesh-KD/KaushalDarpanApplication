@@ -1,0 +1,116 @@
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Common Subjects</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Common Subjects</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Common Subjects</a>
+    </div>
+  </div>
+  <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="GotoCommonSubject()"><i
+      class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<form [formGroup]="CommonSubjectFormGroup" id="CommonSubjectFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Subject</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="CommonSubjectName"
+                   name="CommonSubjectName" [(ngModel)]="request.CommonSubjectName" formControlName="CommonSubjectName">
+            <div *ngIf="isSubmitted && _CommonSubjectFormGroup.CommonSubjectName.errors" class="text-danger">
+              <p *ngIf="_CommonSubjectFormGroup.CommonSubjectName.errors.required">
+                <i aria-hidden="true"></i> This field
+                is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Semester <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" id="SemesterID" name="SemesterID" [(ngModel)]="request.SemesterID"
+                    (change)="GetSubjectCodeMasterDDL()" formControlName="SemesterID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SemestarMasterDDLList" [value]="item.SemesterID">
+                {{item.SemesterName}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && _CommonSubjectFormGroup.SemesterID.errors" class="text-danger">
+              <p *ngIf="!_CommonSubjectFormGroup.SemesterID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required.!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Branch <span class="StarMarking">*</span>
+            </label>
+            <ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="StreamMasterDDLList"
+                                     [formControl]="_CommonSubjectFormGroup.SubjectID" [(ngModel)]="BranchList" [settings]="settingsMultiselect"
+                                     [disabled]="false" (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                     (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                     (onDeSelectAll)="onDeSelectAll($event)">
+            </ng-multiselect-dropdown>
+            <div *ngIf="isSubmitted && _CommonSubjectFormGroup.SubjectID.errors" class="text-danger">
+              <p *ngIf="_CommonSubjectFormGroup.SubjectID.errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+    <select class="form-select" id="StreamID" [(ngModel)]="request.StreamID"
+            (change)="ddlStream_Change()">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+        {{item.StreamName}}
+      </option>
+    </select>
+  </div>-->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject Code <span class="StarMarking">*</span></label>
+            <select class="form-select" (change)="getStreamMasterList()" formControlName="SubjectCode" id="SubjectCode" [(ngModel)]="request.SubjectCode">
+              <option value="">--Select--</option>
+              <option *ngFor="let item of SubjectCodeMasterDDLList" [value]="item.Code">{{item.Code}} {{item.Name}}</option>
+            </select>
+       
+          </div>
+
+
+          <div class="col-span-3 text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>
+<!-- end row -->

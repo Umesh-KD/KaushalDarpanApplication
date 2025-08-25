@@ -1,0 +1,170 @@
+
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+  </div>
+  <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+    <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Role Master</a>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels" id="QualificationDetail">
+    <div class="card-body p-5">
+      <form [formGroup]="RoleMasterFormGroup" class="form-horizontal">
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Role Details</b>
+            <span class="text-danger">(* fields are mandatory)</span>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+
+            <!--<div>
+              <label for="ddlLevel" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Level<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlLevel" name="ddlLevel" [(ngModel)]="request.LevelID"
+                      formControlName="ddlLevel">
+                <option value="0" disabled>-- Select --</option>
+                <option *ngFor="let item of LevelMasterList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlLevel.errors" class="text-danger">
+                <p *ngIf="!form.ddlLevel.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ddlDesignation"
+                     class="text-gray-800 text-sm font-medium inline-block mb-2">Designation<span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlDesignation" name="ddlDesignation" [(ngModel)]="request.DesignationID"
+                      formControlName="ddlDesignation">
+                <option value="0" disabled>-- Select --</option>
+                <option *ngFor="let item of DesignationMasterList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlDesignation.errors" class="text-danger">
+                <p *ngIf="!form.ddlDesignation.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            -->
+
+            <div>
+              <label for="CourseType" class="text-gray-800 text-sm font-medium inline-block mb-2">Course Type:<span class="StarMarking">*</span> </label>
+              <select formControlName="CourseType" class="form-select" id="CourseType" [(ngModel)]="request.CourseTypeID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of CourseTypeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && form.get.errors" class="text-danger">
+                <p *ngIf="!form.get.errors.required">
+                  <i aria-hidden="true"></i>This field is
+                  required.
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="txtRoleName" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Name (English)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtRoleName" name="txtRoleName" formControlName="txtRoleName" [(ngModel)]="request.RoleNameEnglish">
+              <div *ngIf="isSubmitted&&form.txtRoleName.errors" class="text-danger">
+                <p *ngIf="form.txtRoleName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Name (Hindi)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" gtranslate id="txtRoleNameHindi" name="txtRoleNameHindi" formControlName="txtRoleNameHindi" [(ngModel)]="request.RoleNameHindi">
+              <div *ngIf="isSubmitted&&form.txtRoleNameHindi.errors" class="text-danger">
+                <p *ngIf="form.txtRoleNameHindi.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Name (Short)<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtRoleNameShort" name="txtRoleNameShort" formControlName="txtRoleNameShort" [(ngModel)]="request.RoleNameShort">
+              <div *ngIf="isSubmitted&&form.txtRoleNameShort.errors" class="text-danger">
+                <p *ngIf="form.txtRoleNameShort.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <label class="block">Status</label>
+              <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ActiveStatus"
+                       formControlName="chkActiveStatus" onchange="js_StatusYesNoActiveInActive(this);">
+                <span class="toggleIcon">
+                  <span class="toggleTitle"></span>
+                </span>
+              </label>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <div class="flex align-center flexBtn mt-7">
+                <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Save</button>
+                <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
+      </div>
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">Level</th>
+              <th align="left">Designation</th>
+              <th align="left">Roll Name (English)</th>
+              <th align="left">Roll Name (Hindi)</th>
+              <th align="left">Roll Name (Short)</th>
+              <th align="left">Status</th>
+              <th align="center" width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of RoleMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.LevelName}}</td>
+              <td>{{row.DesignationName}}</td>
+              <td>{{row.RoleNameEnglish}}</td>
+              <td>{{row.RoleNameHindi}}</td>
+              <td>{{row.RoleNameShort}}</td>
+              <td>{{row.Status}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.RoleID)"><i class="ti ti-pencil"></i></a>
+                  <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.RoleID)"><i class="ti ti-trash"></i></a>
+                  <a [routerLink]="'/rolemenurights'" [queryParams]="{id:row.RoleID}"  id="btnRoleMenuRight" title="Role Menu Right"><i class="ti ti-plus"></i></a>
+                <!-- </a><a href="javascript:void(0);" title="Edit"> -->
+                  <!-- <a href="/rolemenuright?="row.RoleID></a> -->
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

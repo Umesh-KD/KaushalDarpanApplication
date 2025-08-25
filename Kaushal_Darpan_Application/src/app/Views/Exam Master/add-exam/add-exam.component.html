@@ -1,0 +1,118 @@
+
+
+<!-- Navigation bar -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2" id="AddExam">Add Exam</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/exammaster" class="text-sm font-medium text-slate-700" aria-current="page">Exam</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/addexam" class="text-sm font-medium text-slate-700" id="AddExamSm" aria-current="page">Add Exam</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main content section -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <!-- Form start -->
+      <form [formGroup]="ExamFormGroup">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5" id="AddExamIn"><i class="ti ti-plus"></i> Add Exam</b>
+          <button type="button" class="btn bg-dark text-white btn-sm" (click)="AddExam()">
+            <i class="ti bi-text-indent-left"></i> Back
+          </button>
+        </div>
+
+        
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!-- Financial Year Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year:<span class="StarMarking">*</span></label>
+            <select class="form-select" id="StudentExamInstituteId" placeholderName="Please Select" formControlName="ddlFinancialYearID" [(ngModel)]="request.SessionYearID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
+                {{item.YearName}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.ddlFinancialYearID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.ddlFinancialYearID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Session Month Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Month: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="MonthID" formControlName="MonthID" [(ngModel)]="request.SessionMonthID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of MonthList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.MonthID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.MonthID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Program Type Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Program Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="StreamTypeID" formControlName="StreamTypeID" [(ngModel)]="request.ProgramTypeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ProgramTypeList" [value]="item.CourseTypeID">
+                {{item.CourseTypeName}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.StreamTypeID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.StreamTypeID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Exam Type Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ExamTypeID" formControlName="ExamTypeID" [(ngModel)]="request.ExamTypeID" (change)="onExamTypeChange()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.ExamTypeID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.ExamTypeID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Semester Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester/Year:</label>
+            <select class="form-select" id="StudentExamYear"  formControlName="ddlSemesterID" [(ngModel)]="request.SemesterID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of filteredSemesterList" [value]="item.SemesterID">{{item.ShortCode}}</option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.ddlSemesterID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.ddlSemesterID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Exam Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ExamID" formControlName="ExamID" [(ngModel)]="request.AdmissionCategoryID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ExamCategoryList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && ExamFormGroup.controls.ExamID.errors" class="text-danger">
+              <p *ngIf="!ExamFormGroup.controls.ExamID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+          <!-- Submit and Reset buttons -->
+          <div>
+            <button type="submit" id="btnSave" class="btn bg-info text-white mt-6" (click)="SaveDataExam()">Submit</button>
+            <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="ResetControls()">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

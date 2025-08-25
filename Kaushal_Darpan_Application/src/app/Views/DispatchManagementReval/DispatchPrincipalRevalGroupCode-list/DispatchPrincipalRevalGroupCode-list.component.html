@@ -1,0 +1,145 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dispatch Principal Reval Group Code List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management Reval</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/DispatchPrincipalRevalGroupCodeList" class="text-sm font-medium text-slate-700" aria-current="page">Dispatch Principal Reval Group Code List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <a routerLink="/DispatchPrincipalRevalGroupCode" class="btn bg-info btn-sm text-white me-2">
+            <i class="ti ti-plus"></i>Add New
+          </a>
+          <!-- <a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-refresh"></i>Change Examiner
+        </a> -->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.Status">
+            <!--<option value="0" ng-reflect-value="0">--Select--</option>-->
+            <option value="0">Pending</option>
+            @for (item of StatusTypelist; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getgroupData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <!-- <a *ngIf="sSOLoginDataModel.RoleID == _enumrole.Principal || sSOLoginDataModel.RoleID == _enumrole.PrincipalNon" routerLink="/DispatchPrincipalGroupCode" class="btn bg-info btn-sm text-white me-2">
+      <i class="ti ti-plus"></i>Add New
+    </a> -->
+    </div>
+
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>-->
+      </div>
+      <div class="flex justify-end mt-3">
+        <button *ngIf="IsPending == true && searchRequest.Status != 87 && searchRequest.Status != 88" type="button" class="btn bg-primary text-white" (click)="submitSelected()">
+          <i class="ti ti-device-floppy"></i> Send Group Code to Bter
+        </button>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <!--{{DispatchPrincipalGroupCodeList1|json}}
+    {{GetStatusID|json}}-->
+    <div class="overflow-x-auto mt-3">
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th *ngIf="IsPending === true && GetStatusID !== 87 && GetStatusID !== 88"
+                class="text-left"> <input type="checkbox" [(ngModel)]="isAllSelected" (change)="toggleAllSelection()" /></th>
+            <th class="text-left">Sr No</th>
+
+            <th class="text-left">Dispatch Date </th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Company Name</th>
+            <th class="text-left">Challan No </th>
+            <!--<th class="text-left">Supplier Name</th>
+          <th class="text-left">Supplier Vehicle No</th>
+          <th class="text-left">Supplier MobileNo</th>
+          <th class="text-left">Supplier Date</th>-->
+            <th class="text-left">Recipient Name</th>
+            <th class="text-left">Recipient Post</th>
+            <th class="text-left">Recipient MobileNo</th>
+            <th class="text-left">Recipient Date</th>
+            <th class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let examiner of DispatchPrincipalGroupCodeList1 | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td *ngIf="IsPending === true && GetStatusID !== 87 && GetStatusID !== 88"
+                align="left">
+              <input type="checkbox" [(ngModel)]="examiner.selected" (change)="checkIfAllSelected()" />
+            </td>
+            <td align="left">{{idx+1}}</td>
+            <td>{{examiner.DispatchDate}}</td>
+            <td>{{examiner.Status}}</td>
+            <td>{{examiner.CompanyName}}</td>
+            <td>{{examiner.ChallanNo}}</td>
+            <!--<td>{{examiner.SupplierName}}</td>
+          <td>{{examiner.SupplierVehicleNo}}</td>
+          <td>{{examiner.SupplierMobileNo}}</td>
+          <td>{{examiner.SupplierDate}}</td>-->
+            <td>{{examiner.RecipientName}}</td>
+            <td>{{examiner.RecipientPost}}</td>
+            <td>{{examiner.RecipientMobileNo}}</td>
+            <td>{{examiner.RecipientDate}}</td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a href="javascript:void(0);" title="Download"><i class="ti ti-download" (click)="DownloadDispatchGroupForm(examiner.DPGCID)"></i></a>
+                <a [routerLink]="'/DispatchPrincipalRevalGroupCode'" [queryParams]="{DPGCID:examiner.DPGCID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Remove"
+                   (click)="btnDelete_OnClick(examiner.DPGCID)"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+<app-otpmodal #otpModal></app-otpmodal>

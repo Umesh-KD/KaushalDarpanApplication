@@ -1,0 +1,294 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ IsView ? 'DTE Admission' : 'ITI Admission' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Admission</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">{{ IsView ? 'DTE Admission Form' : 'ITI Admission Form' }}</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <form [formGroup]="StudentJanDetailFormGroup" class="form-horizontal">
+    <div class="card">
+      <div class="card-body p-5">
+        <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6">
+          <div *ngIf="this.DepartmentID==_enumDepartment.BTER">
+            <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              पाठ्यक्रम प्रकार (Course Type):
+            </label>
+            <div class="btn-group" role="group" aria-label="Course Type">
+              <button *ngIf="IsFirst" type="button"
+                      class="btn bg-info text-white mt-6"
+                      (click)="selectCourseType(_EnumCourseType1.Diploma1stYearEng)">
+                Diploma 1st Year Eng
+              </button>
+              <button *ngIf="IsSecond" type="button"
+                      class="btn bg-info text-white mt-6"
+                      (click)="selectCourseType(_EnumCourseType1.DiplomaNonEngineering1stYear)">
+                Diploma Non-Engineering 1stYear
+              </button>
+              <button *ngIf="IsThird" type="button"
+                      class="btn bg-info text-white mt-6"
+                      (click)="selectCourseType(_EnumCourseType1.Diploma2ndYearEngLateralAdmission)">
+                Diploma 2nd Year Eng Lateral Admission
+              </button>
+              <button *ngIf="IsBack" type="button"
+                      class="btn bg-black text-white mt-6"
+                      (click)="OnBack()">
+             Back
+              </button>
+
+            </div>
+            <!--<select class="form-select normal-size-dropdown hidden" id="ddlCourseType" name="ddlCourseType"
+                    [(ngModel)]="model.coursetype" formControlName="ddlCourseType" (change)="onSelectCourseType($event)">
+              <option value="0">-- Select --</option>
+              <option *ngFor="let item of courseTypeList" [value]="item.value">{{item.key}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_StudentJanDetailFormGroup.ddlCourseType.errors" class="text-danger">
+              <p *ngIf="!_StudentJanDetailFormGroup.ddlCourseType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field
+                is required .!
+              </p>
+            </div>-->
+          </div>
+          <div *ngIf="this.DepartmentID==_enumDepartment.ITI || model.coursetype>0">
+            <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+
+              {{this.DepartmentID == _enumDepartment.BTER ? 'प्राथमिकता श्रेणी (Preferential Category)' : 'निवासी (Please Select Your Domicile)'}}:
+            </label>
+            <select class="form-select normal-size-dropdown" id="ddlPreferentialCategory" name="ddlPreferentialCategory"
+                    [(ngModel)]="request.ENR_ID" (change)="Showdropdown()" formControlName="ddlPreferentialCategory">
+              <option value="0">-- Select --</option>
+              <option *ngFor="let item of PrefentialCategoryList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+
+          </div>
+        </div>
+
+        <div *ngIf="this.DepartmentID==_enumDepartment.BTER && model.coursetype==3" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="DivLateral">
+          <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert">
+            <b>नोट:</b>  <br />
+            1.		अगर अभियार्थी 12वीं (Senior Secondary) कक्षा को कला, वाणिज्य एवं कृषि विषय से उतीर्ण की है तो ऐसे अभियार्थी पार्श्व प्रवेश के लिए पात्र नही है इसलिए ऐसे अभियार्थी इस फॉर्म को नही भरें | <br />
+            2.		अगर अभियार्थी 2 वर्षीय इंजीनियरिंग आईटीआई के द्वितीय वर्ष में पढ़ रहा है और परीक्षा नही दी है या अंतिम तिथि तक द्वितीय वर्ष आईटीआई का परिणाम नही आ सकता है तो ऐसे अभियार्थी पार्श्व प्रवेश के लिए पात्र नही है इसलिए ऐसे अभियार्थी इस फॉर्म को नही भरें |
+
+          </div>
+        </div>
+
+
+        <div *ngIf="IsShowDropdown" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="JanAadhaarCardNoVerify">
+          <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert">
+            <b>नोट:</b>  कृपया अपना जन आधार/आधार नंबर एंटर करके अपनी डिटेल्स को गेट करे |
+          </div>
+          <div>
+            <label for="txtJanAadhaar" class="text-gray-800 text-sm font-medium inline-block mb-2">जन आधार/आधार कार्ड नंबर (Jan Aadhaar/Aadhaar Card No.):<span class="StarMarking">*</span></label>
+            <div class="flex">
+              <input type="text" class="form-input rounded-e-none" id="txtJanAadhaar" placeholder="Enter Jan Aadhaar/Aadhaar Card No"
+                     [(ngModel)]="request.JAN_AADHAR" (change)="Showdrop()" formControlName="txtJanAadhaar">
+              <button class="btn bg-warning nowrap rounded-s-none text-white" type="button" (click)="GetDetailsByJanAadhaar()">Get Details</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div *ngIf="IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupCommon">
+          <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
+            <b>नोट:</b>  कृपया सभी विवरण आवेदक के दस्तावेजों के अनुसार भरें, क्योंकि इन्हें बाद में बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं)
+          </div>
+          <div>
+            <label for="StudentName" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम (Applicant's Name):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="StudentName" placeholder="Enter Applicant's Name"
+                   [(ngModel)]="model.StudentName" formControlName="txtName" (change)="model.StudentName = filterString(model.StudentName)">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtName.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtName.errors.required">
+                <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के अपना नाम अंग्रेजी में लिखें</span>
+              </p>
+            </div>
+          </div>
+          <div>
+            <label for="txtFather" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम (Father's Name):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtFather" placeholder="Enter Father's Name"
+                   [(ngModel)]="model.FatherName" formControlName="txtFather" (change)="model.FatherName = filterString(model.FatherName)">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtFather.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtFather.errors.required">
+                <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के पिता का नाम अंग्रेजी में लिखें</span>
+              </p>
+            </div>
+          </div>
+          <div>
+            <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम (Mother's Name):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtMotherEngname" placeholder="Enter Mother's Name"
+                   [(ngModel)]="model.MotherName" formControlName="txtMotherEngname" (change)="model.MotherName = filterString(model.MotherName)">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtMotherEngname.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtMotherEngname.errors.required">
+                <i aria-hidden="true"></i> <span class="redAlertMsg">कृपया बिना अभिवादन के माता का नाम अंग्रेजी में लिखें</span>
+              </p>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.ENR_ID == 6">
+            <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">विभाग का नाम (Department's Name):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtMotherEngname" placeholder="Enter Department's Name"
+                   [(ngModel)]="model.DepartmentName" formControlName="DepartmentName">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.DepartmentName.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.DepartmentName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">लिंग (Gender):<span class="StarMarking">*</span></label>
+            <!--<input type="text" class="form-input disabled" id="Gender" disabled value="Male" formControlName="Gender" [(ngModel)]="request.Gender">-->
+            <select class="form-select" id="ddlIdentityProof" formControlName="Gender" [(ngModel)]="model.Gender">
+              <option value="0" selected>--Select Gender--</option>
+              <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.Gender.errors" class="text-danger">
+              <p *ngIf="!_StudentJanDetailFormGroup.Gender.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              जन्म तिथि (Date of Birth):<span class="StarMarking">*</span>
+            </label>
+            <input type="date"
+                   class="form-input"
+                   id="txtDOB"
+                   placeholder="DOB"
+                   [(ngModel)]="model.DOB"
+                   [max]="maxDate"
+                   formControlName="txtDOB">
+
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtDOB.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtDOB.errors.required">
+                <i aria-hidden="true"></i> This field is required!
+              </p>
+              <p *ngIf="_StudentJanDetailFormGroup.txtDOB.errors.invalidAge && DepartmentID == 1">
+                <i aria-hidden="true"></i> Date of Birth must be at least 10 years ago!
+              </p>
+              <p *ngIf="_StudentJanDetailFormGroup.txtDOB.errors.invalidAge && DepartmentID == 2">
+                <i aria-hidden="true"></i> Date of Birth must be at least 14 years!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="email" class="text-gray-800 text-sm font-medium inline-block mb-2">ईमेल (Email Address):</label>
+            <input type="email" formControlName="email" class="form-input" id="email" placeholder="Enter Email Address" [(ngModel)]="model.Email">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.email.errors" class="text-danger">
+              <!--<p *ngIf="_StudentJanDetailFormGroup.email.errors.required"><i aria-hidden="true"></i>This field is required.</p>-->
+              <p *ngIf="_StudentJanDetailFormGroup.email.errors.pattern"><i aria-hidden="true"></i>Please enter Valid email.</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="txtMobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">मोबाइल नंबर (Mobile Number):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtMobileNumber" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="model.MobileNumber" formControlName="txtMobileNumber" maxlength="10" (input)="onInput($event)">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtMobileNumber.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtMobileNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_StudentJanDetailFormGroup.txtMobileNumber.errors.pattern"><i aria-hidden="true"></i> Please Enter Correct Mobile Number.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="ddlCategoryA" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ए(Category A):<span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="model.CategoryA">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_StudentJanDetailFormGroup.ddlCategoryA.errors" class="text-danger">
+              <p *ngIf="!_StudentJanDetailFormGroup.ddlCategoryA.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field
+                is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="model.CategoryA == 4">
+            <label for="txtOBCCasteCert" class="text-gray-800 text-sm font-medium inline-block mb-2">ओबीसी जाति प्रमाण पत्र संख्या (OBC Caste Certificate No):<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" formControlName="CertificateNo" id="txtOBCCasteCert" [(ngModel)]="model.CasteCertificateNo" maxlength="12" placeholder="Enter OBC Caste Certificate No">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.CertificateNo.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.CertificateNo.errors.required"><i aria-hidden="true"></i>This field is required.</p>
+
+            </div>
+          </div>
+
+          <div *ngIf="model.CategoryA == 4">
+            <label for="txtOBCCertrDate" class="text-gray-800 text-sm font-medium inline-block mb-2">ओबीसी जाति प्रमाण पत्र जारी दिनांक (OBC Certificate generat date): <span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" formControlName="txtGeneratDate" id="txttxtOBCCertrDate" placeholder="dd/mm/yyyy" [(ngModel)]="model.CertificateGeneratDate">
+            <div *ngIf="isSubmitted && _StudentJanDetailFormGroup.txtGeneratDate.errors" class="text-danger">
+              <p *ngIf="_StudentJanDetailFormGroup.txtGeneratDate.errors.required"><i aria-hidden="true"></i>This field is required.</p>
+
+            </div>
+          </div>
+
+          <div *ngIf="this.DepartmentID == _enumDepartment.ITI">
+            <label for="txtApaarid" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक की अपार आईडी (Applicant's ApaarId):</label>
+            <input type="text" class="form-input" formControlName="Apaarid" id="txtApaarid" [(ngModel)]="model.Apaarid" placeholder="Enter Applicant's ApaarId">
+          </div>
+
+        </div>
+
+        <div *ngIf="IsShowDrop && !IsShow" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6" id="formGroupGetDetailsByJanadhar">
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              जन आधार/आधार सदस्य सूची (Jan Aadhar/Aadhar Member List)<span class="StarMarking">*</span>
+            </label>
+            <div class="flex flex-col gap-2">
+              <div *ngFor="let row of AdharMemberList">
+                <label>
+                  <input type="radio"
+                         [checked]="row.IsMainRole" [ngModelOptions]="{standalone: true}"
+                         name="radiocheck" (change)="SendJanaadharOTP(row)"> <!--(change)="SendJanaadharOTP(row)"-->
+                  {{row.NAME}}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="IsShow" class="card-footer text-center" id="formCardFooter">
+        <!--<a href="javascript:void(0);" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Submit</a>-->
+        <!--<a href="Applicationform" type="button" class="btn bg-primary text-white" (click)="SaveData()">Submit</a>-->
+        <button type="button" class="btn bg-primary text-white" (click)="SaveData()">Submit</button>
+        <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+        <!--<button class="btn bg-success text-white btn-sm" (click)="openModalGenerateOTP(modal_GenrateOTP)" type="button">Publish (Generated Enrollment No)</button>-->
+      </div>
+    </div>
+  </form>
+</div>
+<!-- end row -->
+<!--Start Model Popup-->
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="ResendOTP()" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,170 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI-Search</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI-Search</label>
+          <input type="text" class="form-input" placeholder="Code.." id="Code" [(ngModel)]="searchRequest.Code">
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th class="text-left">District Name</th>
+            <th class="text-left">ITI Name</th>
+            <th class="text-left">ITI Code</th>
+            <th class="text-left">Block/Tehsil</th>
+            <th class="text-left">ITI Type (Govt / Private)</th>
+            <th class="text-left">Exam Type (NCVT/SCVT)</th>
+            <th class="text-left">Status</th>
+            <!--<th class="text-left">Action</th>-->
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let ITI of ITIDetailReportList | tableSearchFilter:Table_SearchText; let idx = index;">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ ITI.DistrictName }}</td>
+            <td>{{ ITI.CollegeName }}</td>
+            <td>{{ ITI.Code }}</td>
+            <td>{{ ITI.TehsilName }}</td>
+            <td>{{ ITI.ManagementType }}</td>
+            <td>{{ ITI.ExamType }}</td>
+            <td>{{ ITI.Status }}</td>
+            <td>{{ ITI.Status }}</td>
+            <!--<td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.TimeTableID)">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+            </td>-->
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
+  </div>
+</div>
+
+<!--<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>Time Table Branch Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">-->
+<!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"
+ *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+  <form [formGroup]="InvigilatorFormGroup">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center Superintendent: <span class="StarMarking">*</span></label>
+    <select class="form-select" formControlName="InvigilatorID" [(ngModel)]="requestInv.InvigilatorID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of InvigilatorDDL" [value]="item.UserID">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted && _InvigilatorFormGroup.InvigilatorID.errors" class="text-danger">
+      <p *ngIf="!_InvigilatorFormGroup.InvigilatorID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </form>
+  <div>
+    <button type="submit"
+            id="btnSave"
+            class="btn bg-info text-white mt-6"
+            (click)="SaveInvigilator()">
+      Submit
+    </button>
+  </div>
+</div>-->
+<!--<div class="overflow-x-auto mt-3">
+
+    <table class="table table-border w-full table-auto" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr>
+          <th class="text-left">#</th>
+          <th class="text-left">Branch Name</th>
+          <th class="text-left">Subject Name</th>
+          <th class="text-left">Paper Code</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of TimeTableBranchSubList; let i = index">
+          <td align="left">{{ i + 1 }}</td>
+          <td align="left">{{row.BranchName}}</td>
+          <td align="left">{{row.SubjectName}}</td>
+          <td align="left">{{row.PaperCode}}</td>
+
+        </tr>
+      </tbody>
+
+
+    </table>
+  </div>
+</div>-->
+<!-- <div *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+  <button type="submit"
+          id="btnSave"
+          class="btn bg-info text-white mt-6"
+          (click)="SaveInvigilator()">
+    Submit
+  </button>
+</div> -->
+<!--</div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>-->

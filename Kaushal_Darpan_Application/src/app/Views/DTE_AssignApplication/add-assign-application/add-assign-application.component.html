@@ -1,0 +1,130 @@
+ 
+    <!-- Page Title Start -->
+    <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+        <div>
+            <h4 class="text-slate-900 text-lg font-medium mb-2">Add Assign Application No</h4>
+            <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+                <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+                <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+                <a routerLink="/assignapplication" class="text-sm font-medium text-slate-700" aria-current="page">Assign Application No</a>
+                <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+                <a routerLink="/addassignapplication" class="text-sm font-medium text-slate-700" aria-current="page">Add Assign Application No</a>
+            </div>
+        </div>
+    </div>
+    <!-- Page Title End -->
+    <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Assign Application No</b>
+              <a routerLink="/assignapplication" class="btn bg-dark text-white btn-sm">Back</a>
+            </div>
+            <div class="overflow-x-auto my-3">
+              <table class="table table-border w-full table-auto">
+                <thead>
+                  <tr>
+                    <th>Total Application</th>
+                    <th>Total Assigned</th>
+                    <th>Total Unassigned</th>
+
+                    <th>Available</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th>{{TotalCount.TotalCounT}}</th>
+                    <th>{{TotalCount.Assigned}}</th>
+                    <th>{{TotalCount.Unassigned }}</th>
+                    <th>{{TotalCount.FromSrNo_Unassigned}}-{{TotalCount.ToSrNo_Unassigned}}</th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <form [formGroup]="AssignApplicationFormGroup">
+              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Application No.:</label>
+                  <input class="form-input" type="text" (keypress)="validateNumber($event)" formControlName="FromApplicationNo" [(ngModel)]="request.FromApplicationNo"
+                         (change)="calculateApplied()" maxlength="10" placeholder="Enter Application No" />
+
+                  <div *ngIf="isSubmitted && _AssignApplicationFormGroup.FromApplicationNo.errors" class="text-danger">
+                    <p *ngIf="_AssignApplicationFormGroup.FromApplicationNo.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required.!
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Application No.:</label>
+                  <input class="form-input" type="text" (keypress)="validateNumber($event)" formControlName="ToApplicationNo" [(ngModel)]="request.ToApplicationNo"
+                         (change)="calculateApplied()" maxlength="10" placeholder="Enter Application No" />
+                  <div *ngIf="isSubmitted && _AssignApplicationFormGroup.ToApplicationNo.errors" class="text-danger">
+                    <p *ngIf="_AssignApplicationFormGroup.ToApplicationNo.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required.!
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Verifier</label>
+                  <select class="form-select" formControlName="Verifier" [(ngModel)]="request.VerifierID">
+                    <option value="0">--Choose Option--</option>
+                    <option *ngFor="let item of VerifiersList" value="{{item.ID}}">{{item.Name}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted&&_AssignApplicationFormGroup.Verifier.errors" class="text-danger">
+                    <p *ngIf="!_AssignApplicationFormGroup.Verifier.errors.DropdownValidators">
+                      <i aria-hidden="true"></i>This field is required .!
+                    </p>
+                  </div>
+                </div>
+
+
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Assigned:</label>
+                  <input class="form-input disabled" type="text" disabled formControlName="Applied" [(ngModel)]="request.Applied" />
+                  <div *ngIf="isSubmitted && _AssignApplicationFormGroup.Applied.errors" class="text-danger">
+                    <p *ngIf="_AssignApplicationFormGroup.Applied.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required.!
+                    </p>
+                  </div>
+                </div>
+
+                <!--<div>
+                  <label class="text-gray-800 text-sm font-medium block mb-1">Show All Application.:</label>
+               
+                  <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                    <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ShowAllApplication"
+                           formControlName="ShowAllApplication" >
+                    <span class="toggleIcon">
+                      <span class="toggleTitle"></span>
+                    </span>
+                  </label>
+
+                  <div *ngIf="isSubmitted && _AssignApplicationFormGroup.ShowAllApplication.errors" class="text-danger">
+                    <p *ngIf="_AssignApplicationFormGroup.ShowAllApplication.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required.!
+                    </p>
+                  </div>
+                </div>-->
+
+              </div>
+            </form>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Reset</button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+    </div>
+
+    <!-- end row -->

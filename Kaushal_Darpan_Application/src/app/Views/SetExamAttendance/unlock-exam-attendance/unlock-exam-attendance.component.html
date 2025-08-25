@@ -1,0 +1,163 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Unlock Student Exam Attendance</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Center Superintendent Appointment List</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        Unlock Student Exam Attendance
+      </a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Exam Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" [(ngModel)]="searchRequest.ExamDate">          
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Shift: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.ShiftID">
+            <option value="0">---Select Shift---</option>          
+            <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShift}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="getAllData()">Search</button>
+          <!-- <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button> -->
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List Center Superintendent Appointment</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">FinancialYearName</th>
+            <!--<th class="text-left">Subject Code</th>
+            <th class="text-left">Stream Name</th>-->
+            <th class="text-left">ExamDate</th>
+            <th class="text-left">Start Time- End-Time</th>
+            <th class="text-left">Center Superintendent</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of InvigilatorAppointmentList; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.FinancialYearName}}</td>
+            <!--<td>{{item.SubjectName}}</td>
+            <td>{{item.StreamName}}</td>-->
+            <td>{{item.ExamDate | date: 'dd/MM/yyyy'}}</td>
+            <td>{{item.StartTime}}-{{item.EndTime}}</td>
+            <td>{{item.Name}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a (click)="UnlockExamAttendance(item)" title="Unlock Exam Attendance"><i class="ti ti-lock-open"></i></a>
+
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="InvigilatorAppointmentList?.length === 0"><td colspan="15"> No Record Found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_view let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Student Data</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-auto mt-3">
+            <table class="table table-border w-full" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr. No.</th>
+                  <th class="text-left">Subject Name</th>
+                  <th class="text-left">Stream Name</th>
+
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr  *ngFor="let item of ViewInvigilatorAppointmentList; let idx = index;">
+                  <td>{{ idx + 1 }}</td>
+                  <td> {{ item.SubjectName}} <br /></td>
+                  <td>{{ item.StreamName }}<br /></td>
+            
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+

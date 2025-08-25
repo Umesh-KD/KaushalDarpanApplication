@@ -1,0 +1,279 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <!--<h4 class="text-slate-900 text-lg font-medium mb-2">Generate Enrollment No</h4>-->
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{PageNameTitile}}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a routerLink="/Examiners" class="text-sm font-medium text-slate-700" aria-current="page">Generate Enrollment No</a>-->
+      <a routerLink="/Examiners" class="text-sm font-medium text-slate-700" aria-current="page">{{PageNameTitile}}</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Verifier Status</label>
+          <select class="form-select" id="VerifierStatusID" [(ngModel)]="searchRequest.VerifierStatus" (change)="GetAllData()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of VerifierStatusDDL" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+
+        <ng-select [(ngModel)]="searchRequest.InstituteID" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          @for (item of InstituteMasterList; track item.InstituteID) {
+          <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+          }
+        </ng-select>
+        </div> -->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Semester</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+              {{item.SemesterName}}
+            </option>
+          </select>
+        </div>-->
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>\
+        <ng-select [(ngModel)]="searchRequest.StreamID" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          @for (item of StreamMasterDDLList; track item.StreamID) {
+          <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+          }
+        </ng-select>
+        </div> -->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject</label>
+          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.SubjectID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Group code</label>
+          <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
+            <option value="0">Choose Option</option>
+
+            <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>-->
+        <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select View Common
+                Subject</label>
+            <select class="form-select">
+                <option>--Choose Option--</option>
+            </select>
+        </div> -->
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">
+            Search
+          </button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+        <div></div>
+        <!--<div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.IsReturnHistory == 100">
+          Remark: {{ paginatedInTableData[0]?.Remark}},<br /> Created By: {{paginatedInTableData[0]?.RemarkCreatedBy}},<br /> Remark Date: {{paginatedInTableData[0]?.RemarkDate | date: 'dd/MM/yyyy'}}
+        </div>-->
+      </div>
+      <div class="verify-notice" *ngIf="this.sSOLoginDataModel.RoleID == this._EnumRole.ACP || this.sSOLoginDataModel.RoleID == this._EnumRole.ACP_NonEng">
+        <span><b>Note:</b> Please check all student(s) before 'Publish'.</span>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div class="">
+          <!--<select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>-->
+          <!--New Added-->
+          <div class="flex" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.ACP || sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng) && currentStatus !=61 && currentStatus !=11 ">
+            <select class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
+              <option value="0">Select Status</option>
+              <option value="{{_RollListStatus.VerifiedByACP}}">Verified</option>
+              <option value="{{_RollListStatus.Return}}">Return</option>
+            </select>
+            <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>
+          </div>
+        </div>
+
+        <div class="">
+          <!--&& isAllVerified()==true-->
+          <button *ngIf="hasStudentList==true && searchRequest.VerifierStatus==0 && (this.sSOLoginDataModel.RoleID == this._EnumRole.ACP || this.sSOLoginDataModel.RoleID == this._EnumRole.ACP_NonEng)" type="button" class="btn bg-info text-white" (click)="SaveAllData()">Generate Enrollment No</button>
+        </div>
+
+        <div class="">
+          <div>
+            @if(hasStudentList==true && isACPAllGenerated()==true && (this.sSOLoginDataModel.RoleID == this._EnumRole.ACP || this.sSOLoginDataModel.RoleID == this._EnumRole.ACP_NonEng))
+            {
+            <button class="btn bg-success text-white pull-right" (click)="openModalGenerateOTP(modal_GenrateOTP)" type="button"> Publish </button>
+            }
+
+          </div>
+        </div>
+
+        <div>
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+
+        </div>
+
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <!-- <th align="left">
+                <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
+                       #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)"
+                       [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" >
+              </th> -->
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('StudentName')">
+                Student Name
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('FatherName')">
+                Father's Name
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='FatherName'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('InstituteName')">
+                Institute Name
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteName'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('StreamName')">
+                Branch Name
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='StreamName'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('SemesterName')">
+                Semester Name
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left">DOB  </th>
+              <th class="text-left">Enrollment No</th>
+              <th class="text-left">Verifier Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+              <td>{{(startInTableIndex+1)+idx}}</td>
+              <!-- <td>
+                <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked"
+                       #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)" />
+              </td> -->
+              <td class="text-left">{{row.StudentName}} </td>
+              <td class="text-left">{{row.FatherName}}</td>
+              <td class="text-left">{{row.InstituteName}}</td>
+              <td class="text-left">{{row.StreamName}}</td>
+              <td class="text-left">{{row.SemesterName}}</td>
+              <td class="text-left">{{row.DOB}}</td>
+              <td class="text-left">{{row.temp_Enrollment}}</td>
+              <td class="text-left">
+                {{row.VerifyerStatusName}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--pagination-->
+      <div class="p-3 paginationBox flex items-center justify-end w-full">
+        <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+        <div class="paginationBoxItems flex items-center">
+          <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+          <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+          <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                 [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+          <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+          <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+          <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+        </div>
+      </div>
+      <!--end pagination-->
+    </div>
+  </div>
+</div>
+
+
+<!--Start Model Popup-->
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_GenrateOTPNew let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTPNew()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,99 @@
+ 
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/PaperCountCustomizeReport" class="text-sm font-medium text-slate-700" aria-current="page">Paper Count Customize Report</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <form [formGroup]="groupForm" (ngSubmit)="SubmitData()">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Filter</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Report Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="Type" [(ngModel)]="filter.Type" (change)="applyFilter($event.target.value)">
+            <option value="Select" ng-reflect-value="-1">--Select--</option>
+            @for (item of ReportTypelist; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> EndTerm</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="EndTerm" [(ngModel)]="filter.EndTerm" (change)="applyFilter($event.target.value)">
+            <option value="Select" ng-reflect-value="0">--Select--</option>
+            @for (item of EndTermList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="SemesterID" [(ngModel)]="filter.SemesterID" (change)="applyFilter($event.target.value)">
+            <option value="Select" ng-reflect-value="0">--Select--</option>
+            @for (item of SemesterMasterList; track item) {
+            <option [value]="item.SemesterID">{{item.SemesterName}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info mt-6 text-white">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetReport()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info mt-6 text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+          <!--<a href="javascript:void(0);" (click)="exportToCSV()" class="btn bg-info mt-6 text-white">
+      <i class="ti ti-download"></i> CSV
+    </a>-->
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Filtered Data</b>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto " cellpadding="5" *ngIf="CustomizeReportCoulmnDataPush.length>0">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>S.No</th>
+            <th *ngIf="filter.Type!=2" class="text-left">Instituite code</th>
+            <th *ngIf="filter.Type!=1" class="text-left">Branch code</th>
+            <th  class="text-left">subject code</th>
+            <th class="text-left">subject name</th>
+            <th class="text-left">Total no of registered students from examination form</th>
+            <th class="text-left">semester</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of CustomizeReportCoulmnDataPush; let idx = index;">
+            <td>{{ idx + 1 }}</td>
+            <td *ngIf="filter.Type!=2" >{{row.InstituteCode}}</td>
+            <td *ngIf="filter.Type!=1">{{row.BranchCode}}</td>
+            <td>{{row.SubjectCode}}</td>
+            <td>{{row.SubjectName}}</td>
+            <td>{{row.TotalNo}}</td>
+            <td>{{row.semesterID}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+

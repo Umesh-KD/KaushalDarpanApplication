@@ -1,0 +1,84 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">All Campus List</h3>
+  <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p>
+</div>
+
+<div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card all-post-filer mb-3">
+          <div class="card-header">
+            <h4>Filter</h4>
+          </div>
+          <div class="card-body">
+
+            <form class="row g-3" [formGroup]="searchForm">
+
+              <div class="col-md-4">
+                <label for="inputState" class="form-label">Branch</label>
+                <select id="inputState" class="form-select" formControlName="BranchId" (change)="PerformSearch()">
+                  <option value="0" selected>Choose...</option>
+                  <option *ngFor="let item of TradeList" [value]="item.TradeId">{{item.TradeName}}</option>
+                </select>
+              </div>
+
+              <div class="col-md-4">
+                <label for="exampleFormControlInput1" class="form-label">Start Date</label>
+                <input type="date" class="form-control" id="exampleFormControlInput1" formControlName="StartDate" (change)="PerformSearch()">
+              </div>
+
+              <div class="col-md-4">
+                <label for="exampleFormControlInput1" class="form-label">End Date</label>
+                <input type="date" class="form-control" id="exampleFormControlInput1" formControlName="EndDate" (change)="PerformSearch()">
+              </div>
+
+            </form>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <ul class="marqueeUl">
+              <li class="marqueeUlCampus py-3" *ngFor="let item of CampusPostList;">
+                <div class="d-flex">
+                  <div class="iconMarquee d-flex justify-content-center align-items-center">
+                    <i class="fa fa-building-o"></i>
+                  </div>
+                  <div class="contentMarquee">
+                    <b class="d-block">{{item.PostNo}}</b>
+                    <h4 class="my-2">{{item.CompanyName}}</h4>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>No. of Vacancy: </span>
+                      <span [innerHtml]="item.JobDescription"></span>
+                    </div>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>
+                        Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;{{item.CampusFromDate}}<br />
+                        <span class="bold">Campus Orgnize By: {{item.TPOCollegeName}}</span>
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-end w-100">
+                      <a [routerLink]="'/ITIsinglepost'" [queryParams]="{post:item.PostID}" class="btn btn-sm btn-primary text-white p-1 me-2" *ngIf="item.IsShowMoreDetails==true">View More Details</a>
+                      <a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-sm btn-info text-white p-1">Give Consent</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="row mt-2 justify-content-center">
+      <div class="col-lg-2 col-md-4 col-sm-6 col-12 mt-3" *ngFor="let item of PlacementCompanyList;">
+        <a href="{{item.Website}}" target="_blank" class="d-block">
+          <img src="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.PlacementCompanyFolder}}/{{item.Logo}}" class="img-fluid img-thumbnail" />
+        </a>
+      </div>
+    </div>-->
+
+  </div>
+</div>

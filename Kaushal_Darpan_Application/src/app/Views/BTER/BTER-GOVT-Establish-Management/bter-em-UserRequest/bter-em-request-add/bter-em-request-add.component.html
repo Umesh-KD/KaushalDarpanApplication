@@ -1,0 +1,287 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Request</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/BterUserRequestList" class="text-sm font-medium text-slate-700" aria-current="page">User Request</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Bter-AddUserRequest" class="text-sm font-medium text-slate-700" aria-current="page">Add Request</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Request</b>
+          <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="goBack()">
+            <i class="ti ti-chevron-left"></i> Back
+          </a>
+        </div>
+        <!--{{getstatuId|json}}
+        {{request.RequestType|json}}-->
+        <form [formGroup]="groupForm">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType" (change)="FunctionRequestType()">
+                <option value="0">--Select--</option>
+                <option value="1">Transfer</option>
+                <option value="2">VRS</option>
+              </select>
+              <div *ngIf="isSubmitted && _groupForm.ddlRequestType.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlRequestType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+            <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Name </label>
+              <input type="text" class="form-input" id="txtEmployeeName" name="txtEmployeeName" formControlName="txtEmployeeName" [(ngModel)]="request.UserName" />
+            </div>
+            <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Designation </label>
+              <input type="text" class="form-input" id="txtEmployeeDesignation" name="txtEmployeeDesignation" formControlName="txtEmployeeDesignation" [(ngModel)]="request.EmployeeDesignation" />
+            </div>
+            <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Number </label>
+              <input type="text" class="form-input" id="txtEmployeeNumber" name="txtEmployeeNumber" formControlName="txtEmployeeNumber" [(ngModel)]="request.EmployeeNumber" />
+            </div>
+
+
+
+
+            <div *ngIf="getstatuId!=2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (click)="roleBySubDepartment()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlOffice.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlOffice.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="getstatuId!=2">
+              <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
+              <select class="form-select " name="ReqRoleID" id="ReqRoleID" formControlName="DDlReqRoleID"
+                      [(ngModel)]="request.ReqRoleID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.DDlReqRoleID.errors" class="text-danger">
+                <p *ngIf="!_groupForm.DDlReqRoleID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This fi
+                  eld is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+
+
+            <!--<div>
+        <label>Division<span class="StarMarking">*</span></label>
+        <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()"
+                [(ngModel)]="request.DivisionID">
+          <option value="0">--Select--</option>
+          <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+        </select>
+        <div *ngIf="isSubmitted&&_groupForm.divisionID.errors" class="text-danger">
+          <p *ngIf="!_groupForm.divisionID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This
+            field is required .!
+          </p>
+        </div>
+      </div>-->
+            <!--{{DistrictList|json}}-->
+            <div *ngIf="this.request.OfficeID == 17 && getstatuId!=2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:<span class="StarMarking">*</span>
+              </label>
+
+              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID" (click)="getITICollege()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+              <div *ngIf="isSubmitted&&_groupForm.ddlDistrictID.errors" class="text-danger">
+
+
+
+                <p *ngIf="!_groupForm.ddlDistrictID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+
+
+            </div>
+
+            <!--{{ListITICollegeByManagement|json}}-->
+            <div *ngIf="this.request.OfficeID == 17 && getstatuId!=2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlITICollegeTrade.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlITICollegeTrade.errors.DropdownValidators">
+                  er
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+
+            <div *ngIf="getstatuId !=2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+              <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
+                      [(ngModel)]="request.StaffTypeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlStaffType.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlStaffType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div *ngIf="getstatuId !=2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.PostID" formControlName="ddlPost">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label *ngIf="getstatuId === 1 || getstatuId === 2"
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     [attr.for]="getstatuId === 1 ? 'AttachDocument_signature' : 'AttachDocument_file'">
+                {{ getstatuId === 1 ? 'File' : 'Signature' }}
+              </label>
+
+
+
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="AttachDocument_file" type="file" formControlName="Upload" (change)="onFilechange($event,'Photo')">
+                <label for="AttachDocument_file">
+                  <span>Choose File</span>
+                  {{request.AttachDocument_file === '' ? 'No File Choosen' : request.AttachDocument_file}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument_fileName}}"
+                     *ngIf="this.request.AttachDocument_file !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div>
+              <label *ngIf="getstatuId === 1 || getstatuId === 2"
+                     [attr.for]="'txtRequestDate'"
+                     class="text-gray-800 text-sm font-medium inline-block mb-2">
+                {{ getstatuId === 1 ? 'Request Date' : 'Date of VRS application' }}
+                <span class="StarMarking">*</span>
+              </label>
+              <input type="date"
+                     class="form-input"
+                     id="txtRequestDate"
+                     name="txtRequestDate"
+                     formControlName="txtRequestDate"
+                     [(ngModel)]="request.RequestDate"
+                     >
+              <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtRequestRemarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Remarks <span class="StarMarking">*</span></label>
+              <textarea class="form-input w-full resize-none"
+                        rows="4"
+                        [(ngModel)]="request.RequestRemarks"
+                        formControlName="txtRequestRemarks"
+                        placeholder="Enter your remarks here..."></textarea>
+              <div *ngIf="isSubmitted&&_groupForm.txtRequestRemarks.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtRequestRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+
+
+            <div *ngIf="getstatuId ==2">
+              <label class="inline-flex items-center">
+                <input type="checkbox"
+                       class="form-checkbox"
+                       [(ngModel)]="request.IsPensionable"
+                       formControlName="txtIsPensionable"
+                       name="isPensionable" />
+                <span class="ml-2 text-gray-800 text-sm">Is Pensionable</span>
+              </label>
+            </div>
+
+            <!-- Number of Pensionable (conditional textbox) -->
+            <!--<div  *ngIf="getstatuId ==2 && IsPensionable == true">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Number of Pensionable</label>
+        <input type="text"
+               class="form-input"
+               id="txtNumberOfPensionable"
+               name="txtNumberOfPensionable"
+               formControlName="txtNumberOfPensionable"
+               [(ngModel)]="request.NumberOfPensionable" />
+      </div>-->
+            <div *ngIf="getstatuId == 2 && groupForm.get('txtIsPensionable')?.value">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Number of Pensionable</label>
+              <input type="text"
+                     class="form-input"
+                     id="txtNumberOfPensionable"
+                     [(ngModel)]="request.NumberOfPensionable"
+                     formControlName="txtNumberOfPensionable" />
+            </div>
+
+
+          </div>
+        </form>
+        <div class="text-center">
+          <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" (click)="ResetControl()" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

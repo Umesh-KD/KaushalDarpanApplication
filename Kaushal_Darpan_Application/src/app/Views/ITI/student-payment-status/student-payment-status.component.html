@@ -1,0 +1,57 @@
+
+
+<div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mt-6">
+  <div></div>
+  <div class="card mt-6">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Payment Details</b>
+        <a routerLink="/dashboard" class="btn bg-info btn-sm text-white">Back</a>
+      </div>
+      <div class="overflow-x-auto mt-3 w-full">
+        <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="PaymentStatus">
+          <tbody>
+            <tr>
+              <td>
+                <b>Transaction No.</b>
+              </td>
+              <td>{{PRNNo}} - {{TransactionId}}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Amount</b>
+              </td>
+              <td>{{Amount}}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Status</b>
+              </td>
+              <td>
+                {{PaymentStatus}}
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <b>Transction Message</b>
+              </td>
+              <td>{{this.TransctionMSG}}</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Transction Date</b>
+              </td>
+              <td>{{this.TransctionDate}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-center mt-3">
+        <button class="btn bg-info text-white" (click)="FeeReceipt()">
+          <i class="ti ti-download"></i> Download
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>

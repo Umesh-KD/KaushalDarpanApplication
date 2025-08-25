@@ -1,0 +1,204 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Menu Master</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Menu Master</a>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+        <button type="button" class="btn bg-info text-white btn-sm" (click)="MenuData(MyModel_EditMenuDetails,ParentId)">
+          <i class="ti ti-plus"></i>
+          Add New
+        </button>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
+          <input type="text" class="form-input" placeholder="Search By Name" id="MenuNameEn" [(ngModel)]="searchRequest.MenuNameEn" />
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Parent Menu</label>
+          <select class="form-select" id="ParentId" [(ngModel)]="searchRequest.MenuId">
+            <option value="0">Parent Menu</option>
+            <option *ngFor="let item of ParentMenuDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <div class="flex items-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()"><i class="ti ti-search"></i> Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
+
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!--<div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>-->
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Parent Menu Name</th>
+            <th class="text-left">Menu Name English</th>
+            <th class="text-left">Menu Name Hindi</th>
+            <th class="text-left">Menu Url</th>
+            <th class="text-left">Menu Icon</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of MenuMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              {{row.ParentMenuName}}
+            </td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MenuNameEn}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MenuNameHi}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MenuUrl}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MenuIcon}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <!--<label class="block">Status</label>-->
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.MenuId, row.ActiveStatus)">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ row.ActiveStatus === 1 ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>
+            </td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit Student" (click)="EditMenuData(MyModel_EditMenuDetails,row.MenuId)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.MenuId)"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #MyModel_EditMenuDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="EditMenuDataFormGroup" id="formEditMenuDataFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Menu # {{requestMenu.MenuId}}</b>
+          <button class="btn bg-info text-white" (click)="CloseViewMenuDetails()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+              <label>
+                <input type="checkbox" [(ngModel)]="requestMenu.Marked" formControlName="CheckBoxActiveStatus" (click)="OnVisible()" /> Show Parent Menu
+              </label>
+            </div>
+            <!--<div *ngIf="isLoading" class="loader">Loading...</div>-->
+            <div *ngIf="requestMenu.Marked">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Parent Menu</label>
+              <select class="form-select" id="ParentId" formControlName="ddlParent" [(ngModel)]="requestMenu.ParentId">
+                <option value="0"> Choose Parent Menu</option>
+                <option *ngFor="let item of ParentMenuDDLList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="txtMenuNameEng" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Menu Name (Eng) <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="txtMenuNameEng" formControlName="MenuNameEn" class="form-input" placeholder="Enter Menu Name (Eng)" [(ngModel)]="requestMenu.MenuNameEn">
+              <div *ngIf="isSubmitted && EditMenuDataFormGroup.get('MenuNameEn').invalid" class="text-danger">
+                This field is required.
+              </div>
+            </div>
+
+            <div>
+              <label for="txtMenuNameHin" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Menu Name (Hin) <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="txtMenuNameHin" formControlName="MenuNameHi" class="form-input" placeholder="Enter Menu Name (Hin)" [(ngModel)]="requestMenu.MenuNameHi">
+              <div *ngIf="isSubmitted && EditMenuDataFormGroup.get('MenuNameHi').invalid" class="text-danger">
+                This field is required.
+              </div>
+            </div>
+
+            <div>
+              <label for="txtMenuUrl" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Menu URL <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="txtMenuUrl" formControlName="MenuUrl" class="form-input" placeholder="Enter Menu URL" [(ngModel)]="requestMenu.MenuUrl">
+              <div *ngIf="isSubmitted && EditMenuDataFormGroup.get('MenuUrl').invalid" class="text-danger">
+                This field is required and must be a valid URL.
+              </div>
+            </div>
+
+            <div>
+              <label for="txtMenuIcon" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Menu Icon <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="txtMenuIcon" formControlName="MenuIcon" class="form-input" placeholder="Enter Menu Icon" [(ngModel)]="requestMenu.MenuIcon">
+              <div *ngIf="isSubmitted && EditMenuDataFormGroup.get('MenuIcon').invalid" class="text-danger">
+                This field is required.
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Active</label>
+              <div class="flex items-center">
+
+                <label for="chkIsActive" class="ml-2 text-gray-700"><input type="checkbox" id="chkIsActive" formControlName="ChkActiveStatus" [(ngModel)]="requestMenu.ActiveStatus" (change)="toggleIsActive()" /> Active?</label>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+            <div class="text-center flex items-center justify-center">
+              <button type="button" id="btnSave" (click)="SaveData_EditMenuDetails()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Submit</button>
+              <button type="button" (click)="CancelEditMenuDetails()" class="btn bg-danger text-white">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

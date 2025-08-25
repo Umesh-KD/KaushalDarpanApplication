@@ -1,0 +1,167 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Enrollment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample1">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListEnrollment; let i = index">
+      <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/' + item.URL]" [queryParams]="{ status: item.Status }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="card" *ngIf="item.URL == 'principledashreport'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Examination</b> <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample2">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListExamination; let i = index">
+      <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a routerLink="/{{[item.URL + '/' + item.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="card" *ngIf="item.URL == 'principledashreport'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample4" aria-expanded="true" aria-controls="multiCollapseExample4">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>Inventory</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample4" aria-expanded="true" aria-controls="multiCollapseExample4"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample4">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div *ngFor="let stat of InventoryList; let i = index">
+      <div class="card" *ngIf="stat.ListType=='inventory'">
+        <div class="p-5">-->
+<!-- Icon -->
+<!--<span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>-->
+<!-- Title -->
+<!--<h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>-->
+<!-- Count -->
+<!--<h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+          <a routerLink="/{{stat.URL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>-->
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> OtherType</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample3">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListOther; let i = index">
+      <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType!='inventory'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a routerLink="/{{[item.URL + '/' + item.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="card" *ngIf="item.URL == 'principledashreport'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+
+
+      <div class="card" *ngIf="item.URL == 'Enrollment'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Leave Application</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample3">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of viewAdminDashboardListLeave; let i = index">
+      <div class="card" *ngIf="item.URL != 'principledashreport' && item.ListType=='Leave'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a routerLink="/{{[item.URL + '/' + item.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="card" *ngIf="item.URL == 'principledashreport'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Allotment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample3" aria-expanded="true" aria-controls="multiCollapseExample3"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="multiCollapseExample3">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div class="col-lg-3" *ngFor="let item of viewAdminDashboardAllotment; let i = index">
+      <div class="card" *ngIf=" item.ListType=='Allotment'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a routerLink="/{{[item.URL + '/' + item.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+      <div class="card" *ngIf="item.URL == 'principledashreport'">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="['/',item.URL, item.Menu | lowercase]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

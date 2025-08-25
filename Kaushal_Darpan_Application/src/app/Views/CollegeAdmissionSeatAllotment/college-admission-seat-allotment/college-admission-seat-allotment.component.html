@@ -1,0 +1,286 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">College Admision Allotment</h4>
+
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/ITIIMCAllocationList" class="text-sm font-medium text-slate-700" aria-current="page">College
+                Admission List</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/ITIIMCVerifyStudentPhone" class="text-sm font-medium text-slate-700"
+                aria-current="page">College Admision Allotment</a>
+        </div>
+    </div>
+    <a routerLink="/ApplicationList" class="btn bg-dark btn-sm text-white"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Application Details</b>
+      </div>
+      <div class="overflow-x-auto mt-3 mb-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Application ID</th>
+              <th class="text-left">Name</th>
+              <th class="text-left">Date of Birth</th>
+              <th class="text-left">Category</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr >
+              <td>{{StudentDetailsList.ApplicationID}}</td>
+              <td>{{StudentDetailsList.StudentName}}</td>
+              <td>{{StudentDetailsList.DOB | date:'dd-MM-yyyy'}}</td>
+              <td>{{StudentDetailsList.CasteCategoryNameEnglish}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  
+  
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Choose {{StudentDetailsList.DepartmentID === _EnumDepartment.ITI ? 'Trade' : 'Branch' }} And Allot the seat</b>
+      </div>
+
+
+      <div class="overflow-x-auto mt-3" *ngIf="StudentDetailsList.DepartmentID === _EnumDepartment.BTER">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr.No.</th>
+              <th class="text-left">Branch Name</th>
+              <th class="text-left">Branch Type</th>
+              <th class="text-left">General</th>
+              <th class="text-left">General F</th>
+              <th class="text-left">SC</th>
+              <th class="text-left">SC F</th>
+              <th class="text-left">ST</th>
+              <th class="text-left">ST F</th>
+              <th class="text-left">OBC</th>
+              <th class="text-left">OBC F</th>
+              <th class="text-left">EWS</th>
+              <th class="text-left">EWS F</th>
+              <th class="text-left">MBC</th>
+              <th class="text-left">MBC F</th>
+              <th class="text-left">TFWS</th>             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of BranchList;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{item.Name}}</td>
+              <td>{{item.ShiftName}}</td>
+              <td *ngIf="item.GEN != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'GEN', 'GEN')">{{item.GEN}} - GEN Seat</button></td>
+              <td *ngIf="item.GEN == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.GEN_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'GEN F', 'GEN_F')">{{item.GEN_F}} - GEN F Seat</button></td>
+              <td *ngIf="item.GEN_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.SC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'SC', 'SC')">{{item.SC}} - SC Seat</button></td>
+              <td *ngIf="item.SC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.SC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'SC F', 'SC_F')">{{item.SC_F}} - SC F Seat</button></td>
+              <td *ngIf="item.SC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+              
+              <td *ngIf="item.ST != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'ST', 'ST')">{{item.ST}} - ST Seat</button></td>
+              <td *ngIf="item.ST == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.ST_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'ST F', 'ST_F')">{{item.ST_F}} - ST F Seat</button></td>
+              <td *ngIf="item.ST_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.OBC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'OBC', 'OBC')">{{item.OBC}} - OBC Seat</button></td>
+              <td *ngIf="item.OBC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.OBC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'OBC F', 'OBC_F')">{{item.OBC_F}} - OBC F Seat</button></td>
+              <td *ngIf="item.OBC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.EWS != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'EWS', 'EWS')">{{item.EWS}} - EWS Seat</button></td>
+              <td *ngIf="item.EWS == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.EWS_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'EWS F', 'EWS_F')">{{item.EWS_F}} - EWS F Seat</button></td>
+              <td *ngIf="item.EWS_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MBC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'MBC', 'MBC')">{{item.MBC}} - MBC Seat</button></td>
+              <td *ngIf="item.MBC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MBC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'MBC F', 'MBC_F')">{{item.MBC_F}} - MBC F Seat</button></td>
+              <td *ngIf="item.MBC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.TFWS != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="BranchWithAllot( item.BranchID, item.SeatMetrixId, 'TFWS', 'TFWS')">{{item.TFWS}} - TFWS Seat</button></td>
+              <td *ngIf="item.TFWS == 0"><span class="text-danger">Seat Not Available</span></td>              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="overflow-x-auto mt-3" *ngIf="StudentDetailsList.DepartmentID === _EnumDepartment.ITI">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr.No.</th>
+              <th class="text-left">Trade Name</th>
+              <th class="text-left">Trade Scheme</th>
+              <th class="text-left">General</th>
+              <th class="text-left">General F</th>
+              <th class="text-left">SC</th>
+              <th class="text-left">SC F</th>
+              <th class="text-left">ST</th>
+              <th class="text-left">ST F</th>
+              <th class="text-left">OBC</th>
+              <th class="text-left">OBC F</th>
+              <th class="text-left">EWS</th>
+              <th class="text-left">EWS F</th>
+              <th class="text-left">MBC</th>
+              <th class="text-left">MBC F</th>
+           
+              <!-- st.SAH, st.SAH_F, st.MIN, st.MIN_F, st.DEV, st.DEV_F, IMC_SC, IMC_ST, IMC_OBC, IMC_GEN, -->
+              <th class="text-left">SAH</th>
+              <th class="text-left">SAH F</th>
+              <th class="text-left">MIN</th>
+              <th class="text-left">MIN F</th>
+              <th class="text-left">DEV</th>
+              <th class="text-left">DEV F</th>
+           
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of TradeList;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.TradeScheme}}</td>
+              <td *ngIf="item.GEN != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'GEN', 'GEN')">{{item.GEN}} - GEN Seat</button></td>
+              <td *ngIf="item.GEN == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.GEN_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.BranchID, item.SeatMetrixId, 'GEN F', 'GEN_F')">{{item.GEN_F}} - GEN F Seat</button></td>
+              <td *ngIf="item.GEN_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.SC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'SC', 'SC')">{{item.SC}} - SC Seat</button></td>
+              <td *ngIf="item.SC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.SC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'SC F', 'SC_F')">{{item.SC_F}} - SC F Seat</button></td>
+              <td *ngIf="item.SC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+              
+              <td *ngIf="item.ST != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'ST', 'ST')">{{item.ST}} - ST Seat</button></td>
+              <td *ngIf="item.ST == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.ST_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'ST F', 'ST_F')">{{item.ST_F}} - ST F Seat</button></td>
+              <td *ngIf="item.ST_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.OBC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'OBC', 'OBC')">{{item.OBC}} - OBC Seat</button></td>
+              <td *ngIf="item.OBC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.OBC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'OBC F', 'OBC_F')">{{item.OBC_F}} - OBC F Seat</button></td>
+              <td *ngIf="item.OBC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.EWS != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'EWS', 'EWS')">{{item.EWS}} - EWS Seat</button></td>
+              <td *ngIf="item.EWS == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.EWS_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'EWS F', 'EWS_F')">{{item.EWS_F}} - EWS F Seat</button></td>
+              <td *ngIf="item.EWS_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MBC != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'MBC', 'MBC')">{{item.MBC}} - MBC Seat</button></td>
+              <td *ngIf="item.MBC == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MBC_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'MBC F', 'MBC_F')">{{item.MBC_F}} - MBC F Seat</button></td>
+              <td *ngIf="item.MBC_F == 0"><span class="text-danger">Seat Not Available</span></td>
+             
+
+              <td *ngIf="item.SAH != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'SAH', 'SAH')">{{item.SAH}} - SAH Seat</button></td>
+              <td *ngIf="item.SAH == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.SAH_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'SAH F', 'SAH_F')">{{item.SAH_F}} - SAH F Seat</button></td>
+              <td *ngIf="item.SAH_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MIN != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'MIN', 'MIN')">{{item.MIN}} - MIN Seat</button></td>
+              <td *ngIf="item.MIN == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.MIN_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'MIN F', 'MIN_F')">{{item.MIN_F}} - MIN F Seat</button></td>
+              <td *ngIf="item.MIN_F == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.DEV != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'DEV', 'DEV')">{{item.DEV}} - DEV Seat</button></td>
+              <td *ngIf="item.DEV == 0"><span class="text-danger">Seat Not Available</span></td>
+
+              <td *ngIf="item.DEV_F != 0"><button type="button" class="btn bg-info btn-sm text-white" 
+                (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeTradeID, item.SeatMetrixId, 'DEV F', 'DEV_F')">{{item.DEV_F}} - DEV F Seat</button></td>
+              <td *ngIf="item.DEV_F == 0"><span class="text-danger">Seat Not Available</span></td>            
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+</div>
+
+<ng-template #modal_ShiftUnit let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b>
+            <i class="fa fa-plus"></i>&nbsp; Allot Seat
+          </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mt-4">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Choose Shift and Unit</label>
+            <select class="form-select" [(ngModel)]="request.ShiftUnit" *ngIf="this.StudentDetailsList.DepartmentID === _EnumDepartment.ITI">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of  ShiftUnitList" [value]="item.SeatIntakeID">Shift ({{item.Shift}}) - Unit ({{item.UnitNo}})</option>
+        
+            </select>
+            <select class="form-select" [(ngModel)]="request.ShiftUnit" *ngIf="this.StudentDetailsList.DepartmentID === _EnumDepartment.BTER">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of  ShiftUnitList" [value]="item.Id">{{item.ShiftName}}</option>
+          
+              </select>
+          </div>
+        </div>
+        <div class="card-footer text-center flex items-center justify-center mt-3">
+
+          <button *ngIf="this.StudentDetailsList.DepartmentID === _EnumDepartment.BTER" (click)="SaveBranchWithAllot()"
+           type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Allot Now</button>
+
+           <button *ngIf="this.StudentDetailsList.DepartmentID === _EnumDepartment.ITI" (click)="SaveTradeWithAllot()"
+           type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Allot Now</button>
+
+          <button (click)="CloseModal()" type="button" id="btnSave" class="btn bg-danger text-white"><i class="ti ti-device-floppy"></i> Leter</button>
+        </div>
+      </div>
+    </div>
+</ng-template>

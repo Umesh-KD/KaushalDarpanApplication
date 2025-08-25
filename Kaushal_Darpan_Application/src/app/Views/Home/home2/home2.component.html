@@ -1,0 +1,737 @@
+
+
+<section class="container-fluid py-2 flashNews" id="scrool">
+
+  <div class="row align-items-center">
+    <div class="col-lg-2 col-md-3 col-sm-4 col-12">
+      <div class="newsArrow d-flex justify-content-center align-items-center">
+        <h4 class="m-0 text-dark"><a href="javascript:void(0);" target="_blank" class="text-white">News: <small style="font-size:12px !important">(Read More)</small></a></h4>
+      </div>
+    </div>
+    <div class="col-lg-10 col-md-9 col-sm-8 col-12 d-flex align-items-center">
+
+      <marquee onMouseOver="this.stop()" onMouseOut="this.start()">
+        <div class="d-flex align-items-center">
+          <div *ngFor="let item of NewsList">
+            <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="text-white d-flex align-items-center d-block me-3 border-right-1">
+              <span class="text-white me-2 d-block fw-600"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span> :  {{item.Title}}
+            </a>
+          </div>
+
+        </div>
+      </marquee>
+
+    </div>
+
+  </div>
+</section>
+<div id="carouselExampleCaptions" class="carousel slide">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="/assets/KD5/images/slider/slider11.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h1 class="mb-3">Kaushal Darpan</h1>
+        <!--<p class="mb-0">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>-->
+        <a href="javascript:void(0)" class="btn btn-primary btn-style mt-md-3 mt-3 view_btn">Read More</a>
+      </div>
+      <div class="sliderOverlay"></div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="/assets/KD5/images/slider/banner2.jpg" class="d-block w-100" alt="...">
+      <div class="sliderOverlay"></div>
+    </div>
+
+    <div class="carousel-item">
+      <img src="/assets/KD5/images/slider/banner7.jpg" class="d-block w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <h1 class="mb-3">Kaushal Darpan</h1>
+        <!--<p class="mb-0">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>-->
+        <a href="javascript:void(0)" class="btn btn-primary btn-style mt-md-3 mt-3 view_btn">Read More</a>
+      </div>
+      <div class="sliderOverlay"></div>
+    </div>
+
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions"
+          data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions"
+          data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+  <div Class="cm_img">
+    <img src="/assets/KD5/images/shriCM.png" Class="w-100">
+    <div Class="cm_img_dtl p-2 text-center">
+      <h4>Honourable Chief Minister Rajasthan</h4>
+      <span>Shri Bhajan Lal Sharma</span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<section class="py-5 Admission school-choice-section0 wow bounceIn fadeInRight YourChoice">
+  <div class="container-fluid">
+    <div class="text-center text-white0 mb-5">
+      <h2>
+        Our  Notifications
+      </h2>
+    </div>
+    <div class="row clickedListsNotification">
+      <div class="col-xl-3 col-lg-6 col-md-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-center">
+            <b>DTE</b>
+          </div>
+          <div class="card-body listUlDivScrollLIst">
+
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250"  *ngIf="DteList != null">
+              <div *ngFor="let item of DteList">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                  <div class="d-flex">
+                    <span><img src="/assets/KD5/images/pdf.png"></span>
+                    <div class="ms-2">
+                      <p class="mt-0 mb-0">
+                        {{item.Title}}
+                      </p>
+                      <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}}</span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </marquee>
+            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2"  *ngIf="DteList != null">View All</a>
+            <div style="height:310px" *ngIf="DteList == null" class="text-center">No Record Found!!!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-center">
+            <b>BTER</b>
+          </div>
+          <div class="card-body listUlDivScrollLIst">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="BTERList != null">
+              <div *ngFor="let item of BTERList">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                  <div class="d-flex">
+                    <span><img src="/assets/KD5/images/pdf.png"></span>
+                    <div class="ms-2">
+                      <p class="mt-0 mb-0">
+                        {{item.Title}}
+                      </p>
+                      <span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}}</span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </marquee>
+            <a routerLink="dynamic-content-list/241/1" class="btn btn-outline-warning d-block text-center my-2" *ngIf="BTERList != null">View All</a>
+            <div style="height:310px" *ngIf="BTERList == null" class="text-center">No Record Found!!!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-center">
+            <b>ITI</b>
+          </div>
+          <div class="card-body listUlDivScrollLIst">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="ITIList != null">
+              <div *ngFor="let item of ITIList">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                  <div class="d-flex">
+                    <span><img src="/assets/KD5/images/pdf.png"></span>
+                    <div class="ms-2">
+                      <p class="mt-0 mb-0">
+                        {{item.Title}}
+                      </p>
+                      <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </marquee>
+            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2" *ngIf="ITIList != null">View All</a>
+            <div style="height:310px" *ngIf="ITIList == null" class="text-center">No Record Found!!!</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-lg-6 col-md-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-center">
+            <b>Apprenticeship</b>
+          </div>
+          <div class="card-body listUlDivScrollLIst">
+            <marquee onMouseOver="this.stop()" onMouseOut="this.start()" direction="up" height="250" *ngIf="ITIList != null">
+              <div *ngFor="let item of ApprenticeshipList">
+                <a href="{{appsettingConfig.StaticFileRootPathURL}}{{item.docFile}}" target="_blank" class="card p-3 py-2 shadow-sm mb-2">
+                  <div class="d-flex">
+                    <span><img src="/assets/KD5/images/pdf.png"></span>
+                    <div class="ms-2">
+                      <p class="mt-0 mb-0">
+                        {{item.Title}}
+                      </p>
+                      <!--<span class="text-nowrap"><i class="fa fa-calendar"></i>&nbsp;{{item.CreateDates}} - {{item.DeptNames}}</span>-->
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </marquee>
+            <a href="javascript:void(0);" class="btn btn-outline-warning d-block text-center my-2" *ngIf="ITIList != null">View All</a>
+            <div style="height:310px" *ngIf="ITIList == null" class="text-center">No Record Found!!!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="py-5  school-choice-section0 wow bounceIn fadeInRight">
+  <div class="container-fluid">
+    <div class="row clickedLists">
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Admissions-Polytechnic
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li><a target="_blank" href="/dtepublicinfo?courseid=1"><span><i class="fa fa-hand-o-right"></i>Diploma 1st Year Eng</span></a></li>
+              <li><a target="_blank" href="/dtepublicinfo?courseid=2"><span><i class="fa fa-hand-o-right"></i>Diploma Non-Engineering 1st Year </span></a></li>
+              <li><a target="_blank" href="/dtepublicinfo?courseid=3"><span><i class="fa fa-hand-o-right"></i>Diploma 2nd Year Eng Lateral Admission</span></a></li>
+              <li><a target="_blank" href="/dtepublicinfo?courseid=4"><span><i class="fa fa-hand-o-right"></i>Degree Course 1st Year Non-Engg</span></a></li>
+              <li><a target="_blank" href="/dtepublicinfo?courseid=5"><span><i class="fa fa-hand-o-right"></i>Degree Course 2nd Year Lateral</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Admissions-ITI
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li>
+                <a href="/itipublicinfo">
+                  <span><i class="fa fa-hand-o-right"></i> Online Admissions</span>
+                </a>
+              </li>
+              <!--<li>
+                <a href="iti_admission.html">
+                  <span><i class="fa fa-hand-o-right"></i> Direct Admissions</span>
+                </a>
+              </li>-->
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!--<div class="col-lg-3 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Admissions-DCE
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li>
+                <a href="javascript:void(0);">
+                  <span><i class="fa fa-hand-o-right"></i> UG Courses</span>
+                </a>
+              </li>
+              <li>
+                <a href="javascript:void(0);">
+                  <span><i class="fa fa-hand-o-right"></i> PG Courses</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>-->
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Placement - Polytechnic
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li><a target="_blank" href="/allpost"><span><i class="fa fa-hand-o-right"></i>Placements</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>Examination- Polytechnic</b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li>
+
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>Engineering Yearly Scheme</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Reval</span></a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>Non-Engineering Yearly Scheme</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Reval</span></a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>Engineering Semester Scheme</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Reval</span></a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>Non-Engineering Semester Scheme</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Reval</span></a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>Examination-ITI</b>
+          </div>
+          <div class="card-body listUlDiv">
+            <ul class="mainUL">
+              <li>
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>SCVT</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                </ul>
+              </li>
+              <li>
+                <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <span><i class="fa fa-hand-o-right"></i> <span>NCVT</span></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Examination</span></a></li>
+                  <li><a class="dropdown-item" href="javascript:void(0);"><span><i class="fa fa-angle-right"></i> Results</span></a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!--<div class="col-lg-3 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Examination-DCE
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+
+          </div>
+        </div>
+      </div>-->
+      <div class="col-lg-4 col-md-4 col-sm-6 col-12 h-100">
+        <div class="card h-100">
+          <div class="card-header bg-warning">
+            <b>
+              Placement-ITI
+            </b>
+          </div>
+          <div class="card-body listUlDiv">
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- End To Contribute in the School of Your Choice -->
+<!-- Start Engage withus -->
+
+<!-- End Engage withus -->
+<!-- Start Five Section -->
+
+<!-- End Five Section -->
+
+
+<section class="py-5 school-choice-section0 wow bounceIn fadeInRight d-none" style="background-color: #edf7fe ;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12">
+
+        <ul class="nav nav-tabs d-flex justify-content-center mb-4 border-0" id="NotificationTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="Dashboard1" data-bs-toggle="tab"
+                    data-bs-target="#Dashboard1-pane" type="button" role="tab" aria-controls="Dashboard1-pane"
+                    aria-selected="true">
+              Dashboard 1
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Dashboard2" data-bs-toggle="tab"
+                    data-bs-target="#Dashboard2-pane" type="button" role="tab" aria-controls="Dashboard2-pane"
+                    aria-selected="true">
+              Dashboard 2
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Dashboard3" data-bs-toggle="tab"
+                    data-bs-target="#Dashboard3-pane" type="button" role="tab" aria-controls="Dashboard3-pane"
+                    aria-selected="true">
+              Dashboard 3
+            </button>
+          </li>
+          <!--<li class="nav-item" role="presentation">
+              <button class="nav-link" id="DashboardTable" data-bs-toggle="tab"
+                      data-bs-target="#DashboardTable-pane" type="button" role="tab" aria-controls="DashboardTable-pane"
+                      aria-selected="true">
+                  Table
+              </button>
+          </li>-->
+        </ul>
+
+        <div class="tab-content bg-white p-2 rounded border" id="myTabContent">
+          <div class="tab-pane fade show active" id="Dashboard1-pane" role="tabpanel" aria-labelledby="Dashboard1-tab" tabindex="0">
+
+            <h3 class="graphHeading py-2 m-0">Directorate of Technical Education - Admissions Dashboard</h3>
+            <div class="graphSection graphSection2 lighBgGraph d-flex justify-content-between bg-theme-light">
+              <div class="card">
+                <div class="card-body">
+                  <h3>1,32,454</h3>
+                  <h4>Total Requests</h4>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h3>22.92%</h3>
+                  <h4>Admission % (Avg.)</h4>
+                </div>
+              </div>
+            </div>
+            <div class="graphSection graphSection5 d-flex justify-content-between">
+              <div class="card">
+                <div class="card-header"><b>Admission % by AY</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionPerByAY"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><b>Admission % by Mgmt. Type</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionPerByMgmtType"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><b>Admission % by Adm. Type</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionPerByAdmType"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><b>Admission % by Gender</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionByGender"></div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-header"><b>Admission % by Category</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionPerByCategory"></div>
+                </div>
+              </div>
+            </div>
+            <div class="graphSection graphSection1 d-flex justify-content-between">
+              <div class="card">
+                <div class="card-header"><b>Admission % by District</b></div>
+                <div class="card-body p-0 max-graph-height">
+                  <div id="AdmissionPerByDistrict"></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="Dashboard2-pane" role="tabpanel" aria-labelledby="Dashboard2-tab" tabindex="0">
+
+            <h3 class="graphHeading py-2 m-0">Directorate of Technical Education - Management Type (Govt./ Private) Admissions Analysis</h3>
+
+
+
+            <div class="graphSection d-flex">
+              <div class="card graphSection80">
+                <div class="card-body p-0">
+                  <div class="graphSection graphSection1 d-flex justify-content-between">
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by District</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionPerbyDistrictA"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="graphSection graphSection2 d-flex justify-content-between">
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by Branch</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionByBranch"></div>
+                      </div>
+                    </div>
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by Institute</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionPerByInstitute"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card graphSection20">
+                <div class="card-body d-flex flex-column p-0">
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>AY</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> 2020-21</label></li>
+                        <li><label><input type="checkbox" /> 2021-22</label></li>
+                        <li><label><input type="checkbox" /> 2022-23</label></li>
+                        <li><label><input type="checkbox" /> 2023-24</label></li>
+                        <li><label><input type="checkbox" /> 2024-25</label></li>
+                        <li><label><input type="checkbox" /> 2025-26</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Management Type</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Government</label></li>
+                        <li><label><input type="checkbox" /> Private</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Admission Type</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Eng(Diploma)</label></li>
+                        <li><label><input type="checkbox" /> Non-Eng(Diploma)</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Gender</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Male</label></li>
+                        <li><label><input type="checkbox" /> Female</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Category</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> GEN</label></li>
+                        <li><label><input type="checkbox" /> OBC</label></li>
+                        <li><label><input type="checkbox" /> SC</label></li>
+                        <li><label><input type="checkbox" /> ST</label></li>
+                        <li><label><input type="checkbox" /> MBC</label></li>
+                        <li><label><input type="checkbox" /> PH</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="Dashboard3-pane" role="tabpanel" aria-labelledby="Dashboard3-tab" tabindex="0">
+
+            <h3 class="graphHeading py-2 m-0">Directorate of Technical Education - Admissions Type (Eng./ Non-Eng.) Analysis</h3>
+            <div class="graphSection d-flex">
+              <div class="card graphSection80">
+                <div class="card-body p-0">
+                  <div class="graphSection graphSection1 d-flex justify-content-between">
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by District</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionPerbyDistrictB"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="graphSection graphSection2 d-flex justify-content-between">
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by Branch</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionByBranchB"></div>
+                      </div>
+                    </div>
+                    <div class="card">
+                      <div class="card-header"><b>Admission % by Institute</b></div>
+                      <div class="card-body p-0 max-graph-height">
+                        <div id="AdmissionPerByInstituteB"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card graphSection20">
+                <div class="card-body d-flex flex-column p-0">
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>AY</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> 2020-21</label></li>
+                        <li><label><input type="checkbox" /> 2021-22</label></li>
+                        <li><label><input type="checkbox" /> 2022-23</label></li>
+                        <li><label><input type="checkbox" /> 2023-24</label></li>
+                        <li><label><input type="checkbox" /> 2024-25</label></li>
+                        <li><label><input type="checkbox" /> 2025-26</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Management Type</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Government</label></li>
+                        <li><label><input type="checkbox" /> Private</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Admission Type</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Eng(Diploma)</label></li>
+                        <li><label><input type="checkbox" /> Non-Eng(Diploma)</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Gender</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> Male</label></li>
+                        <li><label><input type="checkbox" /> Female</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="card w-100 mb-0">
+                    <div class="card-header">
+                      <b>Category</b>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li><label><input type="checkbox" /> GEN</label></li>
+                        <li><label><input type="checkbox" /> OBC</label></li>
+                        <li><label><input type="checkbox" /> SC</label></li>
+                        <li><label><input type="checkbox" /> ST</label></li>
+                        <li><label><input type="checkbox" /> MBC</label></li>
+                        <li><label><input type="checkbox" /> PH</label></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="DashboardTable-pane" role="tabpanel" aria-labelledby="DashboardTable-tab" tabindex="0">
+
+            <h3 class="graphHeading py-2 m-0">Tables Dashboard</h3>
+            <div class="graphSection graphSection2 d-flex justify-content-between bg-theme-light">
+              <div class="card">
+                <div class="card-body">
+
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+
+                </div>
+              </div>
+            </div>
+            <div class="graphSection graphSection5 d-flex justify-content-between">
+              <div class="card">
+                <div class="card-body">
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="clearfix"></div>

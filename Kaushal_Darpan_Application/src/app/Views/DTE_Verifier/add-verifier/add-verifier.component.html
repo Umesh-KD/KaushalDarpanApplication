@@ -1,0 +1,107 @@
+ 
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Add Checker</h4>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/verifiers" class="text-sm font-medium text-slate-700" aria-current="page">Checker</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/addverifier" class="text-sm font-medium text-slate-700" aria-current="page">Add Checker</a>
+        </div>
+    </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Checker</b>
+                <a routerLink="/verifiers" class="btn bg-dark text-white btn-sm">Back</a>
+            </div>
+            <form [formGroup]="VerifierFormGroup">
+              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID:<span class="StarMarking">*</span> </label>
+                  <div class="flex">
+                    <input class="form-input" type="text" placeholder="Enter SSOID" formControlName="SSOID" [(ngModel)]="request.SSOID" />
+                    <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.SSOID)">GetDetails</button>
+                  </div>
+                  <div *ngIf="isSubmitted && _VerifierFormGroup.SSOID.errors" class="text-danger">
+                    <p *ngIf="_VerifierFormGroup.SSOID.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required.!
+                    </p>
+                  </div>
+                </div>
+                  <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name:</label>
+                    <input class="form-input" type="text" placeholder="Enter Name" formControlName="Name" [(ngModel)]="request.Name" readonly />
+                    <div *ngIf="isSubmitted && _VerifierFormGroup.Name.errors" class="text-danger">
+                      <p *ngIf="_VerifierFormGroup.Name.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required.!
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email Address: </label>
+                    <input class="form-input" type="email" placeholder="Enter Email Address" formControlName="Email" [(ngModel)]="request.Email" readonly />
+                    <div *ngIf="isSubmitted && _VerifierFormGroup.Email.errors" class="text-danger">
+                      <p *ngIf="_VerifierFormGroup.Email.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required.!
+                      </p>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No.: </label>
+                    <input class="form-input" type="text" placeholder="Enter MobileNo" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" readonly />
+                    <div *ngIf="isSubmitted && _VerifierFormGroup.MobileNumber.errors" class="text-danger">
+                      <p *ngIf="_VerifierFormGroup.MobileNumber.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required.!
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                    <label class="block">Status</label>
+                    <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                      <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ActiveStatus"
+                             formControlName="chkActiveStatus" onchange="js_StatusYesNoActiveInActive(this);">
+                      <span class="toggleIcon">
+                        <span class="toggleTitle"></span>
+                      </span>
+                    </label>
+
+                  </div>
+
+                  <!--<div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+      <label class="block">Show All Application</label>
+      <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+        <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ShowAllApplication"
+               formControlName="chkShowAllApplication">
+        <span class="toggleIcon">
+          <span class="toggleTitle"></span>
+        </span>
+      </label>
+    </div>-->
+
+
+
+
+
+                </div>
+                <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+                  <div class="text-center">
+                    <button type="button" class="btn bg-info text-white mt-6" (click)="SaveVerifierData()">Submit</button>
+                    <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Reset</button>
+                  </div>
+                </div>
+</form>
+        </div>
+
+    </div>
+</div>

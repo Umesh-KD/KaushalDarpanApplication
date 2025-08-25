@@ -1,0 +1,362 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Import NVCT Exam Data</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardBTER" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/BTERCollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">BTER College Trade</a>-->
+      <a [routerLink]="['/iti_ncvt_data_import']" class="text-sm font-medium text-slate-700" aria-current="page">Import NVCT Exam Data</a>
+    </div>
+
+
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
+            <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getITICollege()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Search By College:
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Search By Trade:
+            </label>
+            <select class="form-select" [(ngModel)]="searchRequest.TradeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+            <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+            <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+          </div>
+
+
+
+          <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Alltmet Type
+        </label>
+        <select class="form-select" (change)="AllotmentChange()" [(ngModel)]="searchRequest.AllotmentMasterId">
+          <option value="0">Choose Option</option>
+          <option value="1">IMC Allotment</option>
+          <option value="2">First Allotment</option>
+          <option value="4">Second Allotment</option>
+          <option value="6">Internal Sliding</option>
+        </select>
+      </div>-->
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetNCVTUPLOADED(1)">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <div class="flex justify-end flex-wrap items-center">
+
+          <a href="javascript:void(0)" (click)="OpenSeatMatrix(MyModel_SeatMatrix)" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Import Exam Data</a>
+          <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetNCVTUPLOADED(1)">
+            <option value="10">10</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+
+
+        <div class="">
+        </div> <div class="">
+        </div>
+        <div class="" style="text-align:right">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">#</th>
+              <th class="text-left">Id                 </th>
+              <th class="text-left">Student exam id    </th>
+              <th class="text-left">Reg No.              </th>
+              <th class="text-left">Roll No            </th>
+              <th class="text-left">Exam Type          </th>
+              <th class="text-left">DGT code           </th>
+              <th class="text-left">Inst Code          </th>
+              <th class="text-left">Shift              </th>
+              <th class="text-left">Unit               </th>
+              <th class="text-left">Type               </th>
+              <th class="text-left">Trade code         </th>
+              <th class="text-left">Course duration    </th>
+              <th class="text-left">Practical          </th>
+              <th class="text-left">Paper1             </th>
+              <th class="text-left">Paper2             </th>
+              <th class="text-left">Paper3             </th>
+              <th class="text-left">Paper4             </th>
+              <th class="text-left">Name               </th>
+              <th class="text-left">Father name        </th>
+              <th class="text-left">Institute id       </th>
+              <th class="text-left">Institute name     </th>
+              <th class="text-left">Stream id          </th>
+              <th class="text-left">Stream name        </th>
+              <th class="text-left">Trade type         </th>
+              <th class="text-left">Trade scheme type  </th>
+              <th class="text-left">Exam Fees          </th>
+              <th class="text-left">Exam Fees Status   </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of NCVTData | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <th class="text-left">{{item.id                }} </th>
+              <th class="text-left">{{item.student_exam_id   }} </th>
+              <th class="text-left">{{item.RegNo             }} </th>
+              <th class="text-left">{{item.roll_no           }} </th>
+              <th class="text-left">{{item.Exam_Type         }} </th>
+              <th class="text-left">{{item.DGT_code          }} </th>
+              <th class="text-left">{{item.Inst_Code         }} </th>
+              <th class="text-left">{{item.shift             }} </th>
+              <th class="text-left">{{item.unit              }} </th>
+              <th class="text-left">{{item.Type              }} </th>
+              <th class="text-left">{{item.Trade_code        }} </th>
+              <th class="text-left">{{item.Course_duration   }} </th>
+              <th class="text-left">{{item.Practical         }} </th>
+              <th class="text-left">{{item.Paper1            }} </th>
+              <th class="text-left">{{item.Paper2            }} </th>
+              <th class="text-left">{{item.paper3            }} </th>
+              <th class="text-left">{{item.paper4            }} </th>
+              <th class="text-left">{{item.Name              }} </th>
+              <th class="text-left">{{item.father_name       }} </th>
+              <th class="text-left">{{item.institute_id      }} </th>
+              <th class="text-left">{{item.institute_name    }} </th>
+              <th class="text-left">{{item.stream_id         }} </th>
+              <th class="text-left">{{item.stream_name       }} </th>
+              <th class="text-left">{{item.trade_type        }} </th>
+              <th class="text-left">{{item.trade_scheme_type }} </th>
+              <th class="text-left">{{item.Exam_Fees         }} </th>
+              <th class="text-left">{{item.Exam_Fees_Status  }} </th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="p-3 paginationBox flex items-center justify-end w-full">
+        <span class="block">
+          Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  NCVTData?.length }} of {{NCVTData[0]?.TotalRecords}}
+        </span>
+        <div class="paginationBoxItems flex items-center">
+          <button (click)="GetNCVTUPLOADED(1)" [disabled]="pageNo==1">First</button>
+          <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+          <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+                 [disabled]="NCVTData[0]?.TotalRecords==0" (change)="GetNCVTUPLOADED(pageNo)" />
+          <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+          <button (click)="nextData()">Next</button>
+          <button (click)="GetNCVTUPLOADED(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+        </div>
+      </div>
+
+
+    </div>
+</div>
+<ng-template #MyModel_ViewSeatDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Seat Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <h4><b>College Name:</b> {{CollegeNamePop}}</h4>
+        <h4><b>Branch name :</b> {{TradeNamePop}}</h4>
+        <h4><b>Shift:</b> {{TradeSchemeNamePop}}</h4>
+
+
+
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">TotalSeats</th>
+                <th class="text-left">GEN</th>
+                <th class="text-left">GEN_F</th>
+                <th class="text-left">SC</th>
+                <th class="text-left">SC_F</th>
+                <th class="text-left"> ST</th>
+                <th class="text-left">ST_F</th>
+                <th class="text-left">TSP</th>
+                <th class="text-left">TSP_F</th>
+
+                <th class="text-left">OBC</th>
+                <th class="text-left">OBC_F</th>
+
+
+                <th class="text-left">EWS</th>
+                <th class="text-left">EWS_F</th>
+                <th class="text-left">MBC</th>
+                <th class="text-left">MBC_F</th>
+
+
+                <th class="text-left">TFWS</th>
+                <th class="text-left">MANAGEMENT</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td class="text-left">{{item.TotalSeats}}</td>
+                <td class="text-left">{{item.GEN}}</td>
+                <td class="text-left">{{item.GEN_F}}</td>
+                <td class="text-left">{{item.SC}}</td>
+                <td class="text-left">{{item.SC_F}}</td>
+                <td class="text-left">{{item. ST}}</td>
+                <td class="text-left">{{item.ST_F}}</td>
+                <td class="text-left">{{item.TSP}}</td>
+                <td class="text-left">{{item.TSP_F}}</td>
+                <td class="text-left">{{item.OBC}}</td>
+                <td class="text-left">{{item.OBC_F}}</td>
+                <td class="text-left">{{item.EWS}}</td>
+                <td class="text-left">{{item.EWS_F}}</td>
+                <td class="text-left">{{item.MBC}}</td>
+                <td class="text-left">{{item.MBC_F}}</td>
+
+                <td class="text-left">{{item.TFWS}}</td>
+                <td class="text-left">{{item.MGM}}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 mt-3 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Horizontal Seats</b>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+
+                <th class="text-left">Single Mother Dependent(SMD)</th>
+                <th class="text-left">WIDOW/DIVORCEE</th>
+                <th class="text-left">EX-SERVICE MEN</th>
+                <th class="text-left">PH</th>
+                <th class="text-left">KM</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+
+
+                <td class="text-left">{{item.SMD}}</td>
+                <td class="text-left">{{item.WID_DIV}}</td>
+                <td class="text-left">{{item.EX}}</td>
+                <td class="text-left">{{item.PH}}</td>
+                <td class="text-left">{{item.KM}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #MyModel_SeatMatrix let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Import NVCT Exam Data </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="grid-cols-12">
+          <label style="color:red;font-size:15px;" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                 for="fileStudentPhoto">*Please validate that the record count does not exceed 10,000 rows, as that is the maximum allowed for this operation.</label>
+        </div>
+        <div class="clearfix"></div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="gap-3">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+              <!-- File Input for Excel -->
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <div class="mt-5">
+            <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+            <a href="javascript:void(0)" (click)="ResetData()"             class="btn bg-info btn-md text-white mt-3"><i class="ti ti-list"></i>Reset</a>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Import NVCT Exam Data</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" (click)="SaveExamData()" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Save
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead>
+              <tr>
+                <th style="text-align:left;" *ngFor="let item of DataExcel4">{{ item  }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let items of DataExcel; let indx=index">
+                <td  style="text-align:left;" *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>
+                <!--<td *ngFor="let item of items.values">{{item}}</td>-->                
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

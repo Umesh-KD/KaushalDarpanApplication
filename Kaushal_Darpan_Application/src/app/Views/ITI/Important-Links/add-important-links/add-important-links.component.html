@@ -1,0 +1,44 @@
+  <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Important Links</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ImportantLinksList" class="text-sm font-medium text-slate-700" aria-current="page">Important Links</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddImportantLinks" class="text-sm font-medium text-slate-700" aria-current="page">Add Important Links</a>
+    </div>
+  </div>
+  <a routerLink="/ImportantLinksList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Important Links</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Title: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Title:">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Document: <span class="StarMarking">*</span></label>
+            <input type="file" class="form-input">
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->

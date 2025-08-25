@@ -1,0 +1,207 @@
+ <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Edit</h4>
+  </div>
+  <a routerLink="/iti-fees-peryear-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <!--<form (ngSubmit)="saveData()">-->
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5 text-danger"><i class="ti ti-plus"></i>Fee Structure filled by all ITI on Portal should be totalof Training Fee,Caution Money and Accidential Insurance Preminum  </b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name:</label>
+            <input type="text" class="form-input" disabled placeholder="Trade Name" [(ngModel)]="request.TradeName">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Scheme:</label>
+            <input type="text" class="form-input" disabled placeholder="Trade Scheme" [(ngModel)]="request.TradeScheme">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Seats: <span class="StarMarking">*</span></label>
+            <input type="number" class="form-input" disabled placeholder="Enter Total Seats" [(ngModel)]="request.TotalSeats">
+
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Fee Per Annum :</label>
+            <input type="text" class="form-input" [disabled]="request.FeePdf == 1" placeholder="Fee Per Year" [(ngModel)]="request.Fee">
+          </div>
+
+          <div *ngIf="request.IsImc==1">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">IMC Fee Annum Year:</label>
+              <input type="text" class="form-input" [disabled]="request.FeePdf == 1" placeholder="IMC Fee Per Year" [(ngModel)]="request.Imcfee">
+            </div>
+          </div>
+
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 hidden">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Seats</b>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 hidden">
+          <div class="overflow-x-auto">
+            <table class="table table-border w-full table-auto tableMinInput" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">SC</th>
+                  <th class="text-left">SC (F)</th>
+                  <th class="text-left">ST</th>
+                  <th class="text-left">ST (F)</th>
+                  <th class="text-left">TSP</th>
+                  <th class="text-left">TSP (F)</th>
+                  <th class="text-left">sahriyaARIA</th>
+                  <th class="text-left">sahriyaARIA (F)</th>
+                  <th class="text-left">OBC</th>
+                  <th class="text-left">OBC (F)</th>
+                  <th class="text-left">MBC</th>
+                  <th class="text-left">MBC (F)</th>
+                  <th class="text-left">DEVNARAYAN</th>
+                  <th class="text-left">DEVNARAYAN (F)</th>
+                  <th class="text-left">EWS</th>
+                  <th class="text-left">EWS (F)</th>
+                  <th class="text-left">GENERAL</th>
+                  <th class="text-left">GENERAL (F)</th>
+                  <th class="text-left">MINORITY</th>
+                  <th class="text-left">MINORITY (F)</th>
+                  <th class="text-left">IMC SC</th>
+                  <th class="text-left">IMC ST</th>
+                  <th class="text-left">IMC OBC</th>
+                  <th class="text-left">IMC GENERAL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.SC">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.SC_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.ST">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.ST_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.TSP">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.TSP_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.SAH">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.SAH_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.OBC">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.OBC_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.MBC">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.MBC_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.DEV">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.DEV_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.EWS">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.EWS_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.GEN">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.GEN_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.MIN">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.MIN_F">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.IMCSC">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.IMCST">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.IMCOBC">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.IMCGEN">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 hidden">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Horizontal seats</b>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 hidden">
+          <div class="overflow-x-auto">
+            <table class="table table-border w-full table-auto tableMinInput" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">PH</th>
+                  <th class="text-left">Ex-Servicemen</th>
+                  <th class="text-left">WIDOW/DIVORCEE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.PH">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.EX">
+                  </td>
+                  <td>
+                    <input type="number" class="form-input" disabled [(ngModel)]="request.WID_DIV">
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+        <div class="text-center">
+          <button *ngIf="request.FeePdf!=1" type="submit" id="btnSave" (click)="saveData()" class="btn bg-info text-white mt-6">Submit</button>
+          <button *ngIf="request.FeePdf!=1" type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+        <!--</form>-->
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+<app-otpmodal #otpModal></app-otpmodal>

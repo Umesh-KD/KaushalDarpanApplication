@@ -1,0 +1,55 @@
+
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Principal</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/IssueCertificate" class="text-sm font-medium text-slate-700" aria-current="page">Certification</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i>
+          Declaration Certification
+        </b>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div>
+          <p>
+            मैं {{request.Name}}
+            <input type="text" class="form-input" [(ngModel)]="request.Name" placeholder="Principal Name" style="max-width:150px;margin:0px 10px;display:inline">-
+            <input type="text" [(ngModel)]="request.Designation" placeholder="Designation" class="form-input" style="max-width:150px;margin:0px 10px;display:inline">
+            {{request.InstituteName}}
+            प्रमाणित करता हूँ कि संस्थान में पदस्थ कार्यरत सभी शिक्षकों की सूचना पोर्टल पर सबमिट की जा चुकी है। किसी भी शिक्षक का नाम बाकी नहीं रहा है। सभी शिक्षकों द्वारा भरे गए शैक्षणिक विषय (Teaching Subjects) संस्थान के टाईम टेबल अनुसार सही है।
+          </p>
+        </div>
+        <div>
+
+
+          <button *ngIf="IsApproved === true" type="button" class="btn bg-info text-white mt-6" (click)="Submit()">
+            <i class="ti ti-send"></i> Submit
+          </button>
+
+          <!-- Button for Download (IsDownload equals the Approved status) -->
+          <button *ngIf="IsDownload === true" type="button" class="btn bg-info text-white mt-6" (click)="DownloadCertificate()">
+            <i class="ti ti-download"></i> Download
+          </button>
+
+          <!--<button type="button" class="btn bg-danger text-white mt-6">Cancel</button>-->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

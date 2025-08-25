@@ -1,0 +1,93 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2" id="AddExam">Blank Report</h4>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form [formGroup]="ExamFormGroup">
+
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!-- First Row -->
+          <div class="w-50">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch: <span class="StarMarking">*</span></label>
+            <select class="form-select text-sm w-full py-2 px-3" id="ddlBranch" placeholderName="Please Select" formControlName="ddlBranch" [(ngModel)]="request.BranchID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of BranchDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.ddlBranch.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.ddlBranch.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+
+          <div class="w-50">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date: <span class="StarMarking">*</span></label>
+            <input type="date" class="form-input text-sm w-full py-2 px-3" id="DateID" placeholder="Enter Select DOB" formControlName="DateID" [(ngModel)]="request.ExamDate">
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.DateID.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.DateID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+
+          <!-- Second Row -->
+          <div class="w-50">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester: <span class="StarMarking">*</span></label>
+            <select class="form-select text-sm w-full py-2 px-3" id="StudentExamYear" placeholder="Enter Select Semester" formControlName="StudentExamYear" [(ngModel)]="request.SemesterID" (change)="ddlStream_Change()">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.StudentExamYear.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.StudentExamYear.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+
+          <div class="w-50">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Shift: <span class="StarMarking">*</span></label>
+            <select class="form-select text-sm w-full py-2 px-3" id="TimetableTime" placeholder="Enter Select Shift" formControlName="TimetableTime" [(ngModel)]="request.ShiftID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShiftWithTime}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.TimetableTime.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.TimetableTime.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+          <!--{{SubjectMasterList|json}}-->
+          <!-- Third Row -->
+          <div class="w-50">
+            <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Subject: <span class="StarMarking">*</span></label>
+            <select class="form-select text-sm w-full py-2 px-3" id="ddlSubject" placeholder="Enter Select Shift" formControlName="ddlSubject" [(ngModel)]="request.SubjectCode">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let row of SubjectMasterList" [value]="row.ID">{{row.Code}}</option>
+            </select>
+            <!--<input type="text" class="form-input" id="ddlSubject" placeholder="Enter Select Subject" [(ngModel)]="request.SubjectCode" name="ddlSubject" formControlName="ddlSubject">-->
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.ddlSubject.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.ddlSubject.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+
+          <div class="w-50">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Category: <span class="StarMarking">*</span></label>
+            <select class="form-select text-sm w-full py-2 px-3" id="ddlExamCategoryID" placeholder="Enter Select Category" [(ngModel)]="request.ExamCategoryID" formControlName="ddlExamCategoryID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of ExamCategoryList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted && ExamFormGroup.controls.ddlExamCategoryID.errors" class="text-danger">
+      <p *ngIf="!ExamFormGroup.controls.ddlExamCategoryID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
+          </div>
+
+          <!-- Fourth Row (Buttons) -->
+          <div class="w-50">
+            <button type="button" class="btn bg-info text-white text-sm py-2 px-4" (click)="DownloadDataList()"><i class="ti ti-download"></i> Download</button>
+            <button type="button" id="btnReset" class="btn bg-danger text-white text-sm py-2 px-4" (click)="ResetControls()">Reset</button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

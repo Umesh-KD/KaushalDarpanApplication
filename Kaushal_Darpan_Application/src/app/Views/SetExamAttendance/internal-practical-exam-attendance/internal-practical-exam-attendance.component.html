@@ -1,0 +1,140 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ IsView ? 'Internal Assessment Students' : 'Practical Students' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Appointment List</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">{{ IsView ? 'Internal Assessment Students' : 'Practical Students' }}</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Student List</b>
+      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Excel
+        </a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" /> -->
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Branch Name</th>
+            <th class="text-left">Subject Name</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Roll No.</th>
+            <th class="text-left">Attendance Mark</th>
+            <th class="text-left">If UFM</th>
+            <th class="text-left">If Detained</th>
+            <!-- <th *ngIf="isAnyUFMSelected">Document Required</th> -->
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let student of paginatedInTableData | tableSearchFilter:Table_SearchText; let i = index">
+            <td>{{(startInTableIndex+1)+i}}</td>
+            <td>{{ student.StreamName }} </td>
+            <td>{{ student.SubjectName }}</td>
+            <td>{{ student.StudentName }} </td>
+            <td>{{ student.StudentRollNo }}</td>
+            <td>
+              <div class="flex">
+                <label class="me-2">
+                  <input type="radio" name="AttendanceMark{{i}}" [(ngModel)]="student.IsPresent" [value]="true"
+                         [disabled]="student.IsDetain" /> Present
+                </label>
+                <label>
+                  <input type="radio" name="AttendanceMark{{i}}" [(ngModel)]="student.IsPresent" [value]="false" />
+                  Absent
+                </label>
+              </div>
+            </td>
+            <td>
+              <label>
+                <input type="checkbox" [(ngModel)]="student.IsUFM" (change)="onUfmChange(student)" /> UFM
+              </label>
+            </td>
+            <td>
+              <label>
+                <input type="checkbox" [(ngModel)]="student.IsDetain" (change)="onDetainedChange(student)"
+                       [disabled]="student.IsUFM" /> Detained
+              </label>
+            </td>
+
+            <!-- <td align="left">
+              <div *ngIf="student.IsUFM" class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto_{{i+1}}" type="file" (change)="onFilechange($event, 'Document', student)" />
+                <label for="filepanPhoto_{{i+1}}">
+                  <span>Choose File</span>
+                  {{ student.Dis_UFMDocument === '' ? 'No File Chosen' : student.Dis_UFMDocument }}
+                </label>
+                <div class="flex" *ngIf="student?.UFMDocument !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL+ _GlobalConstants.StudentsFolder+'/'+ student.UFMDocument}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                
+                </div>
+              </div>
+            </td> -->
+
+          </tr>
+          <tr *ngIf="attendanceFormData?.length === 0"><td colspan="15"> No Record Found</td></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+
+    
+
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+
+      <div class="text-center">
+        <button class="btn bg-success text-white" type="button" (click)="SaveData()"
+               >
+          Submit
+        </button>
+        <a routerLink="/InvigilatorExamList" class="btn bg-danger text-white" type="button">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->

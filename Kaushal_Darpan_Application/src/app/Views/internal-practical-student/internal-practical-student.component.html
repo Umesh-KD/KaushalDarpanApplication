@@ -1,0 +1,272 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ IsView ? 'Internal Assessment Students' : 'Practical Students' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/PracticalStudents" class="text-sm font-medium text-slate-700" aria-current="page">{{ IsView ? 'Internal Assessment Students' : 'Practical Students' }}</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <!-- <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b> -->
+        <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      <!-- </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"> -->
+
+        <!-- <div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div> -->
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Branch:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="ddlBranch"
+                  [(ngModel)]="searchRequest.StreamID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of Branchlist" [value]="item?.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No.: </label>
+          <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+            <option value="0">--All--</option>
+            <option value="1">Marks Pending</option>
+            <option value="2">Marks Entered</option>
+          </select>
+        </div> -->
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperIsPresent">Status: </label>
+          <select class="form-select" id="PracticalPaperIsPresent" tabindex="-1" aria-hidden="true">
+            <option value="">Search By Status</option>
+            <option value="0">Absent</option>
+            <option value="1">Present</option>
+            <option value="2">UFM</option>
+            <option value="3">Detained</option>
+          </select>
+        </div>-->
+
+
+        <!-- <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+
+    </div> -->
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " /> -->
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th align="left">
+              <!-- <input type="checkbox" id="checkboxSeletedAll" class="checkboxSize" [checked]="allSelected"
+           (change)="toggleAllCheckboxes($event)"> -->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()"  [disabled]="isfinalsubmit" />
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('SubjectCode')">
+              Subject Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('StudentName')">
+              Student Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('RollNo')">
+              Roll Number
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('InstituteNameEnglish')">
+              Institute
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteNameEnglish'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('SemesterName')">
+              Semester
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('Name')">
+              Branch
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th title="Click to sorting" (click)="sortInTableData('SubjectName')">
+              Subject
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th>Max Marks</th>
+            <th>Marks Obtained</th>
+            <th>Status</th>
+            <th *ngIf="isAnyUFMSelected">Document Required</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData;let idx=index;"  [ngClass]="row.rowclass">
+            <td align="left">
+              <!-- <input type="checkbox"
+                     [checked]="row.Marked"
+                     (change)="toggleCheckbox(row)"> -->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="row.IsDetain || isfinalsubmit"
+                  #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
+            <td align="left">{{row.SubjectCode}}</td>
+            <td align="left">{{row.StudentName}}</td>
+            <td align="left">{{row.RollNo}}</td>
+            <td align="left">{{row.InstituteNameEnglish}}</td>
+            <td align="left">{{row.SemesterName}}</td>
+            <td align="left">{{row.Name}}</td>
+            <td align="left">{{row.SubjectName}}</td>
+            <td *ngIf="IsView" align="left">{{ row.MaxInternalAssisment }}</td>
+            <td *ngIf="!IsView" align="left">{{ row.MaxPractical }}</td>
+
+            <td *ngIf="IsView" align="left">
+              <div class="flex">
+                <input tabindex="{{idx}}" (keydown)="onTabPress($event, idx)" class="form-input" style="width:100px" type="text" [disabled]="!row.Marked || row.IsPresentInternalAssisment!=1" id="txtObtainedInternalAssisment"
+                 [(ngModel)]="row.ObtainedInternalAssisment"  [readonly]="row.IsPresentInternalAssisment!=1" title="11">
+                <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
+              </div>
+            </td>
+            <td *ngIf="!IsView" align="left">
+              <div class="flex">
+                <input tabindex="{{idx}}" class="form-input" style="width:100px" type="text" [disabled]="!row.Marked || row.IsPresentPractical!=1" id="txtObtainedPractical"
+                 [(ngModel)]="row.ObtainedPractical" (keydown)=" onTabPress($event, idx)" [readonly]="row.IsPresentPractical!=1" title="22">
+                <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperMarksID)">Save</button>
+              </div>
+            </td>
+            <td *ngIf="IsView" align="left">
+              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+              <select *ngIf="!row.IsDetain" class="form-select" id="IsPresentInternalAssisment" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentInternalAssisment"  (change)="onStatusPracticalAssesmentChange(row)">
+                <option value="0">Absent</option>
+                <option value="1">Present</option>
+                <!-- <option value="3">Detained</option>
+                <option value="4">UFM</option> -->
+              </select>
+            </td>
+            <td *ngIf="!IsView" align="left">
+              <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+              <select *ngIf="!row.IsDetain" class="form-select" id="IsIsPresentPractical" [disabled]="!row.Marked"
+               [(ngModel)]="row.IsPresentPractical" (change)="onStatusPracticalChange(row)">
+                <option value="0">Absent</option>
+                <option value="1">Present</option>
+                <!-- <option value="3">Detained</option>
+                <option value="4">UFM</option> -->
+              </select>
+            </td>
+
+            <td *ngIf="IsView" align="left">
+              <div *ngIf="row.IsPresentInternalAssisment == 4" class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto_{{idx+1}}" type="file" (change)="onFilechange($event, 'Document', row)" />
+                <label for="filepanPhoto_{{idx+1}}">
+                  <span>Choose File</span>
+                  {{ row.Dis_FileName === '' ? 'No File Chosen' : row.Dis_FileName }}
+                </label>
+                <div class="flex" *ngIf="row.FileName !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UFMDocument}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!-- <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(row)">
+                    <i class="ti ti-trash"></i>
+                  </a> -->
+                </div>
+              </div>
+            </td>
+
+            <td *ngIf="!IsView" align="left">
+              <div *ngIf="row.IsPresentPractical == 4" class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto_{{idx+1}}" type="file" (change)="onFilechange($event, 'Document', row)" />
+                <label for="filepanPhoto_{{idx+1}}">
+                  <span>Choose File</span>
+                  {{ row.Dis_UFMDocument === '' ? 'No File Chosen' : row.Dis_UFMDocument }}
+                </label>
+                <div class="flex" *ngIf="row.UFMDocument !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UFMDocument}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!-- <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(row)">
+                    <i class="ti ti-trash"></i>
+                  </a> -->
+                </div>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+
+      </table>
+     
+
+    </div>
+     <!--pagination-->
+      <div class="p-3 paginationBox flex items-center justify-end w-full">
+        <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+        <div class="paginationBoxItems flex items-center">
+          <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+          <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+          <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+          <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+          <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+          <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+        </div>
+      </div>
+      <!--end pagination-->
+
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3" *ngIf="TheoryMarksList.length>0 && !isfinalsubmit ">
+      <div class="flex text-center justify-center">
+        <button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Save All</button>
+
+        <button *ngIf="AllInTableSelect==true" type="button" class="btn bg-success text-white me-2" (click)="LockAndSubmit(0,1)">Lock & Submit</button>
+        <!-- <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+

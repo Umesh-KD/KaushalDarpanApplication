@@ -1,0 +1,1049 @@
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" style="display:none">
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+<div class="card" id="Tabs5">
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+
+        <h3 class="m-0">आईटीआई कॉलेज खोज (ITI College Search) </h3>
+      </div>
+    </div>
+
+
+    <div class="row">
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Search.</label>
+        <input type="text" class="form-control" placeholder="Search Code/Name/Division/District.."
+               [(ngModel)]="request.SearchText">
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Division</label>
+        <select (change)="ddlDivision_Change()" [(ngModel)]="request.DivisionId" [ngModelOptions]="{standalone: true}" class="form-select" id="DivisionId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+        </select>
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">District</label>
+        <select [ngModelOptions]="{standalone: true}" class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
+                [(ngModel)]="request.DistrictId">
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+
+      </div>
+      <label style="color:red">{{ValidationMessage}}</label>
+      <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label">Sub Division</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label">Tehsil</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label">Urban/Rural:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
+        <option value="0">Select Urban/Rural</option>
+        <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+      <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="PanchayatSamiti"
+              [(ngModel)]="request.PanchayatsamityId">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+      <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="GramPanchayatSamiti"
+              [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==76">
+      <label class="form-label" for="village">Village:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="village"
+              [(ngModel)]="request.VillageId">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+
+
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+      <label class="form-label">Administrative Body:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
+        <option value="0">Select Administrative Body</option>
+        <option value="1">Cantonment Board</option>
+        <option value="2">Nagar Nigam</option>
+        <option value="3">Nagar Palika</option>
+        <option value="4">Nagar Parishad</option>
+      </select>
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
+      <label class="form-label" for="CantonmentBoard">CantonmentBoard Name:</label>
+      <input  class="form-control" type="text" id="CantonmentBoard"
+             placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
+      <label class="form-label" for="NagarNigam">Nagar Nigam Name:</label>
+      <input  class="form-control" type="text" id="NagarNigam"
+             placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
+      <label class="form-label" for="NagarPalika">Nagar Palika Name:</label>
+      <input  class="form-control" type="text" id="NagarPalika"
+             placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
+      <label class="form-label" for="NagarParishad">Nagar Parishad Name:</label>
+      <input  class="form-control" type="text" id="NagarParishad"
+             placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+      <label class="form-label">City:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="CityID" [(ngModel)]="request.CityID">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="request.UrbanRural==75">
+      <label class="form-label" for="Ward">Ward number:</label>
+      <input  class="form-control" type="text" id="Ward" placeholder="Enter Ward"
+             [(ngModel)]="request.Ward">
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label">Parliament Area:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="ParliamentId"
+              [(ngModel)]="request.ParliamentId">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
+          {{item.Name}}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label">Assembly Area:</label>
+      <select [ngModelOptions]="{standalone: true}" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+    </div>
+
+    <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+      <label class="form-label" for="InstitutePincode">Pincode:</label>
+      <input  class="form-control" type="text" id="pincode" placeholder="Enter Pincode"
+             (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
+
+    </div>-->
+
+
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <button type="button" class="btn btn-info text-white" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+        <button type="button" (click)="onResetClick()" class="btn btn-danger mx-1"><i class="ti ti-refresh"></i>Reset</button>
+
+      </div>
+    </div>
+
+
+    <div *ngIf="isVisibleList" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-info-subtle mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+
+    </div>
+    <div *ngIf="isVisibleList" class="row">
+      <div class="col-4">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <!--<div class="">
+      <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+    </div>-->
+    </div>
+
+    <!--{{paginatedInTableData|json}}-->
+    <div *ngIf="isVisibleList" class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">College Code</th>
+            <th class="text-left">Division</th>
+            <th class="text-left">District</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.CollegeName}}</td>
+            <td>{{row.CollegeCode}}</td>
+            <td>{{row.Division}}</td>
+            <td>{{row.District}}</td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns">
+                <button type="button" (click)="GetById(row.CollegeId)" class="btn btn-info text-white">View</button>
+                <!--<a  href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>-->
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="isVisibleList" class="p-3 pe-0 paginationBox d-flex align-items-center justify-content-end">
+     
+        <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+        <div class="pagination pagination-sm bg-white">
+          <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+          <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+          <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                 [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+          <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+          <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+          <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+        </div>
+      
+    </div>
+
+
+
+  
+
+
+    <!--DetailsSection-->
+
+
+
+
+    <div *ngIf="isVisibleSection" class="card">
+      <div class="card-body">
+
+        <div class="mb-8">
+          <div class="d-flex justify-content-between align-items-center mb-3  p-2 bg-info-subtle">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>
+            <!--<a *ngIf="requestPlaning.Status != 1  && sSOLoginDataModel.RoleID != _enumrole.DTETraing" (click)="downloadPDF()" href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i>Download Pdf</a>-->
+            <a href="javascript:void(0);" (click)="BackSide()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+          </div>
+          <div class="row gy-3">
+            <div class="col-lg-4 col-md-6">
+              <label for="ApplicationId" class="form-label">ITI Name</label>
+              <input disabled type="text" class="form-input form-control disabled" id="ApplicationId" [(ngModel)]="requestPlaning.CollegeName">
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+              <label for="ApplicationId" class="form-label">ITI Code</label>
+              <input disabled type="text" class="form-input form-control disabled" id="ApplicationId" [(ngModel)]="requestPlaning.CollegeCode">
+
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+              <label for="ApplicationId" class="form-label">MIS Code</label>
+              <input disabled type="text" class="form-input form-control disabled" id="ApplicationId" [(ngModel)]="requestPlaning.MISC">
+
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label"> Category: </label>
+              <select disabled class="form-select" id="InstituteCategoryID" [(ngModel)]="requestPlaning.InstitutionCategoryId">
+                <!--<option value="0">--Select--</option>-->
+                <option *ngFor="let item of InstituteCategoryList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+            </div>
+
+
+
+
+          </div>
+          <div class="d-flex justify-content-between align-items-center  mt-4 mb-3 p-2 bg-info-subtle">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>Management Details</b>
+          </div>
+          <div class="row gy-3">
+
+
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label">Management Type: </label>
+              <select disabled class="form-select" name="ddlManagementType" id="ddlManagementType" [(ngModel)]="requestPlaning.InstituteManagementId">
+                <!--<option value="0">--Select--</option>-->
+                <option value="1">Govt.</option>
+                <option value="5">Private</option>
+
+              </select>
+
+            </div>
+
+            <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.InstituteManagementId==5">
+              <label class="form-label">Trust/Society: </label>
+              <select disabled class="form-select" name="TrustSociety" id="TrustSociety" [(ngModel)]="requestPlaning.TrustSociety">
+                <!--<option value="0">--Select--</option>-->
+                <option value="1">Trust</option>
+                <option value="2">Society</option>
+
+              </select>
+
+            </div>
+
+
+
+
+            <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.TrustSociety!=0 && requestPlaning.InstituteManagementId==5">
+              <label for="ApplicationId" class="form-label">
+                {{ requestPlaning.TrustSociety == 1 ? 'Trust Name' : 'Society Name' }}
+
+              </label>
+              <input disabled type="text" class="form-control " id="ApplicationId" [(ngModel)]="requestPlaning.TrustSocietyName">
+
+            </div>
+
+            <div class="col-lg-4 col-md-6" *ngIf=" requestPlaning.InstituteManagementId==5">
+              <label for="ApplicationId" class="form-label">Registration No</label>
+              <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.RegNo">
+
+            </div>
+
+
+            <div class="col-lg-4 col-md-6" *ngIf=" requestPlaning.InstituteManagementId==5">
+              <label for="ApplicationId" class="form-label">Registration Date</label>
+              <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="requestPlaning.RegDate | date:'dd-MM-yyyy'">
+
+            </div>
+
+
+            <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.InstituteManagementId==5">
+              <label for="ApplicationId" class="form-label">Registration Office</label>
+              <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.ManageRegOffice">
+
+            </div>
+
+            <div class="col-lg-4 col-md-6" *ngIf=" requestPlaning.InstituteManagementId==5">
+              <label for="ddlState" class="form-label">
+                State:
+              </label>
+              <select disabled class="form-select" id="ddlState" name="State"
+                      [(ngModel)]="requestPlaning.RegOfficeStateID" (change)="ddlState_Change()">
+
+                <!--<option value="0">Select State</option>-->
+                <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+              </select>
+
+            </div>
+            <div class="col-lg-4 col-md-6" *ngIf=" requestPlaning.InstituteManagementId==5">
+              <label for="ddlDistrict" class="form-label">
+                District:
+              </label>
+              <select disabled class="form-select" id="ddlDistrict" name="District"
+                      [(ngModel)]="requestPlaning.RegOfficeDistrictID">
+                <!--<option value="0">Select District</option>-->
+                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+            </div>
+
+
+            <!--<div *ngIf="requestPlaning.InstituteManagementId==5">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Registration Document  </label>
+            <div class="flex fileUploader">
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
+
+              <label for="RegFileName">
+                <span>Choose File</span>
+                {{ requestPlaning.RegDisFileName === '' ? 'No File Chosen' : requestPlaning.RegDisFileName }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.RegFileName}}"
+                   *ngIf="this.requestPlaning.RegFileName  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
+
+            </div>
+          </div>-->
+
+          </div>
+
+
+
+
+
+        </div>
+
+
+
+
+        <div class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2 bg-info-subtle hide-in-pdf">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
+        </div>
+
+        <div *ngIf="requestPlaning.InstituteManagementId==5  " class="row gy-3 hide-in-pdf ">
+          <div class="col-lg-4 col-md-6" *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && requestPlaning.InstituteManagementId==5 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && requestPlaning.InstituteManagementId==5">
+            <label for="ApplicationId" class="form-label">Member Name</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="member.MemberName">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  ">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
+            <select disabled class="form-select" name="TrustSociety" id="TrustSociety" [(ngModel)]="member.PostID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of ItiMemberPostList" [value]="item.ID">{{item.Name}}</option>
+
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1  ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  ">
+            <label for="ApplicationId" class="form-label">Contact No:</label>
+            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="member.ContactNo" maxlength="10">
+
+          </div>
+
+
+
+          <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 ">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ID Proof </label>
+          <div class="flex fileUploader">
+            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="IDFileName" type="file" (change)="onFilechange($event,'IDFileName')" />
+
+            <label for="IDFileName">
+              <span>Choose File</span>
+              {{ member.IDdis_Filename === '' ? 'No File Chosen' : member.IDdis_Filename }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + member.IDFileName}}"
+                 *ngIf="this.member.IDFileName  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+            </div>
+
+          </div>
+        </div>-->
+          <!--<div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1   ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  " class="pt-30">
+          <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
+            <i class="ti ti-plus"></i> Add
+            More
+          </button>
+
+        </div>-->
+          <!--<div *ngIf="this.Type!=1"></div>-->
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Date of Last Election</label>
+            <!--<input disabled type="text" class="form-input form-control" [max]="minDate" id="ApplicationId" [(ngModel)]="requestPlaning.LastElectionDate">-->
+            <input disabled type="text" class="form-input form-control" [value]="requestPlaning.LastElectionDate | date:'dd-MM-yyyy'">
+          </div>
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Valid Upto</label>
+            <input disabled type="text" class="form-input form-control" [value]="requestPlaning.LastElectionValidUpTo | date:'dd-MM-yyyy'" id="ApplicationId">
+
+          </div>
+
+
+          <!--<div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document </label>
+          <div class="flex fileUploader">
+            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
+
+            <label for="MemberIdProofName">
+              <span>Choose File</span>
+              {{ requestPlaning.MemberIdDisProofName === '' ? 'No File Chosen' : requestPlaning.MemberIdDisProofName }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.MemberIdProofName}}"
+                 *ngIf="this.requestPlaning.MemberIdProofName  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+            </div>
+
+          </div>
+        </div>-->
+
+
+        </div>
+
+
+
+
+
+        
+
+
+
+
+
+        <div class="d-flex justify-content-between align-items-center mb-3 p-2  mt-4 bg-info-subtle">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Address</b>
+        </div>
+
+        <div class="row gy-3">
+
+
+          <div class="col-lg-4 col-md-6">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Ownership: </label>
+            <select disabled class="form-select" name="TrustSociety" id="TrustSociety" [(ngModel)]="requestPlaning.OwnerShipID">
+              <!--<option value="0">--Select--</option>-->
+              <option value="1">Rented.</option>
+              <option value="2">Own</option>
+
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+            <label for="ApplicationId" class="form-label">Date of Agreement (Lease deed)  </label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="requestPlaning.AgreementLeaseDate | date:'dd-MM-yyyy'">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+            <label for="ApplicationId" class="form-label">Valid Upto</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="requestPlaning.ValidUpToLeaseDate | date:'dd-MM-yyyy'">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+            <label for="ApplicationId" class="form-label">Registration Office</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.InstituteRegOffice">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+            <label for="ddlState" class="form-label">
+              Registration State:
+            </label>
+            <select disabled class="form-select" id="ddlState" name="State"
+                    [(ngModel)]="requestPlaning.InstituteStateID" (change)="ddlState_Change2()">
+
+              <!--<option value="0">Select State</option>-->
+              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+            </select>
+
+          </div>
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.OwnerShipID==1">
+            <label for="ddlDistrict" class="form-label">
+              Registration District:
+            </label>
+            <select disabled class="form-select" id="ddlDistrict" name="District"
+                    [(ngModel)]="requestPlaning.PropDistrictID">
+              <!--<option value="0">Select District</option>-->
+              <option *ngFor="let item of DistrictMasterList3" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+          <!--<div class="">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> {{ requestPlaning.OwnerShipID == 1 ? 'Rented' : 'Owned Property' }}Document (Lease deed)  </label>
+          <div class="flex fileUploader">
+            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="AgreementFileName" type="file" (change)="onFilechange($event,'AgreementFileName')" />
+
+            <label for="AgreementFileName">
+              <span>Choose File</span>
+              {{ requestPlaning.AgreementDisFileName === '' ? 'No File Chosen' : requestPlaning.AgreementDisFileName }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.AgreementFileName}}"
+                 *ngIf="this.requestPlaning.AgreementFileName  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+            </div>
+
+          </div>
+        </div>-->
+
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Plot/House/Building No</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.PlotHouseBuildingNo">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Street/Road/Lane</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.StreetRoadLane">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Area/Locality/Sector</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.AreaLocalitySector">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">LandMark</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="requestPlaning.LandMark">
+
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Division</label>
+            <select disabled class="form-select" id="DivisionId" (change)="ddlDivision_Change()"
+                    [(ngModel)]="requestPlaning.InstituteDivisionID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+            </select>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">District</label>
+            <select disabled class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
+                    [(ngModel)]="requestPlaning.InstituteDistrictID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of DistrictMasterList1" [value]="item.ID">
+                {{item.Name}}
+              </option>
+            </select>
+
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Sub Division</label>
+            <select disabled class="form-select" id="SubDivisionId" [(ngModel)]="requestPlaning.InstituteSubDivisionID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Tehsil</label>
+            <select disabled class="form-select" id="TehsilId" [(ngModel)]="requestPlaning.PropTehsilID" (change)="GetGramPanchayatSamiti()">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Urban/Rural:</label>
+            <select disabled class="form-select" id="UrbanRural" [(ngModel)]="requestPlaning.PropUrbanRural" (change)="changeUrbanRural()">
+              <!--<option value="0">Select Urban/Rural</option>-->
+              <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==76">
+            <label class="form-label" for="PanchayatSamiti">Panchayat Samiti:</label>
+            <select disabled class="form-select" id="PanchayatSamiti"
+                    [(ngModel)]="requestPlaning.PanchayatSamiti">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==76">
+            <label class="form-label" for="GramPanchayatSamiti">Gram Panchayat:</label>
+            <select disabled class="form-select" id="GramPanchayatSamiti"
+                    [(ngModel)]="requestPlaning.GramPanchayatSamiti" (change)="villageMaster()">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==76">
+            <label class="form-label" for="village">Village:</label>
+            <select disabled class="form-select" id="village"
+                    [(ngModel)]="requestPlaning.VillageID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of VillageList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==75">
+            <label class="form-label">City:</label>
+            <select disabled class="form-select" id="CityID" [(ngModel)]="requestPlaning.CityID">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6" *ngIf="requestPlaning.PropUrbanRural==75">
+            <label class="form-label">Administrative Body:</label>
+            <select disabled class="form-select" id="Administrative" [(ngModel)]="requestPlaning.AdministrativeBodyId">
+              <!--<option value="0">Select Administrative Body</option>-->
+              <option value="1">Cantonment Board</option>
+              <option value="2">Nagar Nigam</option>
+              <option value="3">Nagar Palika</option>
+              <option value="4">Nagar Parishad</option>
+            </select>
+
+          </div>
+
+
+          <!--<label for="CantonmentBoard">CantonmentBoard Name:</label>
+          <input class="form-input" type="text" id="CantonmentBoard"
+                 placeholder="Enter CantonmentBoard Name" [(ngModel)]="requestPlaning.CantonmentBoardName">
+          <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>-->
+          <!--<div *ngIf="requestPlaning.AdministrativeId == 2 && requestPlaning.UrbanRural==75">
+          <label for="NagarNigam">Nagar Nigam Name:</label>
+          <input class="form-input" type="text" id="NagarNigam"
+                 placeholder="Enter NagarNigam Name" [(ngModel)]="requestPlaning.NagarNigamName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarNigam').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>-->
+          <!--<div *ngIf="requestPlaning.AdministrativeId == 3 && requestPlaning.UrbanRural==75">
+          <label for="NagarPalika">Nagar Palika Name:</label>
+          <input class="form-input" type="text" id="NagarPalika"
+                 placeholder="Enter NagarPalika Name" [(ngModel)]="requestPlaning.NagarPalikaName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarPalika').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>-->
+          <!--<div *ngIf="requestPlaning.AdministrativeId == 4 && requestPlaning.UrbanRural==75">
+          <label for="NagarParishad">Nagar Parishad Name:</label>
+          <input class="form-input" type="text" id="NagarParishad"
+                 placeholder="Enter NagarParishad Name" [(ngModel)]="requestPlaning.NagarParishadName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarParishad').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>-->
+
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Ward number:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.WardNo">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Khasra no/Khata No:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.KhasraKhataNo">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Rakba (Bigha/Yard):</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.BighaYard">
+
+          </div>
+
+          <!--<div class="">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Lat/Long* (along with college gate photo)  </label>
+          <div class="flex fileUploader">
+            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="LatLongFileName" type="file" (change)="onFilechange($event,'LatLongFileName')" />
+
+            <label for="LatLongFileName">
+              <span>Choose File</span>
+              {{ requestPlaning.LatLongDisFileName === '' ? 'No File Chosen' : requestPlaning.LatLongDisFileName }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.LatLongFileName}}"
+                 *ngIf="this.requestPlaning.LatLongFileName  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+            </div>
+
+          </div>
+        </div>-->
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Latitude:</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.Latitude">
+
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Longitude:</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.Longitude">
+
+
+
+          </div>
+
+
+
+
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3 p-2  mt-4 bg-info-subtle">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Contact Details</b>
+        </div>
+        <div class="row gy-3">
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Contact No:</label>
+            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" maxlength="10" [(ngModel)]="requestPlaning.ContactNo">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Email:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.Email">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Alternate Email:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.AlternateEmail">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Website:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.Website">
+
+          </div>
+
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3  mt-4 p-2  mt-4 bg-info-subtle">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
+        </div>
+        <div class="row gy-3">
+
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Consumer Name:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.ConsumerName">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">K No:</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.KNo">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label">Connection Type:</label>
+            <select disabled class="form-select" id="Administrative" [(ngModel)]="requestPlaning.ConnectionType">
+              <!--<option value="0">Select Connection Type</option>-->
+              <option value="1">Domestic</option>
+              <option value="2">Commercial</option>
+
+            </select>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Sanction load (KW):</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.SanctionLoad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Contract Demand:</label>
+            <input disabled (keypress)="numberOnly($event)" class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.ContractDemand" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Name Of DISCOM:</label>
+            <select disabled class="form-select" id="UrbanRural" [(ngModel)]="requestPlaning.DISCOM">
+              <!--<option value="0">--Select--</option>-->
+              <option *ngFor="let item of DISCOM" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label class="form-label" for="Ward">Sub-Division Office:</label>
+            <input disabled class="form-input form-control" type="text" id="Ward"
+                   [(ngModel)]="requestPlaning.SubDivOffice">
+
+          </div>
+
+
+
+          <!--<div class="">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Last Month Bill  </label>
+          <div class="flex fileUploader">
+            <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="Bill_Filename" type="file" (change)="onFilechange($event,'Bill_Filename')" />
+
+            <label for="Bill_Filename">
+              <span>Choose File</span>
+              {{ requestPlaning.Bill_DisFilename === '' ? 'No File Chosen' : requestPlaning.Bill_DisFilename }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestPlaning.Bill_Filename}}"
+                 *ngIf="this.requestPlaning.Bill_Filename  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+            </div>
+
+          </div>
+        </div>-->
+
+
+
+
+
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="d-flex justify-content-between align-items-center mb-3 p-2 bg-info-subtle  mt-4 hide-in-pdf">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
+        </div>
+
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="row gy-3 hide-in-pdf">
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Order No</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.OrderNo">
+
+          </div>
+
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Order Date</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.OrderDate | date:'dd-MM-yyyy'">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">With Effect From:</label>
+            <input disabled type="text" class="form-input form-control" id="ApplicationId" [value]="addmore.EffectFrom | date:'dd-MM-yyyy'">
+
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Page No (as per affiliation order):</label>
+            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.PageNo">
+
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <label for="ApplicationId" class="form-label">Serial No (as per affiliation order):</label>
+            <input disabled (keypress)="numberOnly($event)" type="text" class="form-input form-control" id="ApplicationId" [(ngModel)]="addmore.SerialNo">
+
+          </div>
+
+
+
+
+        </div>
+
+
+
+
+      </div>
+
+
+    </div>
+  </div>
+  </div>

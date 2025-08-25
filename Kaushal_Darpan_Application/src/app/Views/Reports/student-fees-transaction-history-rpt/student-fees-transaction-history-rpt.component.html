@@ -1,0 +1,251 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Fees Transaction History</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/StudentFeesTransactionHistoryRpt" class="text-sm font-medium text-slate-700" aria-current="page">Student Fees Transaction History</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Transaction ID</label>
+          <input class="form-input" placeholder="Enter Transaction ID" [(ngModel)]="searchRequest.TransactionId" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Student Name</label>
+          <input class="form-input" placeholder="Enter Student Name" [(ngModel)]="searchRequest.StudentName" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile Number</label>
+          <input class="form-input" placeholder="Enter Mobile Number" [(ngModel)]="searchRequest.MobileNo" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Aadhar Number</label>
+          <input class="form-input" placeholder="Enter Aadhar Number" [(ngModel)]="searchRequest.AadharNo" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Student's DOB</label>
+          <input type="date" class="form-input" placeholder="Enter Student's DOB" [(ngModel)]="searchRequest.DOB" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Enrollment No</label>
+          <input class="form-input" placeholder="Enter Aadhar Number" [(ngModel)]="searchRequest.EnrollmentNo" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Transaction Date</label>
+          <input type="date" class="form-input" placeholder="Enter Transaction Date" [(ngModel)]="searchRequest.TransctionDate" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By PRN ID</label>
+          <input class="form-input" placeholder="Enter PRN ID" [(ngModel)]="searchRequest.PRN" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Fee For
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.FeeFor">
+            <option value="">Choose Option</option>
+            <option value="34">Exam</option>
+            <option value="37">Enroll</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Transaction Status
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TransctionStatus">
+            <option value="">Choose Option</option>
+            <option value="PENDING">Pending</option>
+            <option value="SUCCESS">Success</option>
+            <option value="NOTATTEMPTED">Not Attempted</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Transaction Type
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TransactionType">
+            <option value="2">Choose Option</option>
+            <option value="0">Online Transaction</option>
+            <option value="1">Emitra Transaction</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+              {{item.SemesterName}}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Stream Name</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Payment Service</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.PaymentServiceID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EmitraServiceDetails" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+      </div>
+      <div class="flex justify-center flex-wrap items-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="getStudentFeesTransactionHistoryList()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetControl()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <!-- <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div> -->
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Service Name</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Enrollment No</th>
+            <th class="text-left">Stream Name</th>
+            <th class="text-left">Semester Name</th>
+
+            <th class="text-left">Student DOB</th>
+            <th class="text-left">Student Aadhar Number</th>
+            <th class="text-left">Student Mobile Number</th>
+
+            <th class="text-left">Transaction Type</th>
+            <th class="text-left">Transaction Status</th>
+            <th class="text-left">Transaction Date</th>
+            <th class="text-left">PRN ID</th>
+
+            <th class="text-left">Transaction Amount</th>
+            <th class="text-left">Paid Amount</th>
+            <th class="text-left">Fee For</th>
+
+
+            <th class="text-left">Last Updated Date</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData ;let idx=index;">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{item.ServiceName}}</td>
+            <td>{{item.InstituteName}}</td>
+            <td>{{item.StudentName}}</td>
+            <td>{{item.EnrollmentNo}}</td>
+            <td>{{item.StreamName}}</td>
+            <td>{{item.SemesterName}}</td>
+            <td>{{item.DOB | date:'dd-MM-yyyy'}}</td>
+            <td>{{item.AadharNo}} </td>
+            <td>{{item.MobileNo}}</td>
+
+            <td>{{item.TransactionType}}</td>
+            <td>
+
+              <span [ngSwitch]="item.TransctionStatus">
+                <span *ngSwitchCase="'SUCCESS'" class="badge bg-success">{{ item.TransctionStatus }}</span>
+                <span *ngSwitchCase="'FAILED'" class="badge bg-danger">{{ item.TransctionStatus }}</span>
+                <span *ngSwitchCase="'PENDING'" class="badge bg-warning text-dark">{{ item.TransctionStatus }}</span>
+                <span *ngSwitchDefault class="badge bg-info text-dark">{{ item.TransctionStatus }}</span>
+              </span>
+            </td>
+
+
+            <td>{{item.TransctionDate | date:'dd-MM-yyyy'}}</td>
+            <td>{{item.PRN}}</td>
+            <td>{{item.TransAmt}}</td>
+            <td>{{item.PaidAmount}}</td>
+            <td>{{item.FeeFor}}</td>
+            <td>{{item.UpdateDate}}</td>
+            <td>
+              <div class="flex  actionBtns w-auto" data-attr="{{item.TransactionId}}" style="width:auto !important">
+                <a *ngIf="item.TransctionStatusBtn==0" href="javascript:void(0);" (click)="CheckPaymentSataus(item)" title="Verify"><i class="ti ti-check"></i></a>
+
+                <a href="javascript:void(0);" (click)="FeeReceipt(item)" title="Download Reciept"><i class="ti ti-download"></i></a>
+
+              </div>
+
+
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+
+  
+
+</div>
+

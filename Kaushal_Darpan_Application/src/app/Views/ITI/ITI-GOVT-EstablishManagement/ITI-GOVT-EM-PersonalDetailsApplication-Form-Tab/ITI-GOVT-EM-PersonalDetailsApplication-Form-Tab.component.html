@@ -1,0 +1,23 @@
+
+<h3 class="text-left">Personal Detail Form</h3>
+<div class="flex items-center tabMenu">
+  <a href="javascript:void(0);" disabled class="active" *ngFor="let tab of tabs; let i = index"
+     [class.active]="i === selectedTabIndex"
+     [class.disabled]="!completedTabs[i] && i !== selectedTabIndex"
+     (click)="selectTab(i)">
+    <i class="{{tab.TabIcon}}"></i>
+    <span>
+      {{tab.TabNameHI}} <br>({{tab.TabName}})
+    </span>
+  </a>
+
+</div>
+<div class="card tab-panels">
+  <div class="tab-content card tab-panels">
+    <ng-container #tabContent></ng-container>
+  </div>
+
+</div>
+
+
+

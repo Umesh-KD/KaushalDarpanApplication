@@ -1,0 +1,295 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Dispatch-Group Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management</a>
+      <!--<i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>-->
+      <!--<a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Dispatch Management</a>-->
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="#" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Dispatch-Group Details</a>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+  <div class="card">
+    <div class="card-body p-5" style="min-height:400px;">
+      <div class="mb-3">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
+
+          <span class="text-danger"></span>
+          <a routerLink="/DispatchGroupList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+            <ng-select [clearable]="false" [(ngModel)]="Searchrequest.InstituteID" [disabled]="isUpdateMode">
+              <ng-option [value]="0">--Select--</ng-option>
+              @for (item of InstituteMasterDDLList; track item.ID) {
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+              }
+            </ng-select>
+
+
+
+            <!--<select class="form-select " name="InstituteID" id="InstituteID"
+                [(ngModel)]="Searchrequest.InstituteID" [disabled]="isUpdateMode">
+          <option value="0">--select--</option>
+          @for(item of InstituteMasterDDLList; track item.InstituteID){
+          <option [value]="item.InstituteID">{{item.InstituteName}}</option>
+          }
+        </select>-->
+          </div>
+
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="onInstituteChange()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+          </div>
+
+
+
+        </div>
+
+        <div *ngIf="collegeId !=0 && collegeId == Searchrequest.InstituteID">
+          <span> This College Group Code Already Added !</span>
+        </div>
+
+      </div>
+      <div class="card" *ngIf=" collegeId == 0 && collegeId != Searchrequest.InstituteID ">
+        <div class="card-body p-0">
+          <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Dispatch Group Details </b>
+            <span class="text-danger"></span>
+          </div>
+          <form [formGroup]="DispatchForm">
+            <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+              <div>
+                <label for="DispatchDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Dispatch: <!--<span class="StarMarking">*</span>-->
+                </label>
+                <input type="date" class="form-input" id="DispatchDate" name="DispatchDate" formControlName="txtDispatchDate"
+                       [(ngModel)]="request.DispatchDate">
+                <div *ngIf="isSubmitted && _DispatchForm.txtDispatchDate.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtDispatchDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="txtChallanNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Challan No:<!--<span class="StarMarking">*</span>--></label>
+                <input type="text" class="form-input" id="txtChallanNo" placeholder="Enter Challan No" formControlName="txtChallanNo" [(ngModel)]="request.ChallanNo">
+                <div *ngIf="isSubmitted && _DispatchForm.txtChallanNo.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtChallanNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Company Name
+                </label>
+                <select class="form-select ng-pristine ng-valid ng-touched" formControlName="DDlCompanyName" [(ngModel)]="request.CompanyName" (change)="CompanyWiseGetData()">
+                  <option value="0" ng-reflect-value="0">--Select--</option>
+                  @for (item of CompanyDispatchList; track item) {
+                  <option [value]="item.ID">{{item.Name}}</option>
+                  }
+                </select>
+                <div *ngIf="isSubmitted && _DispatchForm.DDlCompanyName.errors" class="text-danger">
+                  <p *ngIf="!_DispatchForm.DDlCompanyName.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="txtSupplierName" class="text-gray-800 text-sm font-medium inline-block mb-2">Supplier Name:<!--<span class="StarMarking">*</span>--></label>
+                <input type="text" class="form-input" id="txtSupplierName" placeholder="Enter Supplier Name" formControlName="txtSupplierName" [(ngModel)]="request.SupplierName" (input)="onInput($event)" [readonly]="true">
+                <div *ngIf="isSubmitted && _DispatchForm.txtSupplierName.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtSupplierName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+              <div>
+                <label for="txtSupplierVehicleNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Supplier Vehicle No:<!--<span class="StarMarking">*</span>--></label>
+                <input type="text" class="form-input" id="txtSupplierVehicleNo" placeholder="Enter Supplier Vehicle No" formControlName="txtSupplierVehicleNo" [(ngModel)]="request.SupplierVehicleNo" [readonly]="true">
+                <div *ngIf="isSubmitted && _DispatchForm.txtSupplierVehicleNo.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtSupplierVehicleNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+              <!--<div>
+  <label for="txtSupplierMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Supplier MobileNo:-->
+              <!--<span class="StarMarking">*</span>-->
+              <!--</label>
+    <input type="text" class="form-input" id="txtSupplierMobileNo" (keypress)="numberOnly($event)" maxlength="10" placeholder="Enter Supplier MobileNo" formControlName="txtSupplierMobileNo" [(ngModel)]="request.SupplierMobileNo">
+    <div *ngIf="isSubmitted && _DispatchForm.txtSupplierMobileNo.errors" class="text-danger">
+      <p *ngIf="_DispatchForm.txtSupplierMobileNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>-->
+
+              <div>
+                <label for="txtSupplierMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Supplier Mobile No:
+                </label>
+                <input type="tel"
+                       class="form-input"
+                       id="txtSupplierMobileNo"
+                       formControlName="txtSupplierMobileNo"
+                       placeholder="Enter Supplier Mobile No"
+                       maxlength="10"
+                       inputmode="numeric"
+                       pattern="[0-9]*"
+                       required
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" [(ngModel)]="request.SupplierMobileNo" [readonly]="true" />
+
+                <div *ngIf="isSubmitted && DispatchForm.controls['txtSupplierMobileNo'].invalid" class="text-danger">
+                  <p *ngIf="DispatchForm.controls['txtSupplierMobileNo'].errors?.required">
+                    This field is required.!
+                  </p>
+                  <p *ngIf="DispatchForm.controls['txtSupplierMobileNo'].errors?.pattern">
+                    Phone number must be exactly 10 digits.
+                  </p>
+                </div>
+              </div>
+
+
+              <!--<div>
+  <label for="txtSupplierDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+    Supplier Date:-->
+              <!--<span class="StarMarking">*</span>-->
+              <!--</label>
+    <input type="date" class="form-input" id="txtSupplierDate" name="txtSupplierDate" formControlName="txtSupplierDate"
+           [(ngModel)]="request.SupplierDate">
+    <div *ngIf="isSubmitted && _DispatchForm.txtSupplierDate.errors" class="text-danger">
+      <p *ngIf="_DispatchForm.txtSupplierDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>-->
+
+
+              <div>
+                <label for="txtRecipientName" class="text-gray-800 text-sm font-medium inline-block mb-2">Recipient Name:<!--<span class="StarMarking">*</span>--></label>
+                <input type="text" class="form-input" id="txtRecipientName" placeholder="Enter Recipient Name" formControlName="txtRecipientName" [(ngModel)]="request.RecipientName" (input)="onInputRecipientName($event)">
+                <div *ngIf="isSubmitted && _DispatchForm.txtRecipientName.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtRecipientName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="txtRecipientPost" class="text-gray-800 text-sm font-medium inline-block mb-2">Post:<!--<span class="StarMarking">*</span>--></label>
+                <input type="text" class="form-input" id="txtRecipientPost" placeholder="Enter Post" formControlName="txtRecipientPost" [(ngModel)]="request.RecipientPost" (input)="onInputRecipientPost($event)">
+                <div *ngIf="isSubmitted && _DispatchForm.txtRecipientPost.errors" class="text-danger">
+                  <p *ngIf="_DispatchForm.txtRecipientPost.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+
+              <!--<div>
+  <label for="txtRecipientMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Recipient MobileNo:-->
+              <!--<span class="StarMarking">*</span>-->
+              <!--</label>
+    <input type="text" class="form-input" id="txtRecipientMobileNo" (keypress)="numberOnly($event)" maxlength="10" placeholder="Enter Recipient MobileNo" formControlName="txtRecipientMobileNo" [(ngModel)]="request.RecipientMobileNo">
+    <div *ngIf="isSubmitted && _DispatchForm.txtRecipientMobileNo.errors" class="text-danger">
+      <p *ngIf="_DispatchForm.txtRecipientMobileNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>-->
+
+              <div>
+                <label for="txtRecipientMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Enter Recipient MobileNo:
+                </label>
+                <input type="tel"
+                       class="form-input"
+                       id="txtRecipientMobileNo"
+                       formControlName="txtRecipientMobileNo"
+                       placeholder="Enter Recipient Mobile No"
+                       maxlength="10"
+                       inputmode="numeric"
+                       pattern="[0-9]*"
+                       required
+                       oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" [(ngModel)]="request.RecipientMobileNo" />
+
+                <div *ngIf="isSubmitted && DispatchForm.controls['txtRecipientMobileNo'].invalid" class="text-danger">
+                  <p *ngIf="DispatchForm.controls['txtRecipientMobileNo'].errors?.required">
+                    This field is required.!
+                  </p>
+                  <p *ngIf="DispatchForm.controls['txtRecipientMobileNo'].errors?.pattern">
+                    Phone number must be exactly 10 digits.
+                  </p>
+                </div>
+              </div>
+
+
+              <!--<div>
+  <label for="txtRecipientDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+    Recipient Date:-->
+              <!--<span class="StarMarking">*</span>-->
+              <!--</label>
+    <input type="date" class="form-input" id="txtRecipientDate" name="txtRecipientDate" formControlName="txtRecipientDate"
+           [(ngModel)]="request.RecipientDate">
+
+  </div>-->
+
+
+
+
+
+            </div>
+          </form>
+
+
+          <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">No of Group Code:</b>
+          </div>
+          <div class="overflow-auto">
+
+            <table class="table table-border w-full">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">S.No</th>
+                  <th class="text-left">Group Code</th>
+                  <th class="text-left">Subject Code</th>
+                  
+                  <th class="text-left">Examiner Name</th>
+                  <th class="text-left">Examiner Code</th>
+                  <th class="text-left">Institute Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of Principledetail.GroupDataModel; let idx=index;">
+                  <td>
+                    {{idx+1}}
+                  </td>
+                  <td align="left">{{row.GroupCode}}</td>
+                  <td align="left">{{row.SubjectCode}}</td>
+                 
+                  <td align="left">{{row.Name}}</td>
+                  <td align="left">{{row.ExaminerCode}}</td>
+                  <td align="left">{{row.InstituteName}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+        </div>
+        <div class="card-footer text-center">
+
+          <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Submit</button>
+          <button type="button" class="btn bg-light text-dark" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+

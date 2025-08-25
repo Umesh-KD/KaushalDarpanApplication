@@ -1,0 +1,134 @@
+<!--Start Model Popup-->
+
+<ng-template #modal_StudentStatusHistory let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Student Status History</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>Status</th>
+                <th>Create Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentDetailsModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Status}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CreateDate}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+<!--Start Model Popup-->
+
+<ng-template #modal_StudentVerificationHistory let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-xl"><i class="ti ti-history"></i>&nbsp;Student Work Flow History</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>Status</th>
+                <th>Remark</th>
+                <th>Create Date</th>
+                <th>Created By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentHistoryModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ActioName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CreateDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CreatedByName}}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+
+      <div *ngIf="StudentHistoryModelList?.length > 0">
+        <h3 class="text-md font-semibold text-gray-700 dark:text-gray-200 mb-2 ms-2" style="margin-left:20px;">
+          Student Remark: {{StudentHistoryModelList[0].CommonRemark }}
+        </h3>
+      </div>
+
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+<!--Start Model Popup-->
+
+<ng-template #modal_StudentReverteDocument let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-xl"><i class="ti ti-history"></i>&nbsp;Applicant Reverted Documents</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>Document Name</th>
+                <th>Remark</th>
+                <th>Create Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentHistoryModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+                <td><a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + student.Folder + '/' + student.FileName}}" class="text-success">{{student.DisFileName}}</a></td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.UploadDate}}</td>
+
+              </tr>
+              <tr *ngIf="StudentHistoryModelList?.length === 0"><td colspan="15"><b>No Revert Document </b>  </td></tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+

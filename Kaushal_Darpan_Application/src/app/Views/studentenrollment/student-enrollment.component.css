@@ -1,0 +1,12 @@
+.verify-notice {
+  background-color: #fff3cd; /* soft yellow background */
+  color: #856404; /* dark yellow text */
+  padding: 12px 20px;
+  border: 1px solid #ffeeba;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 10px; /* keep top margin if you want */
+  margin-bottom: 0; /* removed bottom margin */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}

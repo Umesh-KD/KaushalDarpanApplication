@@ -1,0 +1,162 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Registration Process Report</a>
+    </div>
+  </div>
+  <a routerLink="/ApprenticeshipRegistrationReport-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Enter Progress Report Detail</b>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format </a>
+        </div>
+        <form [formGroup]="ApprenticeshipReportFormGroup">
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> संस्थान का नाम : <span class="StarMarking">*</span></label>
+              <!--<input type="text" formControlName="Nameofinstitute" class="form-input" placeholder="Name of Institute">-->
+              <select class="form-select" formControlName="Nameofinstitute" (change)="GetTradeMatserDDL()">
+                <option value="0">
+                  ---- Select ---
+                </option>
+                <option *ngFor="let row of CollegeList " [value]="row.ID">{{row.Name}}</option>
+              </select>
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Nameofinstitute')?.hasError('required') && ApprenticeshipReportFormGroup.get('Nameofinstitute')?.touched">
+                This field is required
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">पोर्टल पर पंजीकरण करने की तिथि : <span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" placeholder="Date of registration on the portal" formControlName="dateofregistration">
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('dateofregistration')?.hasError('required') && ApprenticeshipReportFormGroup.get('dateofregistration')?.touched">
+                This field is required
+              </div>
+            </div>
+            <div class="allStatics">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">व्यवसाय का नाम: <span class="StarMarking">*</span></label>
+              <mat-select class="form-select form-control CenterCode border" formControlName="BusinessName" multiple (selectionChange)="onSelectionChange($event)">
+                <mat-option *ngIf="TradeList?.length > 0" [value]="'ALL'">
+                  {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+                </mat-option>
+                <mat-option *ngFor="let item of TradeList" [value]="item.ID" [disabled]="isAllSelected">
+                  {{ item.Name}}
+                </mat-option>
+              </mat-select>
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('BusinessName')?.hasError('required') && ApprenticeshipReportFormGroup.get('BusinessName')?.touched">
+                This field is required
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('NumberofTrainees')?.hasError('required') && ApprenticeshipReportFormGroup.get('NumberofTrainees')?.touched">
+                This field is required
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या: <span class="StarMarking">*</span>
+              </label>
+              <div>
+                <input type="number" class="form-input" placeholder="Total number of Registration" formControlName="Numberofapprentices">
+              </div>
+              </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Document: <span class="StarMarking">*</span>
+              </label>
+              <div class="flex fileUploader upload-input-man">
+
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo')" formControlName="NumberOfRegistrationDoc">
+                <label for="fileStudentPhoto2">
+                  <span>Choose File</span>
+                  {{request.Dis_FilePath === '' ? 'No File Choosen' : request.Dis_FilePath}}
+                </label>
+
+                <div *ngIf="this.request.FileName !=''" class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+         (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+        <i class="ti ti-trash"></i>
+      </a>-->
+                </div>
+              </div>
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Numberofapprentices')?.hasError('required') && ApprenticeshipReportFormGroup.get('Numberofapprentices')?.touched">
+                This field is required
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Remark" formControlName="Remarks">
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Remarks')?.hasError('required') && ApprenticeshipReportFormGroup.get('Remarks')?.touched">
+                This field is required
+              </div>
+            </div>
+            <div>
+              <button (click)="AddRow()" *ngIf="!IsUpdateCase &&  ssoLoginDataModel.RoleID == 97" type="submit" class="btn bg-info text-white mt-6" [disabled]="!ApprenticeshipReportFormGroup.valid">Add More</button>
+            </div>
+
+          </div>
+          <!--<button mat-raised-button color="primary" type="submit" [disabled]="!ApprenticeshipReportFormGroup.valid">Submit</button>-->
+
+        </form>
+
+      </div>
+      <div *ngIf="ApprenticeshipRows.length > 0 &&  IsUpdateCase == false &&  ssoLoginDataModel.RoleID == 97" class="mt-5">
+        <h3 class="text-lg font-semibold mb-3">Added Apprenticeship Entries</h3>
+        <table class="table-auto w-full border border-collapse border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border px-4 py-2">संस्थान का नाम</th>
+              <th class="border px-4 py-2">पंजीकरण तिथि</th>
+              <th class="border px-4 py-2">व्यवसाय</th>
+              <th class="border px-4 py-2">प्रशिक्षार्थियों की संख्या</th>
+              <th class="border px-4 py-2">शिक्षु विवरण</th>
+              <th class="border px-4 py-2">दस्तावेज़</th>
+              <th class="border px-4 py-2">विवरण</th>
+              <th class="border px-4 py-2">कार्य</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of ApprenticeshipRows; let i = index">
+              <td class="border px-4 py-2">{{ row.Nameofinstitute }}</td>
+              <td class="border px-4 py-2">{{ row.dateofregistration }}</td>
+              <td class="border px-4 py-2">
+                <ul>
+                  <li *ngFor="let name of getBusinessNamesFromIds(row.BusinessName)">{{ name }}</li>
+                </ul>
+              </td>
+              <td class="border px-4 py-2">{{ row.NumberofTrainees }}</td>
+              <td class="border px-4 py-2">{{ row.Numberofapprentices }}</td>
+              <td class="border px-4 py-2">
+              <a target="_blank" href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.NumberOfRegistrationDoc}}">View</a></td>
+              <td class="border px-4 py-2">{{ row.Remarks }}</td>
+              <td class="border px-4 py-2">
+                <button class="text-red-500" (click)="removeRow(i)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-5 text-center">
+        <button class="btn bg-success text-white" *ngIf="!IsUpdateCase &&  ApprenticeshipRows.length > 0 &&  ssoLoginDataModel.RoleID == 97 " (click)="onFinalSubmit()" [disabled]="ApprenticeshipRows.length === 0">
+          Submit All
+        </button>
+        <button *ngIf="IsUpdateCase &&  ssoLoginDataModel.RoleID == 97" type="button" class="btn bg-primary text-white mt-4" (click)="UpdateRecordbyID(UpdateEditID)">Update</button>
+      </div>
+    </div>
+  </div>
+</div>

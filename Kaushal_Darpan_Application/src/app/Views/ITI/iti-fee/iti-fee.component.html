@@ -1,0 +1,106 @@
+<!---->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Fees</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ititradelist" class="text-sm font-medium text-slate-700" aria-current="page">Fee</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ititrade" class="text-sm font-medium text-slate-700" aria-current="page">Add Fee</a>
+    </div>
+  </div>
+  <a routerLink="/ititradelist" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Fee</b>
+        </div>
+
+        <form [formGroup]="groupForm" >
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Admission Fee: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Admission Fee:" [(ngModel)]="request.AdmissionFee" formControlName="txtAdmissionFee">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAdmissionFee.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAdmissionFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Processing Fee: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Processing Fee:" [(ngModel)]="request.ApplicationProcessingFee" formControlName="txtApplicationProcessingFee">
+              <div *ngIf="isSubmitted && groupForm.controls.txtApplicationProcessingFee.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtApplicationProcessingFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Form Fee For General: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Form Fee For General:" [(ngModel)]="request.ApplicationFormFeeGen" formControlName="txtAppFormFeeGen">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAppFormFeeGen.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAppFormFeeGen.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Form Fee For SC: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Form Fee For SC:" [(ngModel)]="request.ApplicationFormFeeSc" formControlName="txtAppFormFeeSc">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAppFormFeeSc.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAppFormFeeSc.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Form Fee For ST: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Form Fee For ST:" [(ngModel)]="request.ApplicationFormFeeSt" formControlName="txtAppFormFeeSt">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAppFormFeeSt.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAppFormFeeSt.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Form Fee For OBC: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Form Fee For OBC:" [(ngModel)]="request.ApplicationFormFeeObc" formControlName="txtAppFormFeeObc">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAppFormFeeObc.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAppFormFeeObc.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application Form Fee For MBC: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Application Form Fee For MBC:" [(ngModel)]="request.ApplicationFormFeeMbc" formControlName="txtAppFormFeeMbc">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAppFormFeeMbc.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAppFormFeeMbc.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Academic Year : <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Academic Year:" [(ngModel)]="request.AcademicYear" formControlName="txtAcademicYear">
+              <div *ngIf="isSubmitted && groupForm.controls.txtAcademicYear.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtAcademicYear.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <button type="submit" id="btnSave" (click)="GenerateOTP_save()" class="btn bg-info text-white mt-6">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+
+          </div>
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-otpmodal #otpModal></app-otpmodal>

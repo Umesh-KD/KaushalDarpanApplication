@@ -1,0 +1,256 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Examiner ITI' : 'Add Examiner ITI' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Create Examiner ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+ isUpdate ? 'Update Examiner ITI' : 'Add Examiner ITI'
+        }}
+      </a>
+    </div>
+  </div>
+  <a routerLink="/ITIExaminerList" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Examiner ITI' : 'Add Examiner ITI' }}</b>
+    </div>
+    <form [formGroup]="examinerForm" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="SSOID">SSOID: <span class="StarMarking">*</span></label>
+          <input formControlName="txtSSOID" class="form-input" placeholder="Enter SSO ID" type="text" id="ssoid"
+                 [(ngModel)]="request.SSOID">
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="getSSODetailsBySSOID(request.SSOID)">GetDetails</button>
+          </div>
+          <div *ngIf="isSubmitted && examinerForm.get('txtSSOID').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtSSOID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="Name">Name: <span class="StarMarking">*</span></label>
+          <input formControlName="txtName" class="form-input" type="text" id="Name"
+                 placeholder="Enter Name" [(ngModel)]="request.Name">
+          <div *ngIf="isSubmitted && examinerForm.get('txtName').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtName').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Name">Father Name: <span class="StarMarking">*</span></label>
+          <input formControlName="txtFatherName" class="form-input" type="text" id="FatherName"
+                 placeholder="Enter Father Name" [(ngModel)]="request.FatherName">
+          <div *ngIf="isSubmitted && examinerForm.get('txtFatherName').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtFatherName').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Name">Date Of Birth: <span class="StarMarking">*</span></label>
+          <input formControlName="txtDateOfBirth" class="form-input" type="date" id="Dob"
+                 placeholder="Enter Date Of Birth" [(ngModel)]="request.DateOfBirth">
+          <div *ngIf="isSubmitted && examinerForm.get('txtDateOfBirth').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtDateOfBirth').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label>Gender<span class="StarMarking">*</span></label>
+          <select formControlName="ddlGender" class="form-select" id="Gender" [(ngModel)]="request.Gender">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GenderList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && examinerForm.get('ddlGender').errors" class="text-danger">
+            <p *ngIf="!examinerForm.get('ddlGender').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="Email">Email: <span class="StarMarking">*</span></label>
+          <input formControlName="txtEmail" class="form-input" type="text" id="Email"
+                 placeholder="Enter Email" [(ngModel)]="request.Email">
+          <div *ngIf="isSubmitted && examinerForm.get('txtEmail').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtEmail').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label>District<span class="StarMarking">*</span></label>
+          <select formControlName="ddlDistrictID" class="form-select" id="DistrictID" [(ngModel)]="request.District">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && examinerForm.get('ddlDistrictID').errors" class="text-danger">
+            <p *ngIf="!examinerForm.get('ddlDistrictID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="CenterAddress">Address: <span class="StarMarking">*</span></label>
+          <input formControlName="txtAddress" class="form-input" type="text" id="address" placeholder="Enter Address"
+                 [(ngModel)]="request.Address">
+          <div *ngIf="isSubmitted && examinerForm.get('txtAddress').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtAddress').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="AdharCardNumber">Aadhar Number: <span class="StarMarking">*</span></label>
+          <input formControlName="txtAdharCardNumber" class="form-input" type="text" id="AdharCardNumber"
+                 placeholder="Enter Aadhar Number" [(ngModel)]="request.AadharNumber">
+          <div *ngIf="isSubmitted && examinerForm.get('txtAdharCardNumber').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtAdharCardNumber').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="Bhamashah">Bhamashah Number: <span class="StarMarking">*</span></label>
+          <input formControlName="txtBhamashahNo" class="form-input" type="text" id="BhamashahNo"
+                 placeholder="Enter Bhamashah Number" [(ngModel)]="request.BhamashahNumber">
+          <div *ngIf="isSubmitted && examinerForm.get('txtBhamashahNo').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtBhamashahNo').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="InstitutePhone">Mobile Number: <span class="StarMarking">*</span></label>
+          <input formControlName="txtMobileNumber" class="form-input" type="text" id="MobileNumber"
+                 placeholder="Enter Mobile Number" [(ngModel)]="request.MobileNumber" maxlength="10">
+          <div *ngIf="isSubmitted && examinerForm.get('txtMobileNumber').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtMobileNumber').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Education Qualification">Education Qualification: <span class="StarMarking">*</span></label>
+          <input formControlName="txtHigherQualificationID" class="form-input" type="text" id="HigherQualificationID"
+                 placeholder="Enter Education Qualification" [(ngModel)]="request.EducationQualification">
+          <div *ngIf="isSubmitted && examinerForm.get('txtHigherQualificationID').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtHigherQualificationID').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label>Branch/Trade<span class="StarMarking">*</span></label>
+          <select formControlName="ddlStreamID" class="form-select" id="StreamID" [(ngModel)]="request.Branch_Trade">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+          <div *ngIf="isSubmitted && examinerForm.get('ddlStreamID').errors" class="text-danger">
+            <p *ngIf="!examinerForm.get('ddlStreamID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Designation<span class="StarMarking">*</span></label>
+          <select formControlName="ddlDesignationID" class="form-select" id="DesignationID" [(ngModel)]="request.Designation">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DesignationMasterList" [value]="item.ID"> {{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && examinerForm.get('ddlDesignationID').errors" class="text-danger">
+            <p *ngIf="!examinerForm.get('ddlDesignationID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="PostingPlace">Posting Place: <span class="StarMarking">*</span></label>
+          <input formControlName="txtPostingPlace" class="form-input" type="text" id="PostingPlace" placeholder="Enter Posting Place"
+                 [(ngModel)]="request.PostingPlace">
+          <div *ngIf="isSubmitted && examinerForm.get('txtPostingPlace').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtPostingPlace').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="BankAcNo">Bank Account Number: <span class="StarMarking">*</span></label>
+          <input formControlName="txtBankAccountNo" class="form-input" type="text" id="BankAccountNo" placeholder="Enter Bank Account Number"
+                 [(ngModel)]="request.BankAccountNumber">
+          <div *ngIf="isSubmitted && examinerForm.get('txtBankAccountNo').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtBankAccountNo').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="IFSCCode">IFSC Code: <span class="StarMarking">*</span></label>
+          <input formControlName="txtIFSCCode" class="form-input" type="text" id="IFSCCode" placeholder="Enter IFSC Code"
+                 [(ngModel)]="request.IFSCCode">
+          <div *ngIf="isSubmitted && examinerForm.get('txtIFSCCode').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtIFSCCode').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="BankName">Bank Name: <span class="StarMarking">*</span></label>
+          <input formControlName="txtBankName" class="form-input" type="text" id="BankName" placeholder="Enter IFSC Code"
+                 [(ngModel)]="request.BankName">
+          <div *ngIf="isSubmitted && examinerForm.get('txtBankName').errors" class="text-danger">
+            <p *ngIf="examinerForm.get('txtBankName').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

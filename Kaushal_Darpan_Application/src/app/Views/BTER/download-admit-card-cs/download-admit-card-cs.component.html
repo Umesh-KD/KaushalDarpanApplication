@@ -1,0 +1,105 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Download Admit Card </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Download Admit Card </a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
+      <div class="flex justify-end flex-wrap items-center">
+      </div>
+    </div>
+
+    <!--{{_RollListStatus|json}}-->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Roll Number<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="RollNo" placeholder="Enter Student Roll Number"
+             [(ngModel)]="searchRequest.RollNo" >
+      </div>
+
+      
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetStudentList()">Search</button>
+        <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetFilter()">Cancel</button> -->
+      </div>
+    </div>
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Student List </b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="flex">
+        </div>
+        <div class="">
+
+        </div>
+        
+        <div class="flex items-center">
+          
+        </div>
+      </div>
+      
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+
+              <th class="text-center">Sr. No.</th>
+              <th class="text-center">Roll Number</th>
+              <th class="text-center">Enrollment Number</th>
+              <th class="text-center">Student Name</th>
+              <th class="text-center">Mobile</th>
+              <!--<th class="text-center">Subject Code</th>-->
+              
+              <th class="text-center">Admit Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StudentList; let idx=index;">
+
+              <td class="text-center">{{idx+1}}</td>
+              <td class="text-center">{{row.RollNo}}</td>
+              <td class="text-center">{{row.EnrollmentNo}}</td>
+              <td class="text-center">{{row.StudentName}}</td>
+              <td class="text-center">{{row.MobileNo}}</td>
+              <!--<td class="text-center">{{row.SubjectCode}}</td>-->
+              
+              <td class="text-center">
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                
+                  <a (click)="DownloadAdmitCard(row)" title="Download Admit Cards"><i class="ti ti-download"></i></a>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+

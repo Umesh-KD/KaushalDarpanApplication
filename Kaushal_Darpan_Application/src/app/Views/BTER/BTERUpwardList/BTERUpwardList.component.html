@@ -1,0 +1,571 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+
+    <!--<h4 class="text-slate-900 text-lg font-medium mb-2">{{searchRequest.TradeLevel==1 ?'Engineering':searchRequest.TradeLevel==2 ?'Non Engineering':searchRequest.TradeLevel==3 ?'Lateral':''}} Seats Allotment</h4>-->
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Upward Student List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard-Institute" class="text-sm font-medium text-slate-700">BTER</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">BTER Upward List</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <!--<form [formGroup]="ITIAllotmentFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotment Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="AllotmentId" (change)="startSubscription()" [(ngModel)]="request.AllotmentId">
+              <option value="0">--Select--</option>
+              <option value="2">First Allotment</option>
+              <option value="3">Upward Allotment</option>
+              <option value="4">Second Allotment</option>
+            </select>
+          </div>
+
+          <div *ngIf="DateConfigSetting[0][AllotmentPublishKey]==1">
+            <button type="button" class="btn bg-info text-white  mt-6"> Click To View</button>
+            <button type="button" class="btn bg-info text-white  mt-6" (click)="GenerateAllotment()" [disabled]="Generatebtn"> Generate Allotment</button>
+          </div>
+
+          <div *ngIf="DateConfigSetting[0][AllotmentPublishKey]==1">
+            <button type="button" class="btn bg-info text-white  mt-6"> Click To View</button>
+            <button type="button" class="btn bg-info text-white  mt-6" (click)="OpenUploadAllotmnetModel(MyModel_UploadAllotment)" [disabled]="Generatebtn"> Upload Allotment Data</button>
+          </div>
+
+          <div *ngIf="DateConfigSetting[0][AllotmentPublishKey]==1">
+            <button type="button" class="btn bg-info text-white  mt-6"> Click To View</button>
+            <button type="button" class="btn bg-info text-white  mt-6" (click)="PublishAllotment()" [disabled]="Generatebtn"> Publish Allotment</button>
+          </div>
+
+
+          
+
+        </div>
+      </form>-->
+
+      <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>  Allotment Progress</b>
+
+      </div>-->
+
+
+      <!--<div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Id</th>
+              <th class="text-left">Type</th>
+              <th class="text-left">TotalApplication</th>
+              <th class="text-left">TotalRuning</th>
+              <th class="text-left">TotalAlloted</th>
+              <th class="text-left">Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of AllotmentCounterList ; let idx=index;  ">
+              <td>{{idx+1}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" [innerHTML]="item.Type"></td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TotalApplication}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TotalRuningCount}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TotalAlloted}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CompleteTime}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>-->
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>  Upward List</b>
+        <div>
+          <button type="button" class="btn bg-info text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</button>
+        </div>
+      </div>
+
+
+      <div class="w-100  bg-light my-2">
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-1 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="">
+            Allotment: <span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="actionid" name="actionid" [(ngModel)]="searchRequest.action" (change)="changeListType()">
+            <option value=''>--Select--</option>
+            <option value="MERIT_LIST">Merit List</option>
+            <option value="OPTION_FORM">Option Form</option>
+            <option value="ALLOTMENT_LIST">Allotment List</option>
+            <option value="NOT_ALLOTED_LIST">Not Allotted List</option>
+            <option value="SEAT_METRIX_BEFORE">Seat Metrix Before Allotment</option>
+            <option value="SEAT_METRIX_AFTER">Seat Metrix After Allotment</option>
+            <option value="CUT_OFF">Cut Off</option>
+            <option value="COLLEGE_ALLOTMENT_COUNT">College Allotment Count</option>
+          </select>
+        </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+          <input type="text" class="form-input" placeholder="Search..." (change)="ShowAllotmentDataList(1)" [(ngModel)]="FilterType">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2"> </label>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-1" (click)="ShowAllotmentDataList(1)"><i class="ti ti-search"></i> Search</button>
+            <button type="button" class="btn bg-danger text-white mt-1" (click)="onCancel()">Cancel</button>
+          </div>
+        </div>
+        <!--<div *ngIf="DateConfigSetting[0][AllotmentPublishKey]==1 && searchRequest.action=='ALLOTMENT_LIST' && transactionData.length>0 && transactionData[0].IsPublished==1">
+          <button type="button"  class="btn bg-success text-white mt-7" (click)="openUnPublish(modal_UnPublish)">UnPublish Allotmnet</button>
+        </div>-->
+      </div>
+
+      <div class="w-100  bg-light my-2">
+      </div>
+      <div class="w-100  bg-light my-2">
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="transactionData.length>0">
+          <!--<thead *ngIf="searchRequest.action=='OPTION_FORM'">
+            <tr>
+              <th>SR</th>
+              <th class="text-left">Merit No</th>
+              <th class="text-left">CollegeName                </th>
+              <th class="text-left">BranchName                 </th>
+              <th class="text-left">ShiftName                 </th>
+              <th class="text-left">Priority                   </th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Applicant Name</th>
+              <th class="text-left">Gender</th>
+              <th class="text-left">DOB</th>
+              <th class="text-left">Category</th>
+              <th class="text-left">PH</th>
+              <th class="text-left">KM</th>
+              <th class="text-left">Ex Servicemen</th>
+              <th class="text-left">Widow/Divorcee</th>
+              <th class="text-left">Single Mother Dependent</th>
+              <th class="text-left">TSP</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==1 || searchRequest.TradeLevel==2">Class Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">Course Type</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">12th Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">10th Percentage</th>
+              <th class="text-left">RAJ DOMICILE</th>
+            </tr>
+          </thead>-->
+          <thead>
+            <tr>
+              <th>SR</th>
+              <th class="text-left">Merit No</th>
+              <th class="text-left">CollegeName                </th>
+              <th class="text-left">BranchName                 </th>
+              <th class="text-left">ShiftName                 </th>
+              <th class="text-left">Alloted Priority                   </th>
+              <th class="text-left">Alloted Category              </th>
+              <th class="text-left">Alloted Gender</th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Applicant Name</th>
+              <th class="text-left">Gender</th>
+              <th class="text-left">DOB</th>
+              <th class="text-left">Category</th>
+              <th class="text-left">PH</th>
+              <th class="text-left">KM</th>
+              <th class="text-left">Ex Servicemen</th>
+              <th class="text-left">Widow/Divorcee</th>
+              <th class="text-left">Single Mother Dependent</th>
+              <th class="text-left">TSP</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==1 || searchRequest.TradeLevel==2">Class Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">Course Type</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">12th Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.TradeLevel==3">10th Percentage</th>
+              <th class="text-left">RAJ DOMICILE</th>
+            </tr>
+          </thead>
+          <!--<thead *ngIf="searchRequest.action=='SEAT_METRIX_BEFORE'|| searchRequest.action=='SEAT_METRIX_AFTER'">
+            <tr>
+              <th>SR</th>
+              <th class="text-left">CollegeName </th>
+              <th class="text-left">BranchName  </th>
+              <th class="text-left">Shift Name  </th>
+              <th class="text-left">TotalSeats  </th>
+              <th class="text-left">GEN         </th>
+              <th class="text-left">GEN_F       </th>
+              <th class="text-left">SC          </th>
+              <th class="text-left">SC_F        </th>
+              <th class="text-left">ST          </th>
+              <th class="text-left">ST_F        </th>
+              <th class="text-left">TSP         </th>
+              <th class="text-left">TSP_F       </th>
+              <th class="text-left">OBC         </th>
+              <th class="text-left">OBC_F       </th>
+              <th class="text-left">EWS         </th>
+              <th class="text-left">EWS_F       </th>
+              <th class="text-left">MBC         </th>
+              <th class="text-left">MBC_F       </th>
+              <th class="text-left">TFWS        </th>
+              <th class="text-left">WID_DIV     </th>
+              <th class="text-left">EX          </th>
+              <th class="text-left">KM          </th>
+              <th class="text-left">PH          </th>
+              <th class="text-left">MGM         </th>
+              <th class="text-left">SMD         </th>
+            </tr>
+          </thead>
+          <thead *ngIf="searchRequest.action=='CUT_OFF'">
+            <tr>
+              <th>SR</th>
+              <th class="text-left">InstituteNameEnglish    </th>
+              <th class="text-left">Name                    </th>
+              <th class="text-left">AllotedGender           </th>
+              <th class="text-left">AllotedCategory         </th>
+              <th class="text-left">Shift Name         </th>
+              <th class="text-left">CutOff                  </th>
+
+            </tr>
+          </thead>
+          <thead *ngIf="searchRequest.action=='COLLEGE_ALLOTMENT_COUNT'">
+            <tr>
+              <th>SR</th>
+              <th class="text-left">InstituteNameEnglish      </th>
+              <th class="text-left">Name                      </th>
+              <th class="text-left">Shift                      </th>
+              <th class="text-left">Total Seats                      </th>
+              <th class="text-left">TotalAlloted              </th>
+            </tr>
+          </thead>
+
+          <thead *ngIf="searchRequest.action=='MERIT_LIST' || searchRequest.action=='NOT_ALLOTED_LIST' ">
+            <tr>
+              <th>SR</th>
+              <th class="text-left">Merit No</th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Applicant Name</th>
+              <th class="text-left">Gender</th>
+              <th class="text-left">DOB</th>
+              <th class="text-left">Category</th>
+              <th class="text-left">PH</th>
+              <th class="text-left">KM</th>
+              <th class="text-left">Ex Servicemen</th>
+              <th class="text-left">Widow/Divorcee</th>
+              <th class="text-left">Single Mother Dependent</th>
+              <th class="text-left">TSP</th>
+
+
+              <th class="text-left" *ngIf="searchRequest.CourseType==1 || searchRequest.CourseType==2">Class Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.CourseType==3">Course Type</th>
+              <th class="text-left" *ngIf="searchRequest.CourseType==3">12th Percentage</th>
+              <th class="text-left" *ngIf="searchRequest.CourseType==3">10th Percentage</th>
+
+              <th class="text-left">RAJ DOMICILE</th>
+
+
+            </tr>
+          </thead>-->
+
+
+          <!--<tbody *ngIf="searchRequest.action=='OPTION_FORM'">
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="text-left"> {{row.MeritNo }}</td>
+              <td class="text-left"> {{row.CollegeName }} </td>
+              <td class="text-left"> {{row.BranchName      }}  </td>
+              <td class="text-left"> {{row.ShiftName      }}  </td>
+              <td class="text-left"> {{row.Priority}}          </td>
+              <td class="text-left"> {{row.ApplicationID }}</td>
+              <td class="text-left"> {{row.StudentName }}</td>
+              <td class="text-left"> {{row.Gender }}</td>
+              <td class="text-left"> {{row.DOB }}</td>
+              <td class="text-left"> {{row.CasteCategoryNameEnglish}} </td>
+              <td class="text-left"> {{row.IsPH }}</td>
+              <td class="text-left"> {{row.IsKM }}</td>
+              <td class="text-left"> {{row.IsExServicemen }}</td>
+              <td class="text-left"> {{row.IsWID}} </td>
+              <td class="text-left"> {{row.IsSingleMotherDependent }}</td>
+              <td class="text-left"> {{row.IsTSP }}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==1">{{row.TenthPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==2">{{row.MaxPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.CourseType}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.TwelvePer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.TenthPer}}</td>
+              <td class="text-left"> {{row.IsRajDOMICILE }}</td>
+
+
+
+
+            </tr>
+          </tbody>-->
+          <tbody>
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="text-left"> {{row.MeritNo }}</td>
+              <td class="text-left"> {{row.CollegeName }} </td>
+              <td class="text-left"> {{row.BranchName      }}  </td>
+              <td class="text-left"> {{row.ShiftName      }}  </td>
+              <td class="text-left"> {{row.AllotedPriority}}          </td>
+              <td class="text-left"> {{row.AllotedCategory}}     </td>
+              <td class="text-left"> {{row.AllotedGender }}</td>
+              <td class="text-left"> {{row.ApplicationID }}</td>
+              <td class="text-left"> {{row.StudentName }}</td>
+              <td class="text-left"> {{row.Gender }}</td>
+              <td class="text-left"> {{row.DOB }}</td>
+              <td class="text-left"> {{row.StudentCategory}} </td>
+              <td class="text-left"> {{row.IsPH }}</td>
+              <td class="text-left"> {{row.IsKM }}</td>
+              <td class="text-left"> {{row.IsExServicemen }}</td>
+              <td class="text-left"> {{row.IsWID}} </td>
+              <td class="text-left"> {{row.IsSingleMotherDependent }}</td>
+              <td class="text-left"> {{row.IsTSP }}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==1">{{row.TenthPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==2">{{row.MaxPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.CourseType}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.TwelvePer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.TradeLevel==3">{{row.TenthPer}}</td>
+              <td class="text-left"> {{row.IsRajDOMICILE }}</td>
+            </tr>
+          </tbody>
+          <!--<tbody *ngIf="searchRequest.action=='SEAT_METRIX_BEFORE'|| searchRequest.action=='SEAT_METRIX_AFTER'">
+
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="text-left"> {{row.CollegeName}} </td>
+              <td class="text-left"> {{row.BranchName}}  </td>
+              <td class="text-left"> {{row.ShiftName}}  </td>
+              <td class="text-left"> {{row.TotalSeats}}  </td>
+              <td class="text-left"> {{row.GEN}}  </td>
+              <td class="text-left"> {{row.GEN_F}}  </td>
+              <td class="text-left"> {{row.SC}}  </td>
+              <td class="text-left"> {{row.SC_F}}  </td>
+              <td class="text-left"> {{row.ST}}  </td>
+              <td class="text-left"> {{row.ST_F}}  </td>
+              <td class="text-left"> {{row.TSP}}  </td>
+              <td class="text-left"> {{row.TSP_F}}  </td>
+              <td class="text-left"> {{row.OBC}}   </td>
+              <td class="text-left"> {{row.OBC_F}}   </td>
+              <td class="text-left"> {{row.EWS}}   </td>
+              <td class="text-left"> {{row.EWS_F}}   </td>
+              <td class="text-left"> {{row.MBC}}   </td>
+              <td class="text-left">  {{row.MBC_F   }}   </td>
+              <td class="text-left">  {{row.TFWS    }}   </td>
+              <td class="text-left">  {{row.WID_DIV }}   </td>
+              <td class="text-left">  {{row.EX      }}   </td>
+              <td class="text-left">  {{row.KM      }}   </td>
+              <td class="text-left">  {{row.PH      }}   </td>
+              <td class="text-left">  {{row.MGM     }}   </td>
+              <td class="text-left">  {{row.SMD     }}   </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="searchRequest.action=='CUT_OFF'">
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="text-left">{{row.InstituteNameEnglish}}    </td>
+              <td class="text-left">{{row.Name}}                    </td>
+              <td class="text-left">{{row.AllotedGender}}           </td>
+              <td class="text-left">{{row.AllotedCategory}}         </td>
+              <td class="text-left">{{row.ShiftName}}         </td>
+              <td class="text-left">{{row.CutOff}}                  </td>
+            </tr>
+          </tbody>
+          <tbody *ngIf="searchRequest.action=='COLLEGE_ALLOTMENT_COUNT'">
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="text-left">{{row.InstituteNameEnglish}}      </td>
+              <td class="text-left">{{row.Name}}                      </td>
+              <td class="text-left">{{row.ShiftName}}                      </td>
+              <td class="text-left">{{row.TotalSeats}}                      </td>
+              <td class="text-left">{{row.TotalAlloted}}              </td>
+            </tr>
+          </tbody>
+
+          <tbody *ngIf="searchRequest.action=='MERIT_LIST' || searchRequest.action=='NOT_ALLOTED_LIST' ">
+            <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MeritNo}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationID}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Gender}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB|date:'dd-MM-yyyy'}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryName}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsPH}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsKM}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsExServicemen}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsWID}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsSingleMotherDependent}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsTSP}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==1">{{row.TenthPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==2">{{row.MaxPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.CourseType}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.TwelvePer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.TenthPer}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsRajDOMICILE}}</td>
+            </tr>
+          </tbody>-->
+
+
+
+
+        </table>
+      </div>
+
+
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <!--<div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>-->
+      </div>
+
+      <div *ngIf="transactionData?.length>0" class="p-3 paginationBox flex items-center justify-end w-full">
+        <select id="ddlConter" style="margin-top: 20px;" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="ShowAllotmentDataList(1)">
+          <option [value]="50">50</option>
+          <option [value]="100">100</option>
+          <option [value]="500">500</option>
+          <option [value]="1000">1000</option>
+        </select>
+        <div class="p-3 paginationBox">
+          <span class="block">
+            Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  transactionData?.length }} of {{transactionData[0]?.TotalRecords}}
+          </span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="ShowAllotmentDataList(1)" [disabled]="pageNo==1">First</button>
+            <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+            <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+                   [disabled]="transactionData[0]?.TotalRecords==0" (change)="ShowAllotmentDataList(pageNo)" />
+            <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+            <button (click)="nextData()">Next</button>
+            <button (click)="ShowAllotmentDataList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+
+<!--<ng-template #MyModel_UploadAllotment let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Import Student Allotment </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">-->
+        <!--<div class="grid-cols-12">
+          <label style="color:red;font-size:15px;" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                 for="fileStudentPhoto">*Please validate that the record count does not exceed 10,000 rows, as that is the maximum allowed for this operation.</label>
+        </div>-->
+        <!--<div class="clearfix"></div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="gap-3">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">-->
+              <!-- File Input for Excel -->
+              <!--<input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <div class="mt-5">
+            <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+
+
+            <a href="javascript:void(0)" (click)="ExportExcelBranchmappingData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Collge Branch Mapping</a>
+            <a href="javascript:void(0)" (click)="ExportExcelOptionFormData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Option Form</a>
+            <a href="javascript:void(0)" (click)="ResetData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-list"></i>Reset</a>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Allotment Data</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" (click)="openOTPUploadExcel()" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Save
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead>
+              <tr>
+                <th style="text-align:left;" *ngFor="let item of DataExcel4">{{ item  }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let items of DataExcel; let indx=index">
+                <td style="text-align:left;" *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>-->
+                <!--<td *ngFor="let item of items.values">{{item}}</td>-->
+              <!--</tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_UnPublish let-modal class="fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden ">
+  <div class="modal-content modal-sm">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; Un Publish Merit
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter Remark for un publish merit<span class="StarMarking">*</span></label>
+          <textarea type="text" rows="3" class="form-input" [(ngModel)]="UnPublishRemark" placeholder="Enter Remark for un publish merit"></textarea>
+        </div>
+
+        <div>
+          <label>Attachment</label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" type="file" (change)="onFileChangeUnPublish($event,'Photo')" accept="image/*" />
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{UnPubishAttachment === '' ? 'No File Choosen' : UnPubishAttachment}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + UnPubishAttachment}}"
+                 *ngIf="UnPubishAttachment !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="openOTPUnPublish()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i>Submit</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>-->
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+<app-otpmodal #otpModal1></app-otpmodal>
+<app-otpmodal #otpModal2></app-otpmodal>

@@ -1,0 +1,207 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Company Dispatch' : 'Sanction Order' }}</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a routerLink="/BoardUniversity" class="text-sm font-medium text-slate-700" aria-current="page">Board University</a>-->
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/SanctionOrder" class="text-sm font-medium text-slate-700" aria-current="page">{{ isUpdate ? 'Update Sanction Order' : 'Add Sanction Order' }}</a>
+    </div>
+  </div>
+  <!--<a routerLink="/companydispatchlist" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>-->
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">
+            <i class="ti ti-plus"></i> {{ isUpdate ? 'Update Sanction Order' : 'Add Sanction Order' }}
+          </b>
+        </div>
+        <form *ngIf="groupForm" [formGroup]="groupForm" (ngSubmit)="saveData()">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <!-- File Upload -->
+            <div>
+              <label for="AttachDocument_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                File
+              </label>
+              <div>
+                <input id="AttachDocument_file" formControlName="AttachDocument"
+                       type="file"
+                       (change)="onFilechange($event, 'Photo')"
+                       class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument}}"
+                   *ngIf="request.AttachDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+
+            <!-- Sanction/Order No -->
+            <div>
+              <label class="text-gray-800 text-sm  mb-2 font-medium inline-block mb-1">
+                Order No(s): <span class="StarMarking">*</span>
+              </label>
+              <div class="flex space-x-2 mb-2">
+                <input type="text"
+                       formControlName="OrderNo"
+                       class="form-input flex-1"
+                       placeholder="Enter Order No" (keypress)="validateNumber($event)" maxlength="6" />
+                <button type="button"
+                        class="btn bg-green-500 text-white px-3"
+                        (click)="addOrderNo()"
+                        [disabled]="isEditing">
+                  +
+                </button>
+
+
+              </div>
+              <div *ngIf="duplicateError" class="text-red-600 text-sm mt-1">
+                {{ duplicateError }}
+              </div>
+              <!-- Display List of Order Nos -->
+              <div class="flex flex-wrap gap-2">
+                <span *ngFor="let order of groupForm.get('OrderNos')?.value; let i = index"
+                      class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full flex items-center space-x-1">
+                  {{ order }}
+                  <button type="button"
+                          (click)="removeOrderNo(i)"
+                          class="ml-2 text-red-500 hover:text-red-700 font-bold">
+                    &times;
+                  </button>
+                </span>
+              </div>
+            </div>
+
+
+          </div>
+
+
+          <div class="flex items-end space-x-2 mt-6">
+            <button type="submit" id="btnSave" class="btn bg-info text-white">
+              {{ isEditing ? 'Update' : 'Save' }}
+            </button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </form>
+
+        <!--{{SanctionOrderList|json}}-->
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="">
+            <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize">
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+          </div>
+          <div class="">
+          </div>
+          <div class="">
+          </div>
+          <div class="">
+            <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr.No</th>
+                <th class="text-left">Order No</th>
+                <th class="text-left">File</th>
+                <th class="text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of SanctionOrderList ; let idx=index;">
+                <td class="text-center">{{ idx + 1 }}</td>
+                <td align="left">{{row.OrderNo}}</td>
+                <td align="left">
+                  <div>
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + row.AttachDocument}}"
+                       *ngIf="row.AttachDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" (click)="onSubmitStaffRequest(MyModel_ReplayQuery,row)" title="Edit"><i class="ti ti-pencil"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+          <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                   [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #MyModel_ReplayQuery let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form *ngIf="groupFormUpdate" [formGroup]="groupFormUpdate" >
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label for="AttachDocument_file" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                File
+              </label>
+              <div>
+                <input id="AttachDocument_file" formControlName="AttachDocument1"
+                       type="file"
+                       (change)="onFilechange($event, 'Photo')"
+                       class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument}}"
+                   *ngIf="request.AttachDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+            <input type="text"
+                   formControlName="OrderNoUpdate1"
+                   class="form-input flex-1"
+                   placeholder="Enter Order No" [(ngModel)]="request.OrderNo" (keypress)="validateNumber($event)" maxlength="6" />
+
+            <div *ngIf="isSubmitted && groupFormUpdate.controls.OrderNoUpdate1.errors" class="text-danger">
+              <p *ngIf="groupFormUpdate.controls.OrderNoUpdate1.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+        </div> 
+        <div class="card-footer text-right">
+          <button type="button"  class="btn bg-success text-white btn-sm" (click)="UpdateData()" >
+            Update
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

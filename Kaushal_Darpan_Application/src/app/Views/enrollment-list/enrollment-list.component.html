@@ -1,0 +1,54 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Download Enrollment List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Enrollment list</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Download Enrollment List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Institute:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of InstituteList" [value]="row.InstituteID">{{row.InstituteName}}</option>
+          </select>
+        </div>
+
+
+        <div>
+          <!--<button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">-->
+          <button type="button" class="btn bg-info text-white mt-6">Download</button>
+          <button type="button" class="btn bg-danger text-white mt-6">
+            <i class="ti ti-refresh"></i>
+            Cancel
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+<!-- end row -->

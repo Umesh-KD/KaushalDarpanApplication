@@ -1,0 +1,167 @@
+
+
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+  </div>
+  <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+    <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Post Master</a>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels" id="QualificationDetail">
+    <div class="card-body p-5">
+      <form [formGroup]="FormGroup" class="form-horizontal">
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Post Details</b>
+            <span class="text-danger">(* fields are mandatory)</span>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+          
+
+        
+
+            <!--<div>
+              <label for="ddllevel" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Office<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlOfficeId" name="ddlOfficeId" [(ngModel)]="request.OfficeID"
+                      formControlName="ddlOfficeId">
+                <option value="0">-- Select --</option>
+                <option *ngFor="let item of OfficeMasterList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlOfficeId.errors" class="text-danger">
+                <p *ngIf="!form.ddlOfficeId.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>-->         
+
+
+
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Post Name<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtPostName" name="txtPostName" formControlName="txtPostName" [(ngModel)]="request.PostName" placeholder="Enter Post Name">
+              <div *ngIf="isSubmitted&&form.txtPostName.errors" class="text-danger">
+                <p *ngIf="form.txtPostName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+           
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <div class="flex align-center flexBtn mt-7">
+                <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white"> Save</button>
+                <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
+      </div>
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <!--<th align="left">Office Name</th>-->
+              <th align="left">Post Name</th>         
+              <th align="center" width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <!--<td>{{row.OfficeName}}</td>-->
+              <td>{{row.PostName}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.ID)"><i class="ti ti-pencil"></i></a>
+                  <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.ID)"><i class="ti ti-trash"></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+
+
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Assign Child Subject
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 400px;overflow:auto">
+        <div class="mb-8">
+          <!--<label>Select Child Subject<span class="text-danger">*</span></label>-->
+          <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="ParentList"
+                                   [(ngModel)]="AddParent.SubjectList"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+          </ng-multiselect-dropdown>
+          <!--<ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="SubjectMasterDDLList"
+                                   [formControl]="_BranchSubjectFormGroup.selectedItems" [(ngModel)]="SelectedSubjectList" [settings]="settingsMultiselector"
+                                   [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                   (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                   (onDeSelectAlls)="onDeSelectAlls($event)">
+          </ng-multiselect-dropdown>-->
+          <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<!-- End Modal Popup Start For Add Insitute-->

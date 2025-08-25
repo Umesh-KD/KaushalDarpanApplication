@@ -1,0 +1,52 @@
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { throwError, catchError } from 'rxjs';
+import { AppsettingService } from '../../Common/appsetting.service';
+import { CopyCheckerRequestModel, ExaminerDashboardModel } from '../../Models/CopyCheckerRequestModel';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CopyCheckerDashboardService {
+
+  readonly APIUrl = this.appsettingConfig.apiURL + "CopyCheckerDashboard";
+  readonly headersOptions: any;
+  constructor(private http: HttpClient, private appsettingConfig: AppsettingService) {
+    this.headersOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('authtoken')
+      })
+    };
+  }
+  extractData(res: Response) {
+    return res;
+  }
+  handleErrorObservable(error: Response | any) {
+    return throwError(error);
+  }
+  public async GetCopyCheckerDashData(request: CopyCheckerRequestModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetCopyCheckerDashData/", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAll(request: ExaminerDashboardModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetAllData/", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async GetCopyCheckerDashData_Reval(request: CopyCheckerRequestModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetCopyCheckerDashData_Reval/", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+}

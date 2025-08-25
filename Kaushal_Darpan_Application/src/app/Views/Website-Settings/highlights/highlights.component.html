@@ -1,0 +1,196 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Website Settings</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Website Settings</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Dynamic Content</b>
+        </div>
+        <div class="overflow-x-auto mt-3 mb-3">
+            <form [formGroup]="HighlightsFromGroup">
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department Type</label><span class="StarMarking">*</span>
+                        <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.DepartmentSubID" formControlName="DepartmentSubID">
+                            <option value="0">--Select--</option>
+                            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.BTER">BTER</option>
+                            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER" [value]="_EnumWS_DepartmentSub.DTE">DTE</option>
+                            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_NCVT">ITI NCVT</option>
+                            <option *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI" [value]="_EnumWS_DepartmentSub.ITI_SCVT">ITI SCVT</option>
+                        </select>
+                        <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.DepartmentSubID.errors" class="text-danger">
+                            <p *ngIf="!_HighlightsFromGroup.DepartmentSubID.errors.DropdownValidators">
+                                <i aria-hidden="true"></i>This field is required .!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Notification Type</label>
+                        <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="request.TypeID" formControlName="TypeID">
+                            <option value="0">--Select--</option>
+                            <option  *ngFor="let item of GetDynamicUploadTypeDDL_Data" [value]="item.Id">{{item.TypeName}}</option>
+                        </select>
+                        <div *ngIf="isFormSubmitted&&_HighlightsFromGroup.TypeID.errors" class="text-danger">
+                            <p *ngIf="!_HighlightsFromGroup.TypeID.errors.DropdownValidators">
+                                <i aria-hidden="true"></i>This field is required .!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Title:</label><span class="StarMarking">*</span>
+                        <input type="text" class="form-input" id="Title" placeholder="Title" formControlName="Title"
+                            [(ngModel)]="request.Title" />
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Title.errors"class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.Title.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div >
+                        <label>Upload Document:</label>
+
+                        <div class="flex fileUploader">
+                            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                id="document1" type="file" (change)="onFilechange($event,'Photo')">
+                            <label for="document1">
+                                <span>Choose File</span>
+                                {{request.FileName === '' ? 'No File Choosen' : request.Dis_FileName}}
+                            </label>
+                            <div class="flex">
+                            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" *ngIf="request.FileName !=''"
+                                class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Start Date:</label>
+                        <input type="datetime-local" class="form-input" id="Start_Date" placeholder="Start_Date" formControlName="Start_Date"
+                            [(ngModel)]="request.Start_Date" [min]="todayDate" />
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Start_Date.errors" class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.Start_Date.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>End Date:</label>
+                        <input type="datetime-local" class="form-input" id="End_Date" placeholder="End_Date" formControlName="End_Date"
+                            [(ngModel)]="request.End_Date" [min]="request.Start_Date"/>
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.End_Date.errors" class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.End_Date.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pt-5">
+                        <button class="bg-success btn text-white"  (click)="SaveData()"> Save</button>
+                        <button class="bg-danger btn text-white"  (click)="ResetControls()"> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="flex justify-between flex-wrap  mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Dynamic Content List</b>
+      </div>
+
+        
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+        <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Session</th>
+            <th class="text-left">Department</th>
+            <th class="text-left">Type</th>
+            <th class="text-left">Title</th>
+            <th class="text-left">File</th>
+            <th class="text-left">Start Date</th>
+            <th class="text-left">End Date</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of DynamicContentData  | tableSearchFilter:Table_SearchText;let idx=index;">
+           
+            <td>{{idx+1}}</td>
+            <td>{{row.FinancialYearName}}</td>
+            <td align="left">{{row.subcategory}}</td>
+            <td align="left">{{row.TypeName}}</td>
+            <td align="left">{{row.Title}}</td>
+            <td align="left">{{row.FileName}}</td>
+            <td align="left">{{row.Start_Date | date : 'dd-MM-yyyy hh:mm a'}}</td>
+            <td align="left">{{row.End_Date | date : 'dd-MM-yyyy hh:mm a' }}</td>
+            <td align="left">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <label class="block">{{ row.IsActive == 1 ? 'Active' : 'Inactive' }}</label>
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.IsActive == 1" (change)="onToggleChange(row)">
+                  <span class="toggleIcon">
+                    <!-- <span class="toggleTitle">{{ row.IsActive == 1 ? 'Active' : 'Inactive' }}</span> -->
+                  </span>
+                </label>
+              </div>       
+            </td>
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+                <div class="flex" >
+                  <a href="javascript:void(0);" title="Edit" (click)=" onEdit(row)">
+                    <i class="ti ti-pencil"></i>
+                  </a>
+                  <a href="javascript:void(0);" title="Delete" (click)=" onDelete(row)">
+                    <i class="ti ti-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="DynamicContentData?.length==0">
+            <td colspan="10">
+              No Record Found.
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    </div>
+</div>

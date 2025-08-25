@@ -1,0 +1,120 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College Wise Examination Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/CollegeWiseExaminationRpt" class="text-sm font-medium text-slate-700" aria-current="page">College Wise Examination Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <div class="flex justify-between flex-wrap mb-2">
+      <div class="Search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Filter College Name</mat-label>
+          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Export Execl
+      </a>
+      </div>
+    </div>
+    <!-- Table -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <!-- Sr. No Column -->
+      <ng-container matColumnDef="SrNo">
+        <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+        <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+      </ng-container>
+
+      <!-- College Name Column with Sorting and Filtering -->
+      <ng-container matColumnDef="CollegeName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:400px">
+          College Name
+        </th>
+        <td mat-cell *matCellDef="let element" style="width:400px">{{ element.CollegeName }}</td>
+      </ng-container>
+
+      <!-- Total Students Column -->
+      <ng-container matColumnDef="TotalStudents">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Students </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="'/preexamstudent/' + 0 +'/'+ element.InstituteID">{{ element.TotalStudents }}</a>-->
+          <a [routerLink]="'/studentexamination/' + 0 +'/'+ element.InstituteID">{{ element.TotalStudents }}</a>
+        </td>
+      </ng-container>
+
+      <!-- Pending To Submitted Column -->
+      <ng-container matColumnDef="PendingToSubmitted">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Verified </th>
+        <td mat-cell *matCellDef="let element">
+          <a [routerLink]="'/studentexamination/' + 32 +'/'+ element.InstituteID">{{element.PendingToSubmitted}}</a>
+        </td>
+      </ng-container>
+
+      <!-- Pending To Fee Paid Column -->
+      <ng-container matColumnDef="PendingToFeePaid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Fee Paid </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="'/preexamstudent/' + 34 +'/'+ element.InstituteID">{{ element.PendingToFeePaid }}</a>-->
+          <a [routerLink]="'/studentexamination/' + 34 +'/'+ element.InstituteID">{{element.PendingToFeePaid}}</a>
+        </td>
+      </ng-container>
+
+      <!-- Pending To Examination Column -->
+      <ng-container matColumnDef="PendingToExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Examination </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="'/preexamstudent/' + 32 +'/'+ element.InstituteID">{{ element.PendingToExamination }}</a>-->
+          <a [routerLink]="'/studentexamination/' + 10 +'/'+ element.InstituteID">{{element.PendingToExamination}}</a>
+        </td>
+      </ng-container>
+
+       <!--Eligible For Examination Column--> 
+      <ng-container matColumnDef="EligibleForExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Eligible For Examination </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="'/preexamstudent/' + 13 +'/'+ element.InstituteID">{{ element.EligibleForExamination}}</a>-->
+          <a [routerLink]="'/studentexamination/' + 13 +'/'+ element.InstituteID">{{element.EligibleForExamination}}</a>
+        </td>
+      </ng-container>
+
+      <!-- First Year Examination Column -->
+      <ng-container matColumnDef="FirstYearExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> First Year Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.FirstYearExamination }}</td>
+      </ng-container>
+
+      <!-- Second Year Examination Column -->
+      <ng-container matColumnDef="SecondYearExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Second Year Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.SecondYearExamination }}</td>
+      </ng-container>
+
+      <!-- Table Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+  </div>
+</div>

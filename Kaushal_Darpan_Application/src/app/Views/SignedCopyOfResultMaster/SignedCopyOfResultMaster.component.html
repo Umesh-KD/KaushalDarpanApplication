@@ -1,0 +1,200 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Signed Copy Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Signed Copy</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Company Details</a>-->
+    </div>
+  </div>
+  <!--<a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>-->
+</div>
+
+
+<form [formGroup]="SignedCopyFormGroup" id="SignedCopyFormGroup" class="form-horizontal" *ngIf="GetRoleID == _EnumRole.TPO">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Signed Copy Details</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">List Type: </label>
+            <select class="form-select" id="FileTypeID" formControlName="FileTypeID" [(ngModel)]="request.FileTypeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of TypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _SignedCopyFormGroup.FileTypeID.errors" class="text-danger">
+              <p *ngIf="_SignedCopyFormGroup.FileTypeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">File</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+
+              <!--<div *ngIf="isSubmitted && _SignedCopyFormGroup.FileName.errors" class="text-danger">
+      <p *ngIf="_SignedCopyFormGroup.FileName.errors.required">
+        <i aria-hidden="true"></i> This field is
+        required.!
+      </p>
+    </div>-->
+
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.Dis_File === '' ? 'No File Choosen' : request.Dis_File}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}"
+                   *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+
+            </div>
+            <!-- Error message -->
+            <div *ngIf="isSubmitted && _SignedCopyFormGroup.FileName.errors" class="text-danger">
+              <p *ngIf="_SignedCopyFormGroup.FileName.errors['required']">
+                <i aria-hidden="true"></i> This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Remark <!--<span class="StarMarking">*</span>-->
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Remark" id="Remark" name="Remark"
+                   [(ngModel)]="request.Remark" formControlName="Remark">
+            <!--<div *ngIf="isSubmitted && _SignedCopyFormGroup.Remark.errors" class="text-danger">
+              <p *ngIf="_SignedCopyFormGroup.Remark.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>-->
+          </div>
+
+
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div>
+            <!--<button type="button" class="btn bg-info text-white mt-6" (click)="AddMore()">Add</button>-->
+            
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>
+<!--<div *ngIf="signList?.length>0" class="overflow-x-auto mt-3">
+  <table class="table table-border w-full table-auto" cellpadding="5">
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th class="text-left"> S.No</th>
+        <th class="text-left">List Type</th>
+        <th class="text-left">File</th>
+        <th class="text-left">Remark</th>
+        <th class="text-center">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+
+      <tr *ngFor="let row of signList ;let idx=index;">
+        <td align="left">{{ idx + 1 }}</td>
+        <td align="left">{{row.ListTypeName}}</td>
+        <td align="left">
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        </td>
+        <td align="left">{{row.Remark}}</td>
+
+        <td>
+          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <a href="javascript:void(0);" title="Remove"
+               (click)="DeleteRow(row)"><i class="ti ti-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>-->
+
+<div class="overflow-x-auto mt-3">
+  <table class="table table-border w-full table-auto" cellpadding="5">
+    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <tr>
+        <th class="text-left"> S.No</th>
+        <th class="text-left">File Type</th>
+        <th class="text-left">Campus Venue Name</th>
+        <th class="text-left">Company Name</th>
+        <th class="text-left">HR Name</th>
+        <th class="text-left">HR MobileNo</th>
+        <th class="text-left">HR Email</th>
+        <th class="text-left">Remark</th>
+        <th class="text-left">File</th>
+        <th class="text-center" *ngIf="GetRoleID == _EnumRole.TPO">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+
+      <tr *ngFor="let row of GetAllSignedCopyList ;let idx=index;">
+        <td align="left">{{ idx + 1 }}</td>
+        <td align="left">
+          <span *ngIf="row.FileType == 1">Consent List</span>
+          <span *ngIf="row.FileType == 2">Short List</span>
+          <span *ngIf="row.FileType == 3">Final Place List</span>
+        </td>
+        <td align="left">{{row.CampusVenue}}</td>
+        <td align="left">{{row.CompanyName}}</td>
+        <td align="left">{{row.HR_Name}}</td>
+        <td align="left">{{row.HR_MobileNo}}</td>
+        <td align="left">{{row.HR_Email}}</td>
+        <td align="left">{{row.Remark}}</td>
+        <td align="left">
+          <!--{{row.Dis_File}}-->
+          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+        </td>
+        <!--<td align="left">{{row.Remark}}</td>-->
+
+        <td *ngIf="GetRoleID == _EnumRole.TPO">
+          <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <a href="javascript:void(0);" title="Edit" (click)=" GetById(row.SignedCopyOfResultID)"><i class="ti ti-edit"></i></a>
+            <a href="javascript:void(0);" title="Remove"
+               (click)="btnDelete_OnClick(row.SignedCopyOfResultID)"><i class="ti ti-trash"></i></a>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+  <!--<div class="text-center"> 
+    <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+    <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+      <i class="ti ti-refresh"></i> Reset
+    </button>
+  </div>-->
+
+</div>

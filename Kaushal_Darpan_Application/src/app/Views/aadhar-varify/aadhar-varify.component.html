@@ -1,0 +1,78 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ IsView ? 'DTE Admission' : 'ITI Admission' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Admission</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">{{ IsView ? 'DTE Admission Form' : 'ITI Admission Form' }}</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="gap-3">
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                 for="fileStudentPhoto">Import Excel</label>
+          <div class="flex fileUploader bg-gray-100">
+            <!-- File Input for Excel -->
+            <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                   id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{selectedFile ? selectedFile.name : 'No file chosen'}}
+            </label>
+          </div>
+        </div>
+        <div class="mt-5">
+          <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+          <a href="javascript:void(0)" (click)="ResetData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-list"></i>Reset</a>
+        </div>
+      </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Import NVCT Exam Data</b>
+          <div class="flex justify-end flex-wrap items-center">
+            Total Verifiy-&nbsp;&nbsp; {{TotalVerifiy}} <a href="javascript:void(0);" (click)="verifyAadhar()" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Verify Aadhar
+            </a>
+            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+
+          </div>
+        </div>
+
+      <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead>
+            <tr>
+              <th style="text-align:left;" *ngFor="let item of DataExcel4">{{ item  }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let items of DataExcel; let indx=index">
+              <td style="text-align:left;" *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>
+              <!--<td *ngFor="let item of items.values">{{item}}</td>-->
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div *ngIf="IsShow" class="card-footer text-center" id="formCardFooter">
+      <!--<a href="javascript:void(0);" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Submit</a>-->
+      <!--<a href="Applicationform" type="button" class="btn bg-primary text-white" (click)="SaveData()">Submit</a>-->
+      <button type="button" class="btn bg-primary text-white" (click)="SaveData()">Submit</button>
+      <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+      <!--<button class="btn bg-success text-white btn-sm" (click)="openModalGenerateOTP(modal_GenrateOTP)" type="button">Publish (Generated Enrollment No)</button>-->
+    </div>
+  </div>
+
+</div>
+<!-- end row -->
+<!--Start Model Popup-->

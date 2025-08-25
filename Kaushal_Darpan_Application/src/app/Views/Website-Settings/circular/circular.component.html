@@ -1,0 +1,52 @@
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Circular</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <form [formGroup]="HighlightsFromGroup">
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                    <div>
+                        <label>Title:</label><span class="StarMarking">*</span>
+                        <input type="text" class="form-input" id="Title" placeholder="Title" formControlName="Title"
+                            [(ngModel)]="request.Title" />
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Title.errors"class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.Title.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Start Date:</label><span class="StarMarking">*</span>
+                        <input type="datetime-local" class="form-input" id="Start_Date" placeholder="Start_Date" formControlName="Start_Date"
+                            [(ngModel)]="request.Start_Date" [min]="todayDate" />
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Start_Date.errors" class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.Start_Date.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>End Date:</label><span class="StarMarking">*</span>
+                        <input type="datetime-local" class="form-input" id="End_Date" placeholder="End_Date" formControlName="End_Date"
+                            [(ngModel)]="request.End_Date" [min]="request.Start_Date"/>
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.End_Date.errors" class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.End_Date.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pt-5">
+                        <button class="bg-success btn text-white"  (click)="SaveData()"> Save</button>
+                        <button class="bg-danger btn text-white"  (click)="ResetControls()"> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

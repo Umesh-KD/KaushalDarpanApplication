@@ -1,0 +1,83 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Project' : 'Add Project' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Create Project</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+ isUpdate ? 'Update Project' : 'Add
+        Project'
+        }}
+      </a>
+    </div>
+  </div>
+  <a routerLink="/Projects" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Project' : 'Add Project' }}</b>
+      </div>
+      <form [formGroup]="groupForm" (ngSubmit)="SaveData()">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label for="txtProjectName">Project Name: <span class="StarMarking">*</span></label>
+            <input formControlName="txtProjectName" class="form-input" placeholder="Enter Project Name" type="text" id="txtProjectName" [(ngModel)]="request.ProjectName">
+            <div *ngIf="isSubmitted && groupForm.get('txtProjectName').errors" class="text-danger">
+              <p *ngIf="groupForm.get('txtProjectName').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtVendorName">Vendor: <span class="StarMarking">*</span></label>
+            <input formControlName="txtVendorName" class="form-input" placeholder="Enter Project Name" type="text" id="txtVendorName" [(ngModel)]="request.Vendor">
+            <div *ngIf="isSubmitted && groupForm.get('txtVendorName').errors" class="text-danger">
+              <p *ngIf="groupForm.get('txtVendorName').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label for="txtWorkOrderNo">Work Order No.: <span class="StarMarking">*</span></label>
+            <input formControlName="txtWorkOrderNo" class="form-input" placeholder="Enter Project Name" type="text" id="txtWorkOrderNo" [(ngModel)]="request.WorkorderNo">
+            <div *ngIf="isSubmitted && groupForm.get('txtWorkOrderNo').errors" class="text-danger">
+              <p *ngIf="groupForm.get('txtWorkOrderNo').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+
+          <div>
+            <label for="txtWorkOrderDate">Work Order Date.: <span class="StarMarking">*</span></label>
+            <input formControlName="txtWorkOrderDate" class="form-input" placeholder="Enter Project Name" type="date" id="txtworkorderDate" [(ngModel)]="request.WorkorderDate">
+            <div *ngIf="isSubmitted && groupForm.get('txtWorkOrderDate').errors" class="text-danger">
+              <p *ngIf="groupForm.get('txtWorkOrderDate').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+            <div class="text-center">
+              <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+
+
+
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+

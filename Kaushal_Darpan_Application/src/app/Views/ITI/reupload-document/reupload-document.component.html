@@ -1,0 +1,374 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Correct Student Document</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/ITIAllotmentReporting" class="text-sm font-medium text-slate-700" aria-current="page">ITI Allotment Reporting</a>-->
+      <a [routerLink]="['/ITIAllotmentReporting']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Correct Student Document</a>
+    </div>
+  </div>
+  <a (click)="OnRoute()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!-- Page Title End -->
+<div class="grid grid-cols-3 gap-3">
+  <div>
+    <div class="card">
+      <div class="card-body">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+
+          <div class="text-center" *ngIf="filteredDocumentDetails?.length==0">
+            <img src="assets/images/dummyImg.jpg" class="StudentImageAllotment" />
+          </div>
+          <div class="text-center" *ngFor="let item of filteredDocumentDetails;">
+            <img appImageError="assets/images/dummyImg.jpg"
+                 [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+                 class="StudentImageAllotment"
+                 alt="{{item.ColumnName}}" />
+          </div>
+          <div class="text-center">
+            <p><b>ITI-{{request.ApplicationNo}}</b></p>
+            <p><b>{{request.StudentName}}</b></p>
+            <p><b>Father's Name: </b>{{request.FatherName}}</p>
+            <p><b>Allotted Trade: </b>{{request.TradeName}}</p>
+            <p><b>Allotted Category: </b>{{request.AllotedCategory}}</p>
+            <p><b>Gender: </b>{{ request.GenderNm }}</p>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-cake"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Preference Category</b>
+              <p class="mb-0">{{request.PreferenceCategory}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-cake"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Is Rajasthan Domicile</b>
+              <p class="mb-0">{{request.IsRajasthani}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-cake"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Category</b>
+              <p class="mb-0">{{request.CasteCategory}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-cake"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Date of Birth</b>
+              <p class="mb-0">{{request.DOB}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-map-pin"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Address Detail</b>
+              <p class="mb-0">{{request.fullAddress}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-phone"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Phone No.</b>
+              <p class="mb-0">{{request.MobileNo}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-mail"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Email</b>
+              <p class="mb-0">{{request.Email}}</p>
+            </div>
+          </div>
+          <button type="button" class="btn bg-primary text-white mt-6" style="" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Incorrect Document List</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Task</th>
+                <th align="center" width="200px">Status</th>
+                <th *ngIf="remarkheader">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let item of request.AllotmentDocumentModel; let idx = index">
+                <tr *ngIf="item.DocumentStatus == false">
+
+                  <!-- Index -->
+                  <td>{{ idx + 1 }}</td>
+
+                  <!-- Document Name -->
+                  <td>
+                    <a href="javascript:void(0)"
+                       (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + item.FileName)"
+                       class="text-success">
+                      {{ item.DisplayName }}
+                    </a>
+                  </td>
+
+                  <!-- File Upload + Actions -->
+                  <td>
+                    <div class="flex fileUploader items-center gap-2">
+                      <input class="hidden"
+                             style="border-color:#000;"
+                             id="filepanPhoto_{{ idx + 1 }}"
+                             type="file"
+                             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                             (change)="UploadDocument($event, item)" />
+
+                      <label for="filepanPhoto_{{ idx + 1 }}" class="cursor-pointer  btn btn-outline  btn-sm" style="width:150px; border-color:#7c7c7c;">
+                        Choose File
+                      </label>
+
+                      <span class="ml-2 file-name" >
+                        {{ !item.Dis_FileName ? 'No File Chosen' : item.Dis_FileName }}
+                      </span>
+
+                      <div class="fileUploader-button flex items-center gap-1" *ngIf="item.FileName">
+                        <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.FolderName + '/' + item.FileName"
+                           class="btn bg-primary text-white btn-sm"
+                           target="_blank">
+                          <i class="ti ti-eye"></i>
+                        </a>
+                        <a href="javascript:void(0);"
+                           class="btn bg-danger text-white btn-sm"
+                           (click)="DeleteDocument(item)">
+                          <i class="ti ti-trash"></i>
+                        </a>
+                      </div>
+                    </div>
+
+                    <small class="text-danger" *ngIf="item.validationError">
+                      {{ item.validationError }}
+                    </small>
+                  </td>
+
+                  <!-- Remarks -->
+                  <td *ngIf="item.ShowRemark">
+                    <textarea placeholder="Remarks"
+                              class="form-input w-full"
+                              [(ngModel)]="item.Remark"></textarea>
+                    <div *ngIf="item.Remark == '' && isSubmitted" class="text-danger text-sm">
+                      This field is required!
+                    </div>
+                  </td>
+                </tr>
+              </ng-container>
+
+
+
+            </tbody>
+        </table>
+      </div>
+
+        <!--<div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Shift/Unit</b>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+          <select class="form-select" [(ngModel)]="request.ShiftUnitID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of InternalSlidingUnitList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Reporting Status</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <select class="form-select" [(ngModel)]="searchRequest.ReportingStatus">
+            <option value="" selected>Choose Option</option>
+            <option *ngFor="let row of ReportingStatus" [value]="row.Id">{{row.Name}}</option>
+          </select>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Reporting Remark</b>
+        </div>
+
+
+        <div class="overflow-x-auto mt-3">
+          <textarea type="text" placeholder="Remarks" class="form-input" maxlength="500" [(ngModel)]="request.ReportingRemark"></textarea>
+        </div>-->
+
+
+        <!--<div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light  mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Voter ID Available</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Task</th>
+                <th align="center" width="200px">Status</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.</td>
+                <td>Voter ID Available</td>
+                <td>
+                  <div class="flex">
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio"
+                             [(ngModel)]="request.IsVoterIDAvailable"
+                             [value]="true" /> Yes
+                    </label>
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio"
+                             [(ngModel)]="request.IsVoterIDAvailable"
+                             [value]="false" /> No
+                    </label>
+
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>-->
+
+
+        <!--<div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3" *ngIf="searchRequest.ReportingStatus=='4' && request.AllotedPriority!=1">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Apply in Upward</b>
+        </div>-->
+
+
+        <!--<div class="overflow-x-auto mt-3" *ngIf="searchRequest.ReportingStatus=='4' && request.AllotedPriority!=1">
+          <label class="me-3">
+            <input type="checkbox"
+                   name="ApplyUpward"
+                   [(ngModel)]="request.ApplyUpward"
+                   [value]="false" /> Yes
+          </label>
+        </div>-->
+
+
+
+
+        <div class="flex justify-center flex-wrap items-center py-2 mt-3">
+          <!--<button class="btn bg-info text-white" type="button"><i class="ti ti-download" (click)="DownloadAllotmentLetter(searchRequest.AllotmentId)"></i> Download Allotment Letter</button>
+          <button class="btn bg-info text-white" type="button"><i class="ti ti-download"></i> Download Application</button>-->
+          <button class="btn bg-success text-white" type="button" (click)="OpenSaveReporting()"><i class="ti ti-device-floppy"></i> Submit</button>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #modal_GenrateOTPForList let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTPForList()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Veryfy OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTPForList(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    Header
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    Preview Content
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        PDF Preview
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        Image Preview
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #modal_ChangeMobileNo let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; Change Mobile No.
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter New Mobile No.</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="NewMobileNo" placeholder="Enter New Mobile Number">
+        </div>
+      </div>
+      <div class="card-footer text-center flex items-center justify-center mt-3">
+        <button (click)="openChangeOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+<app-otpmodal #otpModal1></app-otpmodal>

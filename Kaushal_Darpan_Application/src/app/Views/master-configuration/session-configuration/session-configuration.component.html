@@ -1,0 +1,181 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <span *ngIf="requestData.FinancialYearID>0"><i class="ti ti-pencil"></i> Update</span>
+        <span *ngIf="requestData.FinancialYearID==null || request.FinancialYearID==0"><i class="ti ti-plus"></i> Add</span>
+        Session Configuration
+      </b>
+      <button class="bg-success btn text-white" *ngIf="IsShowAddNew==false" (click)="ShowAddNew()">Add New</button>
+    </div>
+
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="IsShowAddNew==true">
+       
+          <div class="d-flex gap-2">
+            <div style="width:100%">
+              <label>Session</label>
+              <select class="form-select"
+                      [(ngModel)]="requestData.EndTermName">
+                <option value="0">Choose Session</option>
+                <option *ngFor="let item of TypeMasterDDL" [value]="item.EndTerm">
+                  {{item.FYName}}({{item.EndTerm}})
+                </option>
+              </select>
+            </div>
+          </div>
+
+      
+            <div class="pt-5">
+              <button class="bg-success btn text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)"> {{request.DateConfigID>0?'Update':'Submit'}}</button>
+              <button class="bg-success btn text-white" (click)="IsShowAddNew=false">Cancel</button>
+            </div>
+       
+        </div>
+
+ 
+
+ 
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List Date Configuration</b>
+    </div>
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="2">2</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+    </div>-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" width="80">Sr. No.</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              Financial Year
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              End Term
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <!--<th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('From_Date')">
+              From Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='From_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('To_Date')">
+              To Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='To_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>-->
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('To_Date')">
+              Is Current Financial Year
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='To_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th></th>
+            <!--<th class="text-right" width="150">Action</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData let idx=index;">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.FinancialYearName}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
+
+            <td>{{row.EndTermName}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
+
+            <!--<td>{{row.StartDate | date:'dd-MM-yyyy hh:mm a'}}
+            <td>{{row.EndDate | date:'dd-MM-yyyy hh:mm a'}}</td>-->
+            <td>{{row.IsCurrentFinancialYear=='YES'?'YES':''}}</td>
+
+            <td align="left">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <!--<label class="block">Status</label>-->
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <!--<input class="sr-only peer" type="checkbox" id="Active" [checked]="row.IsCurrentFinancialYear == 'YES'" (click)="ActiveInActive($event ,row.FinancialYearID, row.IsCurrentFinancialYear == 'YES'? false : true)">-->
+                  <input class="sr-only peer"  id="Active" type="checkbox" [checked]="row.IsCurrentFinancialYear == 'YES'" (change)="onToggleChange($event, row)">
+
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ row.IsCurrentFinancialYear == 'YES' ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>
+            </td>
+
+            <!--<td>
+              <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.FinancialYearID,row.FinancialYearName,row.IsCurrentFinancialYear=='YES'?true:false)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);"
+                   title="Delete" (click)="btnDelete_OnClick(row.FinancialYearID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>-->
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr *ngIf="paginatedInTableData.length==0">
+            <td colspan="5" align="center">
+              <span>
+                <img src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!--pagination-->
+    <!--<div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>-->
+    <!--end pagination-->
+    <!--Start Model Popup-->
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for session configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+    <!--Start Model Popup-->
+  </div>
+</div>

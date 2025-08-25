@@ -1,0 +1,99 @@
+  <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apply Leave</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Apply Leave</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Apply Leave</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<div>
+<form [formGroup]="LeaveMasterFormGroup" id="HrMasterFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Apply Details</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Leave Type  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.LeaveID" formControlName="LeaveID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of LeaveTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _LeaveMasterFormGroup.LeaveID.errors" class="text-danger">
+              <p *ngIf="!_LeaveMasterFormGroup.LeaveID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label>From Date <span class="StarMarking">*</span> </label>
+            <input type="date" class="form-input"  id="txtFromDate" formControlName="txtFromDate"
+                   [(ngModel)]="request.From_Date"  (change)="calculateDays()"   [min]="today" />
+            <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtFromDate.errors"
+                 class="text-danger">
+              <p *ngIf="_LeaveMasterFormGroup.txtFromDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>To Date <span class="StarMarking">*</span> </label>
+            <input type="date" class="form-input"  id="txtToDate" formControlName="txtToDate"
+                   [(ngModel)]="request.To_Date"  (change)="calculateDays()"  />
+            <div *ngIf="isSubmitted && _LeaveMasterFormGroup.txtToDate.errors"
+                 class="text-danger">
+              <p *ngIf="_LeaveMasterFormGroup.txtToDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>Remarks <span class="StarMarking">*</span></label>
+            <textarea type="text"
+                      class="form-input"
+                      id="txtToDate"
+                      formControlName="remark"
+                      [(ngModel)]="request.Remark">
+</textarea>
+
+            <div *ngIf="isSubmitted && _LeaveMasterFormGroup.remark.errors"
+                 class="text-danger">
+              <p *ngIf="_LeaveMasterFormGroup.remark.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            ' <label>Total Days </label>'
+            <input type="text" class="form-input" id="txtToDate" formControlName="TotalDays"
+                   [(ngModel)]="request.TotalDays" />
+          </div>
+
+          <div class="col-span-3 text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>
+</div>
+

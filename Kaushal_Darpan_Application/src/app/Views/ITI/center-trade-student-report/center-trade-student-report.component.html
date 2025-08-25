@@ -1,0 +1,272 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Center-Trade Wise Count</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page"> Center-Trade Wise Count</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Group code</label>
+    <select class="form-select" id="GroupID" [(ngModel)]="searchRequest.GroupCodeID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+  </div> -->
+        <!--<div *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Admin || this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon
+  || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng">-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center:</label>
+          <select [disabled]="sSOLoginDataModel.RoleID == 99 || sSOLoginDataModel.RoleID == 96 || sSOLoginDataModel.RoleID == 95 || sSOLoginDataModel.RoleID == 90"
+                  class="form-select"
+                  id="StudentExamYear"
+                  [(ngModel)]="searchRequest.CenterID"
+                  (change)="GetMasterData()">
+
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CenterDDLlist" [value]="item.ID">{{ item.Name }}</option>
+          </select>
+        </div>
+
+
+
+
+        <div>
+
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Trade:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="ddlBranch"
+                  [(ngModel)]="searchRequest.StreamID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of Branchlist" [value]="item?.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+
+
+
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+    <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+      <option value="0">--All--</option>
+      <option value="1">Marks Pending</option>
+      <option value="2">Marks Entered</option>
+    </select>
+  </div> -->
+      </div>
+      <div class="flex justify-center">
+        <button type="button" class="btn bg-info text-white mt-2" (click)="GetTheoryMarksDetailList()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-2" (click)="ResetControl()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " /> -->
+        <a href="javascript:void(0);" class="btn bg-success text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>SNo</th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
+              Center Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterName')">
+              Center Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('InstituteCode')">
+              Institute Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteCode'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('InstituteNameEnglish')">
+              Institute Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteNameEnglish'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('TradeName')">
+              Trade Code
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='TradeName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('InstituteNameEnglish')">
+              Trade Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteNameEnglish'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sort" (click)="sortInTableData('Paper-I (1st Year)')">
+              Paper 1 (Year 1)
+              <span class="shortingSpan"
+                    *ngIf="sortInTableColumn === 'Paper-I (1st Year)'"
+                    [innerHTML]="sortInTableDirectionAero">
+              </span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-I (2nd Year)')">
+              Paper 1 (Year 2)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-I (2nd Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-II (1st Year)')">
+              Paper 2  (Year 1)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-II (1st Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-II (2nd Year)')">
+              Paper 2 (Year 2)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-II (2nd Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-III (1st Year)')">
+              Paper 3  (Year 1)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-III (1st Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-III (2nd Year)')">
+              Paper 3 (Year 2)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-III (2nd Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-IV (1st Year)')">
+              Paper 4  (Year 1)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-IV (1st Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Paper-IV (2nd Year)')">
+              Paper 4  (Year 2)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Paper-IV (2nd Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Practical (1st Year)')">
+              Practical (Year 1)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Practical (1st Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Practical (2nd Year)')">
+              Practical  (Year 2)
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Practical (2nd Year)'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left" title="Click to sorting" (click)="sortInTableData('TotalStudents')">
+              Total
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='TotalStudents'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <!--<th>Status</th>
+  <th *ngIf="isAnyUFMSelected">Document Required</th>-->
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData;let idx=index;">
+            <td align="center">
+              <ng-container *ngIf="idx < paginatedInTableData.length - 1; else noIndex">
+                {{ (startInTableIndex + 1) + idx }}
+              </ng-container>
+              <ng-template #noIndex></ng-template>
+            </td>
+
+            <td align="left">{{row.CenterCode}}</td>
+            <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.InstituteCode}}</td>
+            <td align="left">{{row.InstituteName}}</td>
+            <td align="left">{{row.TradeCode}}</td>
+            <td align="left">{{row.TradeName}}</td>
+            <td align="left">{{ row['Paper-I (1st Year)'] }}</td>
+            <td align="left">
+              {{row['Paper-I (2nd Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-II (1st Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-II (2nd Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-III (1st Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-III (2nd Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-IV (1st Year)']}}
+            </td>
+            <td align="left">
+              {{row['Paper-IV (2nd Year)']}}
+            </td>
+            <td align="left">
+              {{row['Practical (1st Year)']}}
+            </td>
+            <td align="left">
+              {{row['Practical (2nd Year)']}}
+            </td>
+
+            <td align="left">
+              {{row.TotalStudents}}
+            </td>
+
+
+
+          </tr>
+        </tbody>
+
+      </table>
+
+
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+

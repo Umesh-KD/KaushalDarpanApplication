@@ -1,0 +1,147 @@
+
+<div class="card-body p-5">
+  <div class="mb-8">
+   <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+  <b class="text-1xl-5">Option Form </b>
+  <span class="text-danger">तारांकित (*) फील्ड भरना अनिवार्य हैं</span>
+</div>
+    <form [formGroup]="OptionsFormGroup">
+      <div class="grid xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full"
+             role="alert" id="WihoutJanadharAlert">
+          <b>Note:</b> अभ्यर्थी Option Form में ज्यादा से ज्यादा Option भरने का प्रयास करें जिससे आपका प्रवेश सुनिश्चित
+          हो सके I
+        </div>
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            जिला
+            (District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlDistrict" id="ddlDistrict" formControlName="ddlDistrict"
+                  [(ngModel)]="formData.DistrictID" (change)="GetInstituteListDDL()" >
+
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList" value="{{item.ID}}">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlDistrict.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlDistrict.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">कॉलेज का प्रकार (Type of College): <span class="StarMarking">*</span></label>
+          <select class="form-select" name="ddlManagementType" id="ddlManagementType"
+                  formControlName="ddlManagementType" [(ngModel)]="formData.College_TypeID" (change)="GetInstituteListDDL()">
+
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">
+              {{item.InstitutionManagementType}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlManagementType.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlManagementType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">कॉलेज का नाम (Name of College): <span class="StarMarking">*</span></label>
+          <select class="form-select" name="ddlITI" id="ddlInstitute" formControlName="ddlInstitute"
+                  [(ngModel)]="formData.InstituteID" (change)="GetStreamMasterInstituteWise()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+              {{item.InstituteName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlInstitute.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlInstitute.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">शाखा का नाम (Branch): <span class="StarMarking">*</span></label>
+          <select class="form-select" name="ddlTrade" id="ddlTrade" formControlName="ddlTrade"
+                  [(ngModel)]="formData.BranchID">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of BranchName" value="{{item.StreamID}}">
+              {{item.StreamName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlTrade.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlTrade.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div class="pt-30">
+          <button [disabled]="this.PersonalDetailsData.DirectAdmissionType !== 0" type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+            <i class="ti ti-plus"></i> Add
+            Choice
+          </button>
+          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+
+  <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5">Option Choose List </b>
+  </div>
+
+  <div class="overflow-auto">
+    <table class="w-full table-border" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+        <tr>
+          <th>Priority</th>
+          <th class="text-left">Name of College</th>
+          <th class="text-left">Branch Name</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+      
+      <tbody>
+        <tr *ngFor="let row of AddedChoices; let idx = index">
+          <td class="text-center">{{idx+1}}</td>
+          <td class="text-left" >{{row.InstituteName}}</td>
+          <td class="text-left">{{row.BranchName}}</td>
+          <td class="text-center">
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
+              <i class="ti ti-trash"></i>
+            </button>
+            <button class="btn bg-primary text-white"
+                    type="button"
+                    title="Priority Up"
+                    (click)="PriorityChange(row, 'UP')"
+                    [disabled]="idx === 0">
+              <i class="ti ti-arrow-narrow-up"></i>
+            </button>
+            <button class="btn bg-info text-white"
+                    type="button"
+                    title="Priority Down"
+                    (click)="PriorityChange(row, 'DOWN')"
+                    [disabled]="idx === AddedChoices.length - 1">
+              <i class="ti ti-arrow-narrow-down"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+</div>
+<div class="card-footer text-center">
+  <!--<button type="button" class="btn bg-info text-white" (click)="Back()" ><i class="ti ti-chevron-left"></i>Back</button>-->
+  <button type="button" class="btn bg-primary text-white" (click)="SaveDataon()"  ><i class="ti ti-device-floppy"></i>Save</button>
+  <!-- <button type="button" class="btn bg-light text-dark"  (click)="ResetData()" ><i class="ti ti-refresh"></i>Reset</button> -->
+</div>
+
+

@@ -1,0 +1,118 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Sanctioned Post Based Institute</h4>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Sanctioned Post Based Institute List</b>
+      <!--<a routerLink="/ITIGovtEMSanctionedPostBasedInstitute" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add Sanctioned Post Based Institute</a>-->
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+      <p><strong>नोट :-</strong> 01. Fill all the entries in English only. Leave the column "Profession" given in the I-N of non-teaching personnel blank. Fill separate pages for different budget heads. Fill the details of all the personnel posted in the institute or employed elsewhere. Make the entry of retired personnel below only in the case of being employed on honorarium against a vacant post.</p>
+      <p>02. Note down the following information of the personnel on deputation for long term work arrangements elsewhere in another table which will be recorded at the time of entry in the computer. Name of the office/institution, by whose (DD/ Directorate) order, order number, date of departure</p>
+      <p>03. Mention any one of the following in the column of posting type. Regularly posted Retired personnel on regular fixed honorarium Drawing salary from the current institution but working at other place for work arrangement</p>
+
+
+    </div>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th rowspan="2">Number</th>
+            <th rowspan="2">Institute</th>
+            <th rowspan="2">Budget Chief</th>
+            <th colspan="2">Post as per sanctioned budget head</th>
+            <th rowspan="2">P/G</th>
+            <th rowspan="2">Name of Personnel</th>
+            <th rowspan="2">SSO ID</th>
+            <th colspan="2">of Personnel (Basic) </th>
+            <th rowspan="2">Posting Type</th>
+            <th rowspan="2">Date of joining of retired personnel on fixed honorarium</th>
+            <th rowspan="2">Date of departure, if assigned work</th>
+            <!--<th rowspan="2">Action</th>-->
+          </tr>
+          <tr>
+            <th>Designation</th>
+            <th>Business</th>
+            <th>Designation</th>
+            <th>Business</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.BudgetChief}}</td>
+            <td class="text-left">{{row.SanctionedBudgetPostName}}</td>
+            <td class="text-left">{{row.SanctionedBudgetBusiness}}</td>
+            <td class="text-left">{{row.P_GName}}</td>
+            <td class="text-left">{{row.EmpName}}</td>
+            <td class="text-left">{{row.SSOID}} </td>
+            <td class="text-left">{{row.PersonnelPostName}} </td>
+            <td class="text-left">{{row.PersonnelBusiness}}</td>
+            <td class="text-left">{{row.PostingType}}</td>
+            <td class="text-left">{{row.DateOfJoiningRetiredPersonnelHonorarium}}</td>
+            <td class="text-left">{{row.DateDepartureAssignedWork}}</td>
+            <!--<td class="text-center">
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+              <i class="ti ti-trash"></i>
+            </button>
+          </td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+  <!--end pagination-->
+</div>
+
+
+
+
+
+<!-- end row -->

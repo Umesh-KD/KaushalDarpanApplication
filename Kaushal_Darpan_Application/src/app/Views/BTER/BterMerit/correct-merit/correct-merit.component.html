@@ -1,0 +1,158 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District </label>
+          <select class="form-select" id="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="ddlDistrictChange()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College </label>
+          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch </label>
+          <select class="form-select" id="ddlBranch"
+                  [(ngModel)]="searchRequest.BranchID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By CategoryA </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryA">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By CategoryB </label>
+          <select class="form-select" id="ddlCategoryB" [(ngModel)]="searchRequest.CategoryB">
+            <option value="0">Select Category B</option>
+            <option *ngFor="let item of CategoryBlist" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By CategoryC </label>
+          <select class="form-select" id="ddlCategoryC" [(ngModel)]="searchRequest.CategoryC">
+            <option value="0">Select Category C</option>
+            <option *ngFor="let item of category_CList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By CategoryD </label>
+          <select class="form-select" id="ddlCategoryC" [(ngModel)]="searchRequest.CategoryD">
+            <option value="0">Select Category D</option>
+            <option *ngFor="let item of CategoryDlist" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By CategoryE </label>
+          <select class="form-select" id="ddlCategoryC" [(ngModel)]="searchRequest.CategoryE">
+            <option value="3">Select Category E</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender </label>
+          <select class="form-select" id="ddlIdentityProof" [(ngModel)]="searchRequest.Gender">
+            <option value="" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application </label>
+          <input type="text" class="form-input" id="ApplicationNo" [(ngModel)]="searchRequest.ApplicationNo">
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetCorrectMeritList()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>S.No</th>
+            <th>Applicant Name</th>
+            <th>Applicant No</th>
+            <th>Gender</th>
+            <th>Cat A</th>
+            <th>Cat B</th>
+            <th>Cat C</th>
+            <th>Cat D</th>
+            <th>Cat E</th>
+            <th>Remark</th>
+            <th>Status</th>
+            <th>Action</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of MeritList; let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td align="center">{{item.StudentName}}</td>
+            <td align="center">{{item.ApplicationNo}}</td>
+            <td align="center">{{item.Gender}}</td>
+            <td align="center">{{item.CategoryA}}</td>
+            <td align="center">{{item.CategoryB}}</td>
+            <td align="center">{{item.CategoryC}}</td>
+            <td align="center">{{item.CategoryD}}</td>
+            <td align="center">{{item.CategoryE == '1' ? 'YES' :  'NO'}}</td>
+            <td [innerHtml]="item.Document"></td>
+            <td>{{item.ActionName}}</td>
+            <!-- <td *ngIf="item.Action!=9" align="center"> -->
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns" >
+                <a (click)="Onrouting(item.MeritId)" title="Document Mark"><i class="ti ti-check"></i></a>
+              </div>
+
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

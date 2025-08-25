@@ -1,0 +1,48 @@
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Downloads</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <form [formGroup]="HighlightsFromGroup">
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                    <div>
+                        <label>Title:</label><span class="StarMarking">*</span>
+                        <input type="text" class="form-input" id="Title" placeholder="Title" formControlName="Title"
+                            [(ngModel)]="request.Title" />
+                        <div *ngIf="isFormSubmitted && _HighlightsFromGroup.Title.errors"class="text-danger">
+                            <p *ngIf="_HighlightsFromGroup.Title.errors.required">
+                                <i aria-hidden="true"></i>This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div >
+                        <label>Upload Document:</label><span class="StarMarking">*</span>
+
+                        <div class="flex fileUploader">
+                            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                id="document1" type="file" (change)="onFilechange($event,'Photo')">
+                            <label for="document1">
+                                <span>Choose File</span>
+                                {{request.FileName === '' ? 'No File Choosen' : request.Dis_FileName}}
+                            </label>
+                            <div class="flex">
+                            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" *ngIf="request.FileName !=''"
+                                class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="pt-5">
+                        <button class="bg-success btn text-white"  (click)="SaveData()"> Save</button>
+                        <button class="bg-danger btn text-white"  (click)="ResetControls()"> Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

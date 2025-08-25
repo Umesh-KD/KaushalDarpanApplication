@@ -1,0 +1,143 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Janaadhar</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student Janaadhar</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<div class="flex justify-end">
+              <a href="javascript:void(0);" class="btn bg-success btn-sm text-white me-1"><i class="ti ti-download"></i> Download Janaadhar Report</a>
+              <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i> Download Institute Jan Aadhar</a>
+          </div>-->
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Enrollment No</label>
+          <input type="text" class="form-input" placeholder="Search By Enrollment No" id="EnrollmentNo"
+            [(ngModel)]="searchRequest.EnrollmentNo">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
+          <input type="text" class="form-input" placeholder="Search By Name" id="StudentName"
+            [(ngModel)]="searchRequest.StudentName">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender</label>
+          <select class="form-select" id="Gender" [(ngModel)]="searchRequest.Gender">
+            <option value="">Choose option</option>
+            <option value="97">Male</option>
+            <option value="98">Female</option>
+            <option value="99">Transgender</option>
+          </select>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile</label>
+          <input type="text" class="form-input" placeholder="Search By Mobile" id="MobileNo"
+            [(ngModel)]="searchRequest.MobileNo">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Janaadhar No</label>
+          <input type="text" class="form-input" placeholder="Search By Janaadhar No" id="JanAadharNo"
+            [(ngModel)]="searchRequest.JanAadharNo">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Janaadhar Status</label>
+          <select class="form-select" id="JanAadharStatus" [(ngModel)]="searchRequest.JanAadharStatus">
+            <option value="">Choose Option</option>
+            <option value="1">Verified</option>
+            <option value="2">Not Verified</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i
+              class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th>Enrollment No.</th>
+            <th>Name</th>
+            <th>Father Name</th>
+            <th>Gender</th>
+            <th>Mobile No.</th>
+            <th>Institute</th>
+            <th>Branch</th>
+            <th>Janaadhar Status</th>
+            <th>Dropout Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StudentsJanaadharList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.EnrollmentNo}}</td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.FatherName}}</td>
+            <td>{{row.Gender}}</td>
+            <td>{{row.MobileNo}}</td>
+            <td>{{row.InstituteNameEnglish}}</td>
+            <td>{{row.BranchName}}</td>
+            <td align="center"><span
+                class="btn {{row.JanAadharStatus=='Verified'?'bg-success':'bg-danger'}} text-white btn-sm">{{row.JanAadharStatus}}</span>
+            </td>
+            <td align="center"><span
+                class="btn {{row.DropoutStatus=='Yes'?'bg-success':'bg-danger'}} text-white btn-sm">{{row.DropoutStatus}}</span>
+            </td>
+            <td align="center"><a href="javascript:void(0);" *ngIf="row.JanAadharStatus=='Verified'"
+                class="btn bg-info btn-sm text-white" (click)="onEditStudentJanAadhar(row.StudentID)">Edit Janaadhar
+                MemberId</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

@@ -1,0 +1,161 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITIInvigilatorPaymentRequest" class="text-sm font-medium text-slate-700" aria-current="page">Student Absent/Present Detail</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+
+  <div class="card-body p-5">
+
+    <!-----Excel Download-->
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in Execl</a>
+      </div>
+    </div>
+
+
+    <!------Number of Record Display-->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize">
+          <!--(change)="loadInTable()"-->
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+
+
+    <!----Table data bind-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!--<th class="text-left" *ngFor="let col of displayedColumns">{{ col }}</th>-->
+            <th class="text-left">S.No</th>
+            <th class="text-left">Select</th>
+            <th class="text-left">Exam Shift</th>
+            <th class="text-left">Exam Date</th>
+            <th class="text-left">Examshift with time</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Financial Year</th>
+            <th class="text-left">End Term</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left">Subject Name</th>
+            <th class="text-left">RollNo From</th>
+            <th class="text-left">RollNo To</th>
+            <!--<th class="text-left">Action</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let iti of paginatedInTableData | tableSearchFilter:Table_SearchText ; let i = index">
+            <td> {{ i + 1 }}</td>
+            <td align="left">
+              <input type="checkbox" name="MarkCheck" [(ngModel)]="iti.ischeck" />
+            </td>
+            <td> {{ iti.ExamShift }}</td>
+            <td> {{ iti.Dis_Date }}</td>
+            <td> {{ iti.ExamShiftWithTime }}</td>
+            <td> {{ iti.SemesterName }}</td>
+            <td> {{ iti.FinancialYear }}</td>
+            <td> {{ iti.EndTerm }}</td>
+            <td> {{ iti.TradeName }}</td>
+            <td> {{ iti.SubjectName }}</td>
+            <td> {{ iti.RollNumberFrom }}</td>
+            <td> {{ iti.RollNumberTo }}</td>
+
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length === 0"><td colspan="12"> No records found</td></tr>
+        </tbody>
+
+
+      </table>
+
+
+      <!--pagination-->
+      <div class="p-3 paginationBox flex items-center justify-end w-full" *ngIf="paginatedInTableData.length > 0">
+        <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+        <div class="paginationBoxItems flex items-center">
+          <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+          <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+          <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                 [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+          <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+          <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+          <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+        </div>
+      </div>
+      <!--end pagination-->
+
+
+      <div class="flex justify-center flex-wrap items-center" *ngIf="paginatedInTableData.length > 0">
+        <button type="button" class="btn bg-info text-white mt-2" (click)="ViewPDF()">View and Forward</button>
+        <button type="button" class="btn bg-danger text-white mt-2" (click)="clearAll()">Cancel</button>
+      </div>
+
+  
+
+    </div>
+
+
+
+    
+
+  
+
+  </div>
+
+</div>
+
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="z-index:123;">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;View Remuneration Invigilator PDF</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="flex-grow mt-4 overflow-hidden" style="width:100%;height:100%;">
+      <ng-container *ngIf="pdfUrl; else loading">
+        <object [data]="pdfUrl"
+                type="application/pdf"
+                class="h-full w-full" style="width:100%;height:100%;">
+        </object>
+      </ng-container>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-4 text-center">
+      <button type="button" class="btn bg-info text-white" (click)="SavePDFSubmitAndForwardToAdmin(SelectedInvigilatorID)">
+        Submit And Forward to Admin
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+
+@keyframes bouncing {
+  0% {
+    top: 40%;
+  }
+
+  100% {
+    top: 30%;
+  }
+}
+
+@keyframes fadein {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.page-overlay-wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 99999;
+  background: rgba(112, 191, 93, 0.5);
+
+  .bee-spinner {
+    width: 20%;
+    height: 20%;
+    position: fixed;
+    top: 40%;
+    left: calc(50% - 10%);
+    z-index: 100;
+    /* background-image: url(../../assets/bee-spinner.png);*/
+    background-repeat: no-repeat;
+    background-size: 97%;
+    animation: bouncing 0.4s cubic-bezier(0.1, 0.25, 0.1, 1) 0s infinite alternate both;
+  }
+}
+
+.theme-loader {
+  height: 100%;
+  width: 100%;
+  background-color: #08080859 !important;
+  position: fixed !important;
+  z-index: 99999 !important;
+  top: 0
+}
+
+.theme-loader .ball-scale {
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  height: 50px;
+  width: 50px;
+  margin: -25px 0 0 -25px
+}
+
+.theme-loader .ball-scale .contain {
+  height: 100%;
+  width: 100%
+}
+
+.theme-loader .ball-scale .contain .ring {
+  /*! display: none */
+}
+
+.theme-loader .ball-scale .contain .ring:first-child {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  padding: 10px;
+  border: 3px solid transparent;
+  border-left-color: #01a9ac;
+  border-right-color: #01a9ac;
+  -webkit-animation: round-rotate 1.5s ease-in-out infinite;
+  animation: round-rotate 1.5s ease-in-out infinite
+}
+
+.theme-loader .ball-scale .contain .ring:first-child .frame {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-left-color: #0ac282;
+  border-right-color: #0ac282;
+  -webkit-animation: round-rotate 1.5s ease-in-out infinite;
+  animation: round-rotate 1.5s ease-in-out infinite
+}
+
+@-webkit-keyframes round-rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes round-rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg)
+  }
+}
+
+/* loader.component.css */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #0ac282;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin .5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

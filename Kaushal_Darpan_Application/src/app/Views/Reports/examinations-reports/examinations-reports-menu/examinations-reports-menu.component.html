@@ -1,0 +1,345 @@
+<head>
+  <link href="/assets/KD5/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/KD5/css/Style.css?2" rel="stylesheet" />
+</head>
+<nav class="navbar navbar-expand-lg p-0">
+  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <li class="nav-item dropdown show">
+      <a class="nav-link reports-menu active group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all" href="javascript:void(0);">
+        <span><i class="ti ti-list"></i> Examinations Reports  </span>  <i class="fa fa-angle-down"></i>
+        <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" href="javascript:void(0);"><span>Main Exam</span> <i class="fa fa-angle-right"></i></a>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" (click)="PageHref('M','download_payment_rec',0,'download','pdf','','')" href="javascript:void(0);"> Download Payment Received</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Subject Wise Student Count</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>PDF</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/1">First Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/2">Second Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/3">Third Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/4">Fourth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/5">Fifth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/6">Sixth Semester</a></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>CSV</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/1">First Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/2">Second Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/3">Third Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/4">Fourth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/5">Fifth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/PaperCountReport/7/6">Sixth Semester</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Group center Mapping Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>Answer Book Recd. from Instt. (Subject CCode wise)</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">First Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Second Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Third Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fourth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fifth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Sixth Semester</a></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>Answer Book Recd. without Inst (Subject CCode Wise)</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">First Semester</a></li>
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">Second Semester</a></li>
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">Third Semester</a></li>
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">Fourth Semester</a></li>
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">Fifth Semester</a></li>
+                    <li><a class="dropdown-item"  routerLink="/group-center-mapping-reports">Sixth Semester</a></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>Sub. wise Examiner Work Distribution Report</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">First Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Second Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Third Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fourth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fifth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Sixth Semester</a></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>In CSV</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">First Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Second Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Third Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fourth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Fifth Semester</a></li>
+                    <li><a class="dropdown-item" routerLink="/group-center-mapping-reports">Sixth Semester</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Center Code Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',1,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> First Semester </a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',2,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> Second Semester </a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',3,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> Third Semester </a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',4,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> Fourth Semester </a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',5,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> Fifth Semester </a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_centercode_report',6,'view','csv','','USP_Reports_for_Center_CCode')" href="javascript:void(0);"> Sixth Semester </a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Branch  Wise/Center Wise Subject Count CSV</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',1,'download','pdf','','')" href="javascript:void(0);">First Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',2,'download','pdf','','')" href="javascript:void(0);">Second Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',3,'download','pdf','','')" href="javascript:void(0);">Third Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',4,'download','pdf','','')" href="javascript:void(0);">Fourth Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',5,'download','pdf','','')" href="javascript:void(0);">Fifth Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_branch_wise_count',6,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Center Wise Subject Count CSV</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',1,'download','pdf','','')" href="javascript:void(0);">First Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',2,'download','pdf','','')" href="javascript:void(0);">Second Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',3,'download','pdf','','')" href="javascript:void(0);">Third Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',4,'download','pdf','','')" href="javascript:void(0);">Fourth Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',5,'download','pdf','','')" href="javascript:void(0);">Fifth Semester</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_subject_wise_count',6,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li><a class="dropdown-item" (click)="PageHref('M','download_college_branch_wise_report',1,'download','pdf','','')" href="javascript:void(0);">Download College wise and Branch wise Student Report</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('M','download_non_elective_form_filling',0,'download','pdf','','')" href="javascript:void(0);">Download Non Elective Form Filling Report</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('M','optional_report',0,'download','csv','','')" href="javascript:void(0);">Download Optional format Report</a></li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Center Daily Reports</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('M','bhandarlist',0,'download','csv','','pdf')" href="javascript:void(0);">Center Daily Reports List</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_latecomers',0,'download','csv','','pdf')" href="javascript:void(0);">विलम्ब से आए विध्यार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_noadmitcard',0,'download','csv','','pdf')" href="javascript:void(0);">बिना अनुमति पत्र परीक्षा मे बैठाये गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','download_admitcard',0,'download','csv','','pdf')" href="javascript:void(0);">अनुमति पत्र की प्रतिलिपि से परीक्षा मे बैठाये गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','effective-ufm-attendance',0,'view','csv','','')" href="javascript:void(0);">अनुचित कार्य ( U.F.M.) करते पकड़े गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','ufm-attendance',0,'view','csv','ufm-attendance','USP_GetCenterDailyReport')" href="javascript:void(0);">UFM Students From Attendance Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('M','effective-ufm-attendance',0,'view','csv','effective-ufm-attendance','USP_GetCenterDailyReport')" href="javascript:void(0);">Effective UFM Students From Attendance Report</a></li>
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Branch and Subject Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/1" >First Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/2" >Second Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/3" >Third Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/4" >Fourth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/5" >Fifth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/2/6" >Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute and Subject Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/1">First Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/2">Second Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/3">Third Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/4">Fourth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/5">Fifth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/1/6">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute, Subject, Branch Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/1">First Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/2">Second Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/3">Third Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/4">Fourth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/5">Fifth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/0/6">Sixth Semester</a></li>
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute, Subject, Branch Wise Reg. Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/1">First Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/2">Second Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/3">Third Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/4">Fourth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/5">Fifth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/5/6">Sixth Semester</a></li>
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute, Subject, Branch Wise Ex. Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/1">First Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/2">Second Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/3">Third Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/4">Fourth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/5">Fifth Semester</a></li>
+                <li><a class="dropdown-item" routerLink="/PaperCountReport/6/6">Sixth Semester</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a class="dropdown-item" href="javascript:void(0);"><span>Special Exam</span> <i class="fa fa-angle-right"></i></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="javascript:void(0);"> Download Payment Received</a></li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Subject Wise Student Count</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>PDF</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" (click)="PageHref('S','download_common_subject_6,',0,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a></li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>CSV</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" (click)="PageHref('S','download_common_subject_excel_6,',0,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Group center Mapping Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>Answer Book Recd. from Instt. (Subject Code wise)</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" (click)="PageHref('S','download_group_center_mapping_ccode_wise_6,',0,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>Sub. wise Examiner Work Distribution Report</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" (click)="PageHref('S','download_group_center_mapping_6,',0,'download','pdf','','')" href="javascript:void(0);">Sixth Semester</a>
+                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <a class="dropdown-item" href="javascript:void(0);"><span>In CSV</span> <i class="fa fa-angle-right"></i></a>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <a class="dropdown-item" (click)="PageHref('S','download_group_center_mapping_6,',0,'download','csv','','')" href="javascript:void(0);">Sixth Semester</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Center Code Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" (click)="PageHref('S','download_centercode_report_6,',0,'download','pdf','','')" href="javascript:void(0);"> Sixth Semester </a>
+                </li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Branch  Wise/Center Wise Subject Count CSV</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_branch_wise_count/6/exam_cat:S">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Center Wise Subject Count CSV</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_subject_wise_count/6/exam_cat:S">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/attendance/download_college_branch_wise_report/1/exam_cat:S">Download College wise and Branch wise Student Report</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_non_elective_form_filling/exam_cat:S">Download Non Elective Form Filling Report</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/optional_report_csv/exam_cat:S">Download Optional format Report</a></li>
+
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Center Daily Reports</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/bhandarlist/exam_cat:S">Center Daily Reports List</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_latecomers/exam_cat:S">विलम्ब से आए विध्यार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_noadmitcard/exam_cat:S">बिना अनुमति पत्र परीक्षा मे बैठाये गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_admitcard/exam_cat:S">अनुमति पत्र की प्रतिलिपि से परीक्षा मे बैठाये गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_ufm/exam_cat:S">अनुचित कार्य ( U.F.M.) करते पकड़े गए परीक्षार्थी Report</a></li>
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_attendance_ufm/S">UFM Students From Attendance Report</a></li>
+
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/centers/download_effective_ufm/S">Effective UFM Students From Attendance Report</a></li>
+              </ul>
+            </li>
+            <li>
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Branch and Subject Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_branchsubject_report/6/exam_cat:S">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown-submenu">
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute and Subject Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_institutesubject_report/6/exam_cat:S">Sixth Semester</a></li>
+              </ul>
+            </li>
+
+            <li class="dropdown-submenu">
+              <a class="dropdown-item" href="javascript:void(0);"><span>Download Institute, Subject, Branch Wise Student Report</span> <i class="fa fa-angle-right"></i></a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_institutesubjectbranch_report/6/exam_cat:S">Sixth Semester</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/change_student_details"> Change Student Details</a></li>
+        <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/view_change_student_details"> View Update Student Details </a></li>
+        <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/download_change_enrollment_report">Download Change Enrollment Student Report</a></li>
+        <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/export_student_details_csv">Download Student Enrollment Details</a></li>
+        <li class="dropdown-submenu">
+          <a class="dropdown-item" href="javascript:void(0);"><span>Certification</span> <i class="fa fa-angle-right"></i></a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/issue_migration"> issue migration Certification</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/migration_certificate"> download migration Certification</a></li>
+            <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/StudentExams/issue_duplicate_migration"> Issue Duplicate Certification</a></li>
+          </ul>
+        </li>
+        <li><a class="dropdown-item" (click)="PageHref('S','download_payment_rec',0,'download','pdf','','')" href="/bter_eng_sem_exam/import_excels/get_data_for_kd">Download Data for Kd</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>

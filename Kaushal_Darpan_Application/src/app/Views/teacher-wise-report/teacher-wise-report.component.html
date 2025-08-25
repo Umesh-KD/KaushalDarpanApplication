@@ -1,0 +1,107 @@
+<!-- Page Title Start -->
+
+<!--<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"></h4>-->
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Company Master</a>
+    </div>-->
+  <!--</div>
+</div>-->
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <!--<div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a [routerLink]="'/AddCompany'" [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+            <option value="">--All--</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Hold">Hold</option>
+          </select>
+        </div>
+        <div>
+
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>-->
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Teacher Wise Report</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download PDF</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>#</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">Name of Teacher</th>
+            <th class="text-left">Phone No</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Branch</th>
+            <th class="text-left">Year/Semester</th>
+            <th class="text-left">TeachingSubject</th>
+            <th class="text-left">OptionalSubject</th>
+            <th class="text-left">RemaningSubject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Teacher of TeacherList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.SSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.TeacherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.MobileNumber}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.Email}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.Branch}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.SemesterName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.TeachingSubject}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.OptionalSubject}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Teacher.RemainingSubjects}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->

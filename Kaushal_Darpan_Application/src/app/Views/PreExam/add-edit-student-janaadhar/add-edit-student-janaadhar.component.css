@@ -1,0 +1,7 @@
+.input.radio label [type='radio'] {
+  margin-right: 5px;
+}
+
+.input.radio label {
+  margin-right: 10px;
+}

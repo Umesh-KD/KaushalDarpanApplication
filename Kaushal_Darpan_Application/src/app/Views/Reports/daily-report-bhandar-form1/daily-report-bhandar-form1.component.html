@@ -1,0 +1,105 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <!--<h4 class="text-slate-900 text-lg font-medium mb-2">Daily Report Bhandar </h4>-->
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Center suprintendent diary (Bhandar form) </h4>
+  
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Form1</a>
+      </div>
+    </div>
+</div>
+  <!-- Page Title End -->
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+            </div>
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Date</label>
+                    <input type="date" class="form-input" placeholder="Enter Transaction ID" [(ngModel)]="request.ExamDate"/>
+                </div>
+
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Shift</label>
+                    <select class="form-select" [(ngModel)]="request.ShiftID" >
+                        <option value="0">Choose Option</option>
+                        <option *ngFor="let item of ExamShiftDDL" [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Pending Form</label>
+                    <select class="form-select" [(ngModel)]="request.ExamCategoryID" >
+                        <option value="0">Choose Option</option>
+                        <option value="1">Yes</option>
+                        <option value="2">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex justify-left flex-wrap items-left">
+              <button type="button" class="btn bg-info text-white mt-6" (click)="DailyReportBhandarForm()" >Search</button>
+              <button type="button" class="btn bg-danger text-white mt-6" >Reset</button>
+            </div>
+        </div>
+
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>           
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="">
+                <select id="ddlConter" class="form-select  couterDropDown" >
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                </select>
+            </div>
+            <div class="">
+               
+            </div>
+            <div class=""></div>
+            <div class="">
+                <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+            </div>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                    <th width="80px" align="left">Sr. No.</th>
+                    <th width="80px" align="left">Semester/Year</th>
+                    <th class="text-left">Exam Date</th>
+                    <th class="text-left">Shift</th>
+                    <th class="text-left">Action</th>
+                    
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let row of TableData; let idx = index">
+                    <td>{{idx + 1}}</td>
+                    <td align="left">{{row.SemesterName}}</td>
+                    <td>{{row.ExamDate |date:'dd-MM-yyyy'}}</td>
+                    <td align="left">{{row.ShiftTime}}</td>
+                    <td align="left">
+                        <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                          <a href="javascript:void(0);" title="View Details" (click)="onDownload(row)">
+                            <i class="ti ti-download"></i></a>
+
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

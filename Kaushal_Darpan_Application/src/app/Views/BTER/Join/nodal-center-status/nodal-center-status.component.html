@@ -1,0 +1,254 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">BTER Allotment Reporting</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/ITIAllotmentReporting" class="text-sm font-medium text-slate-700" aria-current="page">BTER Allotment Reporting</a>-->
+      <a [routerLink]="['/ITIAllotmentReporting']" class="text-sm font-medium text-slate-700" aria-current="page">BTER Allotment Reporting</a>
+    </div>
+  </div>
+  <a routerLink="/student-nodal-list/{{request.StreamTypeID}}" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!-- Page Title End -->
+<div class="grid grid-cols-3 gap-3">
+  <div>
+    <div class="card">
+      <div class="card-body">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+
+          <div class="text-center" *ngIf="filteredDocumentDetails?.length==0">
+            <img src="assets/images/dummyImg.jpg"
+                 class="StudentImageAllotment" />
+          </div>
+          <div class="text-center" *ngFor="let item of filteredDocumentDetails;">
+            <img appImageError="assets/images/dummyImg.jpg"
+                 [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+                 class="StudentImageAllotment"
+                 alt="{{item.ColumnName}}" />
+          </div>
+          <div class="text-center">
+            <p><b>{{request.StudentName}}</b></p>
+            <p><b>Father's Name: </b>{{request.FatherName}}</p>
+            <p><b>Allotted Branch: </b>{{request.StreamName}}</p>
+            <p><b>Allotted Category:</b>{{request.AllotedCategory}}</p>
+            <p><b>Gender: </b>{{ request.AllotedGender == 'M' ? 'Male' : (request.AllotedGender == 'F' ? 'Female' : 'Other') }}</p>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-cake"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Date of Birth</b>
+              <p class="mb-0">{{request.DOB}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-map-pin"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Address Detail</b>
+              <p class="mb-0">{{request.fullAddress}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-phone"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Phone No.</b>
+              <p class="mb-0">{{request.MobileNo}}</p>
+            </div>
+          </div>
+          <div class="flex items-center justify-between allotmentFlexDetails border-top-light pt-2">
+            <div class="allotmentFlexDetailsIcons"><i class="ti ti-mail"></i></div>
+            <div class="allotmentFlexDetailsContent">
+              <b>Email</b>
+              <p class="mb-0">{{request.Email}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-span-2">
+    <div class="card">
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> To Do List</b>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left" width="150">Task</th>
+                <th class="text-left" width="80">View</th>
+                <th class="text-left">Upload Original</th>
+                <th align="center" width="200px">Status</th>
+                <th *ngIf="remarkheader">Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of request.AllotmentDocumentModel;  let idx=index;">
+                <td>{{idx+1}}</td>
+                <td [innerHtml]="item.ColumnName"></td>
+                <td width="80">
+                  <div class="flex align-center justify-center actionBtns w-auto">
+                    <a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + item.FileName}}" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + item.FileName)" title="View">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  <ng-container *ngIf="getDocumentsByMasterID(item.DocumentMasterID) as docs">
+                    <div class="flex fileUploader" *ngIf="docs.length == 0">
+                      <input [ngModelOptions]="{standalone: true}"
+                             class="hidden"
+                             id="{{item.ColumnName}}"
+                             type="file"
+                             (change)="UploadDocument($event, item)">
+
+                      <label for="{{item.ColumnName}}" class="cursor-pointer">
+                        <span>Choose File</span> {{documentDetails['idx']?.FileName == '' ? 'No File Chosen' : documentDetails['idx']?.FileName}}
+                      </label>
+
+                      <div class="flex" *ngIf="item.FileName!=''">
+                        <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
+                          <i class="ti ti-trash"></i>
+                        </a>
+                      </div>
+                    </div>
+                    <div class="flex align-center justify-center actionBtns w-auto" *ngIf="docs.length > 0">
+                      <a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + docs[0].FileName}}"
+                         (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + docs[0].FileName)"
+                         title="View">
+                        <i class="ti ti-eye"></i>
+                      </a>
+                    </div>
+                  </ng-container>
+                </td>
+                <td>
+                  <div class="flex">
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio{{idx}}"
+                             [(ngModel)]="item.DocumentStatus"
+                             (click)="OnRemarkChange(item,1)"
+                             [value]="true" />&nbsp;Correct
+                    </label>
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio{{idx}}"
+                             [(ngModel)]="item.DocumentStatus"
+                             (click)="OnRemarkChange(item,0)"
+                             [value]="false" />&nbsp;Incorrect
+                    </label>
+                  </div>
+                </td>
+
+                <td *ngIf="item.ShowRemark">
+                  <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="item.Remark"></textarea>
+                  <div *ngIf="item.Remark==null&& remarkvalidate" class="text-danger">
+                    This field is required .!
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Voter ID Available</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Task</th>
+                <th align="center" width="200px">Status</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.</td>
+                <td>Voter ID Available</td>
+                <td>
+                  <div class="flex">
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio"
+                             [(ngModel)]="request.IsVoterIDAvailable"
+                             [value]="true" /> Yes
+                    </label>
+                    <label class="me-3">
+                      <input type="radio"
+                             name="SubjectRadio"
+                             [(ngModel)]="request.IsVoterIDAvailable"
+                             [value]="false" /> No
+                    </label>
+
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Reporting Status</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <select class="form-select" [(ngModel)]="searchRequest.ReportingStatus">
+            <option value="" selected>Choose Option</option>
+            <option *ngFor="let row of ReportingStatus" [value]="row.Id">{{row.Name}}</option>
+          </select>
+        </div>
+        <div *ngIf="sSOLoginDataModel.Eng_NonEng == 4">
+          <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-list"></i>Fee Receipt No</b>
+          </div>
+
+          <div class="overflow-x-auto mt-3">
+            <input type="text" placeholder="FeeReciptNo" class="form-input" [(ngModel)]="request.FeeReciptNo">
+          </div>
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Reporting Remark</b>
+        </div>
+
+
+        <div class="overflow-x-auto mt-3">
+          <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="request.ReportingRemark"></textarea>
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light mt-3" *ngIf="searchRequest.ReportingStatus=='4' && request.AllotedPriority!=1">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Apply in Upward</b>
+        </div>
+
+
+        <div class="overflow-x-auto mt-3" *ngIf="searchRequest.ReportingStatus=='4' && request.AllotedPriority!=1">
+          <label class="me-3">
+            <input type="checkbox"
+                   name="ApplyUpward"
+                   [(ngModel)]="request.ApplyUpward"
+                   [value]="false" /> Yes
+          </label>
+        </div>
+
+
+        <div class="flex justify-center flex-wrap items-center py-2 mt-3">
+          <button (click)="DownloadApplicationForm()" class="btn bg-info text-white" type="button"><i class="ti ti-download"></i> Download Application</button>
+          <button class="btn bg-success text-white" type="button" (click)="SaveData()"><i class="ti ti-device-floppy"></i> Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

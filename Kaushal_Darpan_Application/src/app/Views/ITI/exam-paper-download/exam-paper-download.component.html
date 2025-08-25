@@ -1,0 +1,126 @@
+  <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Paper Download</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a  class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Exam Paper Download</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" style="display:none">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a (click)="GoToITIPaperUploadPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8" style="display:none">
+        <div class="Search">
+          <div class="form-group row">
+            <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search </label>
+            <div class="col-sm-10">
+              <input type="text" class="form-input ng-pristine ng-valid ng-touched"  placeholder="Search..." >
+            </div>
+          </div>
+        </div>
+
+        <div style="display:none">
+          <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Trade </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedStream">
+            <option value="all">--All--</option>
+            <!--@for (item of StreamMasterList; track item) {
+            <option [value]="item.StreamName">{{item.StreamName}}</option>
+            }-->
+          </select>
+        </div>
+
+        <div style="display:none">
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+            <option value="all">--All--</option>
+            <!--<option *ngFor="let item of SemesterMasterList" [value]="item.SemesterName">{{item.SemesterName}}</option>-->
+          </select>
+        </div>
+        <div  style="display:none"> 
+          <button type="button" class="btn bg-info text-white mt-6">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Paper Download List</b>
+        <!--<div class="flex justify-between flex-wrap items-center">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Execl
+          </a>
+        </div>-->
+      </div>
+      <div class="mat-elevation-z8 table-responsive">
+
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr.no</th>
+                <th class="text-left">Exam Name</th>
+                <th class="text-left">Trade</th>
+                <th class="text-left">Semester/Year</th>
+                <th class="text-left">Center Name</th>
+                <th class="text-left">Paper Download Date & Time</th>
+                <th class="text-left">Download Paper</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+              <ng-container *ngIf="CenterWisePaperList.length > 0 ; else noData">
+                <ng-container *ngFor="let item of CenterWisePaperList  ; let i = index">
+                  <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ item.ExamName }}</td>
+                    <td>{{item.TradeName }}</td>
+                    <td>{{item.SemesterName }}</td>
+                    <td>{{item.CenterName }}</td>
+                    <td>{{item.PaperDate }}</td>
+                    <td>
+                      <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                        <a href="javascript:void(0)" (click)="DownaloadExamPaper(item.PaperUploadID , item.CenterID )"
+                           title="Download Paper">
+                          <i class="fa fa-download"></i>
+                        </a>
+                      </div>
+
+                    </td>
+                  </tr>
+
+
+                  <!--<tr >
+                    <td colspan="4"><em>No professors assigned</em></td>
+                  </tr>-->
+                </ng-container>
+              </ng-container>
+
+              <ng-template #noData>
+                <tr>
+                  <td colspan="7">No data available.</td>
+                </tr>
+              </ng-template>
+
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

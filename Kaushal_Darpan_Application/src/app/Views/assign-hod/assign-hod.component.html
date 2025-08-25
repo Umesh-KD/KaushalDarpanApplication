@@ -1,0 +1,151 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Assign HOD Branch</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Examination</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Assign HOD Branch</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Marksheet Issue Date</a>-->
+        <!--<a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,0,0,0)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Sub User</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contact SSO</label>
+          <input type="text" class="form-input" placeholder="Contact SSO Number" id="MobileNo" [(ngModel)]="searchRequest.MobileNo" maxlength="10">
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email</label>
+          <input type="email" class="form-input" placeholder="Email" id="Email" [(ngModel)]="searchRequest.Email">
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!--<div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>-->
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">
+              Name
+            </th>
+            <th class="text-left">SSO User Name</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Mobile Number</th>
+            <th class="text-left">Role Name</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Admi of AdminUserList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.SSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Email}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{maskMobileNumber(Admi.MobileNo)}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.RoleNameEnglish}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <button (click)="openModal(MyModel_Action,Admi)" title="Assign Branch" style="text-decoration: underline;color:blue;">Assign Branch</button>
+
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Assign Child Subject
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 400px;overflow:auto">
+        <div class="mb-8">
+          <!--<label>Select Child Subject<span class="text-danger">*</span></label>-->
+          <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="CourseMasterDDL"
+                                   [(ngModel)]="AddParent.Branchlist"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+          </ng-multiselect-dropdown>
+          <!--<ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="SubjectMasterDDLList"
+                                   [formControl]="_BranchSubjectFormGroup.selectedItems" [(ngModel)]="SelectedSubjectList" [settings]="settingsMultiselector"
+                                   [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                   (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                   (onDeSelectAlls)="onDeSelectAlls($event)">
+          </ng-multiselect-dropdown>-->
+          <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,161 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">C Form Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">C Form Report</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">C Form Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">C Form Report</b></div>
+    <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 mb-8">
+      <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3 mb-8">
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--All--</option>
+            <option value="1">1 Year</option>
+            <option value="2">2 Year</option>
+
+          </select>
+        </div>
+
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Examination Type </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester" [(ngModel)]="searchRequest.ExamType">
+            <option value="0">--All--</option>
+            <option value="1">Main Exam</option>
+            <option value="2">Supplementary Exam</option>
+          </select>
+        </div>
+
+        <!--<div *ngIf="MapKeyEng == 1">
+    <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
+  </div>-->
+        <div>
+          <button type="button" class="btn  text-white mt-6 bg-info" (click)="GetCFormReport()">Search</button>
+          <button type="button" class="btn  text-white mt-6 bg-info" (click)="DowanloadCFormReport()">Download</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>-->
+
+
+    <div class="table-responsive1">
+      <!-- result.component.html -->
+      <div class="overflow-x-auto1 mt-3" [innerHTML]="ReportHtml">
+
+        <!--{{ReportHtml}}-->
+
+        <!--<table class="table table-border w-full table-auto" cellpadding="5">
+          <tr>
+            <th colspan="11" style="text-align:left">{{searchRequest.SemesterID}} Year (Annual Examination) {{searchRequest.SemesterID}} Year Trades </th>
+          </tr>
+          @for (trade of TradeList; let idx = $index; track trade) {
+            <tr>
+              <th [attr.colspan]="ReporColspan(trade.TradeId)" style="text-align:left">Trade: {{trade.TradeName}}</th>
+            </tr>
+            @for (colg of ReporInstitudeDataList(trade.TradeId); let idx1 = $index; track colg) {
+                <tr>
+                  <th [attr.colspan]="ReporColspan(trade.TradeId)" style="text-align:left">Institute: {{colg.InstituteName}}</th>
+                </tr>
+                <tr>
+                  <th style="text-align:left">S.No. {{idx1}}</th>
+                  <th style="text-align:left">Trainee's Name / Father's Name </th>
+                  <th style="text-align:left">Enrollment/Date of Birth             </th>
+                  <th style="text-align:left">Roll Number                                </th>
+                  <th style="text-align:left">Last Appeared                                  </th>
+                  @for (subj of ReporSubjectNameDataList(trade.TradeId); let idx2 = $index; track subj) {
+                  <th style="text-align:left">{{subj.SubjectName}}</th>
+                  }
+                </tr>
+               }
+          }
+        </table>-->
+        <!--<table class="table table-border w-full table-auto" cellpadding="5">
+          @for (trade of TradeList; track trade) {-->
+          <!-- ✅ Trade Name -->
+
+          <!--<tr>
+            <th [attr.colspan]="ReporColspan(trade.TradeId)" style="text-align: left; padding: 10px; font-weight: bold; text-decoration: underline; font-size: 17px; ">
+              <b> {{searchRequest.SemesterID}} Year (Annual Examination) {{trade.DurationYear}} Year Trades</b>
+            </th>           
+          </tr>
+          <tr>            
+            <th [attr.colspan]="ReporColspan(trade.TradeId)" style="text-align: left; padding: 10px; font-weight: bold; text-decoration: underline; font-size: 17px; ">
+              <b> Trade:  {{ trade.TradeName }}</b>
+            </th>
+          </tr>-->
+
+          <!-- ✅ Institute Loop -->
+          <!--@for (institute of getInstitutesByTrade(trade.TradeId); track institute) {-->
+
+          <!-- ✅ Institutename -->
+          <!--<tr *ngIf="institute">
+            <th [attr.colspan]="ReporColspan(trade.TradeId)" style="text-align:left;padding:10px;font-weight:bold;text-decoration:underline;font-size:15px;">
+              <b> Institute:  {{ institute.InstituteName }}</b>
+            </th>
+          </tr>-->
+
+          <!-- ✅ Column Headers ONLY here -->
+          <!--<tr *ngIf="institute">
+            <th rowspan="2" style="text-align: left; font-size: 13px; ">S.No.</th>
+            <th rowspan="2" style="text-align:left; font-size: 13px;">Trainee's Name / Father's Name</th>
+            <th rowspan="2" style="text-align:left; font-size: 13px;">Enrollment/Date of Birth</th>
+            <th rowspan="2" style="text-align:left; font-size: 13px;">Roll Number</th>
+            <th rowspan="2" style="text-align:left; font-size: 13px;">Last Appeared</th>
+            @for (subj of ReporSubjectNameDataList(trade.TradeId); let idx2 = $index; track subj) {
+            <th style="text-align: center; font-size: 13px; ">{{subj.SubjectName}}</th>
+            }
+
+            <th rowspan="2" style="text-align: center; font-size: 13px;">Grand Total                 </th>
+            <th rowspan="2" style="text-align: center; font-size: 13px;">Result                      </th>
+            <th rowspan="2" style="text-align: center; font-size: 13px;">Original Certificate Number </th>
+            <th rowspan="2" style="text-align: center; font-size: 13px;">Acad Session                </th>
+
+
+          </tr>
+          <tr *ngIf="institute">
+            @for (subj of ReporSubjectNameDataList(trade.TradeId); let idx2 = $index; track subj) {
+            <th style="text-align: center; font-size: 13px;">{{subj.MinMarks}}/{{subj.MaxMarks}}</th>
+            }
+          </tr>-->
+
+          <!-- ✅ Trainee List -->
+          <!--@for (trainee of getTraineesByInstitute(trade.TradeId, institute.InstituteID); let idx = $index; track trainee) {
+          <tr *ngIf="institute">
+            <td style="text-align: left; font-size: 13px;">{{ idx + 1 }}</td>
+            <td style="text-align: left; font-size: 13px;">{{ trainee.TraineeName }}</td>
+            <td style="text-align: center; font-size: 13px;">{{trainee.EnrollmentNo}}<br />{{ trainee.DOB | date:'dd-MM-yyyy' }}</td>
+            <td style="text-align: center; font-size: 13px; ">{{ trainee.RollNo }}</td>
+            <td style="text-align:left">{{ trainee.LastAppeared }}</td>
+            @for (subj of ReporSubjectNameDataList(trade.TradeId); let idx2 = $index; track subj) {
+            <th style="text-align: center; font-size: 13px;">{{trainee[subj.SubjectName]}}</th>
+            }
+            <td style="text-align: center; font-size: 13px;">{{ trainee.GrandTotal }}</td>
+            <td style="text-align: center; font-size: 13px;">{{ trainee.Result }}</td>
+            <td style="text-align: center; font-size: 13px;">{{ trainee.OriginalCertificateNumber }}</td>
+            <td style="text-align: center; font-size: 13px;">{{ trainee.AcadSession }}</td>
+
+
+
+          </tr>
+          }
+          }
+          }
+        </table>-->
+
+
+      </div>
+    </div>
+  </div>
+</div>

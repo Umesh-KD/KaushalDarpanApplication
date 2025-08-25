@@ -1,0 +1,326 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 *ngIf="url === 'totalstaff' || url === 'staffpersent' || url === 'pendingstaffprofile' || url === 'totalexaminer'" class="text-slate-900 text-lg font-medium mb-2">Staff</h4>
+    <h4 *ngIf="url === 'studentpersent'" class="text-slate-900 text-lg font-medium mb-2">Student</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        <ng-container *ngIf="url === 'totalstaff' || url === 'staffpersent' || url === 'pendingstaffprofile' || url === 'totalexaminer'">Staff Reports</ng-container>
+        <ng-container *ngIf="url === 'studentpersent'">Student Percent Reports</ng-container>
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <div class="flex justify-between flex-wrap mb-2">
+      <div class="Search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Search </mat-label>
+          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
+        <ng-container *ngIf="url === 'totalstaff' || url === 'staffpersent' || url === 'pendingstaffprofile' || url === 'totalexaminer'">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+        </ng-container>
+        <ng-container *ngIf="url === 'studentpersent'">
+          <a href="javascript:void(0);" (click)="exportToExcelStudent()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 table-responsive">
+      <ng-container *ngIf="url === 'totalstaff' || url === 'staffpersent' || url === 'pendingstaffprofile' || url === 'totalexaminer'">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <!-- StaffID Column -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+          </ng-container>
+
+          <!-- Designation Column -->
+          <ng-container matColumnDef="DesignationName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Designation </th>
+            <td mat-cell *matCellDef="let element"> {{element.DesignationName}} </td>
+          </ng-container>
+
+          <!-- Subject Column -->
+          <ng-container matColumnDef="Subject">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+            <td mat-cell *matCellDef="let element"> {{element.Subject}} </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="Email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
+          </ng-container>
+
+          <!-- Bank Account Column -->
+          <ng-container matColumnDef="Address">
+            <th mat-header-cell *matHeaderCellDef> Address </th>
+            <td mat-cell *matCellDef="let element"> {{element.Address}} </td>
+          </ng-container>
+
+          <!-- ActiveStatus Column -->
+          <ng-container matColumnDef="ActiveStatus">
+            <th mat-header-cell *matHeaderCellDef> Active Status </th>
+            <td mat-cell *matCellDef="let element"> {{element.ActiveStatus ? 'Active' : 'Inactive'}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="url === 'studentpersent'">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef>Student Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="AcademicYear">
+            <th mat-header-cell *matHeaderCellDef>Academic Year</th>
+            <td mat-cell *matCellDef="let element">{{ element.AcademicYear }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="GenderName">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let element">{{ element.GenderName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="MobileNo">
+            <th mat-header-cell *matHeaderCellDef>Mobile No</th>
+            <td mat-cell *matCellDef="let element">{{ element.MobileNo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CasteCategoryName">
+            <th mat-header-cell *matHeaderCellDef>Caste Category Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.CasteCategoryName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="EnrollmentNo">
+            <th mat-header-cell *matHeaderCellDef>Enrollment No</th>
+            <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="InstituteName">
+            <th mat-header-cell *matHeaderCellDef>Institute Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.InstituteName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="FatherName">
+            <th mat-header-cell *matHeaderCellDef>Father Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="Dis_DOB">
+            <th mat-header-cell *matHeaderCellDef>DOB</th>
+            <td mat-cell *matCellDef="let element">{{ element.Dis_DOB }}</td>
+          </ng-container>
+          <ng-container matColumnDef="StudentExamStatus">
+            <th mat-header-cell *matHeaderCellDef>Student Exam Status</th>
+            <td mat-cell *matCellDef="let element">{{ element.StudentExamStatus }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsStudent"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsStudent;"></tr>
+        </table>
+      </ng-container>
+
+
+      <ng-container *ngIf="url == 'enrollmentcancelrequest'">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef>Student Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="AcademicYear">
+            <th mat-header-cell *matHeaderCellDef>Academic Year</th>
+            <td mat-cell *matCellDef="let element">{{ element.AcademicYear }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="GenderName">
+            <th mat-header-cell *matHeaderCellDef>Gender</th>
+            <td mat-cell *matCellDef="let element">{{ element.GenderName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="MobileNo">
+            <th mat-header-cell *matHeaderCellDef>Mobile No</th>
+            <td mat-cell *matCellDef="let element">{{ element.MobileNo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CasteCategoryName">
+            <th mat-header-cell *matHeaderCellDef>Caste Category Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.CasteCategoryName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="EnrollmentNo">
+            <th mat-header-cell *matHeaderCellDef>Enrollment No</th>
+            <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="InstituteName">
+            <th mat-header-cell *matHeaderCellDef>Institute Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.InstituteName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="FatherName">
+            <th mat-header-cell *matHeaderCellDef>Father Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="Dis_DOB">
+            <th mat-header-cell *matHeaderCellDef>DOB</th>
+            <td mat-cell *matCellDef="let element">{{ element.Dis_DOB }}</td>
+          </ng-container> 
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important;">
+                <a href="javascript:void(0);" style="cursor: pointer;" title="Approve" (click)="btnApprove_OnClick(element.StudentID, element.EndTermID, element.InstituteID, element.CourseType, MyModel_EnrReqApproveModel)"><i class="fa fa-check-circle"></i></a> &nbsp;
+                <a href="javascript:void(0);" class="text-danger" style="cursor: pointer; color: #fa5944 !important;" title="Reject" (click)="btnReject_OnClick(element.StudentID, element.EndTermID, element.InstituteID, element.CourseType, MyModel_EnrReqRejectModel)"><i class="fa fa-times-circle"></i></a>
+              </div>
+            </td>
+
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsEnrStudent"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsEnrStudent;"></tr>
+        </table>
+      </ng-container>
+
+      <div class="overflow-x-auto mt-3">
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">No Record Found</div>
+
+        <!-- Pagination Controls -->
+        <mat-paginator [pageSize]="pageSize"
+                       [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords"
+                       (page)="onPaginationChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_EnrReqApproveModel let-modal>
+  <div class="modal-content custom-width">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-end">
+          <button class="btn bg-info text-white" (click)="ClosePopup()" type="button"><i class="ti ti-x"></i></button>
+        </div>
+        <form [formGroup]="StudentEnrFrom">
+          <h2 class="modal-heading">Student Enrollment Approve Request</h2>
+          <P class="text-center">Kindly enter otp to approve student enrollment cancellation request?</P>
+          <div class="modal-form">
+            <div class="text-center">
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" formControlName="OTP" placeholder="Enter OTP">
+            </div>
+            <div class="text-center mt-3">
+              <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+              <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+              <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_EnrReqRejectModel let-modal>
+  <div class="modal-content custom-width">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-end">
+          <button class="btn bg-info text-white" (click)="ClosePopup()" type="button"><i class="ti ti-x"></i></button>
+        </div>
+        <form [formGroup]="StudentEnrFrom">
+          <h2 class="modal-heading">Student Enrollment Cancel Request</h2>
+          <P class="text-center">Are you sure you want to Reject Student Enrollment Cancel Request?</P>
+          <div class="modal-form">
+            <div>
+              <textarea type="text" placeholder="Enter Remarks" class="form-input" formControlName="Remarks"></textarea>
+            </div>
+            <div *ngIf="isSubmitted && _StudentEnrFrom.Remarks.errors" class="text-danger">
+              <p *ngIf="_StudentEnrFrom.Remarks.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+            <div class="text-center mt-2">
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" formControlName="OTP" placeholder="Enter OTP">
+            </div>
+            <div class="text-center  mt-3">
+              <button (click)="VerifyOTPInRejection()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+              <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+              <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<!--Start Model Popup-->
+<!--<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>-->
+<!--Start Model Popup-->

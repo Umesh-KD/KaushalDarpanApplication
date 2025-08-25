@@ -1,0 +1,90 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Branch </h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/branchesmaster" class="text-sm font-medium text-slate-700" aria-current="page">Branches</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/addbranchesmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Branch</a>
+    </div>
+  </div>
+  <a routerLink="/branchesmaster" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">
+            <i class="ti ti-plus"></i> Add/Edit Branch
+          </b>
+        </div>
+        <form [formGroup]="branchForm" (ngSubmit)="saveData()">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label for="txtbranchName">Branch Name: <span class="StarMarking">*</span></label>
+              <input formControlName="txtbranchName" class="form-input" placeholder="Enter Branch Name" type="text" id="txtbranchName" [(ngModel)]="request.Name">
+              <div *ngIf="isSubmitted && branchForm.get('txtbranchName').errors" class="text-danger">
+                <p *ngIf="branchForm.get('txtbranchName').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtduration">Duraction(in Years): <span class="StarMarking">*</span></label>
+              <input formControlName="txtduration" class="form-input" placeholder="Enter Duration" type="text" id="txtduration" [(ngModel)]="request.Duration">
+              <div *ngIf="isSubmitted && branchForm.get('txtduration').errors" class="text-danger">
+                <p *ngIf="branchForm.get('txtduration').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <!--<div>
+              <label>Stream Type<span class="StarMarking">*</span></label>
+              <select formControlName="ddlstreamType" class="form-select" id="ddlstreamType" [(ngModel)]="request.StreamTypeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StreamTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
+              </select>
+              <div *ngIf="isSubmitted && branchForm.get('ddlstreamType').errors" class="text-danger">
+                <p *ngIf="!branchForm.get('ddlstreamType').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>-->
+
+
+
+            <div>
+              <label for="txtcode">Branch Code  <span class="StarMarking">*</span></label>
+              <input formControlName="txtcode" class="form-input" placeholder="Enter Branch Code" type="text" id="txtcode" [(ngModel)]="request.Code">
+              <div *ngIf="isSubmitted && branchForm.get('txtcode').errors" class="text-danger">
+                <p *ngIf="branchForm.get('txtcode').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtqualification">Entry Qualification Details: <span class="StarMarking">*</span></label>
+              <input formControlName="txtqualification" class="form-input" placeholder="Entry Qualification Details:" type="text" id="txtqualification" [(ngModel)]="request.Qualifications">
+              <div *ngIf="isSubmitted && branchForm.get('txtqualification').errors" class="text-danger">
+                <p *ngIf="branchForm.get('txtqualification').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+              <div class="text-center">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+                <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+
+
+
+            </div>
+          </div>
+</form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

@@ -1,0 +1,67 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+</div>
+<div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light w-full" style="">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Applications</b>
+  <div class="flex justify-end items-center">
+    <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportDocumentsToExcel()"><i class="ti ti-download"></i> Export Documents</a>
+
+    <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Excel</a>
+  </div>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  @for (row of DTEApplicationDashboardList; track row; let idx = $index;) {
+  <div class="card" *ngIf="row.DisplayType==1">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+      <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+      <a routerLink="/bter-application/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="card" *ngIf="row.DisplayType==5">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+      <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+      <a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  }
+</div>
+<div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light w-full">
+
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Allotment</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  @for (row of DTEApplicationDashboardList; track row; let idx = $index;) {
+  <div class="card" *ngIf="row.DisplayType==2">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+      <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+      <!--<a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>-->
+      <a routerLink="/{{row.RedirectURL+ '/' + row.AllotmentStatus}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+
+  </div>
+  }
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light w-full">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> COLLEGES</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  @for (row of DTEApplicationDashboardList; track row; let idx = $index;) {
+  <div class="card" *ngIf="row.DisplayType==3">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+      <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+      <!--<a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>-->
+      <a routerLink="/{{row.RedirectURL+ '/' + row.AllotmentStatus}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+
+  </div>
+  }
+</div>

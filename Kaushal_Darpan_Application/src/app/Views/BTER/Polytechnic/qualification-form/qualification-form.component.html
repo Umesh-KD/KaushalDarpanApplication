@@ -1,0 +1,366 @@
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+  <div class="card tab-panels" id="QualificationDetail">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">10th Qualification Details</b>
+          <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>
+        </div>
+
+        <form [formGroup]="QualificationForm">
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+            <!--<div class="hidden">
+              <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">State of Study:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="StateofStudy" [(ngModel)]="request.StateID">
+                <option value="0">--select--</option>
+
+                <option *ngFor="let item of stateMasterDDL" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>-->
+              <!--<div *ngIf="isSubmitted&&_QualificationForm.ddlStateID.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlStateID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>-->
+            <!--</div>-->
+
+            <div>
+              <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">Board:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="Board" formControlName="ddlBoardID" [(ngModel)]="request.BoardID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of BoardList" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>
+              <div *ngIf="isSubmitted&&_QualificationForm.ddlBoardID.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlBoardID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">Year of Passing:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassyear" [(ngModel)]="request.PassingID" (change)="passingYearValidation()">
+                <option value="">Select Passing Year</option>
+                <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_QualificationForm.ddlPassyear.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlPassyear.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Number:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtRollNumber" placeholder="Enter Roll Number" (keypress)="numberOnly($event)" formControlName="txtRollNumber" [(ngModel)]="request.RollNumber">
+              <div *ngIf="isSubmitted && _QualificationForm.txtRollNumber.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.txtRollNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                <!--<p *ngIf="_QualificationForm.txtRollNumber.errors.pattern"><i aria-hidden="true"></i>  Roll number must be of 8 digits..!</p>-->
+              </div>
+            </div>
+
+
+            <div>
+              <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">Marks Type:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType" [(ngModel)]="request.MarkType" (change)="calculatePercentage()">
+                <option selected value="0">Select Marks Type</option>
+                <option *ngFor="let item of marktypelist" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_QualificationForm.ddlMarksType.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlMarksType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Maximum Marks:<span class="StarMarking">*</span></label>
+              <input maxlength="4" (keypress)="validateNumber($event)" type="text" class="form-input" id="txtAggregateMaximumMarks" placeholder="Enter Aggregate Maximum Marks"
+                     formControlName="txtAggregateMaximumMarks" [(ngModel)]="request.AggMaxMark" (change)="calculatePercentage()">
+              <div *ngIf="isSubmitted && _QualificationForm.txtAggregateMaximumMarks.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.txtAggregateMaximumMarks.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Marks Obtained:<span class="StarMarking">*</span></label>
+              <input type="text" maxlength="4" (keypress)="validateNumber($event)" class="form-input" id="txtAggregateMarksObtained" placeholder="Enter Aggregate Marks Obtained"
+                     formControlName="txtAggregateMarksObtained" [(ngModel)]="request.AggObtMark" (blur)="calculatePercentage()">
+              <div *ngIf="isSubmitted && _QualificationForm.txtAggregateMarksObtained.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.txtAggregateMarksObtained.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+              <input type="text" class="form-input" disabled id="txtAggregateMarksObtained" placeholder="Automatic Percentage calculate"
+                     formControlName="txtpercentage" [(ngModel)]="request.Percentage" [value]="calculatedPercentage">
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+      <div *ngIf="request.CourseType==_EnumCourseType.Lateral" class="mb-8">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Qualifying Examination Details (Senior Secondary/ITI/Diploma)</b>
+          <!--<span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>-->
+        </div>
+
+        <form [formGroup]="LateralQualificationForm">
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+            <div>
+              <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">Course:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="StateofStudy" formControlName="ddlCourseID" [(ngModel)]="lateralrequest.CourseID" (change)="GetStreamCourse()">
+                <option value="0">--select--</option>
+
+                <option *ngFor="let item of Lateralcourselist" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>
+              <div *ngIf="isSubmitted&&_LateralQualificationForm.ddlCourseID.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.ddlCourseID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">Stream/Subject:<span class="StarMarking">*</span></label>
+              <!--<ng-multiselect-dropdown style="width:100%;" #multiSelect [placeholder]="'Choose Subjects (*)'"
+                                       [data]="SubjectMasterDDLList" [(ngModel)]="SubjectID" [settings]="settingsMultiselect" [disabled]="false"
+                                       (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                       (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                       (onDeSelectAll)="onDeSelectAll($event)">
+              </ng-multiselect-dropdown>-->
+              <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                                       [settings]="settingsMultiselect"
+                                       [data]="SubjectMasterDDLList"
+                                       [(ngModel)]="SubjectID"
+                                       [disabled]="false" formControlName="SubjectID">
+              </ng-multiselect-dropdown>
+              <div *ngIf="isSubmitted && _LateralQualificationForm.SubjectID.errors" class="text-danger">
+                <p *ngIf="_LateralQualificationForm.SubjectID.errors.required">
+                  This field is required!
+                </p>
+                <!-- Show dynamic error message here -->
+                <!--<p *ngIf="errormessage">{{ errormessage }}</p>-->
+
+              </div>
+
+            </div>
+
+
+            <!--<div class="hidden">
+              <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">State of Study:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="StateofStudy" [(ngModel)]="lateralrequest.StateID">
+                <option value="0">--select--</option>
+
+                <option *ngFor="let item of stateMasterDDL" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>-->
+              <!--<div *ngIf="isSubmitted&&_LateralQualificationForm.ddlStateID.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.ddlStateID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>-->
+            <!--</div>-->
+            <div>
+              <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">Board:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="Board" formControlName="ddlBoardID" [(ngModel)]="lateralrequest.BoardID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of BoardList" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>
+              <div *ngIf="isSubmitted&&_LateralQualificationForm.ddlBoardID.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.ddlBoardID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">Year of Passing:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassyear" [(ngModel)]="lateralrequest.PassingID" (change)="passingYearValidation()">
+                <option value="">Select Passing Year</option>
+                <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_LateralQualificationForm.ddlPassyear.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.ddlPassyear.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Number:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtRollNumber" placeholder="Enter Roll Number" formControlName="txtRollNumber" [(ngModel)]="lateralrequest.RollNumber">
+              <div *ngIf="isSubmitted && _LateralQualificationForm.txtRollNumber.errors" class="text-danger">
+                <p *ngIf="_LateralQualificationForm.txtRollNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+
+            <div>
+              <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">Marks Type:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType" [(ngModel)]="lateralrequest.MarkType" (change)="calculateLateralPercentage()">
+                <option selected value="0">Select Marks Type</option>
+                <option *ngFor="let item of marktypelist" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_LateralQualificationForm.ddlMarksType.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.ddlMarksType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Maximum Marks:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtAggregateMaximumMarks" placeholder="Enter Aggregate Maximum Marks"
+                     formControlName="txtAggregateMaximumMarks" [(ngModel)]="lateralrequest.AggMaxMark" (change)="calculateLateralPercentage()">
+              <div *ngIf="isSubmitted && _LateralQualificationForm.txtAggregateMaximumMarks.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.txtAggregateMaximumMarks.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Marks Obtained:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtAggregateMarksObtained" placeholder="Enter Aggregate Marks Obtained"
+                     formControlName="txtAggregateMarksObtained" [(ngModel)]="lateralrequest.AggObtMark" (change)="calculateLateralPercentage()">
+              <div *ngIf="isSubmitted && _LateralQualificationForm.txtAggregateMarksObtained.errors" class="text-danger">
+                <p *ngIf="!_LateralQualificationForm.txtAggregateMarksObtained.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+              <input type="text" class="form-input" disabled id="txtAggregateMarksObtained" placeholder="Automatic Percentage calculate"
+                     formControlName="txtpercentage" [(ngModel)]="lateralrequest.Percentage" [value]="calculateLateralPercentage">
+            </div>
+          </div>
+
+
+
+
+        </form>
+
+        <p class="text-info bold mt-2">आप द्वारा यदि 10+2 के आधार पर पार्नु प्रवेश हेतु आवेदन किया जा रहा है तो आपके 10+2 के Mandatory Courses के आधार पर आनंदित हो सकने वाली Engineering Branches की सूची पहाँ देखें।</p>
+
+      </div>
+
+
+
+
+      <div class="mb-1">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Appeared for Supplementary/Improvement in Secondary:</b>
+          <form [formGroup]="RadioForm">
+            <div class="flex gap-2">
+              <div class="form-check">
+                <input type="radio"
+                       name="SubjectRadio"
+                       [(ngModel)]="request.IsSupplement"
+                       [value]="true"
+                       formControlName="SubjectRadio"
+                       (change)="OnShow(1 )" />
+                <label class="ms-1.5" for="SupplementaryYes">Yes</label>
+              </div>
+              <div class="form-check ms-1.5">
+                <input type="radio"
+                       name="SubjectRadio"
+                       [(ngModel)]="request.IsSupplement"
+                       [value]="false"
+                       formControlName="SubjectRadio"
+                       (change)="OnShow(2)" />
+                <label class="ms-1.5" for="SupplementaryNo">No</label>
+              </div>
+            </div>
+          </form>
+        </div>
+
+
+        <div *ngIf="isSupplement" class="overflow-auto">
+          <form [formGroup]="SupplementaryForm">
+            <table class="table table-border w-full">
+
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Supplementary - Year of Passing</th>
+                  <th class="text-left">Supplementary - Roll Number</th>
+                  <th class="text-left">Supplementary - Subject</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of request.SupplementaryDataModel">
+                  <td class="p-1">{{row.PassingID}}</td>
+                  <td class="p-1">{{row.RollN0}}</td>
+                  <td class="p-1">{{row.Subject}}</td>
+                  <td align="center">
+                    <div class="flex align-center justify-center actionBtns" style="width:auto !important">
+                      <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row)">
+                        <i class="ti ti-pencil"></i>
+                      </a>
+                      <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnRowDelete_OnClick(row)">
+                        <i class="ti ti-trash"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div>
+                      <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassingYear" [(ngModel)]="addrequest.PassingID">
+                        <option value="">Select Passing Year</option>
+                        <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+                      </select>
+                      <div *ngIf="isSubmitted&&_SupplementaryForm.ddlPassingYear.errors" class="text-danger">
+                        <p *ngIf="!_SupplementaryForm.ddlPassingYear.errors.DropdownValidators">
+                          <i aria-hidden="true"></i>This field is required .!
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="text" class="form-input" placeholder="Enter Supplementary Roll Number" (keypress)="numberOnly($event)" maxlength="8" formControlName="txtRollNumber" [(ngModel)]="addrequest.RollN0" />
+                    <div *ngIf="isSubmitted && _SupplementaryForm.txtRollNumber.errors" class="text-danger">
+                      <p *ngIf="_SupplementaryForm.txtRollNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                      <p *ngIf="_SupplementaryForm.txtRollNumber.errors.pattern"><i aria-hidden="true"></i>  Roll number must be of 8 digits..!</p>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="text" class="form-input" placeholder="Enter Supplementary Subject" formControlName="txtsubject" [(ngModel)]="addrequest.Subject" />
+                    <div *ngIf="isSubmitted && _SupplementaryForm.txtsubject.errors" class="text-danger">
+                      <p *ngIf="_SupplementaryForm.txtsubject.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                    </div>
+
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+
+            </table>
+          </form>
+        </div>
+
+        <div *ngIf="isSupplement" class="w-full text-end mt-3">
+          <button type="button" class="btn bg-info text-white" (click)="AddNew()"><i class="ti ti-plus"></i> Add</button>
+        </div>
+      </div>
+
+
+
+
+
+    </div>
+    <div class="card-footer text-center">
+
+      <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
+      <button type="button" class="btn bg-light text-dark" (click)="CancelData()"><i class="ti ti-refresh"></i>Reset</button>
+    </div>
+
+  </div>
+
+</div>
+

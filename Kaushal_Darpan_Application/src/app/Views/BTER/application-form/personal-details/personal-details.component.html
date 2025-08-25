@@ -1,0 +1,389 @@
+
+<div class="card tab-panel" id="PersonalDetail">
+  <div class="card-body p-5">
+    <form [formGroup]="PersonalDetailForm">
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
+
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
+          <b>नोट:</b>  कृपया सभी विवरण आवेदक के दस्तावेजों के अनुसार भरें, क्योंकि इन्हें बाद में बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं)
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम (Applicant's Name):</label>
+          <input type="text" class="form-input disabled" id="ApplicationId" value="Test Kumar" formControlName="txtName" [(ngModel)]="request.StudentName" placeholder="Enter Applicant Name">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtName.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम हिंदी में (Applicant's Name in Hindi):<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Applicant's Name" gtranslate="true" formControlName="txtnameHindi" [(ngModel)]="request.StudentNameHindi" placeholder="Enter Applicant Name">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के अपना नाम लिखें</span>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtnameHindi.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtnameHindi.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ईमेल (Email Address):</label>
+          <input type="email" class="form-input" id="ApplicationId" value="TEST@gmail.com" placeholder="Enter Applicant Email" formControlName="txtEmail" [(ngModel)]="request.Email">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtEmail.errors" class="text-danger">
+            <!--<p *ngIf="isSubmitted&&_PersonalDetailForm.txtEmail.errors.required"><i aria-hidden="true"></i> This field is required.!</p>-->
+            <p *ngIf="_PersonalDetailForm.txtEmail.errors.pattern">
+              <i aria-hidden="true"></i> Please enter a valid email address.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम (Father's Name):</label>
+          <input type="text" class="form-input " id="ApplicationId" disabled value="Test Father Name" placeholder="Enter Father Name" formControlName="txtFather" [(ngModel)]="request.FatherName">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtFather.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtFather.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम हिंदी में (Father's Name in Hindi):<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" gtranslate="true" placeholder="Enter Father's Name in Hindi" placeholder="Enter Father's Name in (Hindi)" formControlName="txtFatherHindi" [(ngModel)]="request.FatherNameHindi">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के पिता का नाम लिखें</span>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtFatherHindi.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtFatherHindi.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">जन्म तिथि (Date of Birth):</label>
+          <input type="date" class="form-input disabled" id="txtDOB" disabled value="03/11/1995" formControlName="txtDOB" [(ngModel)]="request.DOB">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtDOB.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtDOB.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम (Mother's Name):</label>
+          <input type="text" class="form-input disabled" id="txtMotherEngname" disabled value="Test Mother Name" formControlName="txtMotherEngname" placeholder="Enter Mother Name" [(ngModel)]="request.MotherName">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtMotherEngname.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtMotherEngname.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="txtMotherHindiname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम हिंदी में (Mother's Name in Hindi)::<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtMotherHindiname" gtranslate="true" placeholder="Enter Mother's Name in Hindi" formControlName="txtMotherHindiname" [(ngModel)]="request.MotherNameHindi">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के माता का नाम लिखें</span>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtMotherHindiname.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtMotherHindiname.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">लिंग (Gender):</label>
+          <!--<input type="text" class="form-input disabled" id="Gender" disabled value="Male" formControlName="Gender" [(ngModel)]="request.Gender">-->
+          <select class="form-select" id="ddlIdentityProof" formControlName="Gender" [(ngModel)]="request.Gender">
+            <option value="" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.Gender.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.Gender.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="MobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">मोबाइल नंबर (Mobile Number):</label>
+          <input type="text" class="form-input disabled" id="MobileNumber" disabled value="XXXXXX3866" formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10">
+          <div *ngIf="isSubmitted && _PersonalDetailForm.MobileNumber.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.MobileNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <!--<div>
+    <label for="txtWhatsappMobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">मोबाइल नंबर (Whatsapp Mobile Number) :</label>
+    <input type="text" class="form-input" id="txtWhatsappMobileNumber" formControlName="txtWhatsappMobileNumber" [(ngModel)]="request.WhatsNumber" maxlength="10">
+    <div *ngIf="isSubmitted && _PersonalDetailForm.txtWhatsappMobileNumber.errors" class="text-danger">
+      <p *ngIf="_PersonalDetailForm.txtWhatsappMobileNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+    </div>
+  </div>
+  <div>
+    <label for="txtLandlineNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">लैंडलाइन नंबर (Landline Number):</label>
+    <div class="flex justify-between">
+      <input type="text" class="form-input me-2" id="txtLandlinePinNumber" placeholder="Pin Code" style="width:100px">
+      <input type="text" class="form-input" id="txtLandlineNumber" placeholder="Enter Landline Number" formControlName="txtLandlineNumber" [(ngModel)]="request.LandlineNumber">
+      <div *ngIf="isSubmitted && _PersonalDetailForm.txtLandlineNumber.errors" class="text-danger">
+        <p *ngIf="_PersonalDetailForm.txtLandlineNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+      </div>
+    </div>-->
+        <!--</div>-->
+        <div>
+          <label for="ddlIdentityProof" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पहचान पत्र (Identity Proof):<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"
+                  id="ddlIdentityProof"
+                  formControlName="ddlIdentityProof"
+                  [(ngModel)]="request.IndentyProff"
+                  (change)="onIdentityProofChange()">
+            <option value="0" selected>--Select Identity Proof--</option>
+            <option value="1">Aadhar Number</option>
+            <option value="2">Aadhar Enrolment ID</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.ddlIdentityProof.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlIdentityProof.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtDetailsofIDProof" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पहचान पत्र विवरण (Details of ID Proof):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" (keypress)="validateNumber($event)" class="form-input" id="txtDetailsofIDProof"
+                 formControlName="txtDetailsofIDProof" [(ngModel)]="request.DetailID" [attr.maxlength]="request.IndentyProff == 1 ? 12 : 14"
+                 [attr.minlength]="request.IndentyProff == 1 ? 12 : 14" />
+          <div *ngIf="isSubmitted && _PersonalDetailForm.txtDetailsofIDProof.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.txtDetailsofIDProof.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+            <p *ngIf="_PersonalDetailForm.txtDetailsofIDProof.errors.invalidLength">
+              <i aria-hidden="true"></i> {{ errorMessage }}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ddlMaritalStatus" class="text-gray-800 text-sm font-medium inline-block mb-2">वैवाहिक स्थिति(Marital Status):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlMaritalStatus" formControlName="ddlMaritial" [(ngModel)]="request.Maritial">
+
+            <option value="0">Select (Marital Status)</option>
+            <option *ngFor="let item of maritialList" value="{{item.ID}}">{{item.Name}}</option>
+
+
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlMaritial.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlMaritial.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="ddlReligion" class="text-gray-800 text-sm font-medium inline-block mb-2">धर्म (Religion):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlReligion" formControlName="ddlReligion" [(ngModel)]="request.Religion">
+
+            <option value="0">Select Religion</option>
+            <option *ngFor="let item of ReligionList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.ddlReligion.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlReligion.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+        <div>
+          <label for="ddlNationality" class="text-gray-800 text-sm font-medium inline-block mb-2">राष्ट्रीयता (Nationality):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlNationality" formControlName="ddlNationality" [(ngModel)]="request.Nationality">
+            <option value="0">--select--</option>
+            <option *ngFor="let item of NationalityList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.ddlNationality.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlNationality.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+        <div class="flex hidden">
+          <label class="me-2 ">
+            <input type="checkbox" value="8" id="Box8THForm" (click)="onClickCheckbox()"
+                   [checked]="IsMinority" [(ngModel)]="request.IsMinority" formControlName="IsMinority" />
+            IsMinority
+          </label>
+        </div>
+
+      </div>
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">श्रेणी/Category</b>
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
+        <div>
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :</label>
+          <!--<input type="text" class="form-input disabled" disabled id="txtCategory" value="Genral"formControlName="ddlCategoryA"[(ngModel)]="request.CategoryA">-->
+          <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="request.CategoryA">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="request.CategoryA == 5">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+            देवनारायण हैं (Is Devnarayan):
+            <span class="StarMarking">*</span>
+          </label>
+
+          <select class="form-select" formControlName="IsDevnarayan" [(ngModel)]="request.IsDevnarayan">
+            <option value="0">--Select Devnarayan --</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select>
+        </div>
+
+        <div *ngIf="request.IsDevnarayan == 1">
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            देवनारायण जिला (Devnarayan District):
+          </label>
+          <select class="form-select" formControlName="DevnarayanDistrictID" [(ngModel)]="request.DevnarayanDistrictID" (change)="selectDDID(+request.DevnarayanDistrictID)">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DevnarayanAreaList" value="{{item.ID}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div *ngIf="request.IsDevnarayan == 1">
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            देवनारायण तहसील (Devnarayan Tehsil):
+          </label>
+          <select class="form-select" formControlName="DevnarayanTehsilID" [(ngModel)]="request.DevnarayanTehsilID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let tehsil of filteredTehsilList" [value]="tehsil.ID">{{ tehsil.Name }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="request.CategoryA == 3 && request.Prefential ==5">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+            उप वर्ग का चयन करें (Select Subcategory):
+            <span class="StarMarking">*</span>
+          </label>
+
+          <select class="form-select" formControlName="subCategory" [(ngModel)]="request.subCategory">
+            <option value="0">--Select Subcategory --</option>
+            <option value="1">Tribal Area</option>
+            <option value="2">Saharia</option>
+            <option value="3">None</option>
+          </select>
+
+        </div>
+
+        <div *ngIf="request.subCategory == 1">
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            अनुसूचित जिला (Tribal District):
+          </label>
+          <select class="form-select" formControlName="TspDistrictID" [(ngModel)]="request.TspDistrictID" (change)="GetTspTehsilList()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of TspDistrictList" value="{{item.ID}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="request.subCategory == 1">
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            अनुसूचित तहसील (Tribal Tehsil):
+          </label>
+          <select class="form-select" formControlName="TSPTehsilID" [(ngModel)]="request.TSPTehsilID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of TspTehsilList" value="{{item.ID}}">
+              {{item.TehsilNameEnglish}}
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <label for="ddlCategoryB" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी बी (सैनिक आश्रित) (Category B) (MP Ward):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryB" formControlName="ddlCategoryB" [(ngModel)]="request.CategoryB">
+            <option value="0">---Select</option>
+            <option *ngFor="let item of CategoryBlist" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlCategoryB.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlCategoryB.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtCategoryC" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी सी (Category C) (Physical Handicap):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryC" formControlName="ddlCategorycp" [(ngModel)]="request.IsPH">
+            <option value="">--Select--</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+
+
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlCategorycp.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.ddlCategorycp.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="txtCategoryC" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी सी (Category C) (Kashmiri Migrant):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryC" formControlName="ddlCategoryck" [(ngModel)]="request.IsKM">
+            <option selected value="">--Select--</option>
+            <option value="0">No</option>
+            <option value="1">Yes</option>
+
+
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlCategoryck.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.ddlCategoryck.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtCategoryD" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी डी (Category D):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryC" formControlName="ddlCategoryD" [(ngModel)]="request.CategoryD">
+            <option value="0">Select Category D</option>
+
+            <option *ngFor="let item of CategoryDlist" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlCategoryD.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlCategoryD.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="ddlCategoryE" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ई (Category E):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryE" formControlName="ddlCategoryE" [(ngModel)]="request.CategoryE">
+
+            <option value="0">Select Category E</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlCategoryE.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlCategoryE.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+          <span class="smallTextForm">विधवा/परित्यकता/तलाकशुदा/35 वर्ष से ज्यादा उम्र की अविवाहित महिला के बच्चे इस श्रेणी में पात्र हैं ( Single Mother Dependent )</span>
+        </div>
+
+
+
+        <div>
+          <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">प्राथमिकता श्रेणी (Preferential Category):<span class="StarMarking">*</span></label>
+          <select class="form-select disabled" disabled id="ddlPreferentialCategory" formControlName="ddlPrefential" [(ngModel)]="request.Prefential">
+
+            <option value="0" selected>Select Preferential Category</option>
+            <option *ngFor="let item of category_PreList" value="{{item.ID}}">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_PersonalDetailForm.ddlPrefential.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.ddlPrefential.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+
+
+      </div>
+</form>
+  </div>
+  <div class="card-footer text-center">
+    <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+    <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
+    <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+  </div>
+</div>
+

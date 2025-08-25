@@ -1,0 +1,37 @@
+
+.verified-badge {
+  background-color: #2ecc71; /* Brighter green */
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: inline-block;
+  font-family: sans-serif;
+  cursor: default;
+}
+
+.DropOut {
+  background-color: #2ecc71; /* Brighter green */
+  color: #fff;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+  display: inline-block;
+  font-family: sans-serif;
+  cursor: default;
+}
+.status-span {
+  background-color: #2ecc714d;
+  color: #06833b;
+  padding: 3px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px; 
+  display: inline-block;
+  font-family: sans-serif;
+  cursor: default;
+}

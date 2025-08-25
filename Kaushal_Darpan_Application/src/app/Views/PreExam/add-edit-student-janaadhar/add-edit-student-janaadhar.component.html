@@ -1,0 +1,153 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Edit Students Janaadhar</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Students Janaadhar</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Edit Students Janaadhar</a>
+    </div>
+  </div>
+  <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="GotoStudentsJanaadhar()">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-edit"></i> Edit Students Janaadhar</b>
+
+        </div>
+        <form [formGroup]="StudentJanaadharForm" (ngSubmit)="postStudentJanaadharForm()">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label for="DropoutStatus">Dropout: *</label>
+              <select class="form-select w-full" formControlName="DropoutStatus">
+                <option value="Yes">Yes</option>
+                <option value="No" selected>No</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="AadharNo">Aadhar No:</label>
+              <input type="text" class="form-input w-full" formControlName="AadharNo" />
+            </div>
+
+            <div>
+              <label for="BranchName">Branch Name:</label>
+              <input type="text" class="form-input w-full" formControlName="BranchName" />
+            </div>
+
+            <div>
+              <label for="DOB">Date of Birth:</label>
+              <input type="date" class="form-input w-full" formControlName="DOB" />
+            </div>
+
+            <div>
+              <label for="District">District Name</label>
+              <ng-select formControlName="District" [clearable]="false">
+                <ng-option [value]="0" selected>--All--</ng-option>
+                <ng-option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</ng-option>
+              </ng-select>
+            </div>
+
+            <div>
+              <label for="EnrollmentNo">Enrollment No:</label>
+              <input type="text" class="form-input w-full" formControlName="EnrollmentNo" />
+            </div>
+
+            <div>
+              <label for="FatherAadharNo">Father's Aadhar No:</label>
+              <input type="text" class="form-input w-full" formControlName="FatherAadharNo" />
+            </div>
+
+            <div>
+              <label for="FatherName">Father's Name:</label>
+              <input type="text" class="form-input w-full" formControlName="FatherName" />
+            </div>
+
+            <div>
+              <label for="Gender">Gender:</label>
+              <select class="form-select w-full" formControlName="Gender">
+                <option value="">Select</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="Institute">Institute</label>
+              <ng-select formControlName="Institute" [clearable]="false">
+                <ng-option [value]="0" selected>--All--</ng-option>
+                <ng-option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+              </ng-select>
+            </div>
+
+            <div>
+              <label for="JanAadharNo">Jan Aadhar No:</label>
+              <input type="text" class="form-input w-full" formControlName="JanAadharNo" />
+            </div>
+
+            <div>
+              <label for="JanAadharStatus">Jan Aadhar Status</label>
+              <select class="form-select" formControlName="JanAadharStatus">
+                <option value="">Choose Option</option>
+                <option value="Verified">Verified</option>
+                <option value="NotVerified">Not Verified</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="MobileNo">Mobile No:</label>
+              <input type="text" class="form-input w-full" formControlName="MobileNo" />
+            </div>
+
+            <div>
+              <label for="MotherName">Mother's Name:</label>
+              <input type="text" class="form-input w-full" formControlName="MotherName" />
+            </div>
+
+            <div>
+              <label for="StudentName">Student Name:</label>
+              <input type="text" class="form-input w-full" formControlName="StudentName" />
+            </div>
+
+          </div>
+      <div class="clearfix">
+        <div class="flex justify-between items-center mb-3 mt-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Jan Aadhaar Member List</b>
+        </div>
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <div class="radio" style="display: inline-grid;">
+            <div class="input radio">
+              <ng-container *ngFor="let item of AdharMemberList">
+                <label>
+                  <input type="radio" formControlName="JanAadharMemberId" name="JanAadharMemberId"  [id]="item['JAN_MEMBER_ID']" [value]="item['JAN_MEMBER_ID']"
+                  class="required font_size"
+                  />
+                  {{ item['NAME'] }}
+                </label>
+              </ng-container>
+            </div>
+          </div>
+          <div class="text-left mt-3">
+            <button type="submit" class="btn bg-info text-white">Submit</button>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+</div>

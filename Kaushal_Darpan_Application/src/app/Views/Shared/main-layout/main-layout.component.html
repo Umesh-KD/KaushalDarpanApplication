@@ -1,0 +1,85 @@
+<head>
+  <link href="/assets/KD1/css/slick-theme.min.css" rel="stylesheet" />
+  <link href="/assets/KD1/css/slick.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/KD1/css/aos.css">
+  <link rel="stylesheet" href="/assets/KD1/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/KD1/css/nav.css">
+  <link rel="stylesheet" href="/assets/KD1/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        crossorigin="anonymous">
+  <script src="/assets/KD1/js/jquery.min.js"></script>
+  <script src="/assets/KD1/js/bootstrap.js"></script>
+  <script src="/assets/KD1/js/aos.js"></script>
+  <script src="/assets/KD1/js/slick.min.js"></script>
+</head>
+
+<main>
+  <div class="container-fluid bg-dark topBar py-2">
+    <div class="row">
+      <div class="col-md-6 d-flex justify-content-start">
+        <ul>
+          <li><a href="{{'mailto:KD.SUPPORT@RAJASTHAN.GOV.IN'}}" title="Technical Support Email"><i class="fa fa-envelope-o"></i> {{'KD.SUPPORT@RAJASTHAN.GOV.IN'}} </a></li>
+          <!--<li><a href="tel:123456789" title="Technical Support Email"><i class="fa fa-phone"></i> +91-1234567890 </a></li>-->
+        </ul>
+      </div>
+      <div class="col-md-6 d-flex justify-content-end">
+        <!--<ul class="socialLinks">
+          <li> <a href="mailto:KD.SUPPORT@RAJASTHAN.GOV.IN">KD.SUPPORT[at]RAJASTHAN[dot]GOV[dot]IN </a></li>
+        </ul>-->
+      </div>
+    </div>
+  </div>
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="logo">
+        <a routerLink="/">
+          <img src="/assets/KD1/images/logo.png" alt="">
+
+        </a>
+      </div>
+      <div id="mainListDiv" class="main_list">
+        <ul class="navlinks">
+          <li><a routerLink="/">Home </a></li>
+          <li>
+            <a routerLink="/">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" aria-current="page" href="https://sso.rajasthan.gov.in/signin">Login</a>
+          </li>
+          <li><a routerLink="/">Placement </a></li>
+        </ul>
+      </div>
+      <span class="navTrigger">
+        <i></i>
+        <i></i>
+        <i></i>
+      </span>
+    </div>
+  </nav>
+  <!--just below render body-->
+  <router-outlet></router-outlet>
+
+  <footer>
+    <a routerLink="/" class="other-link"><img class="img-fluid" src="/assets/KD1/images/ACP-1.png" alt=""></a>
+    <div class="container">
+      <div class="footer-inner text-center">
+        <a href=""><img class="img-fluid" src="/assets/KD1/images/f-logo.png" alt=""></a>
+        <ul class="usefull-link">
+
+          <li><a routerLink="/"> State Portal Rajasthan </a></li>
+          <li><a routerLink="/">Rajasthan Sampark</a></li>
+          <li><a routerLink="/"> DOP</a></li>
+        </ul>
+        <ul class="social-icon">
+          <li><a routerLink="/"><img src="/assets/KD1/images/001-facebook.svg" alt=""></a></li>
+          <li><a routerLink="/"><img src="/assets/KD1/images/003-twitter.svg" alt=""></a></li>
+          <li><a routerLink="/"><img src="/assets/KD1/images/004-instagram.svg" alt=""></a></li>
+        </ul>
+      </div>
+    </div>
+
+  </footer>
+  <p class="bottom-footer">
+    All Rights Reserved to DoIT&C/RISL, Government of (RAJASTHAN) India.
+  </p>
+</main>

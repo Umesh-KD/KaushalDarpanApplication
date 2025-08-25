@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Execl
+        </a>
+        <a href="javascript:void(0);" (click)="downloadPDF()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-pdf"></i> Export PDF
+        </a>
+      </div>
+    </div>
+
+    <!-- mat-table.component.html -->
+    <div class="table-container">
+      <!-- Table Filter Input -->
+      <div class="search-container">
+        <mat-form-field appearance="fill">
+          <mat-label>Filter</mat-label>
+          <input matInput (input)="applyFilter($event)" placeholder="Filter table" />
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- Table -->
+      <div class="mat-elevation-z8 table-responsive" #pdfTable>
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" >
+
+          <!-- Define Columns -->
+          <ng-container *ngFor="let column of displayedColumns" matColumnDef="{{ column }}">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ column | titlecase }}</th>
+            <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+          </ng-container>
+
+          <!-- Table Header and Rows -->
+          <thead>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          </thead>
+          <tbody>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </tbody>
+
+        </table>
+      </div>
+      <!-- Pagination and Excel Export -->
+      <div class="table-footer">
+        <mat-paginator [length]="totalRecords"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       (page)="onPaginationChange($event)">
+        </mat-paginator>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+

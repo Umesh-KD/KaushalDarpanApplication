@@ -1,0 +1,195 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Verify Time Table</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/timetable" class="text-sm font-medium text-slate-700" aria-current="page"> Verify Time Table</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">-->
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year/Semester</label>
+          <select class="form-select" id="TimetableYear" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Select Option </option>
+            <option value="1">Semester </option>
+            <option value="2">Yearly </option>
+          </select>
+        </div>-->
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Shift</label>
+          <select class="form-select" id="TimetableTime" [(ngModel)]="searchRequest.ShiftID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShiftWithTime}}</option>
+
+          </select>
+        </div>-->
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subjects</label>
+          <select class="form-select" id="TimetableSujectId" [(ngModel)]="searchbySubject">
+            <option value="">Choose Option</option>
+            <option *ngFor="let row of SubjectList" [value]="row.SubjectName">{{row.SubjectName}}</option>
+
+
+          </select>
+        </div>-->
+
+        <!--<div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetTimeTableList()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>-->
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Verify Time Table</b>
+
+
+      <!-- <a class="btn bg-info btn-sm text-white" (click)="DownloadTimeTable1('pdf')">
+        <i class="ti ti-download"></i>Download Preview
+      </a> -->
+
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div class="flex" *ngIf="this.Status!=14 && TimeTableList?.length>0">
+        <select *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.ExaminationIncharge ||this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng ||this.sSOLoginDataModel.RoleID ==_enumRole.ExaminationIncharge_NonEng"  class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
+          <option value="0">Select Status</option>
+          <option *ngIf="Status!=13&&Status!=15 &&Status!=14" value="{{_RollListStatus.Verified}}">Verified</option>
+          <option *ngIf="Status!=14&&Status!=15" value="{{_RollListStatus.Reverted}}">Reverted</option>
+        </select>
+        <button *ngIf="this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng " type="button" class="btn bg-info text-white inline-block" (click)="openOTP()"> <i class="ti ti-save"></i>Save</button>
+
+
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngIf="![14, 12].includes(this.Status)">
+              <input *ngIf="VerifyRollList?.length>0" type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                     [checked]="AllSelect"
+                     (change)="checkboxthView_checkboxchange($event.target.checked)">
+
+            </th>
+
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Session</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Exam Date</th>
+            <th class="text-left">Exam Shift</th>
+            <th class="text-left">Created date</th>
+            <th class="text-left">Status</th>
+            <!--<th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+    Center Superintendent
+  </th>-->
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody> 
+
+          <tr *ngFor="let row of TimeTableList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td *ngIf="![14, 12].includes(this.Status)" >
+              <input type="checkbox" name="MarkCheck"
+                     [(ngModel)]="row.Selected" />
+            </td>
+            <td>{{idx+1}}</td>
+            <td>{{row.FinancialYear}}</td>
+            <td align="left">{{row.SemesterName}}</td>
+            <td align="left">{{row.Dis_Date|date:'dd-MM-yyyy'}}</td>
+            <td align="left">{{row.ExamShift}}</td>
+            <td align="left">{{row.CreatedDate}}</td>
+            <td align="left">{{row.StatusName}}</td>
+
+            <!--<td align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+    {{row.InvigilatorName}}
+  </td>-->
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View"
+                   (click)="ViewandUpdate(MyModel_ViewDetails,row.TimeTableID)">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<app-otpmodal #otpModal></app-otpmodal>
+
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>Time Table Branch Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr No</th>
+                  <th class="text-left">Branch Name</th>
+                  <th class="text-left">Subject Name</th>
+                  <th class="text-left">Paper Code</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of TimeTableBranchSubList; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.BranchName}}</td>
+                  <td align="left">{{row.SubjectName}}</td>
+                  <td align="left">{{row.PaperCode}}</td>
+
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+        </div>
+       
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

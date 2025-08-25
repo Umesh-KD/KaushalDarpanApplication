@@ -1,0 +1,28 @@
+.login {
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  top: 0px;
+}
+.CEGlogo {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  height: 65px;
+}
+
+@media screen and (max-width: 768px) {
+  .login {
+    position: relative;
+    width: 0px;
+    height: 0px;
+    top: 0px;
+  }
+  .CEGlogo {
+    position: relative;
+    top: unset;
+    right: unset;
+    height: 65px;
+  }
+}
+

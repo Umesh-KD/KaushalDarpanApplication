@@ -1,0 +1,103 @@
+<div class="card">
+  <div class="card-body p-4">
+    <div class="row" *ngIf="ShowCommingSoon">
+      <div class="col-md-12">
+        <h3 class="text-center mb-3">Admission Closed....</h3>
+
+      </div>
+
+    </div>
+    <div class="row mb-3" *ngIf="!showApplybutton && hideApplyButton && !ShowCommingSoon">
+      <div class="col-md-12 text-center">
+        <button type="button" class="btn bg-info text-white btn-lg" (click)="ApplyConfirmmation()">Apply For Admission</button>
+        <!--if want blink then use class --- buttonAppluAdmission-->
+      </div>
+    </div>
+    <div class="row mb-3" *ngIf="showApplybutton">
+      <div class="col-md-4">
+        <label class="form-label">Enter Mobile No For Apply:</label>
+        <!--<input type="number" maxlength="10" class="form-input" placeholder="Enter Mobile No to fill/view Application" name="MobileNo" [(ngModel)]="MobileNo">-->
+        <input type="text" class="form-control" id="txtMobileNumber" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="MobileNo" maxlength="10" (input)="onInput($event)">
+      </div>
+      <div class="col-md-4">
+        <div class="mt-4 d-flex align-items-center">
+          <button type="button" class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP)">Send OTP</button>  <span class="d-block mx-1">OR</span>
+          <a class="btn bg-info text-white" href="https://sso.rajasthan.gov.in/signin?ru=hte"> Apply BY SSO</a>
+        </div>
+        <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>-->
+      </div>
+    </div>
+    <div class="row" *ngIf="!ShowCommingSoon">
+      <!--<div class="col-lg-12 mb-4 mt-2 text-center">
+      <h3>
+        प्रथम वर्ष इंजीनियरिंग प्रवेश
+        (I year Engineering Admission)
+      </h3>
+    </div>-->
+      <!--<div class="col-lg-12 mb-3" >
+    <div class="card bg-light">
+      <div class="card-body text-center">-->
+      <!--<h3>नॉन-इंजीनियरिंग प्रवेश (Non-Engineering Admission)</h3>-->
+      <!--<p><b>Helpline Number </b> 0141-2706688</p>
+          <p><b>For queries contact email id:</b>  mahila.admission@gmail.com</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 mb-3" >
+      <div class="card bg-light">
+        <div class="card-body text-center">-->
+      <!--<h3>प्रथम वर्ष इंजीनियरिंग प्रवेश (I year Engineering Admission)</h3>-->
+      <!--<p><b>Helpline Number (For Diploma First Year): </b>  0291-2949424, 0291-2649439</p>
+          <p><b>For queries contact email id:</b> gpc.jodhpur2024[at]gmail[dot]com</p>
+        </div>
+      </div>
+    </div>-->
+    </div>
+    <div class="col-lg-12 mb-3">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <!--<h3>प्रथम वर्ष इंजीनियरिंग प्रवेश (I year Engineering Admission)</h3>-->
+          <p><b>Helpline Number: </b> {{HelplineNumber}}</p>
+          <p><b>For queries contact email id:</b>{{ContactEmail}}</p>
+        </div>
+      </div>
+    </div>
+    <!--<div class="row" *ngIf="!ShowCommingSoon">-->
+    
+
+  </div>
+
+
+  </div>
+<!-- end row -->
+
+
+
+<ng-template #modal_GenrateOTP let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header d-flex align-items-center justify-content-between">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">
+          <!--<span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo}}</b></span>-->
+          <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MaskedMobileNo}}</b></span>
+
+        </p>
+        <div class="mt-4">
+          <label class="form-label">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-control" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <!--<p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>-->
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

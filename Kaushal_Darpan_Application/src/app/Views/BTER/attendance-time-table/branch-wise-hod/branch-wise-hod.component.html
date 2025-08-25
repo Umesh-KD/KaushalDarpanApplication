@@ -1,0 +1,165 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Create Branch HOD</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/guest-room-apply']" class="text-sm font-medium text-slate-700" aria-current="page">Create Branch HOD</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    @if(sSOLoginDataModel.RoleID == 7 || sSOLoginDataModel.RoleID == 2 || sSOLoginDataModel.DepartmentID == 2){
+    <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
+        <div class="mb-3">
+          <label for="SSOID" class="form-label">SSOID</label>
+          <div class="input-group check-box-custom">
+            <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID" (blur)="CheckUserExists($event)" aria-describedby="basic-addon3 basic-addon4" />
+            <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span>
+          </div>
+
+          <div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
+            <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <div class="text-left">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1">Verify</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IIPMasterFormGroup">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add HOD Details</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+          <ng-select formControlName="StreamID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StreamMasterDDL; track item.StreamID) {
+            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.StreamID.errors" class="text-danger">
+            <p *ngIf="_IIPMasterFormGroup.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Name
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Display Name" name="DisplayName"
+                 [(ngModel)]="request.DisplayName" formControlName="DisplayName" readonly>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mobile No
+
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
+                 [(ngModel)]="request.MobileNo" formControlName="MobileNo" readonly>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mail ID
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Mail Personal" name="MailPersonal"
+                 [(ngModel)]="request.MailPersonal" formControlName="MailPersonal" readonly>
+        </div>
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+    }
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> HOD Apply list</b>
+    </div>
+
+    <div class="table-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search HOD">
+      </mat-form-field>
+
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <!-- Columns definitions -->
+        <ng-container matColumnDef="SNo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="FirstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.FirstName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="SSOID">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> SSOID</th>
+          <td mat-cell *matCellDef="let row">{{ row.SSOID }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="MobileNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile No</th>
+          <td mat-cell *matCellDef="let row">{{ row.MobileNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="MailPersonal">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mail</th>
+          <td mat-cell *matCellDef="let row">{{ row.MailPersonal }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StreamName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Stream Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.StreamName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="InstituteName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.InstituteName }}</td>
+        </ng-container>
+
+
+        <!--<ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let row">-->
+            <!--<button mat-icon-button color="warn"
+                  *ngIf="row.StatusID === 215"
+                  (click)="btnDeleteOnClick(row.GuestReqID)">
+            <mat-icon>delete</mat-icon>
+          </button>-->
+            <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
+            </div>-->
+          <!--</td>
+        </ng-container>-->
+
+        <!-- Header and row definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
+        No Record Found
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,93 @@
+/* StateLevelPoolCampus */
+.StateLevelPoolCampus {
+  background-color: #ffe7ec;
+}
+
+  .StateLevelPoolCampus a {
+    color: darkblue; /* Make sure links stand out */
+    text-decoration: none; /* Optional: Removes underline from links */
+  }
+
+    .StateLevelPoolCampus a:hover {
+      color: darkred; /* Change color on hover for better interaction */
+    }
+
+/* InstituteLevelCampus */
+.InstituteLevelCampus {
+  /*  background-color: lightgreen;*/
+  background-color: #e1b5bf;
+}
+
+  .InstituteLevelCampus a {
+    color: darkblue;
+    text-decoration: none;
+  }
+
+    .InstituteLevelCampus a:hover {
+      color: darkred;
+    }
+
+/* DivisionLevelPoolCampus */
+.DivisionLevelPoolCampus {
+  /*  background-color: lightcoral;*/
+  background-color: #d38192;
+}
+  .DivisionLevelPoolCampus a {
+    color: darkblue; /* Purple color */
+    text-decoration: none; /* Optional: Remove underline from links */
+  }
+
+    .DivisionLevelPoolCampus a:hover {
+      color: darkred; /* Lighter purple for hover effect */
+    }
+ /* .DivisionLevelPoolCampus a {
+    color: darkred;
+    text-decoration: none;
+  }
+
+    .DivisionLevelPoolCampus a:hover {
+      color: darkblue;
+    }*/
+
+
+/* SuspendLevelCampus */
+.SuspendLevelCampus {
+  /*  background-color: lightcoral;*/
+  background-color: #fdd8a2;
+}
+  .SuspendLevelCampus a {
+    color: darkblue; /* Purple color */
+    text-decoration: none; /* Optional: Remove underline from links */
+  }
+
+    .SuspendLevelCampus a:hover {
+      color: darkred; /* Lighter purple for hover effect */
+    }
+
+/*Role details Overflow*/
+
+
+.role-detail-of {
+  overflow-y: auto; /* or overflow: auto; if both x and y scrolling needed */
+  max-height: 100px; /* Example height */
+  padding-right: 6px;
+}
+
+  /* WebKit Scrollbar Styling (Chrome, Safari, Edge) */
+  .role-detail-of::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .role-detail-of::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .role-detail-of::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+    .role-detail-of::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }

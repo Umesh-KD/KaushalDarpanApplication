@@ -1,0 +1,78 @@
+
+<!--<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Admission 2024-25</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">DTE (Training)</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI ADMISSION 2024-25</a>
+    </div>
+  </div>
+</div>
+<div class="flex justify-center items-center tabMenu">
+  <a href="javascript:void(0);" class="active" data-tagert="QualificationDetail" onclick="js_tabPanel(this)">
+    <i class="ti ti-license"></i>
+    <span>
+      योग्यता विवरण <br>(Qualification Detail)
+    </span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="PersonalDetail" onclick="js_tabPanel(this)">
+    <i class="ti ti-license"></i>
+    <span>
+      व्यक्तिगत विवरण  <br>(Personal Detail)
+    </span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="AddressDetail" onclick="js_tabPanel(this)">
+    <i class="ti ti-world-upload"></i>
+    <span>पते का विवरण   <br>(Address Detail)</span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="OtherDetail" onclick="js_tabPanel(this)">
+    <i class="ti ti-eye"></i>
+    <span>अन्य विवरण<br>(Other Detail)</span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="Documents" onclick="js_tabPanel(this)">
+    <i class="ti ti-report-analytics"></i>
+    <span>दस्तावेज़ <br>(Documents)</span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="OptionsForm" onclick="js_tabPanel(this)">
+    <i class="ti ti-report-analytics"></i>
+    <span>विकल्प प्रपत्र <br>(Options Form)</span>
+  </a>
+  <a href="javascript:void(0);" class="" data-tagert="Preview" onclick="js_tabPanel(this)">
+    <i class="ti ti-report-analytics"></i>
+    <span>समीक्षा <br>(Preview)</span>
+  </a>
+</div>-->
+
+<!--<div class="flex items-center justify-between flex-wrap gap-2 mb-6 hideDteInfoPage">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">DTE/BTER Admission-Examination 2025-26</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">DTE</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">DTE/BTER Admission-Examination 2025-26</a>
+    </div>
+  </div>
+</div>-->
+
+<div class="flex items-center tabMenu">
+  <a href="javascript:void(0);"
+     [class.active]="i === selectedTabIndex"
+     *ngFor="let tab of tabs; let i = index"
+     (click)="selectTab(i)">
+    <i class="{{ tab.TabIcon }}"></i>
+    <span class="text-nowrap">
+      {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+    </span>
+  </a>
+</div>
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels tab-content">
+      <ng-container #tabContent></ng-container>
+    
+  </div>
+</div>
+

@@ -1,0 +1,92 @@
+
+<div class="card tab-panels " id="OtherDetail">
+  <div class="card-body p-6">
+    <form [formGroup]="OtherFormGroup" >
+      <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6">
+
+        <div>
+
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">सभी स्रोतों से माता-पिता की आय (Parent’s income from all sources): <span class="StarMarking">*</span></label>
+
+          <select class="form-select" formControlName="ParentsIncome" [(ngModel)]="formData.ParentsIncome" (change)="Showdropdown()">
+
+            <option value="0">Select Parent’s income from all sources</option>
+            <option *ngFor="let item of ParentIncome" value="{{item.ID}}">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OtherFormGroup.ParentsIncome.errors" class="text-danger">
+            <p *ngIf="!_OtherFormGroup.ParentsIncome.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div id="WantApplyBox" *ngIf="IsShowDropdown" >
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">क्या आप आवेदन करना चाहते हैं (Do you want apply for TFWS): <span class="StarMarking">*</span></label>
+
+          <select class="form-select" id="ddlDoyouwantapplyfor" formControlName="ApplyScheme" [(ngModel)]="formData.ApplyScheme">
+
+            <option value="0">Select Do you want apply for TFWS</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+            <!--<option *ngFor="let item of SchemelIst" value="{{item.ID}}">{{item.Name}}</option>-->
+          </select>
+          <div *ngIf="isSubmitted&&_OtherFormGroup.ApplyScheme.errors" class="text-danger">
+            <p *ngIf="!_OtherFormGroup.ApplyScheme.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div id="EWSbox" *ngIf="IsShowDropdown && formData.CategoryA==1 ||formData.CategoryA==9 ">
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">क्या आप मानदंडों के अनुसार ईडब्ल्यूएस से संबंधित हैं? (Do you belong to EWS as per norms?): <span class="StarMarking">*</span></label>
+
+          <select class="form-select" id="ddlDoyoubelongtoEWSaspernorms" formControlName="EWS" [(ngModel)]="formData.EWS">
+
+            <option value="0">Select Do you belong to EWS as per norms?</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OtherFormGroup.EWS.errors" class="text-danger">
+            <p *ngIf="!_OtherFormGroup.EWS.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="IsShowDropdown" >
+          <label  for="txtParentsincomeInAmt" class="text-gray-800 text-sm font-medium inline-block mb-2">माता-पिता की आय राशि में (Parent's Income In Amount): <span class="StarMarking">*</span></label>
+          <input type="number" class="form-input" id="txtParentsincomeInAmt" placeholder="Enter Parents income from all sources" formControlName="IncomeSource" [(ngModel)]="formData.IncomeSource">
+          <div *ngIf="isSubmitted &&_OtherFormGroup.IncomeSource.errors" class="text-danger">
+            <p *ngIf="_OtherFormGroup.IncomeSource.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <!--<div class="hidden">
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">निवास का एरिया (Area of residence?): <span class="StarMarking">*</span></label>
+
+          <select class="form-select" id="" formControlName="Residence" [(ngModel)]="formData.Residence">
+
+            <option value="0">Select Area of residence</option>
+            <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OtherFormGroup.Residence.errors" class="text-danger">
+            <p *ngIf="!_OtherFormGroup.Residence.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>-->
+
+
+      </div>
+    </form>
+  </div>
+  <div class="card-footer text-center">
+    <button type="button" class="btn bg-info text-white" (click)="Back()" ><i class="ti ti-chevron-left"></i>Back</button>
+    <button type="button" class="btn bg-primary text-white" (click)="SaveData()" ><i class="ti ti-device-floppy"></i>Save & Next</button>
+    <button type="button" class="btn bg-light text-dark" (click)="Resetrow()" ><i class="ti ti-refresh"></i>Reset</button>
+  </div>
+</div>

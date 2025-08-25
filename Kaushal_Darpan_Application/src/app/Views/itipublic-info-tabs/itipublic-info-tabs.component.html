@@ -1,0 +1,40 @@
+
+
+
+  <h4 class="text-center">
+    <!--DTE/{{ DepartmentID == 2 ? 'ITI' : 'BTER' }}--> ADMISSION- <span class="spanMask">{{sessionData.FinancialYearName}}</span>
+  </h4>
+
+  <ul class="nav nav-tabs d-flex justify-content-center mb-4 border-0 tabMenu" id="NotificationTabs">
+
+    @for (tab of tabs; track tab; let i = $index;) {
+
+    <li class="nav-item" role="presentation">
+      <a href="javascript:void(0);" *ngIf="tab.HasLink" routerLink="/{{tab.Link}}" class="nav-link" [class.active]="i === selectedTabIndex" (click)="selectTab(i,tab.CourseTypeId,tab.TabName,tab.TabNameHI)">
+        <i class="{{ tab.TabIcon }}"></i>
+        <span class="text-nowrap">
+          {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+        </span>
+      </a>
+
+      <a href="javascript:void(0);" *ngIf="tab.HasLink==false" class="nav-link" [class.active]="i === selectedTabIndex"
+         (click)="selectTab(i,tab.CourseTypeId,tab.TabName,tab.TabNameHI)">
+        <i class="{{ tab.TabIcon }}"></i>
+        <span class="text-nowrap">
+          {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+        </span>
+      </a>
+    </li>
+
+    }
+
+    
+
+  </ul>
+
+  <div class="container">
+    <ng-container #tabContent></ng-container>
+  </div>
+
+
+

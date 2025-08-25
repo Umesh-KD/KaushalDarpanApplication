@@ -1,0 +1,50 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Prod Tables</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">  
+    <div class="overflow-auto mt-3">
+      <table class="w-full table-border" cellpadding="5" style="width:50%">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr>
+            <th style="text-align:left">Sr No</th>
+            <th></th>
+            <th style="text-align:left">Table Name</th>
+            <th style="text-align:left">Total Count</th>
+            <th style="text-align:left">create_date</th>
+            <th style="text-align:left">modify_date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of TableList; let idx = index">
+            <td  style="text-align:left">{{idx}}</td>
+            <th><input type="radio" name="radion" [(ngModel)]="selectTable" [value]="row.TableName" /></th>
+            <td style="text-align:left">{{row.TableName}}</td>
+            <td style="text-align:left">{{row.TotalRows}}</td>
+            <td style="text-align:left">{{row.create_date}}</td>
+            <td style="text-align:left">{{row.modify_date}}</td>
+ 
+          </tr>
+          <tr *ngIf="TableList.length>0 && selectTable">
+            <td colspan="5">
+              <p>Selected Table: {{ selectTable }}</p>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="UpdateData() ">Update Data</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+

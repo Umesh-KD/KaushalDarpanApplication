@@ -1,0 +1,332 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Flying Squad</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/iti-flying-squad" class="text-sm font-medium text-slate-700" aria-current="page">ITI Flying Squad</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <!-- <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/add-flying-squad" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>
+      </div> -->
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year/Semester</label>
+          <select class="form-select" id="TimetableYear" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Select Option </option>
+            <option value="1">Semester </option>
+            <option value="2">Yearly </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Shift</label>
+          <select class="form-select" id="TimetableTime" [(ngModel)]="searchRequest.ShiftID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShiftWithTime}}</option>
+
+          </select>
+        </div> -->
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subjects</label>
+    <select class="form-select" id="TimetableSujectId" [(ngModel)]="searchbySubject">
+      <option value="">Choose Option</option>
+      <option *ngFor="let row of SubjectList" [value]="row.SubjectName">{{row.SubjectName}}</option>
+
+
+    </select>
+  </div>-->
+
+        <!-- <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetAllData()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div> -->
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a routerLink="/add-iti-flying-squad" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a>
+      <!-- <a *ngIf="searchRequest.SemesterID!=0" class="btn bg-info btn-sm text-white" (click)="DownloadTimeTable()"><i class="ti ti-download"></i>{{searchRequest.SemesterID==1 ?'DownloadSemester':'DownloadYearly'}}</a> -->
+
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+
+        <!-- <a *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng) && isForwardToVerify"
+           class="btn bg-success btn-sm text-white" (click)="ForwardToVerify()"> Forward to Verification</a> -->
+        <!--<a *ngIf=" isForwardToVerify"
+           class="btn bg-success btn-sm text-white" (click)="ForwardToVerify()"> Forward to Verification</a>-->
+
+      </div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!--<th *ngIf="isForwardToVerify">
+              <input  type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>-->
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Team Name</th>
+            <th class="text-left">Deployed Center</th>
+            <th class="text-left">Exam Date</th>
+            <th class="text-left">Exam Shift</th>
+            <th class="text-left">Deployment Staus</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of CenterObserverData  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <!--<td *ngIf="isForwardToVerify">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned"
+                #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>-->
+            <td>{{idx+1}}</td>
+            <td>{{row.FlyingSquadTeamName}}</td>
+            <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.DeploymentDate |date:'dd-MM-yyyy'}}</td>
+            <td align="left">{{row.ExamShift}}</td>
+            <td align="left">
+              <!-- <a *ngIf="row.IsDeployed==true && row.DeploymentStatus==_EnumDeploymentStatus.Assigned" [routerLink]="'/flying-squad-deployment'" [queryParams]="{ id: row.FlyingSquadTeamID }" class="mx-2">
+      Edit Deployment
+  </a> -->
+              <a *ngIf="row.IsDeployed==false" id="btnReset" [routerLink]="'/iti-flying-squad-deployment'" [queryParams]="{ id: row.FlyingSquadTeamID }" class="btn bg-info text-white">
+                Deploy Team
+              </a>
+
+              <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending &&
+       (sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng)"
+                 id="btnReset" [routerLink]="'/flying-squad-deployment'" [queryParams]="{ id: row.FlyingSquadTeamID }" class="btn bg-info text-white">
+                Deploy Team
+              </a>
+              <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-success text-white">Team Deployed</span>
+              <!--<span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.ForwardToVerify" class="py-1 px-2 bg-success text-white">Forward To Verify</span>-->
+              <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Verified" class="py-1 px-2 bg-success text-white">Team Verified</span>
+              <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.OrderGenerated" class="py-1 px-2 bg-success text-white">Duty Order Generated</span>
+              <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Completed" class="py-1 px-2 bg-success text-white">Flying Completed</span>
+            </td>
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View Details"
+                   (click)="ViewandUpdate(MyModel_ViewDetails,row.FlyingSquadTeamID)">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+                <a [routerLink]="'/add-iti-flying-squad'" [queryParams]="{id:row.FlyingSquadTeamID}" title="Edit"
+                   *ngIf=" row.DeploymentStatus==_EnumDeploymentStatus.Pending">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Delete Flying Team" (click)=" btnDelete_OnClick(row.FlyingSquadTeamID)"
+                   *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Delete Deployment" (click)=" DeleteDeploymentDataByID(row.DeploymentID)"
+                   *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned">
+                  <i class="ti ti-trash"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Download Checklist" (click)=" DownloadChecklist(row.FlyingSquadTeamID, row.DeploymentID)"
+                   *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Completed">
+                  <i class="ti ti-download"></i>
+                </a>
+
+                <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.DutyOrder}}"
+                   title="Download Duty Order" *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.OrderGenerated">
+                  <i class="ti ti-download"></i>
+                </a>
+
+                <button href="javascript:void(0);" title="{{row.Req_Remark}}" (click)="RequestApproveByAdmin(row.Req_Remark, row.DeploymentID)"
+                        *ngIf="row.isRequest==1" class="btn bg-info text-white">
+                  Delay Request
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Team Member Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+        
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Staff Name</th>
+                  <th class="text-left">Staff SSOID</th>
+                  <th class="text-left">District Name</th>
+                  <th class="text-left">Institute Name</th>
+                  <!--<th class="text-left">Stream Name</th>-->
+                  <th class="text-left">Member Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of requestObs.ObserverDetails; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.StaffName}}</td>
+                  <td align="left">{{row.SSOID}}</td>
+                  <td align="left">{{row.DistrictName}}</td>
+                  <td align="left">{{row.InstituteName}}</td>
+                  <!--<td align="left">{{row.StreamName}}</td>-->
+                  <td align="left">{{row.IsIncharge? 'Incharge' : 'Member'}}</td>
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_DeployTeam let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Deploy Flying Squad Team </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          
+          <form [formGroup]="FlyingSquadForm">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+              <ng-select formControlName="DistrictID" [clearable]="false" [(ngModel)]="requestDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event)">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of DistrictMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.DistrictID.errors" class="text-danger">
+                <p *ngIf="formFlyingSquad.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College Name</label>
+              <ng-select formControlName="InstituteID" [(ngModel)]="requestDeploy.InstituteID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of InstituteMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.InstituteID.errors" class="text-danger">
+                <p *ngIf="formFlyingSquad.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
+                <input formControlName="DeploymentDate" [(ngModel)]="requestDeploy.DeploymentDate" class="form-input" type="date">
+                  
+                <div *ngIf="isSubmitted && formFlyingSquad.DeploymentDate.errors" class="text-danger">
+                  <p *ngIf="formFlyingSquad.DeploymentDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+            </div>
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+                <ng-select formControlName="ShiftID" [clearable]="false" [(ngModel)]="requestDeploy.ShiftID">
+                  <ng-option [value]="0">--Select--</ng-option>
+                  @for (item of ExamShiftDDL; track item.ShiftID) {
+                  <ng-option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</ng-option>
+                  }
+                </ng-select>
+                <div *ngIf="isSubmitted && formFlyingSquad.ShiftID.errors" class="text-danger">
+                  <p *ngIf="formFlyingSquad.ShiftID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+            </div>
+            
+          </div>
+          <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="DeployTeam()">Deploy Team</button>
+              </div>
+            </div>
+        </form>
+        
+        </div>
+        <!-- <div *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+          <button type="submit"
+                  id="btnSave"
+                  class="btn bg-info text-white mt-6"
+                  (click)="SaveInvigilator()">
+            Submit
+          </button>
+        </div> -->
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #MyModel_RequestApproval let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content status-mdl">
+    <div class="card">
+      <div class="card-body">
+        <button class="modal-cls btn bg-info text-white" (click)="CloseModal(true)"><i class="ti ti-x"></i></button>
+        <h2 class="modal-title">Request for Approval</h2>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark: <span class="StarMarking">*</span></label>
+          <textarea class="form-input" rows="4" id="txtRemark" placeholder="Enter Remark" [(ngModel)]="ApproveRemark"></textarea>
+        </div>
+        <div class="text-center mt-4">
+          <a (click)="RequestApproveByAdmin()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class=""></i>
+            Submit
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>

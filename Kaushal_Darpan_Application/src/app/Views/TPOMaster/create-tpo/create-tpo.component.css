@@ -1,0 +1,11 @@
+.actionBtns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: solid 1px;
+  border-radius: 100%;
+  margin: 2px;
+  color: #696e6e !important;
+}

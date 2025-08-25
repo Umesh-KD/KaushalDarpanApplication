@@ -1,0 +1,43 @@
+<div class="container-fluid p-0 smallBanner">
+  <img src="../../../assets/KD5/images/bannerSmall.jpg" style="width:100%" />
+</div>
+<!--<section class="py-5 Admission school-choice-section0 wow bounceIn fadeInRight bgShapN">-->
+<section class="py-5 school-choice-section0 wow bounceIn fadeInRight">
+  <div class="container-fluid">
+    <div class="container text-center">
+      <h3 style="font-size:30px !important;">{{DUCTName}}</h3>
+      <h4  style="font-size: 20px !important; color: #7d1c2f">({{DuptName}})</h4>
+    </div>
+    <div class="container">
+      <div class="row justify-content-end mb-3">
+        <div class="col-md-4">
+          <input class="form-control" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered table-border">
+              <thead>
+                <tr>
+                  <!--<th>Sr. No.</th>-->
+                  <th>Title</th>
+                  <th>Publish Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of DynamicUploadContentList | tableSearchFilter:Table_SearchText; let idx=index;">
+                  <!--<td></td>-->
+                  <td><a href="{{appsettingConfig.StaticFileRootPathURL}}{{row.docFile}}" target="_blank">{{row.Title}}</a></td>
+                  <td>{{row.CreateDates}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+  </div>
+</section>

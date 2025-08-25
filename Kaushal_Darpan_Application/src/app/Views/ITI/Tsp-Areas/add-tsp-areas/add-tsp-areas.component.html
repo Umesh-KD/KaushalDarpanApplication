@@ -1,0 +1,65 @@
+ <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Tsp Areas</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/TspAreasList" class="text-sm font-medium text-slate-700" aria-current="page">TSP Area</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddTspAreas" class="text-sm font-medium text-slate-700" aria-current="page">Add TSP Area</a>
+    </div>
+  </div>
+  <a routerLink="/TspAreasList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add TSP Area</b>
+        </div>
+        <form [formGroup]="groupForm">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">District: <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.DistrictId" formControlName="ddlDistrictId" (change)="ddlDistrictChange()">
+                <option value="0" selected>--Choose Option--</option>
+                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlDistrictId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlDistrictId.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tehshil: <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.TehsilId" formControlName="ddlTehshilId">
+                <option value="0" selected>--Choose Option--</option>
+                <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlTehshilId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlTehshilId.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Village: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Village Name" [(ngModel)]="request.VillageName" formControlName="txtVillageName">
+              <div *ngIf="isSubmitted && groupForm.controls.txtVillageName.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtVillageName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>-->
+            <div>
+              <button type="submit" id="btnSave" (click)="saveData()" class="btn bg-info text-white mt-6">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->

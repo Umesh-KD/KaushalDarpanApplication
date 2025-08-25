@@ -1,0 +1,130 @@
+<main class="flex-grow p-6">
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Center Observer Deployment</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a routerLink="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/center-observer" class="text-sm font-medium text-slate-700" aria-current="page">Center Observer</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+          <a routerLink="/center-observer-deployment" class="text-sm font-medium text-slate-700" aria-current="page"> Center Observer Deployment</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-user"></i> Team Name: {{requestObs.TeamName}}</b>
+          
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Center Observer Deployment</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a routerLink="/center-observer" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+          </div>
+        </div>
+        <form [formGroup]="CenterObserverDeployForm">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+              <ng-select formControlName="DistrictID" [clearable]="false" [(ngModel)]="requestDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event)">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of DistrictMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && centerObserverDeployForm.DistrictID.errors" class="text-danger">
+                <p *ngIf="!centerObserverDeployForm.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Center Name</label>
+              <ng-select formControlName="InstituteID" [(ngModel)]="requestDeploy.InstituteID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of InstituteMasterDDL; track item.ID) {
+                <ng-option [value]="item.CenterID">{{item.CenterName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && centerObserverDeployForm.InstituteID.errors" class="text-danger">
+                <p *ngIf="!centerObserverDeployForm.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
+                <input formControlName="DeploymentDate" [(ngModel)]="requestDeploy.DeploymentDate" class="form-input" type="date" (change)="checkValidDate($event)">
+                  
+                <div *ngIf="isSubmitted && CenterObserverDeployForm.get('DeploymentDate')?.errors" class="text-danger">
+                  <p *ngIf="CenterObserverDeployForm.get('DeploymentDate')?.errors?.required"><i aria-hidden="true"></i> This field is required .!</p>
+                  
+                </div>
+            </div>
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+              <ng-select formControlName="ShiftID" [(ngModel)]="requestDeploy.ShiftID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of ExamShiftDDL; track item.ShiftID) {
+                <ng-option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && centerObserverDeployForm.ShiftID.errors" class="text-danger">
+                <p *ngIf="!centerObserverDeployForm.ShiftID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddDeployment()">Add More</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Deployment List</b>
+        
+      </div>
+
+      <div class="overflow-auto max-height500">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>#</th>
+            <th class="text-left">District Name</th>
+            <th class="text-left">Center Name</th>
+            <th class="text-left">Deployment Date</th>
+            <!-- <th class="text-left">Exam Shift</th> -->
+            <th>Action</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedDeploymentList; let idx = index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.DistrictName}}</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.DeploymentDate}}</td>
+            <!-- <td class="text-left">{{row.ShiftName}}</td> -->
+           
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-4">
+      <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+      <button type="button" id="btnReset" class="btn bg-danger text-white">
+        <i class="ti ti-refresh"></i> Reset
+      </button>
+    </div>
+
+    </div>
+  </div>
+</main>

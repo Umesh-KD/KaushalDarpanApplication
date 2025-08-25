@@ -1,0 +1,62 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Generate Admit Card</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/collegemaster" class="text-sm font-medium text-slate-700">College</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Generate Admit Card</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> {{SemesterName}}</b>
+
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_TblAdmitCard">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Page No</th>
+              <th class="text-left">Total Records </th>
+              <th class="text-left">Page Info</th>
+              <th class="text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of listDataPaging">
+              <td>{{item.PageNumber}}</td>
+              <td>{{item.TotalRecord}}</td>
+              <td>{{item.PageFrom}} To  {{item.PageTo}}</td>
+
+              <td class="text-left">
+                
+                  <a title="Download" (click)="DownloadAdmitCard(item)" class="btn bg-primary btn-sm text-white"> <i class="ti ti-download"></i> Generate Admit Card</a>
+              </td>
+            </tr>
+            <tr *ngIf="listDataPaging?.length==0"><td colspan="10">No Record Found</td></tr>
+          </tbody>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+

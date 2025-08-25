@@ -1,0 +1,149 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Verify {{ ModuleID === 1 ? 'Roll' : 'Enrollment' }} Number</a>
+    </h4>
+
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page">
+       
+        Verify <b>{{ ModuleID === 1 ? 'Roll' : 'Enrollment' }}</b> Number
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i>Verify {{ ModuleID === 1 ? 'Roll' : 'Enrollment' }} Number
+          
+        </b>
+        <div class="flex justify-end flex-wrap items-center">
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div class="">
+          <!--<select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>-->
+        </div>
+        <div class="">
+
+        </div>
+        <div class="">
+        </div>
+        <div class="flex items-center">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-center">Sr. No.</th>
+      
+
+              <th class="text-center">Generate Date</th>
+              <th class="text-center">Publish Date</th>
+
+              <th class="text-center">Created Name</th>
+
+
+              <th class="text-center">EndTerm</th>
+              <th class="text-center">ExaminerStatus</th>
+              <th class="text-center">RegistrarStatus</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StudentList | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td class="text-center">{{row.GenrateDate	|   date:'dd/MM/yyyy' }} </td>
+              <td class="text-center">{{row.PublishDate	|   date:'dd/MM/yyyy'}}</td>
+              <td class="text-center">{{row.CreatedByName}}</td>
+              <td class="text-center">{{row.EndTermName}}</td>
+              <td class="text-center">{{row.ExaminerStatus}}</td>
+              <td class="text-center">{{row.RegistrarStatus}}</td>
+              <td class="text-center">{{row.RollStatus}}</td>
+              <td align="center">
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a [routerLink]="ModuleID === 1 ? '/published-roll-no' : '/PublishedEnrollNo'"
+                     [queryParams]="{EndTermID: row.EndTermID, CourseType: row.CourseType, Status: row.Status}">
+                    <i class="ti ti-eye"></i>
+                  </a>
+
+                  <a (click)="ViewHistory(modal_ViewHistory)"> <i class="ti ti-exchange"></i></a>
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="StudentList?.length==0">
+              <td colspan="10" class="text-center">No Record Found </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #modal_ViewHistory let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-history"></i>Roll Number List Histroy </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-center">Sr. No.</th>
+              <th class="text-center">EndTermName</th>
+              <th class="text-center">Action By </th>
+              <th class="text-center">Action Date</th>
+              <th class="text-center">Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of RollNoHistoryList | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td class="text-center">{{row.EndTermName}}</td>
+              <td class="text-center">{{row.CreateByName	}} </td>
+              <td class="text-center">{{row.ActionDate}}</td>
+              <td class="text-center">{{row.Remark	}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+
+
+
+
+

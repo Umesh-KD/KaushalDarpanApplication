@@ -1,0 +1,178 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Auction Not Working Report</h4>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <!--<span class="StarMarking">*</span>-->
+          </label>
+          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.EquipmentsId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+        
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            
+            <th class="text-left">SR NO</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Equipment</th>
+            <th class="text-left">Equipment Code</th>
+            <th class="text-left">Equipment Working Non-Working</th>
+            <th class="text-left">Available Quantity</th>
+            <th class="text-left">Price Per Unit</th>
+            <th class="text-left">Is Auction</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <!--{{ItemMasterList | json}}-->
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx = index;">
+            
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.ItemCategoryName}}</td>
+            <td align="left">{{item.CollegeName??"DTE Traning"}}</td>
+            <td align="left">{{item.EquipmentsName}}</td>
+            <td align="left">{{item.EquipmentsCode}}</td>
+            <td align="left">
+              {{ item.EquipmentWorking == '1' ? 'Working' : (item.EquipmentWorking == '2' ? 'Not Working' : 'N/A') }}
+            </td>
+            <td align="left">{{item.AvailableQuantity}}</td>
+            <td align="left">{{item.PricePerUnit}}</td>
+
+            <td align="left">
+              {{ (item.IsOption == '1' && item.AuctionStatus == '1') ? 'Done' : '' }}
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" >
+                <a href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.Dis_AuctionDoc}}" target="_blank" class="text-success"><i class="ti ti-eye"></i></a>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b><i class="fa fa-plus"></i>Auction  For Not-Working</b>
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="AuctionFormGroup">
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto">Upload Auction Document</label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{request.Dis_AuctionDoc === '' ? 'No File Choosen' : request.Dis_AuctionDoc}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AuctionDoc}}"
+                 *ngIf="this.request.AuctionDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+                <i class="ti ti-trash"></i>
+              </a>-->
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Auction Date :
+          </label>
+          <input class="form-input" formControlName="txtAuctionDate" placeholder="Auction Date" type="date"
+                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [attr.min]="minDate">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.txtAuctionDate.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.txtAuctionDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Auction Quantity   (AvailableQuantity: {{AvailableQuantity}} )
+          </label>
+          <input type="number" class="form-input" id="AuctionQuantity" formControlName="AuctionQuantity"
+                 [(ngModel)]="request.AuctionQuantity" (keyup)="validateAuctionQuantity($event)">
+          <div *ngIf="isSubmitted&&_AuctionFormGroup.AuctionQuantity.errors" class="text-danger">
+            <p *ngIf="_AuctionFormGroup.AuctionQuantity.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+
+        </div>
+      </form>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveAuctionData()">Submit</button>
+          <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>-->
+        </div>
+      </div>
+
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+    </div>
+  </div>
+</ng-template>
+
+<!-- end row -->

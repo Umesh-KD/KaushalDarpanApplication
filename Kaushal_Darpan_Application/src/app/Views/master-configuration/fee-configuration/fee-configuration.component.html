@@ -1,0 +1,448 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        @if (request.FeeID>0) {
+        <span><i class="ti ti-pencil"></i> Update</span>
+        }
+        @if (request.FeeID==null || request.FeeID==0) {
+        <span><i class="ti ti-plus"></i> Add</span>
+        }
+        Fee Configuration
+      </b>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <form [formGroup]="FeeConfigurationFromGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+          <div>
+            <label>Type</label><span class="StarMarking">*</span>
+            <select class="form-select" name="TypeID" id="ddlType" formControlName="ddlType"
+                    [(ngModel)]="request.TypeID" (change)="GetAllData()">
+              <option value="0">Choose Type</option>
+              @for (item of TypeMasterDDL; track item) {
+              <option [value]="item.ID">
+                {{item.Name}}
+              </option>
+              }
+            </select>
+            @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlType.errors) {
+            <div class="text-danger">
+              @if (!_FeeConfigurationFromGroup.ddlType.errors.DropdownValidators) {
+              <p>
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3"  *ngIf="request.TypeID != _EnumConfigurationType.RemunerationExaminerFee">
+
+          <div *ngIf="!ShowValidColumn()">
+            <label>Semester</label><span class="StarMarking">*</span>
+                                   <select class="form-select" id="ddlSemester" formControlName="ddlSemester"
+                                           [(ngModel)]="request.SemesterID">
+                                     <option value="0"  >All</option>
+                                     <!--<option *ngFor="let item of SemesterList" [value]="item.SemesterID">
+    {{item.SemesterName}}
+  </option>-->
+
+                                     <option [value]="1">1st Year</option>
+                                     <option [value]="2">2nd Year</option>
+
+
+                                   </select>
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.ddlSemester.errors"
+                 class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.ddlSemester.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div *ngIf="(request?.TypeID==5 ||request?.TypeID==_EnumConfigurationType.BackFee || _EnumConfigurationType.BackFeeYearly) && !ShowValidColumn()">
+            <label>Stream</label><span class="StarMarking">*</span>
+            <select class="form-select" id="ddlStream" formControlName="ddlStream"
+                    [(ngModel)]="request.StreamID">
+              <option value="0">ALL</option>
+              <option *ngFor="let item of StreamList" [value]="item.StreamID">
+                {{item.StreamName}}
+              </option>
+            </select>
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.ddlStream.errors"
+                 class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.ddlStream.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          @if (ShowValidColumn())
+          {
+          <div>
+            <label>Category</label><span class="StarMarking">*</span>
+            <select class="form-select" id="ddlCategory" formControlName="ddlCategory"
+                    [(ngModel)]="request.CasteCategoryID">
+              <option value="0">Choose Category</option>
+              @for (item of CategoryList; track item) {
+              <option [value]="item.CasteCategoryID">
+                {{item.CasteCategoryName}}
+              </option>
+              }
+            </select>
+            @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlCategory.errors)
+            {
+            <div class="text-danger">
+              @if (!_FeeConfigurationFromGroup.ddlCategory.errors.DropdownValidators) {
+              <p>
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+              }
+            </div>
+            }
+          </div>
+          }
+          <div>
+            <label>Fee</label><span class="StarMarking">*</span>
+            <input type="number" class="form-input" id="txtFeeAmount" placeholder="Fee Amount" formControlName="feeAmount"
+                   [(ngModel)]="request.FeeAmount" />
+            @if (isFormSubmitted && _FeeConfigurationFromGroup.feeAmount.errors)
+            {
+            <div class="text-danger">
+              @if (_FeeConfigurationFromGroup.feeAmount.errors.required) {
+              <p>
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+              }
+            </div>
+            }
+          </div>
+          <div *ngIf="!ShowValidColumn()">
+            <label>
+              <input type="checkbox" class="form-checkbox" id="cbIsLateFeeApplicable" formControlName="cbIsLateFeeApplicable"
+                     [(ngModel)]="request.IsLateFeeApplicable" />
+              Is late fee applicable?
+            </label>
+            @if (request.IsLateFeeApplicable)
+            {
+            <input type="text" class="form-input" id="txtLateFeeAmount" formControlName="lateFeeAmount" placeholder="Late Fee Amount"
+                   [(ngModel)]="request.LateFeeAmount" />
+            }
+          </div>
+          @if (request.TypeID==_EnumConfigurationType.BackFee || request.TypeID==_EnumConfigurationType.BackFeeYearly)
+          {
+          <div>
+            <label>Back Subject Count</label><span class="StarMarking">*</span>
+            <input type="text" class="form-input" id="txtBackSubjectCount" maxlength="2" formControlName="BackSubjectCount" placeholder="Back Subject Count"
+                   [(ngModel)]="request.BackSubjectCount" />
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.BackSubjectCount.errors"
+                 class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.BackSubjectCount.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+
+          </div>
+          <div>
+            <label>Fixed Back Fee Amount</label><span class="StarMarking">*</span>
+            <input type="number" class="form-input" id="txtBackFeeAmount" formControlName="BackFeeAmount" placeholder="Back Fee Amount"
+                   [(ngModel)]="request.BackFeeAmount" />
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.BackFeeAmount.errors"
+                 class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.BackFeeAmount.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          }
+          <div>
+            <label>Remark</label>
+            <input type="text" class="form-input" id="txtRemark" placeholder="Remark" formControlName="txtRemark"
+                   [(ngModel)]="request.Remark" />
+          </div>
+
+        </div>
+        
+          <!--renumeration examiner-->
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="request.TypeID == _EnumConfigurationType.RemunerationExaminerFee">
+          <div *ngIf="request.TypeID == _EnumConfigurationType.RemunerationExaminerFee">
+            <label>Stream</label><span class="StarMarking">*</span>
+            <select class="form-select" id="ddlStream" formControlName="ddlStream"
+                    [(ngModel)]="request.StreamID">
+              <option value="0">ALL</option>
+              <option *ngFor="let item of StreamList" [value]="item.StreamID">
+                {{item.StreamName}}
+              </option>
+            </select>
+            <div *ngIf="isFormSubmitted && _FeeConfigurationFromGroup.ddlStream.errors" class="text-danger">
+              <p *ngIf="!_FeeConfigurationFromGroup.ddlStream.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>Fee</label><span class="StarMarking">*</span>
+            <input type="number" class="form-input" id="txtFeeAmount" placeholder="Fee Amount" formControlName="feeAmount"
+                   [(ngModel)]="request.FeeAmount" />
+            @if (isFormSubmitted && _FeeConfigurationFromGroup.feeAmount.errors)
+            {
+            <div class="text-danger">
+              @if (_FeeConfigurationFromGroup.feeAmount.errors.required) {
+              <p>
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+              }
+            </div>
+            }
+          </div>
+
+          <div>
+            <label>Remark</label>
+            <input type="text" class="form-input" id="txtRemark" placeholder="Remark" formControlName="txtRemark"
+                   [(ngModel)]="request.Remark" />
+          </div>
+
+          <!--end renumeration examiner-->
+
+          
+        </div>
+
+        <div>
+          <div class="pt-5">
+            <button class="bg-success btn text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)"> {{request.FeeID>0?'Update':'Submit'}}</button>
+            @if (request.FeeID>0) {
+            <button class="bg-danger btn text-white" (click)="ResetControls()"> Cancel</button>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List Fee Configuration</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3" *ngIf="request.TypeID != _EnumConfigurationType.RemunerationExaminerFee">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" width="80">Sr. No.</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('TypeName')">
+              Type
+              @if (sortInTableColumn=='TypeName')
+              {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+            <th class="text-left"  *ngIf="!ShowValidColumn()">Semester Name</th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('CasteCategoryName')" >
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Admin || this.sSOLoginDataModel.RoleID==_EnumRole.AdminNon">Stream Name </span>
+              <span *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.DTE || this.sSOLoginDataModel.RoleID==_EnumRole.DTENON  || this.sSOLoginDataModel.RoleID==_EnumRole.DTETraing">Caste Category</span>
+              @if (sortInTableColumn=='CasteCategoryName')
+              {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('FeeAmount')">
+              Fee Amount
+              @if (sortInTableColumn=='FeeAmount') {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+            <th class="text-right" width="150">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of paginatedInTableData; track row; let idx = $index;) {
+          <tr>
+            <td>{{idx+1}}</td>
+            <td>{{row.TypeName}}</td>
+            <td *ngIf="!ShowValidColumn()">
+              {{ row.SemesterID == 1 ? '1st Year' : (row.SemesterID == 2 ? '2nd Year' : row.SemesterName) }}
+            </td>
+
+
+            <td *ngIf="ShowValidColumn()">
+
+              @if(row.CasteCategoryName!='')
+              {
+              {{ row.CasteCategoryName}}
+              }
+              @else
+              {
+              {{ row.StreamName}}
+
+              }
+            </td>
+
+            <td>
+              {{row.FeeAmount | currency:'₹ '}} @if (row.LateFeeAmount>0) {
+              <span>(Late Fee: {{row.LateFeeAmount | currency:'₹ '}})</span>
+              }@if(row.TypeID==_EnumConfigurationType.BackFee || row.TypeID==_EnumConfigurationType.BackFeeYearly ){
+              <span>(Fixed Back Fee: <b>{{row.BackFeeAmount | currency:'₹ '}} </b> ,After Subject Count: <b>{{row.BackSubjectCount}}+</b> )</span>
+              }
+            </td>
+            <td>
+              <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit"
+                   (click)="btnEdit_OnClick(row.FeeID)">
+                  <i class="ti ti-pencil" aria-hidden="true"></i>
+                </a>
+                <a href="javascript:void(0);"
+                   title="Delete" (click)="btnDelete_OnClick(row.FeeID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+        <tfoot>
+          @if (paginatedInTableData.length==0) {
+          <tr>
+            <td colspan="6" align="center">
+              <span>
+                <img src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+          }
+        </tfoot>
+      </table>
+    </div>
+
+
+    <!--renumeration examiner-->
+
+    <div class="overflow-x-auto mt-3" *ngIf="request.TypeID == _EnumConfigurationType.RemunerationExaminerFee">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" width="80">Sr. No.</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('TypeName')">
+              Type
+              @if (sortInTableColumn=='TypeName')
+              {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StreamName')" >Stream Name
+              @if (sortInTableColumn=='StreamName')
+              {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('FeeAmount')">
+              Fee Amount
+              @if (sortInTableColumn=='FeeAmount') {
+              <span class="shortingSpan" [innerHTML]="sortInTableDirectionAero"></span>
+              }
+            </th>
+            <th class="text-right" width="150">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of paginatedInTableData; track row; let idx = $index;) {
+          <tr>
+            <td>{{idx+1}}</td>
+            <td>{{row.TypeName}}</td>
+
+            <td >{{ row.StreamName != '' ? row.StreamName : 'All'}} </td>
+
+            <td >{{row.FeeAmount | currency:'₹ '}} </td>
+            <td>
+              <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit"
+                   (click)="btnEdit_OnClick(row.FeeID)">
+                  <i class="ti ti-pencil" aria-hidden="true"></i>
+                </a>
+                <a href="javascript:void(0);"
+                   title="Delete" (click)="btnDelete_OnClick(row.FeeID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+        <tfoot>
+          @if (paginatedInTableData.length==0) {
+          <tr>
+            <td colspan="6" align="center">
+              <span>
+                <img src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+          }
+        </tfoot>
+      </table>
+    </div>
+
+    <!--end renumeration examiner-->
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+    <!--Start Model Popup-->
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+    <!--Start Model Popup-->
+
+  </div>
+</div>

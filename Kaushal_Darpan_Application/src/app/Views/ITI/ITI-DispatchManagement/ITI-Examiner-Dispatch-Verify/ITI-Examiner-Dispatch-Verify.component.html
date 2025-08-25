@@ -1,0 +1,170 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Examiner Dispatch-Group List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/rows" class="text-sm font-medium text-slate-700" aria-current="page">Examiner Dispatch-Group List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <!--<a routerLink="/DispatchToInstitute" class="btn bg-info btn-sm text-white me-2">
+          <i class="ti ti-plus"></i>Add
+        </a>-->
+          <!--<a routerLink="/Changerow" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-refresh"></i>Change row
+        </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+        <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
+          <option value="0">Choose Option</option>
+          <option *ngFor="let item of ExamList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>-->
+        <!--semester-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.StatusID">
+            <option value="0" ng-reflect-value="0">--Select--</option>
+            <option value="1">Verify By Examiner</option>
+            @for (item of StatusTypelist; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+
+
+
+        <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+        <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID" [disabled]="isInstituteDisabled">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+            {{item.InstituteName}}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status Type</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.Status">
+          <option value="0" ng-reflect-value="0">--Select--</option>
+          @for (item of StatusTypelist; track item) {
+          <option [value]="item.ID">{{item.Name}}</option>
+          }
+        </select>
+      </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getgroupteacherData()">Search</button>
+          <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>-->
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>-->
+      </div>
+      <div class="">
+        <button *ngIf="SearchDDLValue == _DispatchDDlValue.Pending" class="btn bg-success text-white pull-right" (click)="OnSTatusUpdateByExaminer()" type="button">Verify By Examiner</button>
+      </div>
+
+      <div class="">
+        <button *ngIf="SearchDDLValue ==  _DispatchDDlValue.VerifyByExaminer" class="btn bg-success text-white pull-right" (click)="UpdateVerifiedAndSentToPrincipalByExaminer()" type="button">Verified and Sent to Admin by Examiner</button>
+      </div>
+
+
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--{{GroupList|json}}-->
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngIf="SearchDDLValue == _DispatchDDlValue.Pending || SearchDDLValue == _DispatchDDlValue.VerifyByExaminer">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                     [checked]="AllSelect"
+                     (change)="checkboxthView_checkboxchange($event.target.checked)">
+
+            </th>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Examiner Name</th>
+            <th class="text-left">Examiner Code</th>
+            <th class="text-left">RollNo From</th>
+            <th class="text-left">RollNo To</th>
+            <th class="text-left">Due Date</th>
+            <th class="text-left">Remark</th>
+            <th class="text-left">Challan No</th>
+            <th class="text-left">Dispatch Date</th>
+            <th class="text-left">File</th>
+            <th class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of GroupList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td *ngIf="SearchDDLValue == _DispatchDDlValue.Pending || SearchDDLValue == _DispatchDDlValue.VerifyByExaminer">
+              <input type="checkbox" name="MarkCheck"
+                     [(ngModel)]="row.Selected" />
+            </td>
+            <td align="left">{{idx+1}}</td>
+            <td>{{row.ExaminerName}}</td>
+            <td>{{row.ExaminerCode}}</td>
+            <td>{{row.RollNo_From}}</td>
+            <td>{{row.RollNo_To}}</td>
+            <td>{{row.DueDate}}</td>
+            <td>{{row.Remark}}</td>
+            <td>{{row.ChallanNo}}</td>
+            <td>{{row.DispatchDate}}</td>
+            <td>
+              <a *ngIf="row.DispatchGroupFileName != null && row.DispatchGroupFileName != ''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.DispatchGroupFileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a href="javascript:void(0);" title="Download"><i class="ti ti-download" (click)="DownloadDispatchGroupCertificate(0,row.ExaminerID)"></i></a>
+
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+<app-otpmodal #otpModal></app-otpmodal>

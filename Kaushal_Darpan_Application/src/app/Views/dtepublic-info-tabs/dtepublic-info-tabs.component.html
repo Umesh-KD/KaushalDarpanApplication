@@ -1,0 +1,143 @@
+
+
+
+<h4 class="text-center">
+  <!--DTE/{{ DepartmentID == 2 ? 'ITI' : 'BTER' }}--> ADMISSION- <span class="spanMask">{{sessionData.FinancialYearName}}</span>
+</h4>
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6 hideDteInfoPage">
+  <div>
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">DTE</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">   DTE/{{ DepartmentID == 2 ? 'ITI' : 'BTER' }} Admission-Examination 2025-26</a>
+    </div>-->
+  </div>
+</div>
+
+<ul class="nav nav-tabs d-flex justify-content-center mb-4 border-0 tabMenu" id="NotificationTabs">
+
+  @for (tab of tabs; track tab; let i = $index;) {
+
+  <li class="nav-item" role="presentation">
+    <a href="javascript:void(0);" *ngIf="tab.HasLink" routerLink="/{{tab.Link}}" class="nav-link" [class.active]="i === selectedTabIndex" (click)="selectTab(i,tab.CourseTypeId,tab.TabName,tab.TabNameHI)">
+      <i class="{{ tab.TabIcon }}"></i>
+      <span class="text-nowrap">
+        {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+      </span>
+    </a>
+
+    <a href="javascript:void(0);" *ngIf="tab.HasLink==false" class="nav-link" [class.active]="i === selectedTabIndex"
+       (click)="selectTab(i,tab.CourseTypeId,tab.TabName,tab.TabNameHI)">
+      <i class="{{ tab.TabIcon }}"></i>
+      <span class="text-nowrap">
+        {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+      </span>
+    </a>
+  </li>
+
+  }
+
+  <!--<a href="javascript:void(0);" routerLink="/BTERSeatIntakesList"
+     [class.active]="i === selectedTabIndex"
+     *ngFor="let tab of tabs; let i = index"
+     (click)="selectTab(i,tab.CourseTypeId,tab.TabName,tab.TabNameHI)">
+    <i class="{{ tab.TabIcon }}"></i>
+    <span class="text-nowrap">
+      {{ tab.TabNameHI }} <br />({{ tab.TabName }})
+    </span>
+  </a>-->
+
+
+</ul>
+ 
+
+
+
+
+<ng-container #tabContent></ng-container>
+
+
+
+<div class="mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-light">
+          <b><i class="ti ti-download"></i> Downloads</b>
+        </div>
+        <div class="card-body overflow250px">
+          <ul class="scrollDocList">
+            <li *ngFor="let row of PublicInfoDownloadsList" class="mb-2">
+              <a href="javascript:void(0)" (click)="DownloadFile(row.FileName)" class="card p-3 py-2 shadow-sm mb-2">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="d-flex align-items-start">
+                    <img src="../../../../assets/KD5/images/pdf.png">
+                    <p class="mx-2 mt-0 mb-0">
+                      {{row.DescriptionEn}}
+                    </p>
+                  </div>
+                </div>
+              </a>
+              <!--<div class="d-flex justify-content-between align-items-center w-full"><span><i class="ti ti-download"></i> {{row.DescriptionEn}}</span><a href="javascript:void(0)" (click)="DownloadFile(row.FileName)" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i></a></div>-->
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-light">
+          <b><i class="ti ti-brand-days-counter"></i> Highlights</b>
+        </div>
+        <div class="card-body overflow250px">
+          <ul class="scrollDocList">
+            <li *ngFor="let row of PublicInfoHighlightsList">
+              <a href="javascript:void(0)" class="card p-3 py-2 shadow-sm mb-2">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="d-flex align-items-start">
+                    <img src="../../../../assets/KD5/images/bell-icons.png">
+                    <p class="mx-2 mt-0 mb-0">{{row.DescriptionEn}} </p>
+                  </div>
+                  <!--<span class="text-nowrap">12/07/2025</span>-->
+                </div>
+              </a>
+              <!--<span><i class="ti ti-brand-days-counter"></i>{{row.DescriptionEn}}</span>-->
+            </li>
+
+
+
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header bg-light">
+          <b><i class="ti ti-notes"></i>  Notes</b>
+        </div>
+        <div class="card-body overflow250px">
+          <ul class="scrollDocList">
+            <li *ngFor="let row of PublicInfoNoteList">
+              <a href="javascript:void(0)" class="card p-3 py-2 shadow-sm mb-2">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="d-flex align-items-start">
+                    <img src="../../../../assets/KD5/images/bell-icons.png">
+                    <p class="mx-2 mt-0 mb-0">{{row.DescriptionEn}} </p>
+                  </div>
+                  <!--<span class="text-nowrap">12/07/2025</span>-->
+                </div>
+              </a>
+              <!--<span><i class="ti ti-brand-days-counter"></i> {{row.DescriptionEn}}</span>-->
+            </li>
+           
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,106 @@
+<div class="card mb-3">
+  <div class="card-body p-5">
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i> Enrollment Number</b>
+      </div>
+      <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.<span class="StarMarking">*</span></label>
+          <input type="text" placeholder="Enter Enrollment No" formControlName="EnrollmentNo" class="form-input" />
+          <div class="text-danger" *ngIf="searchForm.get('EnrollmentNo')?.hasError('required')  && searchForm.get('EnrollmentNo')?.touched">This field is required</div>
+        </div>
+        <div>
+          <button class="btn bg-info text-white mt-6 me-1" type="submit" [disabled]="!searchForm.valid"><i class="ti ti-search"></i>Search</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card tab-panels" *ngIf="StudentDetails.length > 0">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="downloadEnrollmentPDF()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download Form
+        </a>
+      </div>
+    </div>
+
+    <div id="pdfTable" #pdfTable>
+      <h1 class="flex justify-center text-center flex-wrap items-center title" style="font-size:32px; line-height:32px;">
+
+        GOVERNMENT OF RAJASTHAN <br />
+        BOARD OF TECHNICAL EDUCATION RAJASTHAN, JODHPUR, 342011 <br />
+        STUDENT PROFILE
+
+      </h1>
+      <table class="table table-border w-full table-auto enrollment-table">
+        <thead>
+          <tr>
+            <th rowspan="2"style="font-size:24px; line-height:32px;">S#</th>
+            <th rowspan="2"style="font-size:24px; line-height:32px;">Sem</th>
+            <th rowspan="2"style="font-size:24px; line-height:32px;">Name of Exam</th>
+            <th rowspan="2" style="font-size:24px; line-height:32px;">Roll Number</th>
+            <th style="font-size:24px; line-height:32px;">Subject Code in</th>
+            <th rowspan="2"  style="font-size:24px; line-height:32px;">Res</th>
+            <th style="font-size:24px; line-height:32px;" >Subject Codes</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2" >Earn Credit/Total Credit</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2">SGPA</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2">CGPA</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2">Promoted/Not Promoted</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2">Result Declaration Date</th>
+          </tr>
+          <tr>
+            <th style="font-size:24px; line-height:32px;">which appearing (In case of Ex.)</th>
+            <th style="font-size:24px; line-height:32px;">Condon: Regulation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="StudentDetails.length > 0">
+            <td style="font-size:24px; line-height:32px;"></td>
+            <td style="font-size:24px; line-height:32px;" colspan="4" class="text-center"><b>S.P.N:</b> {{StudentDetails[0].EnrollmentNo}}</td>
+            <td  style="font-size:24px; line-height:32px;" colspan="3" class="text-center"><b>INSTITUTE :</b> {{StudentDetails[0].InstituteName}}</td>
+            <td style="font-size:24px; line-height:32px;" colspan="5" class="text-center"><b>Name:</b> {{StudentDetails[0].StudentName}} s/o  {{StudentDetails[0].FatherName}}</td>
+          </tr>
+          <tr *ngIf="StudentDetails.length == 0">
+            <td style="font-size:24px; line-height:32px;" colspan="12"><div class="alert alert-warning text-center">No Record Found</div>  </td>
+          </tr>
+          <tr *ngFor="let item of StudentDetails; let idx = index;">
+            <td style="font-size:24px; line-height:32px;">{{ idx + 1 }}.</td>
+            <td style="font-size:24px; line-height:32px;">{{item.SemesterName}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.Exam}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.RollNo}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.RegulationSubSem1}}{{item.RegulationSubSem2}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.StudentType}}</td>
+            <td style="font-size:24px; line-height:32px;">
+              <ng-container *ngFor="let item of STUFFPapersList">
+                <span (mouseenter)="onHover(item)"
+                      (mouseleave)="onMouseLeave()"
+                      [matTooltip]="tooltipText()"
+                      [matTooltipDisabled]="!tooltipText()"
+                      matTooltipPosition="above">
+                  {{ item }}
+                </span>
+              </ng-container>
+            </td>
+            <td style="font-size:24px; line-height:32px;">
+              {{item.EarnedCreditsSem1}}{{item.EarnedCreditsSem2}}{{item.EarnedCreditsSem3}}{{item.EarnedCreditsSem4}}{{item.EarnedCreditsSem5}}{{item.EarnedCreditsSem6}}
+            </td>
+            <td style="font-size:24px; line-height:32px;">{{item.TotalCGPA}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.TotalSGPA}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.IsPromoted === false?"Not-Registered":"Registered"}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.ResultDeclareDate | date}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+      <div  style="font-size:24px; line-height:32px;" class="alert alert-green mt-2"><b>Note:</b> R-REGULATION; C-CONDONED; F-FAIL; P-PASS; F(7.6), I-FAIL IN SESSIONALS; H-RWH, *-TRANSFER; S-SPECIAL, (M) IMP. </div>
+
+    </div>
+
+  </div>
+</div>
+

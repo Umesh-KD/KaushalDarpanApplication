@@ -1,0 +1,116 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Guest House' : 'Create Guest House' }}</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/create-guest-house']" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+        isUpdate ? 'Update Guest House' : 'Create Guest House'
+        }}
+      </a>
+    </div>
+  </div>  
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Guest House' : 'Create Guest House' }}</b>
+    </div>
+    <form [formGroup]="groupForm" (ngSubmit)="saveData()" *ngIf="groupForm">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="GuestRoom">Guest House Name: <span class="StarMarking">*</span></label>
+          <input formControlName="txtGuestHouseName" class="form-input" type="text" id="GuestHouseName"
+                 placeholder="Enter Guest House Name" [(ngModel)]="request.GuestHouseName">
+
+
+
+          <div *ngIf="isSubmitted && groupForm.controls.txtGuestHouseName.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtGuestHouseName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+
+        </div>
+        <div>
+          <label for="Phone Number">Phone Number: <span class="StarMarking">*</span></label>
+          <input formControlName="txtPhoneNumber" class="form-input" type="tel" id="PhoneNumber"
+                 placeholder="Enter Phone Number" [(ngModel)]="request.PhoneNumber" maxlength="10"
+                 pattern="^[0-9]{10}$" required (input)="validatePhoneNumber($event)">
+          <div *ngIf="isSubmitted && groupForm.controls.txtPhoneNumber.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtPhoneNumber.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            <p *ngIf="groupForm.controls.txtPhoneNumber.errors.pattern"><i aria-hidden="true"></i>Phone number must be 10 digits.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Address">Address: <span class="StarMarking">*</span></label>
+          <input formControlName="txtAddress" class="form-input" type="text" id="Address" placeholder="Enter Address"
+                 [(ngModel)]="request.Address">
+          <div *ngIf="isSubmitted && groupForm.controls.txtAddress.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtAddress.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Guest House List</b>
+    </div>
+    <div class="table-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search guests">
+      </mat-form-field>
+
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <!-- Columns definitions -->
+        <ng-container matColumnDef="SNo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="GuestHouseName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest House Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="PhoneNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone Number</th>
+          <td mat-cell *matCellDef="let row">{{ row.PhoneNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+          <td mat-cell *matCellDef="let row">{{ row.Address }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0);" title="Edit" (click)=" GetByID(row.GuestHouseID)"><i class="ti ti-pencil"></i></a>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Header and row definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+        No Record Found
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>    
+  </div>
+</div>

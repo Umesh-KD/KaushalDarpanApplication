@@ -1,0 +1,72 @@
+@if(this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.Admin)
+{
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+  </div>
+</div>
+<p style="color: green;">Component HTML is working!</p>
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event">
+  <b class="text-1xl-5" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-list"></i> Issue Tracker</b>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample2" aria-expanded="true" aria-controls="multiCollapseExample2"><i class="ti ti-chevron-down"></i></button>
+  <div class="flex flex-row gap-2">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input  me-2" type="radio" name="examType" id="semester" [value]=0 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <label class="form-check-label" for="semester">Semester</label>
+    </div>
+
+    <div class="form-check form-check-inline ms-3 ">
+      <input class="form-check-input me-2" type="radio" name="examType" id="yearly" [value]=1 [(ngModel)]="searchRequest.IsYearly" (change)="GetAllData()">
+      <label class="form-check-label" for="yearly">Yearly</label>
+    </div>
+  </div>
+
+</div>
+}
+@if(this.sSOLoginDataModel && this.sSOLoginDataModel.RoleID == _EnumRole.AdminNon){
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+  </div>
+</div>
+
+
+<div class="collapse multi-collapse show" id="multiCollapseExample2">
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div *ngFor="let stat of viewAdminDashboardListExamination; let i = index">
+      <div class="card" *ngIf="stat.ListType=='IssueTrackerType'">
+        <div class="p-5">
+          <!-- Icon -->
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+
+          <!-- Title -->
+          <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+
+          <!-- Count -->
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+
+          <!-- View All Link -->
+          <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View All <i class="ti ti-chevron-right"></i>
+          </button>-->
+          @if(stat.URL.toLowerCase()=='published-roll-no')
+          {
+          <a [routerLink]="['/IssueTracker']" [queryParams]="{ Status: 1 }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View All <i class="ti ti-chevron-right"></i>
+          </a>
+          }
+          @else
+          {
+          <a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View All <i class="ti ti-chevron-right"></i>
+          </a>
+          }
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+}
+

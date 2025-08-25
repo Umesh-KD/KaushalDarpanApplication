@@ -1,0 +1,215 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">PMNUM Mela Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/PMNAM-MelaReport" class="text-sm font-medium text-slate-700" aria-current="page">PMNUM Mela Report</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+
+    <div class="card-body p-5">
+
+      <div *ngIf="ssoLoginDataModel.RoleID != 97" class="mb-8">
+        <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
+          <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+  
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+
+
+            </select>
+
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()" >Cancel</button>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+        <b *ngIf="ssoLoginDataModel.RoleID != 97" class="text-1xl-5">
+          <i class="ti ti-list"></i> Search Results
+        </b>
+        <b *ngIf="ssoLoginDataModel.RoleID == 97" class="text-1xl-5">
+          <i class="ti ti-list"></i> PMNUM Mela Report
+        </b>
+        <div *ngIf="ssoLoginDataModel.RoleID == 97" class="inline-flex items-center text-white btn-sm">
+
+          <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+          <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <!--<table class="table table-border w-full table-auto" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr>
+          <th class="text-left">क्र.सं</th>
+          <th class="text-left">मेलें में सम्मलित हुए प्रतिष्ठानों की संख्या</th>
+          <th class="text-left">संस्थान द्वारा संपर्क किए गये प्रतिष्ठानों की संख्या</th>
+          <th class="text-left">मेलें में उपस्थिति अभ्यार्थीयों की संख्या</th>
+          <th class="text-left">प्राथमिक स्तर पर चयन अभ्यार्थीयों की संख्या</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of InspectExaminationCentersList; let idx = index;">
+          <td>{{idx+1}}</td>
+          <td>{{row.NameOfExaminationCentre}}</td>
+          <td>{{row.DateAndTimeOfInspection}}</td>
+          <td>{{row.TotalNumberOfCandidatesEnrolled}}</td>
+          <td>{{row.CandidatesHadLeftAfterCompletingTheExam}}</td>
+        </tr>
+      </tbody>
+    </table>-->
+
+
+
+
+
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <!-- First header row for group titles with colspan -->
+            <tr>
+              <th rowspan="2" class="text-left">क्र.सं</th>
+              <th rowspan="2" class="text-left">नोडल अधिकारी का नाम</th>
+              <th colspan="2" class="text-left">मेलें में सम्मलित हुए प्रतिष्ठानों की संख्या</th>
+              <th colspan="2" class="text-left">संस्थान द्वारा संपर्क किए गये प्रतिष्ठानों की संख्या</th>
+              <th colspan="2" class="text-left">मेलें में उपस्थिति अभ्यार्थीयों की संख्या</th>
+              <th colspan="2" class="text-left">प्राथमिक स्तर पर चयन अभ्यार्थीयों की संख्या </th>
+              <th rowspan="2">कार्रवाई</th>
+            </tr>
+
+            <!-- Second header row for individual columns under the grouped headers -->
+            <tr>
+              <th class="text-left">राजकीय</th>
+              <th class="text-left">निजी</th>
+              <th class="text-left">राजकीय</th>
+              <th class="text-left">निजी</th>
+              <th class="text-left">पुरुष</th>
+              <th class="text-left">महिला</th>
+              <th class="text-left">पुरुष</th>
+              <th class="text-left">महिला</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.Nodal}}</td>
+              <td>{{row.PoliticalEstablishmentspartNo}}</td>
+              <td>{{row.PrivateEstablishmentspartNo}}</td>
+              <td>{{row.PoliticalEstablishmentscontactedNo}}</td>
+              <td>{{row.PrivateEstablishmentscontactedNo}}</td>
+              <td>{{row.CandidatespresentMaleNo}}</td> <!-- Example binding -->
+              <td>{{row.CandidatespresentFemaleNo}}</td>
+              <td>{{row.CandidatessselectedMaleNo}}</td>
+              <td>{{row.CandidatessselectedFemaleNo}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="Edit"><i class="ti ti-pencil"></i></a>-->
+                  <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
+                  <a *ngIf="ssoLoginDataModel.RoleID != 97" (click)="EditData(row)" title="view"><i class="ti ti-eye"></i></a>
+                  <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DeleteData(row)" title="Delete"><i class="ti ti-trash"></i></a>-->
+                </div>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+<ng-template #MyModel_ViewDetails class="" > 
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i> PMNUM Mela Report </b>
+      <button (click)="CloseModalPopup(true)" class="btn bg-info text-white"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class=" ">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">मेलें में सम्मलित हुए प्रतिष्ठानों की संख्या <span class="StarMarking">*</span></label>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 " value="" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PoliticalEstablishmentspartNo" name="PoliticalEstablishmentspartNo">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PrivateEstablishmentspartNo" name="PrivateEstablishmentspartNo">
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">संस्थान द्वारा संपर्क किए गये प्रतिष्ठानों की संख्या <span class="StarMarking">*</span></label>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PoliticalEstablishmentscontactedNo" name="PoliticalEstablishmentscontactedNo">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PrivateEstablishmentscontactedNo" name="PrivateEstablishmentscontactedNo">
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">मेलें में उपस्थिति अभ्यार्थीयों की संख्या<span class="StarMarking">*</span></label>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatespresentMaleNo" name="CandidatespresentMaleNo">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatespresentFemaleNo" name="CandidatespresentFemaleNo">
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्राथमिक स्तर पर चयन अभ्यार्थीयों की संख्या<span class="StarMarking">*</span></label>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatessselectedFemaleNo" name="CandidatessselectedFemaleNo">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <div *ngIf="ssoLoginDataModel.RoleID == 97 && obj.ID==0" class="modal-footer text-center pb-4">
+        <button (click)="SaveData()" class="inline-flex items-center btn bg-dark text-white btn-lg">Submit</button>
+        <button (click)="ClearAll()" class="inline-flex items-center btn bg-light text-dark btn-lg">Clear</button>
+      </div>
+    </div>
+  </div>
+   
+</ng-template>

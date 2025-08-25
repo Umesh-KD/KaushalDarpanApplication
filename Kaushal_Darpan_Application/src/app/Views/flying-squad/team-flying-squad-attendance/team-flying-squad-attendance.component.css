@@ -1,0 +1,93 @@
+/* General Navbar Reset */
+.navbar {
+  background-color: #f8f9fa; /* Light background */
+  font-family: Arial, sans-serif;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-nav > li > a {
+  padding: 15px 20px;
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+  .navbar-nav > li > a:hover {
+    background-color: #e2e6ea;
+    color: #000;
+  }
+
+/* Show dropdown on hover */
+.nav-item.dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+/* First level dropdown menu */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  min-width: 250px;
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+    color: #000;
+  }
+
+  /* Caret icon spacing */
+  .dropdown-item i.fa-angle-right,
+  .nav-link i.fa-angle-down {
+    margin-left: 8px;
+  }
+
+/* Multi-level dropdown (submenu) */
+.dropdown-menu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-left: 0;
+  margin-top: -1px;
+}
+
+/* Prevent submenu from closing when clicked */
+.dropdown-submenu {
+  position: relative;
+}
+
+  .dropdown-submenu > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+  }
+
+  .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+  }
+
+/* Responsive tweaks */
+@media (max-width: 992px) {
+  .dropdown-menu {
+    position: static;
+    float: none;
+  }
+
+    .dropdown-menu .dropdown-menu {
+      margin-left: 20px;
+    }
+}

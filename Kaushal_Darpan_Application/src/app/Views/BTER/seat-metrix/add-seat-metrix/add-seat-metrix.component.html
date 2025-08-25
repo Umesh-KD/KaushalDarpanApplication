@@ -1,0 +1,369 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{searchRequest.StreamTypeId=='1' ?'Engineering':searchRequest.StreamTypeId=='2' ?'Non Engineering':searchRequest.StreamTypeId=='3' ?'Lateral':''}} Seats Distributions</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/SeatsDistributionsList" class="text-sm font-medium text-slate-700" aria-current="page">{{searchRequest.StreamTypeId=='1' ?'Engineering':searchRequest.StreamTypeId=='2' ?'Non Engineering':searchRequest.StreamTypeId=='3' ?'Leater':''}} Seats Distributions</a>-->
+      <a [routerLink]="['/SeatsDistributionsList']" class="text-sm font-medium text-slate-700" aria-current="page">{{searchRequest.StreamTypeId=='1' ?'Engineering':searchRequest.StreamTypeId=='2' ?'Non Engineering':searchRequest.StreamTypeId=='3' ?'Leater':''}} Seats Distributions</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College Type:</label>
+          <select class="form-select" name="ddlManagementType" id="ddlManagementType" [(ngModel)]="formData.ManagementTypeID" (change)="GetInstituteListDDL()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ManagmentTypeList" value="{{item.Id}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">College:</label>
+
+          <mat-select multiple [(ngModel)]="CollegesId" class="MatSelect" (selectionChange)="GetCollegeTradeList($event)">
+            <mat-option *ngFor="let item of ItiCollegesList" [value]="item.CollegeId">
+              {{item.Name}}
+            </mat-option>
+          </mat-select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getSeatsDistributionsList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-1 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Seat Matrix</b>
+
+      <div class="flex justify-between items-center">
+        <div class="flex items-center me-3">
+          <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                 for="fileStudentPhoto">Import Excel</label>
+          <div class="flex fileUploader bg-gray-100">
+            <!-- File Input for Excel -->
+            <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                   id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{selectedFile ? selectedFile.name : 'No file chosen'}}
+            </label>
+          </div>
+        </div>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelData()"><i class="ti ti-download"></i> Sample Formate</a>
+      </div>
+
+    </div>
+
+
+    <div class="overflow-x-auto mt-3">
+
+      <table class="table table-border w-full table-auto tableMinInput50" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr id="trSeatHead">
+            <th rowspan="2" class="text-center">#</th>
+            <th rowspan="2" class="text-center stickyColumn">College Name/Trade Name/Trade Scheme</th>
+            <!--<th rowspan="2">Remark</th>-->
+            <th rowspan="2">Total Seat  </th>
+            <th rowspan="2" class="HideShow">C1</th>
+            <th rowspan="2" class="HideShow">C2</th>
+            <th valign="top" rowspan="2" class="HeadDiv" id="HeadDiv_0_0">
+              <div class="innerThInputBox">
+                M(%)
+                <input [(ngModel)]="seatMetrixHeader.Total_M_H" (change)="Calculate(0)" type="text">
+              </div>
+            </th>
+
+            <th valign="top" rowspan="2" class="HideShow">C2</th>
+            <th valign="top" rowspan="2" class="FHeadDiv">
+              <div class="innerThInputBox">
+                F(%)
+                <input type="text" (change)="Calculate(0)" [(ngModel)]="seatMetrixHeader.Total_F_H">
+              </div>
+            </th>
+
+            <th class="HideShow">SC Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_0"><div class="ThInputBoxs"><div class="innerThInputBox">SC(%)<input [(ngModel)]="seatMetrixHeader.SC_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size:11px;display: none;"><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(0)"><i class="fa fa-trash"></i></a></div></div></th>
+            <th class="HideShow">ST Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_1"><div class="ThInputBoxs"><div class="innerThInputBox">ST(%)<input [(ngModel)]="seatMetrixHeader.ST_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size: 11px; display: none; "><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(1)"><i class="fa fa-trash"></i></a></div></div></th>
+            <th class="HideShow">OBC Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_2"><div class="ThInputBoxs"><div class="innerThInputBox">OBC(%)<input [(ngModel)]="seatMetrixHeader.OBC_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size: 11px; display: none; "><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(2)"><i class="fa fa-trash"></i></a></div></div></th>
+            <th class="HideShow">MBC Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_3"><div class="ThInputBoxs"><div class="innerThInputBox">MBC(%)<input [(ngModel)]="seatMetrixHeader.MBC_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size: 11px; display: none; "><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(3)"><i class="fa fa-trash"></i></a></div></div></th>
+            <th class="HideShow">EWS Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_4"><div class="ThInputBoxs"><div class="innerThInputBox">EWS(%)<input [(ngModel)]="seatMetrixHeader.EWS_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size: 11px; display: none; "><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(4)"><i class="fa fa-trash"></i></a></div></div></th>
+            <th class="HideShow">TSP Cumulative</th>
+            <th class="HeadCategory" colspan="2" id="HeadCategory_0_5"><div class="ThInputBoxs"><div class="innerThInputBox">TSP(%)<input [(ngModel)]="seatMetrixHeader.TSP_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div><div class="ThInputBoxIcon"><div style="font-size: 11px; display: none; "><input type="checkbox" (change)="Calculate(0)">&nbsp;Is Horizantal?</div><a class="TrashTd" href="javascript:void(0)" tital="click to delete category" onclick="RemoveCategory(5)"><i class="fa fa-trash"></i></a></div></div></th>
+
+            <th valign="top" rowspan="2" class="HideShow">KM Cumulative</th>
+            <th valign="top" rowspan="2" class="HeadCategory"><div class="innerThInputBox">KM(%)<input [(ngModel)]="seatMetrixHeader.KM_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div></th>
+
+
+            <th valign="top" rowspan="2" class="HideShow">PH Cumulative</th>
+            <th valign="top" rowspan="2" class="HeadCategory"><div class="innerThInputBox">PH(%)<input [(ngModel)]="seatMetrixHeader.PH_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div></th>
+            <th valign="top" rowspan="2" class="HideShow">EX Cumulative</th>
+            <th valign="top" rowspan="2" class="HeadCategory"><div class="innerThInputBox">EX(%)<input [(ngModel)]="seatMetrixHeader.EX_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div></th>
+            <th valign="top" rowspan="2" class="HideShow">WID Cumulative</th>
+            <th valign="top" rowspan="2" class="HeadCategory"><div class="innerThInputBox">WID(%)<input [(ngModel)]="seatMetrixHeader.WID_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div></th>
+
+            <th valign="top" rowspan="2" class="HideShow">SGM Cumulative</th>
+            <th valign="top" rowspan="2" class="HeadCategory"><div class="innerThInputBox">SMD(%)<input [(ngModel)]="seatMetrixHeader.SMD_H" class="form-control" type="text" id="EPer" (change)="Calculate(0)"></div></th>
+
+
+            <th class="HeadUR" colspan="2">UR</th>
+
+            <th rowspan="2" class="HeadCategory"><div class="innerThInputBox">TFWS </div></th>
+            <th rowspan="2" class="HeadCategory"><div class="innerThInputBox">Management </div></th>
+
+
+          </tr>
+
+
+
+          <tr>
+            <tH>M </tH>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+            <th>M</th>
+            <th>F</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr id="trSeatHeadValue_0" *ngFor="let item of seatMetrix | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="text-center"> {{idx+1}} </td>
+            <td class="stickyColumn">
+              <span class="text-nowrap block">{{item.CollegeName}}</span>
+              <span class="text-nowrap block"><b>Branch:</b> {{item.TradeName}}</span>
+              <select class="form-select" [(ngModel)]="item.Remark" (change)="Calculate(0)">
+                <option value="0">--Select Remark--</option>
+                <option value="TSP">TSP</option>
+                <option value="General">General</option>
+              </select>
+            </td>
+
+
+
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              <input type="text" class="form-control" style="width: 100%" [(ngModel)]="item.TotalSeats" (change)="Calculate(0)" id="totalseat_0" value="{{item.TotalSeats}}" />
+            </td>
+            <td class="HideShow TotalCumulative" id="TotalCumulative_0"><input [(ngModel)]="item.TotalSeatCumulative" type="text" class="form-control" style="width: 100%" id="EPer"></td>
+
+            <td class="HideShow DivCumulative" id="DivCumulative_0_0"><input [(ngModel)]="item.TotalSeatMCumulative" class="form-control " type="text" style="width:100%;"></td>
+            <td class="DivTotalCumulative" id="DivTotalCumulative_0_0"><input [(ngModel)]="item.TotalM" class="form-control {{!checkNumber(item.TotalM)?'red_td':''}}" type="text" style="width:100%;"></td>
+
+            <td class="HideShow FDivCumulative" id="FDivCumulative_0_0"><input [(ngModel)]="item.TotalSeatFCumulative" class="form-control " type="text" style="width:100%;"></td>
+            <td class="FDivTotalCumulative" id="FDivTotalCumulative_0_0">
+              <input [(ngModel)]="item.TotalF" class="form-control {{!checkNumber(item.TotalF)?'red_td':''}}" type="text" style="width:100%;">
+            </td>
+
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_0">    <input [(ngModel)]="item.SC_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.SC_M)?'red_td':''}}" id="CategoryTotalCumulative_0_0">   <input [(ngModel)]="item.SC_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_0">  <input [(ngModel)]="item.SC_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.SC_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_0"> <input [(ngModel)]="item.SC_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_1">    <input [(ngModel)]="item.ST_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.ST_M)?'red_td':''}}" id="CategoryTotalCumulative_0_1">   <input [(ngModel)]="item.ST_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_1">  <input [(ngModel)]="item.ST_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.ST_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_1"> <input [(ngModel)]="item.ST_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_2">    <input [(ngModel)]="item.OBC_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.OBC_M)?'red_td':''}}" id="CategoryTotalCumulative_0_2">   <input [(ngModel)]="item.OBC_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_2">  <input [(ngModel)]="item.OBC_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.OBC_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_2"> <input [(ngModel)]="item.OBC_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_3">    <input [(ngModel)]="item.MBC_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.MBC_M)?'red_td':''}}" id="CategoryTotalCumulative_0_3">   <input [(ngModel)]="item.MBC_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_3">  <input [(ngModel)]="item.MBC_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.MBC_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_3"> <input [(ngModel)]="item.MBC_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_4">    <input [(ngModel)]="item.EWS_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.EWS_M)?'red_td':''}}" id="CategoryTotalCumulative_0_4">   <input [(ngModel)]="item.EWS_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_4">  <input [(ngModel)]="item.EWS_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.EWS_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_4"> <input [(ngModel)]="item.EWS_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_5">    <input [(ngModel)]="item.TSP_MCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.TSP_M)?'red_td':''}}" id="CategoryTotalCumulative_0_5">   <input [(ngModel)]="item.TSP_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_5">  <input [(ngModel)]="item.TSP_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.TSP_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_5"> <input [(ngModel)]="item.TSP_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_9">    <input [(ngModel)]="item.KM_Cumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.KM)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.KM" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_9">    <input [(ngModel)]="item.PH_Cumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.PH)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.PH" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_9">    <input [(ngModel)]="item.EX_Cumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.EX)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.EX" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+            <td class="HideShow CategoryCumulative" id="CategoryCumulative_0_9">    <input [(ngModel)]="item.WID_Cumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="CategoryTotalCumulative {{!checkNumber(item.WID)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.WID" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+            <td class="HideShow FCategoryCumulative" id="FCategoryCumulative_0_7">  <input [(ngModel)]="item.SMD_FCumulative" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FCategoryTotalCumulative {{!checkNumber(item.SMD_F)?'red_td':''}}" id="FCategoryTotalCumulative_0_7"> <input [(ngModel)]="item.SMD" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+            <td class="URTotal {{!checkNumber(item.GEN_M)?'red_td':''}}" id="URTotal_0">                                     <input [(ngModel)]="item.GEN_M" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+            <td class="FURTotal {{!checkNumber(item.GEN_F)?'red_td':''}}" id="FURTotal_0">                                    <input [(ngModel)]="item.GEN_F" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+            <td class="CategoryTotalCumulative {{!checkNumber(item.TFWS)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.TFWS" (change)="CalculateFooterTotal()" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+            <td class="CategoryTotalCumulative {{!checkNumber(item.MGM)?'red_td':''}}" id="CategoryTotalCumulative_0_9">   <input [(ngModel)]="item.MGM" (change)="CalculateFooterTotal()" class="form-control" type="text" style="width:100%;" id="EPer"></td>
+
+
+          </tr>
+
+          <tr *ngIf="seatMetrix.length>0">
+
+            <th colspan="2"> Total </th>
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TotalSeats}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TotalM}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TotalF}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.SC_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.SC_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.ST_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.ST_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.OBC_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.OBC_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.MBC_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.MBC_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.EWS_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.EWS_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TSP_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TSP_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.KM}}
+            </td>
+
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.PH}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.EX}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.WID}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.SMD}}
+            </td>
+
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.GEN_M}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.GEN_F}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.TFWS}}
+            </td>
+
+            <td align="center" class="TotalSeat" id="TotalSeat_0">
+              {{seatMetrixHeader.MGM}}
+            </td>
+
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-3 w-full">
+      <button type="button" id="btnSave" (click)="SaveSeatsDistributions()"
+              class="btn bg-info text-white">
+        <i class="ti ti-device-floppy"></i> Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->

@@ -1,0 +1,87 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Download Marksheet Letter</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Download Marksheet Letter</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Institute:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of InstituteList" [value]="row.InstituteID">{{row.InstituteName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Semester:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of SemesterMasterList" [value]="row.SemesterID">{{row.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Exam Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ExamTypeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of ExamTypeList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.ExamTypeID ==129">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">R.W.H Result Type: <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.RWHResultID">
+            <option value="0">Select R.W.H Result Type </option>
+            <option value="3">RWH</option>
+            <option value="3">RWH Effected By Reval</option>
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.ExamTypeID == 129">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">R.W.H Effected End Term: <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.EndTermID">
+            <option value="0">All</option>
+            <option *ngFor="let item of EndTermList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <div>
+          <!--<button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+    <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetData()">-->
+          <button type="button" class="btn bg-info text-white mt-6" (click)="DownloadMarksheetLetter()">Download</button>
+          <button type="button" class="btn bg-danger text-white mt-6">
+            <i class="ti ti-refresh"></i>
+            Cancel
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+<!-- end row -->

@@ -1,0 +1,201 @@
+
+
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Profile</h4>
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">BTE</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/StudentProfile" class="text-sm font-medium text-slate-700" aria-current="page">Profile</a>
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+  <!-- end row -->
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Profile</b>
+        <a routerLink="/studentDashboard" class="btn bg-dark btn-sm text-white">Back</a>
+      </div>
+
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full">
+          <b>नोट:</b>  कृपया सभी विवरण आवेदक के दस्तावेजों के अनुसार भरें, क्योंकि इन्हें बाद में बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं)
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम (Applicant's Name):</label>
+          <input type="text" class="form-input" placeholder="Enter Applicant's Name" [(ngModel)]="requestStudent.StudentName">
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">आवेदक का नाम हिंदी में (Applicant's Name in Hindi):<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" placeholder="Enter Applicant's Name" [(ngModel)]="requestStudent.StudentNameHindi">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के अपना नाम लिखें</span>
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ईमेल (Email Address):</label>
+          <input type="text" class="form-input" placeholder="example@gmail.com" [(ngModel)]="requestStudent.Email">
+        </div>
+        <div>
+
+
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम (Father's Name):</label>
+          <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" [(ngModel)]="requestStudent.FatherName">
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">पिता का नाम हिंदी में (Father's Name in Hindi):<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" placeholder="Enter Father's Name in Hindi" [(ngModel)]="requestStudent.FatherNameHindi">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के पिता का नाम लिखें</span>
+        </div>
+        <div>
+          <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">जन्म तिथि (Date of Birth):</label>
+          <input type="date" class="form-input" id="txtDOB" name="txtDOB"  [(ngModel)]="requestStudent.Dis_DOB">
+        </div>
+        <div>
+          <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2" [(ngModel)]="requestStudent.MotherName">माता का नाम (Mother's Name):</label>
+          <input type="text" class="form-input" placeholder="Enter Mother Name">
+        </div>
+        <div>
+          <label for="txtMotherHindiname" class="text-gray-800 text-sm font-medium inline-block mb-2">माता का नाम हिंदी में (Mother's Name in Hindi)::<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtMotherHindiname" [(ngModel)]="requestStudent.MotherNameHindi" placeholder="Enter Mother's Name in Hindi">
+          <span class="redAlertMsg">कृपया बिना अभिवादन के माता का नाम लिखें</span>
+        </div>
+        <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">लिंग (Gender):</label>
+          <select class="form-select" [(ngModel)]="requestStudent.Gender">
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="MobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">मोबाइल नंबर (Mobile Number):</label>
+          <input type="text" class="form-input" placeholder="Enter Phone no." [(ngModel)]="requestStudent.MobileNo">
+        </div>
+        <div>
+          <label for="txtWhatsappMobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">मोबाइल नंबर (Whatsapp Mobile Number) :</label>
+          <input type="text" class="form-input" placeholder="Enter Whatsapp No">
+        </div>
+        <div>
+          <label for="txtLandlineNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">लैंडलाइन नंबर (Landline Number):</label>
+         
+            <input type="text" class="form-input" placeholder="Enter Landline Number" [(ngModel)]="requestStudent.TelephoneNo">
+         
+        </div> 
+        <div>
+          <label for="ddlIdentityProof" class="text-gray-800 text-sm font-medium inline-block mb-2">पहचान पत्र (Identity Proof):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlIdentityProof">
+            <option value="" selected="">--Select Identity Proof--</option>
+            <option value="A">Aadhar Number</option>
+            <option value="E">Aadhar Enrolment ID</option>
+          </select>
+        </div>
+        <div>
+          <label for="txtDetailsofIDProof" class="text-gray-800 text-sm font-medium inline-block mb-2">पहचान पत्र विवरण (Details of ID Proof):<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtDetailsofIDProof">
+        </div>
+        <div>
+          <label for="ddlMaritalStatus" class="text-gray-800 text-sm font-medium inline-block mb-2">वैवाहिक स्थिति(Marital Status):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlMaritalStatus">
+            <option value="" selected="">Select (Marital Status)</option>
+            <option value="1">Single</option>
+            <option value="2">Married</option>
+            <option value="3">Widow/Divorcee</option>
+            <option value="4">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="ddlReligion" class="text-gray-800 text-sm font-medium inline-block mb-2">धर्म (Religion):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlReligion">
+
+            <option value="" selected="">Select Religion</option>
+            <option value="1">Hindu</option>
+            <option value="2">Muslim</option>
+            <option value="3">Sikh</option>
+            <option value="4">Christian</option>
+            <option value="5">Jain</option>
+            <option value="6">Buddhist</option>
+            <option value="7">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="ddlNationality" class="text-gray-800 text-sm font-medium inline-block mb-2">राष्ट्रीयता (Nationality):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlNationality">
+
+            <option value="Indian" selected="selected">Indian</option>
+            <option value="Other">Other</option>
+
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">श्रेणी/Category</b>
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
+        <div>
+          <label for="txtCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :</label>
+          <select class="form-select">
+            <option selected="">--Choose Option--</option>
+            <option *ngFor="let item of ddlCasteCategoryListA" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+          </select>
+        </div>
+        <div>
+          <label for="ddlCategoryB" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी बी (सैनिक आश्रित) (Category B) (MP Ward):<span class="StarMarking">*</span></label>
+          <select class="form-select">
+            <option selected="">--Choose Option--</option>
+            <option *ngFor="let item1 of ddlCasteCategoryListB" value="{{item1.CasteCategoryID}}">{{item1.CasteCategoryName}}</option>
+          </select>
+        </div>
+        <div>
+          <label for="txtCategoryC" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी सी (Category C) (PH/KM):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryC">
+            <option selected="">--Choose Option--</option>
+
+            <option value="1">Kashmiri Migrants (KM)</option>
+            <option value="2">Physically Handicapped (PH)</option>
+            <option value="3">None</option>
+
+
+          </select>
+        </div>
+        <div>
+          <label for="ddlCategoryE" class="text-gray-800 text-sm font-medium inline-block mb-2">श्रेणी ई (Category E):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlCategoryE">
+
+            <option value="" selected="">Select Category E</option>
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+
+          </select>
+          <span class="smallTextForm">विधवा/परित्यकता/तलाकशुदा/35 वर्ष से ज्यादा उम्र की अविवाहित महिला के बच्चे इस श्रेणी में पात्र हैं ( Single Mother Dependent )</span>
+        </div>
+        <div>
+          <label for="ddlPreferentialCategory" class="text-gray-800 text-sm font-medium inline-block mb-2">प्राथमिकता श्रेणी (Preferential Category):<span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlPreferentialCategory">
+
+            <option value="" selected="">Select Preferential Category</option>
+            <option value="6">जिन अभ्यर्थियो ने प्राविधिक शिक्षा मण्डल, राजस्थान, जोधपुर से इंजिनीरिंग में डिप्लोमा परीक्षा उत्तीर्ण की हो</option>
+            <option value="1">जिन अभ्यर्थियों ने माध्यमिक शिक्षा बोर्ड, राजस्थान / केन्द्रीय माध्यमिक शिक्षा बोर्ड की माध्यमिक परीक्षा एवं उच्च माध्यमिक परीक्षा राजस्थान में स्थित किसी स्कूल से नियमित अध्ययन कर उत्तीर्ण की हो।</option>
+            <option value="7">जिन अभ्यर्थियों ने मान्यता प्राप्त ओपन बोर्ड से उच्च माध्यमिक परीक्षा अध्ययन कर उत्तीर्ण की हो एवं राजस्थान का मूल निवासी हो</option>
+            <option value="8">
+              राजस्थान के किसी भी विद्यालय से दसवीं कक्षा उतीर्ण करने के पश्चात ऐसे अभ्यर्थी जो प्राविधिक शिक्षा
+              निदेशालय (प्रशिक्षण) राजस्थान, जोधपुर के प्रशासनिक नियंत्रण वाले औद्योगिक प्रशिक्षण संस्थानों से राष्ट्रीय
+              / राज्य व्यावसायिक प्रशिक्षण परिषद् (NCVT/SCVT) से सम्बद्धता प्राप्त दो वर्षीय इंजीनियरिंग व्यवसायों में
+              आई.टी.आई. या राष्ट्रीय शिक्षुता प्रमाण पत्र धारक या सेन्टर ऑफ एक्सीलेन्स अथवा समकक्ष हो
+            </option>
+            <option value="2">अभ्यर्थी राजस्थान का मूल निवासी हो।</option>
+            <option value="3">अभ्यर्थी राजस्थान सरकार के कर्मचारी की संतान / Spouse हो ।</option>
+            <option value="4">अभ्यर्थी राजस्थान राज्य के बोर्ड , कार्पोरेशन, विश्वविद्यालय तथा भारत सरकार या उसके उपक्रम के कर्मचारी की सन्तान / Spouse जिनका पदस्थापन राजस्थान मे स्थित कार्यालय मे हो।</option>
+            <option value="5">राजस्थान मूल का निवासी ना हो</option>
+
+          </select>
+        </div>
+
+      </div>
+      <!-- end row-->
+
+    </div>
+  </div>
+

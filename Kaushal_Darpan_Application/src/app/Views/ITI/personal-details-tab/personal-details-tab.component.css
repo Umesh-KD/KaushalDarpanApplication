@@ -1,0 +1,3 @@
+::ng-deep .ng-dropdown-panel {
+  position: static !important;  /* Or relative, depending on what you want */
+}

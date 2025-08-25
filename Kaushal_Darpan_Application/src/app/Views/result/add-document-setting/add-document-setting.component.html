@@ -1,0 +1,148 @@
+<!-- Topbar End -->
+<main class="flex-grow p-6">
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Add Document Setting</h4>
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/AddNewMarksheetSetting" class="text-sm font-medium text-slate-700" aria-current="page">Document Setting</a>
+      </div>
+    </div>
+    <a routerLink="/DocumentSetting" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+  </div>
+  <!-- Page Title End -->
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <!--<form [formGroup]="AddDocumentFormGroup" (ngSubmit)="SaveData()">-->
+
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5" id="AddDocIn"><i class="ti ti-plus"></i>Document Setting</b>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div class="mb-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Document Category:</label>
+              <div class="flex items-center gap-3">
+                <label class="flex items-center">
+                  <input type="radio" class="form-radio" name="docCategory" [(ngModel)]="request.DocType" [value]="0" checked />
+                  <span class="ml-2">All</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="radio" class="form-radio" name="docCategory" [(ngModel)]="request.DocType" [value]="1" />
+                  <span class="ml-2">Marksheet</span>
+                </label>
+                <label class="flex items-center">
+                  <input type="radio" class="form-radio" name="docCategory" [(ngModel)]="request.DocType" [value]="2" />
+                  <span class="ml-2">Certificate</span>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name: <span class="text-red-500">*</span></label>
+              <input class="form-input" placeholder="Enter Name" type="text" id="Name" formControlName="Name" [(ngModel)]="request.Name" required />
+              <!--<div *ngIf="AddDocumentFormGroup.get('Name').hasError('required') && AddDocumentFormGroup.get('Name').touched" class="text-red-500">
+                This field is required.
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type<span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.ContentType">
+                <option value="">--Choose Option--</option>
+                <option value="0">Text</option>
+                <option value="1">File</option>
+              </select>
+              <!--<div *ngIf="AddDocumentFormGroup.get('ContentType').hasError('required') && AddDocumentFormGroup.get('ContentType').touched" class="text-red-500">
+                This field is required.
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Key: <span class="text-red-500">*</span></label>
+              <input class="form-input"
+                     placeholder="Enter Key"
+                     type="text"
+                     id="Key"
+                     [(ngModel)]="request.Key"
+                     required
+                     (ngModelChange)="validateKey()" />
+              <small class="text-red-500" *ngIf="keyError">{{ keyError }}</small>
+            </div>
+
+            <!-- Show textbox if ContentType is 'Text' -->
+            <div *ngIf="request.ContentType == 0">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Value: <span class="text-red-500">*</span></label>
+              <input class="form-input" placeholder="Enter Value" type="text" id="Value" [(ngModel)]="request.Value" required />
+            </div>
+
+            <div *ngIf="request.ContentType == 1" class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer"
+                     id="ValuePhoto" type="file" (change)="onFilechange($event,'Photo')"  [(ngModel)]="request.Value" [disabled]="this.request.Value!=''">
+              <label for="ValuePhoto">
+
+                <span>Choose File</span>
+                {{request.Value === '' ? 'No File Choosen' :request.Value}}
+              </label>
+              <div class="flex">
+
+                <a href="{{ appsettingConfig.StaticFileRootPathURL + _GlobalConstants.StudentsFolder + '/' + request.Value}}" *ngIf="this.request.Value !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                   (click)="DeleteImage(request.ValuePhoto,'Photo')" *ngIf="this.request.Value !=''">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Start Date(Joining Date)<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" placeholder="Enter Date" [(ngModel)]="request.StartDate" required />
+              <!--<div *ngIf="AddDocumentFormGroup.get('StartDate').hasError('required') && AddDocumentFormGroup.get('StartDate').touched" class="text-red-500">
+                This field is required.
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">End Date<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" placeholder="Enter End Date" [(ngModel)]="request.EndDate" required />
+              <!--<div *ngIf="AddDocumentFormGroup.get('EndDate').hasError('required') && AddDocumentFormGroup.get('EndDate').touched" class="text-red-500">
+                This field is required.
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Now<span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.IsNow">
+                <option value="">--Choose Option--</option>
+                <option [value]="true">Yes</option>
+                <option [value]="false">No</option>
+              </select>
+              <!--<div *ngIf="AddDocumentFormGroup.get('IsNow').hasError('required') && AddDocumentFormGroup.get('IsNow').touched" class="text-red-500">
+                This field is required.
+              </div>-->
+            </div>
+
+
+            <div>
+              <button type="submit" id="btnSave" class="btn bg-info text-white mt-6" (Click)="SaveData()">Submit</button>
+              <button type="button" id="btnReset" class="btn bg-danger text-white mt-6" (click)="ResetControls()">Cancel</button>
+            </div>
+          </div>
+
+
+        <!--</form>-->
+      </div>
+
+    </div>
+  </div>
+
+  <!-- end row -->
+
+</main>
+<!-- Footer Start -->

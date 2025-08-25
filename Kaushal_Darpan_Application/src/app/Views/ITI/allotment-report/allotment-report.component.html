@@ -1,0 +1,227 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Allotment Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardBTER" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardBTER']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/BTERCollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">Allotment Report</a>-->
+      <a [routerLink]="['/BTERCollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">Allotment Report</a>
+    </div>
+
+
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Alltmet Type
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.AllotmentMasterId">
+            <option value=0>All</option>
+            <!--<option value="1">IMC Allotment</option>-->
+            <option value="2">First Allotment</option>
+            <option value="-2">Horizonatl Allotment</option>
+            <option value="4">Second Allotment</option>
+            <option value="6">Internal Sliding</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Level:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId" >
+            <option value="0">All</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+            <option value="12">12th</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" >
+            <option value="0">All</option>
+            <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade Scheme
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeSchemeId">
+            <option value=0>All</option>
+            <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College/Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade/Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Branch Code">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.ReportingStatus">
+            <option value="0">--Select--</option>
+            <option value="1">Allotted</option>
+            <option value="2">Choice Exhausted</option>
+            <option value="3">Cancelled</option>
+            <option value="4">Reported</option>
+            <option value="5">Not Reported</option>
+            <option value="6">Applied Upward</option>
+            <option value="7">Rejected</option>
+            <option value="8">Admitted</option>
+            <option value="9">Withdrawal</option>
+            <option value="10">Internal Sliding</option>
+            <option value="11"> Reject With Deficiency</option>
+            <option value="13">Dropout</option>
+          </select>
+        </div>
+
+
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Fee Status:
+    </label>
+    <select class="form-select" [(ngModel)]="searchRequest.FeePaid">
+      <option value="0">Choose Option</option>
+      <option value="1">Fee Paid</option>
+      <option value="2">Not Paid</option>
+    </select>
+  </div>-->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Search By Status:
+    </label>
+    <select class="form-select" [(ngModel)]="ActiveStatusModel">
+      <option value="0">--Choose Option--</option>
+      <option value="1">Active</option>
+      <option value="2">In-Active</option>
+    </select>
+  </div>-->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="ShowAllotmentDataList(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+
+          <button type="button" class="btn bg-info text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</button>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+   
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="ShowAllotmentDataList(1)">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+
+      <div class="">
+      </div>
+     
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>SR</th>
+            <th class="text-left">Application No</th>
+            <th class="text-left">Merit No</th>
+            <th class="text-left">Applicant Name</th>
+            <th class="text-left">Gender</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Mobile No</th>
+            <th class="text-left">Aadhar No</th>
+            <th class="text-left">College Code                </th>
+            <th class="text-left">College Name                </th>
+            <th class="text-left">Trade Name                 </th>
+            <th class="text-left">Trade Code                 </th>
+            <th class="text-left">Trade Scheme                 </th>
+            <th class="text-left">Alloted Priority                   </th>
+            <th class="text-left">Alloted Category              </th>
+            <th class="text-left">PH</th>
+            <th class="text-left">Ex Servicemen</th>
+            <th class="text-left">Widow/Divorcee</th>
+            <th class="text-left">TSP</th>
+            <th class="text-left">RAJ DOMICILE</th>
+            <th class="text-left">Reporting Status</th>
+            <!--<th class="text-left">Fee Status</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+            <td class="text-left"> {{row.ApplicationNo    }}</td>
+            <td class="text-left"> {{row.MeritNo          }}</td>
+            <td class="text-left"> {{row.Name             }}</td>
+            <td class="text-left"> {{row.Gender            }}</td>
+            <td class="text-left"> {{row.DOB                 }}</td>
+            <td class="text-left"> {{row.StudentCategory   }} </td>
+            <td class="text-left"> {{row.MobileNo           }} </td>
+            <td class="text-left"> {{row.AadharNo          }} </td>
+            <td class="text-left"> {{row.CollegeCode       }} </td>
+            <td class="text-left"> {{row.Collegename       }} </td>
+            <td class="text-left"> {{row.TradeCode          }}  </td>
+            <td class="text-left"> {{row.TradeName          }}  </td>
+            <td class="text-left"> {{row.TradeSchemeName      }}  </td>
+            <td class="text-left"> {{row.AllotedPriority     }}          </td>
+            <td class="text-left"> {{row.AllotedCategory     }}     </td>
+            <td class="text-left"> {{row.IsPH                }}</td>
+            <td class="text-left"> {{row.IsExServicemen      }}</td>
+            <td class="text-left"> {{row.IsWID               }} </td>
+            <td class="text-left"> {{row.IsTSP                }}</td>
+            <td class="text-left"> {{row.IsRajDOMICILE       }}</td>
+            <td class="text-left"> {{row.JoiningStatus       }}</td>
+           
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  transactionData?.length }} of {{transactionData[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="ShowAllotmentDataList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="transactionData[0]?.TotalRecords==0" (change)="ShowAllotmentDataList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="ShowAllotmentDataList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>

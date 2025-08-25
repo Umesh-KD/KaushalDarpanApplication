@@ -1,0 +1,514 @@
+<div class="flex items-center justify-between flex-wrap mb-2">
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Update College Details</h4>
+</div>
+<div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+  <b class="text-1xl-5">Please Enter ITI Details of your ITI. System will allow user to navigate to other tabs only after filling of ITI details:</b>
+  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="DownloadPDF()"><i class="ti ti-download"></i>Download Pdf</a>
+</div>
+<!--Page Title End-->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5">ITI Basic Info:</b>
+    </div>
+    <form [formGroup]="instituteForm" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="InstituteName">Name:<span class="StarMarking">*</span></label>
+          <input formControlName="Name" class="form-input" type="text" id="Name"
+                 placeholder="Enter College Name" disabled [(ngModel)]="request.Name">
+          <div *ngIf="isSubmitted && instituteForm.get('Name').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('Name').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+        <!--<div>
+          <label for="InstituteWebsite">ITI Website:<span class="StarMarking">*</span></label>
+          <input formControlName="website" class="form-input " type="text" id="website"
+                 placeholder="Enter College Website" [(ngModel)]="request.website">
+          <div *ngIf="isSubmitted && instituteForm.get('website').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('website').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>-->
+
+        <div>
+          <label for="InstituteName">Admission Incharge Name:<span class="StarMarking">*</span></label>
+          <input formControlName="SecretaryName" class="form-input" type="text" id="SecretaryName"
+                 placeholder="Enter Admission Incharge Name" [(ngModel)]="request.SecretaryName">
+          <div *ngIf="isSubmitted && instituteForm.get('SecretaryName').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('SecretaryName').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="InstitutePhone">Admission Incharge Number:<span class="StarMarking">*</span></label>
+          <input formControlName="SecretaryMobile" class="form-input" type="text" id="SecretaryMobile	"
+             (keypress)="numberOnly($event)"    placeholder="Enter Incharge Number" [(ngModel)]="request.SecretaryMobile" maxlength="10">
+          <div *ngIf="isSubmitted && instituteForm.get('SecretaryMobile').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('SecretaryMobile').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <!--<div>
+          <label for="InstituteEmail">ITI Email Address As Per NCVT MIS Portal.:<span class="StarMarking">*</span></label>
+          <input formControlName="email" class="form-input" type="email" id="email" placeholder="Enter Email Address As Per NCVT MIS Portal"
+                 [(ngModel)]="request.ItiEmail">
+          <div *ngIf="isSubmitted && instituteForm.get('email').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('email').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            <p *ngIf="instituteForm.get('email').errors.email"><i aria-hidden="true"></i>Invalid email format.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="InstituteEmail">Alternate email Address:</label>
+          <input formControlName="Altemail" class="form-input" type="email" id="email" placeholder="Enter Email Address"
+                 [(ngModel)]="request.Email">-->
+          <!--<div *ngIf="isSubmitted && instituteForm.get('email').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('Altemail').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+            <p *ngIf="instituteForm.get('email').errors.email"><i aria-hidden="true"></i>Invalid email format.</p>
+          </div>-->
+        <!--</div>-->
+
+        <div>
+          <label for="InstituteSsoid">SSO Id: </label>
+          <input formControlName="ssoid"  class="form-input" placeholder="Enter SSO ID" type="text" id="ssoid"
+                 [(ngModel)]="request.Ssoid">
+          <!--<div *ngIf="isSubmitted && instituteForm.get('ssoid').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('ssoid').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>-->
+        </div>
+
+        <div>
+          <label for="InstituteName">Principal Name:<span class="StarMarking">*</span></label>
+          <input formControlName="PrincipalName" class="form-input" type="text" id="PrincipalName"
+                 placeholder="Enter Principal Name" [(ngModel)]="request.PrincipalName">
+          <div *ngIf="isSubmitted && instituteForm.get('PrincipalName').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('PrincipalName').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="InstitutePhone">Principal Contact Number:<span class="StarMarking">*</span></label>
+          <input formControlName="PrincipalMobile" class="form-input" type="text" id="PrincipalMobile"
+              (keypress)="numberOnly($event)"   placeholder="Enter Principal Contact Number" [(ngModel)]="request.PrincipalMobile" maxlength="10">
+          <div *ngIf="isSubmitted && instituteForm.get('PrincipalMobile').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('PrincipalMobile').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="fileStudentPhoto">ITI Principal Seal And Sign (Only image file.Max.Size 1MB):<span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" formControlName="Principalphoto" type="file" (change)="onFilechange($event,'Photo')">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{request.Dis_Name === '' ? 'No File Choosen' : request.Dis_Name}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Logo}}"
+                 *ngIf="this.request.Logo !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.Logo,'Photo')" *ngIf="this.request.Logo !=''">
+                <i class="ti ti-trash"></i>
+              </a>-->
+            </div>
+            <!--<div *ngIf="isSubmitted && instituteForm.get('Principalphoto').errors" class="text-danger">
+              <p *ngIf="instituteForm.get('Principalphoto').errors.required">
+                <i aria-hidden="true"></i>This field is
+                required.
+              </p>
+            </div>-->
+          </div>
+        </div>
+
+        <div>
+          <label for="InstituteSsoid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Status: </label>
+          <input formControlName="StatusName"  class="form-input disabled" readonly placeholder="status" type="text" id="ssoid"
+                 [(ngModel)]="request.StatusName">
+          <!--<div *ngIf="isSubmitted && instituteForm.get('ssoid').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('ssoid').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>-->
+        </div>
+
+        <div>
+          <label for="InstituteSsoid" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Remark: </label>
+          <textarea formControlName="Remark"  class="form-input disabled" readonly placeholder="remarks" type="text" id="ssoid"
+                 [(ngModel)]="request.Remark">
+          </textarea>
+          <!--<div *ngIf="isSubmitted && instituteForm.get('ssoid').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('ssoid').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>-->
+        </div>
+
+
+        <!--<div>
+          <label for="InstituteInstitutionCategoryId">Institute Category:<span class="StarMarking">*</span></label>
+          <select formControlName="InstitutionCategoryId" class="form-select" id="InstitutionCategoryId"
+                  [(ngModel)]="request.InstitutionCategoryId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of categoryList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('InstitutionCategoryId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('InstitutionCategoryId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field
+              is required.
+            </p>
+          </div>
+        </div>-->
+
+      </div>
+      <!--<div class="flex justify-between items-center mb-4 mt-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5">ITI address details:</b>
+      </div>
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label>Division<span class="StarMarking">*</span></label>
+          <select formControlName="DivisionId" class="form-select" id="DivisionId" (change)="ddlDivision_Change()"
+                  [(ngModel)]="request.DivisionId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('DivisionId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('DivisionId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>District<span class="StarMarking">*</span></label>
+          <select formControlName="DistrictId" class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
+                  [(ngModel)]="request.DistrictId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('DistrictId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('DistrictId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label>Sub Division<span class="StarMarking">*</span></label>
+          <select formControlName="SubDivisionId" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('SubDivisionId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('SubDivisionId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Tehsil<span class="StarMarking">*</span></label>
+          <select formControlName="TehsilId" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilId" (change)="GetGramPanchayatSamiti()" >
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('TehsilId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('TehsilId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Urban/Rural:<span class="StarMarking">*</span></label>
+          <select formControlName="UrbanRural" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural">
+            <option value="0">Select Urban/Rural</option>
+            <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('UrbanRural').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('UrbanRural').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div *ngIf="request.UrbanRural==76" >
+          <label for="PanchayatSamiti">Panchayat Samiti:<span class="StarMarking">*</span></label>
+          <select formControlName="PanchayatSamiti" class="form-select" id="PanchayatSamiti"
+                  [(ngModel)]="request.PanchayatsamityId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('PanchayatSamiti').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('PanchayatSamiti').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field
+              is required.
+            </p>
+          </div>
+        </div>
+
+
+        <div *ngIf="request.UrbanRural==76" >
+          <label for="GramPanchayatSamiti">Gram Panchayat:<span class="StarMarking">*</span></label>
+          <select formControlName="GramPanchayatSamiti" class="form-select" id="GramPanchayatSamiti"
+                  [(ngModel)]="request.GrampanchayatId" (change)="villageMaster()" >
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('GramPanchayatSamiti').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('GramPanchayatSamiti').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field
+              is required.
+            </p>
+          </div>
+        </div>
+
+          
+
+        <div *ngIf="request.UrbanRural==76" >
+          <label for="village">Village:<span class="StarMarking">*</span></label>
+          <select formControlName="village" class="form-select" id="village"
+                  [(ngModel)]="request.VillageId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of VillageMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('village').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('village').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field
+              is required.
+            </p>
+          </div>
+        </div>
+
+
+
+
+        <div *ngIf="request.UrbanRural==75">
+          <label>Administrative Body:<span class="StarMarking">*</span></label>
+          <select formControlName="Administrative" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeId">
+            <option value="0">Select Administrative Body</option>
+            <option value="1">Cantonment Board</option>
+            <option value="2">Nagar Nigam</option>
+            <option value="3">Nagar Palika</option>
+            <option value="4">Nagar Parishad</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('Administrative').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('Administrative').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
+          <label for="CantonmentBoard">CantonmentBoard Name:<span class="StarMarking">*</span></label>
+          <input formControlName="CantonmentBoard" class="form-input" type="text" id="CantonmentBoard"
+                 placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
+          <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
+          <label for="NagarNigam">Nagar Nigam Name:<span class="StarMarking">*</span></label>
+          <input formControlName="NagarNigam" class="form-input" type="text" id="NagarNigam"
+                 placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarNigam').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
+          <label for="NagarPalika">Nagar Palika Name:<span class="StarMarking">*</span></label>
+          <input formControlName="NagarPalika" class="form-input" type="text" id="NagarPalika"
+                 placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarPalika').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
+          <label for="NagarParishad">Nagar Parishad Name:<span class="StarMarking">*</span></label>
+          <input formControlName="NagarParishad" class="form-input" type="text" id="NagarParishad"
+                 placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
+          <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('NagarParishad').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.UrbanRural==75">
+          <label>City:<span class="StarMarking">*</span></label>
+          <select formControlName="CityID" class="form-select" id="CityID" [(ngModel)]="request.CityID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('CityID').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('CityID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="request.UrbanRural==75">
+          <label for="Ward">Ward number:<span class="StarMarking">*</span></label>
+          <input formControlName="Ward" class="form-input" type="text" id="Ward" placeholder="Enter Ward"
+                 [(ngModel)]="request.Ward">
+          <div *ngIf="isSubmitted && instituteForm.get('Ward').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('Ward').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Parliament Area:<span class="StarMarking">*</span></label>
+          <select formControlName="ParliamentId" class="form-select" id="ParliamentId"
+                  [(ngModel)]="request.ParliamentId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ParliamentMasterList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('ParliamentId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('ParliamentId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Assembly Area:<span class="StarMarking">*</span></label>
+          <select formControlName="AssemblyId" class="form-select" id="AssemblyId" [(ngModel)]="request.AssemblyId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of AssemblyMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && instituteForm.get('AssemblyId').errors" class="text-danger">
+            <p *ngIf="!instituteForm.get('AssemblyId').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="InstitutePincode">Pincode:<span class="StarMarking">*</span></label>
+          <input formControlName="pinCode" class="form-input" type="text" id="pincode" placeholder="Enter Pincode"
+                 (keypress)="numberOnly($event)" [(ngModel)]="request.Pincode">
+          <div *ngIf="isSubmitted && instituteForm.get('pinCode').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('pinCode').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+            <p *ngIf="instituteForm.get('pinCode').errors.pattern">
+              <i aria-hidden="true"></i> Enter Valid PinCode
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center mb-4 mt-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5">ITI Full Address:</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label for="InstituteAddress">Plot/House/Building No.:<span class="StarMarking">*</span></label>
+          <input formControlName="PlotNo" class="form-input" type="text" id="PlotNo"
+                 placeholder="Enter Plot/House/Building No" [(ngModel)]="request.PlotNo">
+          <div *ngIf="isSubmitted && instituteForm.get('PlotNo').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('PlotNo').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>-->
+
+        <!--<div>
+          <label for="InstituteAddress">Address: <span class="StarMarking">*</span></label>
+          <input formControlName="address" class="form-input" type="text" id="address"
+                 placeholder="Enter Address" [(ngModel)]="request.Address">
+          <div *ngIf="isSubmitted && instituteForm.get('address').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('address').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>-->
+
+        <!--<div>
+          <label for="InstituteAddress">Street/Road/Lane:<span class="StarMarking">*</span></label>
+          <input formControlName="Street" class="form-input" type="text" id="Street"
+                 placeholder="Enter Street/Road/Lane" [(ngModel)]="request.Street">
+          <div *ngIf="isSubmitted && instituteForm.get('Street').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('Street').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="InstituteAddress">Area/Locality/Sector:<span class="StarMarking">*</span></label>
+          <input formControlName="Area" class="form-input" type="text" id="Area"
+                 placeholder="Enter Area/Locality/Sector" [(ngModel)]="request.Area">
+          <div *ngIf="isSubmitted && instituteForm.get('Area').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('Area').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="InstituteAddress">Land Mark:<span class="StarMarking">*</span></label>
+          <input formControlName="Landmark" class="form-input" type="text" id="Landmark"
+                 placeholder="Enter Land Mark" [(ngModel)]="request.Landmark">
+          <div *ngIf="isSubmitted && instituteForm.get('Landmark').errors" class="text-danger">
+            <p *ngIf="instituteForm.get('Landmark').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+      </div>-->
+
+      
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Save & Next</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

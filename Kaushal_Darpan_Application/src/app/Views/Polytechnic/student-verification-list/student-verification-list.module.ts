@@ -1,0 +1,23 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { StudentVerificationListRoutingModule } from './student-verification-list-routing.module';
+import { StudentVerificationListComponent } from './student-verification-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoaderModule } from '../../Shared/loader/loader.module';
+import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { StudentStatusHistoryModule } from '../../Student/student-status-history/student-status-history.module';
+import { ViewApplicationModule } from '../../BTER/application-view/application-view.module';
+
+
+@NgModule({
+  declarations: [
+    StudentVerificationListComponent
+  ],
+  imports: [
+    CommonModule,
+    StudentVerificationListRoutingModule,
+    FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule, StudentStatusHistoryModule, ViewApplicationModule
+  ]
+})
+export class StudentVerificationListModule { }

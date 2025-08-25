@@ -1,0 +1,201 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Janaadhar</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">List</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Janaadhar List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Code</label>
+        <input formControlName="Code" class="form-input" type="text" id="Name" placeholder="Search By Institute Code" />
+      </div>
+      <div>
+        <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+        <ng-select formControlName="Name" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          <ng-option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="filterFormSubmit()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+      </div>
+    </div>
+    <!--<div class="flex justify-between flex-wrap mb-2">
+      <div class="Search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Filter</mat-label>
+          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
+        </mat-form-field>
+      </div>
+    </div>-->
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportJanadharReportToExcel()"  matTooltip="Download Janadhar Report" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download Janadhar Report
+        </a>
+        <a href="javascript:void(0);" (click)="exportToExcel()" matTooltip="Download Institute Jan Aadhar" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download Institute Jan Aadhar
+        </a>
+      </div>
+    </div>
+    <!-- Table -->
+    <div class="mat-elevation-z8 table-responsive" #pdfTable>
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+        <!-- ID Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="100px"> Sr. No.</th>
+          <td mat-cell *matCellDef="let element; let i = index" width="100px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- StaffSSOID Column -->
+        <ng-container matColumnDef="InstituteCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Institute Code </th>
+          <td mat-cell *matCellDef="let element"> {{element.InstituteCode}} </td>
+        </ng-container>
+
+        <!-- StaffSSOID Column -->
+        <ng-container matColumnDef="InstituteName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Institute Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.InstituteName}} </td>
+        </ng-container>
+
+        <!-- StaffSSOID Column -->
+        <ng-container matColumnDef="TotalStudents">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Total Students </th>
+          <td mat-cell *matCellDef="let element"> {{element.TotalStudents}} </td>
+        </ng-container>
+
+        <!-- StaffSSOID Column -->
+        <ng-container matColumnDef="FilledJanAadhar">
+          <th width="350" mat-header-cell *matHeaderCellDef mat-sort-header> Filled Janaadhar </th>
+          <td width="350" mat-cell *matCellDef="let element"> {{element.FilledJanAadhar}} </td>
+        </ng-container>
+
+
+
+        <!-- StaffSSOID Column -->
+        <ng-container matColumnDef="DropoutStudents">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Dropout Student </th>
+          <td mat-cell *matCellDef="let element"> <button class="{{element.DropoutStudents > 0 ?'btn bg-info text-white':''}}" matTooltip="Dropout Students" (click)="Model_DropoutStudentsData(Model_DropoutStudents, element)">{{element.DropoutStudents}} </button></td>
+        </ng-container>       
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+      No Record Found
+    </div>
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+
+
+  </div>
+</div>
+
+<ng-template #Model_DropoutStudents let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Dropout Students</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+        <div class="flex justify-between flex-wrap mb-2">
+          <div class="Search">
+            <mat-form-field class="example-full-width">
+              <mat-label>Filter</mat-label>
+              <input matInput (input)="applyInstituteFilter($event.target.value)" placeholder="Search..." />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5">Search Result</b>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+
+          <table mat-table [dataSource]="dataInstituteSource" matSort class="mat-elevation-z8">
+            <!-- ID Column -->
+            <ng-container matColumnDef="SrNo">
+              <th mat-header-cell *matHeaderCellDef width="70px"> Sr. No.</th>
+              <td mat-cell *matCellDef="let element;" width="70px">{{ element.SNo }}</td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="InstituteCode">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header width="100px"> Institute Code </th>
+              <td mat-cell *matCellDef="let element" width="100px"> {{element.InstituteCode}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="InstituteNameEnglish">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header width="350px"> Institute Name </th>
+              <td mat-cell *matCellDef="let element" width="350px"> {{element.InstituteNameEnglish}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="StudentName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.StudentName}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="EnrollmentNo">
+              <th width="350" mat-header-cell *matHeaderCellDef mat-sort-header width="130px"> Enrollment No </th>
+              <td width="350" mat-cell *matCellDef="let element" width="130px"> {{element.EnrollmentNo}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="IsDropped">
+              <th width="350" mat-header-cell *matHeaderCellDef width="100px"> IsDropped </th>
+              <td width="350" mat-cell *matCellDef="let element" width="100px">
+                <button class="btn-sm {{element.IsDropped === true ?'btn bg-danger text-white':'btn bg-info text-white'}}" matTooltip="Dropout Students" (click)="IsDroppedChange(element.StudentID,element.InstituteID)">{{element.IsDropped === true ?'YES':'NO'}} </button>
+              </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="JanAadharMemberId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header width="180px"> Action </th>
+              <td mat-cell *matCellDef="let element" width="180px">
+                <button class="btn bg-info btn-sm text-white" matTooltip="Back to Admitted" (click)="StudentAdmittedChange(element.StudentID,element.InstituteID)"> Back to Admitted</button>
+              </td>
+            </ng-container>
+
+            <!-- Table Header and Rows -->
+            <tr mat-header-row *matHeaderRowDef="displayedInstituteColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedInstituteColumns;"></tr>
+          </table>
+
+
+          <div class="alert alert-warning text-center" role="alert" *ngIf="totalInstituteRecords == 0">
+            No Record Found
+          </div>
+          <!-- Pagination Controls -->
+          <mat-paginator [pageInstituteSize]="pageInstituteSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                         [length]="totalInstituteRecords" (page)="onInstitutePaginationChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

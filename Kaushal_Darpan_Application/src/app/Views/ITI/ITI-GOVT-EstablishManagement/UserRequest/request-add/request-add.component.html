@@ -1,0 +1,234 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Request</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/UserRequestList" class="text-sm font-medium text-slate-700" aria-current="page">User Request</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddUserRequest" class="text-sm font-medium text-slate-700" aria-current="page">Add Request</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Request</b>
+          <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="goBack()">
+            <i class="ti ti-chevron-left"></i> Back
+          </a>
+        </div>
+
+        <form [formGroup]="groupForm">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType">
+                <option value="0">--Select--</option>
+                <option value="1">Transfer</option>
+                <option value="2">Resignation</option>
+              </select>
+              <div *ngIf="isSubmitted && _groupForm.ddlRequestType.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlRequestType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.LevelID" formControlName="ddlLevelID" (change)="GetOfficeList()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlLevelID.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlLevelID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (change)="OfficeITIWiseCollege()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlOffice.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlOffice.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.LevelID==2 && request.OfficeID== 11 ||  request.OfficeID== 15">
+              <label>Division<span class="StarMarking">*</span></label>
+              <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()"
+                      [(ngModel)]="request.DivisionID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.divisionID.errors" class="text-danger">
+                <p *ngIf="!_groupForm.divisionID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div *ngIf="request.LevelID==2 && request.OfficeID== 11">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlITICollegeTrade.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlITICollegeTrade.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.LevelID==2 && request.OfficeID== 15">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="request.NodalDistrictID" formControlName="ddlDistrictID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+              <div *ngIf="isSubmitted&&_groupForm.ddlDistrictID.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlDistrictID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+
+
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+              <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
+                      [(ngModel)]="request.StaffTypeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlStaffType.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlStaffType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.PostID" formControlName="ddlPost">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
+                <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="AttachDocument_file">File</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="AttachDocument_file" type="file" formControlName="Upload" (change)="onFilechange($event,'Photo')">
+                <label for="AttachDocument_file">
+                  <span>Choose File</span>
+                  {{request.AttachDocument_file === '' ? 'No File Choosen' : request.AttachDocument_file}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.AttachDocument_fileName}}"
+                     *ngIf="this.request.AttachDocument_file !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <div>
+              <label for="txtOrderNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtOrderNo" name="txtOrderNo" formControlName="txtOrderNo" [(ngModel)]="request.OrderNo" placeholder="Enter Order No">
+              <div *ngIf="isSubmitted&&_groupForm.txtOrderNo.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtOrderNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtOrderDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" id="txtOrderDate" name="txtOrderDate" formControlName="txtOrderDate" [(ngModel)]="request.OrderDate">
+              <div *ngIf="isSubmitted&&_groupForm.txtOrderDate.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtOrderDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <!--<div>
+    <label for="txtJoiningDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Joining Date</label>
+    <input type="date" class="form-input" id="txtJoiningDate" name="txtJoiningDate" formControlName="txtJoiningDate" [(ngModel)]="request.JoiningDate">
+    <div *ngIf="isSubmitted&&_groupForm.txtJoiningDate.errors" class="text-danger">
+      <p *ngIf="_groupForm.txtJoiningDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>-->
+            <div>
+              <label for="txtRequestDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Date <span class="StarMarking">*</span></label>
+              <input type="date" class="form-input" id="txtRequestDate" name="txtRequestDate" formControlName="txtRequestDate" [(ngModel)]="request.RequestDate">
+              <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtRequestRemarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Remarks <span class="StarMarking">*</span></label>
+              <!--<input type="text" class="form-input" id="txtRequestRemarks" name="txtRequestRemarks" formControlName="txtRequestRemarks" [(ngModel)]="request.RequestRemarks" placeholder="Enter Request Remarks">-->
+              <textarea class="form-input w-full resize-none"
+                        rows="4"
+                        [(ngModel)]="request.RequestRemarks"
+                        formControlName="txtRequestRemarks"
+                        placeholder="Enter your remarks here..."></textarea>
+              <div *ngIf="isSubmitted&&_groupForm.txtRequestRemarks.errors" class="text-danger">
+                <p *ngIf="_groupForm.txtRequestRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+
+          </div>
+        </form>
+        <div class="text-center">
+          <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" (click)="ResetControl()" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

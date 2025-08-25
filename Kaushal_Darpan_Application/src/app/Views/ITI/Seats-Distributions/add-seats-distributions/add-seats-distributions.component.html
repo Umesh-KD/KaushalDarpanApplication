@@ -1,0 +1,203 @@
+ <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Seats Distributions</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/SeatsDistributionsList" class="text-sm font-medium text-slate-700" aria-current="page">Seats Distributions</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddSeatsDistributions" class="text-sm font-medium text-slate-700" aria-current="page">Add Seats Distributions</a>
+    </div>
+  </div>
+  <a routerLink="/SeatsDistributionsList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <form [formGroup]="groupForm" (ngSubmit)="saveData()">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Seats Distributions</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Seats: <span class="StarMarking">*</span></label>
+              <input type="number" class="form-input" placeholder="Enter Total Seats" [(ngModel)]="request.total_seats" formControlName="txttotal_seats">
+              <div *ngIf="isSubmitted && groupForm.controls.txttotal_seats.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txttotal_seats.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Remark <span class="StarMarking">*</span></label>
+              <select class="form-select" [(ngModel)]="request.remark" formControlName="ddlremark">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of RemarkMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlremark.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlremark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Seats</b>
+          </div>
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="overflow-x-auto">
+              <table class="table table-border w-full table-auto tableMinInput" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+                    <th class="text-left">SC</th>
+                    <th class="text-left">SC (F)</th>
+                    <th class="text-left">ST</th>
+                    <th class="text-left">ST (F)</th>
+                    <th class="text-left">TSP</th>
+                    <th class="text-left">TSP (F)</th>
+                    <th class="text-left">sahriyaARIA</th>
+                    <th class="text-left">sahriyaARIA (F)</th>
+                    <th class="text-left">OBC</th>
+                    <th class="text-left">OBC (F)</th>
+                    <th class="text-left">MBC</th>
+                    <th class="text-left">MBC (F)</th>
+                    <th class="text-left">DEVNARAYAN</th>
+                    <th class="text-left">DEVNARAYAN (F)</th>
+                    <th class="text-left">EWS</th>
+                    <th class="text-left">EWS (F)</th>
+                    <th class="text-left">GENERAL</th>
+                    <th class="text-left">GENERAL (F)</th>
+                    <th class="text-left">MINORITY</th>
+                    <th class="text-left">MINORITY (F)</th>
+                    <th class="text-left">IMC SC</th>
+                    <th class="text-left">IMC ST</th>
+                    <th class="text-left">IMC OBC</th>
+                    <th class="text-left">IMC GENERAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input type="number" class="form-input" formControlName="sc" [(ngModel)]="request.sc">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="sc_f" [(ngModel)]="request.sc_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="st" [(ngModel)]="request.st">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="st_f" [(ngModel)]="request.st_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="tsp" [(ngModel)]="request.tsp">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="tsp_f" [(ngModel)]="request.tsp_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="sahriya" [(ngModel)]="request.sahriya">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="sahriya_f" [(ngModel)]="request.sahriya_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="obc" [(ngModel)]="request.obc">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="obc_f" [(ngModel)]="request.obc_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="mbc" [(ngModel)]="request.mbc">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="mbc_f" [(ngModel)]="request.mbc_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="dny" [(ngModel)]="request.dny">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="dny_f" [(ngModel)]="request.dny_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="ews" [(ngModel)]="request.ews">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="ews_f" [(ngModel)]="request.ews_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="gen" [(ngModel)]="request.gen">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="gen_f" [(ngModel)]="request.gen_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="min" [(ngModel)]="request.min">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="min_f" [(ngModel)]="request.min_f">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="imcsc" [(ngModel)]="request.imcsc">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="imcst" [(ngModel)]="request.imcst">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="imcobc" [(ngModel)]="request.imcobc">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="imcgen" [(ngModel)]="request.imcgen">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Horizontal seats</b>
+          </div>
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="overflow-x-auto">
+              <table class="table table-border w-full table-auto tableMinInput" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+                    <th class="text-left">PH</th>
+                    <th class="text-left">Ex-Servicemen</th>
+                    <th class="text-left">WIDOW/DIVORCEE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <input type="number" class="form-input" formControlName="ph" [(ngModel)]="request.ph">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="ex_m" [(ngModel)]="request.ex_m">
+                    </td>
+                    <td>
+                      <input type="number" class="form-input" formControlName="w_d" [(ngModel)]="request.w_d">
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center">
+              <button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->

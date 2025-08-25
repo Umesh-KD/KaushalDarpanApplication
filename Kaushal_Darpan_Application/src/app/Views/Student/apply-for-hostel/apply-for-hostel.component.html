@@ -1,0 +1,491 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apply For Hostel</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Apply For Hostel</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<!--{{StudentDetailsList|json}}-->
+<div class="card">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ">
+
+    <div class="mb-8">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+        <div><b>Name of Student</b></div>
+        <div>{{StudentDetailsList[0]?.StudentName}}</div>
+        <div><b>Father's Name</b></div>
+        <div>{{StudentDetailsList[0]?.FatherName}}</div>
+        <div><b>Contact/Mobile No.</b></div>
+        <div>{{StudentDetailsList[0]?.MobileNo}}</div>
+        <div><b>Permanet Address</b></div>
+        <div>{{StudentDetailsList[0]?.Address1}}</div>
+        <div><b>Cast/Category</b></div>
+        <div>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Academic Status</b>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
+        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
+        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
+        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
+
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
+        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
+        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
+        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
+        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+        <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2' }}%</div>
+
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList" *ngIf="MarksDetailsList && sSOLoginDataModel.RoleID == _EnumRole.Student ">
+        <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+        <div>Obtained Marks ( {{MarksDetailsList[0]?.Marks10}} / 600 ) - {{MarksDetailsList[0]?.AvgMarks10}}%</div>
+        <!--<div>
+          {{StudentDetailsList[0]?.MarksFirstYear}}
+          ({{ (StudentDetailsList[0]?.MarksFirstYear / 600 * 100) | number:'1.0-2'}}%)
+        </div>-->
+
+        <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+        <div>{{MarksDetailsList[0]?.MarksFirstYear}} - {{MarksDetailsList[0]?.AvgMarksFirstYear}}%</div>
+        <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+        <div>{{MarksDetailsList[0]?.MarksSecondYear}} - {{MarksDetailsList[0]?.AvgMarksSecondYear}}%</div>
+        <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+        <div>{{MarksDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
+
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
+      </div>
+      <form [formGroup]="groupForm" (ngSubmit)="saveData()" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.</label>
+            <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" name="MobileNo" formControlName="txtFatherContactNo" maxlength="10">
+            <div *ngIf="isSubmitted && groupForm.controls.txtFatherContactNo.errors" class="text-danger">
+              <p *ngIf="groupForm.controls.txtFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Name</label>
+            <input class="form-input" placeholder="Enter Local Guardian Name" formControlName="txtLocalGuardianName" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Contact No.</label>
+            <input class="form-input" placeholder="Enter Local Guardian Contact No." (keypress)="validateNumber($event)" formControlName="txtLocalGuardianContactNo" maxlength="10" />
+          </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> In Year({{LastFY.FinancialYearName}})</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="StudentDetailsList[0]?.YearNo !== '1st'">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Alloted Hostel in {{LastTerm1.EndTermName}} Session</label>
+            <select class="form-select" formControlName="txtAllotedHostelLastEndTerm" (change)="isallotedhostellastendterm()">
+              <option value="2">--Select Option--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div *ngIf="allotedhostellastendterm === true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Alloted Hostel in {{LastTerm2.EndTermName}} session</label>
+            <div class="flex items-center">
+              <input class="form-input" placeholder="Room No." formControlName="txtAllotedHostelInLastSessionRoomNo" />
+              -
+              <input class="form-input" placeholder="Fee Details" formControlName="txtAllotedHostelInLastSessionFeeDetails" />
+            </div>
+          </div>
+          <div *ngIf="allotedhostellastendterm === true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Short of Attendance</label>
+            <select class="form-select" formControlName="txtAnyWorningForShortOfAttendance">
+              <option value="2">--Select Option--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+          <div *ngIf="allotedhostellastendterm === true">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Any Warning for Invovement Against Discipline</label>
+            <select class="form-select" formControlName="txtAnyWarningForInvovementAgainstDiscipline">
+              <option value="2">--Select Option--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
+          <div class="flex justify-between flex-wrap items-center ">
+            <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Partner</b>
+            <div class="ms-3">
+              <label for="txtRequestForRoomPartner">
+                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(true)" [value]="true" /> Yes
+              </label>
+              <label for="txtRequestForRoomPartner">
+                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(false)" [value]="false" /> No
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3" *ngIf="RequestForRoomPartner === true">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
+            <input class="form-input" placeholder="Enter Application ID" formControlName="txtPartnerApplicationID" />
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SearchPartner()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="CancelRoomPartner()">Cancel</button>
+          </div>
+        </div>
+
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList  mt-3" *ngIf="SearchRoomPartner === true && RoomPartnerDetailsList[0].StudentName">
+          <div><b>Name</b></div>
+          <div>{{RoomPartnerDetailsList[0]?.StudentName}}</div>
+          <div><b>Year</b></div>
+          <div>{{RoomPartnerDetailsList[0]?.YearNo}}</div>
+          <div><b>Branch</b></div>
+          <div>{{RoomPartnerDetailsList[0]?.BranchName}}</div>
+          <div><b>SFS</b></div>
+          <div>{{RoomPartnerDetailsList[0]?.SFS}}</div>
+          <div><b>Regular</b></div>
+          <div>{{RoomPartnerDetailsList[0]?.Regular}}</div>
+        </div>
+
+        <!--<div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto"> Upload Document <span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="SupportingDocument" type="file" (ngModelOptions)="{ standalone: true }" (change)="onFilechange($event,'SupportingDocument')">
+            <label for="SupportingDocument">
+              <span>Choose File</span>
+              {{request.SupportingDocument === '' ? 'No File Choosen' : request.SupportingDocument}}
+            </label>
+            <div class="flex" *ngIf="this.request.SupportingDocument !=''">
+              <a href="{{appsettingConfig.StaticFileRootPathURL  + request.SupportingDocument}}"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.SupportingDocument,'SupportingDocument')">
+                <i class="ti ti-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>-->
+
+
+
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <!--<button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+            <button type="Update" id="btnUpdate" class="btn bg-info text-white mt-6">Update</button>-->
+
+            <button type="submit"
+                    id="btnSave"
+                    class="btn bg-info text-white mt-6">
+              Submit
+            </button>
+
+            <button type="button"
+                    id="btnUpdate"
+                    class="btn bg-success text-white mt-6"
+                    (click)="updateData()"
+                    *ngIf="isEditMode && sSOLoginDataModel.RoleID == _EnumRole.Principal || isEditMode && sSOLoginDataModel.RoleID == _EnumRole.HostelWarden">
+              Update
+            </button>
+
+
+
+
+
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 1">
+    <div class="mb-8">
+      <h3>Hostel Application Status:</h3>
+      <p>Your application for the hostel has been successfully submitted. If you are eligible for the hostel, you will receive an affidavit form.</p>
+
+      <h3>Next Steps:</h3>
+      <ol>
+        <li><b>Fill the Affidavit Form:</b> Once you receive the form, please fill it out with all required details.</li>
+        <li><b>Upload the Completed Form:</b> After completing the affidavit form, upload it back to the portal to complete your hostel application process.</li>
+      </ol>
+    </div>
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 2">
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      <div>
+        <h3>Steps:</h3>
+        <ol>
+          <li><b>Download Affidavit Form</b></li>
+          <li><b>Fill the Affidavit Form:</b> Once you receive the form, please fill it out with all required details.</li>
+          <li><b>Upload the Completed Form:</b> After completing the affidavit form, upload it back to the portal to complete your hostel application process.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light  mt-3">
+      <b class="text-1xl-5"><i class="ti ti-upload"></i> Affidavit Form</b>
+      <button class="btn bg-success text-white btn-sm" type="button" (click)="DownloadHostelForm(RoomPartnerDetailsList[0]?.StudentID)">Download Affidavit Form </button>
+    </div>
+
+    <form [formGroup]="groupFormAffidavit" (ngSubmit)="UpdateAffidavit()" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 2">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto">Upload Affidavit Form <span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" type="file" formControlName="txtAffidavitDocument" (change)="onFilechange($event,'Document')">
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{request.AffidavitDocument === '' ? 'No File Choosen' : request.AffidavitDocument}}
+            </label>
+            <div class="flex" *ngIf="this.request.AffidavitDocument !=''">
+              <a href="{{appsettingConfig.StaticFileRootPathURL  + request.dis_AffidavitDocument}}"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.AffidavitDocument,'AffidavitDocument')">
+                <i class="ti ti-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+      </div>
+    </form>
+
+
+
+
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 3">
+    <div class="mb-8">
+      <h3>Hostel Application Status:</h3>
+      <p>Your supporting documents have been submitted. The college will verify them shortly.</p>
+    </div>
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 4">
+    <div class="mb-8">
+      <h3>Hostel Details:</h3>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">SR NO</th>
+              <th class="text-left">Student Name</th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Semester/Year Name</th>
+              <th class="text-left">InstituteName</th>
+              <th class="text-left">HostelName</th>
+              <th class="text-left">AllotmentStatus</th>
+              <th class="text-left">Room No.</th>
+              <th class="text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of HostelDetailsList  | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td align="left">{{idx+1}}</td>
+              <td align="left">{{item.StudentName}}</td>
+              <td align="left">{{item.ApplicationId}}</td>
+              <td align="left">{{item.SemesterName}}</td>
+              <td align="left">{{item.InstituteName}}</td>
+              <td align="left">{{item.HostelName}}</td>
+              <td align="left">{{item.AllotmentStatus}}</td>
+              <td align="left">{{item.RoomNo}}</td>
+
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a *ngIf="item.HostelFeesReciept" [href]="appsettingConfig.StaticFileRootPathURL + item.HostelFeesReciept" class="text-success"
+                     title="Download Hostel Fee Receipt">
+                    <i class="ti ti-download"></i>
+                  </a>
+                  </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 5">
+    <div class="mb-8">
+      <h3>Hostel Reject:</h3>
+      <p>You are not eligible for hostel</p>
+    </div>
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 6">
+    <div class="mb-8" style="padding: 10px; background-color: #ffe5e5; border: 1px solid #cc0000; color: #990000;">
+      <strong>Hostel Cancelled by Choice:</strong><br>
+      We regret to inform you that your hostel request has been cancelled by the warden.
+    </div>
+
+  </div>
+  <div class="card-body p-5" *ngIf=" sSOLoginDataModel.RoleID == _EnumRole.Student && StudentDetailsList[0]?.AllotmentStatus == 3">
+    <div style="border: 1px solid #d0e4ff; background-color: #f7fbff; padding: 15px; border-radius: 6px; margin-top: 15px;">
+      <h3 style="margin: 0; color: #0056b3;">📌 Hostel Applied</h3>
+      <p style="margin: 5px 0 0; color: #333;">
+        Your application is currently under process.
+      </p>
+    </div>
+
+  </div>
+
+  <!--<div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus > 3 || StudentDetailsList[0]?.AllotmentStatus < 10">
+    <div class="mb-8">
+      <h3>Hostel Applied:</h3>
+      <p>Your Application under process</p>
+    </div>
+  </div>-->
+  <!--{{StudentDetailsList|json}}-->
+  <div class="card-body p-5" *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Student && StudentDetailsList[0]?.AllotmentStatus === 10">
+    <div class="mb-8">
+
+
+
+      <form [formGroup]="groupFormHostelWardenRecheck" (ngSubmit)="UpdateAffidavit()" *ngIf=" sSOLoginDataModel.RoleID != _EnumRole.Student &&  StudentDetailsList[0]?.AllotmentStatus === 10 ">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+          <div><b>Name of Student</b></div>
+          <div>{{StudentDetailsList[0]?.StudentName}}</div>
+          <div><b>Father's Name</b></div>
+          <div>{{StudentDetailsList[0]?.FatherName}}</div>
+          <div><b>Contact/Mobile No.</b></div>
+          <div>{{StudentDetailsList[0]?.MobileNo}}</div>
+          <div><b>Permanet Address</b></div>
+          <div>{{StudentDetailsList[0]?.Address1}}</div>
+          <div><b>Cast/Category</b></div>
+          <div>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Academic Status</b>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+          <div><b>(A).Aggregate Marks in 10th & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.Marks10}} - {{StudentDetailsList[0]?.AvgMarks10}}%</div>
+          <div><b>(B).Aggregate Marks in 1st year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksFirstYear}} - {{StudentDetailsList[0]?.AvgMarksFirstYear}}%</div>
+          <div><b>(C).Aggregate Marks in 2nd year & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.MarksSecondYear}} - {{StudentDetailsList[0]?.AvgMarksSecondYear}}%</div>
+          <div><b>(D). Total (A)+(B)+(C) Aggregate & Percentage</b></div>
+          <div>{{StudentDetailsList[0]?.TotalAvg  | number:'1.2-2'}}%</div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+
+          <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Contact/Mobile No.<span class="StarMarking">*</span></label>
+    <input placeholder="Enter Father's Contact/Mobile No." class="form-input" id="mobileNo" (keypress)="validateNumber($event)" [(ngModel)]="HostelWardenSomeDetails.txtWFatherContactNo" name="MobileNo" formControlName="txtWFatherContactNo" maxlength="10">
+    <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors" class="text-danger">
+      <p *ngIf="groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>
+  </div>-->
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Father's Contact/Mobile No.<span class="StarMarking">*</span>
+            </label>
+
+            <input placeholder="Enter Father's Contact/Mobile No."
+                   class="form-input"
+                   id="mobileNo"
+                   maxlength="10"
+                   (keypress)="validateNumber($event)"
+                   formControlName="txtWFatherContactNo"
+                   [(ngModel)]="HostelWardenSomeDetails.txtWFatherContactNo"
+                   name="MobileNo" />
+
+            <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors" class="text-danger">
+              <p *ngIf="groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors.required">
+                <i class="ti ti-alert-circle"></i> This field is required!
+              </p>
+              <p *ngIf="groupFormHostelWardenRecheck.controls.txtWFatherContactNo.errors.pattern">
+                <i class="ti ti-alert-circle"></i> Please enter a valid 10-digit mobile number starting with 6-9.
+              </p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Name</label>
+            <input class="form-input" placeholder="Enter Local Guardian Name" [(ngModel)]="HostelWardenSomeDetails.txtWLocalGuardianName" formControlName="txtWLocalGuardianName" />
+            <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWLocalGuardianName.errors" class="text-danger">
+              <p *ngIf="groupFormHostelWardenRecheck.controls.txtWLocalGuardianName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Local Guardian Contact No.</label>
+            <input class="form-input" placeholder="Enter Local Guardian Contact No." (keypress)="validateNumber($event)" [(ngModel)]="HostelWardenSomeDetails.txtWLocalGuardianContactNo" formControlName="txtWLocalGuardianContactNo" maxlength="10" />
+            <div *ngIf="isSubmitted && groupFormHostelWardenRecheck.controls.txtWLocalGuardianContactNo.errors" class="text-danger">
+              <p *ngIf="groupFormHostelWardenRecheck.controls.txtWLocalGuardianContactNo.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileStudentPhoto"> Upload Document </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="SupportingDocument" type="file" (ngModelOptions)="{ standalone: true }" (change)="onFilechange($event,'SupportingDocument')">
+            <label for="SupportingDocument">
+              <span>Choose File</span>
+              {{request.SupportingDocument === '' ? 'No File Choosen' : request.SupportingDocument}}
+            </label>
+            <div class="flex" *ngIf="this.request.SupportingDocument !=''">
+              <a href="{{appsettingConfig.StaticFileRootPathURL  + request.SupportingDocument}}"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                 (click)="DeleteImage(request.SupportingDocument,'SupportingDocument')">
+                <i class="ti ti-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+
+            <button type="button"
+                    id="btnUpdate"
+                    class="btn bg-success text-white mt-6"
+                    (click)="HostelWardenupdateData()">
+              Update
+            </button>
+
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+

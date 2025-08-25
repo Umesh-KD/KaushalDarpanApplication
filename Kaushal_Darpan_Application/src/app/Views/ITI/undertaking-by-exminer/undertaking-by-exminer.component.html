@@ -1,0 +1,139 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Undertaking By Exminer</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/PracticalExaminerUndertaking" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/undertaking-by-exminer" class="text-sm font-medium text-slate-700" aria-current="page">Undertaking By Exminer</a>
+    </div>
+  </div>
+  <a routerLink="/PracticalExaminerUndertaking" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Letter Number and Appointing The Undersigned Date</b>
+        <span class="text-danger"> (*) Marking Fields Mandatory</span>
+      </div>
+       
+      <form [formGroup]="UndertakingExminerForm" (ngSubmit)="onSubmit()">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Letter No. <span class="StarMarking">*</span></label>
+            <input formControlName="LetterNumber"   class="form-input" type="text" placeholder="Enter Letter Number" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Appointing The Undersigned Date: <span class="StarMarking">*</span></label>
+            <input formControlName="AppointingDate" class="form-input" type="date" />
+          </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light  mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Details of Examiner</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span></label>
+            <div class="flex">
+              <input formControlName="SsoId" class="form-input" type="text" placeholder="Enter Letter Number" />
+              <button type="button" class="btn btn-sm bg-info text-white text-nowrap" (click)="fetchExaminerDetails()" style="display:none" >Get Details</button>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
+            <input formControlName="Name" class="form-input "  type="text" placeholder="Name Fetch From System" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation <span class="StarMarking">*</span></label>
+            <input formControlName="Designation" class="form-input "  type="text" placeholder="Designation Fetch From System" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Organization <span class="StarMarking">*</span></label>
+            <input formControlName="Organization"  class="form-input "  type="text" placeholder="Organization Name Fetch From System" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contact Number <span class="StarMarking">*</span></label>
+            <input formControlName="ContactNumber"  class="form-input "  type="text" placeholder="Contact Number Fetch From System" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email Id <span class="StarMarking">*</span></label>
+            <input  formControlName="EmailId" class="form-input "  type="text" placeholder="Email Id Fetch From System" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Address <span class="StarMarking">*</span></label>
+            <input formControlName="Address" class="form-input "  type="text" placeholder="Address Fetch From System" />
+          </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> ITI Details</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College <span class="StarMarking">*</span></label>
+            <select formControlName="ItiCollege" class="form-select" (change)="onItiCollegeChange($event)">
+              <!-- <option selected>--Choose ITI--</option> -->
+              <option [ngValue]="null" disabled selected>--Choose ITI--</option>
+              <option *ngFor="let college of ItiCollegeDataList" [value]="college.centerid">{{ college.CenterName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">MIS Code <span class="StarMarking">*</span></label>
+            <input formControlName="MisCode" class="form-input" type="text" placeholder="Enter MIS Code" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Examination <span class="StarMarking">*</span></label>
+            <input formControlName="DateOfExamination" class="form-input" type="date" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject For Which Appointed <span class="StarMarking">*</span></label>
+            <select formControlName="SubjectAppointed" class="form-select">
+              <option [ngValue]="null" disabled selected>--Choose Subject--</option>
+              <!--<option *ngFor="let subject of subjectList" [value]="subject">{{ subject }}</option>-->
+              <option value="Paper-I">Paper-I</option>
+              <option value="Paper-II">Paper-II</option>
+              <option value="Paper-III">Paper-III</option>
+              <option value="Paper-IV">Paper-IV</option>
+              <option value="Practical">Practical</option>
+            </select>
+          </div>
+           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Complete Address <span class="StarMarking">*</span></label>
+            <input formControlName="ItiCompleteAddress" class="form-input"  type="text" placeholder="ITI Selected Auto fill Address" />
+          </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Declaration</b>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div>
+            <label class="flex items-center">
+              <input class="me-2" type="checkbox" formControlName="Declaration1" /> I here by declare that ITI is having all the infrastructure as per affiliation norms for the trades I performed practical examiner.
+            </label>
+          </div>
+          <div>
+            <label class="flex items-center">
+              <input class="me-2" type="checkbox" formControlName="Declaration2" /> During practical examination, I have noticed the following deficiencies in the infrastructure available in the trades.
+            </label>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-3 mt-4 mb-4">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">During practical examination, I have noticed the following deficiencies in the infrastructure available in the trades.</label>
+            <textarea  formControlName="DeficienciesDetails" class="form-input" placeholder="Ener Noticed the following deficiencies in the infrastructure available in the trades"></textarea>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
+          <div class="text-center">
+            <button class="btn btn-sm bg-info text-white" type="submit">Submit</button>
+            <button class="btn btn-sm bg-danger text-white" (click)="UndertakingExminerForm.reset()" type="button">Cancel</button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+</div>

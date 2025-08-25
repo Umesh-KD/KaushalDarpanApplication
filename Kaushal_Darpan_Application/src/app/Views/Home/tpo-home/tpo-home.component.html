@@ -1,0 +1,73 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">TPO Details</h3>
+  <p class="mb-0">There are showing all TPO Member list. If you want to check your TPO details then find here or search by District and Institute filter</p>
+</div>
+
+<div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card mb-3">
+          <div class="card-header">
+            <b><i class="fa fa-filter"></i> Search Filter</b>
+          </div>
+          <div class="card-body pb-0">
+            <div class="row">
+              <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
+                <label>District</label>
+                <select class="form-select" [(ngModel)]="searchRequest.DistrictID" (change)="ddlDistrictChange()">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3">
+                <label>Institute</label>
+                <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of InstituteMasterList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 col-12 mb-3 pt-4">
+                <button class="btn btn-primary text-white" type="button" (click)="SearchTPO()"><i class="fa fa-search"></i> Search</button>
+                <button class="btn btn-danger text-white" type="button" (click)="SearchReset()"><i class="fa fa-refresh"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <b><i class="fa fa-th-list"></i> TPO List</b>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover table-striped table-bordered">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>College Name</th>
+                    <th>ATPO Name</th>
+                    <th>Contact No.</th>
+                    <th>Email</th>
+                    <th>Official Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of TPOList; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{row.InstituteCode}}-{{row.InstituteNameEnglish}}<br />{{row.InstituteNameHindi}}</td>
+                    <td>{{row.TPOName}}</td>
+                    <td>{{row.MobileNo}}</td>
+                    <td>{{row.Email}}</td>
+                    <td>{{row.EmailOfficial}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

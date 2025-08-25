@@ -1,0 +1,234 @@
+  <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Paper Uploaded List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Paper Uploaded List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a (click)="GoToITIPaperUploadPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+        <div class="Search">
+          <div class="form-group row">
+            <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search Exam Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="searchTerm" placeholder="Search...">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Trade </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedStream">
+            <option value="all">--All--</option>
+            @for (item of StreamMasterList; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester/Year</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+            <option value="all">--All--</option>
+            <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+            <!--<option value="1">1st Year</option>
+            <option value="2">2nd Year</option>-->
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="applyFilter(filterForm.value)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <!--<div class="flex justify-between flex-wrap items-center">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Execl
+          </a>
+        </div>-->
+      </div>
+      <div class="mat-elevation-z8 table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
+          <!-- PaperUploadID Column -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef width="100px"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index" width="100px">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- ExamName Column -->
+          <ng-container matColumnDef="ExamName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.ExamName }}</td>
+          </ng-container>
+
+          <!-- StreamID Column -->
+          <ng-container matColumnDef="StreamName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Trade Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.StreamName }}</td>
+          </ng-container>
+
+          <!-- SemesterID Column -->
+          <ng-container matColumnDef="SemesterName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Semester/Year</th>
+            <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
+          </ng-container>
+
+          <!-- PaperID Column -->
+          <!--<ng-container matColumnDef="PaperType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Type</th>
+            <td mat-cell *matCellDef="let element">{{ element.PaperType }}</td>
+          </ng-container>-->
+
+          <!-- PaperDate Column -->
+          <ng-container matColumnDef="PaperDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Download Date & Time</th>
+            <!--<td mat-cell *matCellDef="let element">{{ element.PaperDate | date }}</td>-->
+            <td mat-cell *matCellDef="let element"> {{ element.PaperDate | date: 'MMM d, y HH:mm' }} </td>
+          </ng-container>
+
+          <!-- CenterCode Column -->
+          <!--<ng-container matColumnDef="CenterCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>CenterCode</th>
+            <td mat-cell *matCellDef="let element">{{ element.CenterCode }}</td>
+          </ng-container>-->
+
+          <ng-container matColumnDef="CenterCode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Center Detail</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center actionBtns w-auto ">
+
+                <a href="javascript:void(0)" title="View" (click)="ViewCenterDetail(MyModel_ViewCenterDtls,element.PaperUploadID)"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0)" title="Download Center Detail" (click)="DownloadCenterDtlsInExcel(element.PaperUploadID)"><i class="fa fa-download"></i></a>
+                <!--<button class="btn text-success btn-sm ">Download</button>-->
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- FileName Column -->
+          <ng-container matColumnDef="Password">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Password</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="password-container" *ngIf="sSOLoginDataModel.RoleID == 7">
+                <input *ngIf="!element.showPassword"
+                       type="password"
+                       [value]="element.Password"
+                       readonly
+                       id="password-{{element.id}}" />
+                <input *ngIf="element.showPassword"
+                       type="text"
+                       [value]="element.Password"
+                       readonly
+                       id="password-{{element.id}}" />
+                <mat-icon class="eye-icon" matTooltip="Show"
+                          (click)="togglePasswordVisibility(element)">
+                  {{element.showPassword ? 'visibility_off' : 'visibility'}}
+                </mat-icon>
+                <mat-icon class="copy-icon"
+                          [cdkCopyToClipboard]="element.Password"
+                          (cdkCopyToClipboardCopied)="onCopySuccess(element)"
+                          matTooltip="Copy">
+                  {{element.isCopied ? 'check_circle' : 'content_copy'}}
+                </mat-icon>
+              </div>
+            </td>
+          </ng-container>
+          <!-- FileName Column -->
+          <ng-container matColumnDef="Download">
+            <th mat-header-cell *matHeaderCellDef>Download</th>
+            <td mat-cell *matCellDef="let element">
+              <button (click)="DownloadFile(element.FileName)">
+                <mat-icon matTooltip="Download">download</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- Header Row -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+          <!-- Data Row -->
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+          No Record Found
+        </div>
+        <!-- Pagination Controls -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords" (page)="onPaginationChange($event)">
+        </mat-paginator>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #MyModel_ViewCenterDtls let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Center Detail</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Exam Name</th>
+                  <!--<th class="text-left">Trade</th>-->
+                  <th class="text-left">Center Name</th>
+                  <th class="text-left">Center Superitendent Name </th>
+                  <th class="text-left">Mobile No</th>
+                  <th class="text-center">Paper Download</th>
+                  <th class="text-left">Download Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of CenterDtlsList; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.ExamName}}</td>
+                  <!--<td align="left">{{row.Trade}}</td>-->
+                  <td align="left">{{row.CenterName}}</td>
+                  <td align="center">{{row.CenterSuperIntendenctName}}</td>
+                  <td align="left">{{row.MobileNo}}</td>
+                  <!--<td align="center" class="text-success">
+                    <input type="checkbox" [checked]="row.IsDownload" disabled />
+                  </td>-->
+                  <td align="center">
+                    <i [ngClass]="row.IsDownload ? 'text-success fa fa-check' : 'text-danger fa fa-remove'"></i>
+                  </td>
+                  <td align="left">{{row.DownloadDate}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+      </div>
+    </div>
+  </div>
+</ng-template>

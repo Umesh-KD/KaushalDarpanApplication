@@ -1,0 +1,58 @@
+<head>
+  <title>Dashboard | DTE</title>
+  <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="assets/images/favicon.ico">
+  <!-- Icons css -->
+  <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+</head>
+
+<form [formGroup]="LoginForm" class="form-horizontal" >
+  <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6 flex justify-center" style="margin-top:100px">
+    <a href="javascript:void(0);" class="flex logoTxt login">
+     
+      <b>
+        Authentication.<br />
+        This Is One Time Authentication. Please enter your
+        login details given by Admin!
+      </b>
+    </a>
+    <h3>Entered SSSOID:- <b>{{sSOLoginDataModel.SSOID}}</b></h3>
+    <div class="card tab-panels">
+      <div class="card-body p-5">
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+
+          <div>
+            <label for="txtuserName" class="text-gray-800 text-sm font-medium inline-block mb-2">College Code <span class="StarMarking">*</span></label>
+
+
+            <input  autocomplete="off" type="text" class="form-input" id="txtUserID" placeholder="Enter User Name" name="txtUserID" [(ngModel)]="UserName" formControlName="txtUserID"
+                   (keyup.enter)="GotoPassword()">
+            <div *ngIf="isSubmitted&&form.txtUserID.errors" class="text-danger">
+              <p *ngIf="form.txtUserID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+
+          </div>
+          <div>
+            <label for="txtPassword" class="text-gray-800 text-sm font-medium inline-block mb-2">Password <span class="StarMarking">*</span></label>
+
+            <input autocomplete="off" type="password" class="form-input" id="txtPassword" placeholder="Enter Your Password" name="txtPassword" [(ngModel)]="Password" formControlName="txtPassword"
+                   (keyup.enter)="Login()">
+            <div *ngIf="isSubmitted&&form.txtPassword.errors" class="text-danger">
+              <p *ngIf="form.txtPassword.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+          <div>
+            <button type="submit" class="btn bg-info text-white" (click)="Login()">Validate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center">
+      <script>document.write(new Date().getFullYear())</script> © DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN
+    </div>
+  </div>
+</form>
+
+

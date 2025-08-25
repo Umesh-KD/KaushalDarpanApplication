@@ -1,0 +1,109 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Branch</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/SeatIntakesList']"  class="text-sm font-medium text-slate-700" aria-current="page">Branch</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddSeatIntakes" class="text-sm font-medium text-slate-700" aria-current="page">Add Branch</a>
+    </div>
+  </div>
+  <a routerLink="/BTERSeatIntakesList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Branch</b>
+        </div>
+        <form [formGroup]="SeatIntakeFormGroup">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College Name: <span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="CollegeName" [(ngModel)]="request.CollegeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of CollegesListAll" value="{{item.CollegeId}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.CollegeName.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.CollegeName.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Branch Name:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="BranchName" [(ngModel)]="request.StreamID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of BranchList" value="{{item.Id}}">({{item.Code}}) {{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.BranchName.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.BranchName.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Shift:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="Shift" [(ngModel)]="request.ShiftID">
+                <option value="0">Choose Option</option>
+                <option value="1">GAS</option>
+                <option value="2">I Shift</option>
+                <option value="3">SFS(II Shift)</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.Shift.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.Shift.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Bter Seats: <span class="StarMarking">*</span>
+              </label>
+              <input type="number" class="form-input" placeholder="Enter Bter seats" formControlName="BterSeats" [(ngModel)]="request.TotalSeats">
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.BterSeats.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.BterSeats.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Admission Seats: <span class="StarMarking">*</span>
+              </label>
+              <input type="number" class="form-input" placeholder="Enter Admission Seats" formControlName="AdmissionSeats" [(ngModel)]="request.TotalAdmissionSeats">
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.AdmissionSeats.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.AdmissionSeats.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="onSubmit()">Submit</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

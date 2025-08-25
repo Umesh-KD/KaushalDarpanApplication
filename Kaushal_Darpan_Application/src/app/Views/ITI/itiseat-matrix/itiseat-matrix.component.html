@@ -1,0 +1,239 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI SeatMatrix</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI SeatMatrix</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <form [formGroup]="ITISeatMatrixFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ddlFinancialYearID" name="ddlFinancialYearID" formControlName="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="searchRequest.FinancialYearID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
+                {{item.YearName}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlFinancialYearID.errors" class="text-danger">
+              <p *ngIf="!form.ddlFinancialYearID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotment Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ddlAllotmentId" name="ddlAllotmentId" formControlName="ddlAllotmentId" [(ngModel)]="searchRequest.AllotmentId">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of AllotmentTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlAllotmentId.errors" class="text-danger">
+              <p *ngIf="!form.ddlAllotmentId.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <button type="button" class="btn bg-info text-white  mt-6" (click)="ShowSeatMetrix()"> Show Seat Matrix</button>
+          </div>
+
+        </div>
+      </form>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>  Seat Matrix</b>
+        <div>
+          <button type="button" class="btn bg-info text-white" (click)="OpenInternalsliding(MyModel_Action)"><i class="ti ti-plus"></i>IMC MARGE</button>
+          <!--<a href="javascript:void(0)" title="Swap Trade" (click)="OpenInternalsliding(MyModel_Action)">
+            <i class="ti ti-transfer"></i>
+          </a>-->
+        </div>
+      </div>
+
+      <div class="w-100  bg-light my-2">
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th scope="col">SrNo</th>
+              <th scope="col">CollegeName</th>
+              <th scope="col">TradeName</th>
+              <th scope="col">TradeSchemeName</th>
+              <th scope="col">TotalSeat</th>
+              <th scope="col">GEN</th>
+              <th scope="col">GEN_F</th>
+              <th scope="col">SC</th>
+              <th scope="col">SC_F</th>
+              <th scope="col">ST</th>
+              <th scope="col">ST_F</th>
+              <th scope="col">TSP</th>
+              <th scope="col">TSP_F</th>
+              <th scope="col">SAH</th>
+              <th scope="col">SAH_F</th>
+              <th scope="col">OBC</th>
+              <th scope="col">OBC_F</th>
+              <th scope="col">SBC</th>
+              <th scope="col">SBC_F</th>
+              <th scope="col">MIN</th>
+              <th scope="col">MIN_F</th>
+              <th scope="col">EWS</th>
+              <th scope="col">EWS_F</th>
+              <th scope="col">MBC</th>
+              <th scope="col">MBC_F</th>
+              <th scope="col">DEV</th>
+              <th scope="col">DEV_F</th>
+              <th scope="col">WID_DIV</th>
+              <th scope="col">EX</th>
+              <th scope="col">PH</th>
+              <th scope="col">IMC_SC</th>
+              <th scope="col">IMC_ST</th>
+              <th scope="col">IMC_OBC</th>
+              <th scope="col">IMC_GEN</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let Metrix of ShowSeatMetrixList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+              <td>{{idx+1}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.Name}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.TradeName}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.TradeSchemeName}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.TotalSeats}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.GEN}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.GEN_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SC_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.ST}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.ST_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.TSP}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.TSP_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SAH}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SAH_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.OBC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.OBC_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SBC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.SBC_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.MIN}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.MIN_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.EWS}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.EWS_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.MBC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.MBC_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.DEV}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.DEV_F}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.WID_DIV}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.EX}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.PH}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.IMC_SC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.IMC_ST}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.IMC_OBC}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Metrix.IMC_GEN}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- end row -->
+  <ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+    <div class="modal-content">
+
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <div class="flex-grow text-center">
+            <b><i class="fa fa-plus"></i>&nbsp; IMC MARGE </b>
+          </div>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <form class="form-horizontal">
+          <div class="card">
+            <div class="card-body p-5">
+              <div class="mb-8">
+
+                <!--<div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-1">-->
+                <div class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+                  <div class="flex items-center">
+                    <!-- Label on the left -->
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4">IMC-SC: </label>
+                    <!-- Dropdown on the right -->
+                    <select class="form-select" name="ddlAllotmentId" [(ngModel)]="searchRequest.IMC_SC">
+                      <option value=''>--Select--</option>
+                      <option value="SC">SC</option>
+                      <option value="SC_F">SC_F</option>
+                      <option value="GEN">GEN</option>
+                      <option value="GEN_F">GEN_F</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center">
+                    <!-- Label on the left -->
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4">IMC-ST: </label>
+                    <!-- Dropdown on the right -->
+                    <select class="form-select" name="ddlAllotmentId" [(ngModel)]="searchRequest.IMC_ST">
+                      <option value=''>--Select--</option>
+                      <option value="ST">ST</option>
+                      <option value="ST_F">ST_F</option>
+                      <option value="GEN">GEN</option>
+                      <option value="GEN_F">GEN_F</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center">
+                    <!-- Label on the left -->
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4">IMC-OBC: </label>
+                    <!-- Dropdown on the right -->
+                    <select class="form-select" name="ddlAllotmentId" [(ngModel)]="searchRequest.IMC_OBC">
+                      <option value=''>--Select--</option>
+                      <option value="OBC">OBC</option>
+                      <option value="OBC_F">OBC_F</option>
+                      <option value="GEN">GEN</option>
+                      <option value="GEN_F">GEN_F</option>
+                    </select>
+                  </div>
+                  <div class="flex items-center">
+                    <!-- Label on the left -->
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4">IMC-GEN: </label>
+                    <!-- Dropdown on the right -->
+                    <select class="form-select" name="ddlAllotmentId" [(ngModel)]="searchRequest.IMC_GEN">
+                      <option value=''>--Select--</option>
+                      <option value="GEN">GEN</option>
+                      <option value="GEN_F">GEN_F</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                  <div class="text-center">
+                    <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData()">Submit</button>
+                  </div>
+
+                </div>
+
+
+              </div>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </ng-template>

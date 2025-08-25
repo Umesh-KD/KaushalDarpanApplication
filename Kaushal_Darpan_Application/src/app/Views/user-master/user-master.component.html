@@ -1,0 +1,392 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+  </div>
+  <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+    <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">User Master</a>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<!--<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">-->
+  <div class="card tab-panels" id="UserDetail">
+    <div class="card-body p-5">
+      <form [formGroup]="UserMasterFormGroup" class="form-horizontal">
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add User Details</b>
+            <span class="text-danger">(* fields are mandatory)</span>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+            <div>
+              <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                User Name<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtUserName" name="txtUserName" formControlName="txtUserName"
+                     [(ngModel)]="request.Name">
+              <div *ngIf="isSubmitted && _UserMasterFormGroup.txtUserName.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtUserName.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                User Email<span class="StarMarking">*</span>
+              </label>
+              <input type="email" class="form-input" id="txtUserEmail" name="txtUserEmail"
+                     formControlName="txtUserEmail" [(ngModel)]="request.Email">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtUserEmail.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtUserEmail.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ddlLevel" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Level<!--<span class="StarMarking">*</span>-->
+              </label>
+              <select class="form-select" id="ddlLevel" name="ddlLevel" [(ngModel)]="request.LevelID"
+                      formControlName="ddlLevel">
+                <option value="0" disabled>-- Select --</option>
+                <option *ngFor="let item of LevelMasterList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <!--<div *ngIf="isSubmitted&&_UserMasterFormGroup.ddlLevel.errors" class="text-danger">
+                <p *ngIf="!_UserMasterFormGroup.ddlLevel.errors.DropdownValidators">
+                  <i aria-hidden="true"></i> This
+                  field is required .!
+                </p>
+              </div>-->
+
+            </div>
+
+            <div>
+              <label for="ddlDesignation" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Designation<!--<span class="StarMarking">*</span>-->
+              </label>
+              <select class="form-select" id="ddlDesignation" name="ddlDesignation" [(ngModel)]="request.DesignationID"
+                      formControlName="ddlDesignation">
+                <option value="0" disabled>-- Select --</option>
+                <option *ngFor="let item of DesignationMasterList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <!--<div *ngIf="isSubmitted&&_UserMasterFormGroup.ddlDesignation.errors" class="text-danger">
+                <p *ngIf="!_UserMasterFormGroup.ddlDesignation.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>
+                  This field is required .!
+                </p>
+              </div>-->
+            </div>
+
+            <div>
+              <label for="txtAadhaarID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Aadhaar ID<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtAadhaarID" name="txtAadhaarID" formControlName="txtAadhaarID"
+                     [(ngModel)]="request.AadhaarID" maxlength="12">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtAadhaarID.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtAadhaarID.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+
+              </div>
+            </div>
+
+            <div>
+              <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                SSO ID<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtSSOID" name="txtSSOID" formControlName="txtSSOID"
+                     [(ngModel)]="request.SSOID">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtSSOID.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtSSOID.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Mobile No<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtMobileNo" name="txtMobileNo" formControlName="txtMobileNo"
+                     [(ngModel)]="request.MobileNo" maxlength="10">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtMobileNo.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtMobileNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtGender" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Gender<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlGender" name="ddlGender" [(ngModel)]="request.Gender"
+                      formControlName="ddlGender">
+                <option value="" disabled>-- Select --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Other">Other</option>
+              </select>
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.ddlGender.errors" class="text-danger">
+                <p *ngIf="!_UserMasterFormGroup.ddlGender.errors.DropdownValidators">
+                  <i aria-hidden="true"></i> This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!--<div>
+              <label for="txtState" class="text-gray-800 text-sm font-medium inline-block mb-2">State<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtState" name="txtState" formControlName="txtState" [(ngModel)]="request.State">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtState.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtState.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>-->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">State</label><span class="StarMarking">*</span>
+              <select class="form-select" id="ddlStateID" name="StateID" formControlName="ddlStateID"
+                      [(ngModel)]="request.StateID" (change)="ddlState_Change()">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.ddlStateID.errors" class="text-danger">
+                <p *ngIf="!_UserMasterFormGroup.ddlStateID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">District</label><span class="StarMarking">*</span>
+              <select class="form-select" name="DistrictID" id="ddlDistrictID" formControlName="ddlDistrictID"
+                      [(ngModel)]="request.DistrictID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.ddlDistrictID.errors" class="text-danger">
+                <p *ngIf="!_UserMasterFormGroup.ddlDistrictID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtOfficialEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Official
+                Email<span class="StarMarking">*</span>
+              </label>
+              <input type="email" class="form-input" id="txtOfficialEmail" name="txtOfficialEmail"
+                     formControlName="txtOfficialEmail" [(ngModel)]="request.EmailOfficial">
+              <div *ngIf="isSubmitted&&_UserMasterFormGroup.txtOfficialEmail.errors" class="text-danger">
+                <p *ngIf="_UserMasterFormGroup.txtOfficialEmail.errors.required">
+                  <i aria-hidden="true"></i> This field
+                  is required .!
+                </p>
+
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <label class="block">Status</label>
+              <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ActiveStatus"
+                       formControlName="chkActiveStatus" onchange="js_StatusYesNoActiveInActive(this);">
+                <span class="toggleIcon">
+                  <span class="toggleTitle"></span>
+                </span>
+              </label>
+
+            </div>
+            <!--<div>
+              <div class="col-md-12">
+                <div class="col-span-2 row-span-2 flex items-start">
+
+                  <div>
+                    <label for="vertical" class="text-gray-800 text-sm font-medium inline-block mb-2">Vertical<span class="StarMarking">*</span></label>
+                    <div class="vertical-checkbox-list">
+                      <label *ngFor="let option of verticalOptions" class="vertical-label">
+                        <input type="checkbox" [formControlName]="vertical" [value]="option.id">
+                        <span class="tag">{{ option.label }}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>-->
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+          <div class="flex align-center flexBtn mt-7 ">
+            <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white">
+              <i class="ti ti-device-floppy"></i> Save
+            </button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+        </div>
+        <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+          <div class="">
+            <select id="ddlConter" class="form-select  couterDropDown">
+              <option value="50">50</option>
+              <option value="100">100</option>
+              <option value="500">500</option>
+              <option value="1000">1000</option>
+            </select>
+          </div>
+          <div class="">
+          </div>
+          <div class="">
+          </div>
+          <div class="">
+            <input class="form-input" placeholder="Search..." [ngModelOptions]="{standalone: true}" [(ngModel)]="Table_SearchText " />
+          </div>
+        </div>
+        <div class="overflow-auto mt-3">
+          <table class="table table-border w-full" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th width="80px" align="left">Sr. No.</th>
+                <th align="left">Level</th>
+                <th align="left">Designation</th>
+                <th align="left">Name</th>
+                <th align="left">SSOID (Hindi)</th>
+                <th align="left">Email</th>
+                <th align="left">OfficialEmail</th>
+                <th align="left">MobileNo</th>
+                <th align="left">State</th>
+                <th align="left">District</th>
+                <th align="center" width="200">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td>{{idx+1}}</td>
+                <td>{{row.LevelNameEnglish}}</td>
+                <td>{{row.Designation}}</td>
+                <td>{{row.Name}}</td>
+                <td>{{row.SSOID}}</td>
+                <td>{{row.Email}}</td>
+                <td>{{row.EmailOfficial}}</td>
+                <td>{{row.MobileNo}}</td>
+                <td>{{row.StateName_English}}</td>
+                <td>{{row.DistrictNameEnglish}}</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns">
+                    <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.UserID)">
+                      <i class="ti ti-pencil"></i>
+                    </a>
+                    <a href="javascript:void(0);" id="btnDelete" title="Delete"
+                       (click)="btnDelete_OnClick(row.UserID)"><i class="ti ti-trash"></i></a>
+
+                    <a href="javascript:void(0);" title="Assign Role Rights" (click)="ViewandUpdate(MyModel_Action,row.UserID)"><i class="ti ti-playlist-add"></i></a>
+
+                    <!--<a [routerLink]="'/usermenurights'" [queryParams]="{id:row.UserID}"  id="btnRoleMenuRight" title="Role Menu Right"><i class="ti ti-plus"></i></a>-->
+                    
+
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </form>
+    </div>
+  </div>
+<!--</div>-->
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Assign Role</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-auto mt-3">
+            <table class="table table-border w-full" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th width="80px" align="left">Sr. No.</th>
+                  <th align="left">
+
+                  
+                    <input type="checkbox" id="checkboxSeletedAll" class="checkboxSize" [checked]="allSelected"
+                           (change)="toggleAllCheckboxes($event)">
+                    All
+                  </th>
+                  <th align="left">Role Name</th>
+                  <th align="left">
+                    Is Main
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of RoleMasterList; let idx = index;">
+                  <td>{{ idx + 1 }}</td>
+                  <td align="left">
+                    <!--[checked]="isChecked(row.ID,row)"-->
+
+                    <input type="checkbox"
+                           (change)="toggleCheckbox(row)" [(ngModel)]="row.Marked">
+                  </td>
+                  <td>
+                    {{ row.Name }}
+                  </td>
+                  <td align="left">
+                    <!--<input id="rb_{{idx + 1}}" type="radio" [checked]="row.IsMainRole" [(ngModel)]="row.IsMainRole"
+           name="radiocheck_{{idx + 1}}">-->
+
+                    <input type="radio"
+                           id="radio_{{idx+1}}"
+                           [checked]="row.IsMainRole"
+                           [disabled]="!row.Marked"
+                           name="radiocheck"
+                           (change)="onRadioChange(row)">
+                  </td>
+                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="text-center">
+              <button type="button"
+                      class="btn bg-info text-white mt-6"
+                      (click)="SaveData_AssignRole()"
+                      >
+                Submit
+              </button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetCheck()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

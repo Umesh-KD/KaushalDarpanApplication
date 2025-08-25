@@ -1,0 +1,157 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Trade</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ititradelist" class="text-sm font-medium text-slate-700" aria-current="page">Trade</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ititrade" class="text-sm font-medium text-slate-700" aria-current="page">Add Trade</a>
+    </div>
+  </div>
+  <a routerLink="/ititradelist" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Trade</b>
+        </div>
+        <form [formGroup]="groupForm">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Trade Name:" [(ngModel)]="request.TradeName" formControlName="txtTradeName">
+              <div *ngIf="isSubmitted && groupForm.controls.txtTradeName.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtTradeName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Types: <span class="StarMarking">*</span></label>
+
+              <select class="form-select" id="TradeTypesID" [(ngModel)]="request.TradeTypeId" formControlName="ddlTradeTypeId">
+                <option value="0">Choose Option</option>
+                <option value="1">Eng</option>
+                <option value="2">Non-Eng</option>
+                <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
+        {{item.CourseTypeName}}
+      </option>-->
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlTradeTypeId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlTradeTypeId.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Level: <span class="StarMarking">*</span></label>
+              <!--<select class="form-select" [(ngModel)]="request.TradeLevelId" formControlName="ddlTradeLevelId">
+      <option value="0">Choose Option</option>
+      <option value="12">12th</option>
+      <option value="10">10th</option>
+      <option value="8">8th</option>
+    </select>-->
+              <!--<select class="form-select" id="TradeTypesID" [(ngModel)]="request.TradeLevelId" formControlName="ddlTradeLevelId">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of TradeLevelList" [value]="item.TradeLevelID">
+        {{item.TradeLevelName}}
+      </option>
+    </select>-->
+              <select class="form-select" id="TradeTypesID" [(ngModel)]="request.TradeLevelId" formControlName="ddlTradeLevelId">
+                <option value="0">Choose Option</option>
+                <option value="8">8th</option>
+                <option value="10">10th</option>
+                <option value="12">12th</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlTradeLevelId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlTradeLevelId.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Minimum Percentage in Maths: <span class="StarMarking">*</span></label>
+                  <input type="number" class="form-input" placeholder="Enter Minimum Percentage in Maths" [(ngModel)]="request.MinPercentageInMath" formControlName="txtMinPercentageInMath">
+                  <div *ngIf="isSubmitted && groupForm.controls.txtMinPercentageInMath.errors" class="text-danger">
+                    <p *ngIf="groupForm.controls.txtMinPercentageInMath.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Minimum Percentage in Science: <span class="StarMarking">*</span></label>
+                  <input type="number" class="form-input" placeholder="Enter Minimum Percentage in Science" [(ngModel)]="request.MinPercentageInScience" formControlName="txtMinPercentageInScience">
+                  <div *ngIf="isSubmitted && groupForm.controls.txtMinPercentageInScience.errors" class="text-danger">
+                    <p *ngIf="groupForm.controls.txtMinPercentageInScience.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Duration (in Years)</label>
+              <input type="number" class="form-input" placeholder="Enter Duration (in Years)" [(ngModel)]="request.DurationYear" formControlName="txtDurationYear">
+              <div *ngIf="isSubmitted && groupForm.controls.txtDurationYear.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtDurationYear.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semesters:</label>
+              <input type="number" class="form-input" placeholder="Enter Semesters" [(ngModel)]="request.NoOfSemesters" formControlName="txtNoOfSemesters">
+              <div *ngIf="isSubmitted && groupForm.controls.txtNoOfSemesters.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtNoOfSemesters.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>-->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanctioned Seats</label>
+              <input type="number" class="form-input" placeholder="Enter Sanctioned Seats" [(ngModel)]="request.NoOfSanctionedSeats" formControlName="txtNoOfSanctionedSeats">
+              <div *ngIf="isSubmitted && groupForm.controls.txtNoOfSanctionedSeats.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtNoOfSanctionedSeats.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Minimum Age Limit</label>
+              <input type="number" class="form-input" placeholder="Enter Minimum Age Limit" [(ngModel)]="request.MinAgeLimit" formControlName="txtMinAgeLimit">
+              <div *ngIf="isSubmitted && groupForm.controls.txtMinAgeLimit.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtMinAgeLimit.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Code</label>
+              <input type="number" class="form-input" placeholder="Enter Trade Code" [(ngModel)]="request.TradeCode" formControlName="txtTradeCode">
+              <div *ngIf="isSubmitted && groupForm.controls.txtTradeCode.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtTradeCode.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Entry Qualification Details</label>
+              <textarea class="form-input" placeholder="Enter  Qualification Details" [(ngModel)]="request.QualificationDetails" formControlName="txtQualificationDetails"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtQualificationDetails.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtQualificationDetails.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6"><input type="checkbox" [(ngModel)]="request.IsMathsSciencecompulsory" [ngModelOptions]="{standalone: true}" /> Is Maths & Science compulsory</label>
+              <!--<br /><label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6"><input type="checkbox" [(ngModel)]="request.OnlyForWomen" [ngModelOptions]="{standalone: true}" /> Is Only For Women</label>-->
+            </div>
+
+          
+
+            <div>
+              <button type="submit" id="btnSave" (click)="saveData()" class="btn bg-info text-white mt-6">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- end row -->

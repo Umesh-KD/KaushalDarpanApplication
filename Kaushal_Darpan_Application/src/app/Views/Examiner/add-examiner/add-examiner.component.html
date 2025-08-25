@@ -1,0 +1,293 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Appoint Teacher for Exam</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/examiners" class="text-sm font-medium text-slate-700" aria-current="page">
+        Examiner List
+      </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Appoint Examiner</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/examiners" class="btn bg-dark text-white btn-sm">Back</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--semester-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Examination Scheme:</label>
+          <select class="form-select" id="StudentExamYear"
+                
+                  [(ngModel)]="searchRequest.IsYearly"
+                  (change)="ExaminationSchemeChange()">
+            <option value="-1">--Select All--</option>
+            <option value=0>Semester</option>
+            <option value=1>Yearly</option>
+          </select>
+
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID" (change)="ddlStream_Change()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of filteredSemesterList" [value]="item.SemesterID">
+              {{item.SemesterName}}
+            </option>
+          </select>
+        </div>
+        <!--commonsubject(yes/no)-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Common Subject (Yes/No)</label>
+          <select class="form-select" id="CommonSubjectYesNo" [(ngModel)]="CommonSubjectYesNo" (change)="ResetControl()">
+            <option value="1">No</option>
+            <option value="2">Yes</option>
+          </select>
+        </div>
+        <!--commonsubject(DB)-->
+        <div *ngIf="CommonSubjectYesNo==2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Common Subject</label>
+          <select class="form-select" id="CommonSubjectID" [(ngModel)]="searchRequest.CommonSubjectID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CommonSubjectDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <!--branch-->
+        <div *ngIf="CommonSubjectYesNo==1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID" (change)="ddlStream_Change()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+        </div>
+        <!--subject-->
+        <div *ngIf="CommonSubjectYesNo==1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject</label>
+          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.SubjectID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SubjectMasterDDLList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getStaffForExaminerData()">
+            Search
+          </button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Reset</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">SSO ID</th>
+            <th class="text-left">Teacher Name</th>
+            <th class="text-left">Designation</th>
+            <th class="text-left">UG Qualification</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Branch</th>
+            <th class="text-left">Subject</th>
+            <th class="text-left">DOJ</th>
+            <th class="text-left">Mobile</th>
+            <th class="text-left">Email</th>
+            <th class="text-Center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let staff of StaffForExaminerList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{staff.SSOID}}</td>
+            <td>{{staff.Name}}</td>
+            <td>{{staff.DesignationName}}</td>
+            <td>{{staff.QualificationName}}</td>
+            <td>{{staff.InstituteName}}</td>
+            <td>{{staff.StreamName}}</td>
+            <td>{{staff.SubjectCode}} ({{staff.SubjectName}})</td>
+            <td>{{staff.DateOfJoining | date: 'dd/MM/yyyy'}}</td>
+            <td>{{staff.MobileNumber}}</td>
+            <td>{{staff.Email}}</td>
+            <td>
+              <button class="btn bg-info text-white" type="button"
+                      (click)="ViewandUpdate(MyModel_UpdateExaminer,staff.StaffID,staff.StaffSubjectId)">
+                {{staff.IsAppointed? "Appointed":"Appoint"}}
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->
+
+<ng-template #MyModel_UpdateExaminer let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>Appoint Examiner </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+              <select class="form-select" id="InstituteID" [(ngModel)]="AppointExaminer.ExamID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ExamList" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
+            </div>-->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject Name</label>
+              <select class="form-select" id="StreamID" disabled [(ngModel)]="AppointExaminer.SubjectID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of SubjectDDLList" [value]="item.SubjectID">
+                  {{item.SubjectName}}
+                </option>
+              </select>
+            </div>
+
+            <div *ngIf="sSOLoginDataModel.DepartmentID==_enumDepartment.BTER">
+              <span style="font-size:12px;" > Assigned Group Code (Examiner Code): {{AppointExaminer.AssignGroupCode}} </span> <br>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Select Group </label>
+              <select class="form-select" id="StreamID" [(ngModel)]="AppointExaminer.GroupID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of GroupMasterDDLList" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Examiner Code:</label>
+              <input type="text" class="form-input" placeholder="Select ExaminerCode" [(ngModel)]="AppointExaminer.ExaminerCode">
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
+              <input type="text" class="form-input disabled" disabled value="Staff Name" [(ngModel)]="AppointExaminer.Name">
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSOID:</label>
+              <input type="text" class="form-input disabled" disabled value="ssoid" [(ngModel)]="AppointExaminer.SSOID">
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation </label>
+              <select class="form-select" id="DesignationID" disabled [(ngModel)]="AppointExaminer.DesignationID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DesignationMasterList" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+              <select class="form-select" id="InstituteID" disabled [(ngModel)]="AppointExaminer.InstituteID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+                  {{item.InstituteName}}
+                </option>
+              </select>
+            </div>
+
+
+
+
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth:</label>
+              <input type="text" class="form-input disabled" disabled value="00/00/0000" placeholder="Enter Student Name" [(ngModel)]="AppointExaminer.Dis_DOB">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sex:</label>
+              <input type="text" class="form-input disabled" disabled value="Male" placeholder="Enter Student Name" [(ngModel)]="AppointExaminer.Gender">
+            </div>-->
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+              <select class="form-select" id="StreamID" [(ngModel)]="AppointExaminer.StreamID"
+                    >
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+                  {{item.StreamName}}
+                </option>
+              </select>
+            </div>-->
+
+
+
+
+
+          </div>
+        </div>
+
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="appointStaffAsExaminer()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</ng-template>

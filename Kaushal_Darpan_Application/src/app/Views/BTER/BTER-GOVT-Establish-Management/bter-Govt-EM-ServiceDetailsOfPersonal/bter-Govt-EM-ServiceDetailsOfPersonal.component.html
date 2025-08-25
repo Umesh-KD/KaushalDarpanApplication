@@ -1,0 +1,383 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">BTER Govt EM Service Details Of Personnel</h4>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add BTER Govt EM Service Details Of Personnel</b>
+      <!--<a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class="ti ti-chevron-left"></i> Back
+      </a>-->
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label for="txtFromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            From Date <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="txtFromDate" (change)="DateCheckValidation()" name="txtFromDate" formControlName="txtFromDate" [(ngModel)]="formData.FromDate" placeholder="Enter From Date" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtFromDate.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtToDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            To Date <span class="StarMarking">*</span>
+          </label>
+          <input type="date" (change)="DateCheckValidation()" class="form-input" id="txtToDate" name="txtToDate" formControlName="txtToDate" [(ngModel)]="formData.ToDate" placeholder="Enter To Date" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtToDate.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Original Position <span class="StarMarking">*</span> </label>
+
+          <select class="form-select" [(ngModel)]="formData.OriginalPositionID" formControlName="ddlOriginalPositionID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OriginalPositionList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlOriginalPositionID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlOriginalPositionID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Core Business </label>
+
+          <select class="form-select" [(ngModel)]="formData.CoreBusinessID" formControlName="ddlCoreBusinessID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CoreBusinessList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District <span class="StarMarking">*</span> </label>
+
+          <select class="form-select" [(ngModel)]="formData.DistrictID" (change)="ddlDistrict_Change()" formControlName="ddlDistrictID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlDistrictID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlDistrictID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Block <span class="StarMarking">*</span></label>
+
+          <select class="form-select" [(ngModel)]="formData.BlockID" (change)="ddlBolck_Change()" formControlName="ddlBlockID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of BlockList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlBlockID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlBlockID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name Of Gram Panchayat <span class="StarMarking">*</span></label>
+
+          <select class="form-select" [(ngModel)]="formData.GramPanchayatID" formControlName="ddlGramPanchayatID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlGramPanchayatID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlGramPanchayatID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtNameOfRevenueVillage" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name Of Revenue Village/Ward Number For Urban Area
+          </label>
+          <input type="text" class="form-input" id="txtNameOfRevenueVillage" name="txtNameOfRevenueVillage" formControlName="txtNameOfRevenueVillage" [(ngModel)]="formData.NameOfRevenueVillage" placeholder="Enter Name Of Revenue Village" />
+
+        </div>
+
+        <div>
+          <label for="txtNameAndLocationOfTheInstitution_Office" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name And Location Of The Institution / Office
+          </label>
+          <input type="text" class="form-input" id="txtNameAndLocationOfTheInstitution_Office" name="txtNameAndLocationOfTheInstitution_Office" formControlName="txtNameAndLocationOfTheInstitution_Office" [(ngModel)]="formData.NameAndLocationOfTheInstitution_Office" placeholder="Enter Name And Location Of The Institution/Office" />
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> City/Village <span class="StarMarking">*</span></label>
+
+          <select class="form-select" [(ngModel)]="formData.City_VillageID" formControlName="ddlCity_VillageID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of City_VillageList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlCity_VillageID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlCity_VillageID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Posting Direct Recruitment / Promotion <span class="StarMarking">*</span></label>
+
+          <select class="form-select" [(ngModel)]="formData.PostingDirectRecruitment_PromotionID" formControlName="ddlPostingDirectRecruitment_PromotionID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostingDirectRecruitment_PromotionList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPostingDirectRecruitment_PromotionID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPostingDirectRecruitment_PromotionID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtFromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Gradation Order Number And Date <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="txtGradationOrderNumberAndDate" name="txtGradationOrderNumberAndDate" formControlName="txtGradationOrderNumberAndDate" [(ngModel)]="formData.GradationOrderNumberAndDate" placeholder="Enter Gradation Order Number And Date" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtGradationOrderNumberAndDate.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtGradationOrderNumberAndDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <!--<div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Caste Category <span class="StarMarking">*</span></label>
+
+      <select class="form-select" [(ngModel)]="formData.CadreID" formControlName="ddlCasteID">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of CasteList" [value]="item.ID">{{item.Name}}</option>
+      </select>
+      <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlCasteID.errors" class="text-danger">
+        <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlCasteID.errors.DropdownValidators">
+          <i aria-hidden="true"></i>This
+          field is required .!
+        </p>
+      </div>
+    </div>-->
+
+
+        <div>
+          <label for="txtFromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Confirmation Date <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="txtConfirmationDate" name="txtConfirmationDate" formControlName="txtConfirmationDate" [(ngModel)]="formData.ConfirmationDate" placeholder="Enter Confirmation Date" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtConfirmationDate.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtConfirmationDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtFromDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Duffel Carriage Order No. & Date
+          </label>
+          <input type="date" class="form-input" id="txtDuffelCarriageOrderNoDate" name="txtDuffelCarriageOrderNoDate" formControlName="txtDuffelCarriageOrderNoDate" [(ngModel)]="formData.DuffelCarriageOrderNoDate" placeholder="Enter Duffel Carriage Order No Date" />
+
+        </div>
+
+        <div>
+          <button type="button"
+                  class="btn bg-info text-white mt-6" (click)="AddEducation()">
+            Add
+          </button>
+          <button type="button"
+                  class="btn bg-danger text-white mt-6" (click)="ResetControl()">
+            Cancel
+          </button>
+        </div>
+
+
+      </div>
+
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3" *ngIf="AddedServiceList.length != 0">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Added Service Details Of Personnel List</b>
+      </div>
+      <div class="overflow-x-auto mt-4" *ngIf="AddedServiceList.length != 0">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left" rowspan="2">Sr</th>
+              <th class="text-left" rowspan="2">From date</th>
+              <th class="text-left" rowspan="2">To date</th>
+              <th class="text-left" rowspan="2">Original Position</th>
+              <th class="text-left" rowspan="2">Core Business</th>
+              <th class="text-left" rowspan="2">District</th>
+              <th class="text-left" rowspan="2">Block</th>
+              <th class="text-left" rowspan="2">Name Of Gram Panchayat  </th>
+              <th class="text-left" rowspan="2">
+                Name Of Revenue Village / Ward Number For Urban Area
+              </th>
+              <th class="text-left" rowspan="2">
+                Name And Location Of The Institution / Office
+              </th>
+              <th class="text-left" rowspan="2">City/Village</th>
+              <th class="text-left" rowspan="2">
+                Posting Direct Recruitment / Promotion
+              </th>
+              <th class="text-left" rowspan="2">Gradation Order Number And Date</th>
+              <!--<th class="text-left" rowspan="2">Caste </th>-->
+              <th class="text-left" colspan="2">
+                If The Appointment Is Through Direct Recruitment Then Permanent Reason Details
+              </th>
+              <th rowspan="2">Action </th>
+
+            </tr>
+            <tr>
+              <th class="text-left">Confirmation Date</th>
+              <th class="text-left">Duffel Carriage Order No. & Date</th>
+
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of AddedServiceList; let idx = index;">
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.FromDate}}</td>
+              <td class="text-left">{{row.ToDate}}</td>
+              <td class="text-left">{{row.OriginalPositionName}}</td>
+              <td class="text-left">{{row.CoreBusinessName}}</td>
+              <td class="text-left">{{row.DistrictName}}</td>
+              <td class="text-left">{{row.BlockName}}</td>
+              <td class="text-left">{{row.GramPanchayatName}}</td>
+              <td class="text-left">{{row.NameOfRevenueVillage}}</td>
+              <td class="text-left">{{row.NameAndLocationOfTheInstitution_Office}}</td>
+              <td class="text-left">{{row.City_Village}}</td>
+              <td class="text-left">{{row.PostingDirectRecruitment_Promotion}}</td>
+              <td class="text-left">{{row.GradationOrderNumberAndDate}}</td>
+              <!--<td class="text-left">{{row.CasteName}}</td>-->
+              <td class="text-left">{{row.ConfirmationDate}}</td>
+              <td class="text-left">{{row.DuffelCarriageOrderNoDate}}</td>
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-4" *ngIf="AddedServiceList.length != 0">
+        <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Final Submit</button>
+        <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="FinalSaveData()">Lock & Submit</button>-->
+      </div>
+    </form>
+
+
+
+  </div>
+</div>
+<div class="card mt-3">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Service-Details-Of-Personnel List</b>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" rowspan="2">Sr</th>
+            <th class="text-left" rowspan="2">From date</th>
+            <th class="text-left" rowspan="2">To date</th>
+            <th class="text-left" rowspan="2">Original Position</th>
+            <th class="text-left" rowspan="2">Core Business</th>
+            <th class="text-left" rowspan="2">District</th>
+            <th class="text-left" rowspan="2">Block</th>
+            <th class="text-left" rowspan="2">Name Of Gram Panchayat  </th>
+            <th class="text-left" rowspan="2">
+              Name Of Revenue Village / Ward Number For Urban Area
+            </th>
+            <th class="text-left" rowspan="2">
+              Name And Location Of The Institution / Office
+            </th>
+            <th class="text-left" rowspan="2">City/Village</th>
+            <th class="text-left" rowspan="2">
+              Posting Direct Recruitment / Promotion
+            </th>
+            <th class="text-left" rowspan="2">Gradation Order Number And Date</th>
+            <!--<th class="text-left" rowspan="2">Caste </th>-->
+            <th class="text-left" colspan="2">
+              If The Appointment Is Through Direct Recruitment Then Permanent Reason Details
+            </th>
+            <th rowspan="2">Action </th>
+
+          </tr>
+          <tr>
+            <th class="text-left">Confirmation Date</th>
+            <th class="text-left">Duffel Carriage Order No. & Date</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedServiceListAdded; let idx = index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.FromDate}}</td>
+            <td class="text-left">{{row.ToDate}}</td>
+            <td class="text-left">{{row.OriginalPositionName}}</td>
+            <td class="text-left">{{row.CoreBusinessName}}</td>
+            <td class="text-left">{{row.DistrictName}}</td>
+            <td class="text-left">{{row.BlockName}}</td>
+            <td class="text-left">{{row.GramPanchayatName}}</td>
+            <td class="text-left">{{row.NameOfRevenueVillage}}</td>
+            <td class="text-left">{{row.NameAndLocationOfTheInstitution_Office}}</td>
+            <td class="text-left">{{row.City_Village}}</td>
+            <td class="text-left">{{row.PostingDirectRecruitment_Promotion}}</td>
+            <td class="text-left">{{row.GradationOrderNumberAndDate}}</td>
+            <!--<td class="text-left">{{row.CasteName}}</td>-->
+            <td class="text-left">{{row.ConfirmationDate}}</td>
+            <td class="text-left">{{row.DuffelCarriageOrderNoDate}}</td>
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- end row -->

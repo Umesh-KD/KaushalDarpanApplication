@@ -1,0 +1,379 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Sanctioned Post Based Institute</h4>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Sanctioned post based institute personnel details as per budget head</b>
+        <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="goBack()">
+          <i class="ti ti-chevron-left"></i> Back
+        </a>
+      </div>
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+        <p><strong>नोट :-</strong> 01. Fill all the entries in English only. Leave the column "Profession" given in the I-N of non-teaching personnel blank. Fill separate pages for different budget heads. Fill the details of all the personnel posted in the institute or employed elsewhere. Make the entry of retired personnel below only in the case of being employed on honorarium against a vacant post.</p>
+        <p>02. Note down the following information of the personnel on deputation for long term work arrangements elsewhere in another table which will be recorded at the time of entry in the computer. Name of the office/institution, by whose (DD/ Directorate) order, order number, date of departure</p>
+        <p>03. Mention any one of the following in the column of posting type. Regularly posted Retired personnel on regular fixed honorarium Drawing salary from the current institution but working at other place for work arrangement</p>
+
+
+      </div>
+      <!--<div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3 items-end">
+
+
+    <p class="text-end"><strong>PERMANENT के लिए P एवं GUEST FACULTY के लिए G भरें</strong></p>
+
+  </div>-->
+     
+      <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name Of Institute </label>
+            <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlInstituteID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of InstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post (Post As Per Sanctioned Budget Head)</label>
+            <select class="form-select" [(ngModel)]="formData.SanctionedBudgetPostID" formControlName="ddlSanctionedBudgetPostID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+          <div>
+            <label for="txtSanctionedBudgetBusiness" class="text-gray-800 text-sm font-medium inline-block mb-2">Business (Post As Per Sanctioned Budget Head)</label>
+            <input type="text" class="form-input" id="txtSanctionedBudgetBusiness" name="txtSanctionedBudgetBusiness" formControlName="txtSanctionedBudgetBusiness" [(ngModel)]="formData.SanctionedBudgetBusiness" placeholder="Enter Business">
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">P/G</label>
+            <select class="form-select" [(ngModel)]="formData.P_GID" formControlName="ddlP_GID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of P_GList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+          <div>
+            <label for="txtEmpName" class="text-gray-800 text-sm font-medium inline-block mb-2">Employee Name</label>
+            <input type="text" class="form-input" id="txtEmpName" name="txtEmpName" formControlName="txtEmpName" [(ngModel)]="formData.EmpName" placeholder="Enter Emp Name">
+
+          </div>
+
+          <div>
+            <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID</label>
+            <input type="text" class="form-input" id="txtSSOID" name="txtSSOID" formControlName="txtSSOID" [(ngModel)]="formData.SSOID" placeholder="Enter SSO ID" (change)="DuplicateCheck(formData.SSOID)">
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post (Of Personnel (Basic))</label>
+            <select class="form-select" [(ngModel)]="formData.PersonnelPostID" formControlName="ddlPersonnelPostID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+          <div>
+            <label for="txtPersonnelBusiness" class="text-gray-800 text-sm font-medium inline-block mb-2">Business (Of Personnel (Basic))</label>
+            <input type="text" class="form-input" id="txtPersonnelBusiness" name="txtPersonnelBusiness" formControlName="txtPersonnelBusiness" [(ngModel)]="formData.PersonnelBusiness" placeholder="Enter Business">
+
+          </div>
+          <div>
+            <label for="txtPostingType" class="text-gray-800 text-sm font-medium inline-block mb-2">Posting Type</label>
+            <input type="text" class="form-input" id="txtPostingType" name="txtPostingType" formControlName="txtPostingType" [(ngModel)]="formData.PostingType" placeholder="Enter Posting Type">
+
+          </div>
+
+          <div>
+            <label for="txtDateOfJoiningRetiredPersonnelHonorarium" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Joining Of Retired Personnel On Fixed Honorarium</label>
+            <input type="date" class="form-input" id="txtDateOfJoiningRetiredPersonnelHonorarium" name="txtDateOfJoiningRetiredPersonnelHonorarium" formControlName="txtDateOfJoiningRetiredPersonnelHonorarium" [(ngModel)]="formData.DateOfJoiningRetiredPersonnelHonorarium" placeholder="Enter Date Of Joining Retired Personnel Honorarium">
+
+          </div>
+
+          <div>
+            <label for="txtDateDepartureAssignedWork" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Departure, If Assigned Work</label>
+            <input type="date" class="form-input" id="txtDateDepartureAssignedWork" name="txtDateDepartureAssignedWork" formControlName="txtDateDepartureAssignedWork" [(ngModel)]="formData.DateDepartureAssignedWork" placeholder="Enter Date Departure Assigned Work">
+
+          </div>
+          <div>
+            <label for="txtBudgetChief" class="text-gray-800 text-sm font-medium inline-block mb-2">Budget Chief</label>
+            <input type="text" class="form-input" id="txtBudgetChief" name="txtBudgetChief" formControlName="txtBudgetChief" [(ngModel)]="formData.BudgetChief" placeholder="Enter Budget Chief">
+
+          </div>
+
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+          <div>
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddAddedSanctioned()">Add More</button>
+          </div>
+        </div>
+      </form>
+
+
+
+
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th rowspan="2">Number</th>
+              <th rowspan="2">Institute</th>
+              <th rowspan="2">Budget Chief</th>
+              <th colspan="2">Post as per sanctioned budget head</th>
+              <th rowspan="2">P/G</th>
+              <th rowspan="2">Name of Personnel</th>
+              <th rowspan="2">SSO ID</th>
+              <th colspan="2">of Personnel (Basic) </th>
+              <th rowspan="2">Posting Type</th>
+              <th rowspan="2">Date of joining of retired personnel on fixed honorarium</th>
+              <th rowspan="2">Date of departure, if assigned work</th>
+              <th rowspan="2">Action</th>
+            </tr>
+            <tr>
+              <th>Designation</th>
+              <th>Business</th>
+              <th>Designation</th>
+              <th>Business</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of AddedSanctionedList; let idx = index;">
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.InstituteName}}</td>
+              <td class="text-left">{{row.BudgetChief}}</td>
+              <td class="text-left">{{row.SanctionedBudgetPostName}}</td>
+              <td class="text-left">{{row.SanctionedBudgetBusiness}}</td>
+              <td class="text-left">{{row.P_GName}}</td>
+              <td class="text-left">{{row.EmpName}}</td>
+              <td class="text-left">{{row.SSOID}} </td>
+              <td class="text-left">{{row.PersonnelPostName}} </td>
+              <td class="text-left">{{row.PersonnelBusiness}}</td>
+              <td class="text-left">{{row.PostingType}}</td>
+              <td class="text-left">{{row.DateOfJoiningRetiredPersonnelHonorarium}}</td>
+              <td class="text-left">{{row.DateDepartureAssignedWork}}</td>
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #SttafModelPriview let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <!--<div *ngIf="isModalOpen" >-->
+        <!--<h4 class="text-center text-lg font-semibold mb-4">Confirmation</h4>-->
+        <div class="card tab-panels " id="Preview">
+          <div class="card-body p-5">
+            <div class="mb-6 w-full text-center">
+              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Teacher Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <!--<div class="col-span-2 text-center" style="text-align:center !important">
+                    <img src="assets/images/dummyImg.jpg" class="imgSignSelf" />
+                    <b class="block">फोटो (Photograph)</b>
+                </div>
+                <div class="col-span-2 text-center">
+                    <img src="assets/images/signature.jpg" class="imgSignSelf" />
+                    <b class="block">हस्ताक्षर (Signature)</b>
+                </div>-->
+                <div><b>Teacher Name:</b></div>
+                <div>{{staffDetailsFormData.Name
+                }}
+</div>
+                <div><b>Email:</b></div>
+                <div>{{staffDetailsFormData.Email}}</div>
+                <div><b>Mobile:</b></div>
+                <div>{{staffDetailsFormData.MobileNumber}}</div>
+                <div><b>Designation:</b></div>
+                <div>{{staffDetailsFormData.DesignationID}}</div>
+                <div><b>Date of Joining as lecture:</b></div>
+                <div>{{staffDetailsFormData.DateOfJoining}}</div>
+                <div><b>Date of Retirement:</b></div>
+                <div>{{staffDetailsFormData.DateOfAppointment}}</div>
+                <div><b>Number of years experience:</b></div>
+                <div>
+                  {{staffDetailsFormData.Experience}}
+                </div>
+                <div><b>Teacher Branch & code:</b></div>
+                <div>{{staffDetailsFormData.StreamName}}</div>
+
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Current Working Institute</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Institute Name:</b></div>
+                <div>{{staffDetailsFormData.InstituteName}}</div>
+                <div><b>Division:</b></div>
+                <div>{{staffDetailsFormData.InstituteDivision}}</div>
+                <div><b>District:</b></div>
+                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
+                <div><b>Tehsil:</b></div>
+                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Qualification Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>UG:</b></div>
+                <div>B.Tech</div>
+                <div><b>PG:</b></div>
+                <div>M.E.</div>
+                <div><b>PhD:</b></div>
+                <div>No</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.District}}</div>
+                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>
+
+            <!--<div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.State}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.district}}</div>
+                <div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.TehssilName}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>-->
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Bank Account Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Bank Name</b></div><div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Branch Name</b></div><div>{{staffDetailsFormData.BranchName}}</div>
+                <div><b>Name In Bank Account</b></div><div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Account No.</b></div><div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div><div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div><div>{{staffDetailsFormData.PanCardNumber}}</div>
+              </div>
+            </div>
+
+
+          </div>
+          <!--<div class="card-footer text-center">
+            <button type="button" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Lock & Submit</button>
+          </div>-->
+        </div>
+
+
+      </div>
+
+
+      <!-- Close Button -->
+      <!--<div class="flex justify-center mt-4">
+        <button class="btn bg-info text-white" (click)="Confirm()">Confirm</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+      </div>-->
+    </div>
+    <!--</div>-->
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Dispatch Documents Uploads</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--{{searchRequestUpdateSSOIDByPricipleModel|json}}-->
+      <form [formGroup]="QueryReqFormGroup" id="QueryReqFormGroup">
+        <div class="card-body">
+
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+
+
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+            <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
+                   formControlName="txtSSOID" [(ngModel)]="searchRequestUpdateSSOIDByPricipleModel.SSOID" />
+            <div *ngIf="isSubmitted && _QueryReqFormGroup.txtSSOID.errors" class="text-danger">
+              <p *ngIf="_QueryReqFormGroup.txtSSOID.errors.required">
+                <i aria-hidden="true"></i>
+                This
+                field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <div class="card-footer text-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="UpdateSSOIDByPriciple()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</ng-template>
+
+<!-- end row -->

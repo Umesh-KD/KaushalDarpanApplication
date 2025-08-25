@@ -1,0 +1,423 @@
+
+
+<div class="flex items-center justify-between flex-wrap">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+  </div>
+  <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+    <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Subject Master</a>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card tab-panels" id="QualificationDetail">
+    <div class="card-body p-5">
+      <form [formGroup]="SubjectMasterFormGroup" class="form-horizontal">
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Subject Details</b>
+            <span class="text-danger">(* fields are mandatory)</span>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Course</label>
+    <select class="form-select" name="SearchByCourse" id="SearchByCourse"
+            [(ngModel)]="request.StreamID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of BranchesMasterList" [value]="item.StreamID">
+        {{item.StreamName}}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+    <select class="form-select" name="SearchBySemester" id="SearchBySemester"
+            [(ngModel)]="request.SemesterID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">
+        {{item.SemesterName}}
+      </option>
+    </select>
+  </div>-->
+
+            <div>
+              <label for="ddlStream" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Course<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlStreamType" name="ddlStream" [(ngModel)]="request.StreamID"
+                      formControlName="ddlStream">
+                <option value="0">-- Select --</option>
+                <option *ngFor="let item of BranchesMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlStream.errors" class="text-danger">
+                <p *ngIf="!form.ddlStream.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ddlSubjectType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Semester<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlSubjectType" name="ddlSemester" [(ngModel)]="request.SemesterID"
+                      formControlName="ddlSemester">
+                <option value="0">-- Select --</option>
+                <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlSemester.errors" class="text-danger">
+                <p *ngIf="!form.ddlSemester.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+
+
+
+            <!--<div>
+    <label for="ddlSubjectType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      Subject Category<span class="StarMarking">*</span>
+    </label>
+    <select class="form-select" id="ddlSubjectType" name="ddlSubjectType" [(ngModel)]="request.SubjectType"
+            formControlName="ddlSubjectType">
+      <option value="0">-- Select --</option>
+      <option *ngFor="let item of SubjectCategoryListList" value="{{item.SubjectCategoryID}}">{{item.SubjectCategoryName}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&form.ddlSubjectType.errors" class="text-danger">
+      <p *ngIf="!form.ddlSubjectType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>
+  </div>-->
+
+
+
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Subject Name<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtSubjectName" name="txtSubjectName" formControlName="txtSubjectName" [(ngModel)]="request.SubjectName" placeholder="Enter Subject Name">
+              <div *ngIf="isSubmitted&&form.txtSubjectName.errors" class="text-danger">
+                <p *ngIf="form.txtSubjectName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Subject Code<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtSubjectCode" name="txtSubjectCode" formControlName="txtSubjectCode" [(ngModel)]="request.SubjectCode" placeholder="Enter Subject Code">
+              <div *ngIf="isSubmitted&&form.txtSubjectCode.errors" class="text-danger">
+                <p *ngIf="form.txtSubjectCode.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">Credits <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtSubjectCode" name="txtSubjectCode" formControlName="txtCredits" [(ngModel)]="request.SubjectCredits" placeholder="Enter Subject Credits">
+              <div *ngIf="isSubmitted&&form.txtSubjectCode.errors" class="text-danger">
+                <p *ngIf="form.txtCredits.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>  
+
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject Type</label>
+    <div class="flex items-center">
+      <label class="flex items-center">
+        <input type="radio"
+               name="SubjectRadio"
+               [(ngModel)]="request.SubjectRadio"
+               [value]="false"
+               formControlName="SubjectRadio"
+               (change)="onSubjectTypeChange(1)" />
+        Optional
+      </label>
+      <label class="flex items-center ms-2">
+        <input type="radio"
+               name="SubjectRadio"
+               [(ngModel)]="request.SubjectRadio"
+               [value]="true"
+               formControlName="SubjectRadio"
+               (change)="onSubjectTypeChange(2)" />
+        Mandatory
+      </label>
+    </div>
+  </div>-->
+
+            <div *ngIf="showDropdown">
+              <label for="ddlSubjectType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Parent Subject <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="ddlSubjectType" name="ddlSubjectType" [(ngModel)]="request.ParentID" formControlName="ddlParent">
+                <option value="0">-- Select --</option>
+                <option *ngFor="let item of ParentList" [value]="item.ID">
+                  {{ item.Name}}
+                </option>
+              </select>
+              <div *ngIf="isSubmitted && form.ddlParent.errors" class="text-danger">
+                <p *ngIf="form.ddlParent.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">IsParent Subject</label>
+              <div class="flex items-center">
+                <label class="flex items-center">
+                  <input type="radio" name="IsParent" id="IsParent" formControlName="IsParent"
+                         [(ngModel)]="request.isParent" [value]="true" />
+                  Yes
+                </label>
+                <label class="flex items-center ms-2">
+                  <input type="radio" name="IsParent" id="IsParent" formControlName="IsParent"
+                         [(ngModel)]="request.isParent" [value]="false" />
+                  No
+                </label>
+              </div>
+            </div>
+
+
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-2">Options</label>
+    <div class="flex flex-col">
+      <label class="inline-flex items-center">
+        <input type="checkbox" [(ngModel)]="request.isTheory" formControlName="isTheory" />
+        <span class="ml-2">Option 1</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="checkbox" [(ngModel)]="request.isTheory" formControlName="isTheory" />
+        <span class="ml-2">Option 2</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="checkbox" [(ngModel)]="request.isTheory" formControlName="isTheory" />
+        <span class="ml-2">Option 3</span>
+      </label>
+      <label class="inline-flex items-center">
+        <input type="checkbox" [(ngModel)]="request.option4" formControlName="option4" />
+        <span class="ml-2">Option 4</span>
+      </label>
+    </div>
+  </div>-->
+
+            <div class="mb-4" *ngIf="!request.isParent">
+              <label class="block text-gray-800 text-sm font-medium mb-2">Additional Options</label>
+
+              <!-- Checkbox 1 for Max_Theory -->
+              <div class="additional-options-check flex gap-2 mb-2">
+
+                <div class="flex items-center">
+                  <input type="checkbox"
+                         id="option1"
+                         [(ngModel)]="request.is_th"
+                         (click)="OnCheck('th')"
+                         formControlName="is_th"
+                         name="option1" />
+                  <label for="option1" class="ms-2 text-sm">IsTheory</label>
+                </div>
+                <div *ngIf="request.is_th" class="w-100">
+                  <label for="inputField1" class="text-gray-800 text-sm font-medium inline-block mb-2">Max_Theory</label>
+                  <input type="text" id="inputField1" class="form-input " [(ngModel)]="request.max_th" formControlName="max_th" />
+                </div>
+              </div>
+
+              <!-- Checkbox 2 for Max_Practical -->
+              <div class="additional-options-check flex gap-2 mb-2">
+
+                <div class="flex items-center">
+                  <input type="checkbox"
+                         id="option2"
+                         [(ngModel)]="request.is_pr"
+                         formControlName="is_pr"
+                         (click)="OnCheck('pr')"
+                         name="option2" />
+                  <label for="option2" class="ms-2 text-sm">IsPractical</label>
+                </div>
+                <div *ngIf="request.is_pr" class="w-100">
+                  <label for="inputField2" class="text-gray-800 text-sm font-medium inline-block mb-2">Max_Practical</label>
+                  <input type="text" id="inputField2" class="form-input" [(ngModel)]="request.max_pr" formControlName="max_pr" />
+                </div>
+              </div>
+
+              <!-- Checkbox 3 for Max_IA -->
+              <div class="additional-options-check flex gap-2 mb-2">
+
+                <div class="flex items-center">
+                  <input type="checkbox"
+                         id="option3"
+                         [(ngModel)]="request.is_ia"
+                         formControlName="is_ia"
+                         (click)="OnCheck('ia')"
+                         name="option3" />
+                  <label for="option3" class="ms-2 text-sm">IsIA</label>
+                </div>
+                <div *ngIf="request.is_ia" class="w-100">
+                  <label for="inputField3" class="text-gray-800 text-sm font-medium inline-block mb-2">Max_IA</label>
+                  <input type="text" id="inputField3" class="form-input" [(ngModel)]="request.max_ia" formControlName="max_ia" />
+                </div>
+              </div>
+
+              <!-- Checkbox 4 for SCA Grade -->
+              <div class="additional-options-check flex gap-2 mb-2">
+                <div class="flex items-center">
+                  <input type="checkbox"
+                         id="option4"
+                         [(ngModel)]="request.is_sca"
+                         formControlName="is_sca"
+                         (click)="OnCheck('sca')"
+                         name="option4" />
+                  <label for="option4" class="ms-2 text-sm">SCA Grade</label>
+                </div>
+                <div *ngIf="request.is_sca" class="w-100">
+                  <label for="inputField4" class="text-gray-800 text-sm font-medium inline-block mb-2">SCA Grade</label>
+                  <input type="text" id="inputField4" class="form-input" [(ngModel)]="request.sca_grade" formControlName="sca_grade" />
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+
+
+
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3 ">
+              <label class="block">Status</label>
+              <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                <input class="sr-only peer" type="checkbox" id="Active" [(ngModel)]="request.ActiveStatus"
+                       formControlName="chkActiveStatus" onchange="js_StatusYesNoActiveInActive(this);">
+                <span class="toggleIcon">
+                  <span class="toggleTitle"></span>
+                </span>
+              </label>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+              <div class="flex align-center flexBtn mt-7">
+                <button type="button" id="btnSave" (click)="SaveData()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Save</button>
+                <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> List</b>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
+      </div>
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="80px" align="left">Sr. No.</th>
+              <th align="left">Subject Code</th>
+              <th align="left">Subject Name</th>
+              <th align="left">Branch Name</th>
+              <th align="left">Semester Name</th>
+              <th align="left">Is Parent Subject</th>
+
+              <!--<th align="left">Subject Category</th>-->
+
+              <th align="left">Status</th>
+              <th align="center" width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.SubjectCode}}</td>
+              <td>{{row.SubjectName}}</td>
+              <td>{{row.StreamName}}</td>
+              <td>{{row.SemesterName}}</td>
+              <td >
+                <!-- {{row.IsParent? 'Yes' : 'No'}} -->
+                <span *ngIf="row.IsParent" class="py-1 px-2 bg-success text-white">Yes</span>
+                <span *ngIf="!row.IsParent" class="py-1 px-2 bg-warning text-white">No</span>
+              </td>
+              <td>{{row.Status}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.SubjectID)"><i class="ti ti-pencil"></i></a>
+                  <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.SubjectID,row.IsParent)"><i class="ti ti-trash"></i></a>
+                  <a *ngIf="row.IsParent==true" href="javascript:void(0);" id="btnDelete" title="Assign Child Subject" (click)="openModal(modal_AddInsitute,row)"><i class="ti ti-plus"></i></a>
+
+                  <!-- </a><a href="javascript:void(0);" title="Edit"> -->
+                  <!-- <a href="/rolemenuright?="row.RoleID></a> -->
+
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+
+
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Assign Child Subject
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 400px;overflow:auto">
+        <div class="mb-8">
+          <!--<label>Select Child Subject<span class="text-danger">*</span></label>-->
+          <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="ParentList"
+                                   [(ngModel)]="AddParent.SubjectList"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+          </ng-multiselect-dropdown>
+          <!--<ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="SubjectMasterDDLList"
+                                   [formControl]="_BranchSubjectFormGroup.selectedItems" [(ngModel)]="SelectedSubjectList" [settings]="settingsMultiselector"
+                                   [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                   (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                   (onDeSelectAlls)="onDeSelectAlls($event)">
+          </ng-multiselect-dropdown>-->
+          <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<!-- End Modal Popup Start For Add Insitute-->

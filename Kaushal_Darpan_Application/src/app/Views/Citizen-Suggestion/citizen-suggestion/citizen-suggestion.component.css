@@ -1,0 +1,11 @@
+.ml-1 {
+  margin-left: 10px;
+}
+.fileUploader a {
+  position: relative;
+  left: 90%;
+  top: -38px;
+}
+.StarMarking {
+  color: red;
+}

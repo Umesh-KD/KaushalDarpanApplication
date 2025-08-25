@@ -1,0 +1,371 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{searchRequest.CourseType==1 ?'Engineering':searchRequest.CourseType==2 ?'Non Engineering':searchRequest.CourseType==3 ?'lateral':''}} Merit</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/btermerit" class="text-sm font-medium text-slate-700" aria-current="page">Merit</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotment Master:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.MeritMasterId" (change)="AllotmentChange()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of MeritMaster" [value]="row.Id">{{row.Name}}</option>
+
+            <!--<option value="1">First Allotment Provisional Merit </option>
+          <option value="2">First Allotment Final Merit       </option>
+          <option value="3">Second Allotment Provisional Merit</option>
+          <option value="4">Second Allotment Final Merit      </option>-->
+          </select>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.Category">
+            <option value="0">Choose Option</option>
+            <!-- <option *ngFor="let row of CategoryAlist" [value]="row.CasteCategoryID">{{row.CasteCategoryName}}</option> -->
+            <option value="GEN">GEN</option>
+
+
+            <option value="OBC">OBC</option>
+            <option value="MBC">MBC</option>
+            <option value="EWS">EWS</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+            <option value="TSP">TSP</option>
+            <option value="EXS">EXS</option>
+            <option value="PH">PH</option>
+            <option value="KM">KM</option>
+            <option value="WD">WD</option>
+            <option value="SMD">Single Mother Dependent</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.Gender">
+            <option value="0">Choose Option</option>
+            <option value="M">Male</option>
+            <option value="F">Female</option>
+            <!-- <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option> -->
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search Text</label>
+          <input type="text" class="form-input" placeholder="Search " [(ngModel)]="searchRequest.SearchText">
+        </div>
+
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch(1)">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetSearch()">Reset</button>
+
+        <button type="button" *ngIf=" searchRequest.MeritMasterId != 0 && searchRequest.CourseType != 0 && DateConfigSetting[0][MeritPublishKey]==1"
+                class="btn bg-secondary text-white mt-6" (click)="generateMerit()">
+          Generate Merit
+        </button>
+
+        <a href="javascript:void(0)" (click)="OpenUploadMeritModel(MyModel_SeatMatrix)" class="btn bg-info btn-sm text-white me-2" *ngIf="searchRequest.MeritMasterId != 0 && searchRequest.CourseType != 0 && DateConfigSetting[0][MeritPublishKey]==1">
+          <i class="ti ti-download"></i> Upload Merit Data
+        </a>
+
+
+        <button type="button" *ngIf="MeritData.length>0 && MeritData[0].IsPublished==0 && DateConfigSetting[0][MeritPublishKey]==1"
+                class="btn bg-success text-white mt-6" (click)="openOTPPublish()">
+          Publish Merit
+        </button>
+
+
+        <button type="button" *ngIf="MeritData.length>0 && MeritData[0].IsPublished==1 && DateConfigSetting[0][MeritPublishKey]==1"
+                class="btn bg-success text-white mt-6" (click)="openUnPublish(modal_UnPublish)">
+          UnPublish Merit
+        </button>
+
+
+
+      </div>
+
+
+
+
+
+
+    </div>
+
+   
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center " *ngIf="searchRequest.MeritMasterId!=0">
+        <button type="button" class="btn bg-success text-white" (click)="exportExcelData()">Export Excel</button>
+        <button type="button" class="btn bg-success text-white" (click)="DownloadPDF()">Download PDF</button>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="onSearch(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Merit No</th>
+            <th class="text-left">Application No</th>
+            <th class="text-left">Applicant Name</th>
+            <th class="text-left">Gender</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">PH</th>
+            <th class="text-left">KM</th>
+            <th class="text-left">Ex Servicemen</th>
+            <th class="text-left">Widow/Divorcee</th>
+            <th class="text-left">Single Mother Dependent</th>
+            <th class="text-left">TSP</th>
+            <th class="text-left" >10th Percentage</th>
+            <th class="mt-3 mb-1" *ngIf="searchRequest.CourseType==2||searchRequest.CourseType==3||searchRequest.CourseType==4||searchRequest.CourseType==5">Qualifying Examination Type</th>
+            <th class="mt-3 mb-1" *ngIf="searchRequest.CourseType==4 ||searchRequest.CourseType==3||searchRequest.CourseType==2||searchRequest.CourseType==5">Percentage</th>
+
+
+            <!--<th class="text-left" *ngIf="searchRequest.CourseType==1 || searchRequest.CourseType==2">Class Percentage</th>-->
+            <!--<th class="text-left" *ngIf="searchRequest.CourseType==3">Course Type</th>-->
+            <!--<th class="text-left" *ngIf="searchRequest.CourseType==3">12th Percentage</th>-->
+
+
+            <th class="text-left">Prefential Category</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of MeritData; let idx=index;">
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.MeritNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Gender}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB|date:'dd-MM-yyyy'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CategoryName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsPH}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsKM}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsExServicemen}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsWID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsSingleMotherDependent}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.IsTSP}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TenthPer}}</td>
+
+            <td class="mt-3 mb-1" *ngIf="searchRequest.CourseType==4 || searchRequest.CourseType==3 || searchRequest.CourseType==2|| searchRequest.CourseType==5">{{row.OtherQuaType}}</td>
+            <td class="mt-3 mb-1" *ngIf="searchRequest.CourseType==4 || searchRequest.CourseType==3 || searchRequest.CourseType==2|| searchRequest.CourseType==5">{{row.OtherQuaPer}}</td>
+
+            <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==2">{{row.MaxPer}}</td>
+          <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.CourseType}}</td>
+          <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.TwelvePer}}</td>
+          <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6" *ngIf="searchRequest.CourseType==3">{{row.TenthPer}}</td>-->
+
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PrefCategoryType}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  MeritData?.length }} of {{MeritData[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="onSearch(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="MeritData[0]?.TotalRecords==0" (change)="onSearch(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="onSearch(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+  </div>
+</div>
+
+
+<ng-template #MyModel_SeatMatrix let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Import Student Merit </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <!--<div class="grid-cols-12">
+          <label style="color:red;font-size:15px;" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                 for="fileStudentPhoto">*Please validate that the record count does not exceed 10,000 rows, as that is the maximum allowed for this operation.</label>
+        </div>-->
+        <div class="clearfix"></div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="gap-3">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+              <!-- File Input for Excel -->
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <div class="mt-5">
+            <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+            <a href="javascript:void(0)" (click)="ResetData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-list"></i>Reset</a>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Merit Data</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" (click)="openOTPUploadExcel()"  class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Save
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead>
+              <tr>
+                <th style="text-align:left;" *ngFor="let item of DataExcel4">{{ item  }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let items of DataExcel; let indx=index">
+
+                <td style="text-align:left;" *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>
+
+                <!--<td *ngFor="let item of items.values">{{item}}</td>-->
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Veryfy OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_UnPublish let-modal class="fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden ">
+  <div class="modal-content modal-sm">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; Un Publish Merit
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter Remark for un publish merit<span class="StarMarking">*</span></label>
+          <textarea type="text" rows="3" class="form-input" [(ngModel)]="UnPublishRemark" placeholder="Enter Remark for un publish merit"></textarea>
+        </div>
+
+        <div>
+          <label>Attachment</label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="fileStudentPhoto" type="file"  (change)="onFileChangeUnPublish($event,'Photo')" accept="image/*" />
+            <label for="fileStudentPhoto">
+              <span>Choose File</span>
+              {{UnPubishAttachment === '' ? 'No File Choosen' : UnPubishAttachment}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + UnPubishAttachment}}"
+                 *ngIf="UnPubishAttachment !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>         
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="openOTPUnPublish()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i>Submit</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+<app-otpmodal #otpModal1></app-otpmodal>
+<app-otpmodal #otpModal2></app-otpmodal>

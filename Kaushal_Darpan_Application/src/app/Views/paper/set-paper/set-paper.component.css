@@ -1,0 +1,20 @@
+
+  .question-chackbox label {
+    margin: 0px;
+    padding: 10px;
+    border-left: solid 1px #f0f0f0;
+  }
+.question-chackbox input {
+  margin: 10px;
+}
+.question-chackbox {
+  height: 40px;
+  line-height: 40px;
+  border: solid 1px #f0f0f0;
+  width: 169px;
+  margin: 10px 0px;
+}
+.QuestionBotton {
+  margin-top: -38px;
+  position: absolute;
+}

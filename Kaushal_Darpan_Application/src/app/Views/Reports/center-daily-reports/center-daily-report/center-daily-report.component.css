@@ -1,0 +1,13 @@
+.submenu-arrow {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.active-parent {
+  background-color: rgba(0, 0, 0, 0.08); /* Light grey highlight */
+}
+.group:hover > button > svg {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}

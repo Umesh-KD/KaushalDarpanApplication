@@ -1,0 +1,74 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITIs</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITIs" class="text-sm font-medium text-slate-700" aria-current="page">PdfDownload</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+
+     
+    </div>
+   
+
+    <!--{{UserRequestList|json}}-->
+    <div class="overflow-x-auto mt-3">
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+           
+           
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+           
+          
+          
+            <td align="left">
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+               
+               
+                <a  href="javascript:void(0);" title="Joining Letter" (click)="PdfDownload()"><i class="ti ti-download"></i></a>
+               
+               
+              </div>
+
+            </td>
+
+
+          </tr>
+        </tbody>
+
+
+      </table>
+
+    </div>
+
+
+    
+
+
+  </div>
+</div>
+
+
+
+
+
+

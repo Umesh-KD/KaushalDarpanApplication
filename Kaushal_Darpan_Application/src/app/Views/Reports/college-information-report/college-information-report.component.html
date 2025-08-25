@@ -1,0 +1,62 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College Information Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/CollegeInformationReport" class="text-sm font-medium text-slate-700" aria-current="page">College Information Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+    <!-- Table -->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead>
+          <tr>
+            <th>S No.</th>
+            <th class="text-left">No of College(Government)</th>
+            <th class="text-left">Total Seats(Government)</th>
+            <th class="text-left">Admissions(Government)</th>
+            <th class="text-left">No of College(Private)</th>
+            <th class="text-left">Total Seats(Private)</th>
+            <th class="text-left">Admissions(Private)</th>
+            <th class="text-left">No of College(Total)</th>
+            <th class="text-left">Total Seats(Total)</th>
+            <th class="text-left">Admissions(Total)</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let company of CollegeInformationReportList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ company.NoOfGovernmentColleges }}</td>
+            <td>{{ company.TotalSeatsGovernment }}</td>
+            <td>{{ company.TotalAdmissionsGovernment }}</td>
+            <td>{{ company.NoOfPrivateColleges}}</td>
+            <td>{{ company.TotalSeatsPrivate}}</td>
+            <td>{{ company.TotalAdmissionsPrivate}}</td>
+            <td>{{ company.TotalNoOfColleges}}</td>
+            <td>{{ company.TotalSeats}}</td>
+            <td>{{ company.TotalAdmissions}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

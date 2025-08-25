@@ -1,0 +1,243 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Room Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Room Details</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Room</b>
+      </div>
+      <form [formGroup]="RequestFormGroup">
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Room Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="roomTypeID" formControlName="roomTypeID" [(ngModel)]="request.RoomTypeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of RoomTypeDDLList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _RequestFormGroup.roomTypeID.errors" class="text-danger">
+              <p *ngIf="!_RequestFormGroup.roomTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Room No <span class="StarMarking">*</span>
+            </label>
+            <input type="text" placeholder="Enter RoomNo" class="form-input" id="roomNo" name="RoomNo" formControlName="roomNo" [(ngModel)]="request.RoomNo">
+            <div *ngIf="isSubmitted && _RequestFormGroup.roomNo.errors?.required" class="text-danger">
+              <p>This field is required!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Study Table Facilities: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="studyTableFacilities" formControlName="studyTableFacilities" [(ngModel)]="request.StudyTableFacilities">
+              <option value="0">Choose Option</option>
+              <option value="1">Yes</option>
+              <option value="2">No</option>
+            </select>
+            <div *ngIf="isSubmitted && _RequestFormGroup.studyTableFacilities.errors" class="text-danger">
+              <p *ngIf="!_RequestFormGroup.studyTableFacilities.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Fan Facilities: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="fanFacilities" formControlName="fanFacilities" [(ngModel)]="request.FanFacilities">
+              <option value="0">Choose Option</option>
+              <option value="1">Yes</option>
+              <option value="2">No</option>
+            </select>
+            <div *ngIf="isSubmitted && _RequestFormGroup.fanFacilities.errors" class="text-danger">
+              <p *ngIf="!_RequestFormGroup.fanFacilities.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Cooling Facilities: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="coolingFacilities" formControlName="coolingFacilities" [(ngModel)]="request.CoolingFacilities">
+              <option value="0">Choose Option</option>
+              <option value="1">Yes</option>
+              <option value="2">No</option>
+            </select>
+            <div *ngIf="isSubmitted && _RequestFormGroup.coolingFacilities.errors" class="text-danger">
+              <p *ngIf="!_RequestFormGroup.coolingFacilities.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attached Let/Bath Facilities: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="attachedBathFacilities" formControlName="attachedBathFacilities" [(ngModel)]="request.AttachedBathFacilities">
+              <option value="0">Choose Option</option>
+              <option value="1">Yes</option>
+              <option value="2">No</option>
+            </select>
+            <div *ngIf="isSubmitted && _RequestFormGroup.attachedBathFacilities.errors" class="text-danger">
+              <p *ngIf="!_RequestFormGroup.attachedBathFacilities.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="saveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Room Details List</b>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-1 bg-light">
+        <b class="text-1xl-5"> Add Room Details</b>
+
+        <div class="flex justify-between items-center">
+          <div class="flex items-center me-3">
+            <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+              <!-- File Input for Excel -->
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>-->
+          <a href="{{fileUrl}}" download="Sample_Formate_HostelRoomFacility.xlsx?2" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Sample Formate</a>
+         
+        </div>
+
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div *ngIf="RoomExcelDetailsList.length==0" class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Room Type</th>
+            <th class="text-left">Room No</th>
+            <th class="text-left">Study Table Facilities</th>
+            <th class="text-left">Fan Facilities</th>
+            <th class="text-left">Cooling Facilities</th>
+            <th class="text-left">Attached Washroom Facilities</th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of RoomDetailsList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.RoomType}}</td>
+            <td align="left">{{item.RoomNo}}</td>
+            <td align="left">{{item.StudyTableFacilities}}</td>
+            <td align="left">{{item.FanFacilities}}</td>
+            <td align="left">{{item.CoolingFacilities}}</td>
+            <td align="left">{{item.AttachedBathFacilities}}</td>
+            <td align="left">{{item.Status}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!--<a href="HostelRoomDetails?id={{item.HSRoomID}}" title="Edit"><i class="ti ti-pencil"></i></a>-->
+                <a [routerLink]="['HostelRoomDetails']" [queryParams]="{ id: item.HSRoomID }" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0)" (click)="btnDelete_OnClick(item.HSRoomID)" title="Delete"><i class="ti ti-trash"></i> </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+      <div class="overflow-x-auto mt-3">
+        <div *ngIf="this.RoomExcelDetailsList.length!=0">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr. No.</th>
+                <th class="text-left">Room Type</th>
+                <th class="text-left">Room No</th>
+                <th class="text-left">Study Table Facilities</th>
+                <th class="text-left">Fan Facilities</th>
+                <th class="text-left">Cooling Facilities</th>
+                <th class="text-left">Attached Washroom Facilities</th>
+                <!--<th class="text-left">Status</th>
+            <th class="text-center">Action</th>-->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of RoomExcelDetailsList  | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{item.RoomType}}</td>
+                <td align="left">{{item.RoomNo}}</td>
+                <td align="left">{{item.StudyTableFacilities}}</td>
+                <td align="left">{{item.FanFacilities}}</td>
+                <td align="left">{{item.CoolingFacilities}}</td>
+                <td align="left">{{item.AttachedBathFacilities}}</td>
+                <!--<td align="left">{{item.Status}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="HostelRoomDetails?id={{item.HSRoomID}}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0)" (click)="btnDelete_OnClick(item.HSRoomID)" title="Delete"><i class="ti ti-trash"></i> </a>
+              </div>
+            </td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="text-center mt-3 w-full" *ngIf="RoomExcelDetailsList.length!==0" >
+        <button type="button" id="btnSave" (click)="SaveExcelData()"
+                class="btn bg-info text-white">
+          <i class="ti ti-device-floppy"></i> Submit
+        </button>
+        <button type="button" id="btnSave" (click)="CloseExcel()"
+          class="btn bg-danger text-white">
+          <i class="ti ti-device-floppy"></i> Close
+        </button>
+      </div>
+    </div>
+</div>
+<!-- end row -->

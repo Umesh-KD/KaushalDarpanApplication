@@ -1,0 +1,70 @@
+<!--Start Model Popup-->
+<ng-template #modal_UserLoginType let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-exchange"></i>&nbsp; Please Select User Type
+        </b>
+       
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <tr>
+              <td>
+                Sr No
+              </td>
+              <td>
+                User Type
+              </td>
+              <td>
+                Action
+              </td>
+            </tr>
+            <tr>
+              <td>
+                1.
+              </td>
+              <td>
+                ITI College
+              </td>
+              <td>
+                <a routerLink="/ITICollegeSSOMapping" (click)="CloseModal()" class="btn bg-info btn-sm text-white text-center c-pointer">Proceed <i class="ti ti-chevron-right"></i></a>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                2.
+              </td>
+              <td>
+                Student/Trainee
+              </td>
+              <td>
+                <a href="javascript:void(0);" (click)="UpdateStudentUserType()" class="btn bg-info btn-sm text-white text-center c-pointer">Proceed <i class="ti ti-chevron-right"></i></a>
+              </td>
+            </tr>
+            <!--<tr>
+    <td>
+      2.
+    </td>
+    <td>
+      Department User
+    </td>
+    <td>
+      <a routerLink="/UserRequest" (click)="CloseModal()" class="btn bg-info btn-sm text-white text-center c-pointer">Proceed <i class="ti ti-chevron-right"></i></a>
+    </td>
+  </tr>-->
+
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+

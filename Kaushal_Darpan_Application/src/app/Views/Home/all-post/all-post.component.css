@@ -1,0 +1,54 @@
+.all-post-filer.card .card-header h4 {
+  margin: 0;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+
+.all-post-filer.card .card-header  {
+  background-color: transparent;
+}
+
+
+select.form-select {
+  position: relative;
+}
+
+  select.form-select:focus {
+    position: relative;
+  }
+
+.form-select {
+  margin-bottom: 150px; /* adjust as per your UI */
+}
+
+
+/* StateLevelPoolCampus */
+.StateLevelPoolCampus {
+  background-color: #ffe7ec;
+}
+
+/* InstituteLevelCampus */
+.InstituteLevelCampus {
+  /*  background-color: lightgreen;*/
+  background-color: #e1b5bf;
+}
+
+/* DivisionLevelPoolCampus */
+.DivisionLevelPoolCampus {
+  /*  background-color: lightcoral;*/
+  background-color: #d38192;
+}
+.marqueeUl.postlist-mar li a, .marqueeUl.postlist-mar li.marqueeUlCampus {
+  border-bottom: solid 1px #d3d3d3 !important;
+  padding: 5px 8px;
+}
+
+.downlod-btn-mar {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+}

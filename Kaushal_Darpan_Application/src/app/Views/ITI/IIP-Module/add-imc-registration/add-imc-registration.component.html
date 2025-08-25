@@ -1,0 +1,198 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">IMC registration</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/add-imc-registration" class="text-sm font-medium text-slate-700" aria-current="page">IMC registration</a>
+    </div>
+  </div>
+  <a href="/iti-iip-manage" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> IMC registration</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label for="InstituteSsoid">IMC registration office<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="IMC Registration Office" type="text" [(ngModel)]="formData.RegOfficeName" required #regOfficeName="ngModel" name="RegOfficeName" [disabled]="isFormReadOnly">
+            <input type="hidden" [(ngModel)]="formData.regOfficeID" name="regOfficeID">
+            <div class="text-red-500 text-sm" *ngIf="regOfficeName.invalid && (regOfficeName.dirty || regOfficeName.touched)">
+              <div *ngIf="regOfficeName.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="RegNumber">IMC Registration Number<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="IMC Registration Number" type="number" [(ngModel)]="formData.RegNumber" required #RegNumber="ngModel" name="RegNumber" [disabled]="isFormReadOnly">
+            <div class="text-red-500 text-sm" *ngIf="RegNumber.invalid && (RegNumber.dirty || RegNumber.touched)">
+              <div *ngIf="RegNumber.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="RegDate">IMC Registration Date<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="IMC Registration Date" type="date" [(ngModel)]="formData.RegDate" required #RegDate="ngModel" name="RegDate" [disabled]="isFormReadOnly">
+            <div class="text-red-500 text-sm" *ngIf="RegDate.invalid && (RegDate.dirty || RegDate.touched)">
+              <div *ngIf="RegDate.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="RegLink">Society Formation Format (upload link)<span class="StarMarking">*</span></label>
+            <!--<input class="form-input" type="file" [(ngModel)]="formData.RegLink" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">-->
+            <!--<div class="flex fileUploader">
+              <input formControlName="FileName" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"(change)="onFileSelected($event)" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
+              <label for="FileName" (click)="fileInput.click()">
+                <ng-container *ngIf="documentDetails.length > 0">{{documentDetails[0].FileName}}</ng-container>
+                <span>Choose File</span>
+              </label>
+              <div class="flex" style="height:40px">
+                <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(examForm.value.FileName)" *ngIf="documentDetails.length > 0">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </div>-->
+
+            <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event)" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
+
+            <button type="button"
+                    class="btn btn-primary btn-sm ml-2"
+                    (click)="previewFile()"
+                    [disabled]="!selectedFileUrl">
+              Preview
+            </button>
+            <div class="text-red-500 text-sm" *ngIf="RegLink.invalid && (RegLink.dirty || RegLink.touched)">
+              <div *ngIf="RegLink.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="m-8">
+          <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> IMC Member Details</b>
+          </div>
+          <!--<form (ngSubmit)="submit()" #memberForm="ngForm">-->
+
+          <table class="table-auto w-full border border-gray-300">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="p-2 border">Member Type</th>
+                <th class="p-2 border">Member Name</th>
+                <th class="p-2 border">Company/Address</th>
+                <th class="p-2 border">Email</th>
+                <th class="p-2 border">Contact</th>
+                <th class="p-2 border">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let item of formData.IMCMemberDetails; let i = index">
+                <!-- Member Type (readonly) -->
+                <td class="p-2 border">
+                  <input [(ngModel)]="item.MemberTypeName"
+                         name="MemberTypeName{{i}}"
+                         class="form-input w-full bg-gray-100"
+                         readonly>
+                  <input type="hidden" [(ngModel)]="item.MemberTypeID" name="MemberTypeID{{i}}" />
+                </td>
+
+                <!-- Member Name -->
+                <td class="p-2 border">
+                  <input [(ngModel)]="item.MemberName"
+                         name="MemberName{{i}}"
+                         class="form-input w-full"
+                         placeholder="Member Name"
+                         required
+                         #MemberName="ngModel">
+                  <div class="text-red-500 text-sm" *ngIf="MemberName.invalid && (MemberName.dirty || MemberName.touched)">
+                    <div *ngIf="MemberName.errors?.['required']"> This field is required .!</div>
+                  </div>
+                </td>
+
+                <!-- Address -->
+                <td class="p-2 border">
+                  <input [(ngModel)]="item.MemberAddress"
+                         name="MemberAddress{{i}}"
+                         class="form-input w-full"
+                         placeholder="Member Address"
+                         required>
+                </td>
+
+                <!-- Email -->
+                <td class="p-2 border">
+                  <input [(ngModel)]="item.MemberEmail"
+                         name="MemberEmail{{i}}"
+                         class="form-input w-full"
+                         placeholder="Member Email"
+                         type="email"
+                         required>
+                </td>
+
+                <!-- Contact -->
+                <td class="p-2 border">
+                  <input [(ngModel)]="item.MemberContact"
+                         name="MemberContact{{i}}"
+                         class="form-input w-full"
+                         placeholder="Member Contact"
+                         required>
+                </td>
+
+                <!-- Action -->
+                <td class="p-2 border text-center">
+                  <!-- Show buttons only if MemberTypeName === Industry Representative -->
+                  <ng-container *ngIf="item.MemberTypeName == 'Industry Representative'">
+                    <button *ngIf="i==7" type="button" class="btn btn-sm bg-info text-white"
+                            (click)="addRepresentive()">
+                      <span class="fa fa-plus"></span> Add More
+                    </button>
+                    <button  type="button" class="btn btn-sm bg-danger text-white ml-2"
+                            *ngIf="formData.IMCMemberDetails.length > 8 && i!=7"
+                            (click)="removeRepresentive(i)">
+                      <span class="fa fa-remove"></span> Remove
+                    </button>
+                  </ng-container>
+                </td>
+              </tr>
+            </tbody>
+
+
+            <!-- Footer Row for Total -->
+
+          </table>
+
+
+          <!--<button type="button"
+                  (click)="addRepresentative()"
+                  class="bg-blue-500 text-white px-4 py-2 rounded">
+            + Add More Representative
+          </button>-->
+          <!--<button type="submit"
+                    class="mt-5 bg-green-600 text-white px-6 py-2 rounded"
+                    [disabled]="memberForm.invalid">
+              Submit
+            </button>
+          </form>-->
+
+
+        </div>
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6" [disabled]="instituteForm.invalid">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- end row -->
+<!--[disabled]="instituteForm.invalid"-->

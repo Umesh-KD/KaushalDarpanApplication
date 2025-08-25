@@ -1,0 +1,253 @@
+  <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Paper Set Professor List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="#" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Paper Set Professor List</a>
+    </div>
+  </div>
+  <a (click)="GoToPaperSetAssignListPage()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8" *ngIf="DIVTradeDtl">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Years Trade:</label>
+          <input type="text" class="form-input" [(ngModel)]="txtyearTrade" placeholder="" disabled>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <input type="text" class="form-input" [(ngModel)]="txtTradename" disabled>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject:</label>
+          <input type="text" class="form-input" [(ngModel)]="txtSubjectNamee" disabled>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Paper Submition Last Date:</label>
+          <input type="text" class="form-input" [(ngModel)]="txtpapperSubmitionLastDate" disabled>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Paper Code/Name:</label>
+          <input type="text" class="form-input" [(ngModel)]="txtPapperCode_Name" disabled>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" rowspan="2">#</th>
+            <!--<th class="text-left" rowspan="2">Years Trade</th>
+            <th class="text-left" rowspan="2">Trade</th>
+            <th class="text-left" rowspan="2">Subject</th>
+            <th class="text-left" rowspan="2">Paper Submition Last Date</th>
+            <th class="text-left" rowspan="2">Paper Code/Name</th>-->
+            <th class="text-left text-center" colspan="4">Professor Details</th>
+            <!--<th class="text-left" rowspan="2">Remark</th>-->
+            <th class="text-center" rowspan="2">Action</th>
+          </tr>
+          <tr>
+            <th class="text-left">District</th>
+            <th class="text-left">Professors</th>
+            <th class="text-left">Remark By Professor</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+          <ng-container *ngIf="AllAssignListDataArray.length > 0; else noData">
+            <ng-container *ngFor="let item of AllAssignListDataArray; let i = index">
+              <tr>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ i + 1 }}</td>
+                <!--<td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.yearTrade }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.Tradename }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.SubjectName }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.papperSubmitionLastDate }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.PapperCode_Name }}</td>-->
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.DistrictName }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.ProfessorName }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.RemarkByProfessor }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.Status }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">
+                  <div class="flex align-center justify-center actionBtns w-auto">
+                    <!--<a *ngIf="item.AssignprofessorListModel[0]?.UploadedPaperDocument !== ''"
+                       href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/UploadedPaperPDF/' + item.AssignprofessorListModel[0]?.UploadedPaperDocument }}"
+                       target="_blank"
+                       title="Paper file">
+                      <i class="ti ti-paperclip"></i>
+                    </a>-->
+
+                    <a *ngIf="item.AssignprofessorListModel[0]?.UploadedPaperDocument !== ''"
+                       href="javascript:void(0)"
+                       (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/UploadedPaperPDF/' + item.AssignprofessorListModel[0]?.UploadedPaperDocument)"
+                       title="Paper file">
+                      <i class="ti ti-paperclip"></i>
+                    </a>
+
+                    <a *ngIf="item.AssignprofessorListModel[0]?.UploadedPaperDocument !== '' && item.AssignprofessorListModel[0]?.IsAutoSelect != 1 && item.IsAutoSelectComplete!=1 " title="Revert Paper" (click)="OpenRevertModalPopUp(MyModel_RevertPaperFile , item.id , item.AssignprofessorListModel[0]?.ProfessorId , item.AssignprofessorListModel[0]?.ProfessorName , item.AssignprofessorListModel[0]?.DistrictName)"><i class="ti ti-chevron-left"></i></a>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngFor="let prof of item.AssignprofessorListModel.slice(1)">
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.DistrictName }}</td>
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.ProfessorName }}</td>
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.RemarkByProfessor }}</td>
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.Status }}</td>
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">
+                  <div class="flex align-center justify-center actionBtns w-auto">
+                    <!--<a *ngIf="prof.UploadedPaperDocument !== ''"
+                       href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/UploadedPaperPDF/' + prof.UploadedPaperDocument }}"
+                       target="_blank"
+                       title="Paper file">
+                      <i class="ti ti-paperclip"></i>
+                    </a>-->
+                    <a *ngIf="prof.UploadedPaperDocument !== ''"
+                       href="javascript:void(0)"
+                       (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/UploadedPaperPDF/' + prof.UploadedPaperDocument)"
+                       title="Paper file">
+                      <i class="ti ti-paperclip"></i>
+                    </a>
+                    <a *ngIf="prof.UploadedPaperDocument !== '' && item.IsAutoSelectComplete!=1 " title="Revert Paper" (click)="OpenRevertModalPopUp(MyModel_RevertPaperFile , item.id , prof.ProfessorId , prof.ProfessorName ,prof.DistrictName)"><i class="ti ti-chevron-left"></i></a>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="!item.AssignprofessorListModel.length">
+                <td colspan="4"><em>No professors assigned</em></td>
+              </tr>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noData>
+            <tr>
+              <td colspan="10">No data available.</td>
+            </tr>
+          </ng-template>
+
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <div id="divIDAutoBtn" *ngIf="DIVAutoselect" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      <div class="text-center">
+        <button type="button" id="BtnAutoSelect" class="btn bg-info text-white mt-6" (click)="AutoSelect()">Auto Select</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!----modal popup for Revert Case-->
+  <ng-template #MyModel_RevertPaperFile let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp; Revert Paper </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-2 gap-3 p-5">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">District Name: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtDistrictNameID" [(ngModel)]="txtDistrictName" disabled />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Professor Name: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="txtProfessorNameID" [(ngModel)]="txtProfessorName" disabled />
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 pt-0 p-5">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reason: <span class="StarMarking">*</span></label>
+            <textarea class="form-input" id="txtReasonID" placeholder="Enter Reason of Revert" [(ngModel)]="txtReason"></textarea>
+          </div>
+        </div>
+        <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-default-200">
+          <button type="button" class="py-2 px-5 inline-flex items-center justify-center font-medium tracking-wide border align-middle duration-500 text-sm text-center bg-primary/5 hover:bg-primary border-primary/10 hover:border-primary text-primary hover:text-white rounded-md" (click)="RevertProfessorPaper()">Revert</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+
+
+
+
+</div>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- Preview Content -->
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        <!-- PDF Preview -->
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        <!-- Image Preview -->
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <!--<pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>-->
+    </div>
+
+  </div>
+</div>
+<!-- end row -->

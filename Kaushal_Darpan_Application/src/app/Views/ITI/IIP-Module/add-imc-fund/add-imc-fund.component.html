@@ -1,0 +1,238 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Installment & Trade GPR</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/add-imc-Fund" class="text-sm font-medium text-slate-700" aria-current="page">IMC Fund</a>
+    </div>
+  </div>
+  <a href="/iti-iip-manage" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Installment & Trade GPR</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+          <input type="hidden" [(ngModel)]="formData.FundID" name="FundID"/>
+          <div>
+            <label for="InstituteSsoid" class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Years<span class="StarMarking">*</span></label>
+            <select class="form-input" name="FinancialYearID" [(ngModel)]="formData.FinancialYearID" required #FinancialYearID="ngModel" (change)="GetFinancialData($event)" [disabled]="isFormReadOnly">
+              <option [ngValue]="null">--Select--</option>
+              <option *ngFor="let item of FinancialYearMasterDDL"
+                      [ngValue]="item.FinancialYearID">
+                {{ item.FinancialYearName }}
+              </option>
+            </select>
+            <div class="text-red-500 text-sm" *ngIf="FinancialYearID.invalid && (FinancialYearID.dirty || FinancialYearID.touched)">
+              <div *ngIf="FinancialYearID.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Quarter</label>
+            <select class="form-input" name="QuarterID" [(ngModel)]="formData.QuarterID" required #QuarterID="ngModel" [disabled]="isFormReadOnly">
+              <option [ngValue]="null" selected>--Select--</option>
+              <option [ngValue]="1" [disabled]="isQuarterDisabled(1)">Quarter 1</option>
+              <option [ngValue]="2" [disabled]="isQuarterDisabled(2)">Quarter 2</option>
+              <option [ngValue]="3" [disabled]="isQuarterDisabled(3)">Quarter 3</option>
+              <option [ngValue]="4" [disabled]="isQuarterDisabled(4)">Quarter 4</option>
+            </select>
+            <div class="text-red-500 text-sm" *ngIf="QuarterID.invalid && (QuarterID.dirty || QuarterID.touched)">
+              <div *ngIf="QuarterID.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label for="InstalmentPaid" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Instalment Paid(12.5 Lac)<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Instalment Piad" type="number" [(ngModel)]="formData.InstalmentPaid" required #InstalmentPaid="ngModel" name="InstalmentPaid" (ngModelChange)="ClcAmt(1)">
+            <div class="text-red-500 text-sm" *ngIf="InstalmentPaid.invalid && (InstalmentPaid.dirty || InstalmentPaid.touched)">
+              <div *ngIf="InstalmentPaid.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="InstalmentPaidAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of Instalment Paid</label>
+            <input class="form-input" type="text" [(ngModel)]="formData.InstalmentPaidAmt" name="InstalmentPaidAmt" placeholder="Paid Amount" disabled>
+
+          </div>
+          <div>
+            <label for="InstalmentPending" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Instalment Pending(12.5 Lac)<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Instalment Pending" type="number" [(ngModel)]="formData.InstalmentPending" required #InstalmentPending="ngModel" name="InstalmentPending" (ngModelChange)="ClcAmt(2)">
+            <div class="text-red-500 text-sm" *ngIf="InstalmentPending.invalid && (InstalmentPending.dirty || InstalmentPending.touched)">
+              <div *ngIf="InstalmentPending.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="InstalmentPendingAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of Instalment Pending</label>
+            <input class="form-input" type="text" [(ngModel)]="formData.InstalmentPendingAmt" name="InstalmentPendingAmt" placeholder="Pending Amount" disabled>
+
+          </div>
+
+          <div>
+            <label for="SchemeSanctioned" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Sanctioned under the Scheme <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Sanctioned Scheme" type="number" [(ngModel)]="formData.SchemeSanctioned" required #SchemeSanctioned="ngModel" name="SchemeSanctioned">
+            <div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
+              <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="SchemeSanctionedTrade" class="text-gray-800 text-sm font-medium inline-block mb-1">Sanctioned Trade<span class="StarMarking">*</span></label>
+            <!--<select formControlName="SchemeSanctionedTrade" class="form-input">
+            <option [value]="">--Select--</option>
+            <option *ngFor="let item of TradeMasterDDL"
+                    [value]="item.ID">
+              {{ item.Name }}
+            </option>
+          </select>-->
+            <ng-multiselect-dropdown #SanctionedTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
+                                     [(ngModel)]="formData.SanctionedTradeList" [settings]="settingsMultiselector" (onchange)="onItemSelect()"
+                                     [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                     (onSelects)="onItemSelect()" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+            </ng-multiselect-dropdown>
+            <!--<div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
+            <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
+          </div>-->
+          </div>
+          <div>
+            <label for="TradeAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Affiliated <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Affiliated Trade" type="number" [(ngModel)]="formData.TradeAffiliated" required #TradeAffiliated="ngModel" name="TradeAffiliated">
+            <div class="text-red-500 text-sm" *ngIf="TradeAffiliated.invalid && (TradeAffiliated.dirty || TradeAffiliated.touched)">
+              <div *ngIf="TradeAffiliated.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="TradeAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Affiliated Trade<span class="StarMarking">*</span></label>
+            <ng-multiselect-dropdown #AffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
+                                     [(ngModel)]="formData.AffilateTradeList" [settings]="settingsMultiselector"
+                                     [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                     (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+            </ng-multiselect-dropdown>
+          </div>
+
+          <div>
+            <label for="TradeNotAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Not Affiliated <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Not Affiliated Trade" type="number" [(ngModel)]="formData.TradeNotAffiliated" required #TradeNotAffiliated="ngModel" name="TradeNotAffiliated">
+            <div class="text-red-500 text-sm" *ngIf="TradeNotAffiliated.invalid && (TradeNotAffiliated.dirty || TradeNotAffiliated.touched)">
+              <div *ngIf="TradeNotAffiliated.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+          <div>
+            <label for="TradeNotAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Not Affiliated Trade<span class="StarMarking">*</span></label>
+            <ng-multiselect-dropdown #NotAffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
+                                     [(ngModel)]="formData.NotAffilateTradeList" [settings]="settingsMultiselector"
+                                     [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                     (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+            </ng-multiselect-dropdown>
+          </div>
+          <div>
+            <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Reason of Trade Not Affiliated <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Not Affiliated Trade" type="text" [(ngModel)]="formData.Remarks" #Remarks="ngModel" name="Remarks" />
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Last IDP Revision Order Date<span class="StarMarking">*</span></label>
+            <input type="date" [(ngModel)]="formData.OrderDate" #OrderDate="ngModel" class="form-input" name="OrderDate" min="1900-01-01" max="2099-12-31" required />
+
+            <div class="text-red-500 text-sm" *ngIf="OrderDate.invalid && (OrderDate.dirty || OrderDate.touched)">
+              <div *ngIf="OrderDate.errors?.['required']"> This field is required .!</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6" [disabled]="instituteForm.invalid">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </form>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="!isFormReadOnly">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Quarterly Fund List</b>
+    </div>
+
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    <div class="">
+      <select id="ddlConter" class="form-select  couterDropDown">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+    </div>
+
+  </div>-->
+
+    <div class="overflow-x-auto mt-3" *ngIf="!isFormReadOnly">
+      <!-- Parent Table -->
+      <table class="table table-border w-full table-auto text-sm">
+
+        <thead class="bg-gray-200 dark:bg-gray-700">
+          <tr>
+            <th>Sr. No.</th>
+            <th>Quarter</th>
+            <th>Instalment Paid</th>
+            <th>Instalment Paid Amount</th>
+            <th>Instalment Pending</th>
+            <th>Instalment Pending Amount</th>
+            <th>Scheme Sanctioned</th>
+            <th>Trade Affiliated</th>
+            <th>Trade Not Affiliated</th>
+            <th>Order Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let fund of IIPFundData;  let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>Quarter {{fund.QuarterID}}</td>
+            <td>{{fund.InstalmentPaid}}</td>
+            <td>{{fund.InstalmentPaidAmt}}</td>
+            <td>{{fund.InstalmentPending}}</td>
+            <td>{{fund.InstalmentPendingAmt}}</td>
+            <td>{{fund.SchemeSanctioned}}</td>
+            <td>{{fund.TradeAffiliated}}</td>
+            <td>{{fund.TradeNotAffiliated}}</td>
+            <td>{{fund.OrderDate | date:'dd/MMM/yyyy'}}</td>
+            <td>
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="'/add-imc-fund'" [queryParams]="{IMCFundID:fund.IMCFundID}">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!IIPFundData || IIPFundData.length === 0">
+            <td colspan="7" class="text-center text-gray-400">No fund records found</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+  
+
+  </div>
+</div>
+<!-- end row -->
+<!--[disabled]="instituteForm.invalid"-->

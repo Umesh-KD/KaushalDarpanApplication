@@ -1,0 +1,146 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Quaterly Progress Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/add-quater-repot" class="text-sm font-medium text-slate-700" aria-current="page">IMC Fund</a>
+    </div>
+  </div>
+  <a href="/iti-iip-manage" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
+        <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+          <b class="text-1xl-5">SRS Point 5.10 (F)</b>
+        </div>
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <input type="hidden" name="ID"  [(ngModel)]="formData.ID"/>
+          <div>
+            <label for="InstituteSsoid">Interest received (saving & FDR)</label>
+
+          </div>
+          <div>
+            <input class="form-input" placeholder="Interest received" type="number" name="InterestReceivedAmt" [(ngModel)]="formData.InterestReceivedAmt" required #InterestReceivedAmt="ngModel" (ngModelChange)="ClcAmt()">
+          </div>
+          <div>
+            <label for="InstituteSsoid">Admission fees</label>
+
+          </div>
+          <div>
+            <input class="form-input" placeholder="Admission fees" type="number" name="AdmissionFeesAmt" [(ngModel)]="formData.AdmissionFeesAmt" required #AdmissionFeesAmt="ngModel" (ngModelChange)="ClcAmt()">
+          </div>
+          <div>
+            <label for="InstituteSsoid">Other revenue (other than interest)</label>
+
+          </div>
+          <div>
+            <input class="form-input" placeholder="Other revenue" type="number" name="OtherRevenueAmt" [(ngModel)]="formData.OtherRevenueAmt" required #OtherRevenueAmt="ngModel" (ngModelChange)="ClcAmt()">
+          </div>
+          <div>
+            <label for="InstituteSsoid">Total revenues by IMC</label>
+
+          </div>
+          <div>
+            <input class="form-input"placeholder="Total revenues by IMC" type="number" name="TotalRevenueAmt" [(ngModel)]="formData.TotalRevenueAmt" required #TotalRevenueAmt="ngModel" disabled>
+          </div>
+
+        </div>
+
+        <div class="flex justify-between items-center mt-5 mb-4 p-3 py-2 bg-light ms-5">
+          <b class="text-1xl-5">
+            <i class="ti ti-plus"></i>Expenditure Details (excluding loan
+            repayment amount)
+          </b>
+        </div>
+
+
+
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3 ms-5">
+          <div>
+            <label for="">Civil</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="CivilAmt" [(ngModel)]="formData.CivilAmt" required #CivilAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Tools, Equipments</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="ToolsAmt" [(ngModel)]="formData.ToolsAmt" required #ToolsAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Furniture</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="FurnitureAmt" [(ngModel)]="formData.FurnitureAmt" required #FurnitureAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Books & Learning Resources</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="BooksAmt" [(ngModel)]="formData.BooksAmt" required #BooksAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Additional Manpower</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="AdditionalAmt" [(ngModel)]="formData.AdditionalAmt" required #AdditionalAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Consumable, Maintenance etc</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="MaintenanceAmt" [(ngModel)]="formData.MaintenanceAmt" required #MaintenanceAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+
+          <div>
+            <label for="">Miscellaneous</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Expenditure" type="number" name="MiscellaneousAmt" [(ngModel)]="formData.MiscellaneousAmt" required #MiscellaneousAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          </div>
+        </div>
+
+
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-12 gap-3 mt-3">
+          <div>
+            <label for="InstituteSsoid">Total Expenditure</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Total Expenditure" type="number" name="TotalExpenditureAmt" [(ngModel)]="formData.TotalExpenditureAmt" required #TotalExpenditureAmt="ngModel" disabled>
+          </div>
+
+          <div>
+            <label for="InstituteSsoid">Fund avilable with IMC <br />(interest free loan given by central gov. + IMC income - Expenditure - amount of instalment paid on bharatkosh portal)</label>
+          </div>
+          <div>
+            <input class="form-input" placeholder="Fund avilable with IMC" type="number" name="FundAvailableAmt" [(ngModel)]="formData.FundAvailableAmt" required #FundAvailableAmt="ngModel" disabled>
+          </div>
+
+        </div>
+
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6" [disabled]="instituteForm.invalid">Save</button>
+            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+
+        </div>
+       </form>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->

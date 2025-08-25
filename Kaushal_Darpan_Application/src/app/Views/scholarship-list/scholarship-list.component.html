@@ -1,0 +1,206 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Scholarship</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Students</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Examiners" class="text-sm font-medium text-slate-700" aria-current="page">Scholarship List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.Principal||sSOLoginDataModel.RoleID == _enumrole.PrincipalNon" class="flex justify-end flex-wrap items-center">
+          <a routerLink="/AddSchlorship" class="btn bg-info btn-sm text-white me-2">
+            <i class="ti ti-plus"></i>Add
+          </a>
+          <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-refresh"></i>Change Examiner
+          </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+    <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ExamList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
+        <!--semester-->
+
+     
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID" [disabled]="isInstituteDisabled" >
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+              {{item.InstituteName}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester Name</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+              {{item.SemesterName}}
+            </option>
+          </select>
+        </div>
+        <!--commonsubject(yes/no)-->
+        <!--branch-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+        </div>
+        <!--subject-->
+        <!--group code-->
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getExaminerData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>-->
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <!--<th class="text-left">Exam Name</th>-->
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Branch Name</th>
+            <th class="text-left">Semester Name</th>
+            <th class="text-left">Category Name</th>
+            <th class="text-left">Total Student</th>
+            <th class="text-left">Amount</th>
+            <th *ngIf="sSOLoginDataModel.RoleID == _enumrole.Principal||sSOLoginDataModel.RoleID == _enumrole.PrincipalNon" class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let examiner of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td>{{examiner.InstituteName}}</td>
+            <td>{{examiner.StreamName}}</td>
+            <td>{{examiner.SemesterName}}</td>
+            <td>{{examiner.CategoryName}}</td>
+            <td>{{examiner.TotalStudent}}</td>
+            <td>{{examiner.Amount}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID == _enumrole.Principal||sSOLoginDataModel.RoleID == _enumrole.PrincipalNon">
+              <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.Principal||sSOLoginDataModel.RoleID == _enumrole.PrincipalNon" class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a [routerLink]="'/AddSchlorship'" [queryParams]="{ScholarshipID:examiner.ScholarshipID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Remove"
+                   (click)="btnDelete_OnClick(examiner.ScholarshipID)"><i class="ti ti-trash"></i></a>
+                <div *ngIf="examiner.Dis_DocName" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{examiner.Document}}" title="Download"><i class="ti ti-download"></i></a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+
+
+<ng-template #MyModel_UpdateAppoint let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Eamination 2024-25 (May) </b>
+        <button class="btn bg-info text-white" (click)="CloseViewStudentDetails()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
+              <input type="text" class="form-input disabled" disabled value="Student Name" [(ngModel)]="requestStudent.StudentName">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Instituter Name:</label>
+              <input type="text" class="form-input disabled" disabled value="Father Name" [(ngModel)]="requestStudent.FatherName">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth:</label>
+              <input type="text" class="form-input disabled" disabled value="00/00/0000" [(ngModel)]="requestStudent.Dis_DOB">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sex:</label>
+              <input type="text" class="form-input disabled" disabled value="Male" [(ngModel)]="requestStudent.Gender">
+            </div>
+
+
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+          <!--<div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template>
+
+
+<!-- end row -->

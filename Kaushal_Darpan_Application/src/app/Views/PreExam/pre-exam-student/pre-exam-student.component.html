@@ -1,0 +1,90 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student for Examination</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page" *ngIf="data">{{data.TotalText}} Details</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap mb-2">
+      <div class="Search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Filter </mat-label>
+          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
+        </mat-form-field>
+      </div>
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+
+        <div class="example-button-container" *ngIf="data">
+          <button class="btn bg-info text-white" extended (click)="exportToExcel()">
+            <mat-icon>downloading</mat-icon>
+            {{data.TotalText}} Reports
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- Sr. No Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StudentID" width="130px">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header width="130px">Student ID</th>
+          <td mat-cell *matCellDef="let element">{{ element.StudentID }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StudentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="FatherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Father Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="InstituteName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute</th>
+          <td mat-cell *matCellDef="let element">{{ element.InstituteName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="BranchName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch</th>
+          <td mat-cell *matCellDef="let element">{{ element.BranchName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="SemesterName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Semester</th>
+          <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StudentExamStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let element">{{ element.StudentExamStatus }}</td>
+        </ng-container>
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <!-- Pagination Controls -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                     [length]="totalRecords" (page)="onPaginationChange($event)">
+      </mat-paginator>
+    </div>
+
+  </div>
+</div>
+
+

@@ -1,0 +1,209 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"> Statics Report Provide By Examiner</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+        <ng-select formControlName="selectedSemester" [clearable]="false" (change)="GetSubjectCodeMasterDDL()">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          <ng-option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+        </ng-select>
+      </div>
+
+      <div>
+        <label for="SubjectCode" class="text-gray-800 text-sm font-medium inline-block mb-1">Subject</label>
+        <ng-select formControlName="SubjectCode" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          <ng-option *ngFor="let item of SubjectCodeMasterDDLList" [value]="item.Code">{{item.Code}}</ng-option>
+        </ng-select>
+      </div>
+
+      <div>
+        <div class="form-group row">
+          <label for="GroupCode" class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Group Code
+          </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="GroupCode" placeholder="Group Code...">
+          </div>
+        </div>
+      </div>
+
+
+      <div>
+        <div class="form-group row">
+          <label for="CCCode" class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Center Code
+          </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="CenterCode" placeholder="Center Code...">
+          </div>
+        </div>
+      </div>
+
+
+      <!--<div>
+    <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+    <ng-select formControlName="selectedInstitute" [clearable]="false">
+      <ng-option [value]="0" selected>--All--</ng-option>
+      <ng-option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+    </ng-select>
+  </div>-->
+
+
+    <div>
+      <button type="button" class="btn bg-info text-white mt-6" (click)="filterFormSubmit()">Search</button>
+     
+      <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+    </div>
+    </div>
+    <!--<div class="flex justify-between flex-wrap mb-2">
+      <div class="Search">
+        <mat-form-field class="example-full-width">
+          <mat-label>Filter</mat-label>
+          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
+        </mat-form-field>
+      </div>
+    </div>-->
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        
+        <a href="javascript:void(0);" (click)="PDFDownload()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Download PDF
+        </a>
+
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+    <!-- Table -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+      <!-- Sr. No Column -->
+      <ng-container matColumnDef="SrNo">
+        <th mat-header-cell *matHeaderCellDef width="40px"> # </th>
+        <td mat-cell *matCellDef="let element; let i = index" width="40px">{{ i + 1 }}</td>
+      </ng-container>
+
+      <!-- College Name Column with Sorting and Filtering -->
+      <ng-container matColumnDef="ExamName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          Exam Name
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.ExamName }}</td>
+      </ng-container>
+
+      <!-- Total Students Column -->
+      <ng-container matColumnDef="ExaminerName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Examiner Name </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.ExaminerName }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="SubjectCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject Code </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.SubjectCode }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="GroupCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Group Code </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.GroupCode }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="CenterCode">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Center Code </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.CenterCode }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Present">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Present </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Present }}
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="Absent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Absent </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Absent }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Below14MarksStudent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Below 14 Marks Student </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Below14MarksStudent }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Below15to17MarksStudent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>15 to 17 Marks Student </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Below15to17MarksStudent }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Below18to54MarksStudent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>18 to 54 Marks Student </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Below18to54MarksStudent }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Below55to60MarksStudent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>55 to 60 Marks Student </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Below55to60MarksStudent }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="Above60MarksStudent">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Above 60 Marks Student </th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Dynamic routerLink based on element's student ID -->
+          {{ element.Above60MarksStudent }}
+        </td>
+      </ng-container>
+
+      <!-- Table Rows -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+      No Record Found
+    </div>
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+  </div>
+</div>

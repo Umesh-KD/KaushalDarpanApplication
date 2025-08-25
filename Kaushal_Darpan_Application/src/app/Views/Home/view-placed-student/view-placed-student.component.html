@@ -1,0 +1,70 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">{{key==2?"Short Listed Student Details":"Final Placed Student Details"}}</h3>
+</div>
+
+<div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+          <div class="card-body">
+
+            <div class="row">
+              <div class="col-md-12 text-end mb-3">
+                <a class="btn btn-primary btn-sm" [routerLink]="'/singlepost'" [queryParams]="{post:this.Id}"><i class="fa fa-back"></i>Back</a>
+                <button class="btn btn-primary btn-sm" type="button" (click)="printDiv('printable_div_id')" *ngIf="PlacedStudentList.length>0"><i class="fa fa-print me-1"></i>Print</button>
+              </div>
+              <div class="col-md-12" *ngIf="PlacedStudentList.length>0">
+
+                <!--<div class="d-flex justify-content-between w-100 flex-wrap">
+                  <span>No. of Vacancy: <i class="fa fa-user-o"></i>&nbsp;40</span>
+                  <span>Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;10-10-2024 09:00AM</span>
+                </div>-->
+                <div class="table-responsive" id="printable_div_id">
+                  <table class="table table-border w-full mb-0" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th>Sr.No.</th>
+                        <th class="text-left">Student Name</th>
+                        <th class="text-left">Enrollment No</th>
+                        <th class="text-left">Institute Name</th>
+                        <th class="text-left">Institute Type</th>
+                        <!--<th class="text-left">Email</th>-->
+                        <th class="text-left">Father Name</th>
+                        <!--<th class="text-left">DOB</th>-->
+                        <th class="text-left">Age</th>
+                        <th class="text-left">Gender</th>
+                        <!--<th class="text-left">Mobile No</th>-->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of PlacedStudentList ;let idx=index;">
+                        <td>{{idx+1}}</td>
+                        <td class="text-sm">{{row.StudentName}}</td>
+                        <td class="text-sm">{{row.EnrollmentNo}}</td>
+                        <td class="text-sm">{{row.InstituteName}}</td>
+
+                        <td class="text-sm">{{row.InstitutionManagementType}}</td>
+                        <!--<td class="text-sm text-center">{{row.Email}}</td>-->
+                        <td class="text-sm">{{row.FatherName}}</td>
+                        <!--<td class="text-sm">{{row.DOB}}</td>-->
+                        <td class="text-sm">{{row.Age}}</td>
+                        <td class="text-sm">{{row.Dis_Gender}}</td>
+                        <!--<td class="text-sm">{{row.MobileNo}}</td>-->
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

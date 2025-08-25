@@ -1,0 +1,66 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+        <h3 class="m-0 fs-4">ITI Instructor</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Application No.</label>
+        <input type="text" class="form-input" placeholder="Enter Application No" [(ngModel)]="request.ApplicationID">
+      </div>
+
+      <div class="col-xxl-8 col-xl-8 col-md-6 col-sm-12 col-12 mb-3 d-flex align-items-end">
+        <button type="button" class="btn bg-info py-2 text-white me-2" (click)="onSearchClickAllotListITI()">
+          <i class="ti ti-search"></i> Search
+        </button>
+        <button type="button" id="btnReset" class="btn py-2 bg-danger text-white me-2" (click)="onResetClick()">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+        <button type="button" id="btnAdd" class="btn bg-primary ms-auto py-2 text-white" [routerLink]="['/ItiInstructorForm']">
+          <i class="ti ti-plus"></i> Add
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-center">Sr No</th>
+              <th class="text-center">Name</th>
+              <th>DOB</th>
+              <th>Gender</th>
+              <th>Category</th>
+              <th>Mobile</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of InstructorDetailsModelList; let idx = index">
+              <td>{{ idx + 1 }}</td>
+              <td>{{ item.Name }}</td>
+              <td>{{ item.Dob | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ item.Gender }}</td>
+              <td>{{ item.Category }}</td>
+              <td>{{ item.Mobile }}</td>
+              <td>{{ item.Email }}</td>
+              <td>
+                <button (click)="onViewDetail(item.ID)" title="View Detail">
+                  <i class="ti ti-eye"></i>
+                </button>
+              </td>
+            </tr>
+
+            <tr *ngIf="InstructorDetailsModelList.length == 0">
+              <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+            </tr>
+
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>

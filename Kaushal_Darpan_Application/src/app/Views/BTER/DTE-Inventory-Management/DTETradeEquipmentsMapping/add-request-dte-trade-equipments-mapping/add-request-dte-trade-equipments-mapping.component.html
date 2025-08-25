@@ -1,0 +1,347 @@
+<!--Page Title Start-->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{TE_MappingId>0?'Edit':'Add'}} Branch Equipments</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/NodalOfficer" class="text-sm font-medium text-slate-700" aria-current="page">TradeEquipments</a>-->
+      <a [routerLink]="['/NodalOfficer']" class="text-sm font-medium text-slate-700" aria-current="page">Branch Equipments</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{TE_MappingId>0?'Edit':'Add'}}
+        Request Equipments
+      </a>
+    </div>
+  </div>
+  <!--<a href="DteTradeEquipmentsMapping" class="inline-flex items-center btn bg-dark text-white btn-sm">-->
+  <!--<a [routerLink]="['/DteTradeEquipmentsMapping']" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>-->
+</div>
+<!--Page Title End-->
+
+<div class="card"  *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Request Trade Equipment</b>
+    </div>
+    <form [formGroup]="RequestFormGroup" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 grid-cols-2 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <select class="form-select" id="StudentExamInstituteId" [disabled]="true" [(ngModel)]="request.InstituteID"
+                  formControlName="ddlInstituteID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+              {{item.InstituteName}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"  [(ngModel)]="request.CategoryId" formControlName="ddlCategoryId" (change)="CategoryWiseEquiments()">
+            <option *ngFor="let item of CategoryddlList" value="{{item.ItemCategoryID}}">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlCategoryId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlCategoryId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="request.EquipmentId" formControlName="ddlEquipmentsId">
+            <option *ngFor="let item of EquipmentddlList" value="{{item.EquipmentsId}}">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlEquipmentsId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlEquipmentsId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Quantity: <span class="StarMarking">*</span><span> Unit:1</span>
+            </label>
+            <input type="text" placeholder="Quantity" class="form-input" id="txtQuantity" name="Quantity" formControlName="txtQuantity" [(ngModel)]="request.Quantity">
+            <div *ngIf="isSubmitted && _RequestFormGroup.txtQuantity.errors" class="text-danger">
+              <p *ngIf="_RequestFormGroup.txtQuantity.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <div class="text-center">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+    </form>
+  </div>
+</div>
+
+<div class="card mt-5">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Category: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="CategoryId" [(ngModel)]="Searchrequest.CategoryId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryddlList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="EquipmentId" [(ngModel)]="Searchrequest.EquipmentId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentddlList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By College: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="InstituteID" [(ngModel)]="Searchrequest.InstituteID" [disabled]="true">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="MappingList && MappingList.length > 0">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">SR NO</th>
+            <th class="text-left">College</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Equipment</th>
+            <th class="text-left">Quantity</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of MappingList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.InstituteName}}</td>
+            <td align="left">{{item.ItemCategoryName}}</td>
+            <td align="left">{{item.EquipmentsName}}</td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.DTE && item.EquipmentsStatus == 'Accept'"
+                   [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity]"
+                   title="Edit"> <i class="ti ti-pencil"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Category Template -->
+<ng-template #MyCategoryModal let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="closeModal()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="CategoriesRequestFormGroup">
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Category:</b>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Category Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" placeholder="Name" class="form-input" id="ItemCategoryName" name="ItemCategoryName" formControlName="ItemCategoryName" [(ngModel)]="requestCategorie.ItemCategoryName">
+              <div *ngIf="isSubmitted3 && _CategoriesRequestFormGroup.ItemCategoryName.errors" class="text-danger">
+                <p *ngIf="_CategoriesRequestFormGroup.ItemCategoryName.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+                <!--Check for pattern error-->
+                <p *ngIf="_CategoriesRequestFormGroup.ItemCategoryName.errors.pattern">
+                  <i aria-hidden="true"></i> Numbers are not allowed in the Name field!
+                </p>
+              </div>
+
+              <!--<div *ngIf="_CategoriesRequestFormGroup.ItemCategoryName?.invalid && _CategoriesRequestFormGroup.ItemCategoryName?.touched">
+                <p *ngIf="_CategoriesRequestFormGroup.ItemCategoryName.errors?.required" class="text-danger">
+                  This field is required!
+                </p>
+                <p *ngIf="_CategoriesRequestFormGroup.ItemCategoryName.errors?.pattern" class="text-danger">
+                  Numbers are not allowed in the Name field!
+                </p>
+              </div>-->
+
+
+
+            </div>
+
+          </div>
+
+          <div>
+            <button type="button" (click)="saveCategoriesData()" class="btn bg-info text-white mt-6 me-1">Save</button>
+            <button type="button" (click)="closeModal()" class="btn bg-danger text-white"> Cancel</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<!-- Modal Equipment Template -->
+<ng-template #MyEquipmentModal let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="closeModal()">
+          <i class="ti ti-x"></i>
+        </button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="EquipmentsRequestFormGroup">
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Equipment:</b>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" placeholder="Name" class="form-input" id="txtName" name="Name" formControlName="txtName" [(ngModel)]="requestEquipments.Name">
+              <div *ngIf="isSubmitted1 && _EquipmentsRequestFormGroup.txtName.errors" class="text-danger">
+                <p *ngIf="_EquipmentsRequestFormGroup.txtName.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+                <!--Check for pattern error-->
+                <p *ngIf="_EquipmentsRequestFormGroup.txtName.errors.pattern">
+                  <i aria-hidden="true"></i> Numbers are not allowed in the Name field!
+                </p>
+              </div>
+
+              <!--<div *ngIf="_EquipmentsRequestFormGroup.txtName?.invalid && _EquipmentsRequestFormGroup.txtName?.touched">
+                <p *ngIf="_EquipmentsRequestFormGroup.txtName.errors?.required" class="text-danger">
+                  This field is required!
+                </p>
+                <p *ngIf="_EquipmentsRequestFormGroup.txtName.errors?.pattern" class="text-danger">
+                  Numbers are not allowed in the Name field!
+                </p>
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Unit: <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="UnitId" formControlName="UnitId"
+                      [(ngModel)]="requestEquipments.UnitId">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of UnitDDLList" [value]="item.UnitId">{{item.UnitName}}</option>
+              </select>
+              <div *ngIf="isSubmitted1 && _EquipmentsRequestFormGroup.UnitId.errors" class="text-danger">
+                <p *ngIf="!_EquipmentsRequestFormGroup.UnitId.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Specification <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" id="Specification" formControlName="Specification" [(ngModel)]="requestEquipments.Specification"></textarea>
+              <div *ngIf="isSubmitted1 && _EquipmentsRequestFormGroup.Specification.errors?.required" class="text-danger">
+                <p>This field is required!</p>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div>
+            <button type="button" (click)="saveEquipmentsData()" class="btn bg-info text-white mt-6 me-1">Save</button>
+            <button type="button" (click)="closeModal()" class="btn bg-danger text-white">Cancel</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+

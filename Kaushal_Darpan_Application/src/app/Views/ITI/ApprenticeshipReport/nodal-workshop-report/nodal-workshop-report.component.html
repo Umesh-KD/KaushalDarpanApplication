@@ -1,0 +1,387 @@
+  <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Quarterly Progress Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dahboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Quarterly Progress Report</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+
+<form [formGroup]="ScholarshipFormGroup" id="HrMasterFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>   जिला स्तरीय सहायक शिक्षुता सलाहकारों के कार्यशाला की प्रगति</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">त्रैमासिक अवधि  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.QuaterID" formControlName="QuaterID">
+              <option value="0">Choose Option</option>
+              <!--<option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>-->
+              <option value="1">प्रथम त्रैमासिक</option>
+              <option value="2">द्वितीय त्रैमासिक</option>
+              <option value="3">तृतीय त्रैमासिक</option>
+              <option value="4">चतुर्थ त्रैमासिक</option>
+
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.QuaterID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.QuaterID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.DistrictID" formControlName="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+
+
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.DistrictID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.DistrictID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला की तिथि:<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="date" placeholder="Enter Workshop summary" formControlName="WorkshopeDate" [(ngModel)]="request.WorkshopeDate" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.WorkshopeDate.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.WorkshopeDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला मे दिये गये प्रजेंटेशन / जानक ारी का संक्षिप्त विवरण :<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="text" placeholder="Enter Workshop summary" formControlName="WorkshopDetail" [(ngModel)]="request.WorkshopDetail" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.WorkshopDetail.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.WorkshopDetail.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+          <div *ngIf="!buttonHide" class="flex flex-row gap-4">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">भाग लेने वाले AAA का SSOID:<span class="StarMarking">*</span> </label>
+              <input class="form-input" type="text" placeholder="Enter SSOID" formControlName="ParticipateSsoid" [(ngModel)]="request.ParticipateSsoid" />
+              <div *ngIf="isSubmitted && _ScholarshipFormGroup.ParticipateSsoid.errors" class="text-danger">
+                <p *ngIf="_ScholarshipFormGroup.ParticipateSsoid.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              </div>
+            </div>
+
+            <div class="mt-6">
+              <button  type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.ParticipateSsoid)">GetDetails & Add More</button>
+            </div>
+          </div>
+
+
+
+          <!--<div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">भाग लेने वाले AAA का नाम :<span class="StarMarking">*</span> </label>
+      <input class="form-input" type="text" placeholder="Enter Name" formControlName="ParticipateName" [(ngModel)]="request.ParticipateName" />
+      <div *ngIf="isSubmitted && _ScholarshipFormGroup.ParticipateName.errors" class="text-danger">
+        <p *ngIf="_ScholarshipFormGroup.ParticipateName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>
+
+    </div>-->
+
+
+
+        </div>
+
+        
+        <div *ngIf="AddedAAAList.length > 0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>AAA सूची</b>
+        </div>
+        <div *ngIf="AddedAAAList.length > 0" class="overflow-auto max-height500">
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+              <tr>
+                <th>#</th>
+                <th class="text-left">एस.एस.ओ. आई.डी.</th>
+                <th class="text-left">नाम</th>
+                <th class="text-left">मोबाइल</th>
+                <th class="text-left">ईमेल</th>
+                <th *ngIf="!buttonHide">कार्यवाही</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of AddedAAAList; let idx = index;">
+                <td class="text-left">{{idx+1}}</td>
+                <td class="text-left">{{row.SSOID}}</td>
+                <td class="text-left">{{row.Name}}</td>
+                <td class="text-left">{{row.MobileNo}}</td>
+                <td class="text-left">{{row.EmailID}}</td>
+                <td *ngIf="!buttonHide" class="text-center">
+                  <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                    <i class="ti ti-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>त्रैमास के प्रारंभ मे स्थिति</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              प्रतिष्ठानों की संख्या
+              :<span class="StarMarking">*</span>
+            </label>
+            <input class="form-input" type="text" (keypress)="numberOnly($event)" placeholder="Enter Number of Establishments" formControlName="BeforeEstablishmentNo" (input)="OnCalculate()" [(ngModel)]="request.BeforeEstablishmentNo" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.BeforeEstablishmentNo.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.BeforeEstablishmentNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">सीट् की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="text" (keypress)="numberOnly($event)" placeholder="Enter Number of Seats" (input)="OnCalculate1()" formControlName="BeforeEstablishmentSeat" [(ngModel)]="request.BeforeEstablishmentSeat" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.BeforeEstablishmentSeat.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.BeforeEstablishmentSeat.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">नियुक्त शिक्षुओं की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="text" (keypress)="numberOnly($event)" placeholder="Enter Number of Appointed Apprentices" (input)="OnCalculate2()" formControlName="BeforeStudentCount" [(ngModel)]="request.BeforeStudentCount" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.BeforeStudentCount.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.BeforeStudentCount.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>त्रैमास की समाप्ति पर स्थिति</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              प्रतिष्ठानों की संख्या
+              :<span class="StarMarking">*</span>
+            </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Establishments" (input)="OnCalculate()" formControlName="AfterEstablishmentNo" [(ngModel)]="request.AfterEstablishmentNo" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.AfterEstablishmentNo.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.AfterEstablishmentNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">सीट् की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Seats" (input)="OnCalculate1()" formControlName="AfterEstablishmentSeat" [(ngModel)]="request.AfterEstablishmentSeat" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.AfterEstablishmentSeat.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.AfterEstablishmentSeat.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">नियुक्त शिक्षुओं की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Appointed Apprentices" (input)="OnCalculate2()" formControlName="AfterStudentCount" [(ngModel)]="request.AfterStudentCount" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.AfterStudentCount.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.AfterStudentCount.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>त्रैमास में हुई वृद्धि</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              प्रतिष्ठानों की संख्या
+              :<span class="StarMarking">*</span>
+            </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Establishments" formControlName="QuaterIncreaseEstablishment" [(ngModel)]="request.QuaterIncreaseEstablishment" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.QuaterIncreaseEstablishment.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.QuaterIncreaseEstablishment.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">सीट् की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Seats" formControlName="QuaterIncreaseSeat" [(ngModel)]="request.QuaterIncreaseSeat" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.QuaterIncreaseSeat.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.QuaterIncreaseSeat.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">नियुक्त शिक्षुओं की संख्या :<span class="StarMarking">*</span> </label>
+            <input class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="Enter Number of Appointed Apprentices" formControlName="QuaterIncreaseStudent" [(ngModel)]="request.QuaterIncreaseStudent" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.QuaterIncreaseStudent.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.QuaterIncreaseStudent.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+
+
+
+
+          <!--<div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+           for="fileStudentPhoto">Scholarship Document</label>
+    <div class="flex fileUploader">
+      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+      <label for="fileStudentPhoto">
+        <span>Choose File</span>
+        {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Document}}"
+           *ngIf="this.request.Document !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+          <!--</div>
+      </div>
+    </div>-->
+
+
+
+
+
+
+
+
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>कार्यशाला हेतु आवश्यक दस्तावेज़ अपलोड करें</b>
+        </div>
+
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">
+              त्रैमास के दौरान शिक्षु पोर्टल पर फ्रेशर शिक्षुओं के पंजीयन की संख्या (सूची संलग्न करे)
+            </label>
+            <div class="flex fileUploader">
+              <input [disabled]="sSOLoginDataModel.RoleID != 97 || ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.DisRegisterStudentPdf === '' ? 'No File Choosen' : request.DisRegisterStudentPdf}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.RegisterStudentPdf}}"
+                   *ngIf="this.request.RegisterStudentPdf !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+             (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+            <i class="ti ti-trash"></i>
+          </a>-->
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto2">
+              त्रैमास के दौरान आई. टी. आई ग्रेजुए ट के पोर्टल पर पंजीय न की संख्या (सूची संलग्न करे)
+            </label>
+            <div class="flex fileUploader">
+              <input [disabled]="sSOLoginDataModel.RoleID != 97 ||ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo2')">
+              <label for="fileStudentPhoto2">
+                <span>Choose File</span>
+                {{request.DisWorkshopPdf === '' ? 'No File Choosen' : request.DisWorkshopPdf}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkshopPdf}}"
+                   *ngIf="this.request.WorkshopPdf !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+             (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+            <i class="ti ti-trash"></i>
+          </a>-->
+              </div>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">विविध विवरण :<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="text" placeholder="Enter Remarks" formControlName="Remarks" [(ngModel)]="request.Remarks" />
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.Remarks.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+
+          <div class="col-span-3 text-center">
+
+
+
+            <button *ngIf="sSOLoginDataModel.RoleID == 97 && ID==0" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">
+              Save
+            </button>
+            <button *ngIf="sSOLoginDataModel.RoleID == 97 && ID==0" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i>
+              Reset
+            </button>
+
+          </div>
+        </div>
+
+      </div>
+      </div>
+
+  </div>
+</form>
+<!-- end row -->

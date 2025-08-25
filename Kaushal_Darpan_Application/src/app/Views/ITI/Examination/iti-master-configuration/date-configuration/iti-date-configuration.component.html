@@ -1,0 +1,231 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <span *ngIf="request.DateConfigID>0"><i class="ti ti-pencil"></i> Update</span>
+        <span *ngIf="request.DateConfigID==null || request.DateConfigID==0"><i class="ti ti-plus"></i> Add</span>
+        Date Configuration
+      </b>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <form [formGroup]="DateConfigurationFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <div class="d-flex gap-2">
+              <div style="width:100%">
+                <label>Type</label>
+                <select class="form-select" name="TypeID" id="ddlType" formControlName="ddlType"
+                        [(ngModel)]="request.TypeID" (change)="GetDataUpadate(request.TypeID)" >
+                  <option value="0">Choose Type</option>
+                  <option *ngFor="let item of TypeMasterDDL" [value]="item.ID">
+                    {{item.Name}}
+                  </option>
+                </select>
+              </div>
+              <!--<div style="width:30%;margin-top:28px" *ngIf="request.TypeID==1">
+                <label>
+                  <input type="checkbox" formControlName="cbIsLateral" [(ngModel)]="request.IsLateral" />
+                  Is Lateral
+                </label>
+              </div>-->
+            </div>
+            <div *ngIf="isFormSubmitted && _DateConfigurationFormGroup.ddlType.errors"
+                 class="text-danger">
+              <p *ngIf="!_DateConfigurationFormGroup.ddlType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>From Date</label>
+            <input type="datetime-local" class="form-input" name="Date" id="txtFromDate" formControlName="txtFromDate"
+                   [(ngModel)]="request.From_Date" [min]="todayDate" />
+            <div *ngIf="isFormSubmitted && _DateConfigurationFormGroup.txtFromDate.errors"
+                 class="text-danger">
+              <p *ngIf="_DateConfigurationFormGroup.txtFromDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>To Date</label>
+            <input type="datetime-local" class="form-input" name="ToDate" id="txtToDate" formControlName="txtToDate"
+                   [(ngModel)]="request.To_Date" [min]="request.From_Date" />
+            <div *ngIf="isFormSubmitted && _DateConfigurationFormGroup.txtToDate.errors"
+                 class="text-danger">
+              <p *ngIf="_DateConfigurationFormGroup.txtToDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <!--<div>
+    <mat-form-field>
+      <mat-label>Type</mat-label>
+      <mat-select name="TypeID" id="ddlType" formControlName="ddlType"
+                  [(ngModel)]="request.TypeID">
+        <mat-option *ngFor="let item of TypeMasterDDL" [value]="item.ID"> {{item.Name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="_DateConfigurationFormGroup.ddlType.errors">Please choose type</mat-error>
+    </mat-form-field>
+  </div>
+  <div class="d-flex gap-5">
+    <mat-form-field>
+      <mat-label>From Date</mat-label>
+      <input matInput [matDatepicker]="picker" id="txtFromDate" formControlName="txtFromDate"
+             [(ngModel)]="request.From_Date" (ngModelChange)="combineFromDateTime()">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="_DateConfigurationFormGroup.txtFromDate.errors && _DateConfigurationFormGroup.txtFromDate.errors.required">From date is <strong>required</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>From Time</mat-label>
+      <input matInput [ngxTimepicker]="timepicker" [(ngModel)]="From_Time" formControlName="txtFromTime" (ngModelChange)="combineFromDateTime()">
+      <ngx-material-timepicker-toggle matIconSuffix [for]="timepicker"></ngx-material-timepicker-toggle>
+      <ngx-material-timepicker #timepicker></ngx-material-timepicker>
+      <mat-error *ngIf="_DateConfigurationFormGroup.txtFromTime.errors && _DateConfigurationFormGroup.txtFromTime.errors.required">From time is <strong>required</strong></mat-error>
+    </mat-form-field>
+  </div>
+  <div class="d-flex gap-5">
+    <mat-form-field>
+      <mat-label>To Date</mat-label>
+      <input matInput [matDatepicker]="pickerTo" id="txtToDate" formControlName="txtToDate"
+             [(ngModel)]="request.To_Date" (ngModelChange)="combineToDateTime()">
+      <mat-datepicker-toggle matIconSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker>
+      <mat-error *ngIf="_DateConfigurationFormGroup.txtToDate.errors && _DateConfigurationFormGroup.txtToDate.errors.required">To date is <strong>required</strong></mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>To Time</mat-label>
+      <input matInput [ngxTimepicker]="timepickerTo" [(ngModel)]="To_Time" formControlName="txtToTime" (ngModelChange)="combineToDateTime()">
+      <ngx-material-timepicker-toggle matIconSuffix [for]="timepickerTo"></ngx-material-timepicker-toggle>
+      <ngx-material-timepicker #timepickerTo></ngx-material-timepicker>
+      <mat-error *ngIf="_DateConfigurationFormGroup.txtToTime.errors && _DateConfigurationFormGroup.txtToTime.errors.required">To time is <strong>required</strong></mat-error>
+    </mat-form-field>
+  </div>-->
+          <div>
+            <div class="pt-5">
+              <button class="bg-success btn text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)"> {{request.DateConfigID>0?'Update':'Submit'}}</button>
+              <button class="bg-danger btn text-white" *ngIf="request.DateConfigID>0" (click)="ResetControls()"> Cancel</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List Date Configuration</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="2">2</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        
+      </div>
+      <div>
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" width="80">Sr. No.</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              Type
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('From_Date')">
+              From Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='From_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('To_Date')">
+              To Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='To_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-right" width="150">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index; ">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.Name}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
+            <td>{{row.From_Date | date:'dd-MM-yyyy hh:mm a'}}
+            <td>{{row.To_Date | date:'dd-MM-yyyy hh:mm a'}}</td>
+            <td>
+              <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(row.DateConfigID)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);"
+                   title="Delete" (click)="btnDelete_OnClick(row.DateConfigID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr *ngIf="paginatedInTableData.length==0">
+            <td colspan="5" align="center">
+              <span>
+                <img src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+    <!--Start Model Popup-->
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+    <!--Start Model Popup-->
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  <div class="card" *ngFor="let row of InventoryDashboardList">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+      <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+      <a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+</div>

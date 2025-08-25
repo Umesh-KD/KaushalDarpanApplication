@@ -1,0 +1,421 @@
+<div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Details</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add Details</a>
+    </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <form [formGroup]="StaffMasterFormGroup">
+
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Branch Details</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name  </label>
+          <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
+                  [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.InstituteID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.InstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsHideShow">
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch <span class="StarMarking">*</span></label>
+          <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                  [(ngModel)]="request.BranchID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.BranchID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.BranchID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
+                  [(ngModel)]="request.DesignationID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DesignationID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.DesignationID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="IsHideShow">
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Branch as per Service Book</label>
+          <select class="form-select" name="ServiceBookBranchID" id="ServiceBookBranchID" formControlName="ServiceBookBranchID"
+                  [(ngModel)]="request.ServiceBookBranchID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.ServiceBookBranchID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.ServiceBookBranchID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Employee Personal Details</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span class="StarMarking">*</span></label>
+          <input autocomplete="off" type="text" class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
+                 formControlName="Name" [(ngModel)]="request.Name" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Name.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Name.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>
+          <select class="form-select" id="Gender" name="Gender" [(ngModel)]="request.Gender"
+                  formControlName="Gender">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Gender.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.Gender.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
+          <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
+                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfBirth.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DateOfBirth.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining" 
+                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfAppointment.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DateOfAppointment.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
+          <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement" 
+                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber" id="MobileNumber"
+                 formControlName="MobileNumber" [(ngModel)]="request.MobileNumber" maxlength="10" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.MobileNumber.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.MobileNumber.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
+          <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID" id="SSOID"
+                 formControlName="SSOID" [(ngModel)]="request.SSOID" readonly />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.SSOID.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.SSOID.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
+                 formControlName="EmployeeID" [(ngModel)]="request.EmployeeID"  />
+
+          <!--<div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>-->
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Employment Details</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Current Designation <span class="StarMarking">*</span> </label>
+          <select class="form-select " name="CurrentDesignationID" id="CurrentDesignationID" formControlName="CurrentDesignationID"
+                  [(ngModel)]="request.CurrentDesignationID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.CurrentDesignationID.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.CurrentDesignationID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Work Experience(In Years)
+            <span class="StarMarking">*</span>
+          </label>
+          <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
+                 formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2" (keypress)="validateNumber($event)"/>
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification as per Service Book at the time of joining<span class="StarMarking">*</span></label>
+          <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining" 
+                 formControlName="QualificationAtJoining" [(ngModel)]="request.QualificationAtJoining" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAtJoining.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.QualificationAtJoining.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualifications as per Service Book gained after joining <span class="StarMarking">*</span></label>
+          <input class="form-input" placeholder="Qualification After Joining" name="TotalExperience" id="QualificationAfterJoining"
+                 formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAfterJoining.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.QualificationAfterJoining.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
+          <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"  [min]="request.DateOfJoining" 
+                 formControlName="DateOfRetirement" [(ngModel)]="request.DateOfRetirement" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark (If any) </label>
+          <textarea autocomplete="off" class="form-input " placeholder="Please Enter The Remark" value="12dfgdf" name="SSOId" id="Remark"
+                    formControlName="Remark" [(ngModel)]="request.Remark">
+          </textarea>
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Teacher">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Subjects</b>
+      </div>
+      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type<span class="StarMarking">*</span></label>
+            <select class="form-select " name="SubjectID" id="ddlStreamType" formControlName="ddlStreamType"
+                    [(ngModel)]="Addrequest.StreamTypeID" (change)="getStreamMasterData()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of StreamTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
+            </select>
+            <div *ngIf="isAddrequest&&_AddsubjectFormGroup.ddlStreamType.errors" class="text-danger">
+              <p *ngIf="!_AddsubjectFormGroup.ddlStreamType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
+            <select class="form-select" name="CourseID" id="ddlCourse" formControlName="ddlCourse"
+                    [(ngModel)]="Addrequest.BranchID" (change)="GetSubjectMasterDDL()">
+              <option value="0">Choose Option</option>
+
+              <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">
+                {{item.StreamName}}
+              </option>
+
+
+            </select>
+            <div *ngIf="isAddrequest&&_AddsubjectFormGroup.ddlCourse.errors" class="text-danger">
+              <p *ngIf="!_AddsubjectFormGroup.ddlCourse.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type<span class="StarMarking">*</span></label>
+            <select class="form-select " name="SubjectID" id="ddlExamType" formControlName="ddlExamType"
+                    [(ngModel)]="Addrequest.ExamTypeID" (change)="ChangeSemester()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isAddrequest&&_AddsubjectFormGroup.ddlExamType.errors" class="text-danger">
+              <p *ngIf="!_AddsubjectFormGroup.ddlExamType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
+            <select class="form-select " name="SubjectID" id="ddlSubjectID" formControlName="ddlSemesterID" (change)="GetSubjectMasterDDL()"
+                    [(ngModel)]="Addrequest.SemesterID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+            </select>
+            <div *ngIf="isAddrequest&&_AddsubjectFormGroup.ddlSemesterID.errors" class="text-danger">
+              <p *ngIf="!_AddsubjectFormGroup.ddlSemesterID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject<span class="StarMarking">*</span></label>
+            <select class="form-select " name="SubjectID" id="ddlSubjectID" formControlName="ddlSubjectID"
+                    [(ngModel)]="Addrequest.SubjectID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isAddrequest&&_AddsubjectFormGroup.ddlSubjectID.errors" class="text-danger">
+              <p *ngIf="!_AddsubjectFormGroup.ddlSubjectID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is
+                required .!
+              </p>
+            </div>
+
+          </div>
+
+
+          <div class="flex flex-col justify-end mb-4">
+            <label class="me-2 ">
+              <input type="checkbox" value="" id="Box8THForm" (click)="checkoptional()"
+                     [checked]="IsOptional" [(ngModel)]="Addrequest.IsOptional" formControlName="IsOptional" />
+              IsOptional
+            </label>
+          </div>
+
+          <div class="pt-30">
+            <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+              <i class="ti ti-plus"></i> Add
+              Choice
+            </button>
+            <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+          </div>
+        </div>
+      </form>
+      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
+        <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
+        <b class="text-1xl-5">Staff Subject List </b>
+      </div>
+     
+      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher" class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr>
+              <th>S.No</th>
+              <th>Branch Type</th>
+              <th>Branch Name</th>
+              <th>EXam Type</th>
+              <th>{{ExamTypeHeading}}</th>
+              <th>Subject</th>
+              <th>Subject Type</th>
+              <th>Action</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let row of staffDetailsFormData.StaffSubjectListModel; let idx = index">
+              <td class="text-center">{{idx+1}}</td>
+              <td class="text-center">{{row.StreamType}}</td>
+              <td class="text-center">{{row.BranchName}}</td>
+              <td class="text-center">{{row.ExamType}}</td>
+              <td class="text-center">{{row.SemesterName}}</td>
+              <td class="text-center">{{row.SubjectName}}</td>
+              <td class="text-center">{{row.SubjectType}}</td>
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+                  <i class="ti ti-trash"></i>
+                </button>
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+    </form>
+    <div class="flex justify-center flex-wrap items-centermt-3">
+      <div>
+        <button *ngIf="[0, 288, 249].includes(request.ProfileStatusID)" class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
+          Complete
+        </button>
+        <button *ngIf="request.ProfileStatusID == 288" class="btn bg-success text-white mt-3" type="button" (click)="LockSubmitSaveData()">
+          Lock & Submit
+        </button>
+        <!-- <button class="btn bg-danger text-white mt-3" type="button" (click)="CancelData()">Cancel</button> -->
+        <!-- <button  type="button" class="btn bg-info text-white" (click)="OnConfirm(SttafModelPriview)">Lock Profile</button> -->
+
+      </div>
+    </div>
+  </div>
+</div>

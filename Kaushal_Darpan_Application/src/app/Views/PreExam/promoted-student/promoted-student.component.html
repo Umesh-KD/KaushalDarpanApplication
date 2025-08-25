@@ -1,0 +1,178 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Promoted Student</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/promotedstudent" class="text-sm font-medium text-slate-700" aria-current="page">Promoted Student</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
+                    >
+              <option value="0">--All--</option>
+              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+                {{item.InstituteName}}
+              </option>
+            </select>
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+            <select class="form-select" id="StudentExamStreamId" [(ngModel)]="request.StreamID"
+                   >
+              <option value="0">--All--</option>
+              <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+            <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bridge Course</label>
+            <select class="form-select" id="IsBridge" [(ngModel)]="request.IsBridge">
+              <option value="">--All--</option>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+          </div>
+        </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download in Excel</a>
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div>
+        <button type="button" class="btn bg-info text-white inline-block" (click)="SavePromoteStudent()">Promote to Next Sem.</button><!--*ngIf="MapKeyEng == 1"-->
+        &nbsp;<span class="me-3" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
+            <th class="text-left">Sr.No.</th>
+            <!--sorting column-->
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
+              Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('FatherName')">
+              Father Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='FatherName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ApplicationNo')">
+              Application No.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ApplicationNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EnrollmentNo')">
+              Enrollment No.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EnrollmentNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Dis_DOB')">
+              DOB.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Dis_DOB'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('RollNo')">
+              Roll No.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('MobileNo')">
+              Mobile No.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='MobileNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('InstituteName')">
+              Institute
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('BranchName')">
+              Branch
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='BranchName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SemesterName')">
+              Semester
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('IsBridge')">
+              Bridge Course
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='IsBridge'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.FatherName}}</td>
+            <td>{{row.ApplicationNo}}</td>
+            <td>{{row.EnrollmentNo}}</td>
+            <td>{{row.Dis_DOB}}</td>
+            <td>{{row.RollNo}}</td>
+            <td>{{row.MobileNo}}</td>
+            <td>{{row.InstituteName}}, {{row.DistrictName}}</td>
+            <td>{{row.BranchName}}</td>
+            <td>{{row.SemesterName}}</td>
+            <td>{{row.IsBridge==true?'Yes':'No'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>

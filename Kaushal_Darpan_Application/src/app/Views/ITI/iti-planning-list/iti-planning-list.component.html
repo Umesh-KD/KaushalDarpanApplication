@@ -1,0 +1,242 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Planning Details</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ItiPlanningList" class="text-sm font-medium text-slate-700" aria-current="page">ITI Planning Details</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
+          <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="CollegeID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="ApprovedStatus">
+            <option value="0">--All--</option>
+            <option value="2">Pending For Approval</option>
+            <option value="3">Approved</option>
+            <option value="4">Rejected</option>
+            <!--<option value="Suspend">Suspend</option>-->
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
+        <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+        </select>-->
+        <!--<ng-select [(ngModel)]="InstituteID"
+                   formControlName="StudentExamInstituteId" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          @for (item of InstituteMasterList; track item.InstituteID) {
+          <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+          }
+        </ng-select>
+        </div>-->
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div class="">
+      </div><div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="flex">
+        <!--<select id="ddlConter" class="form-select couterDropDown me-2">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>-->
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Mobile No</th>
+
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of CampusValidationListData | tableSearchFilter:Table_SearchText;let idx=index;">
+
+
+            <td>{{idx+1}}</td>
+            <td>{{row.CollegeName}}</td>
+            <td>
+              <p> {{row.Email}}</p>
+
+            </td>
+
+
+
+
+
+
+
+
+
+            <td><p>{{row.PrincipalMobile}}</p> </td>
+            <td><p>{{row.StatusName}}</p> </td>
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="['/ItiPlanning']" [queryParams]="{ id: row.CollegeId,Type:1 }" id="btnEdit" title="Preview"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" title="View History" (click)="ViewHistory(modal_StudentReverteDocument,row.CollegeId)"><i class="ti ti-list"></i></a>
+                <a  href="javascript:void(0);" title="View & Update ITI" *ngIf="row.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" (click)="ViewandUpdate(MyModel_Action,row.CollegeId )"><i class="ti ti-check"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>ITI Planning Action</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Status">
+                  <option value="0">--Select--</option>
+                  <option value="3">Approved</option>
+                  <option value="4">Rejected</option>
+
+                </select>
+                <div *ngIf="isSubmitted&&requestAction.Status=='0'" class="text-danger">
+                  This field is required .!
+                </div>
+
+
+
+              </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.Remarks"></textarea>
+                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                    <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                  </div>
+              </div>
+
+
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
+                <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #modal_StudentReverteDocument let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-xl"><i class="ti ti-history"></i>ITI Planning Details</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>College Name</th>
+                <th>Status</th>
+                <th>Remark</th>
+                <th>Create Date</th>
+                <th>Action Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentHistoryModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+               
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CodeAndName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.StatusName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.GenrateDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ActionDate}}</td>
+
+              </tr>
+              <tr *ngIf="StudentHistoryModelList?.length === 0"><td colspan="15"><b>No Data Available </b>  </td></tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+

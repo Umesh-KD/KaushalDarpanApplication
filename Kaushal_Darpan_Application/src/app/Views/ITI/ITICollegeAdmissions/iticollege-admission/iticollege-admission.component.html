@@ -1,0 +1,268 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/dashboard" class="text-sm font-medium text-slate-700">Student</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700" aria-current="page">Map Application</a>
+    </div>
+  </div>
+  <button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <form [formGroup]="searchssoform">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-map"></i> Map Application  </b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" formControlName="txtApplicationNo" [(ngModel)]="searchRequest.ApplicationNo">
+            <div *ngIf="isSubmitted && _searchssoform.txtApplicationNo.errors" class="text-danger">
+              <p *ngIf="_searchssoform.txtApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No<span class="StarMarking">*</span> </label>
+            <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " formControlName="txtMobileNo" [(ngModel)]="searchRequest.MobileNumber">
+            <div *ngIf="isSubmitted && _searchssoform.txtMobileNo.errors" class="text-danger">
+              <p *ngIf="_searchssoform.txtMobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" placeholder="Enter Select DOB" formControlName="DOB" [(ngModel)]="searchRequest.DOB">
+            <div *ngIf="isSubmitted && _searchssoform.DOB.errors" class="text-danger">
+              <p *ngIf="_searchssoform.DOB.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="isShowGrid">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    </div>
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Application No.</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Father Name</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Mobile</th>
+            <th class="text-left">Email</th>
+            <th class="text-Center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.ApplicationNo}}</td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.FatherName}}</td>
+            <td>{{row.DOB}}</td>
+            <td>{{row.MobileNo  | mobileMask}}</td>
+            <td>{{row.Email}}</td>
+            
+            <!--<td class="text-center">
+              <button class="btn bg-success text-white btn-sm" (click)="onModalAdmission(modal_DirectAdmission,row)" type="button">DirectAdmission</button>
+            </td>-->
+
+            <td class="text-center">
+              <button *ngIf="row.DirectAdmissionType == 0 && row.DepartmentID == 2" class="btn bg-success text-white btn-sm" 
+                (click)="onModalAdmission(modal_DirectAdmission, row)" type="button">
+                DirectAdmission
+              </button>
+
+              <button *ngIf="row.DirectAdmissionType == 160" class="btn bg-secondary text-white btn-sm" type="button">
+                Applied
+              </button>
+
+              <button *ngIf="row.DirectAdmissionType == 0 && row.DepartmentID == 1" class="btn bg-success text-white btn-sm"
+               (click)="onModalAdmissionBTER(modal_DirectAdmissionForBTER, row)" type="button">
+                DirectAdmissionBTER
+              </button>
+
+            </td>
+          </tr>
+          <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No records found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+<!--Start Model Popup-->
+<ng-template #modal_DirectAdmission let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="RequestFormGroup">
+
+          <div class="mb-8">
+
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Direct Admission </b>
+              <span class="text-danger">(* fields are mandatory)</span>
+            </div>
+
+            <div class="grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-1 gap-2">
+
+              <div>
+                <label for="ddlTradeLevelId" class="text-gray-800 text-sm font-medium inline-block mb-2">Trade Level:<span class="StarMarking">*</span></label>
+                <select class="form-select" name="TradeLevel" id="ddlTradeLevelId" formControlName="ddlTradeLevelId"
+                        [(ngModel)]="request.TradeLevel" (change)="GetTradeListDDL()">
+                  <option value="0">--Choose Option--</option>
+                  <option *ngIf="box8thChecked" value="8">8th Level Trades</option>
+                  <option *ngIf="box10thChecked" value="10">10th Level Trades</option>
+                </select>
+                <div *ngIf="isSubmitted && _RequestFormGroup.ddlTradeLevelId.errors" class="text-danger">
+                  <p *ngIf="!_RequestFormGroup.ddlTradeLevelId.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="ddlTradeId" class="text-gray-800 text-sm font-medium inline-block mb-2">Trade:<span class="StarMarking">*</span></label>
+                <select class="form-select" name="TradeId" id="ddlTradeId" formControlName="ddlTradeId" [(ngModel)]="request.TradeId">
+                  <option value="0">--Choose Option--</option>
+                  <option *ngFor="let item of TradeList" [value]="item.Id">{{item.TradeName}}</option>
+                </select>
+                <div *ngIf="isSubmitted && _RequestFormGroup.ddlTradeId.errors" class="text-danger">
+                  <p *ngIf="!_RequestFormGroup.ddlTradeId.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required!
+                  </p>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+          <div>
+            <button type="button" (click)="SaveDirectAddmissionData()" class="btn bg-info text-white mt-6">Submit</button>
+            <button type="button" (click)="CloseModal()" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+
+        </form>
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>
+
+<!--Start Model Popup-->
+
+
+<ng-template #modal_ApplyNow let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Proceed With </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div>
+              <h2 class="text-center text-4xl">Admission Apply For</h2>
+            </div>
+          </div>
+          <div class="grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-3 gap-6 loginBox mt-8">
+            <!--<a href="StudentJanAadharDetail?deptid={{_EnumDepartment.ITI}}" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i class="ti ti-chevron-right"></i></a>-->
+            <!-- <button class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer" (click)="onModalAdmission(modal_DirectAdmission)" type="button">
+              Direct Admission <i class="ti ti-chevron-right"></i>
+            </button> -->
+            <a *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI " 
+              class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">JAIL Admission <i class="ti ti-chevron-right"></i></a>
+
+              <!-- <a  (click)="Redirect(sSOLoginDataModel.DepartmentID)" 
+                class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">
+                BTER 
+                <i class="ti ti-chevron-right"></i>
+              </a> -->
+
+            <a (click)="Redirect(sSOLoginDataModel.DepartmentID)" 
+             class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">
+              Direct Admission
+              <i class="ti ti-chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<!--Start Model Popup-->
+<ng-template #modal_DirectAdmissionForBTER let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="RequestFormGroupBter">
+
+          <div class="mb-8">
+
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Direct Admission </b>
+              <span class="text-danger">(* fields are mandatory)</span>
+            </div>
+
+            <div class="grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-1 gap-2">
+
+              <div>
+                <label for="BranchID" class="text-gray-800 text-sm font-medium inline-block mb-2">Branch: <span class="StarMarking">*</span></label>
+                <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                        [(ngModel)]="request.BranchID">
+                  <option value="0">--Choose Option--</option>
+                  <option *ngFor="let item of BranchName" value="{{item.StreamID}}">
+                    {{item.StreamName}}
+                  </option>
+                </select>
+                <div *ngIf="isSubmitted && _RequestFormGroupBter.BranchID.errors" class="text-danger">
+                  <p *ngIf="!_RequestFormGroupBter.BranchID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div>
+            <button type="button" (click)="SaveDirectAddmissionBterData()" class="btn bg-info text-white mt-6">Submit</button>
+            <button type="button" (click)="CloseModal()" class="btn bg-danger text-white mt-6">Cancel</button>
+          </div>
+
+        </form>
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>
+
+<!--Start Model Popup-->

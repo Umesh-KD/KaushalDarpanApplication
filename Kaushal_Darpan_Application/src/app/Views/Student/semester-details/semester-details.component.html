@@ -1,0 +1,102 @@
+
+
+<!--<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Semester Details</a>
+    </div>
+  </div>
+</div>-->
+<!-- Page Title End -->
+
+<div class="card mt-2" *ngIf="StudentDetailsModelList?.length>0">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>&nbsp;Semester Details</b>
+    </div>
+    <div class="overflow-x-auto mt-3 w-full">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr.No</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Stream Name</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Enrollment No.</th>
+            <th class="text-left">End Term</th>
+            <th class="text-left">View Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.StreamName}}</td>
+            <td>{{row.Semester}}</td>
+            <td>{{row.EnrollmentNo}}</td>
+            <td>{{row.EndTermName}}</td>
+            <td class="text-Center">
+              <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
+            </td>
+          </tr>
+          <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No SemesterFound</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- end row-->
+
+  </div>
+</div>
+
+<!--Modal Popup Start-->
+<ng-template #modal_viewPaper let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Subject List of {{SemesterName}}
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">SubjectName</th>
+                <th class="text-left">SubjectCode</th>
+                <th class="text-left">SubjectCategory </th>
+                <th class="text-left">StreamSubjectcode</th>
+                <th class="text-left">IsTheory</th>
+                <th class="text-left">IsPractical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of StudentSubjectList ; let idx=index; ">
+                <td>{{idx+1}}</td>
+                <td>{{item.SubjectName}}</td>
+                <td>{{item.SubjectCode}}</td>
+                <td>{{item.SubjectCategory}}</td>
+                <td>{{item.StreamSubjectcode}}</td>
+                <td> {{item.strIsTheory}}</td>
+                <td>{{item.strIsPractical}}</td>
+              </tr>
+              <tr *ngIf="StudentSubjectList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<!--End Modal Popup Start-->

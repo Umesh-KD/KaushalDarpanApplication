@@ -1,0 +1,374 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Assign Theory Paper</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+
+      <span>Assign Theory Paper</span>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+  <div class="card tab-panels">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
+          <span class="text-danger"></span>
+        </div>
+        <!--<div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-3">
+
+
+
+
+
+
+        </div>-->
+        <!--<div class="flex justify-end mt-3"*ngIf="statusCh == _DispatchDDlValue.SendToBterFromCenter" >
+          <button type="button" class="btn bg-primary text-white" (click)="submitSelected()">
+            <i class="ti ti-device-floppy"></i> {{btnText}}
+          </button>
+        </div>-->
+        <!--SemesterName	StreamName	SubjectName	SemesterID	StreamId	SubjectId	total-->
+        <!--{{DispatchITI_Dispatch_ShowAllbundleList|json}}-->
+
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+
+                <th class="text-left">
+                  SR NO
+                </th>
+                <th class="text-left">CC Code</th>
+                <th class="text-left"> Year Name</th>
+                <th class="text-left">Trade Name</th>
+                <th class="text-left">Subject Name</th>
+                <th class="text-left">Total</th>
+                <th class="text-left">Assigned</th>
+                <th class="text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of DispatchITI_Dispatch_ShowAllbundleList; let idx = index;">
+                <td align="left">
+                  {{ idx + 1 }}
+                </td>
+                <td align="left">{{ item.CenterCode }}</td>
+                <td align="left">{{ item.SemesterName }}</td>
+                <td align="left">{{ item.StreamName }}</td>
+                <td align="left">{{ item.SubjectName }}</td>
+                <td align="left">{{ item.Total }}</td>
+                <td align="left">{{ item.AssignedCount }}</td>
+                <td>
+                  <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+                    <a (click)="GetAllTheoryStudents(modal_ViewApplication,item)" title="Assign Group"><i class="ti ti-plus"></i></a>
+                    <a href="javascript:void(0)" title="View" (click)="GetAllExaminerAndInstituteDetails( MyModel_ExaminerAndInstituteDetails, item)"><i class="ti ti-eye"></i></a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<ng-template #modal_ViewApplication let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b><i class="fa fa-plus"></i>&nbsp; Assign Examiner</b>
+      <!--<button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>-->
+      <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+    </div>
+    <form [formGroup]="AppointExaminerFromGroup" id="AdminUserFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Examiner</b>
+            </div>
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-3">
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No from:  <span class="StarMarking">*</span> </label>
+                <input type="text" class="form-input" placeholder="Enter Roll No From" formControlName="RollNoFrom" [(ngModel)]="request.RollNoFrom">
+                <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoFrom.errors" class="text-danger">
+                  <p *ngIf="_AppointExaminerFromGroup.RollNoFrom.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No To: <span class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Roll No To" formControlName="RollNoTo" [(ngModel)]="request.RollNoTo">
+
+                <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoTo.errors" class="text-danger">
+                  <p *ngIf="_AppointExaminerFromGroup.RollNoTo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Examiner Code: <span class="StarMarking">*</span></label>
+                <input type="text" class="form-input" placeholder="Enter Examiner Code" formControlName="ExaminerCode" [(ngModel)]="request.ExaminerCode">
+
+                <div *ngIf="isSubmitted && _AppointExaminerFromGroup.ExaminerCode.errors" class="text-danger">
+                  <p *ngIf="_AppointExaminerFromGroup.ExaminerCode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+
+              </div>
+
+              <div>
+                <label>Examiner <span class="StarMarking">*</span></label>
+                <select class="form-select" formControlName="ddlSSOID" [(ngModel)]="request.ExaminerID">
+                  <option value="0">--All--</option>
+                  <option *ngFor="let item of examinerList" [value]="item.ExaminerID">{{item.Name}}</option>
+
+                </select>
+                <div *ngIf="isSubmitted && _AppointExaminerFromGroup.ddlSSOID.errors" class="text-danger">
+                  <p *ngIf="!_AppointExaminerFromGroup.ddlSSOID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+                </div>
+              </div>
+
+              <div class="items-center ms-4">
+                <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">Submit</button>
+              </div>
+
+
+
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <!--<button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">Submit</button>-->
+                <!--<button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">-->
+                <!--<i class="ti ti-refresh"></i> Reset
+                </button>-->
+              </div>
+
+            </div>
+
+
+          </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Invigilator List</b>
+          </div>
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+                <tr>
+                  <th width="80px" align="left">Sr. No.</th>
+                  <th class="text-left">CC Code</th>
+
+                  <th class="text-left">Roll No </th>
+                  <th class="text-left">Year</th>
+                  <th class="text-left">Subject</th>
+                  <th class="text-left">Examiner Assigned</th>
+                  <!--<th class="text-left">Examiner</th>-->
+                  <!--<th class="text-left">Action</th>-->
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let row of StudentList let idx=index;">
+                  <td>{{idx+1}}</td>
+                  <td>{{row.CenterCode}}</td>
+
+                  <td align="left">{{row.RollNo}}</td>
+                  <td align="left">{{row.SemesterName }}</td>
+                  <td align="left">{{row.SubjectName }}</td>
+                  <td align="left">{{row.Invigilators}}</td>
+
+                  <!--<td align="left">
+                    <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+
+                    </div>
+                  </td>-->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+
+<!------View Assigned Examiner and Institute Details----------->
+<ng-template #MyModel_ExaminerAndInstituteDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Assigned Detail</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr.No</th>
+                  <th class="text-left">Examiner Name</th>
+                  <th class="text-left">Examiner Code</th>
+                  <th class="text-left">Institute Name</th>
+                  <th class="text-left">Total Assign</th>
+                  <th class="text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of AssignedExaminerInstituteDetailList; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.ExaminerName}}</td>
+                  <td align="left">{{row.ExaminerCode}}</td>
+                  <td align="left">{{row.InstituteName}}</td>
+                  <td align="left">{{row.TotalAssignedCount}}</td>
+                  <td>
+                    <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                      <!--<a href="javascript:void(0)" title="edit" (click)="GetAllExaminerAndInstituteDetails( MyModel_ExaminerAndInstituteDetails, item)"><i class="ti ti-eye"></i></a>-->
+                      <a href="javascript:void(0)" title="Edit" (click)="EditData(row)"><i class="ti ti-pencil"></i></a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+          <form [formGroup]="AppointExaminerFromGroup" id="AdminUserFormGroup" class="form-horizontal">
+            <div class="mb-8 mt-4" id="divExaminerAndInstitute" *ngIf="IsEditData ==true">
+              <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Examiner</b>
+              </div>
+              <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-2 gap-3">
+
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No from:  <span class="StarMarking">*</span> </label>
+                  <input type="text" class="form-input" placeholder="Enter Roll No From" formControlName="RollNoFrom" [(ngModel)]="request.RollNoFrom">
+                  <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoFrom.errors" class="text-danger">
+                    <p *ngIf="_AppointExaminerFromGroup.RollNoFrom.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No To: <span class="StarMarking">*</span></label>
+                  <input type="text" class="form-input" placeholder="Enter Roll No To" formControlName="RollNoTo" [(ngModel)]="request.RollNoTo">
+
+                  <div *ngIf="isSubmitted && _AppointExaminerFromGroup.RollNoTo.errors" class="text-danger">
+                    <p *ngIf="_AppointExaminerFromGroup.RollNoTo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                  </div>
+
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Examiner Code: <span class="StarMarking">*</span></label>
+                  <input type="text" class="form-input" placeholder="Enter Examiner Code" formControlName="ExaminerCode" [(ngModel)]="request.ExaminerCode">
+
+                  <div *ngIf="isSubmitted && _AppointExaminerFromGroup.ExaminerCode.errors" class="text-danger">
+                    <p *ngIf="_AppointExaminerFromGroup.ExaminerCode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+                  </div>
+
+                </div>
+
+                <div>
+                  <label>Examiner <span class="StarMarking">*</span></label>
+                  <select class="form-select" formControlName="ddlSSOID" [(ngModel)]="request.ExaminerID">
+                    <option value="0">--All--</option>
+                    <option *ngFor="let item of examinerList" [value]="item.ExaminerID">{{item.Name}}</option>
+
+                  </select>
+                  <div *ngIf="isSubmitted && _AppointExaminerFromGroup.ddlSSOID.errors" class="text-danger">
+                    <p *ngIf="!_AppointExaminerFromGroup.ddlSSOID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+                  </div>
+                </div>
+
+                <div class="items-center ms-4">
+                  <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">Submit</button>
+                </div>
+
+
+
+              </div>
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                <div class="text-center">
+                  <!--<button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">Submit</button>-->
+                  <!--<button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">-->
+                  <!--<i class="ti ti-refresh"></i> Reset
+            </button>-->
+                </div>
+
+              </div>
+
+
+            </div>
+          </form>
+        </div>
+
+        <div  *ngIf="IsEditData ==true" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Invigilator List</b>
+        </div>
+        <div *ngIf="IsEditData ==true" class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+              <tr>
+                <th width="80px" align="left">Sr. No.</th>
+                <th class="text-left">CC Code</th>
+
+                <th class="text-left">Roll No </th>
+                <th class="text-left">Year</th>
+                <th class="text-left">Subject</th>
+                <th class="text-left">Examiner Assigned</th>
+                <!--<th class="text-left">Examiner</th>-->
+                <!--<th class="text-left">Action</th>-->
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let row of StudentList let idx=index;">
+                <td>{{idx+1}}</td>
+                <td>{{row.CenterCode}}</td>
+
+                <td align="left">{{row.RollNo}}</td>
+                <td align="left">{{row.SemesterName }}</td>
+                <td align="left">{{row.SubjectName }}</td>
+                <td align="left">{{row.Invigilators}}</td>
+
+                <!--<td align="left">
+            <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+
+            </div>
+          </td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+      </div>
+    </div>
+  </div>
+</ng-template>

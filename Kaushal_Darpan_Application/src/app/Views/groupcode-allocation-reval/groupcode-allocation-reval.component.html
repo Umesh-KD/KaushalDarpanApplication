@@ -1,0 +1,118 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Group Code Allocation Reval</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Group Code Allocation Reval</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Group Code Allocation Reval</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <a  *ngIf="MapKeyEng == 1"  routerLink="/groupcodeaddreval" class="btn bg-success btn-sm text-white me-2"><i class="ti ti-plus"></i>Add New Group Partition</a>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Center CCode</a>
+          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">
+            <i class="ti ti-list"></i>Selected Center
+            List
+          </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--semester-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterId" >
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SemestarMasterDDLList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List For Select</b>
+      <div class="flex justify-between items-center">
+        <select id="ddlConter" class="form-select  couterDropDown me-2">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <form [formGroup]="GroupCodeAllocationSaveForm">
+          <div class="flex items-center">
+            <label for="StartValue" class="me-1" style="white-space:nowrap;">Start Value: <span class="StarMarking">*</span></label>
+            <div style="width:100%">
+              <input formControlName="StartValue" class="form-input" type="number" min="0" id="StartValue" placeholder="Enter Start Value"
+                     [(ngModel)]="this.StartValue" max="10000000">
+              <div *ngIf="isSubmitted && GroupCodeAllocationSaveForm.get('StartValue').errors" class="text-danger">
+                <p *ngIf="!GroupCodeAllocationSaveForm.get('StartValue').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Subject Code</th>
+            <th class="text-left">Common Subject</th>
+            <th class="text-left">Total Paper</th>
+            <th class="text-center">Group Code</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of GroupCodeAllocationList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.SemesterName}}</td>
+            <td>{{item.SubjectCode}} ({{item.SubjectName}})</td>
+            <td>{{item.CommonSubjectName}}</td>
+            <td>{{item.Total}}</td>
+            <td>{{item.GroupCode}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4" *ngIf="GroupCodeAllocationList.length>0">
+      <div class="text-center">
+        <button class="btn bg-success text-white" type="button" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
+           (click)="SaveData()">Generate & Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->

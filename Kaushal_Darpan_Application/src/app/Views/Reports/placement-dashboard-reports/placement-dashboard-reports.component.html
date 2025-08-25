@@ -1,0 +1,105 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Placement Dash Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">DashBoard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Branches" class="text-sm font-medium text-slate-700" aria-current="page">Placement Dash Report</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div class="Search">
+        <div class="form-group row">
+          <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" id="Search" (input)="applyFilter($event.target.value)" placeholder="Search...">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="PostNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Post No </th>
+          <td mat-cell *matCellDef="let element"> {{element.PostNo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="PostSSOID">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> SSOID </th>
+          <td mat-cell *matCellDef="let element"> {{element.PostSSOID}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HR_Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> HR Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.HR_Name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HR_Email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> HR Email </th>
+          <td mat-cell *matCellDef="let element"> {{element.HR_Email}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="HR_MobileNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> HR Mobile No </th>
+          <td mat-cell *matCellDef="let element"> {{element.HR_MobileNo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CompanyName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Company Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.CompanyName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CampusVenue">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Campus Venue </th>
+          <td mat-cell *matCellDef="let element"> {{element.CampusVenue}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="CampusVenueLocation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Campus Venue Location </th>
+          <td mat-cell *matCellDef="let element"> {{element.CampusVenueLocation}} </td>
+        </ng-container>
+          <ng-container matColumnDef="CreatedDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.CreatedDate}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+
+
+      <div class="overflow-x-auto mt-3">
+
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">No Record Found</div>
+        <!-- Pagination Controls -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords" (page)="onPaginationChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

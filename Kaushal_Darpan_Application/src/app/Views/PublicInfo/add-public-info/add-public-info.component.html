@@ -1,0 +1,116 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Public Info</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/public-info-list" class="text-sm font-medium text-slate-700" aria-current="page">Public Info</a>-->
+      <a [routerLink]="['/public-info-list']" class="text-sm font-medium text-slate-700" aria-current="page">Public Info</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/add-public-info" class="text-sm font-medium text-slate-700" aria-current="page">Add Public Info</a>
+    </div>
+  </div>
+  <a routerLink="/public-info-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Public Info</b>
+        </div>
+        <form [formGroup]="PublicInfoFormGroup">
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1">
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Type: <span class="StarMarking">*</span></label>
+                <select class="form-select" formControlName="PublicInfoType" [(ngModel)]="request.PublicInfoType" (change)="Hi_Update_file()">
+                  <option value="0">Choose Option</option>
+                  <option value="1">Downloads</option>
+                  <option value="2">Highlights</option>
+                  <option value="3">Notes</option>
+                </select>
+                <div *ngIf="isSubmitted&&_PublicInfoFormGroup.PublicInfoType.errors" class="text-danger">
+                  <p *ngIf="!_PublicInfoFormGroup.PublicInfoType.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Description English: <span class="StarMarking">*</span>
+                </label>
+                <textarea rows="2" class="form-input" placeholder="Enter Description In English" formControlName="DescriptionEn" [(ngModel)]="request.DescriptionEn"></textarea>
+                <div *ngIf="isSubmitted && _PublicInfoFormGroup.DescriptionEn.errors" class="text-danger">
+                  <p *ngIf="_PublicInfoFormGroup.DescriptionEn.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Description Hindi: <span class="StarMarking">*</span>
+                </label>
+                <textarea rows="2" class="form-input" placeholder="Enter Description In Hindi" formControlName="DescriptionHi" [(ngModel)]="request.DescriptionHi"></textarea>
+                <div *ngIf="isSubmitted && _PublicInfoFormGroup.DescriptionHi.errors" class="text-danger">
+                  <p *ngIf="_PublicInfoFormGroup.DescriptionHi.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf="request.PublicInfoType!=0">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  {{LableText}} <span class="StarMarking">{{_startl}}</span>
+                </label>
+                <input type="text" class="form-input" placeholder="{{LableText}}" formControlName="LinkUrl" [(ngModel)]="request.LinkUrl">
+                <div *ngIf="isSubmitted && _PublicInfoFormGroup.LinkUrl.errors" class="text-danger">
+                  <p *ngIf="_PublicInfoFormGroup.LinkUrl.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf="IsUpload == true">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="fileStudentPhoto">File <span class="StarMarking">{{_startf}}</span></label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="fileStudentPhoto" type="file" formControlName="Upload" (change)="onFilechange($event,'Photo')">
+                  <label for="fileStudentPhoto">
+                    <span>Choose File</span>
+                    {{request.Dis_FileName === '' ? 'No File Choosen' : request.Dis_FileName}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + request.FileName}}"
+                       *ngIf="this.request.FileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+                <div *ngIf="isSubmitted && _PublicInfoFormGroup.Upload.errors" class="text-danger">
+                  <p *ngIf="_PublicInfoFormGroup.Upload.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required.!
+                  </p>
+                </div>
+              </div>
+
+
+
+              <div>
+                <button type="button" class="btn bg-info text-white mt-6" (click)="onSubmit()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

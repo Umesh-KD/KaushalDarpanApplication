@@ -1,0 +1,684 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Result</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Result</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/iti-college-search" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Search</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Search:
+          </label>
+          <input type="text" placeholder="Search Code/Name/Division/District.." class="form-input" id="txtSearch" name="txtSearch" [(ngModel)]="searchRequest.SearchText">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Division: </label>
+
+          <select class="form-select w-full" name="ddlDivisionID" [(ngModel)]="searchRequest.DivisionId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+          </select>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
+          <select class="form-select w-full" name="ddlDistrictID" [(ngModel)]="searchRequest.DistrictId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <button type="submit" (click)="onSearchClick()" class="btn bg-info text-white mt-6 me-1">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetClick()"><i class="ti ti-refresh"></i>Reset</button>
+
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div *ngIf="isVisibleList" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+
+    </div>
+    <div *ngIf="isVisibleList" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <!--<div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>-->
+    </div>
+
+
+    <div *ngIf="isVisibleList" class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">College Name</th>
+            <th align="left">College Code</th>
+            <th align="left">Division</th>
+            <th align="left">District</th>
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.CollegeName}}</td>
+            <td>{{row.CollegeCode}}</td>
+            <td>{{row.Division}}</td>
+            <td>{{row.District}}</td>
+
+            <td align="left">
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View" (click)="GetById(row.CollegeId)"><i class="ti ti-eye"></i></a>
+              </div>
+
+            </td>
+
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length==0"><td colspan="8">No Record Found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="isVisibleList" class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+<div class="card" *ngIf="isVisibleSection">
+  <div class="card-body p-5">
+   
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Details</b>         
+          <a (click)="BackSide()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name</label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.CollegeName">
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Code</label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.CollegeCode">
+
+          </div>
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">MIS Code</label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.MISC">
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Category: </label>
+            <select disabled class="form-select disabled" id="InstituteCategoryID" [(ngModel)]="request.InstitutionCategoryId" >
+             
+              <option *ngFor="let item of InstituteCategoryList" [value]="item.ID">{{item.Name}}</option>
+            </select>           
+          </div>
+
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Management Details</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Management Type: </label>
+            <select disabled class="form-select disabled" name="ddlManagementType" id="ddlManagementType" [(ngModel)]="request.InstituteManagementId">
+             
+              <option value="1">Govt.</option>
+              <option value="5">Private</option>
+
+            </select>          
+          </div>
+
+          <div *ngIf="request.InstituteManagementId==5">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trust/Society: </label>
+            <select disabled class="form-select disabled" name="TrustSociety" id="TrustSociety" [(ngModel)]="request.TrustSociety">
+             
+              <option value="1">Trust</option>
+              <option value="2">Society</option>
+            </select>          
+          </div>
+
+
+          <div *ngIf="request.TrustSociety!=0 && request.InstituteManagementId==5">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              {{ request.TrustSociety == 1 ? 'Trust Name' : 'Society Name' }}
+              
+            </label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.TrustSocietyName" placeholder="Enter {{ request.TrustSociety == 1 ? 'Trust Name' : 'Society Name' }}">
+           
+          </div>
+
+          <div *ngIf=" request.InstituteManagementId==5">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Registration No</label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.RegNo" placeholder="Enter Registration No">
+            
+          </div>
+
+
+          <div *ngIf=" request.InstituteManagementId==5">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Registration Date</label>
+            <input disabled type="text" class="form-input disabled" id="ApplicationId" [value]="request.RegDate | date:'dd-MM-yyyy'">
+           
+          </div>
+
+
+          <div *ngIf="request.InstituteManagementId==5">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Registration Office</label>
+            <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.ManageRegOffice" placeholder="Enter Registration Office">
+           
+          </div>
+
+          <div *ngIf=" request.InstituteManagementId==5">
+            <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              State: 
+            </label>
+            <select disabled class="form-select disabled" id="ddlState" name="State" 
+                    [(ngModel)]="request.RegOfficeStateID" (change)="ddlState_Change()">
+
+              <option value="0">Select State</option>
+              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+            </select>
+        
+          </div>
+          <div *ngIf=" request.InstituteManagementId==5">
+            <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              District: 
+            </label>
+            <select disabled class="form-select disabled" id="ddlDistrict" name="District" 
+                    [(ngModel)]="request.RegOfficeDistrictID">
+              <option value="0">Select District</option>
+              <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          
+          </div>         
+
+        </div>
+      </div>
+
+
+
+   
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
+    </div>
+   
+      <div *ngIf="request.InstituteManagementId==5  " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf ">
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 && request.InstituteManagementId==5 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 && request.InstituteManagementId==5">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Member Name</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="member.MemberName" placeholder="Enter Member Name">
+        
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  ">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
+          <select disabled class="form-select disabled" name="TrustSociety" id="TrustSociety" [(ngModel)]="member.PostID">
+           
+            <option *ngFor="let item of ItiMemberPostList" [value]="item.ID">{{item.Name}}</option>
+          </select>         
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1  ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1  ">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Contact No:</label>
+          <input (keypress)="numberOnly($event)" type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="member.ContactNo" maxlength="10" placeholder="Enter Contact No">
+         </div>
+     
+
+        <div class="mt-4">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Last Election</label>
+          <input type="text" class="form-input disabled" disabled id="ApplicationId" [value]="request.LastElectionDate | date:'dd-MM-yyyy'">
+
+        </div>
+
+
+        <div class="mt-4">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Valid Upto</label>
+          <input type="text" disabled class="form-input disabled"  id="ApplicationId" [value]="request.LastElectionValidUpTo | date:'dd-MM-yyyy'">
+
+        </div>
+      </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute Address</b>
+    </div>
+    
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Ownership: </label>
+          <select disabled class="form-select disabled" name="TrustSociety" id="TrustSociety" [(ngModel)]="request.OwnerShipID">
+           
+            <option value="1">Rented.</option>
+            <option value="2">Own</option>
+          </select>          
+        </div>
+
+
+        <div *ngIf="request.OwnerShipID==1">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Agreement (Lease deed)  </label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId" [value]="request.AgreementLeaseDate | date:'dd-MM-yyyy'">         
+        </div>
+
+        <div *ngIf="request.OwnerShipID==1">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Valid Upto</label>
+          <input type="text" class="form-input disabled" id="ApplicationId" disabled [value]="request.ValidUpToLeaseDate | date:'dd-MM-yyyy'">
+          </div>
+
+        <div *ngIf="request.OwnerShipID==1">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Registration Office</label>
+          <input type="text" class="form-input disabled" id="ApplicationId" disabled [value]="request.InstituteRegOffice | date:'dd-MM-yyyy'"  placeholder="Enter Registration Office">
+         
+        </div>
+
+
+        <div *ngIf="request.OwnerShipID==1">
+          <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Registration State: 
+          </label>
+          <select class="form-select disabled" disabled id="ddlState" name="State"
+                  [(ngModel)]="request.InstituteStateID" (change)="ddlState_Change2()">
+
+            <option value="0">Select State</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>         
+        </div>
+        <div *ngIf="request.OwnerShipID==1">
+          <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Registration District: 
+          </label>
+          <select class="form-select disabled" id="ddlDistrict" disabled name="District" 
+                  [(ngModel)]="request.PropDistrictID">
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList3" [value]="item.ID">{{item.Name}}</option>
+          </select>        
+        </div>
+
+      
+
+
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Plot/House/Building No</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.PlotHouseBuildingNo" placeholder="Enter Plot/House/Building No">
+        
+        </div>
+
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.StreetRoadLane" placeholder="Enter Street/Road/Lane">
+          
+        </div>
+
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.AreaLocalitySector" placeholder=" Enter Area/Locality/Sector">
+         
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="request.LandMark" placeholder="Enter LandMark">
+          
+        </div>
+        <div>
+          <label>Division</label>
+          <select disabled class="form-select disabled" id="DivisionId" (change)="ddlDivision_Change()"
+                  [(ngModel)]="request.InstituteDivisionID">
+           
+            <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+          </select>        
+        </div>
+
+        <div>
+          <label>District</label>
+          <select disabled class="form-select disabled" id="DistrictId" (change)="ddlDistrict_Change()"
+                  [(ngModel)]="request.InstituteDistrictID">
+           
+            <option *ngFor="let item of DistrictMasterList1" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>        
+        </div>
+        <div>
+          <label>Sub Division</label>
+          <select disabled class="form-select disabled" id="SubDivisionId" [(ngModel)]="request.InstituteSubDivisionID">
+           
+            <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>         
+        </div>
+
+        <div>
+          <label>Tehsil</label>
+          <select disabled class="form-select disabled" id="TehsilId" [(ngModel)]="request.PropTehsilID" (change)="GetGramPanchayatSamiti()">
+           
+            <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>          
+        </div>
+
+        <div>
+          <label>Urban/Rural:</label>
+          <select disabled class="form-select disabled" id="UrbanRural" [(ngModel)]="request.PropUrbanRural" (change)="changeUrbanRural()">
+            <option value="0">Select Urban/Rural</option>
+            <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>        
+        </div>
+
+
+        <div *ngIf="request.PropUrbanRural==76">
+          <label for="PanchayatSamiti">Panchayat Samiti:</label>
+          <select disabled class="form-select disabled" id="PanchayatSamiti"
+                  [(ngModel)]="request.PanchayatSamiti">
+           
+            <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+          </select>       
+        </div>
+
+
+        <div *ngIf="request.PropUrbanRural==76">
+          <label for="GramPanchayatSamiti">Gram Panchayat:</label>
+          <select disabled class="form-select disabled" id="GramPanchayatSamiti"
+                  [(ngModel)]="request.GramPanchayatSamiti" (change)="villageMaster()">
+           
+            <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+         
+        </div>
+
+
+        <div *ngIf="request.PropUrbanRural==76">
+          <label for="village">Village:</label>
+          <select disabled class="form-select disabled" id="village"
+                  [(ngModel)]="request.VillageID">
+           
+            <option *ngFor="let item of VillageList" [value]="item.ID">{{item.Name}}</option>
+          </select>        
+        </div>
+
+
+        <div *ngIf="request.PropUrbanRural==75">
+          <label>City:</label>
+          <select disabled class="form-select disabled" id="CityID" [(ngModel)]="request.CityID">
+           
+            <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+          </select>        
+        </div>
+
+
+        <div *ngIf="request.PropUrbanRural==75">
+          <label>Administrative Body:</label>
+          <select disabled class="form-select disabled" id="Administrative" [(ngModel)]="request.AdministrativeBodyId">
+            <option value="0">Select Administrative Body</option>
+            <option value="1">Cantonment Board</option>
+            <option value="2">Nagar Nigam</option>
+            <option value="3">Nagar Palika</option>
+            <option value="4">Nagar Parishad</option>
+          </select>         
+        </div>       
+
+
+        <div>
+          <label for="Ward">Ward number:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Ward"
+                 [(ngModel)]="request.WardNo">         
+        </div>
+
+        <div>
+          <label for="Ward">Khasra no/Khata No:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Khasra/Khata No"
+                 [(ngModel)]="request.KhasraKhataNo">
+        
+        </div>
+
+        <div>
+          <label for="Ward">Rakba (Bigha/Yard):</label>
+          <input disabled (keypress)="numberOnly($event)"  class="form-input disabled" type="text" id="Ward" placeholder="Enter Rakba (Bigha/Yard)"
+                 [(ngModel)]="request.BighaYard">
+       
+        </div>
+
+      
+
+        <div>
+          <label for="Ward">Latitude:</label>
+          <input (keypress)="numberOnly($event)" disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Latitude"
+                 [(ngModel)]="request.Latitude">
+        
+        </div>
+
+        <div>
+          <label for="Ward">Longitude:</label>
+          <input (keypress)="numberOnly($event)" disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Longitude"
+                 [(ngModel)]="request.Longitude"> 
+
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Contact Details</b>
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Contact No:</label>
+          <input (keypress)="numberOnly($event)" disabled type="text" class="form-input disabled" id="ApplicationId" maxlength="10"  [(ngModel)]="request.ContactNo" placeholder="Enter Contact No">
+         
+        </div>
+
+
+        <div>
+          <label for="Ward">Email:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Email"
+                 [(ngModel)]="request.Email">
+         
+        </div>
+
+        <div>
+          <label for="Ward">Alternate Email:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Alternate Email"
+                 [(ngModel)]="request.AlternateEmail">
+          
+        </div>
+
+        <div>
+          <label for="Ward">Website:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Website"
+                 [(ngModel)]="request.Website">
+         
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Electrical load details</b>
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
+
+
+        <div>
+          <label for="Ward">Consumer Name:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Consumer Name"
+                 [(ngModel)]="request.ConsumerName">
+        
+        </div>
+
+        <div>
+          <label for="Ward">K No:</label>
+          <input disabled (keypress)="numberOnly($event)"  class="form-input disabled" type="text" id="Ward" placeholder="Enter K No"
+                 [(ngModel)]="request.KNo">         
+        </div>
+
+        <div>
+          <label>Connection Type:</label>
+          <select disabled  class="form-select disabled" id="Administrative" [(ngModel)]="request.ConnectionType">
+            <option value="0">Select Connection Type</option>
+            <option value="1">Domestic</option>
+            <option value="2">Commercial</option>
+
+          </select>
+        
+        </div>
+
+        <div>
+          <label for="Ward">Sanction load (KW):</label>
+          <input (keypress)="numberOnly($event)" disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Sanction load"
+                 [(ngModel)]="request.SanctionLoad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+        
+        </div>
+
+        <div>
+          <label for="Ward">Contract Demand:</label>
+          <input (keypress)="numberOnly($event)" disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Contarct Demand"
+                 [(ngModel)]="request.ContractDemand" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+         
+        </div>
+
+        <div>
+          <label for="Ward">Name Of DISCOM:</label>
+          <select disabled class="form-select disabled" id="UrbanRural" [(ngModel)]="request.DISCOM">
+           
+            <option *ngFor="let item of DISCOM" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+         
+        </div>
+
+        <div>
+          <label for="Ward">Sub-Division Office:</label>
+          <input disabled class="form-input disabled" type="text" id="Ward" placeholder="Enter Sub-Division Office"
+                 [(ngModel)]="request.SubDivOffice">
+       
+        </div>
+
+
+
+      </div>
+
+
+    <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Affiliation Details </b>
+    </div>
+   
+      <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 hide-in-pdf">
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No</label>
+          <input type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="addmore.OrderNo" placeholder="Enter Order No">
+        
+        </div>
+
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date</label>
+          <input type="text" class="form-input disabled" id="ApplicationId"  disabled [(ngModel)]="addmore.OrderDate">
+          
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">With Effect From:</label>
+          <input type="text" class="form-input disabled" disabled id="ApplicationId"  [min]="addmore.OrderDate" [(ngModel)]="addmore.EffectFrom" placeholder="Enter Contact No">
+          
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Page No (as per affiliation order):</label>
+          <input disabled (keypress)="numberOnly($event)" type="text" class="form-input disabled" id="ApplicationId"  [(ngModel)]="addmore.PageNo" placeholder="Enter Page No">
+         
+        </div>
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Serial No (as per affiliation order):</label>
+          <input (keypress)="numberOnly($event)" type="text" disabled class="form-input disabled" id="ApplicationId"  [(ngModel)]="addmore.SerialNo" placeholder="Enter Serial No">
+         
+        </div>       
+
+      </div>  
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+

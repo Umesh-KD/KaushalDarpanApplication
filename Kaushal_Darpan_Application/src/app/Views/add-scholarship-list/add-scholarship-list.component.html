@@ -1,0 +1,112 @@
+  <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Scholarship Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Scholarship Details</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+
+<form [formGroup]="ScholarshipFormGroup" id="HrMasterFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Scholarship Details</b>
+        </div>
+        <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.StreamID" formControlName="StreamID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.StreamID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.StreamID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester Name  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.SemesterID" formControlName="SemesterID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.SemesterID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.SemesterID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.Category" formControlName="CategoryID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CategoryList" [value]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.CategoryID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.CategoryID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Student <span class="StarMarking">*</span></label>
+            <input (keypress)="numberOnly($event)" type="text" class="form-input" placeholder="Enter Total Student" [(ngModel)]="request.TotalStudent" formControlName="txtToatlstudent">
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.txtToatlstudent.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.txtToatlstudent.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Amount <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" (keypress)="numberOnly($event)" placeholder="Enter Total Amount" [(ngModel)]="request.Amount" formControlName="txtAmount">
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.txtAmount.errors" class="text-danger">
+              <p *ngIf="_ScholarshipFormGroup.txtAmount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">Scholarship Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Document}}"
+                   *ngIf="this.request.Document !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="col-span-3 text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>
+<!-- end row -->

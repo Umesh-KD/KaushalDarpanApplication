@@ -1,0 +1,110 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Examiner - Report</h4>
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Report</a>
+    </div>-->
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Examiner Name</label>
+          <select class="form-select" [(ngModel)]="searchRequest.StaffID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of ExaminerNameList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetCollegeMasterList(1)">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Report Excel</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetCollegeMasterList(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (change)="filteredItems()" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th width="80px" align="left">Sr. No.</th>
+            <th>SSOID</th>
+            <th>Examiner Name</th>
+            <th>Semester Name</th>
+            <th>Total Student Count</th>
+            <th>Subject Name</th>
+            <th>EndTerm Name</th>
+            <th>Institute Name</th>
+            <th>Stream Name</th>
+            <th>Appoint Date</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Exam of ExaminerReportList; let idx=index; ">
+            <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+            <td align="left">{{Exam.SSOID}}</td>
+            <td align="left">{{Exam.ExaminerName}}</td>
+            <td align="left">{{Exam.SemesterName}}</td>
+            <td align="left">{{Exam.TotalStudentCount}}</td>
+            <td align="left">{{Exam.SubjectName}}</td>
+            <td align="left">{{Exam.EndTermName}}</td>
+            <td align="left">{{Exam.InstituteNameEnglish}}</td>
+            <td align="left">{{Exam.StreamName}}</td>
+            <td align="left">{{Exam.AppointDate}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ExaminerReportList?.length }} of {{ExaminerReportList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetCollegeMasterList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="ExaminerReportList[0]?.TotalRecords==0" (change)="GetCollegeMasterList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetCollegeMasterList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>

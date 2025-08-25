@@ -1,0 +1,159 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Result</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Result</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/certificate" class="text-sm font-medium text-slate-700" aria-current="page">Certificate</a>
+    </div>
+  </div>
+
+ 
+
+
+
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
+        </div>
+      </div>
+      <form [formGroup]="AddStaffBasicDetailFromGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="searchRequest.ExamYearID" formControlName="ddlExamYearID">
+              <option value="0">--Select--</option>
+              <option value="1">1st Year</option> 
+              <option value="2">2nd Year</option> 
+              
+            </select>
+            <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlExamYearID.errors" class="text-danger">
+              <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlExamYearID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label for="RollNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Roll No:<span class="StarMarking">*</span>
+            </label>
+            <input type="text" placeholder="Roll No" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" class="form-input" id="txtRollNo" formControlName="txtRollNo" name="txtRollNo" [(ngModel)]="searchRequest.RollNo">
+            <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtRollNo.errors" class="text-danger">
+              <p *ngIf="_AddStaffBasicDetailFromGroup.txtRollNo.errors.required">
+                <i aria-hidden="true"></i>
+                This
+                field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <button type="submit" (click)="GetList()" class="btn bg-info text-white mt-6 me-1">Search</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+
+
+    <div *ngIf="isVisibleList" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+
+    </div>
+    <div  *ngIf="isVisibleList" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+
+   
+    <div  *ngIf="isVisibleList" class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>           
+            <th align="left">Student Name</th>         
+            <th align="left">Father Name</th>         
+            <th align="left">Dob</th>         
+            <th align="left">Total Marks</th>
+            <th align="left">Min Marks</th>            
+            <th align="left">Obtained Marks</th>         
+            <th align="left">Result</th>         
+
+            <th align="center" width="200">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.FatherName}}</td>
+            <td>{{ row.DOB | date: 'dd-MM-yyyy' }}</td>
+            <td>{{row.MaxMarks}}</td>
+            <td>{{row.MinMarks}}</td>
+            <td>{{row.ObtainedMarks}}</td>
+            <td>{{row.Result}}</td>
+            <td align="left">
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Certificate" (click)="Download()"><i class="ti ti-download"></i></a>
+                <!--<a href="javascript:void(0);" title="Certificate" (click)="TestDownload()"><i class="ti ti-download"></i></a>-->
+
+              </div>
+
+            </td>
+
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length==0"><td colspan="9">No Record Found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div  *ngIf="isVisibleList" class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+

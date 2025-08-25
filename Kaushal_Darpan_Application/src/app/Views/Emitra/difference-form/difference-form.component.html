@@ -1,0 +1,181 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="row my-3">
+      <div class="col-md-4">
+        <label class="form-label">Enter Mobile Number For Search Application:</label>
+        <input type="text" class="form-control" id="txtMobileNumber" placeholder="Enter 10 Digits Mobile Number" [(ngModel)]="MobileNo" maxlength="10" (input)="onInput($event)">
+      </div>
+      <div class="col-md-4">
+        <div class="mt-4 d-flex align-items-center">
+          <button type="button" class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP)">Send OTP</button>
+          <!--<span class="d-block mx-1">OR</span><a class="btn bg-info text-white" href="https://sso.rajasthan.gov.in/signin?ru=hte"> Apply BY SSO</a>-->
+        </div>
+        <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>-->
+      </div>
+    </div>
+
+    <div class="row my-3" *ngIf="ApplicationList.length>0">
+      <div>
+        एप्लिकेशन का चयन करें जिसमें आप कमी जोड़ना चाहते हैं। (Select the application in which you want to Upload Deficiency)
+      </div>
+
+      <table class="w-full border border-gray-300 w-50" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="border border-gray-300">
+            <th class="border border-gray-300 px-2 py-1">Name</th>
+            <th class="border border-gray-300 px-2 py-1">DOB</th>
+            <th class="border border-gray-300 px-2 py-1">Gender</th>
+            <th class="border border-gray-300 px-2 py-1">Application No</th>
+            <th class="border border-gray-300 px-2 py-1">Course Type</th>
+            <th class="border border-gray-300 px-2 py-1">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let app of ApplicationList; let i = index" class="border border-gray-300">
+            <td class="border border-gray-300 px-2 py-1">{{app.StudentName}}</td>
+            <td class="border border-gray-300 px-2 py-1">{{app.DOB}}</td>
+            <td class="border border-gray-300 px-2 py-1">{{app.Gender}}</td>
+            <td class="border border-gray-300 px-2 py-1">{{app.ApplicationNo}}</td>
+            <td class="border border-gray-300 px-2 py-1">{{app.CourseTypeName}}</td>
+            <td class="border border-gray-300 px-2 py-1">
+              <a (click)="openModal(modal_Open, app.ApplicationID,app.CourseType,app.AcademicYearID,app.EndTermID)" class="text-blue-600 hover:underline">Upload Deficency</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+
+    <div class="col-lg-12 mb-3">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <!--<h3>प्रथम वर्ष इंजीनियरिंग प्रवेश (I year Engineering Admission)</h3>-->
+          <p><b>Helpline Number: </b> {{HelplineNumber}}</p>
+          <p><b>For queries contact email id:</b>{{ContactEmail}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="card-body p-5" *ngIf="!ShowEditOption">
+    विकल्प पत्र संपादन का विकल्प फिलहाल बंद है या अभी तक नहीं खोला गया है। (The option to edit the option form is currently closed or not opened yet.)
+  </div>-->
+</div>
+<!-- end row -->
+
+
+
+<ng-template #modal_GenrateOTP let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header d-flex align-items-center justify-content-between">
+        <b>
+          <i class="fa fa-comment"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-center">
+          <!--<span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo}}</b></span>-->
+          <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MaskedMobileNo}}</b></span>
+
+        </p>
+        <div class="mt-4">
+          <label class="form-label">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-control" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <!--<p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>-->
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Revert documents </b>
+        <button class="btn bg-info text-white pull-right text-right" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-3">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div class="flex items-center gap-3 mb-2 flex justify-between">
+              <div class="alert alert-warning" role="alert">
+                Application Remark: {{ CommonRemark }}
+              </div>
+              <div class="alert alert-danger" role="alert">
+                Note: Add Multiple Documents in single PDF
+              </div>
+            </div>
+            <table class="table table-bordered" cellpadding="5"  *ngIf="DocumentList.length > 0">
+              <thead>
+                <tr class="text-left">
+                  <th width="80">Sr. No.</th>
+                  <th>Document Name</th>
+                  <th> Revert Remark</th>
+                  <th class="text-left">Upload Document</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let item of DocumentList; let idx = index;">
+                  <td>{{ idx + 1 }}</td>
+                  <td><a class="text-success">{{ item.DisplayColumnNameEn }} <br> <span class="text-danger" *ngIf="item.GroupNo==1">(Only jpg, png, jpeg file)</span></a></td>
+                  <td>{{ item.Remark }}</td>
+
+                  <td>
+                    <div class="flex fileUploader">
+                      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+                             id="filepanPhoto_{{idx+1}}"
+                             type="file"
+                             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                             (change)="UploadDocument($event, item)" />
+
+                      <label for="filepanPhoto_{{idx+1}}">
+                        <span>Choose File</span>
+                        {{ !item.Dis_FileName ? 'No File Chosen' : item.Dis_FileName }}
+                      </label>
+
+                      <div class="fileUploader-button" *ngIf="item.FileName">
+                        <a [href]="appsettingConfig.StaticFileRootPathURL + '/' + item.FolderName + '/' + item.FileName"
+                           class="btn bg-primary text-white btn-sm mr-1" target="_blank">
+                          <i class="ti ti-eye"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="btn bg-danger text-white  btn-sm mr-1" (click)="DeleteDocument(item)">
+                          <i class="ti ti-trash"></i>
+                        </a>
+                      </div>
+                    </div>
+
+                    <small class="text-danger" *ngIf="item.validationError">{{ item.validationError }}</small>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+
+            <div class="mt-4 mb-2">
+              <label for="overallRemark" class="block font-semibold mb-1">Student Remark:</label>
+              <textarea id="overallRemark"
+                        rows="4"
+                        class="form-control rounded-md p-2"
+                        placeholder="Enter student remark here..."
+                        [(ngModel)]="overallRemark"></textarea>
+            </div>
+
+          </div>
+          <div class="card-footer text-center" *ngIf="DocumentList.length > 0">
+            <button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

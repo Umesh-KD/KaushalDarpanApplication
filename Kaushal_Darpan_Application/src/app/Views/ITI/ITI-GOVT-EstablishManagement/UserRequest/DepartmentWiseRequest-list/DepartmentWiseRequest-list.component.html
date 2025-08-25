@@ -1,0 +1,377 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITIs</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITIs" class="text-sm font-medium text-slate-700" aria-current="page">Request List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a routerLink="/AddUserRequest" class="btn bg-success btn-sm text-white">
+        <i class="ti ti-plus"></i> Add Request
+      </a>-->
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Request Type:
+          </label>
+          <select class="form-select" id="ddlRequestType" [(ngModel)]="searchRequest.RequestType">
+            <option value="0">--Select--</option>
+            <option value="1">Relieving Request</option>
+            <option value="2">Joining Request</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Level:
+          </label>
+          <select (change)="GetOfficeList()" class="form-select" id="ddlLevelID" [(ngModel)]="searchRequest.LevelID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Office:
+          </label>
+          <select class="form-select" id="ddlOfficeID" [(ngModel)]="searchRequest.OfficeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Staff Type:
+          </label>
+          <select class="form-select" id="ddlStaffTypeID" [(ngModel)]="searchRequest.StaffTypeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Post:
+          </label>
+          <select class="form-select" id="ddlPostID" [(ngModel)]="searchRequest.PostID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Order No:
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Order No:" [(ngModel)]="searchRequest.OrderNo">
+
+        </div>
+
+
+      </div>
+      <div class="text-center mb-2">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="getlist()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+      </div>
+    </div>
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <!--{{UserRequestList|json}}-->
+    <div class="overflow-x-auto mt-3">
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">S No</th>
+            <th class="text-left">Request Type</th>
+            <th class="text-left">User</th>
+            <th class="text-left">Level</th>
+            <th class="text-left">Staff Type</th>
+            <th class="text-left">Post</th>
+            <th class="text-left">Office</th>
+            <th class="text-left">Institute</th>
+            <th class="text-left">Order No</th>
+            <th class="text-left">Order Date</th>
+            <th class="text-left">Last Working Date</th>
+            <th class="text-left">Joining Date</th>
+            <th class="text-left">Request Date</th>
+            <th class="text-left">Staff Request Status</th>
+            <th class="text-left">Relieving Status</th>
+            <th class="text-left">Joining Status</th>
+            <th class="text-left">Request Remarks</th>
+            <th class="text-left">File</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of UserRequestList; let idx=index;  ">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{ row.RequestType }}</td>
+            <td align="left">{{ row.UserName }}</td>
+            <td align="left">{{ row.LevelName }}</td>
+            <td align="left">{{ row.StaffType }}</td>
+            <td align="left">{{ row.PostName }}</td>
+            <td align="left">{{ row.OfficeName }}</td>
+            <td align="left">{{ row.InstituteName }}</td>
+            <td align="left">{{ row.OrderNo }}</td>
+            <td align="left">{{ row.OrderDate }}</td>
+            <td align="left">{{ row.LastWorkingDate }}</td>
+            <td align="left">{{ row.JoiningDate }}</td>
+            <td align="left">{{ row.RequestDate }}</td>
+            <td align="left">{{ row.RequestStatus }}</td>
+            <td align="left">{{ row.RelievingStatus }}</td>
+            <td align="left">{{ row.JoiningStatus }}</td>
+
+            <td align="left">{{ row.RequestRemarks }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/PublicInfoDocument/' + row.AttachDocument_fileName}}"
+                   *ngIf="row.AttachDocument_fileName !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+            <td align="left">
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
+                <a *ngIf="RequestTypeSHowID == 2 &&  row.JoiningStatusId !=247" href="javascript:void(0);" title="Joining Request" (click)="onSubmitJoiningRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
+                <a *ngIf="row.RequestTypeID==1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
+                <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.UserId)"><i class="ti ti-download"></i></a>
+                <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.UserId)"><i class="ti ti-download"></i></a>
+              </div>
+
+            </td>
+
+
+          </tr>
+        </tbody>
+
+
+      </table>
+
+    </div>
+
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<ng-template #MyModel_ReplayQuery let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Status <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.StatusIDs" formControlName="ddlStatus" (change)="StatusWiseCondition()">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of filteredStatusList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlStatus.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="RequestUpdateStatus.Remark" formControlName="txtRemark"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>-->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input w-full resize-none"
+                        rows="4"
+                        [(ngModel)]="RequestUpdateStatus.Remark"
+                        formControlName="txtRemark"
+                        placeholder="Enter your remarks here..."></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+
+            <div *ngIf="searchRequest.RequestType == 1 && RequestUpdateStatus.StatusIDs==247">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Last Working Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.LastWorkingDate" formControlName="txtLastworkingDate">
+              <div *ngIf="isSubmitted && groupForm.controls.txtLastworkingDate.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtLastworkingDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div *ngIf="searchRequest.RequestType == 2 && RequestUpdateStatus.StatusIDs==247">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Joining Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.JoiningDate" formControlName="txtJoiningDate">
+              <div *ngIf="isSubmitted && groupForm.controls.txtJoiningDate.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtJoiningDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+<ng-template #MyModel_UserRequestHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-end items-center">
+        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Request History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+
+
+        <!--{{UserRequestHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Request Type</th>
+                <th class="text-left">Relieving Status</th>
+                <th class="text-left">Joining Status</th>
+                <th class="text-left">Request Status</th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserRequestHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.ServiceRequestName }}</td>
+                <td align="left">{{ row.RelievingStatusName }}</td>
+                <td align="left">{{ row.JoiningStatusName }}</td>
+                <td align="left">{{ row.RequestStatusName }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+
+              </tr>
+              <tr *ngIf="UserRequestHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalRequestHistorylist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>
+
+
+

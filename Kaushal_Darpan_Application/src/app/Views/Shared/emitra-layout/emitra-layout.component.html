@@ -1,0 +1,136 @@
+<head>
+  <title>Dashboard | DTE</title>
+  <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+
+  <!-- Icons CSS -->
+  <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+</head>
+<!---->
+<div id="app-menu">
+  <div class="example-container" [class.example-is-mobile]="isMobile()">
+    <!-- Sidenav Container -->
+    <mat-sidenav-container class="example-sidenav-container"
+                           [style.marginTop.px]="isMobile()">
+      <!-- Sidebar: Sidenav (open by default on desktop, toggle on mobile) -->
+      <mat-sidenav #snav [mode]="isMobile() ? 'over' : 'side'" [fixedInViewport]="isMobile()" fixedTopGap="56" [opened]="!isMobile()" style="width: 300px;">
+        <ng-scrollbar class="position-relative" style="height: 100%">
+          <div class="top-0 flex h-16 items-center justify-center px-6">
+            <!-- Logo Section -->
+            @if(this.sSOLoginDataModel && this.sSOLoginDataModel.DepartmentID==_EnumDepartment.ITI)
+            {
+            <a routerLink="/dashboard" class="flex logoTxt">
+              <img src="/assets/images/logo.png" alt="logo" class="flex h-12" />
+              <b>DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN ITI</b>
+            </a>
+            }
+            @else
+            {
+            <a routerLink="/dashboard" class="flex logoTxt">
+              <img src="/assets/images/logo.png" alt="logo" class="flex h-12" />
+              <b>DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN</b>
+            </a>
+            }-->
+          </div>
+          <!-- Search Bar -->
+          <div class="flex items-center mb-2">
+            <input matInput [(ngModel)]="searchTerm" placeholder="Search..." class="form-input" />
+          </div>
+
+
+
+        </ng-scrollbar>
+
+      </mat-sidenav>
+
+      <!-- Main Content Area -->
+      <mat-sidenav-content>
+        <!-- Top Toolbar -->
+        <mat-toolbar class="example-toolbar menu-toggle-toolbar">
+          <!-- Menu Icon Button to Toggle Sidebar (Left aligned) -->
+          <button class="menu-toggle left-align" mat-icon-button (click)="snav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+
+          <!-- Spacer to push content to the right -->
+          <span class="spacer"></span>
+
+
+
+
+
+
+
+
+
+
+          <!-- Role Dropdown -->
+          <mat-form-field class="mt-3 RoleID" appearance="fill">
+            <mat-label>Role</mat-label>
+            <mat-select [(ngModel)]="RoleID" name="RoleID" >
+              <mat-option [value]="4">Emitra</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+
+          <!--Profile Avatar with Dropdown-->
+          <button mat-icon-button [matMenuTriggerFor]="menu" class="profile">
+            <img src="/assets/images/users/avatar-6.jpg" alt="user-image" class="rounded-full h-15 mr-1" />
+            <span class="md:flex items-center hidden">
+              <h5 class="text-base">{{ sSOLoginDataModel['SSOID'] }}</h5>
+              <mat-icon>arrow_drop_down</mat-icon>
+            </span>
+          </button>
+
+          <!-- Dropdown Menu for Profile -->
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="BackToSSOButton()">
+              <mat-icon>arrow_back</mat-icon>
+              Back to SSO
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="BackToSSOButton()">
+              <mat-icon>logout</mat-icon>
+              Sign out
+            </button>
+          </mat-menu>
+        </mat-toolbar>
+
+        <main class="flex-grow p-3">
+
+          <router-outlet></router-outlet>
+
+          <!-- Session Expired Modal -->
+          <ng-template #mymodalSessionExpired let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+            <div class="modal-content">
+              <div class="card">
+                <div class="card-header flex justify-between align-center">
+                  <b><i class="fa fa-plus"></i>&nbsp;Session Expired</b>
+                </div>
+                <div class="card-body">
+                  User session invalid. Please try login after some time.
+                  <div class="row m-2">
+                    <div class="col-md-12">
+                      <button type="button" id="btnOk" class="btn btn-primary" (click)="btnOk()" title="Submit">OK</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </main>
+
+
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+    <!-- Footer -->
+    <footer class="footer h-6 flex items-center px-6 bg-white border-t border-gray-200 shadow">
+      <div class="flex md:justify-center justify-center w-full gap-4">
+        <div style="font-size:12px;">
+          <script>document.write(new Date().getFullYear())</script> © DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+

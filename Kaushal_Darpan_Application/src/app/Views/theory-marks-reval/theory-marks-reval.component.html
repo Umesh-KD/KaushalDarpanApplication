@@ -1,0 +1,462 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Theory Marks Reval</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/theory-marks-reval" class="text-sm font-medium text-slate-700" aria-current="page">Theory Marks Reval</a>
+    </div>
+  </div>
+  <!--<button type="button" class="btn bg-black text-white btn-sm" (click)="Back()">
+    <i class="ti bi-text-indent-left"></i>
+    Back
+  </button>-->
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <!--<div class="mb-8">
+  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>-->
+    <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+    <!--</div>
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester:</label>
+      <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.SemesterID">
+        <option value="0">--All--</option>
+        <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+        Branch:<span class="StarMarking">*</span>
+      </label>
+      <select class="form-select" id="ddlBranch"
+              [(ngModel)]="searchRequest.StreamID">
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of Branchlist" [value]="item.StreamID">{{item.StreamName}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No.: </label>
+      <input class="form-input" placeholder="Search By Roll Number" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo" >
+    </div>
+
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperGetMarkPr">Marks Entered: </label>
+      <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.MarkEnter">
+        <option value="0">Search By Marks Entered</option>
+        <option value="1">Marks Pending</option>
+        <option value="2">Marks Entered</option>
+      </select>
+    </div>-->
+    <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperIsPresent">Status: </label>
+    <select class="form-select" id="PracticalPaperIsPresent" tabindex="-1" aria-hidden="true">
+      <option value="">Search By Status</option>
+      <option value="0">Absent</option>
+      <option value="1">Present</option>
+      <option value="2">UFM</option>
+      <option value="3">Detained</option>
+    </select>
+  </div>-->
+    <!--<div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksList()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+      </div>
+    </div>
+
+
+  </div>-->
+    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+  </div>-->
+
+    <div *ngIf="IsCountShow" class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!--<th align="left">
+            <input type="checkbox" id="checkboxSeletedAll" class="checkboxSize" [checked]="allSelected"
+                   (change)="toggleAllCheckboxes($event)">
+          </th>-->
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Allotted No. Of Copies</th>
+            <th class="text-left">No. Of Students Saved</th>
+            <th class="text-left">Pending Students</th>
+            <th>Action </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of TheoryMarksDashBoardCount | tableSearchFilter: Table_SearchText; let idx = index;">
+            <td align="left">{{row.GroupCode  }}</td>
+            <td align="left">{{ row.Allotted_No_Of_copies }}</td>
+            <td align="left">{{ row.No_Of_Student_Save }}</td>
+            <td align="left">{{ row.Pending_Students }}</td>
+            <td class="text-center">
+              <button *ngIf="!IsConfirmed" type="button" class="btn bg-info text-white" (click)="OnConfirm(modalContent,row.ExaminerCode)">Confirm</button>
+              <!-- <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button> -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- Modal Popup -->
+
+    <ng-template #modalContent let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+            <div class="flex-1 text-center">
+              <b><i class="fa fa-plus"></i>&nbsp;CONFIRMATION</b>
+            </div>
+            <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <!--<div *ngIf="isModalOpen" >-->
+            <!--<h4 class="text-center text-lg font-semibold mb-4">Confirmation</h4>-->
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 olClassForNo">
+              <div>
+                <h4 class="text-end">गोपनीय</h4>
+                <h4 class="text-center">
+                  राजस्थान सरकार<br />
+                  प्राविधिक शिक्षा मण्डल, राजस्थान, जोधपुर<br />
+                  परीक्षकों के लिये निर्देश
+                </h4>
+                <p class="text-center">परीक्षा सम्बन्धी सभी पत्र व्यवहार संयुक्त निदेशक (गोपनीय) के व्यक्तिगत नाम से करें, एवं लिफाफे के ऊपर गोपनीय शब्द लिखें। <br /><b>(अ) उत्तरपुस्तिका मूल्यांकन</b></p>
+              </div>
+              <div>
+                <ol>
+                  <li>परीक्षा केन्द्र के अनुसार क्राफ्ट पेपर पर चस्पा उत्तरपुस्तिका विवरण एवं प्रेषित एवार्ड शीट अनुसार जाँच करें। विसंगति की स्थिति में तुरन्त दूरभाष पर सम्पर्क करें। सही होने पर email द्वारा सूचना (CHECKED FOUND CORRECT) प्रेषित करें। </li>
+                  <li>वार्षिक पद्धति नींन इंजिनियरिंग एवं सेमेस्टर पद्धति में न्यूनतम उत्र्तीणांक 23 एवं कन्डोनेशन उत्र्तीणांक 18 है। सीमान्त उत्तीणाक >अवस्था वाले मामलों (1 व 2 अंकों) का पुनः सावधानी पूर्वक मूल्यांकन करें। यदि किसी परीक्षार्थी के अंक बढ़ने की सम्भावना पाई जाए तथा परीक्षार्थी उत्र्तीण होने योग्य हो तो ऐसी अवस्था में परीक्षार्थी को (PUSH UP) पुशअप कर दिया जायें, तथा मुख्य पृष्ठ पर (PUSH UP) अंक अंकित कर देवे।</li>
+                  <li>उत्तरपुस्तिकाओं की जांच में किसी प्रकार का संशय होने पर आप तुरन्त प्रेषक को सूचित करें।</li>
+                  <li>पैकेट पर चस्पा उत्तरपुस्तिका विवरण में अंकित विषय कोड व प्राप्त उत्तरपुस्तिकाओं के विषय कोड में अन्तर हो तो आप तुरन्त उसकी सूचना दूरभाष संख्या 0291-2430440, 0291-2636572 पर करें एवं Mail करें। Mail Id-conf.bter&#64;gmail.com </li>
+                  <li>कुछ सामान्य त्रुटियां आपकी जानकारी में आ सकती है जिसे आप अपने स्तर पर ठीक करते हुए उत्तरपुस्तिका मूल्यांकन रिपोर्ट में उक्त विवरण अंकित कर देवें जैसे अ) एवार्ड सूची (Award Sheet) में किसी परीक्षार्थी को अनुपस्थित/वचित व अन्य परिस्थिति अंकित की गई हो परन्तु उत्तरपुस्तिका प्राप्त हुई हो तो आप मूल्यांकन कर यथा स्थान पर अंक दर्ज करें। ब) अंकसूची में परीक्षार्थी उपस्थित है परन्तु उत्तरपुस्तिका प्राप्त नहीं है तो आप आवश्यक संशोधन करते हुए सही स्थितिनुसार कार्यवाही करें, तथा मण्डल को लौटती डाक से सूचित करें। स) परीक्षार्थी द्वारा समस्त प्रश्न हल करने के पश्चात त्तमस्त हल प्रश्न काट दिये गये है तो आप उत्तरपुस्तिका मूल्यांकन करें, एवं इसकी टिप्पणी मूल्यांकन रिपोर्ट व उत्तरपुस्तिका के मुख्य पृष्ठ पर अंकित करें।</li>
+                  <li>
+                    उत्तर पुस्तिकाओं मूल्यांकन के सम्बन्ध में सामान्य निर्देश:-
+                    <ol>
+                      <li>
+                        मूल्याकन प्रश्न पत्र में अंकित निर्देशानुसार एवं प्रश्न पत्र निर्माता द्वारा उपलब्ध (Solution) हल के अनुसार किया जाय, प्रश्न हल के प्रत्येक भाग में अंक प्रदान करें तथा यदि परीक्षक द्वारा प्रश्न पत्र का (Solution) हल उपलब्ध करवाया गया हो तो तथा मुख्य परीक्षक ने प्रश्न को प्रत्येक हल में अंक निर्धारित किए है तो कृपया तदनुसार मूल्यांकन करें।
+                      </li>
+                      <li>
+                        प्रत्येक हल प्रश्न के भाग में अंक प्रदान कर हर के अन्त में गोले में अंक प्रदत्त कर उक्त गोले के अंक मुख्य पृष्ठ पर अग्रनित करें।
+                      </li>
+                      <li>
+                        प्रत्येक हल प्रश्न के भाग में प्रदत्त अंकों को उत्तरपुस्तिका के मुख्य पृष्ठ पर अग्रनित करें तथा अन्त में देख ले कि परीक्षार्थी ने प्रश्न पत्र में निर्देशित प्रथम प्रश्न अनिवार्य के साथ साथ अन्य प्रश्नों के भी प्रदत्त अंक मुख्य पृष्ठ पर अग्रनित हुए अथवा नहीं। परीक्षार्थी द्वारा उत्तरपुस्तिका में जो प्रश्न हल नहीं किये गये उनके मुख्य पृष्ठ पर प्रश्न संख्या के कॉलम में (1) क्रोस का निशान अंकित करे।
+                      </li>
+                      <li>
+                        यदि किसी परीक्षार्थी ने आवश्यकता से अधिक प्रश्न हल किये है तो अधिक प्रश्नों को जाँच के बाद में काट देना चाहिए। परीक्षक को अधिकार है कि इसके लिए यह किसी भी उत्तर को काट सकता है। ऐसे उत्तरों को काटकर उस पर आवश्यकता से अधिक /EXCESS" लिख देना चाहिये। यही उत्तरपुस्तिका के मुख पृष्ठ पर भी उस प्रश्न के खाने में लिखना चाहिए।
+                      </li>
+                      <li>
+                        नीचे कुछ ऐसी साधारण त्रुटियों का उल्लेख है जो साधारणतया की जाती है। ऐसी त्रुटि नहीं हो इसके लिये सावधानी रखनी चाहिये
+                        <ol>
+                          <li>
+                            किसी प्रश्न अथवा उसके किसी भाग को मूल्यांकित किये बिना छोड दिया जाता है अथवा मूल्यांकन के पश्चात कोई अंक प्रदान नहीं किये जाते है।
+                          </li>
+                          <li>
+                            उत्तरपुस्तिका के साथ नत्थी की हुई ग्राफ शीट, ड्राईंग शीट इत्यादि का मूल्यांकन नहीं किया जाता है। यदि किया जाता है तो उस पर न तो हस्ताक्षर ही होते है न ही मूल्यांकित / ASSESSED लिखा जाता है।
+                          </li>
+                          <li>
+                            उत्तरपुस्तिका के भीतर तथा मुख पृष्ठ दोनों स्थानों पर एक समान अंक नहीं लिखे जाते हैं।
+                          </li>
+                          <li>
+                            योग ठीक नहीं होते है।
+                          </li>
+                          <li>
+                            उत्तरपुस्तिका से अंकों का इन्द्राज शुद्धता से नहीं किया जाता है।
+                          </li>
+                          <li>
+                            ओएमआर में अंक के गोले स्पष्ट करें एवं योग सही लगायें। ओएमआर के बांया साईड में कुल योग के गोले लगाये जाय।
+                          </li>
+                          <li>
+                            ओएमआर पर हस्ताक्षर नहीं होते है।
+                          </li>
+                          <li>
+                            उत्तरपुस्तिका के मुख पृष्ठ पर हस्ताक्षर नहीं किये जाते है।
+                            <ol>
+                              <li> अंकों में संशोधन के पास छोटे हस्ताक्षर नहीं किये जाते हैं।
+                            </ol>
+                          </li>
+                          <li>उत्तरपुस्तिका को पेन्सिल से या ऐसी स्याही से जो लाल न हो जांचा जाता है।</li>
+                          <li>
+                            किसी प्रश्न के लिए  निर्धारित पूर्ण अंकों से अधिक अंक दिये जाते है।
+                          </li>
+                        </ol>
+                      </li>
+
+                    </ol>
+                  </li>
+                </ol>
+              </div>
+              <div>
+                <p class="text-center"><b>(ब)उत्तरपुस्तिका प्रेषित</b></p>
+                <ol>
+                  <li>
+                    आपके नियुक्ति पन्त्र में आपके नाम के आगे परीक्षक कोड संख्या अंकित की गई है, आप मण्डल से पत्र व्यवहार करते समय प्रेषक के स्थान पर केवल अपने आंवटित कोड अंकित करें साथ ही समस्त उत्तरपुस्तिका सम्बधित गोपनीय पत्र व्यवहार में उक्त कोड का
+                    प्रयोग करें। अवहेलना की स्थिति में मण्डल की गोपनीयता प्रभावित होती है। कृपया इस बिन्दु पर विशेष ध्यान देखें।
+                  </li>
+                  <li>
+                    अनुचित साधन के मामले की मूल्यांकित उत्तरपुस्तिका / उत्तरपुस्तिकाएँ तथा रिपोर्ट अविलम्ब संयुक्त निदेशक (गोपनीय) को तुरंत सूचित करावें।
+                  </li>
+                  <li>
+                    उत्तरपुस्तिकाओं का मूल्यांकन करते समय यदि परीक्षक किसी ठोस आधार पर सन्देह करें कि किसी परीक्षार्थी द्वारा अथवा किसी परीक्षा केन्द्र पर अनुचित साधन काम में लिये गये है तो वह अपने सन्देह का आधार बताते हुए मूल्यांकित उत्तरपुस्तिका / उत्तरपुस्तिकाएँ अपने गुप्त प्रतिवेदन के साथ संयुक्त निदेशक (गोपनीय) को तुरंत सूचित करावे।
+                  </li>
+                  <li>अंकों को पूर्णतया गुप्त रखना चाहिये। यदि कोई परीक्षार्थी अथवा उसकी ओर कोई अन्य व्यक्ति परीक्षा परिणाम को प्रभावित करने के लिये परीक्षक से सम्पर्क करे तो तुरन्त ही इस तथ्य की सूचना संयुक्त निदेशक (गोपनीय) को दी जानी चाहिये। </li>
+                  <li>मूल्यांकन कार्य समाप्त करने के पश्चात ओएमआर अंक सूचियों तथा रेल्वे रसीद / बिल्टी रजिस्ट्री/मोडल सेंटर प्रभारी को अविलम्ब भेजनी बाहिये। अंक सूची के लिये निर्धारित लिफाफों में ओएमआर अंक सूची, सांख्यिकी भिजवाये। </li>
+                  <li>परीक्षकों से निवेदन है कि उत्तरपुस्तिकाओं का मूल्यांकन कार्य पूर्ण करने तक अपना मुख्यालय को न छोडे। यदि मुख्यालय छोडना अति आवश्यक हो तो संयुक्त निदेशक (गोपनीय) को उसकी सूचना तुरन्त दें तथा अपना नया पता भेजें ताकि बाद में पत्र व्यवहार नये पता पर किया जा सके। </li>
+                </ol>
+              </div>
+              <div>
+                <p class="text-center"><b>(स) अन्य</b></p>
+                <ol>
+
+                  <li>
+                    उत्तरपुस्तिकाएँ मूल्यांकित करने से पहले परीक्षक कृपया उत्तरपुस्तिकाओं को रोल नं. के अनुसार व्यवस्थित करें मूल्यांकन के समय अतिरिक्त उत्तरपुस्तिकाओं की ताले में सुरक्षित रखा जाना चाहिये।
+                  </li>
+                  <li>
+                    अकों के सभी परिवर्तन पर वीक्षक के लघु हस्ताक्षर होने चाहिये ।
+                  </li>
+                  <li>
+                    मूल्यांकन कार्य निर्धारित समय में पूरा होना चाहिये तथा अंक एवं मूल्यांकित उत्तरपुस्तिकाएं मण्डल कार्यालय में निर्देशित व्यक्ति के पास निर्धारित समय में पंहुच जानी चाहिये। उत्तरपुस्तिकाओं को भिजवाने से पूर्व क्रमबद्ध करना सुनिश्चित करें।
+                  </li>
+                  <li>
+                    पारिश्रमिक्त एवं ढाक व्यय विपत्र के साथ डाक व्यय की मूल रसीदें प्रेषित करें। मूल रसीद के अभाव में डाक व्यय का भुगतान किया
+                  </li>
+                  <li>
+                    प्रत्येक पारिश्रमिक कार्य हेतु पृथक-पृथक विपत्र का प्रयोग करें एवं प्रेषित बिल की प्रति अपने पास सुरक्षित रखे। जाना सम्भव नहीं होगा।
+                  </li>
+                  <li>परीक्षार्थियों के आगामी शिक्षा अर्जन हेतु मण्डल द्वारा निश्चित तिथि तक परिणाम घोषित किया जाना आवश्यक है अतः आपसे अपेक्षा की जाती है कि मण्डल द्वारा आपको निर्दिष्ठ की गई तिथि तक उत्तरपुस्तिका मूल्यांकन कार्य कर सहयोग करेगें।</li>
+                </ol>
+                <h4 class="text-end">संयुक्त निदेशक (गोपनीय)</h4>
+              </div>
+            </div>
+
+
+            <!-- Close Button -->
+            <div class="flex justify-center mt-4">
+              <button class="btn bg-info text-white" (click)="Confirm()">Confirm</button>
+              <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+            </div>
+          </div>
+          <!--</div>-->
+        </div>
+      </div>
+    </ng-template>
+
+    <div *ngIf="IsConfirmed">
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student Roll No.: </label>
+          <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo" [(ngModel)]="searchRequest.RollNo">
+        </div>
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetTheoryMarksDetailList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="reset()">Cancel</button>
+        </div>
+      </div>
+
+
+  
+    <!--<div class="">
+    <select id="ddlConter" class="form-select  couterDropDown">
+      <option value="50">50</option>
+      <option value="100">100</option>
+      <option value="500">500</option>
+      <option value="1000">1000</option>
+    </select>
+  </div>-->
+    <!--<div class="">
+  </div>
+  <div class="">
+  </div>
+  <div class="">
+    <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+  </div>-->
+  </div>
+      <div *ngIf="isListVisible" class="overflow-x-auto mt-3">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a> -->
+
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+
+        <table class="table table-border w-full tab-content" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+
+              <th align="center" width="100">
+                <input type="checkbox" [disabled]="isfinalsubmit" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
+                Center C-Code
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left">Group Code</th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('SubjectCode')">
+                Subject Code
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left" title="Click to sorting" (click)="sortInTableData('RollNo')">
+                Student Roll No.
+                <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
+              </th>
+              <th class="text-left">Max Marks</th>
+              <th class="text-left">Marks Obtained</th>
+              <th class="text-left">Status</th>
+              <!-- <th *ngIf="isAnyUFMSelected">Document Required</th> -->
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData ;let idx=index;" [ngClass]="row.rowclass">
+              <td align="center">
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked" [disabled]="row.IsDetain || row.IsUFM || isfinalsubmit"
+                       #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+              </td>
+              <td align="left">{{row.CenterCode}}</td>
+              <td align="left">{{row.GroupCode}}</td>
+              <td align="left">{{row.SubjectCode}}</td>
+              <td class="" align="left">{{row.RollNo}}</td>
+              <td align="left">{{row.MaxTheory}}</td>
+
+              <td align="left">
+                <div class="flex">
+                  <!--<input class="form-input" style="width:100px" type="text" (keypress) = "numberOnly($event)" [disabled]="!row.Marked" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
+                  <input  class="form-input" style="width:100px" type="text" (keypress)="numberOnly($event)" [readonly]="row.IsPresentTheory==0" tabindex="{{idx}}" 
+                     [disabled]="!row.Marked || row.IsPresentTheory==0" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory" (keydown)="onTabPress($event, idx)">
+                  <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button" (click)="OnSubmit(row.StudentExamPaperRevaluationID)">Save</button>
+                </div>
+              </td>
+              <td align="left">
+                <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+                <span class="text-red-500" *ngIf="row.IsUFM">UFM</span>
+                <select *ngIf="row.IsDetain==false && row.IsUFM==false" class="form-select" id="IsPresentTheory"
+                        [disabled]="!row.Marked" [(ngModel)]="row.IsPresentTheory" (change)="onStatusThoryMarks(row)">
+                  <option value="">Choose Option</option>
+                  <option value="0">Absent</option>
+                  <option value="1">Present</option>
+                  <!--<option value="3">Detained</option>
+                  <option value="4">UFM</option>-->
+                </select>
+              </td>
+
+              <!-- <td align="left">
+                <div *ngIf="row.IsPresentTheory == 4" class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="filepanPhoto_{{idx+1}}" type="file" (change)="onFilechange($event, 'Document', row)" />
+                  <label for="filepanPhoto_{{idx+1}}">
+                    <span>Choose File</span>
+                    {{ row.Dis_UFMDocument === '' ? 'No File Chosen' : row.Dis_UFMDocument }}
+                  </label>
+                  <div class="flex" *ngIf="row.UFMDocument !== ''">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UFMDocument}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    
+                  </div>
+                </div>
+              </td> -->
+
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+      <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+          <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                   [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+          </div>
+        </div>
+        <!--end pagination-->
+
+      <div *ngIf="TheoryMarksDetailList.length>0 && isfinalsubmit!=true" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+        <div class="flex text-center justify-center">
+          <button type="button" class="btn bg-success text-white me-2" (click)="OnSubmit()">Submit All</button>
+          <button *ngIf="AllInTableSelect==true" type="button" class="btn bg-success text-white me-2" (click)="LockAndSubmit(0,1)">Lock & Submit</button>
+          <!-- <button type="button" class="btn bg-danger text-white" (click)="ResetControl()">Cancel</button> -->
+        </div>
+      </div>
+    </div>
+</div>
+
+<!--examiner login with code-->
+<ng-template #MyModel_ExaminerCodeLogin let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Login Examiner </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup(true)"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="grid sm:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <form [formGroup]="ExaminerCodeLoginForm">
+              <div class="mb-4">
+                <label for="exami">Examiner Group Code <span class="StarMarking">*</span></label>
+                <select class="form-select" id="StudentExamYear" formControlName="GroupCodeID" [(ngModel)]="examinerCodeLoginModel.GroupCodeID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of GroupCodeList" [value]="item.GroupCodeID">{{item.GroupCode}}</option>
+                </select>
+                <div *ngIf="isSubmitted && ExaminerCodeLoginForm.get('GroupCodeID').errors" class="text-danger">
+                  <p *ngIf="!ExaminerCodeLoginForm.get('GroupCodeID').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+                </div>
+              </div>
+              <div>
+                <label for="exami">Examiner Code <span class="StarMarking">*</span></label>
+                <input formControlName="ExaminerCode" class="form-input" type="text" id="ExaminerCode" placeholder="Enter Examiner Code"
+                       [(ngModel)]="examinerCodeLoginModel.ExaminerCode">
+                <div *ngIf="isSubmitted && ExaminerCodeLoginForm.get('ExaminerCode').errors" class="text-danger">
+                  <p *ngIf="ExaminerCodeLoginForm.get('ExaminerCode').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="openPageAfterExaminerLogin()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

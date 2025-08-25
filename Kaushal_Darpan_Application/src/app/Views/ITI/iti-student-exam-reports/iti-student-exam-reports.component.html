@@ -1,0 +1,126 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student for Examination</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student for Examination</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div class="Search">
+        <div class="form-group row">
+          <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="searchTerm" placeholder="Search...">
+          </div>
+        </div>
+      </div>
+      <div>
+        <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedInstitute" >
+          <option value="all">--All--</option>
+          <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+        </select>
+      </div>
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+          <option value="all">--All--</option>
+          <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterName">{{item.SemesterName}}</option>
+        </select>
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="applyFilter(filterForm.value)">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
+        <!-- Sr. No Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StudentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="FatherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Father Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="InstituteName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute</th>
+          <td mat-cell *matCellDef="let element">{{ element.InstituteName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="BranchName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Trade</th>
+          <td mat-cell *matCellDef="let element">{{ element.BranchName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="SemesterName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+          <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
+        </ng-container>
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <div class="overflow-x-auto mt-3">
+        <!--<table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left cursorHand">SrNo</th>
+                <th class="text-left cursorHand">Student</th>
+                <th class="text-left cursorHand">Father</th>
+                <th class="text-left cursorHand">Institute</th>
+                <th class="text-left cursorHand">Branch</th>
+                <th class="text-left cursorHand">Semester</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of dataSource.data;let i=index">
+                <td align="left">{{i+1}}</td>
+                <td align="left">{{item.StudentName}}</td>
+                <td align="left">{{item.FatherName}}</td>
+                <td align="left">{{item.InstituteName}}</td>
+                <td align="left">{{item.BranchName}}</td>
+                <td align="left">{{item.SemesterName}}</td>
+              </tr>
+          </table>-->
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+          No Record Found
+        </div>
+        <!-- Pagination Controls -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords" (page)="onPaginationChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

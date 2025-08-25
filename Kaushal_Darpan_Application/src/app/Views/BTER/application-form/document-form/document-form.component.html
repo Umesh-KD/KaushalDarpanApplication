@@ -1,0 +1,103 @@
+
+<div class="card tab-panels" id="Documents">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Photo/Signature Upload</b>
+        <span class="text-danger">तारांकित (*) फील्ड भरना अनिवार्य हैं</span>
+      </div>
+
+      <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6">
+
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
+          <b>Note:</b>  The photograph and signature should of minimum 20 kb and maximum 2 mb size. The photograph and signature should of jpeg/png/gif file type. <br />
+         
+        </div>
+
+        <!--document-->
+        <div *ngFor="let item of filteredDocumentsGroup1;">
+          <div class="text-center w-full">
+            <label for="{{item.ColumnName}}" class="cursor-pointer">
+              <img appImageError="assets/images/dummyImg.jpg"
+                   [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+                   class="imgSignSelf"
+                   alt="{{item.ColumnName}}" />
+            </label>
+          </div>
+
+          <label for="{{item.ColumnName}}" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            {{item.DisplayColumnNameEn}}<span class="StarMarking">*</span>
+          </label>
+
+          <div class="flex fileUploader">
+            <input [ngModelOptions]="{standalone: true}"
+                   class="hidden"
+                   id="{{item.ColumnName}}"
+                   type="file"
+                   (change)="UploadDocument($event, item)"
+                   [disabled]="item.FileName!=''">
+
+            <label for="{{item.ColumnName}}" class="cursor-pointer">
+              <span>Choose File</span> {{item.Dis_FileName == '' ? 'No File Chosen' : item.Dis_FileName}}
+            </label>
+
+            <div class="flex" *ngIf="item.FileName!=''">
+              <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
+                <i class="ti ti-trash"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!--/document-->
+      </div>
+
+    </div>
+
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">कृपया Self-Attested दस्तावेज़ ही Upload करें| </b>
+      <span class="text-danger">तारांकित (*) फील्ड भरना अनिवार्य हैं</span>
+    </div>
+
+    <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6">
+
+      <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
+        <b>Note:</b>  The document of minimum 100 kb and maximum 2 mb size should be uploaded in pdf/jpeg/png/gif file type. <br />
+        यदि दस्तावेज में एक से अधिक पेज हों तो सिंगल फाईल बना कर अपलोड करें
+      </div>
+
+      <!--document-->
+      <div *ngFor="let item of filteredDocumentsGroup2;">
+        <label for="{{item.ColumnName}}" class="text-gray-800 text-sm font-medium inline-block mb-2">{{item.DisplayColumnNameEn}}</label><br />
+        <p>{{item.DisplayColumnNameHi}}</p>
+
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="{{item.ColumnName}}" type="file" (change)="UploadDocument($event,item)" [disabled]="item.FileName!=''">
+          <label for="{{item.ColumnName}}">
+            <span>Choose File</span>{{item.Dis_FileName == '' ? 'No File Choosen' : item.Dis_FileName}}
+          </label>
+          <div class="flex" *ngIf="item.FileName!=''">
+            <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
+              <i class="ti ti-trash"></i>
+            </a>
+          </div>
+        </div>
+        <label *ngIf="item.DocumentMasterID==78" class="text-danger"><span>Upload all marks sheets and Experience certificate as single file</span></label>
+      </div>
+      <!--/document-->
+
+      <!--<span class="smallTextForm">(जिन अभ्यर्थियों ने माध्यमिक शिक्षा बोर्ड, राजस्थान / केन्द्रीय माध्यमिक शिक्षा बोर्ड की माध्यमिक परीक्षा एवं उच्च माध्यमिक परीक्षा राजस्थान में स्थित किसी स्कूल से नियमित अध्ययन कर उत्तीर्ण की हो।)</span>-->
+    </div>
+
+  </div>
+
+  <div class="card-footer text-center">
+    <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+    <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
+    <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+  </div>
+</div>

@@ -1,0 +1,170 @@
+
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Trades</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ititradelist" class="text-sm font-medium text-slate-700" aria-current="page">Trades</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/ititrade" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Trade</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Name:</label>
+          <input type="text" class="form-input" placeholder="Search By Trade Name" [(ngModel)]="searchRequest.TradeName">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+          <input type="text" class="form-input" placeholder="Search By Trade Code" [(ngModel)]="searchRequest.TradeCode">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId">
+            <option value="0">Choose Option</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+            <option value="12">12th</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeTypeId">
+            <option value="0">Choose Option</option>
+            <option value="1">Eng</option>
+            <option value="2">Non-Eng</option>
+            <!--<option *ngFor="let item of TradeTypesList" [value]="item.CourseTypeID">
+    {{item.CourseTypeName}}
+  </option>-->
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Duration:</label>
+          <input type="text" class="form-input" placeholder="Search By Trade Duration" [(ngModel)]="searchRequest.DurationYear">
+        </div>
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search By Status:</label>
+    <select class="form-select" [(ngModel)]="searchRequest.CenterCode">
+      <option value="">Choose Option</option>
+      <option value="1">Active</option>
+      <option value="0">In-Active</option>
+    </select>
+  </div>-->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradetblListList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetCancel()">Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download PDF</a> -->
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left">Code</th>
+            <th class="text-left">Trade Type</th>
+            <th class="text-left">Trade Level</th>
+            <th class="text-left">Duration</th>
+            <th class="text-left">Min Age Limit</th>
+            <th class="text-left">Min Percentage In Science</th>
+            <th class="text-left">Min Percentage In Math</th>
+            <th class="text-left">Sanctioned Seats</th>
+            <th class="text-left">Entry Qualification</th>
+            <!--<th class="text-left">Status</th>-->
+            <!--<th class="text-left">Active/Inactive Remark</th>-->
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText ;let idx=index;">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{item.TradeName}}</td>
+            <td>{{item.TradeCode}}</td>
+            <td>{{item.CourseTypeName}}</td>
+            <td>{{item.TradeLevelId}}</td>
+            <td>{{item.DurationYear}}</td>
+            <td align="left">{{item.MinAgeLimit}}</td>
+            <td align="left">{{item.MinPercentageInScience}}</td>
+            <td align="left">{{item.MinPercentageInMath}}</td>
+            <td>{{item.NoOfSanctionedSeats}}</td>
+            <td>{{item.QualificationDetails}}</td>
+            <!--<td>{{item.ActiveStatus}}</td>-->
+            <!--<td>1</td>-->
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="'/ititrade'" [queryParams]="{TradeId:item.TradeId}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" (click)=" btnDeleteOnClick(item.TradeId)" title="Delete"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+
+  </div>
+</div>
+
+<!-- end row -->

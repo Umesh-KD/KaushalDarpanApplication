@@ -1,0 +1,155 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Staff Management Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+
+      <div>
+        <div class="form-group row">
+          <label for="ssoid" class="text-gray-800 text-sm font-medium inline-block mb-1">
+            SSO ID
+          </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="SSOID" placeholder="SSO ID">
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="form-group row">
+          <label for="name" class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Name
+          </label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="Name" placeholder="Name">
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="StaffType">
+          <option [value]="0" selected>--Select--</option>
+          <option [value]="30" selected>Teaching</option>
+          <option [value]="31" selected>Non Teaching</option>
+        </select>
+      </div>
+      <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Role</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" formControlName="RoleID">
+          <option [value]="0" selected>--Select--</option>
+          <option [value]="1001" selected>TTC</option>
+          <option [value]="1002" selected>BTER</option>
+          <option [value]="1003" selected>TTC</option>
+          <option [value]="1" selected>Principal</option>
+        </select>
+      </div>-->
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="filterFormSubmit()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <!--<div class="flex justify-end flex-wrap items-center">
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Export Execl
+      </a>
+    </div>-->
+    </div>
+    <!-- Table -->
+    <!-- Table -->
+    <div class="mat-elevation-z8 table-responsive" #pdfTable>
+      <table class="table w-full">
+        <thead>
+          <tr>
+            <th class="p-2" *ngFor="let column of columnSchema">{{ column.label }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let row of dataSource.filteredData">
+            <!-- Main Row -->
+            <tr>
+              <td class="px-2 py-1 border" *ngFor="let column of columnSchema">
+                <ng-container [ngSwitch]="column.key">
+                  <ng-container *ngSwitchCase="'Action'">
+                    <a href="javascript:void(0);" (click)="Toggle(row.UserID)" class="btn bg-info btn-sm text-white">
+                      <i class="ti" [ngClass]="expandedElement === row.UserID ? 'bi-dash' : 'bi-plus'"></i>
+                      {{ expandedElement === row.UserID ? 'Hide' : 'Show' }}
+                    </a>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    {{ row[column.key] }}
+                  </ng-container>
+                </ng-container>
+              </td>
+            </tr>
+
+            <!-- Expandable Row -->
+            <tr *ngIf="expandedElement === row.UserID">
+              <td [attr.colspan]="columnSchema.length">
+                <div class="bg-slate-100 p-3 rounded shadow">
+                 
+                  <table class="table table-sm table-bordered mt-2 w-full">
+                    <thead>
+                      <tr>
+                        <th class="p-1" align="left">Sr.No</th>                       
+                        <th class="p-1" align="left">Sso Id</th>
+                        <th class="p-1" align="left">Name</th>
+                        <th class="p-1" align="left">Display Name</th>
+                        <th class="p-1" align="left">Gender</th>
+                        <th class="p-1" align="left">Mobile</th>
+                        <th class="p-1" align="left">Mail Personal</th>
+                        <th class="p-1" align="left">Address</th>
+                        <th class="p-1" align="left">Insitute Name</th>
+                        <th class="p-1" align="left">Profile Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let child of childDataMap[row.UserID]; let i = index">
+                        <td class="p-1 border">{{ i + 1 }}</td>
+                        <td class="p-1 border">{{ child.SSOID }}</td>
+                        <td class="p-1 border">{{ child.Name }}</td>
+                        <td class="p-1 border">{{ child.DisplayName }}</td>
+                        <td class="p-1 border">{{ child.Gendername }}</td>
+                        <td class="p-1 border">{{ child.MobileNo }}</td>
+                        <td class="p-1 border">{{ child.MailPersonal }}</td>
+                        <td class="p-1 border">{{ child.PostalAddress }}</td>
+                        <td class="p-1 border">{{ child.InstituteName }}</td>
+                        <td class="p-1 border">{{ child.ProfileStatus }}</td>
+                      </tr>
+                      <tr *ngIf="!childDataMap[row.UserID]?.length">
+                        <td colspan="10" class="text-center">No Data Found</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+    </div>
+
+
+    <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+      No Record Found
+    </div>
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+  </div>
+</div>

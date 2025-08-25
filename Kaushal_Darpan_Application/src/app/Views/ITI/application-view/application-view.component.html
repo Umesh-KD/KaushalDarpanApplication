@@ -1,0 +1,417 @@
+<ng-template #modal_ViewApplication let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-list"></i>&nbsp; View Student Details
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <div class="card-body p-5">
+            <div class="mb-6">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
+              </div>
+
+              <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+                <div class="col-span-2 text-center" style="text-align:center !important" *ngFor="let item of filteredDocumentDetails;">
+                  <img appImageError="assets/images/dummyImg.jpg"
+                       [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+                       class="imgSignSelf"
+                       alt="{{item.ColumnName}}" />
+                  <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
+                </div>
+
+                <div *ngIf="request.ApplicationNo"><b>आवेदन संख्या (Application Number):</b></div>
+                <div *ngIf="request.ApplicationNo">{{request.ApplicationNo}}</div>
+
+                <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+                <div>{{request.StudentName}}</div>
+
+                <div><b>आवेदक का नाम हिंदी में  (Applicant's Name in Hindi):</b></div>
+                <div>{{request.StudentNameHindi}}</div>
+
+                <div><b>पिता का नाम (Father's Name):</b></div>
+                <div>{{request.FatherName}}</div>
+
+                <div><b>पिता का नाम हिंदी में (Father's Name in Hindi):</b></div>
+                <div>{{request.FatherNameHindi}}</div>
+
+                <div><b>माता का नाम (Mother's Name):</b></div>
+                <div>{{request.MotherName}}</div>
+
+                <div><b>माता का नाम हिंदी में (Mother's Name in Hindi):</b></div>
+                <div>{{request.MotherNameHindi}}</div>
+
+                <div><b>आधार नंबर  (Aadhar Number):</b></div>
+                <div>{{request.AadharNo}}</div>
+
+                <div><b>लिंग (Gender):</b></div>
+                <div>{{request.Gender}}</div>
+
+                <div><b>धर्म  (Religion):</b></div>
+                <div>{{request.Religion}}</div>
+
+                <div><b>वैवाहिक स्थिति(Marital Status):</b></div>
+                <div>{{request.MaritalStatusName}}</div>
+
+                <div><b>जन्म तिथि (Date of Birth):</b></div>
+                <div>{{request.DOB}}</div>
+
+                <div><b>आयु (Age) :</b></div>
+                <div>{{request.Age}}</div>
+
+                <div><b>ईमेल (Email Address):</b></div>
+                <div>{{request.Email}}</div>
+
+                <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+                <div>{{request.MobileNo}}</div>
+
+                <div>
+                  <b>श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC):</b>
+                </div>
+                <div>{{request.CategoryA}}</div>
+
+                <div>
+                  <b>श्रेणी  बी (Category B):</b>
+                </div>
+                <div>{{request.CategoryB}}</div>
+
+                <div>
+                  <b>श्रेणी सी (Category C):</b>
+                </div>
+                <div>{{request.CategoryC}}</div>
+
+                <div><b>माता-पिता की आय (Parent's Income):</b></div>
+                <div>{{request.ParentIncome}}</div>
+
+                <div *ngIf="this.searchrequest.DepartmentID == _enumDepartment.ITI">
+                  <b>आवेदक की अपार आईडी (Applicant's ApaarId):</b>
+                </div>
+                <div>{{request.Apaarid}}</div>
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+              </div>
+
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>पता पंक्ति 1 (Address Line 1):</b></div>
+                <div>{{request.AddressLine1}}</div>
+
+                <div><b>पता पंक्ति 2 (Address Line 2):</b></div>
+                <div>{{request.AddressLine2}}</div>
+
+                <div><b>पता पंक्ति 3 (Address Line 3):</b></div>
+                <div>{{request.AddressLine3}}</div>
+
+                <div><b>राज्य (State):</b></div>
+                <div>{{request.StateName}}</div>
+
+                <div><b>जिला (District):</b></div>
+                <div>{{request.DistrictName}}</div>
+
+                <div><b>ब्लॉक/तहसील (Block/Tehsil):</b></div>
+                <div>{{request.BlockName}}</div>
+
+                <div><b>शहर / गाँव (City/Village):</b></div>
+                <div>{{request.CityVillage}}</div>
+
+                <div><b>पिन कोड (Pincode):</b></div>
+                <div>{{request.Pincode}}</div>
+              </div>
+
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">योग्यता विवरण (Qualification Details)</b>
+              </div>
+
+              <div class="overflow-auto">
+                <table class="w-full table-border" cellpadding="5">
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                    <tr class="text-left">
+                      <th>Qualification Level</th>
+                      <th>State of Study</th>
+                      <th>Board/University</th>
+                      <th>School/College</th>
+                      <th>Year of Passing</th>
+                      <th>Roll Number</th>
+                      <th>Marks Type</th>
+                      <th>Aggregate Maximum Marks</th>
+                      <th>Aggregate Marks Obtained</th>
+                      <th>Percentage</th>
+                      <th>Maths Maximum Marks</th>
+                      <th>Maths Marks Obtained</th>
+                      <th>Science Maximum Marks</th>
+                      <th>Science Marks Obtained</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of request.QualificationViewDetails">
+                      <td>{{item.QualificationID}}</td>
+                      <td>{{item.StateName}}</td>
+                      <td>{{item.BoardName || 'N/A'}}</td>
+                      <td>{{item.SchoolCollegeName || 'N/A'}}</td>
+                      <td>{{item.PassingYear}}</td>
+                      <td>{{item.RollNumber}}</td>
+                      <td>{{item.Marktype}}</td>
+                      <td>{{item.AggMaxMarks}}</td>
+                      <td>{{item.AggObtMarks}}</td>
+                      <td>{{item.Percentage}}</td>
+                      <td>{{item.MathsMaxMarks}}</td>
+                      <td>{{item.MathsObtMarks}}</td>
+                      <td>{{item.ScienceMaxMarks}}</td>
+                      <td>{{item.ScienceObtMarks}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+            <div class="mb-6" *ngIf="Options8thLevel.length > 0">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">विकल्प(Option Form For 8th Level Trades)</b>
+              </div>
+              <div class="overflow-auto">
+                <table class="w-full table-border" cellpadding="5">
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+                    <tr class="text-left">
+                      <th>Priority</th>
+                      <th>Name of College</th>
+                      <th>Trade Name</th>
+                      <th>college Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of Options8thLevel;  let idx=index; ">
+                      <td>{{idx+1}}</td>
+                      <td>{{item.InstituteName}}</td>
+                      <td>{{item.TradeName}}</td>
+                      <td>{{item.ManagementTypeName}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+
+
+
+
+
+
+
+            <div class="mb-6" *ngIf="Options10thLevel.length > 0">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">विकल्प(Option Form for 10th Level Trades)</b>
+              </div>
+              <div class="overflow-auto">
+                <table class="w-full table-border" cellpadding="5">
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+                    <tr class="text-left">
+                      <th>Priority</th>
+                      <th>Name of College</th>
+                      <th>Trade Name</th>
+                      <th>college Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of Options10thLevel;  let idx=index; ">
+                      <td>{{idx+1}}</td>
+                      <td>{{item.InstituteName}}</td>
+                      <td>{{item.TradeName}}</td>
+                      <td>{{item.ManagementTypeName}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mb-6" *ngIf="Options12thLevel.length > 0">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">विकल्प(Option Form For 12th Level Trades)</b>
+              </div>
+              <div class="overflow-auto">
+                <table class="w-full table-border" cellpadding="5">
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+                    <tr class="text-left">
+                      <th>Priority</th>
+                      <th>Name of College</th>
+                      <th>Trade Name</th>
+                      <th>college Type</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of Options12thLevel;  let idx=index; ">
+                      <td>{{idx+1}}</td>
+                      <td>{{item.InstituteName}}</td>
+                      <td>{{item.TradeName}}</td>
+                      <td>{{item.ManagementTypeName}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+              <b class="text-1xl-5">
+                &nbsp;
+                अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+              </b>
+            </div>
+
+            <div class="overflow-auto mb-6">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr class="text-left">
+                    <th>Sr. No.</th>
+                    <th>Document Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let dOC of request.DocumentDetailList  let idx=index; ">
+                    <td>{{idx+1}}</td>
+                    <td>
+                      <!--<a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{dOC.FolderName}}/{{dOC.FileName}}" class="text-success">{{dOC.ColumnName}}</a>-->
+                      <a href="javascript:void(0)"
+                         (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + dOC.FolderName + '/' + dOC.FileName)"
+                         class="text-success">
+                        {{ dOC.DisplayColumnNameEn }}
+                      </a>
+                    </td>
+                  </tr>
+                  <tr *ngIf="request.DocumentDetailList?.length==null">
+                    <td colspan="7">No Document Uploaded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+
+
+
+            <div class="mb-6" *ngIf="TransactionDataList?.length > 0">
+              <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">ट्रांजेक्शन विवरण(Transaction Details)</b>
+              </div>
+              <div class="overflow-auto">
+
+                <table class="table table-border w-full table-auto" cellpadding="5">
+                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                    <tr>
+                      <th class="text-left">#</th>
+                      <th class="text-left">Prn No</th>
+                      <th class="text-left">Receipt Number</th>
+                      <th class="text-left">Fee For</th>
+                      <th class="text-left">Amount</th>
+                      <th class="text-left">Status</th>
+                      <th class="text-left">User</th>
+                      <th class="text-left">Status Message</th>
+                      <th class="text-left">Trans Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let row of TransactionDataList ; let idx=index;">
+                      <td>{{idx+1}}</td>
+                      <td>
+                        {{row.PRN}}
+                      </td>
+                      <td>
+                        {{row.Receipt_Number}}
+                      </td>
+                      <td>{{row.FeeFor}}</td>
+                      <td>{{ row.TransAmt | currency:'INR':'symbol':'1.2-2' }}</td>
+                      <td>{{row.TransctionStatus}}</td>
+                      <td>{{row.FormFiller}}</td>
+                      <td>{{row.TransctionMSG}}</td>
+                      <td>{{ row.TransctionDate | date: 'dd-MM-yyyy' }}</td>
+                    </tr>
+                    <tr *ngIf="TransactionDataList?.length === 0">
+                      <td colspan="10">
+                        No records found
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" *ngIf="IsShowIncompleteData">
+              <b class="text-1xl-5">Incomplete Data</b>
+            </div>
+
+            <div class="overflow-auto" *ngIf="IsShowIncompleteData">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr class="text-left">
+                    <th>Sr. No.</th>
+                    <th>Pending Data</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of request.PendingDataModel  let idx=index; ">
+                    <td>{{idx+1}}</td>
+                    <td>{{item.Pending}}</td>
+                    <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">       
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    Header
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    Preview Content
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        PDF Preview
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        Image Preview
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>
+    </div>
+
+  </div>
+</div>

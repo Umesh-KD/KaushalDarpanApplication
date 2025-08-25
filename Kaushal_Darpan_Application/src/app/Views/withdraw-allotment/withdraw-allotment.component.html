@@ -1,0 +1,186 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Joining Status Marks(Withdraw Allotment)</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/StudentsJoiningStatusMarks" class="text-sm font-medium text-slate-700" aria-current="page">Student Joining Status Marks</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application ID:</label>
+          <input class="form-input" type="number" [(ngModel)]="searchRequest.ApplicationID" />
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Trade Lavel: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.TradeLevel">
+            <option value=0>--Select--</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+          </select>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotment Type: <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.AllotmentMasterId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of AllotmentTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Course : <span class="StarMarking">*</span></label>
+          <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchRequest.CourseTypeId">
+            <option value="0">Select </option>
+            <option *ngFor="let item of courseTypeList" [value]="item.value">{{item.key}}</option>
+          </select>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.ReportingStatus">
+            <option value=''>--Select--</option>
+            <option value="J">Joining</option>
+            <option value="N">Not Joining</option>
+            <option value="R">Reject</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getStudentsJoiningStatusMarksList(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="getStudentsJoiningStatusMarksList(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+          <tr>
+
+            <th class="text-left">#</th>
+            <th class="text-left">Application ID</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Stream</th>
+            <!--<th class="text-left">Trade Scheme</th>-->
+            <th class="text-left">Status</th>
+            <th class="text-left">Remark</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentsJoiningStatusMarksList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+
+            <td>{{item.ApplicationID}}</td>
+            <td>{{item.Name}}</td>
+            <td>
+              {{item.StreamName}}
+            </td>
+            <!--<td>
+              {{item.TradeSchemeName}}
+            </td>-->
+
+
+          <td>
+            {{item.ReportingStatus}}
+          </td>
+            <td>
+              {{item.ReportingRemark}}
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" (click)="addStatusMark(MyModel_StatusMark,item)" title="Edit"><i class="ti ti-check"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  StudentsJoiningStatusMarksList?.length }} of {{StudentsJoiningStatusMarksList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="getStudentsJoiningStatusMarksList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="StudentsJoiningStatusMarksList[0]?.TotalRecords==0" (change)="getStudentsJoiningStatusMarksList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="getStudentsJoiningStatusMarksList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_StatusMark let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Enter Remark</b>
+        <button class="btn bg-info text-white" (click)="CloseAddStatusMark()"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="RemarkFormGroup" id="RemarkFormGroup" class="form-horizontal">
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+              <label for="txtRemark" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="txtRemark" formControlName="Remark" class="form-input" placeholder="Enter Remark" [(ngModel)]="request.ReportingRemark">
+            </div>
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+            <div class="text-center flex items-center justify-center">
+              <button type="button" id="btnSave" (click)="saveData()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Submit</button>
+              <button type="button" (click)="CloseAddStatusMark()" class="btn bg-danger text-white">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+

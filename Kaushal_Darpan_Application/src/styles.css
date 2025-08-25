@@ -1,0 +1,292 @@
+
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size:1.2rem;
+  background-color: #f5f5f5;
+}
+.mat-mdc-icon-button .mat-mdc-button-persistent-ripple {
+  border-radius: 4% !important;
+}
+
+/*.card.mainInstretor{
+    min-height:400px;
+}*/
+
+.mat-mdc-unelevated-button:not(:disabled) {
+  color: #fff !important;
+}
+.admin-sidebr .ng-scroll-content {
+  width: 100% !important;
+}
+body {
+  overflow: auto;
+}
+.pointer-event {
+  cursor: pointer;
+}
+.alert-green {
+  background: #10b981;
+  color: #fff;
+}
+.mat-mdc-notch-piece.mdc-notched-outline__notch {
+  border-right: none !important;
+}
+.example-is-mobile .profile {
+  width: 50px !important;
+  display: inline-flex;
+  margin-left: 10px;
+}
+tr.mat-mdc-row.mdc-data-table__row {
+  height: 40px !important;
+}
+.mat-mdc-header-row th {
+  font-weight: 600;
+}
+.mat-elevation-z8, .mat-mdc-elevation-specific.mat-elevation-z8 {
+  box-shadow: none !important;
+}
+.mdc-data-table__cell, .mdc-data-table__header-cell {
+  border: #e5e7eb solid 1px !important;
+}
+.mat-sort-header-stem {
+  background: rgb(16 185 129) !important;
+}
+
+.mat-sort-header-pointer-left, .mat-sort-header-pointer-right {
+  background: rgb(16 185 129) !important;
+}
+
+.mat-sort-header-pointer-middle {
+  background: rgb(16 185 129) !important;
+}
+
+/* Fix the table header */
+table.mat-mdc-table {
+  position: relative;
+}
+
+  table.mat-mdc-table th.mat-mdc-header-cell {
+    position: sticky !important;
+    top: 0px;
+    background-color: #f3f3f3; /* Apply background color */
+    color: rgb(37 37 37); /* Change text color */
+    z-index: 1;
+  }
+
+.mat-mdc-fab.mat-accent, .mat-mdc-mini-fab.mat-accent {
+  --mdc-fab-container-color: #10b981;
+}
+
+table.mat-mdc-table .mat-mdc-header-cell .mat-sort-header-arrow {
+  color: #fff !important;
+}
+
+table.mat-mdc-table th.mat-mdc-header-cell {
+  padding: 16px;
+  text-align: center;
+}
+
+.table-responsive {
+  max-height: 610px;
+  overflow-y: auto;
+}
+
+.example-full-width {
+  width: 350px
+}
+.ITIPortal .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: rgb(2 67 109) !important;
+}  
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: #10b981 !important;
+}
+.mat-pseudo-checkbox::after {
+  border-bottom: 2px solid rgb(16 185 129) !important;
+}
+.ITIPortal .mat-pseudo-checkbox::after {
+  border-bottom: 2px solid rgb(2 67 109) !important;
+}
+.mat-pseudo-checkbox-checked::after {
+  border-left: 2px solid rgb(16 185 129) !important;
+}
+.ITIPortal .mat-pseudo-checkbox-checked::after {
+  border-left: 2px solid rgb(2 67 109) !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  border-bottom-color: #10b981 !important;
+}
+
+.ITIPortal .mdc-text-field--filled:not(.mdc-text-field--disabled) .mdc-line-ripple::after {
+  border-bottom-color: rgb(2 67 109) !important;
+}
+.ITIPortal [aria-expanded="true"] .mat-mdc-select-arrow svg {
+  fill: rgb(2 67 109) !important;
+}
+[aria-expanded="true"] .mat-mdc-select-arrow svg {
+  fill: rgb(16 185 129) !important;
+}
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label, .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
+  color: rgb(16 185 129) !important;
+}
+.ITIPortal .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label, .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
+  color: rgb(2 67 109) !important;
+}
+.alert-warning {
+  color: #856404;
+  background-color: #fff3cd;
+  border-color: #ffeeba;
+}
+.alert {
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}
+.cdk-virtual-scrollable {
+  height:470px;
+}
+.mat-sort-header-arrow svg {
+  fill: rgb(16 185 129) !important;
+}
+  mat-select, matinput, .mat-mdc-input-element, .mat-mdc-input-element:focus, mat-select:focus {
+    background: none !important;
+    outline: none !important;
+    border: none !important;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+.ITIPortal .mat-pseudo-checkbox-checked::after {
+  border-left: 2px solid rgb(229 234 237) !important;
+}
+
+.ITIPortal .mat-pseudo-checkbox::after {
+  border-bottom: 2px solid rgb(248 249 249) !important;
+}
+mat-table tr th {
+  padding: 16px !important;
+}
+.ng-scroll-content input.mat-mdc-input-element {
+  border: 1px solid #ccc !important;
+}
+button.swal2-cancel.swal2-styled {
+  background: rgb(220,53,69);
+}
+
+button.swal2-confirm.swal2-styled {
+  background: rgb(25, 135, 84);
+}
+
+.ng-select-disabled, .ng-select-disabled input {
+  background: none !important;
+}
+app-student-profile-download .enrollment-table th {
+  padding: 10px !important;
+  font-size: 16px !important;
+}
+
+app-student-profile-download .enrollment-table td {
+  padding: 10px !important;
+  font-size: 16px !important;
+}
+
+app-student-profile-download .title {
+  font-size: 24px !important;
+}
+app-student-profile-download .enrollment-table, .enrollment-table th, .enrollment-table td {
+  border: solid 1px #a0a0a5 !important;
+}
+
+
+app-student-attendance .mat-date-range-input-wrapper {
+  width: 104px !important;
+}
+app-student-attendance input.mat-start-date {
+  background: none !important;
+}
+app-student-attendance input.mat-end-date {
+  background: none !important;
+}
+.ng-select-disabled, .ng-select-disabled input {
+  background: none !important;
+}
+app-student-attendance mat-checkbox .mdc-form-field {
+  width: 120px !important;
+}
+a {
+  cursor: pointer;
+}
+@keyframes scroll-up {
+  0% {
+    top: 100%;
+  }
+
+  100% {
+    top: -100%;
+  }
+}
+.topBar ul{
+    margin:0px;
+    padding:0px;
+    list-style:none !important;
+    display:flex;
+    flex-wrap:wrap;
+}
+.topBar ul li a{
+    color:#fff;
+    display:block;
+    border-left:solid 1px #fff;
+    padding-left:15px;
+    padding-right:15px;
+}
+.topBar ul li:nth-child(1) a{
+    padding-left:0px;
+    border-left:0px;
+}
+.ITIPortal .bg-info {
+  --tw-bg-opacity: 1;
+  background-color: rgb(2 67 109) !important;
+}
+
+.mat-date-range-input-inner {
+  background: #f5f5f5;
+}
+
+
+.reports-menu.active {
+  background: #4ecba2;
+  color: #fff !important;
+}
+
+app-examinations-reports-menu .navbar .dropdown-menu .dropdown-item:hover {
+  background: #16bb84 !important;
+  color: #fff !important;
+}
+app-examinations-reports-menu ul.navbar-nav li:hover > a {
+  background: #16bb84 !important;
+  color: #fff !important;
+}
+
+app-examinations-reports-menu .navbar li:hover .reports-menu {
+  background: #16bb84 !important;
+  color: #fff !important;
+  border-radius: 0px 18px 18px 0px;
+}
+app-date-wise-attendance-report .mat-date-range-input-mirror {
+  width: 120px !important;
+}
+
+app-date-wise-attendance-report .input.mat-start-date {
+  width: 120px !important;
+}
+
+app-date-wise-attendance-report .mat-date-range-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  max-width: calc(50% - 4px);
+  width: 120px !important;
+}
+

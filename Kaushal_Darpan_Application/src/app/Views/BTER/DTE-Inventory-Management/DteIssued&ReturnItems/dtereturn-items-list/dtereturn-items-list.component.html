@@ -1,0 +1,264 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Return Items</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Return Items</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a href="/AddIssueitem" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.EquipmentsId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of EquipmentddlList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="CategoryId" [(ngModel)]="Searchrequest.CategoryId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryddlList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <label for="Issuenumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Issue number: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Issuenumber" name="Issuenumber" [(ngModel)]="Searchrequest.Issuenumber">
+        </div>
+
+
+        <div>
+          <label for="Issuedate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Issue date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="Issuedate" name="Issuedate" [(ngModel)]="Searchrequest.FilterIssuedate">
+        </div>
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--{{ReturnItemList|json}}-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">SR NO</th>
+            <th class="text-left">Issue Number</th>
+            <th class="text-left">Issue Quantity</th>
+            <th class="text-left">Equipment</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ReturnItemList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.IssueNumber}}</td>
+            <td align="left">{{item.IssueQuantity}}</td>
+            <td align="left">{{item.EquipmentsName}}</td>
+            <td align="left">{{item.ItemCategoryName}}</td>
+            <td align="left">{{ item.IssueDate}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Return Item" (click)="onReturnSubmit(MyModel_ReturnItem,item.IssuedId)"><i class="ti ti-pencil"></i></a>
+                <!--<a href="javascript:void(0)" (click)="btnDelete_OnClick(item.IssuedId)" title="Delete"><i class="ti ti-trash"></i> </a>-->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->
+<ng-template #MyModel_ReturnItem let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto">
+  <div class="modal-content">
+    <form [formGroup]="RequestFormGroup">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Return Item On Action</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Item: <span class="StarMarking">*</span>
+                </label>
+                <select formControlName="ddlItemId" class="form-select" id="ddlItemId" [(ngModel)]="Returnrequest.ItemId" [disabled]="true">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of ItemddlList" [value]="item.EquipmentsId">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isSubmitted && _RequestFormGroup.ddlItemId.errors" class="text-danger">
+                  <p *ngIf="!_RequestFormGroup.ddlItemId.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="IssueNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  ReturnIssue Number: <span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtIssueNumber" name="IssueNumber" formControlName="txtIssueNumber"
+                       [(ngModel)]="Returnrequest.ReturnIssueNumber" [attr.min]="minDate">
+                <div *ngIf="isSubmitted && _RequestFormGroup.txtIssueNumber.errors" class="text-danger">
+                  <p *ngIf="_RequestFormGroup.txtIssueNumber.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                  <!-- Check for pattern error -->
+                  <p *ngIf="_RequestFormGroup.txtIssueNumber.errors.pattern">
+                    <i aria-hidden="true"></i>
+                    Only positive numbers are allowed in the Issue  field!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="IssueQuantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  ReturnIssue Quantity: <span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtIssueQuantity" name="IssueQuantity" formControlName="txtIssueQuantity"
+                       [(ngModel)]="Returnrequest.ReturnQuantity">
+                <div *ngIf="isSubmitted && _RequestFormGroup.txtIssueQuantity.errors" class="text-danger">
+                  <p *ngIf="_RequestFormGroup.txtIssueQuantity.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                  <!-- Check for pattern error -->
+                  <p *ngIf="_RequestFormGroup.txtIssueQuantity.errors.pattern">
+                    <i aria-hidden="true"></i>
+                    Only positive numbers are allowed in the Issue  field!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="IssueDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  ReturnIssueDate: <span class="StarMarking">*</span>
+                </label>
+                <input type="date" class="form-input" [min]="minToDate" id="IssueDate" name="IssueDate" formControlName="IssueDate" [(ngModel)]="Returnrequest.ReturnIssueDate">
+                <div *ngIf="isSubmitted && _RequestFormGroup.IssueDate.errors" class="text-danger">
+                  <p *ngIf="_RequestFormGroup.IssueDate.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Return Status: <span class="StarMarking">*</span>
+                </label>
+                <select formControlName="ddlreturnStatus" class="form-select" id="ddlreturnStatus" [(ngModel)]="Returnrequest.ReturnStatus">
+                  <option value="0">--Select--</option>
+                  <option value="1">Serviceable</option>
+                  <option value="2">UnServiceable</option>
+                  <option value="3">Obselete/Auctioned</option>
+                  <!--<option *ngFor="let item of ItemddlList" [value]="item.ItemId">{{item.Name}}</option>-->
+                </select>
+                <div *ngIf="isSubmitted && _RequestFormGroup.ddlreturnStatus.errors" class="text-danger">
+                  <p *ngIf="!_RequestFormGroup.ddlreturnStatus.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="ReturnRemark" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Return Remark: <span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="txtReturnRemark" name="ReturnRemark" formControlName="txtReturnRemark"
+                       [(ngModel)]="Returnrequest.ReturnRemark">
+                <div *ngIf="isSubmitted && _RequestFormGroup.txtReturnRemark.errors" class="text-danger">
+                  <p *ngIf="_RequestFormGroup.txtReturnRemark.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                  <!-- Check for pattern error -->
+                  <!--<p *ngIf="_RequestFormGroup.txtReturnRemark.errors.pattern">
+        <i aria-hidden="true"></i>
+        Only positive numbers are allowed in the Issue  field!
+      </p>-->
+                </div>
+              </div>
+
+
+
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ReturnItem()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

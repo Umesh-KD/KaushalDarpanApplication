@@ -1,0 +1,249 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Intakes</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/SeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>-->
+      <a [routerLink]="['/SeatIntakesList']" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/AddSeatIntakes" class="text-sm font-medium text-slate-700" aria-current="page">Add Intakes</a>
+    </div>
+  </div>
+  <a routerLink="/SeatIntakesList" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Intakes</b>
+        </div>
+        <form [formGroup]="SeatIntakeFormGroup">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College: <span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="ddlCollege" [(ngModel)]="request.CollegeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ItiCollegesListAll" value="{{item.Id}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlCollege.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlCollege.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade level:<span class="StarMarking">*</span></label>
+              <select class="form-select" formControlName="ddlTradeLevel" [(ngModel)]="request.TradeLevel" (change)="GetTradeAndColleges()">
+                <option value=0>Choose Option</option>
+                <option value=8>8th</option>
+                <option value=10>10th</option>
+                <option value="12">12th</option>
+              </select>
+              <!--<div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTradeLevel.errors" class="text-danger">
+      <p *ngIf="!_SeatIntakeFormGroup.ddlTradeLevel.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Trade:<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTrade.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlTrade.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Shift:<span class="StarMarking">*</span>
+              </label>
+              <select type="text" class="form-input" placeholder="Select Shift" formControlName="txtShift" [(ngModel)]="request.Shift">
+                <option value="">Choose Option</option>
+                <option value="1">I Shift</option>
+                <option value="2">II Shift</option>
+                <option value="3">III Shift</option>
+              </select>
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.txtShift.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.txtShift.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Unit No: <span class="StarMarking">*</span>
+              </label>
+
+              <select type="text" class="form-input" placeholder="Select UnitNo" formControlName="txtUnitNo" [(ngModel)]="request.UnitNo">
+                <option value="">Choose Option</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+                <option value="21">21</option>
+                <option value="22">22</option>
+                <option value="23">23</option>
+                <option value="24">24</option>
+                <option value="25">25</option>
+
+
+
+              </select>
+
+
+
+
+
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.txtUnitNo.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.txtUnitNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Reservation Category (For Seat Distribution Only): <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="ddlRemark" (change)="OnTradeSchemechange()" [(ngModel)]="request.RemarkID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlRemark.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlRemark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Trade Scheme: <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="ddlTradeScheme" [(ngModel)]="request.TradeSchemeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlTradeScheme.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlTradeScheme.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Sanctioned (For Office Use Only):<span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" formControlName="ddlSanctioned" [(ngModel)]="request.SanctionedID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of SanctionedList" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlSanctioned.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlSanctioned.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Student Admission in Last Acadmic Year:<span class="StarMarking">*</span>
+              </label>
+              <!--<select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of FinancialYearList" value="{{item.FinancialYearID}}">{{item.FinancialYearName}}</option>
+    </select>-->
+
+              <select class="form-select" formControlName="ddlLastSession" [(ngModel)]="request.LastSession">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+
+              <div *ngIf="isSubmitted&&_SeatIntakeFormGroup.ddlLastSession.errors" class="text-danger">
+                <p *ngIf="!_SeatIntakeFormGroup.ddlLastSession.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Sanction No: <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Unit No" formControlName="OrderNo" [(ngModel)]="request.OrderNo">
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.OrderNo.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.OrderNo.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+           
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Sanction  Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" placeholder="Enter Unit No" max="currentDate" formControlName="OrderDate" [(ngModel)]="request.OrderDate">
+              <div *ngIf="isSubmitted && _SeatIntakeFormGroup.OrderDate.errors" class="text-danger">
+                <p *ngIf="_SeatIntakeFormGroup.OrderDate.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="text-center justify-center">
+              <button type="button" class="btn bg-info text-white mt-6" (click)="onSubmit()">Submit</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

@@ -1,0 +1,273 @@
+<!-- Page Header -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Create Branch Wise Section</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/guest-room-apply']" class="text-sm font-medium text-slate-700" aria-current="page">
+        Create Branch Wise Section
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Card -->
+<div class="card">
+  <div class="card-body p-5">
+
+    <!-- Section: Stream Selection & Section Count -->
+    <!--<ng-container *ngIf="iSHOD && GetBranchSectionData.length == 0">-->
+    <ng-container>
+      <form [formGroup]="IIPMasterFormGroup" *ngIf="IIPMasterFormGroup" class="form-horizontal" novalidate>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Select Stream and Section Count</b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!-- Stream Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Stream</label>
+            <ng-select formControlName="StreamID" [clearable]="false" class="w-full">
+              <ng-option [value]="0">--Select--</ng-option>
+              <ng-option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">
+                {{ item.StreamName }}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="isSubmitted && _IIPMasterFormGroup.StreamID.errors" class="text-danger text-sm mt-1">
+              <p *ngIf="_IIPMasterFormGroup.StreamID.errors.required">This field is required.</p>
+            </div>
+          </div>
+
+          <!-- Section Count Input -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Section Count</label>
+            <input type="number" class="form-input w-full" placeholder="Enter Section Count" formControlName="SectionCount" />
+            <div *ngIf="isSubmitted && _IIPMasterFormGroup.SectionCount.errors" class="text-danger text-sm mt-1">
+              <p *ngIf="_IIPMasterFormGroup.SectionCount.errors.required">This field is required.</p>
+            </div>
+          </div>
+
+          <!-- Buttons -->
+          <div class="col-span-full flex gap-3 mt-6">
+            <button type="button" class="btn bg-info text-white" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white" (click)="reset()">Reset</button>
+          </div>
+        </div>
+      </form>
+
+      <form [formGroup]="sectionForm" class="form-horizontal mt-6 mb-3" *ngIf="sectionForm && sections?.length > 0">
+        <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Branch-wise Section Students</b>
+        </div>
+
+        <div class="mb-3">
+          <label><strong>Stream:</strong> {{ streamName }}</label>
+        </div>
+
+        <div class="overflow-auto">
+          <table class="table table-bordered w-full mt-3">
+            <thead class="bg-light">
+              <tr>
+                <th class="text-left px-2 py-1">Sno</th>
+                <th class="text-left px-2 py-1">Section Name</th>
+                <th class="text-left px-2 py-1">Student Count</th>
+                <th class="text-left px-2 py-1">Actions</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="sections" *ngIf="sections?.length > 0">
+              <tr *ngFor="let section of sections.controls; let i = index" [formGroupName]="i">
+                <td class="px-2 py-1">{{ i + 1 }}</td>
+                <td class="px-2 py-1">
+                  <input formControlName="sectionName" class="form-input w-full" />
+                </td>
+                <td class="px-2 py-1">
+                  <input type="number" formControlName="studentCount" class="form-input w-full" />
+                </td>
+                <td class="px-2 py-1">
+                  <button type="button" class="btn bg-danger text-white btn-sm" (click)="removeSection(i)">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-span-full flex gap-3 mt-6">
+          <button type="button" class="btn bg-info text-white" (click)="addSection()">Add Section</button>
+          <button type="button" class="btn bg-success text-white" (click)="save()">Save</button>
+          <button type="button" class="btn bg-warning text-white" (click)="reset()">Reset</button>
+        </div>
+       
+      </form>
+    </ng-container>
+   
+    
+    <div class="table-container mt-5">
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Added Data</b>
+      </div>
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+
+        <!-- Columns definitions -->
+        <ng-container matColumnDef="SNo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <!-- Stream ID Column -->
+        <ng-container matColumnDef="StreamName">
+          <th mat-header-cell *matHeaderCellDef> Stream Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.StreamName}} </td>
+        </ng-container>
+
+        <!-- Stream ID Column -->
+        <ng-container matColumnDef="TotalSections">
+          <th mat-header-cell *matHeaderCellDef> Total Sections </th>
+          <td mat-cell *matCellDef="let element"> {{element.TotalSections}} </td>
+        </ng-container>
+
+        <!-- Created Date Column -->
+        <ng-container matColumnDef="LastCreated">
+          <th mat-header-cell *matHeaderCellDef> Last Created </th>
+          <td mat-cell *matCellDef="let element"> {{element.LastCreated | date:'short'}} </td>
+        </ng-container>
+
+        <!-- Actions Column (optional) -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,element)" title="View"><i class="ti ti-eye"></i> </a>
+              <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Header & Row Declarations -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
+        No Record Found
+      </div>
+      <mat-paginator #mainPaginator [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #MyModel_EdiDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Add-Edit Branch Section</b>
+        <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Branch Section</b>
+        </div>
+        <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="SectionName">
+            <th mat-header-cell *matHeaderCellDef> Section Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.SectionName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="StudentCount">
+            <th mat-header-cell *matHeaderCellDef> Students </th>
+            <td mat-cell *matCellDef="let element"> {{element.StudentCount}} </td>
+          </ng-container>
+          <ng-container matColumnDef="StreamName">
+            <th mat-header-cell *matHeaderCellDef> Stream Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.StreamName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="CreatedDate">
+            <th mat-header-cell *matHeaderCellDef> Created Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.CreatedDate | date:'short'}} </td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)" title="View"><i class="ti ti-eye"></i> </a>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+
+        </table>
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
+          No Record Found
+        </div>
+        <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        <!--<div class="text-center flex items-center justify-center" style="margin-top:50px">
+          <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                  class="btn bg-info text-white">
+            <i class="ti ti-device-floppy"></i> Submit
+          </button>
+          <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+        </div>-->
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<ng-template #MyModel_EditBranchSectionData let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Add-Edit Branch Section</b>
+        <button class="btn bg-info text-white" (click)="CloseModal2()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Branch Section</b>
+        </div>
+        <table mat-table [dataSource]="dataSource2" class="mat-elevation-z8" style="width: 100%;" *ngIf="GetBranchSectionStudentData.length > 0">
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ApplicationID">
+            <th mat-header-cell *matHeaderCellDef> Application ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.ApplicationID}} </td>
+          </ng-container>
+          <ng-container matColumnDef="EnrollmentNo">
+            <th mat-header-cell *matHeaderCellDef> Enrollment No </th>
+            <td mat-cell *matCellDef="let element"> {{element.EnrollmentNo}} </td>
+          </ng-container>
+          <ng-container matColumnDef="SectionName">
+            <th mat-header-cell *matHeaderCellDef> Section Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.SectionName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef> Student Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.StudentName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="StreamName">
+            <th mat-header-cell *matHeaderCellDef> Stream Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.StreamName}} </td>
+          </ng-container>
+          <ng-container matColumnDef="CreatedDate">
+            <th mat-header-cell *matHeaderCellDef> Created Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.CreatedDate | date:'short'}} </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns2"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns2;"></tr>
+
+        </table>
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord2 == 0">
+          No Record Found
+        </div>
+        <mat-paginator #paginator2 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

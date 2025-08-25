@@ -1,0 +1,376 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Center Superitendent Exam Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/nodal-officer-exminer-report" class="text-sm font-medium text-slate-700" aria-current="page">Center Superitendent Exam Report</a>
+    </div>
+  </div>
+  <a routerLink="/CenterSuperitendentExamReport" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <form [formGroup]="examReportForm" (ngSubmit)="onSubmit()">
+        <div class="mb-8">
+
+          <!-- Section 1: Basic Information -->
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i> प्रायोगिक परीक्षा केन्द्रों हेतु केन्द्र अधीक्षक द्वारा भेजी जाने वाली रिपोर्ट का प्रपत्र (राजकीय नोडल आई.टी.आई. को प्रेषित की जावे):
+            </b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">गोपनीयता व निष्पक्षता का स्तर।</label>
+              <input class="form-input" formControlName="confidentialityLevel" />
+              <div *ngIf="isSubmitted&&form.confidentialityLevel.errors" class="text-danger">
+                <p *ngIf="!form.confidentialityLevel.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+              <!-- <div class="text-red-500 text-sm" *ngIf="hasError('confidentialityLevel', 'required')">
+                   {{ getErrorMessage('confidentialityLevel') }}
+                 </div> -->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षाऐं आयोजन का समय (क्या परीक्षाएँ सामान्य कार्य घण्टों से अधिक समय में आयोजित की गई है)</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="examOnTime" value="yes" (change)="handleRadioChange('examOnTime')" /> Yes</label>
+                <label class="ms-3"><input type="radio" formControlName="examOnTime" (change)="handleRadioChange('examOnTime')" value="no" /> No</label>
+              </div>
+              <!-- <div class="text-red-500 text-sm" *ngIf="hasError('examOnTime', 'required')">
+                  {{ getErrorMessage('examOnTime') }}
+                </div> -->
+            </div>
+
+            <div *ngIf="examReportForm.get('examOnTime')?.value === 'no'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+              <textarea type="text" class="form-input" formControlName="examOnTimeRemark"></textarea>
+              <div *ngIf="isSubmitted&&form.examOnTimeRemark.errors" class="text-danger">
+                <p *ngIf="!form.examOnTimeRemark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Exam Schedule -->
+          <div class="flex flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i>परीक्षाऐं कितने दिनों तक आयोजित की गई (परीक्षाओं के आयोजन का समय का विवरण)।
+            </b>
+          </div>
+
+          <div class="overflow-x-auto mt-3 mb-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">दिनांक</th>
+                  <th class="text-left">प्रारंभ होने का समय</th>
+                  <th class="text-left">समाप्त होने का समय</th>
+                  <th align="center">Action</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="examSchedule">
+                <tr *ngFor="let schedule of examScheduleArray.controls;let i=index" [formGroupName]="i">
+                  <td>
+                    <input class="form-input" type="date" formControlName="examDate" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="time" formControlName="startTime" (change)="validateSchedule(i)" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="time" formControlName="endTime" (change)="validateSchedule(i)" />
+
+                  </td>
+                  <td>
+                    <div class="flex align-center justify-center actionBtns w-auto">
+                      <a href="javascript:void(0)" title="Add" (click)="addExamSchedule()" *ngIf="i == examScheduleArray.length - 1">
+                        <i class="ti ti-plus"></i>
+                      </a>
+                      <a href="javascript:void(0)" title="Delete" (click)="removeExamSchedule(i)" *ngIf="examScheduleArray.length > 1">
+                        <i class="ti ti-trash"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Section 3: Marking Guidelines -->
+          <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i> क्या मूल्यांकन के दौरान मार्किंग निर्देशों की पालना की गई है।
+            </b>
+            <div class="flex items-center ms-3">
+              <label><input type="radio" formControlName="markingGuidance" value="yes" (change)="handleRadioChange('markingGuidance')" /> Yes</label>
+              <label class="ms-3"><input type="radio" formControlName="markingGuidance" value="no" (change)="handleRadioChange('markingGuidance')" /> No</label>
+            </div>
+          </div>
+
+          <div *ngIf="examReportForm.get('markingGuidance')?.value==='no'" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+              <textarea class="form-input" formControlName="markingGuidanceRemark"></textarea>
+              <div *ngIf="isSubmitted&&form.markingGuidanceRemark.errors" class="text-danger">
+                <p *ngIf="!form.markingGuidanceRemark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document</label>
+              <input type="file" class="form-input" (change)="onFilechange($event, 'markingGuidanceDocument')" />
+            </div>
+          </div>
+
+          <!-- Section 4: Unit Size Changes -->
+          <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i> क्या प्रत्यके ईकाई के लिये निर्देशानुसार जाब की साईज में परिवर्तन कर जॉब को भिन्न बताया गया है यदि हां तो विविरण संलग्न करें।
+            </b>
+            <div class="flex items-center ms-3">
+              <label><input type="radio" formControlName="changeSizeOfUnits" value="yes" (change)="handleRadioChange('changeSizeOfUnits')" /> Yes</label>
+              <label class="ms-3"><input type="radio" formControlName="changeSizeOfUnits" value="no" (change)="handleRadioChange('changeSizeOfUnits')" /> No</label>
+            </div>
+          </div>
+
+          <div *ngIf="examReportForm.get('changeSizeOfUnits')?.value==='no'" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+              <textarea class="form-input" formControlName="changeSizeOfUnitsRemark"></textarea>
+              <div *ngIf="isSubmitted&&form.changeSizeOfUnitsRemark.errors" class="text-danger">
+                <p *ngIf="!form.changeSizeOfUnitsRemark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document</label>
+              <input type="file" class="form-input" (change)="onFilechange($event, 'changeSizeOfUnitsDocument')" />
+            </div>
+          </div>
+
+          <!-- Section 5: Exam Center Facilities -->
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> परीक्षा केन्द्र पर अन्य व्यवस्थाऐ</b>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रकाश व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="lightFacilities" value="satisfactory" /> संतोषजनक</label>
+                <label class="ms-3"><input type="radio" formControlName="lightFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="lightFacilities" value="unsatisfactory" /> असंतोषजनक</label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">पानी की व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="waterFacilities" value="satisfactory" /> संतोषजनक</label>
+                <label class="ms-3"><input type="radio" formControlName="waterFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="waterFacilities" value="unsatisfactory" /> असंतोषजनक</label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> अनुशासन</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="discipline" value="satisfactory" /> संतोषजनक</label>
+                <label class="ms-3"><input type="radio" formControlName="discipline" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="discipline" value="unsatisfactory" /> असंतोषजनक</label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">टॉयलेट की व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="toiletFacilities" value="satisfactory" /> संतोषजनक</label>
+                <label class="ms-3"><input type="radio" formControlName="toiletFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="toiletFacilities" value="unsatisfactory" /> असंतोषजनक </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 6: Incidents -->
+          <div class="flex flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i> परीक्षा के दौरान घटित घटना जिससे परीक्षा की निष्पक्षता व गोपनीयता प्रभावित हुई हो।
+            </b>
+            <div class="flex items-center ms-3">
+              <label><input type="radio" formControlName="incidentOnExam" value="yes" (change)="handleRadioChange('incidentOnExam')" /> Yes</label>
+              <label class="ms-3"><input type="radio" formControlName="incidentOnExam" value="no" (change)="handleRadioChange('incidentOnExam')" /> No</label>
+            </div>
+          </div>
+
+          <div *ngIf="examReportForm.get('incidentOnExam')?.value==='no'" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+              <textarea class="form-input" formControlName="incidentOnExamRemark"></textarea>
+              <div *ngIf="isSubmitted&&form.incidentOnExamRemark.errors" class="text-danger">
+                <p *ngIf="!form.incidentOnExamRemark.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document</label>
+              <input type="file" class="form-input" (change)="onFilechange($event, 'incidentOnExamDocument')" />
+            </div>
+          </div>
+
+          <!-- Section 7: comments -->
+          <div class="flex flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>परीक्षा संचालन बाबत् समग्र टिप्पणी।</b>
+            <div class="flex items-center ms-3">
+              <label><input type="radio" formControlName="examConductComment" value="yes" (change)="handleRadioChange('examConductComment')" /> Yes</label>
+              <label class="ms-3"><input type="radio" formControlName="examConductComment" value="no" (change)="handleRadioChange('examConductComment')" /> No</label>
+            </div>
+          </div>
+          <div *ngIf="examReportForm.get('examConductComment')?.value==='no'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+            <textarea class="form-input" formControlName="examConductCommentRemark"></textarea>
+            <div *ngIf="isSubmitted&&form.examConductCommentRemark.errors" class="text-danger">
+              <p *ngIf="!form.examConductCommentRemark.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रकाश व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="CommentsOnlightFacilities" value="satisfactory"  /> संतोषजनक </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOnlightFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOnlightFacilities" value="unsatisfactory" /> असंतोषजनक </label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> पानी की व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="CommentsOnwaterFacilities" value="satisfactory" /> संतोषजनक </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOnwaterFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOnwaterFacilities" value="unsatisfactory" /> असंतोषजनक </label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> अनुशासन</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="CommentsOndiscipline" value="satisfactory" /> संतोषजनक </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOndiscipline" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOndiscipline" value="unsatisfactory" /> असंतोषजनक </label>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> टॉयलेट की व्यवस्था</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="CommentsOntoiletFacilities" value="satisfactory" /> संतोषजनक </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOntoiletFacilities" value="good" /> अच्छा </label>
+                <label class="ms-3"><input type="radio" formControlName="CommentsOntoiletFacilities" value="unsatisfactory" /> असंतोषजनक </label>
+              </div>
+            </div>
+          </div> -->
+          <!-- Section 7: futureCenterSelection -->
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> भविष्य में संबन्धित संस्थान को परीक्षा केन्द्र बनाये जाने बाबत् टिप्पणी।</label>
+              <div class="flex items-center">
+                <label><input type="radio" formControlName="futureExamCenterComment" value="yes" (change)="handleRadioChange('futureExamCenterComment')" /> Yes </label>
+                <label class="ms-3"><input type="radio" formControlName="futureExamCenterComment" value="no" (change)="handleRadioChange('futureExamCenterComment')" /> No </label>
+              </div>
+            </div>
+            <div *ngIf="examReportForm.get('futureExamCenterComment')?.value==='no'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document</label>
+              <input class="form-input" type="file" (change)="onFilechange($event, 'ExamCenterCommentDocument')" />
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> अन्य कोई सुझाव जो भविष्य में परीक्षा आयोजन हेतु लाभप्रद हो।</label>
+              <input class="form-input" type="text" formControlName="otherFutureExamSuggestions" />
+            </div>
+          </div>
+
+
+          <!-- Section 7: Flying Squad Details -->
+          <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <i class="ti ti-plus"></i>आपके परीक्षा केंद्र को फ्लाईंग द्वारा कब कब चैक किया गया (नीचे दिये अनुसार विवरण देवें)
+            </b>
+          </div>
+
+          <div class="overflow-x-auto mt-3 mb-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left"> क्रम सख्या </th>
+                  <th class="text-left">फ्लाईंग के आने की दिनांक</th>
+                  <th class="text-left">फ्लाईंग के ठहरनें की समयावधी</th>
+                  <th class="text-left"> फ्लाईग टीम के प्रभारी का नाम</th>
+                  <th class="text-left"> फ्लाईग टीम के प्रभारी का पद</th>
+                  <th class="text-left"> फ्लाईग टीम के प्रभारी का वाहन संख्या</th>
+                  <th align="center">Action</th>
+                </tr>
+              </thead>
+              <tbody formArrayName="flyingSquadDetails">
+                <tr *ngFor="let squad of flyingSquadArray.controls; let i = index" [formGroupName]="i">
+                  <td>
+                    <input class="form-input" type="number" formControlName="serialNumber" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="date" formControlName="visitDate" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="text" formControlName="duration" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="text" formControlName="inchargeName" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="text" formControlName="inchargePosition" />
+                  </td>
+                  <td>
+                    <input class="form-input" type="text" formControlName="vehicleNumber" />
+                  </td>
+                  <td>
+                    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                      <a href="javascript:void(0)" title="Add" (click)="addFlyingSquad()" *ngIf="i == flyingSquadArray.length - 1">
+                        <i class="ti ti-plus"></i>
+                      </a>
+                      <a href="javascript:void(0)" title="Delete" (click)="removeFlyingSquad(i)" *ngIf="flyingSquadArray.length > 1">
+                        <i class="ti ti-trash"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Submit/Cancel Buttons -->
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <button type="submit" class="btn bg-info text-white mt-6">
+                Submit
+              </button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">
+                Cancel
+              </button>
+              <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="generatePDF()">
+                PDF
+              </button> -->
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

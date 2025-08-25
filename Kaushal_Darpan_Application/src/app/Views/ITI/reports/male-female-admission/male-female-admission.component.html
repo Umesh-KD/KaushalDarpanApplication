@@ -1,0 +1,115 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Male-Female Admission Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/Genderadmission']" [queryParams]="{ id: Id }" class="text-sm font-medium text-slate-700" aria-current="page">Male-Female Admission Report</a>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Division:</label>
+            <select class="form-select" [(ngModel)]="selectedDivision">
+              <option value="0">--Select Division--</option>
+              <option *ngFor="let item of Divisionlist" [value]="item.ID">{{ item.Name }}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
+            <select class="form-select" [(ngModel)]="selectedDistrict">
+              <option value="0">--Select District--</option>
+              <option *ngFor="let item of Districtlist" [value]="item.ID">{{ item.Name }}</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SearchFinalList()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Reset</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
+      </div>
+
+
+      <div class="overflow-x-auto mt-3">
+        <!--{{backupFinalList|json}}-->
+
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left" rowspan="2">#</th>
+              <th class="text-left" rowspan="2">Zone</th>
+              <th class="text-left" rowspan="2">District</th>
+              <th class="text-center" style="padding-top: 12px; padding-bottom: 12px;" colspan="3">Male</th>
+              <th class="text-center" style="padding-top: 12px; padding-bottom: 12px;" colspan="3">Female</th>
+              <th class="text-center" style="padding-top: 12px; padding-bottom: 12px;" colspan="3">Total</th>
+            </tr>
+
+            <tr>
+              <th class="text-left">Seats Offered</th>
+              <th class="text-left">Total Admission</th>
+              <th class="text-left">% Utilization</th>
+              <th class="text-left">Seats Offered</th>
+              <th class="text-left">Total Admission </th>
+              <th class="text-left">% Utilization</th>
+              <th class="text-left">Seats Offered</th>
+              <th class="text-left">Total Admission </th>
+              <th class="text-left">% Utilization</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let i=index;">
+              <td>{{ (startInTableIndex+1) + i }}</td>
+              <td>{{ item.Zone }}</td>
+              <td>{{ item.District }}</td>
+              <td>{{ item.MaleAdmission }}</td>
+              <td>{{ item.MaleSeatOffered }}</td>
+              <td>{{ item.MaleUtilization }}</td>
+              <td>{{ item.FemaleAdmission }}</td>
+              <td>{{ item.FemaleSeatOfferedFemale }}</td>
+              <td>{{ item.FemaleUtilization }}</td>
+              <td>{{ item.TotalSeatOffered }}</td>
+              <td>{{ item.TotalAdmission }}</td>
+              <td>{{ item.TotalUtilization }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>

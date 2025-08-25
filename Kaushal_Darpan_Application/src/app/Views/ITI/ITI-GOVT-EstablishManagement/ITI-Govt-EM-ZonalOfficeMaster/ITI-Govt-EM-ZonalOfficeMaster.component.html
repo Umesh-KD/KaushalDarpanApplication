@@ -1,0 +1,444 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Office</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add ITI Govt EM Office</b>
+      <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="goBack()">
+        <i class="ti ti-chevron-left"></i> Back
+      </a>
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtSSOID" name="txtSSOID" formControlName="txtSSOID" [(ngModel)]="formData.SSOID" placeholder="Enter SSO ID">
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
+        </div>
+      </div>
+
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label for="txtName" class="text-gray-800 text-sm font-medium inline-block mb-2">Name</label>
+          <input type="text" class="form-input" id="txtName" name="txtName" formControlName="txtName" [(ngModel)]="formData.Name"  placeholder="Enter Name">
+        </div>
+
+        <div>
+          <label for="txtMobile" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile</label>
+          <input type="text" class="form-input" id="txtMobile" name="txtMobile" formControlName="txtMobile" [(ngModel)]="formData.MobileNo"  placeholder="Enter Mobile">
+        </div>
+        <div>
+          <label for="txtEmailID" class="text-gray-800 text-sm font-medium inline-block mb-2">Email</label>
+          <input type="text" class="form-input" id="txtEmailID" name="txtEmailID" formControlName="txtEmailID" [(ngModel)]="formData.EmailID"  placeholder="Enter EmailID">
+        </div>
+      </div>
+
+
+
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.LevelID" formControlName="ddlLevelID" (change)="GetOfficeList()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlLevelID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlLevelID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="ddlOffice" (change)="OfficeITIWiseCollegeAndDirstrict()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlOffice.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlOffice.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="formData.LevelID==2 && formData.OfficeID== 11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="ddlITICollegeTrade">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlITICollegeTrade.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <!--{{OldNodalDistrictID|json}}-->
+        <div *ngIf="formData.LevelID==2 && formData.OfficeID== 15 && OldNodalDistrictID==0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            District:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="formData.DistrictID" formControlName="ddlDistrictID" (change)="DuplicateNodal()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlDistrictID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlDistrictID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+
+
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+          <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
+                  [(ngModel)]="formData.StaffTypeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStaffType.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStaffType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <!--{{GetIsHodOldID|json}}-->
+        <div>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
+          <select class="form-select " name="RoleID" id="ddlRoleID" formControlName="ddlRoleID"
+                  [(ngModel)]="formData.RoleID" (change)="onRoleChange($event)">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlRoleID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlRoleID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <!--{{OfficeList|json}}-->
+
+        <div *ngIf="showIsHod">
+          <label for="chkIsHod" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            <input type="checkbox"
+                   id="chkIsHod"
+                   name="chkIsHod"
+                   formControlName="chkIsHod"
+                   [(ngModel)]="formData.IsHod"
+                   [disabled]="IsHodIsDisable">
+            Is Hod
+          </label>
+        </div>
+
+      </div>
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddZonal()">Add More</button>
+        </div>
+      </div>
+    </form>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office List</b>
+    </div>
+    <div class="overflow-auto max-height500">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>#</th>
+            <th class="text-left">SSO ID</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Mobile</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Level Name</th>
+            <th class="text-left">Office Name</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">District Name</th>
+            <th class="text-left">Staff Type</th>
+            <th class="text-left">Post Name</th>
+            <th class="text-left">Role</th>
+            <th class="text-left">Is Hod</th>
+            <!-- <th class="text-left">Deployment Type</th> -->
+
+            <th>Action</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedZonalList; let idx = index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.SSOID}}</td>
+            <td class="text-left">{{row.Name}}</td>
+            <td class="text-left">{{row.MobileNo}}</td>
+            <td class="text-left">{{row.EmailID}}</td>
+            <td class="text-left">{{row.LevelName}}</td>
+            <td class="text-left">{{row.OfficeName}}</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.DistrictName}}</td>
+            <td class="text-left">{{row.StaffTypeName}}</td>
+            <td class="text-left">{{row.PostName}}</td>
+            <td class="text-left">{{row.RoleName}}</td>
+            <td class="text-left">{{row.IsHod}}</td>
+
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-4">
+      <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+      <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+        <i class="ti ti-refresh"></i> Reset
+      </button>
+    </div>
+  </div>
+
+</div>
+
+
+
+<ng-template #SttafModelPriview let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <!--<div *ngIf="isModalOpen" >-->
+        <!--<h4 class="text-center text-lg font-semibold mb-4">Confirmation</h4>-->
+        <div class="card tab-panels " id="Preview">
+          <div class="card-body p-5">
+
+            <div class="mb-6 w-full text-center">
+              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Teacher Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <!--<div class="col-span-2 text-center" style="text-align:center !important">
+                    <img src="assets/images/dummyImg.jpg" class="imgSignSelf" />
+                    <b class="block">फोटो (Photograph)</b>
+                </div>
+                <div class="col-span-2 text-center">
+                    <img src="assets/images/signature.jpg" class="imgSignSelf" />
+                    <b class="block">हस्ताक्षर (Signature)</b>
+                </div>-->
+
+                <div><b>Teacher Name:</b></div>
+                <div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Email:</b></div>
+                <div>{{staffDetailsFormData.Email}}</div>
+                <div><b>Mobile:</b></div>
+                <div>{{staffDetailsFormData.MobileNumber}}</div>
+                <div><b>Designation:</b></div>
+                <div>{{staffDetailsFormData.DesignationID}}</div>
+                <div><b>Date of Joining as lecture:</b></div>
+                <div>{{staffDetailsFormData.DateOfJoining}}</div>
+                <div><b>Date of Retirement:</b></div>
+                <div>{{staffDetailsFormData.DateOfAppointment}}</div>
+                <div><b>Number of years experience:</b></div>
+                <div>
+                  {{staffDetailsFormData.Experience}}
+                </div>
+                <div><b>Teacher Branch & code:</b></div>
+                <div>{{staffDetailsFormData.StreamName}}</div>
+
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Current Working Institute</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Institute Name:</b></div>
+                <div>{{staffDetailsFormData.InstituteName}}</div>
+                <div><b>Division:</b></div>
+                <div>{{staffDetailsFormData.InstituteDivision}}</div>
+                <div><b>District:</b></div>
+                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
+                <div><b>Tehsil:</b></div>
+                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Qualification Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>UG:</b></div>
+                <div>B.Tech</div>
+                <div><b>PG:</b></div>
+                <div>M.E.</div>
+                <div><b>PhD:</b></div>
+                <div>No</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.District}}</div>
+                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>
+
+            <!--<div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.State}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.district}}</div>
+                <div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.TehssilName}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>-->
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Bank Account Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Bank Name</b></div><div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Branch Name</b></div><div>{{staffDetailsFormData.BranchName}}</div>
+                <div><b>Name In Bank Account</b></div><div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Account No.</b></div><div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div><div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div><div>{{staffDetailsFormData.PanCardNumber}}</div>
+              </div>
+            </div>
+
+
+          </div>
+          <!--<div class="card-footer text-center">
+            <button type="button" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Lock & Submit</button>
+          </div>-->
+        </div>
+
+
+      </div>
+
+
+      <!-- Close Button -->
+      <!--<div class="flex justify-center mt-4">
+        <button class="btn bg-info text-white" (click)="Confirm()">Confirm</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+      </div>-->
+    </div>
+    <!--</div>-->
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Dispatch Documents Uploads</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--{{searchRequestUpdateSSOIDByPricipleModel|json}}-->
+      <form [formGroup]="QueryReqFormGroup" id="QueryReqFormGroup">
+        <div class="card-body">
+
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+
+
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+            <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
+                   formControlName="txtSSOID" [(ngModel)]="searchRequestUpdateSSOIDByPricipleModel.SSOID" />
+            <div *ngIf="isSubmitted && _QueryReqFormGroup.txtSSOID.errors" class="text-danger">
+              <p *ngIf="_QueryReqFormGroup.txtSSOID.errors.required">
+                <i aria-hidden="true"></i>
+                This
+                field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <div class="card-footer text-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="UpdateSSOIDByPriciple()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</ng-template>
+
+<!-- end row -->

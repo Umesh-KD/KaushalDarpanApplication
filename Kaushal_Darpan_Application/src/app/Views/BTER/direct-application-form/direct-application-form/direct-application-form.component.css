@@ -1,0 +1,10 @@
+a.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.tabMenu a.active, .tabMenu a:hover {
+  background: #dfb82f !important;
+  color: #fff !important;
+  font-weight: bold !important;
+}

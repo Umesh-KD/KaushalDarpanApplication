@@ -1,0 +1,242 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Budget Management</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <a routerLink="" class="text-sm font-medium text-slate-700" aria-current="page">ITI Budget Management</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollegeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Buget Type: </label>
+          <select class="form-select w-full" name="ddlDistributedType" [(ngModel)]="searchRequest.DistributedType">
+            <option value="0">ALL</option>
+            <option value="1">Main Budget</option>
+            <option value="2">Supplement Budget</option>
+          </select>
+        </div>
+        <div>
+          <button type="submit" (click)="GetList()" class="btn bg-info text-white mt-6 me-1">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetClick()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+    </div>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">S No</th>
+            <th class="text-left">College Details</th>
+            <th class="text-left">Budget Type</th>
+            <th class="text-left">Budget Amount</th>
+            <th class="text-left">Utilized Amount</th>
+            <th class="text-left">Remark</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>
+              {{row.CollegeName}}<br>
+              <strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
+              <strong>Email:</strong> {{row.Email}}
+            </td>
+            <td>{{row.BudgetType}}</td>
+            <td>{{row.Amount | number:digitsInfo:locale}}</td>
+            <td (click)="Utilize(modal_AddUtilize, row, idx)" style="cursor: pointer; color: #0d6efd; text-decoration: none;">
+              {{row.UtilizationAmount | number:digitsInfo:locale}}
+            </td>
+            <td>{{row.Remark}}</td>
+            <td>
+              <button type="button" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute, row, idx)">
+                Add Budget
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length==0"><td colspan="11">No Record Found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <form [formGroup]="AddStaffBasicDetailFromGroup" id="AddStaffBasicDetailFromGroup" class="form-horizontal">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;ASSIGN BUDGET FOR - <b> ({{CollegeName}})</b></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="height:200px">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Amount:<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="number" placeholder="Enter Total Amount" formControlName="Amount" id="Amount"
+                   [(ngModel)]="Request.DistributedAmount">
+            <div *ngIf="isSubmitted && _BudgetFormGroup.Amount.errors" class="text-danger">
+              <p *ngIf="_BudgetFormGroup.Amount.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>Remarks <span class="StarMarking">*</span></label>
+            <textarea type="text" class="form-input" placeholder="Enter Rmarks" formControlName="Remark"
+                      id="Remark" name="Remark" [(ngModel)]="Request.Remarks"></textarea>
+            <div *ngIf="isSubmitted && _BudgetFormGroup.Remark.errors" class="text-danger">
+              <p *ngIf="_BudgetFormGroup.Remark.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="AssignBudget()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #modal_AddUtilize let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="card">
+    <div class="card-header flex justify-between items-center">
+      <div class="text-end">
+        <b>Utilize Amount : {{ColegeAmount}}</b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <b>College Name : {{CollegeName}}</b>
+      </div>
+      <button class="btn bg-info text-white" (click)="CloseModal()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+
+    <div class="card-body">
+      <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>S No</th>
+            <th>Head Name</th>
+            <th>Utilization Amount</th>
+            <th>Uploaded File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of BudgetUtilizationsList; let i = index">
+            <td>{{i + 1}}</td>
+            <td>{{item.HeadName}}</td>
+            <td>{{item.UtilizationAmount | number: '1.2-2'}}</td>
+            <td>
+              <span *ngIf="item.UploadedFileName; else noFile">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + item.UploadedFileName}}"
+                   *ngIf="item.UploadedFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+              </span>
+              <ng-template #noFile><em>No file uploaded</em></ng-template>
+            </td>
+          </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td colspan="2"><b>Total</b></td>
+            <td><b>{{ getTotalUtilizationAmount() | number: '1.2-2' }}</b></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td colspan="4">
+              <label for="remark"><strong>Remark:</strong></label><br />
+              <textarea id="remark" rows="2" style="width: 100%; resize: none;" [value]="Remarks" readonly></textarea>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+</ng-template>

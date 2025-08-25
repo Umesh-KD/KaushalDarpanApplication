@@ -1,0 +1,178 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Center Superintendent Allocation</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Center Superintendent Allocation</a>
+
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center Code</label>
+          <input type="text" class="form-input" placeholder="Center Code" [(ngModel)]="searchByCenterCode" />
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center Name</label>
+          <input type="text" class="form-input" placeholder="Center Name" [(ngModel)]="searchByCenterName" />
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
+          <button type="button" id="btnReset" (click)="resetList()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+
+      <div *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 12" class="mt-3 alert text-danger text-danger ng-star-inserted">
+        Note: The draft order has been successfully forwarded for verification. Once the verification is complete, the 'Publish' button will become available to release the Final Order to the Center Superintendent.
+      </div>
+
+      <div *ngIf="this.CenterMasterList?.length > 0 && GetStatusCenterSuperintendentData?.Status === 13" class="mt-3 alert text-green text-success ng-star-inserted">
+        Note: Verified list of Order for Center Superintendent is shown below.
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          <i class="ti ti-list"></i> Search Results
+        </b>
+
+        <!-- Button for status 15 only -->
+        <button *ngIf="this.CenterMasterList?.length > 0 && this.GetStatusCenterSuperintendentData === 0 || this.GetStatusCenterSuperintendentData === undefined || GetStatusCenterSuperintendentData?.Status === 15"
+                type="button" class="btn bg-info text-white me-1"
+                (click)="downloadPDF('order')">
+          <i class="ti ti-download"></i> Generate Draft of Order
+        </button>
+
+
+
+        <!-- Forward to Verify button for status 11 -->
+        <!-- Button for statuses 12, 13, 14 -->
+        <button *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 12"
+                type="button" class="btn bg-info text-white me-1"
+                (click)="downloadPDF('view')">
+          <i class="ti ti-eye"></i>Order Center Superintendent
+        </button>
+        <button *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 13 ||
+GetStatusCenterSuperintendentData?.Status === 14"
+                type="button" class="btn bg-info text-white me-1"
+                (click)="downloadPDF('view')">
+          <i class="ti ti-eye"></i>Final Order Center Superintendent
+        </button>
+        <button *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 11"
+                type="button" class="btn bg-info text-white me-1"
+                (click)="forwardStatus()">
+          <i class="ti ti-download"></i> Forward to Verify
+        </button>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="50px" align="left">SNo.</th>
+              <th class="text-left">Center Name</th>
+              <th class="text-left">Capacity</th>
+              <th class="text-left">CC Code</th>
+              <th class="text-left">Center Superintendent</th>
+              <th class="text-left">Institute Names (Allotted)</th>
+              <th class="text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of CenterMasterList | tableSearchFilter: Table_SearchText; let idx = index;">
+              <td class="text-center">{{ idx + 1 }}</td>
+              <td>{{ row.CenterName }} </td>
+              <td>{{ row.Capacity }} </td>
+              <td>{{ row.CCCode }} </td>
+              <td>{{ row.UserName }}{{row.SSOID != null?' ('+row.SSOID+')':''}} </td>
+              <td>
+                <!-- If InstituteNames are available, show them -->
+                <div *ngIf="row.InstituteNames && row.InstituteNames.length > 0;">
+                  <span>{{ row.InstituteNames }}</span>
+                </div>
+
+                <!-- If InstituteNames are not available, show Multi-Select Dropdown -->
+                <div *ngIf="IsShowDropdown || !row.InstituteNames || row.InstituteNames.length === 0">
+                </div>
+              </td>
+              <td>
+                <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng) &&
+                  GetStatusCenterSuperintendentData?.Status !== 12 &&
+                 GetStatusCenterSuperintendentData?.Status !== 13 &&
+                 GetStatusCenterSuperintendentData?.Status !== 14" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute,row,idx)">
+                  {{row.UserID > 0?"Update Superintendent":"Add Superintendent"}}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal Popup Start For Add Insitute-->
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Add Center Superintendent Allocation</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="height:100px">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
+
+          <div>
+            <label>Staff</label>
+            <select class="form-select" *ngIf="assignedInstitutesReady" [(ngModel)]="UserID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of assignedInstitutes" [value]="item.StaffID">{{item.Name}} ({{item.SSOID}})</option>
+            </select>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="AssignCenterSuperintendent()">
+              {{UserID > 0 ? 'Update' : 'Submit'}}
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<!-- End Modal Popup Start For Add Insitute-->

@@ -1,0 +1,803 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Staff Profile</h4>
+    <button type="button" title="Remarks History" class="btn bg-info text-white" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, personalDetailsRequest.StaffID)">History </button>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="rounded border   mt-4">
+        <!-- Tabs -->
+        <!--<ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
+          <li class="bg-white px-4 text-gray-800 font-semibold py-2 rounded-t border-t border-r border-l -mb-px">
+            <a id="default-tab" href="#first">Personal Details </a>
+          </li>
+          <li class="px-4 text-gray-800 font-semibold py-2 rounded-t">
+            <a href="#second">Educational Qualification & Technical Qualification</a>
+          </li>
+          <li class="px-4 text-gray-800 font-semibold py-2 rounded-t">
+            <a href="#third">
+              Service
+              details of personnel
+            </a>
+          </li>
+
+        </ul>-->
+        <!-- Tab Contents -->
+        <div id="tab-contents">
+          <div id="first" class="p-4">
+            <div class="card">
+              <form [formGroup]="AddStaffBasicDetailFromGroup">
+                <div class="card-body p-5">
+                  <div class="mb-8">
+
+                    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Name of Employee:<span class="StarMarking">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="txtNameOfEmployee" name="txtNameOfEmployee" formControlName="txtName" [(ngModel)]="formData.Name" placeholder="Enter Name Of Employee" />
+
+                        <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtName.errors" class="text-danger">
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtName.errors.required">
+                            <i aria-hidden="true"></i>
+                            This
+                            field is
+                            required.!
+                          </p>
+                        </div>
+
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Employee ID
+                        </label>
+                        <input type="text" class="form-input" id="txtEmployeeID" name="txtEmployeeID" formControlName="txtEmployeeID" [(ngModel)]="formData.EmployeeID" placeholder="Enter Employee ID" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Current Basic
+                          Designation Of The Personnel
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.CurrentBasicDesignationID" formControlName="ddlCurrentBasicDesignationID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of CurrentBasicDesignationList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Core
+                          Business
+                        </label>
+                        <input type="text" class="form-input" id="txtCoreBusiness" name="txtCoreBusiness" formControlName="txtCoreBusiness" [(ngModel)]="formData.CoreBusiness" placeholder="Enter Core Business" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Current Posting
+                          Of The Employee (Institute/Office)
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.CurrentPostingEmp" formControlName="ddlCurrentPostingEmp">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of CurrentPostingEmpList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Date Of Posting Emp. In The Present Institution
+                        </label>
+                        <input type="date" class="form-input" id="txtDateofPostingEmp" name="txtDateofPostingEmp" formControlName="txtDateofPostingEmp" [(ngModel)]="formData.DateofPostingEmp" placeholder="Enter Date Of Posting Emp" />
+
+                      </div>
+                    </div>
+                    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                      <b class="text-1xl-5"><i class="ti ti-search"></i> Personal Information</b>
+                      <!--<a href="papperSetAssign.html" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Auto Select</a>-->
+                    </div>
+                    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Gender
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.GenderID" formControlName="ddlGenderID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of GenderList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          PAN Number:<span class="StarMarking">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="txtPanCardNumber" name="txtPanCardNumber" formControlName="txtPanCardNumber" maxlength="10" [(ngModel)]="formData.PanCardNumber" placeholder="Enter Pan Card Number" />
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtPanCardNumber.errors" class="text-danger">
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtPanCardNumber.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtPanCardNumber.errors.pattern"><i aria-hidden="true"></i> PAN Number must contain only letters and digits. Special characters not allowed.!</p>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Blood Group:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.BloodGroupID" formControlName="ddlBloodGroupID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of BloodGroupList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlBloodGroupID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlBloodGroupID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Father's  Name:<span class="StarMarking">*</span>
+                        </label>
+                        <input type="text" class="form-input" id="txtFatherName" name="txtFatherName" formControlName="txtFatherName" [(ngModel)]="formData.FatherName" placeholder="Enter Father Name" />
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtFatherName.errors" class="text-danger">
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtFatherName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtFatherName.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Date Of Birth:<span class="StarMarking">*</span>
+                        </label>
+                        <input type="date" class="form-input" id="txtDateOfBirth" name="txtDateOfBirth" formControlName="txtDateOfBirth" [(ngModel)]="formData.DateOfBirth" placeholder="Enter Date Of Birth" />
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtDateOfBirth.errors" class="text-danger">
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtDateOfBirth.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                        </div>
+
+
+                      </div>
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Marital Status:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.MaritalStatusID" formControlName="ddlMaritalStatusID" (change)="MaritalStatusAccordingCondition()">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of MaritalStatusList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlMaritalStatusID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlMaritalStatusID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <div *ngIf="IsMaritalCheck==true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Husband/Wife's Name
+                        </label>
+                        <input type="text" class="form-input" id="txtHusband_WifeName" name="txtHusband_WifeName" formControlName="txtHusband_WifeName" [(ngModel)]="formData.Husband_WifeName" placeholder="Enter Husband/Wife Name" />
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtHusband_WifeName.errors" class="text-danger">                          
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtHusband_WifeName.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+                        </div>
+                      </div>
+
+                      <div *ngIf="IsMaritalCheck==true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          If Husband/Wife Is In Government Service Then Select Service Type
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.ServiceTypeHWID" formControlName="ddlServiceTypeHWID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of ServiceTypeHWList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                      <div *ngIf="IsMaritalCheck == true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Employee ID Of Husband And Wife
+                        </label>
+                        <input type="text" class="form-input" id="txtEmployeeIDOfHusband_Wife" name="txtEmployeeIDOfHusband_Wife" formControlName="txtEmployeeIDOfHusband_Wife" [(ngModel)]="formData.EmployeeIDOfHusband_Wife" placeholder="Enter EmployeeID Of Husband/Wife" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Caste Category:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.CastID" formControlName="ddlCastID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of CastList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlCastID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlCastID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+
+                      </div>
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Religion:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.ReligionID" formControlName="ddlReligionID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of ReligionList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlReligionID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlReligionID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          If You Are Specially Abled (Divyang) Then Select The Appropriate One
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.DivyangID" formControlName="ddlDivyangID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of DivyangList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+
+
+
+                      <div *ngIf="IsMaritalCheck == true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          1/6/2002 Before
+                        </label>
+                        <input type="text" class="form-input" id="txtBeforeChildren" name="txtBeforeChildren" formControlName="txtBeforeChildren" [(ngModel)]="formData.BeforeChildren" placeholder="Enter Before Children" (change)="GetChildrenTotal()" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,1)" />
+
+                      </div>
+
+
+                      <div *ngIf="IsMaritalCheck == true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          1/6/2002 To They  After Wisdom..
+                        </label>
+                        <input type="text" class="form-input" id="txtAfterChildren" name="txtAfterChildren" formControlName="txtAfterChildren" [(ngModel)]="formData.AfterChildren" placeholder="Enter After Children" (change)="GetChildrenTotal()" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,1)" />
+
+                      </div>
+
+                      <div *ngIf="IsMaritalCheck == true">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Number Of Children Total.
+                        </label>
+                        <input type="text" class="form-input" id="txtTotalChildren" name="txtTotalChildren" formControlName="txtTotalChildren" [(ngModel)]="formData.TotalChildren" placeholder="Enter Total Children" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,1)" />
+
+                      </div>
+
+
+                    </div>
+
+                    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                      <b class="text-1xl-5">
+                        <i class="ti ti-search"></i> If there are more than
+                        one child in the second
+                        delivery, they will be considered as one unit. In the event of
+                        second marriage after the
+                        death of first wife/husband, the children of first wife will be
+                        considered as one unit.
+                      </b>
+                      <!--<a href="papperSetAssign.html" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Auto Select</a>-->
+                    </div>
+
+                    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Current Residential Address Of The Employee
+                        </label>
+                        <input type="text" class="form-input" id="txtAddress" name="txtAddress" formControlName="txtAddress" [(ngModel)]="formData.Address" placeholder="Enter Address" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Pin Code
+                        </label>
+                        <input type="text" class="form-input" id="txtPincode" name="txtPincode" maxlength="6" formControlName="txtPincode" [(ngModel)]="formData.Pincode" placeholder="Enter Pincode" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Rajasthan:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.StateHomeStateID" formControlName="ddlStateHomeStateID" (change)="RajasthanCheckcondition()">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of StateHomeStateList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStateHomeStateID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStateHomeStateID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Home State:<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.StateID" (change)="ddlState_Change()" formControlName="ddlStateID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of StateList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStateID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStateID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+
+                      </div>
+
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Home
+                          District
+                          (Only for Rajasthan):<span class="StarMarking">*</span>
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.DistrictID" formControlName="ddlDistrictID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of DistrictList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlDistrictID.errors" class="text-danger">
+                          <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlDistrictID.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This
+                            field is required .!
+                          </p>
+                        </div>
+
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Email Id
+                        </label>
+                        <input type="text" class="form-input" id="txtEmail" name="txtEmail" formControlName="txtEmail" [(ngModel)]="formData.Email" placeholder="Enter Email" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Mobile No.
+                        </label>
+                        <input type="text" class="form-input" id="txtMobileNumber" maxlength="10" name="txtMobileNumber" formControlName="txtMobileNumber" [(ngModel)]="formData.MobileNumber" placeholder="Enter Mobile Number" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Aadhaar Number
+                        </label>
+                        <input type="text" class="form-input" id="txtAdharCardNumber" maxlength="12" name="txtAdharCardNumber" formControlName="txtAdharCardNumber" [(ngModel)]="formData.AdharCardNumber" placeholder="Enter Adhar Card Number" />
+
+                      </div>
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Bhamashah Family Number
+                        </label>
+                        <input type="text" class="form-input" id="txtBhamashahNo" name="txtBhamashahNo" formControlName="txtBhamashahNo" [(ngModel)]="formData.BhamashahNo" placeholder="Enter Bhamashah No" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Passport No.
+                        </label>
+                        <input type="text" class="form-input" id="txtPassportNo" maxlength="8" name="txtPassportNo" formControlName="txtPassportNo" [(ngModel)]="formData.PassportNo" placeholder="Enter Passport No" />
+                        <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtPassportNo.errors" class="text-danger">                         
+                          <p *ngIf="_AddStaffBasicDetailFromGroup.txtPassportNo.errors.pattern"><i aria-hidden="true"></i> Passport Number must contain only letters and digits. Special characters not allowed.!</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                      <b class="text-1xl-5">
+                        <i class="ti ti-search"></i> If the
+                        employee is working as Junior
+                        Instructor or Senior Instructor then
+                      </b>
+                      <div class="flex items-center ms-2">
+                        <label class="flex items-center me-2"><input type="radio" (change)="VisibleSeniorInstructor()"  class="me-1" name="RadioisSeniorInstructor" formControlName="RadioisSeniorInstructor" [(ngModel)]="formData.isSeniorInstructor"   [value]="true" />Yes</label>
+                        <label class="flex items-center me-2"> <input type="radio" (change)="VisibleSeniorInstructor()" class="me-1" name="RadioisSeniorInstructor" formControlName="RadioisSeniorInstructor" [(ngModel)]="formData.isSeniorInstructor"  [value]="false" /> No </label>
+                      </div>
+                      <!--<a href="papperSetAssign.html" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Auto Select</a>-->
+                    </div>
+                    <div *ngIf="isVisibleSeniorInstructor" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          CITS Passed If Yes Which Year(Date) Passed
+                        </label>
+                        <input type="date" class="form-input" id="txtCITSPassedYears" name="txtCITSPassedYears" formControlName="txtCITSPassedYears" [(ngModel)]="formData.CITSPassedYears" placeholder="Enter CITS Passed Years" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          First Date Of
+                          Joining Any Government Service Emp.
+                        </label>
+                        <input type="date" class="form-input" id="txtDateOfJoiningGvernmentOfEmp" name="txtDateOfJoiningGvernmentOfEmp" formControlName="txtDateOfJoiningGvernmentOfEmp" [(ngModel)]="formData.DateOfJoiningGvernmentOfEmp" placeholder="Enter Date Of Joining Gvernment Of Emp" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Personnel On Which Post First Joining Date
+                        </label>
+                        <input type="date" class="form-input" id="txtFirstPostJoiningDateEmp" name="txtFirstPostJoiningDateEmp" formControlName="txtFirstPostJoiningDateEmp" [(ngModel)]="formData.FirstPostJoiningDateEmp" placeholder="Enter First Post Joining Date Emp" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Judicial Case Pending
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.JudicialCasePendingID" formControlName="ddlJudicialCasePendingID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of JudicialCasePendingList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div *ngIf="isVisibleSeniorInstructor" class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4 mb-4">
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Special Ability (Co-curricular Activities)
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.SpecialAbilityID" formControlName="ddlSpecialAbilityID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of SpecialAbilityList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                    </div>
+
+                    <div *ngIf="isVisibleSeniorInstructor" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Departmental Enquiry Under Consideration
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.DepartmentalEnquiryPendingID" formControlName="ddlDepartmentalEnquiryPendingID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of DepartmentalEnquiryPendingList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Punished In Departmental Enquiry
+                        </label>
+                        <select class="form-select" [(ngModel)]="formData.PunishedInDepartmentalInquiryID" formControlName="ddlPunishedInDepartmentalInquiryID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of PunishedInDepartmentalInquiryList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Date Of Punishment
+                        </label>
+                        <input type="date" class="form-input" id="txtDateOfPunishment" name="txtDateOfPunishment" formControlName="txtDateOfPunishment" [(ngModel)]="formData.DateOfPunishment" placeholder="Enter Date Of Punishment" />
+
+                      </div>
+
+
+                    </div>
+
+                    <div  class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                      <b class="text-1xl-5">
+                        <i class="ti ti-search"></i>if the
+                        promotion is renounced
+                      </b>
+                      <!--<a href="papperSetAssign.html" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Auto Select</a>-->
+                      <div class="flex items-center ms-2">
+                        <label class="flex items-center me-2"><input type="radio" (change)="VisibleRenounced()" class="me-1" name="RadioisRenounced" formControlName="RadioisRenounced" [(ngModel)]="formData.isRenounced" [value]="true" />Yes</label>
+                        <label class="flex items-center me-2"> <input type="radio" (change)="VisibleRenounced()" class="me-1" name="RadioisRenounced" formControlName="RadioisRenounced" [(ngModel)]="formData.isRenounced" [value]="false" /> No </label>
+                      </div>
+                    </div>
+                    <div *ngIf="isVisibleRenounced && !IsLockandSubmit" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Promotion Year(Date)
+                        </label>
+                        <input type="date" class="form-input" id="txtPromotionDate" name="txtPromotionDate" formControlName="txtPromotionDate" [(ngModel)]="promotionData.PromotionDate" placeholder="Enter Promotion Year" />
+
+                      </div>
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post</label>
+                        <select formControlName="ddlPostID" class="form-select" [(ngModel)]="promotionData.PostID">
+                          <option value="0">--Select--</option>
+                          <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+                        </select>
+                      </div>
+
+
+                      <div class="flex items-end gap-3">
+                        <div class="w-full">
+                          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Business </label>
+                          <input type="text" class="form-input" id="txtBusiness" name="txtBusiness" formControlName="txtBusiness" [(ngModel)]="promotionData.Business" placeholder="Enter Business" />
+                        </div>
+                        <svg (click)="AddZonal()" class="bi bi-plus-circle-fill" fill="#007bff"
+                             height="40" viewBox="0 0 16 16" width="40"
+                             xmlns="http://www.w3.org/2000/svg" *ngIf="CheckUserID == 0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z">
+                          </path>
+                        </svg>
+                      </div>
+
+
+
+                    </div>
+                    <div *ngIf="AddedZonalList?.length>0" class="grid 1xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                      <div class="overflow-x-auto mt-3">
+                        <table class="table table-border w-full table-auto" cellpadding="5">
+                          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                            <tr>
+                              <th class="text-left">Sr</th>
+                              <th class="text-left">Promotion Year</th>
+                              <th class="text-left">Post</th>
+                              <th class="text-left">Business</th>
+                              <th>Action </th>
+                            </tr>
+
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let row of AddedZonalList; let idx = index;">
+                              <td class="text-left">{{idx+1}}</td>
+                              <td class="text-left">{{row.PromotionDate}}</td>
+                              <td class="text-left">{{row.PostName}}</td>
+                              <td class="text-left">{{row.Business}}</td>
+                              <td class="text-center">
+                                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)" *ngIf="CheckUserID==0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+                                  <i class="ti ti-trash"></i>
+                                </button>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+
+                    <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                      <b class="text-1xl-5">
+                        <i class="ti ti-search"></i> Details of
+                        departmental mixed
+                        seniority for the present post (as applicable)
+                      </b>
+                      <div class="flex items-center ms-2">
+                        <label class="flex items-center me-2"><input type="radio" class="me-1" (change)="VisibleiDepartmentalMixed()" name="RadioisDepartmentalMixed" formControlName="RadioisDepartmentalMixed" [(ngModel)]="formData.isDepartmentalMixed" [value]="true" />Yes</label>
+                        <label class="flex items-center me-2"> <input type="radio" class="me-1" (change)="VisibleiDepartmentalMixed()" name="RadioisDepartmentalMixed" formControlName="RadioisDepartmentalMixed" [(ngModel)]="formData.isDepartmentalMixed" [value]="false" /> No </label>
+                      </div>
+                      <!--<a href="papperSetAssign.html" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Auto Select</a>-->
+                    </div>
+                    <div *ngIf="isVisibleiDepartmentalMixed" class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 align-middle">
+                      <div>
+                        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-6">
+                          District
+                        </div>
+                      </div>
+
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Year(Date)
+                        </label>
+                        <input type="date" class="form-input" id="txtDistrictYear" name="txtDistrictYear" formControlName="txtDistrictYear" [(ngModel)]="formData.DistrictYear" placeholder="Enter District Year" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Commak
+                        </label>
+                        <input type="text" class="form-input" id="txtDistrictCommak" name="txtDistrictCommak" formControlName="txtDistrictCommak" [(ngModel)]="formData.DistrictCommak" placeholder="Enter District Commak" />
+
+                      </div>
+
+                      <div>
+                        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-6">
+                          Division
+                          Level
+                        </div>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Year(Date)
+                        </label>
+                        <input type="date" class="form-input" id="txtDivisionLevelYear" name="txtDivisionLevelYear" formControlName="txtDivisionLevelYear" [(ngModel)]="formData.DivisionLevelYear" placeholder="Enter Division Level Year" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Commak
+                        </label>
+                        <input type="text" class="form-input" id="txtDivisionLevelCommak" name="txtDivisionLevelCommak" formControlName="txtDivisionLevelCommak" [(ngModel)]="formData.DivisionLevelCommak" placeholder="Enter Division Level Commak" />
+
+                      </div>
+
+
+                      <div>
+                        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-6">State </div>
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Year(Date)
+                        </label>
+                        <input type="date" class="form-input" id="txtStateYear" name="txtStateYear" formControlName="txtStateYear" [(ngModel)]="formData.StateYear" placeholder="Enter State Year" />
+
+                      </div>
+
+                      <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                          Commak
+                        </label>
+                        <input type="text" class="form-input" id="txtStateCommak" name="txtStateCommak" formControlName="txtStateCommak" [(ngModel)]="formData.StateCommak" placeholder="Enter State Commak" />
+
+                      </div>
+                    </div>
+
+                    <!--{{CheckUserID|json}}-->
+
+
+                    <div *ngIf="CheckUserID==0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+                      <button type="button"
+                              class="btn bg-info text-white mt-6" (click)="SaveData()">
+                        Submit
+                      </button>
+                      <button type="button" (click)="ResetControl()"
+                              class="btn bg-danger text-white mt-6">
+                        Cancel
+                      </button>
+                    </div>
+
+
+                  </div>
+
+
+
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function js_tabPanel(elem) {
+    $('.admin-menu li a').removeClass('active');
+    $(elem).addClass('active');
+    $('.tab-panels').addClass('hidden');
+    var tab = $(elem).attr('data-tagert');
+    $("#" + tab).removeClass('hidden');
+
+  }</script>
+<!-- end row -->
+<ng-template #MyModel_UserProfileStatusHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-end items-center">
+        <button class="btn bg-info text-white" (click)="CloseModalProfileStatuslist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>User Profile Status  History</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
+            <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+          </div>
+        </div>
+
+
+        <!--{{UserProfileStatusHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+             
+              <tr>
+              
+                <th class="text-left">S No</th>
+                <th class="text-left">Name</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserProfileStatusHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.DisplayName }}</td>
+                <td align="left">{{ row.UserProfileStatus }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.CreatedDate }}</td>
+
+              </tr>
+              <tr *ngIf="UserProfileStatusHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+
+
+          </table>
+
+        </div>
+
+
+
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalProfileStatuslist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>

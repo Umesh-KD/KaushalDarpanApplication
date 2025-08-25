@@ -1,0 +1,359 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Paper Upload</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITIPaperUploaded-List" class="text-sm font-medium text-slate-700" aria-current="page">Paper</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/iti-paper-upload" class="text-sm font-medium text-slate-700" aria-current="page">Paper Upload</a>
+    </div>
+  </div>
+  <a (click)="GoToITIPaperUploadedListPage()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#paper1" aria-expanded="true" aria-controls="paper1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Add Paper</b>
+  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#paper1" aria-expanded="true" aria-controls="paper1"><i class="ti ti-chevron-down"></i></button>
+</div>
+<div class="collapse multi-collapse show" id="paper1">
+  <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+    <div class="card">
+      <div class="card-body p-5">
+        <div class="mb-8">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Paper Upload</b>
+          </div>
+          <form [formGroup]="examForm" (ngSubmit)="onSubmit()">
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam ID<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="ExamID" (change)="onExamChange($event)">
+                  <option value="">Choose option</option>
+                  @for (item of ExamList; track item)
+                  {
+                  <option [value]="item.ID">{{item.Name}}</option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('ExamID').hasError('required')  && examForm.get('ExamID').touched">This field is required</div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name<span class="StarMarking">*</span></label>
+                <input type="text" placeholder="Search By Paper Name" class="form-input ng-pristine ng-valid ng-touched" formControlName="ExamName" readonly>
+                <span class="text-danger" *ngIf="examForm.get('ExamName').hasError('required')  && examForm.get('ExamName').touched">This field is required</span>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Stream<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="StreamID">
+                  <option value="">Choose option</option>
+                  @for (item of StreamMasterList; track item) {
+                  <option [value]="item.ID">{{item.Name}}</option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('StreamID').hasError('required')  && examForm.get('StreamID').touched">This field is required</div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="SemesterID">
+                  <option value="">Choose option</option>
+                  @for (item of SemesterMasterList; track item) {
+                  <option [value]="item.SemesterID">{{item.SemesterName}}</option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('SemesterID').hasError('required')  && examForm.get('SemesterID').touched">This field is required</div>
+              </div>
+
+              <div style="display:none">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper ID<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="PaperID">
+                  <option value="">Choose option</option>
+                  <option value="1">Paper 1</option>
+                  <option value="2">Paper 2</option>
+                  @for (item of PaperMasterList; track item) {
+                  <option [value]="item.PaperID">{{item.PaperType}}</option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('PaperID').hasError('required')  && examForm.get('PaperID').touched">This field is required</div>
+              </div>
+
+              <!--<div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Year<span class="StarMarking">*</span></label>
+                <select class="form-select form-control" formControlName="FinancialYearID">
+                  <option value="">Choose option</option>
+                  @for (item of lstAcedmicYear; track item) {
+                  <option *ngFor="let item of lstAcedmicYear;" [value]="item.YearID">
+                    {{ item.FinancialYearName }} ({{ item.TermName }})
+                  </option>
+                  }
+                </select>
+                <div class="text-danger" *ngIf="examForm.get('FinancialYearID').hasError('required') && examForm.get('FinancialYearID').touched">This field is required</div>
+              </div>-->
+
+              <!--<div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Paper Date<span class="StarMarking">*</span></label>
+                <input type="date" class="form-input" formControlName="PaperDate" />
+                <div class="text-danger" *ngIf="examForm.get('PaperDate').hasError('required') && examForm.get('PaperDate').touched">This field is required</div>
+              </div>-->
+
+           
+            </div>
+
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+              <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Password <span class="StarMarking">*</span>
+    </label>
+    <input type="password" placeholder="Enter Password" class="form-input" formControlName="Password">
+
+    <div *ngIf="examForm.get('Password').touched || examForm.get('Password').dirty">
+      <div *ngIf="examForm.get('Password').hasError('required')">
+        <p class="text-danger">This field is required</p>
+      </div>
+      <div *ngIf="examForm.get('Password').hasError('pattern')">
+        <p class="text-danger">Password must contain at least one letter and one number</p>
+      </div>
+      <div *ngIf="examForm.get('Password').hasError('minlength')">
+        <p class="text-danger">Password must be at least 8 characters long</p>
+      </div>
+    </div>
+  </div>-->
+              <div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PaperDate">Paper Date Time<span class="StarMarking">*</span></label>
+                  <input type="datetime-local" class="form-input" id="PaperDate" name="PaperDate" formControlName="PaperDate" />
+                  <div class="text-danger" *ngIf="examForm.get('PaperDate')?.hasError('required') && examForm.get('PaperDate')?.touched">
+                    This field is required
+                  </div>
+                </div>
+
+
+
+                <div>
+                  <input matInput hidden formControlName="PaperUploadID" />
+                </div>
+              </div>
+
+              <div>
+                <div class="relative">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Password <span class="StarMarking">*</span>
+                  </label>
+
+                  <input [type]="showPassword ? 'text' : 'password'"
+                         placeholder="Enter Password"
+                         class="form-input pr-10"
+                         formControlName="Password" />
+
+                  <!-- Eye icon button -->
+                  <button type="button"
+                          (click)="togglePassword()"
+                          class="absolute right-2 top-9 text-gray-500 eyeButton">
+                    <i [class]="showPassword ?'fa fa-eye' :'fa fa-eye-slash'"></i>
+                  </button>
+                </div>
+
+
+
+                <!-- Validation messages -->
+                <div *ngIf="examForm.get('Password').touched || examForm.get('Password').dirty">
+                  <div *ngIf="examForm.get('Password').hasError('required')">
+                    <p class="text-danger">This field is required</p>
+                  </div>
+                  <div *ngIf="examForm.get('Password').hasError('pattern')">
+                    <p class="text-danger">Password must contain at least one letter and one number</p>
+                  </div>
+                  <div *ngIf="examForm.get('Password').hasError('minlength')">
+                    <p class="text-danger">Password must be at least 8 characters long</p>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+              <div>
+                <label for="FileName" class="text-gray-800 text-sm font-medium inline-block mb-2">Paper PDF<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input formControlName="FileName" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         #fileInput type="file" (change)="UploadDocument($event)" accept=".pdf">
+                  <label for="FileName" (click)="fileInput.click()">
+                    <ng-container *ngIf="documentDetails.length > 0">{{documentDetails[0].FileName}}</ng-container>
+                    <span>Choose File</span>
+                  </label>
+                  <div class="flex" style="height:40px">
+                    <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(examForm.value.FileName)" *ngIf="documentDetails.length > 0">
+                      <i class="ti ti-trash"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-5">
+                <mat-checkbox formControlName="Active">Active</mat-checkbox>
+              </div>
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6  mb-6 allStatics">
+              <div>
+                <label for="FileName" class="text-gray-800 text-sm font-medium inline-block mb-2">Center Code<span class="StarMarking">*</span></label>
+                <mat-select class="form-select form-control CenterCode" formControlName="CenterCode" multiple (selectionChange)="onSelectionChange($event)">
+                  <mat-option [value]="'ALL'">
+                    {{ isAllSelected ? 'Unselect All' : 'Select All' }}
+                  </mat-option>
+                  <mat-option *ngFor="let item of CenterMasterList;" [value]="item.ID">
+                    {{ item.ID }} ({{ item.Name }})
+                  </mat-option>
+                </mat-select>
+                <div class="text-danger" *ngIf="examForm.get('CenterCode').hasError('required')  && examForm.get('CenterCode').touched">This field is required</div>
+              </div>
+            </div>
+            <button mat-raised-button color="primary" type="submit" [disabled]="!examForm.valid">Submit</button>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div class="container-fluid">
+  <div class="card">
+    <div class="card-body p-5">
+      <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+        <div class="Search">
+          <div class="form-group row">
+            <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search Exam Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="searchTerm" placeholder="Search...">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Stream</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedStream">
+            <option value="all">--All--</option>
+            @for (item of StreamMasterList; track item) {
+            <option [value]="item.StreamName">{{item.StreamName}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+            <option value="all">--All--</option>
+            <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterName">{{item.SemesterName}}</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="applyFilter(filterForm.value)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>-->
+<!--<div class="flex justify-between flex-wrap items-center">
+  <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+    <i class="ti ti-download"></i> Export Execl
+  </a>
+</div>-->
+<!--</div>
+<div class="mat-elevation-z8 table-responsive">
+  <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">-->
+<!-- PaperUploadID Column -->
+<!--<ng-container matColumnDef="SrNo">
+  <th mat-header-cell *matHeaderCellDef width="100px"> Sr. No. </th>
+  <td mat-cell *matCellDef="let element; let i = index" width="100px">{{ i + 1 }}</td>
+</ng-container>-->
+<!-- ExamName Column -->
+<!--<ng-container matColumnDef="ExamName">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Exam Name</th>
+  <td mat-cell *matCellDef="let element">{{ element.ExamName }}</td>
+</ng-container>-->
+<!-- StreamID Column -->
+<!--<ng-container matColumnDef="StreamName">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Stream Name</th>
+  <td mat-cell *matCellDef="let element">{{ element.StreamName }}</td>
+</ng-container>-->
+<!-- SemesterID Column -->
+<!--<ng-container matColumnDef="SemesterName">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Semester Name</th>
+  <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
+</ng-container>-->
+<!-- PaperID Column -->
+<!--<ng-container matColumnDef="PaperType">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Paper Type</th>
+  <td mat-cell *matCellDef="let element">{{ element.PaperType }}</td>
+</ng-container>-->
+<!-- PaperDate Column -->
+<!--<ng-container matColumnDef="PaperDate">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>PaperDate</th>
+  <td mat-cell *matCellDef="let element">{{ element.PaperDate | date }}</td>
+</ng-container>-->
+<!-- CenterCode Column -->
+<!--<ng-container matColumnDef="CenterCode">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>CenterCode</th>
+  <td mat-cell *matCellDef="let element">{{ element.CenterCode }}</td>
+</ng-container>-->
+<!-- FileName Column -->
+<!--<ng-container matColumnDef="Password">
+  <th mat-header-cell *matHeaderCellDef mat-sort-header>Password</th>
+  <td mat-cell *matCellDef="let element">
+    <div class="password-container" *ngIf="sSOLoginDataModel.RoleID == 7">
+      <input *ngIf="!element.showPassword"
+             type="password"
+             [value]="element.Password"
+             readonly
+             id="password-{{element.id}}" />
+      <input *ngIf="element.showPassword"
+             type="text"
+             [value]="element.Password"
+             readonly
+             id="password-{{element.id}}" />
+      <mat-icon class="eye-icon" matTooltip="Show"
+                (click)="togglePasswordVisibility(element)">
+        {{element.showPassword ? 'visibility_off' : 'visibility'}}
+      </mat-icon>
+      <mat-icon class="copy-icon"
+                [cdkCopyToClipboard]="element.Password"
+                (cdkCopyToClipboardCopied)="onCopySuccess(element)"
+                matTooltip="Copy">
+        {{element.isCopied ? 'check_circle' : 'content_copy'}}
+      </mat-icon>
+    </div>
+  </td>
+</ng-container>-->
+<!-- FileName Column -->
+<!--<ng-container matColumnDef="Download">
+  <th mat-header-cell *matHeaderCellDef>Download</th>
+  <td mat-cell *matCellDef="let element">
+    <button (click)="DownloadFile(element.FileName)">
+      <mat-icon matTooltip="Download">download</mat-icon>
+    </button>
+  </td>
+</ng-container>-->
+<!-- Header Row -->
+<!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>-->
+<!-- Data Row -->
+<!--<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+  No Record Found
+</div>-->
+<!-- Pagination Controls -->
+<!--<mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords" (page)="onPaginationChange($event)">
+        </mat-paginator>
+
+      </div>
+    </div>
+  </div>
+</div>-->

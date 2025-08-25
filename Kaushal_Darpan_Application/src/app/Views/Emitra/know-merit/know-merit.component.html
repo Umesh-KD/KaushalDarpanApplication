@@ -1,0 +1,348 @@
+
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" style="display:none">
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="Tabs5">
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+        <h3 class="m-0">मेरिट क्रमांक ( Your Merit)</h3>
+      </div>
+    </div>
+    <form [formGroup]="searchssoform">
+      <div class="row">
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">Application No.</label>
+          <input type="text" class="form-control" placeholder="Enter Application No"
+                 formControlName="txtApplicationNo" [(ngModel)]="searchRequest.ApplicationNo">
+          <div *ngIf="isSubmitted && _searchssoform.txtApplicationNo.errors" class="text-danger">
+            <p *ngIf="_searchssoform.txtApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Date of Birth:</label>
+        <input type="date" class="form-control" placeholder="Enter Select DOB" formControlName="DOB" [(ngModel)]="searchRequest.DOB">
+        <div *ngIf="isSubmitted && _searchssoform.DOB.errors" class="text-danger">
+          <p *ngIf="_searchssoform.DOB.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+        </div>
+      </div>-->
+        <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Captcha Code:</label>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between">
+            <img src="assets/images/captcha.jpg" style="height:34px" />
+            <button class="btn bg-purple-100 icon-btn"><i class="ti ti-refresh"></i></button>
+          </div>
+          <input type="text" class="form-control" placeholder="Enter Captcha">
+        </div>
+
+      </div>-->
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12" style="margin-top: 25px;">
+          <button type="button" class="btn btn-info text-white" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+          <button type="button" class="btn btn-danger mx-1"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+      <table class="table table-border w-full table-auto" cellpadding="10">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th class="text-left">Application Number</th>
+            <th class="text-left">Applicant Name</th>
+            <th class="text-left">Category</th>
+
+            <th class="text-left">Date of Birth </th>
+            <th class="text-left">Gender</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>{{request.ApplicationNo}}</td>
+            <td>{{request.StudentName}}</td>
+            <td>{{request.categoryName}}</td>
+
+            <td>{{request.DOB}}</td>
+            <td>{{ request.Gender === 'M' ? 'Male' : (request.Gender === 'F' ? 'Female' : 'Other') }}</td>
+
+
+
+          </tr>
+          <tr *ngIf="request.ApplicationID == 0"><td colspan="15"> No records found</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3 class="mt-3 mb-1" *ngIf="isShowGrid">10th Qualification Details:</h3>
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Mark Type</th>
+            <th class="text-left">Aggregate Max Mark</th>
+            <th class="text-left">Aggregate Max Obtain</th>
+            <th class="text-left">Percentage</th>
+            <!--<th class="text-left">General Rank</th>
+          <th class="text-left">Category Rank</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{request.MarksTypeID==84?"CGPA/GPA":"Marks"}}</td>
+            <td>{{request.MaxMarks}}</td>
+            <td>{{request.MarksObt}}</td>
+            <td>{{request.TenthPer}}</td>
+            <!--<td>{{request.MeritNo}}</td>
+          <td>{{request.CategoryMeritNo}}</td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <h3 class="mt-3 mb-1" *ngIf="isShowGrid && request.CourseTypeID==4">Qualifying examination details 12th/D-Voc/(10+ITI+English)/Diploma:</h3>
+    <h3 class="mt-3 mb-1" *ngIf="isShowGrid && request.CourseTypeID==3">Qualifying Examination Details Diploma / (10th + C.Voc) / (10th + ITI) / 12 th:</h3>
+    <h3 class="mt-3 mb-1" *ngIf="isShowGrid && request.CourseTypeID==2">Highest Percentage in Qualification:</h3>
+    <!--<h3 class="mt-3 mb-1" *ngIf="isShowGrid && request.CourseTypeID==5">Highest Percentage in Qualification:</h3>-->
+
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid && (request.CourseTypeID==4||request.CourseTypeID==3||request.CourseTypeID==2 ||request.CourseTypeID==5)">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Qualifying Examination</th>
+            <th class="text-left">Mark Type</th>
+            <th class="text-left">Aggregate Max Mark</th>
+            <th class="text-left">Aggregate Max Obtain</th>
+            <th class="text-left">Percentage</th>
+            <!--<th class="text-left">General Rank</th>
+          <th class="text-left">Category Rank</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{request.QualificationViewDetails[0].Qualification}}</td>
+            <td>{{request.QualificationViewDetails[0].Marktype==84?"CGPA/GPA":"Marks"}}</td>
+            <td>{{request.QualificationViewDetails[0].AggMaxMarks}}</td>
+            <td>{{request.QualificationViewDetails[0].AggObtMarks}}</td>
+            <td>{{request.QualificationViewDetails[0].Percentage}}</td>
+            <!--<td>{{request.MeritNo}}</td>
+          <td>{{request.CategoryMeritNo}}</td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="overflow-x-auto mt-3" *ngIf="(request.CourseTypeID==5)">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Qualifying Examination</th>
+            <th class="text-left">Mark Type</th>
+            <th class="text-left">Aggregate Max Mark</th>
+            <th class="text-left">Aggregate Max Obtain</th>
+            <th class="text-left">Percentage</th>
+            <!--<th class="text-left">General Rank</th>
+          <th class="text-left">Category Rank</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{request.QualificationViewDetails[1]?.Qualification}}</td>
+            <td>{{request.QualificationViewDetails[1]?.Marktype==84?"CGPA/GPA":"Marks"}}</td>
+            <td>{{request.QualificationViewDetails[1]?.AggMaxMarks}}</td>
+            <td>{{request.QualificationViewDetails[1]?.AggObtMarks}}</td>
+            <td>{{request.QualificationViewDetails[1]?.Percentage}}</td>
+            <!--<td>{{request.MeritNo}}</td>
+          <td>{{request.CategoryMeritNo}}</td>-->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="mt-3 mb-1" *ngIf="isShowGrid">Merit Info:</h3>
+    <div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">General Rank</th>
+            <!--<th class="text-center">Category Rank</th>-->
+
+
+
+            <th *ngIf="request.general_male>0" class="text-left">General Male          </th>
+            <th *ngIf="request.general_female" class="text-left">General Female        </th>
+            <th *ngIf="request.ews_male>0" class="text-left">EWS Male              </th>
+            <th *ngIf="request.ews_female>0" class="text-left">EWS Female            </th>
+            <th *ngIf="request.sc_male>0" class="text-left">SC Male               </th>
+            <th *ngIf="request.sc_female>0" class="text-left">SC Female             </th>
+            <th *ngIf="request.st_male>0" class="text-left">ST Male               </th>
+            <th *ngIf="request.st_female>0" class="text-left">ST Female             </th>
+            <th *ngIf="request.tsp_male>0" class="text-left">TSP Male              </th>
+            <th *ngIf="request.tsp_female>0" class="text-left">TSP Female            </th>
+            <th *ngIf="request.obc_male>0" class="text-left">OBC Male              </th>
+            <th *ngIf="request.obc_female>0" class="text-left">OBC Female            </th>
+            <th *ngIf="request.mbc_male>0" class="text-left">MBC Male              </th>
+            <th *ngIf="request.mbc_female>0" class="text-left">MBC Female            </th>
+            <th *ngIf="request.catB_MP_male_merit>0" class="text-left">Category B MP Male    </th>
+            <th *ngIf="request.catB_MP_female_merit>0" class="text-left">Category B MP Female  </th>
+            <th *ngIf="request.catC_PH_merit>0" class="text-left">Category C PH         </th>
+            <th *ngIf="request.catE_SMD_merit>0" class="text-left">Category E SMD        </th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-left">{{request.MeritNo}}</td>
+            <!--<td>{{request.CategoryMeritNo}}</td>-->
+            <td class="text-left" *ngIf="request.general_male>0">{{request.general_male        }}</td>
+            <td class="text-left" *ngIf="request.general_female>0">{{request.general_female       }}</td>
+            <td class="text-left" *ngIf="request.ews_male>0">{{request.ews_male             }}</td>
+            <td class="text-left" *ngIf="request.ews_female>0">{{request.ews_female           }}</td>
+            <td class="text-left" *ngIf="request.sc_male>0">{{request.sc_male              }}</td>
+            <td class="text-left" *ngIf="request.sc_female>0">{{request.sc_female            }}</td>
+            <td class="text-left" *ngIf="request.st_male>0">{{request.st_male              }}</td>
+            <td class="text-left" *ngIf="request.st_female>0">{{request.st_female            }}</td>
+            <td class="text-left" *ngIf="request.tsp_male>0">{{request.tsp_male             }}</td>
+            <td class="text-left" *ngIf="request.tsp_female>0">{{request.tsp_female           }}</td>
+            <td class="text-left" *ngIf="request.obc_male>0">{{request.obc_male             }}</td>
+            <td class="text-left" *ngIf="request.obc_female>0">{{request.obc_female           }}</td>
+            <td class="text-left" *ngIf="request.mbc_male>0">{{request.mbc_male             }}</td>
+            <td class="text-left" *ngIf="request.mbc_female>0">{{request.mbc_female           }}</td>
+            <td class="text-left" *ngIf="request.catB_MP_male_merit>0">{{request.catB_MP_male_merit   }}</td>
+            <td class="text-left" *ngIf="request.catB_MP_female_merit>0">{{request.catB_MP_female_merit }}</td>
+            <td class="text-left" *ngIf="request.catC_PH_merit>0">{{request.catC_PH_merit        }}</td>
+            <td class="text-left" *ngIf="request.catE_SMD_merit>0">{{request.catE_SMD_merit       }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <table class="table table-border w-full table-auto mt-3" cellpadding="5" *ngIf="isShowGrid">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr>
+          <th class="text-left">Prefential category</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            {{
+request.PrefentialCategory
+            }}
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+
+    <div *ngIf="isShowGrid && request.Action!=8 &&request.Action!=9" class="mt-4 mb-4" style="display:none">
+      <h3>क्या उपरोक्त अंकित डाटा आपके द्वारा पूर्व में भरे हुवे आवेदन फॉर्म के अनुसार नहीं है तथा आप इसमें परिवर्तन करना चाहते है?</h3>
+
+      <div class="flex items-center">
+        <label for="SupplementaryYes"><input type="radio" name="SubjectRadio" [(ngModel)]="request.IsApply" [value]="true" (change)="OnShow(1)" /> Yes</label>
+        <label class="ms-1.5" for="SupplementaryNo" *ngIf="isShowGrid"><input type="radio" name="SubjectRadio" [(ngModel)]="request.IsApply" [value]="false" (change)="OnShow(2)" /> No</label>
+      </div>
+
+    </div>
+
+    <div *ngIf="IsdocumentShow &&request.Action!=8 &&request.Action!=9 " class="overflow-auto">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+
+            <th style="width:500px">Name</th>
+            <th class="text-center">Yes/No</th>
+            <th class="text-left">Document</th>
+            <th class="text-left">Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let dOC of request.RecheckDocumentModel let i = index  ">
+
+            <td>{{dOC.DisplayColumnNameEn}}</td>
+
+            <td class="text-center">
+              <label class="me-2">
+                <input type="radio" name="AttendanceMark{{i}}" [(ngModel)]="dOC.isselect" [value]="true" (change)="OnImageUpload(1,dOC)" /> yes
+              </label>
+              <label>
+                <input type="radio" name="AttendanceMark{{i}}" [(ngModel)]="dOC.Isselect" [value]="false" (change)="OnImageUpload(2,dOC)" />
+                No
+              </label>
+            </td>
+
+
+            <td>
+              <div *ngIf="dOC.ShowRemark" class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto_{{i+1}}" type="file" (change)="UploadDocument($event,dOC)" />
+                <label for="filepanPhoto_{{i+1}}">
+
+                  <span>Choose File</span>
+                  {{ dOC.Dis_FileName === '' ? 'No File Chosen' : dOC.Dis_FileName }}
+                </label>
+                <div class="flex" *ngIf="dOC.FileName !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{dOC.FolderName}}/{{dOC.FileName}}"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                     (click)="DeleteDocument(dOC)">
+                    <i class="ti ti-trash"></i>
+                  </a>
+                </div>
+              </div>
+            </td>
+            <td *ngIf="dOC.ShowRemark">
+              <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="dOC.Remark"></textarea>
+              <div *ngIf="dOC.Remark==''" class="text-danger">
+                This field is required .!
+              </div>
+            </td>
+
+            <!--<td *ngIf="dOC.ShowRemark">
+            <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="dOC.Remark"></textarea>
+            <div *ngIf="dOC.Remark==''" class="text-danger">
+              This field is required .!
+            </div>
+          </td>-->
+          </tr>
+
+
+        </tbody>
+      </table>
+
+    </div>
+    <div *ngIf="IsdocumentShow" class="card-footer text-center">
+      <button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>
+    </div>
+    <div *ngIf="(request.Action==8 && isShowGrid || request.Action==9 && isShowGrid) && request.IsEdit==true">
+      <p class="text-danger">You Have Already Submit Request For Merit Correction</p>
+    </div>
+
+    <div class="col-lg-12 mb-3">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <!--<h3>प्रथम वर्ष इंजीनियरिंग प्रवेश (I year Engineering Admission)</h3>-->
+          <p><b>Helpline Number: </b> {{HelplineNumber}}</p>
+          <p><b>For queries contact email id:</b>{{ContactEmail}}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+

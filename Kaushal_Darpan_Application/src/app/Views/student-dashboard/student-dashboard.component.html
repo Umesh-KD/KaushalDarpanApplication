@@ -1,0 +1,188 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 1">
+        BTER
+      </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 2">
+        ITI
+      </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Dashboard</a>
+    </div>
+  </div>
+  <!--<button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>-->
+</div>
+<div *ngIf="IsShowDashboard">
+  <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="Profilebox flex justify-between">
+
+          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{ProfileLists.FileName}}</p>
+          <div class="profilePic">
+            <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+                 [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + ProfileLists.FileName" />
+
+          </div>
+          <div class="userInfos">
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-3">
+              <div>
+                <label>Name:</label>
+                <span>{{ProfileLists.StudentName}} ({{ProfileLists.StudentNameHindi}})</span>
+              </div>
+              <div>
+                <label>Father Name: </label>
+                <span>{{ProfileLists.FatherName}} ({{ProfileLists.FatherNameHindi}})</span>
+              </div>
+              <div>
+                <label>Mother Name: </label>
+                <span>{{ProfileLists.MotherName}} ({{ProfileLists.MotherNameHindi}})</span>
+              </div>
+              <div>
+                <label>Date Of Birth : </label>
+                <span>{{ProfileLists.Dis_DOB}}</span>
+              </div>
+              <div>
+                <label>Email : </label>
+                <span>{{ProfileLists.Email}}</span>
+              </div>
+              <div>
+                <label>Phone : </label>
+                <span>{{ProfileLists.MobileNo}}</span>
+              </div>
+              <div>
+                <label>Gender : </label>
+                <span>{{ProfileLists.GenderName}}</span>
+              </div>
+              <div>
+                <label>Institute Name : </label>
+                <span>({{ProfileLists.InstituteCode}}) {{ProfileLists.InstituteName}}</span>
+              </div>
+              <div>
+                <label>{{sSOLoginDataModel.DepartmentID == 2?"Trade Name":"Stream Name"}}   : </label>
+                <span>({{ProfileLists.StreamCode}}) {{ProfileLists.StreamName}}</span>
+              </div>
+              <!--<div>
+                <label>Semester : </label>
+                <span>{{ProfileLists.SemesterName}}</span>
+              </div>-->
+              <div>
+                <label>Enrollment No : </label>
+                <span>{{ProfileLists.EnrollmentNo}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--<div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics">-->
+
+  <div class="{{this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.BTER?'grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics':'grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-6 allStatics'}}">
+    <div class="card" *ngFor="let row of StudantDashboardList">
+      <div class="p-5">
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
+        <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
+        <a href="{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+      </div>
+    </div>
+  </div>
+
+  @if(this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER)
+  {
+  <!--Pending Fees Module-->
+  <app-pending-fees></app-pending-fees>
+  <!--Semester Details-->
+  <app-semester-details></app-semester-details>
+  }
+  @else if(this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.ITI)
+  {
+  <app-itipending-fees>  </app-itipending-fees>
+
+  }
+</div>
+
+<ng-template #modal_ApplyNow let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Proceed With </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div>
+              <h2 class="text-center text-4xl">Apply for Admissions</h2>
+            </div>
+          </div>
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 loginBox mt-8">
+            <a (click)="Redirect(_EnumDepartment.BTER)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">Polytechnic Admission<i class="ti ti-chevron-right"></i></a>
+            <a (click)="Redirect(_EnumDepartment.ITI)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i class="ti ti-chevron-right"></i></a>
+            <a class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer" (click)="closeModal()">DCE <i class="ti ti-chevron-right"></i></a>
+            <!-- <a [routerLink]="'/StudentJanAadharDetail'"
+             [queryParams]="{deptid:_EnumDepartment.ITI,isDirectAdmission:true}"
+             (click)="closeModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">
+              Direct Admission
+              <i class="ti ti-chevron-right"></i></a> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #modal_StudetnCourseType let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Please Select Department </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="p-6">
+
+          <div class="grid xl:grid-cols-12 loginBox">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <tr>
+                <td>
+                  Sr No
+                </td>
+                <td>
+                  Department
+                </td>
+                <td>
+                  Action
+                </td>
+              </tr>
+              <tr *ngFor="let item of StudantCourseList;let idx=index;">
+                <td>
+
+                  {{idx+1}}
+                </td>
+                <td>
+                  {{item.DepartmentName}}
+                </td>
+                <td>
+                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetStudentDepartment(item)">Proceed <i class="ti ti-chevron-right"></i></a>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+

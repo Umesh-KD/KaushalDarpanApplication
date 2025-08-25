@@ -1,0 +1,217 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{PageNameTitile}}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      @if(this.selectedEndTermID>0)
+      {
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Verify Enrollment Number</a>
+      }
+      @else
+      {
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      }
+
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">{{PageNameTitile}}</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <form [formGroup]="SearchForm">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+            <ng-select [(ngModel)]="searchRequest.InstituteID"
+                       formControlName="ddlInstitute" [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              @for (item of InstituteMasterList; track item.InstituteID) {
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+              }
+            </ng-select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+
+            <ng-select [(ngModel)]="searchRequest.StreamID" (change)="ddlStream_Change()"
+                       formControlName="ddlStream" [clearable]="false">
+              <ng-option [value]="0" selected>--All--</ng-option>
+              @for (item of StreamMasterDDLList; track item.StreamID) {
+              <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+              }
+            </ng-select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+            <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID" formControlName="ddlSemester">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+                {{item.SemesterName}}
+              </option>a
+            </select>
+          </div>
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Student Type</label>
+            <select class="form-select" id="StudentExamStudentType" [(ngModel)]="searchRequest.StudentTypeID"
+                    formControlName="ddlStudentTypeID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of StudentTypeList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+          </div>-->
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">
+              Search
+            </button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+          </div>
+
+        </div>
+
+      </form>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>All Student List</b>
+        <div class="flex justify-end flex-wrap items-center">
+
+
+
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+        </div>
+      </div>
+      <!--<div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.status == 60">
+        Remark: Registrar Verified Data
+      </div>-->
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div class="flex">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+
+          <!--<div class="flex" *ngIf="![ _RollListStatus.Published, _RollListStatus.Reverted ].includes(this.currentStatus)">
+            <select class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
+              <option value="0">Select Status</option>
+              <option *ngIf="this.currentTab==1" value="{{_RollListStatus.Verified}}">Verified</option>
+              <option value="{{_RollListStatus.Reverted}}">Reverted</option>
+            </select>
+            <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>
+          </div>-->
+
+          <div class="flex" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Registrar || sSOLoginDataModel.RoleID == _EnumRole.Registrar_NonEng) && currentStatus !=60">
+            <select class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
+              <option value="0">Select Status</option>
+              <!--<option value="{{_RollListStatus.VerifiedByRegistrar}}">Verified</option>-->
+            <option value="{{_RollListStatus.VerifiedByRegistrar}}">Approve By Registrar</option>
+              <option value="{{_RollListStatus.Return}}">Return</option>
+            </select>
+            <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>
+          </div>
+
+        </div>
+        <div class="">
+
+        </div>
+        <div class="">
+        </div>
+        <div class="flex items-center">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+
+              <th class="text-left">Student Name </th>
+              <th class="text-left">Father's Name</th>
+              <th class="text-left">DOB</th>
+              <th class="text-left">Institute Name   </th>
+              <th class="text-left">Branch Name   </th>
+              <!--<th class="text-left">Semester Name</th>-->
+              <th class="text-left">Enrollment No</th>
+              <!--<th class="text-left">Roll No</th>-->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{(startInTableIndex+1)+idx}}</td>
+              <td class="text-left">{{row.StudentName}} </td>
+              <td class="text-left">{{row.FatherName}}</td>
+              <td class="text-left">{{row.DOB}}</td>
+              <td class="text-left">{{row.InstituteName}}</td>
+              <td class="text-left">{{row.StreamName}}</td>
+              <!--<td class="text-left">{{row.SemesterName}}</td>-->
+              <!--<td class="text-left">{{row.temp_Enrollment}}</td>-->
+              <td class="text-left">
+                {{ currentStatus == 14 ? row.EnrollmentNo : row.temp_Enrollment }}
+              </td>
+              <!--<td class="text-left">{{row.RollNumber}}</td>-->
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+  </div>
+</div>
+
+
+
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

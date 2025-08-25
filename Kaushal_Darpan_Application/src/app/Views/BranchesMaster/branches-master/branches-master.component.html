@@ -1,0 +1,110 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Branches</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/branchesmaster" class="text-sm font-medium text-slate-700" aria-current="page">Branches</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/addbranchesmaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Code</label>
+          <input type="text" class="form-input" placeholder="Search By Branch Code"  [(ngModel)]="searchByBranchCode" >
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Name</label>
+          <input type="text" class="form-input" placeholder="Search By Branch Name"  [(ngModel)]="searchByBranchName">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Type</label>
+          <select class="form-select" id="StreamStreamTypeId" [(ngModel)]="searchByBranchType">
+            <option value="">Choose Option</option>
+            <option *ngFor="let item of StreamTypeList" [value]="item.StreamTypeID">{{item.StreamType}}</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..."  [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Code</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Type</th>
+            <th class="text-left">Duration Years</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let stream of StreamMasterList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+
+            <td>{{idx+1}}</td>
+            <td>{{stream.Code}}</td>
+            <td>{{stream.Name}}</td>
+
+            <td>
+              {{stream.StreamType}}
+            </td>
+            <td> {{stream.Duration}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)=" onEdit(stream.StreamID)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" (click)=" btnDelete_OnClick(stream.StreamID)"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

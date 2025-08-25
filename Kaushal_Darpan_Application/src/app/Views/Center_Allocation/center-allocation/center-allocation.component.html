@@ -1,0 +1,164 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Center Allocation</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Center Allocation</a>
+
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Center CCode</a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center Code</label>
+          <input type="text" class="form-input" placeholder="Center Code" [(ngModel)]="searchByCenterCode" />
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Center Name</label>
+          <input type="text" class="form-input" placeholder="Center Name" [(ngModel)]="searchByCenterName" />
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
+          <button type="button" id="btnReset" (click)="resetList()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+          <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>          
+        </div>
+        <div >
+          <button type="button" class="btn bg-success text-white " (click)="saveData()">Save All</button>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Mark</th>
+              <th width="80px" align="left">Sr. No.</th>
+              <th class="text-left">Center Name</th>
+              <th class="text-left">Capacity</th>
+              <th class="text-left">CC Code</th>
+              <th class="text-left">Institute Names (Allotted)</th>
+              <th class="text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of CenterMasterList | tableSearchFilter: Table_SearchText; let idx = index;">
+              <td align="left">
+                <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" (change)="onCheckboxChange(row)" />
+              </td>
+              <td>{{ idx + 1 }}</td>
+              <td>{{ row.CenterName }} </td>
+              <td>{{ row.Capacity }} </td>
+              <td>{{ row.CCCode }} </td>
+              <td>
+                <!-- If InstituteNames are available, show them -->
+                <div *ngIf="row.InstituteNames && row.InstituteNames.length > 0;">
+                  <span>{{ row.InstituteNames }}</span>
+                </div>
+
+                <!-- If InstituteNames are not available, show Multi-Select Dropdown -->
+                <div *ngIf="IsShowDropdown || !row.InstituteNames || row.InstituteNames.length === 0">
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute,row,idx)">Add</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!--<div>
+          <button type="button" class="btn bg-success text-white mt-6 me-1" (click)="saveData()">Save</button>
+        </div>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--Modal Popup Start For Add Insitute-->
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Add Edit Insitute
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <label> District</label>
+        <select class="form-select" [(ngModel)]="searchRequest.DistrictID" (change)="ddlInstitute_Change()">
+          <option value="">--All--</option>
+          <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+
+        </select>
+      </div>
+      <div class="card-body" style="min-height: 400px;overflow:auto">
+        <div class="mb-8">
+          <label>Select Insitute<span class="text-danger">*</span></label>
+          <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="FilteredInstituteList"
+                                   [(ngModel)]="SelectedInstituteList"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+          </ng-multiselect-dropdown>
+          <!--<ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="SubjectMasterDDLList"
+                                   [formControl]="_BranchSubjectFormGroup.selectedItems" [(ngModel)]="SelectedSubjectList" [settings]="settingsMultiselector"
+                                   [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
+                                   (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
+                                   (onDeSelectAlls)="onDeSelectAlls($event)">
+          </ng-multiselect-dropdown>-->
+          <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<!-- End Modal Popup Start For Add Insitute-->

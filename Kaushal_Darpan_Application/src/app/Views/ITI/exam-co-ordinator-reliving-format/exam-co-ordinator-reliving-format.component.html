@@ -1,0 +1,273 @@
+ <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Exam Coordinator Reliving Format</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/CenterExamCoordinator" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/exam-co-ordinator-reliving-format" class="text-sm font-medium text-slate-700" aria-current="page">Exam Cordinator Reliving Format</a>
+    </div>
+  </div>
+  <a routerLink="/CenterExamCoordinator" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> कोर्डिनेटर को रिलीव करते समय नोडल अधिकारी द्वारा तैयार की जाने वाली चेक पॉईन्ट की सूची</b>
+        <span class="text-danger"> (तीन प्रतियों में प्रत्येक कोर्डिनेटर हेतु अलग-अलग तैयार की जाए)</span>
+      </div>
+      <form [formGroup]="ExamCoOrdinatorRelivingForm" (ngSubmit)="onSubmit()">
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">एनसीवीटी प्रायोगिक परीक्षा: <span class="StarMarking">*</span></label>
+            <select formControlName="NCVTPracticalExam" class="form-select" disabled>
+              <option selected>अगस्त 2025</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.NCVTPracticalExam.errors" class="text-danger">
+              <p *ngIf="!form.NCVTPracticalExam.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>-->
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">एनसीवीटी प्रायोगिक परीक्षा: <span class="StarMarking">*</span></label>
+            <input formControlName="NCVTPracticalExam" class="form-input" type="text" placeholder="एनसीवीटी प्रायोगिक परीक्षा भरें" />
+            <div *ngIf="isSubmitted&&form.NCVTPracticalExam.errors" class="text-danger">
+              <p *ngIf="!form.NCVTPracticalExam.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षा की दिनांक: <span class="StarMarking">*</span></label>
+            <input onkeydown="return false"
+                   onpaste="return false"
+                   onkeypress="return false"
+                   oninput="return false" formControlName="DateOfExamination" class="form-input" type="date" />
+            <div *ngIf="isSubmitted&&form.DateOfExamination.errors" class="text-danger">
+              <p *ngIf="!form.DateOfExamination.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">परीक्षा व्यवसाय: <span class="StarMarking">*</span></label>
+            <select formControlName="Trade" class="form-select">
+              <option value='0'>--Trade list as per exam centre--</option>
+              <option *ngFor="let item of TradeList" [value]="item.Id">{{item.TradeName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.Trade.errors" class="text-danger">
+              <p *ngIf="!form.Trade.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रायोगिक परीक्षा केन्द्र की कोड संख्या व नाम: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalExamCentre" class="form-input" type="text" value="201 - Center Name" />
+            <div *ngIf="isSubmitted&&form.PracticalExamCentre.errors" class="text-danger">
+              <p *ngIf="!form.PracticalExamCentre.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">केन्द्राधीक्ष का नाम: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalSuperintendentName" class="form-input" type="text" placeholder="प्रायोगिक परीक्षक का नाम भरें" />
+            <div *ngIf="isSubmitted&&form.PracticalSuperintendentName.errors" class="text-danger">
+              <p *ngIf="!form.PracticalSuperintendentName.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">केन्द्राधीक्ष का सर्पक नम्बर: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalSuperintendentNumber" class="form-input" type="number" placeholder="प्रायोगिक परीक्षक का नाम भरें" />
+            <div *ngIf="isSubmitted&&form.PracticalSuperintendentNumber.errors" class="text-danger">
+              <p *ngIf="!form.PracticalSuperintendentNumber.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कोर्डिनेटर का नाम: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalCoOrdinatorName" class="form-input" type="text" placeholder="कोर्डिनेटर का नाम भरें" />
+            <div *ngIf="isSubmitted&&form.PracticalCoOrdinatorName.errors" class="text-danger">
+              <p *ngIf="!form.PracticalCoOrdinatorName.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कोर्डिनेटर का पद: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalCoOrdinatorDesignation" class="form-input" type="text" placeholder="कोर्डिनेटर का पद भरें" />
+            <div *ngIf="isSubmitted&&form.PracticalCoOrdinatorDesignation.errors" class="text-danger">
+              <p *ngIf="!form.PracticalCoOrdinatorDesignation.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कोर्डिनेटर का सर्पक नम्बर: <span class="StarMarking">*</span></label>
+            <input formControlName="PracticalCoOrdinatorNumber" (keypress)="numberOnly($event)" class="form-input" type="number" placeholder="कोर्डिनेटर का सर्पक नम्बर भरें" />
+            <div *ngIf="isSubmitted&&form.PracticalCoOrdinatorNumber.errors" class="text-danger">
+              <p *ngIf="!form.PracticalCoOrdinatorNumber.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कुल पंजीकृत संस्थानों की संख्या, जिनकी प्रायोगिक परीक्षा उक्त केन्द्र पर करवाई गई: <span class="StarMarking">*</span></label>
+            <input formControlName="NoOfRegisteredInstitutes" class="form-input" (keypress)="numberOnly($event)" type="text" placeholder="कुल पंजीकृत संस्थानों की संख्या भरें जिनकी प्रायोगिक परीक्षा उक्त केन्द्र पर करवाई गई" />
+            <div *ngIf="isSubmitted&&form.NoOfRegisteredInstitutes.errors" class="text-danger">
+              <p *ngIf="!form.NoOfRegisteredInstitutes.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">उपस्थित परीक्षकों का विवरण (अलग से संलग्न करें): <span class="StarMarking">*</span></label>
+            <input formControlName="DetailsOfPresentExaminers" class="form-input" type="number" placeholder="उपस्थित परीक्षकों का विवरण भरें" />
+            <div *ngIf="isSubmitted&&form.DetailsOfPresentExaminers.errors" class="text-danger">
+              <p *ngIf="!form.DetailsOfPresentExaminers.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> क्या मार्किंग शीट का लिफाफा सं. 01 प्रायोगिक परीक्षक से लेकर जमा करा दिया गया है: <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isMarkingSheetEnvelopeSubmitted" name="isMarkingSheetEnvelopeSubmitted" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isMarkingSheetEnvelopeSubmitted" name="isMarkingSheetEnvelopeSubmitted" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isMarkingSheetEnvelopeSubmitted.errors" class="text-danger">
+                <p *ngIf="!form.isMarkingSheetEnvelopeSubmitted.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> क्या प्रायोगिक परीक्षा की कॉपियों का लिफाफा व जॉब सं. 02 कोर्डिनेटर द्वारा नोडल केन्द्र पर शील्ड कर जमा करा दिया गया है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isCopyEnvelopeJob2Submitted" name="isCopyEnvelopeJob2Submitted" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isCopyEnvelopeJob2Submitted" name="isCopyEnvelopeJob2Submitted" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isCopyEnvelopeJob2Submitted.errors" class="text-danger">
+                <p *ngIf="!form.isCopyEnvelopeJob2Submitted.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या प्रायोगिक परीक्षा का पर्णप्रति पर्ण का लिफाफा सं. 03 प्रायोगिक परीक्षक से लेकर जमा करा दिया गया है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isPracticalCopyEnvelopeSubmitted" name="isPracticalCopyEnvelopeSubmitted" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isPracticalCopyEnvelopeSubmitted" name="isPracticalCopyEnvelopeSubmitted" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isPracticalCopyEnvelopeSubmitted.errors" class="text-danger">
+                <p *ngIf="!form.isPracticalCopyEnvelopeSubmitted.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> क्या प्रायोगिक परीक्षक का मानदेय का लिफाफा सं. 04 कोर्डिनेटर द्वारा जमा करा दिया गया है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isHonorariumEnvelopeSubmitted" name="isHonorariumEnvelopeSubmitted" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isHonorariumEnvelopeSubmitted" name="isHonorariumEnvelopeSubmitted" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isHonorariumEnvelopeSubmitted.errors" class="text-danger">
+                <p *ngIf="!form.isHonorariumEnvelopeSubmitted.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या प्रायोगिक परीक्षा के प्रेक्टिकल के जॉब शील बन्द बौरे में नोडल केन्द्र पर जमा करा दिये गये है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isSealedPracticalJobsSubmitted" name="isSealedPracticalJobsSubmitted" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isSealedPracticalJobsSubmitted" name="isSealedPracticalJobsSubmitted" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isSealedPracticalJobsSubmitted.errors" class="text-danger">
+                <p *ngIf="!form.isSealedPracticalJobsSubmitted.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">केन्द्राधीक्षक की रिर्पोट का प्रारूप संलग्न है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isCenterReportAttached" name="isCenterReportAttached" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isCenterReportAttached" name="isCenterReportAttached" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isCenterReportAttached.errors" class="text-danger">
+                <p *ngIf="!form.isCenterReportAttached.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्या प्रायोगिक परीक्षक को उसके मानदेय रूपये का भुगतान कर दिया गया है। / उसका मानदेय बिल रूपये के भुगतान हेतु कोर्डिनेटर द्वारा सत्यापित कर दिया गया है : <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isHonorariumPaidOrVerified" name="isHonorariumPaidOrVerified" value="Yes" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="isHonorariumPaidOrVerified" name="isHonorariumPaidOrVerified" value="No" /> No</label>
+              <div *ngIf="isSubmitted&&form.isHonorariumPaidOrVerified.errors" class="text-danger">
+                <p *ngIf="!form.isHonorariumPaidOrVerified.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रायोगिक परीक्षक को उसके मानदेय रूपये: <span class="StarMarking">*</span></label>
+            <input class="form-input" type="text" (keypress)="numberOnly($event)" formControlName="honorariumAmount" placeholder="प्रायोगिक परीक्षक को उसके मानदेय रूपये" />
+            <div *ngIf="isSubmitted&&form.honorariumAmount.errors" class="text-danger">
+              <p *ngIf="!form.honorariumAmount.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">प्रायोगिक परीक्षक बाबत् अन्य कोई टिप्पणी जो कोर्डिनेटर ने अलग से प्रस्तुत की हैं: <span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="OtherInfo" name="OtherInfo" value="Yes"  (change)="onOtherInfoChange()" /> Yes</label>
+              <label class="flex items-center me-2"><input type="radio" class="me-1" formControlName="OtherInfo" name="OtherInfo" value="No"  (change)="onOtherInfoChange()" /> No</label>
+              <div *ngIf="isSubmitted&&form.OtherInfo.errors" class="text-danger">
+                <p *ngIf="!form.OtherInfo.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="this.ExamCoOrdinatorRelivingForm.value.OtherInfo=='Yes'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">टिप्पणी<span class="StarMarking">*</span></label>
+            <textarea class="form-input" formControlName="OtherInfoText" placeholder="टिप्पणी"></textarea>
+            <div *ngIf="isSubmitted&&form.OtherInfoText.errors" class="text-danger">
+              <p *ngIf="!form.OtherInfoText.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">अलग से शील्ड बन्द लिफाफे में प्रस्तुत करें</label>
+            <textarea class="form-input" formControlName="AdditionalExaminerRemarksSubmitted" placeholder="अलग से शील्ड बन्द लिफाफे में प्रस्तुत करें"></textarea>
+            <div *ngIf="isSubmitted&&form.AdditionalExaminerRemarksSubmitted.errors" class="text-danger">
+              <p *ngIf="!form.AdditionalExaminerRemarksSubmitted.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
+          <div class="text-center">
+            <button class="btn btn-sm bg-info text-white" type="submit">Submit</button>
+            <a routerLink="/CenterExamCoordinator" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

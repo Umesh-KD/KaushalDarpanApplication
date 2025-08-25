@@ -1,0 +1,254 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Campus Post List</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Placement</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/campuspostlist" class="text-sm font-medium text-slate-700" aria-current="page">Campus Post List</a>
+    </div>
+  </div>
+  <a routerLink="/campuspost" class="btn bg-info text-white btn-sm">Add New Campus Post</a>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>
+          <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="CompanyID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="ApprovedStatus">
+            <option value="0">--All--</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Suspend">Suspend</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <div  class="btn text-white StateLevelPoolCampus mt-4"></div><label>State Level Pool Campus</label>
+        <div  class="btn text-white InstituteLevelCampus mt-4"></div><label>Institute Level Campus</label>
+        <div  class="btn text-white DivisionLevelPoolCampus mt-4"></div><label>Division Level Pool Campus</label>
+        <!--<div  class="btn text-white SuspendLevelCampus mt-4"></div><label>Suspend Level Campus</label>-->
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div class="">
+      </div><div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="flex">
+        <!--<select id="ddlConter" class="form-select couterDropDown me-2">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>-->
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+    <!--{{campusvalidationlistdata|json}}-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">Campus ID</th>
+            <th class="text-left">TPO CollegeName </th>
+            <th class="text-left">TPO Details</th>
+            <th class="text-left">Campus CreateDateAndTime</th>
+            <th class="text-left">Company</th>
+            <th class="text-left">HR Details</th>
+            <th class="text-left">Venue Details</th>
+            <th class="text-left">Role Details</th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+            <th class="text-center" *ngIf="GetRoleID == _EnumRole.TPO" >Upload Signed Copy Of result</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of CampusValidationListData | tableSearchFilter:Table_SearchText;let idx=index;" [ngClass]="row.CampusTypeClass">
+            <!--<tr *ngFor="let row of CampusValidationListData | tableSearchFilter:Table_SearchText;let idx=index;" [ngClass]="row.Status === 'Suspend' ? 'SuspendLevelCampus' : row.CampusTypeClass">-->
+            <td style="border-color: #b4cedf;">{{idx+1}} -- {{row.CampusTypeStatus}}</td>
+            <!--<td width="120px">{{row.PostNo}}</td>-->
+            <td style="border-color: #b4cedf;" width="140px">
+              {{ ('2025-26')+ '-' + (row.InstituteCode | number:'3.0') + '-' + row.Dis_PostId }}
+            </td>
+            <td style="border-color: #b4cedf;">
+              <p><b>{{row.TPOCollegeName}}</b></p>
+              <p>({{row.TPOSSOID}})</p>
+            </td>
+
+            <td style="border-color: #b4cedf;">
+              <p *ngIf="row.TPO_Name">
+                {{ row.TPO_Name }} ({{ row.TPO_Mobile }})
+              </p>
+            </td>
+
+            <td style="border-color: #b4cedf;">
+              <p>{{row.DateAndTime}}</p>
+            </td>
+
+            <td style="border-color: #b4cedf;">
+              <p><b>{{row.CompanyName}}</b></p>
+              <p>{{row.Address}}</p>
+              <p>
+                <a [href]="'https://' + row.Website" target="_blank">
+                  {{row.Website}}
+                </a>
+              </p>
+            </td>
+            <td style="border-color: #b4cedf;">
+              <p><b>{{row.HR_Name}}</b></p>
+              <p style=""><i class="ti ti-phone"></i> +91-{{row.HR_MobileNo}}</p>
+              <p style=""><i class="ti ti-mail"></i> {{row.HR_Email}}</p>
+            </td>
+
+            <td style="border-color: #b4cedf;">
+              <p><b>{{row.CampusVenue}}</b></p>
+              <p style="">{{row.CampusFromDate}} to {{row.CampusToDate}}</p>
+              <p style="">{{row.CampusAddress}}</p>
+            </td>
+
+            <td style="border-color: #b4cedf;"><div [innerHtml]="row.RoleDetails" class="role-detail-of"> </div></td>
+            <td style="border-color: #b4cedf;">
+              {{row.Status}}
+              <div class="flex" *ngIf="row.Status === 'Suspend' && row.SuspendDocumnet">
+                <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.SuspendDocumnet }}"
+                   class="btn bg-primary text-white m-0"
+                   target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </div>
+            </td>
+            <td style="border-color: #b4cedf;" align="center">
+
+              <div class="flex align-center justify-center actionBtns w-auto" style="width: 100px; height: 30px;">
+
+                <a href="javascript:void(0);" *ngIf="( row.Status !='Suspend' && row.Status=='Approved' )" title="Show QR Code" (click)="showQRCode(row)">
+                  <i class="ti ti-qrcode"></i>
+                </a>
+
+                <a href="javascript:void(0);" (click)="openModal(modal_Open,row.PostID)" id="btnEdit" *ngIf="( row.Status !='Suspend' && row.Status=='Approved' )" title="Edit"><i class="ti ti-eye"></i></a>
+                <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID }" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend' && (row.Status =='Approved' && GetRoleID != 6))"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" id="btnDelete" *ngIf="(row.Status !='Suspend' && row.Status=='Pending')" title="Delete" (click)="btnDelete_OnClick(row.PostID)"><i class="ti ti-trash"></i></a>
+              </div>
+
+              <!--<div *ngIf="qrModalVisible" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div class="bg-white p-5 rounded shadow-lg w-96 text-center relative">
+        <h3 class="mb-3 text-lg font-semibold">Scan QR Code</h3>
+
+        <ngx-qrcode [qrc-value]="qrCodeData"></ngx-qrcode>
+
+        <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded" (click)="qrModalVisible = false">Close</button>
+      </div>
+    </div>-->
+
+            </td>
+            <td style="border-color: #b4cedf;" *ngIf="GetRoleID == _EnumRole.TPO">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Upload Signed Copy Of Result" (click)="onUploadSignedCopyOfResult(row.PostID)" *ngIf="( row.Status !='Suspend')"><i class="ti ti-edit"></i></a>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Consent Student List </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <table class="w-full table-border" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                <tr class="text-left">
+                  <th>Sr No</th>
+                  <th>Student Name</th>
+                  <th>Father Name</th>
+                  <th>Institute Name</th>
+                  <th>Semester Name</th>
+                  <th>Branch Name</th>
+                  <th>EnrollmentNo</th>
+                  <th>MobileNo</th>
+                  <th>Consent Date</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let row of studentconsentlist | tableSearchFilter:Table_SearchText;let idx=index;">
+                  <td>
+                    {{idx+1}}
+                  </td>
+                  <td>
+                    {{row.StudentName}}
+                  </td>
+                  <td>
+                    {{row.FatherName}}
+                  </td>
+                  <td>
+                    {{row.InstituteName}}
+                  </td>
+                  <td>
+                    {{row.StreamName}}
+                  </td>
+                  <td>
+                    {{row.SemesterName}}
+                  </td>
+                  <td>
+                    {{row.EnrollmentNo}}
+                  </td>
+                  <td>
+                    {{row.MobileNo}}
+                  </td>
+                  <td>
+                    {{row.ConsentDate}}
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer text-center">
+            <!--<button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

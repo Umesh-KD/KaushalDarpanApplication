@@ -1,0 +1,150 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Guest Room Type / Seats/No. of Rooms' : 'Create Guest Room Type / Seats / No. of Rooms' }}</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/guest-house-room-seat-master']" class="text-sm font-medium text-slate-700" aria-current="page">{{isUpdate ? 'Update Seat / Guest Room Type' : 'Add Seat / Guest Room Type'}}</a>
+    </div>   
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Guest Room Type / Seats / No. of Rooms' : 'Add Guest Room Type / Seats/ No. of Rooms' }}</b>
+    </div>
+    <form [formGroup]="groupForm" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
+          <select formControlName="ddlGuestHouseID" class="form-select" id="GuestHouseID" [(ngModel)]="request.GuestHouseID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GuestHouseNameList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _groupForm.ddlGuestHouseID.errors" class="text-danger">
+            <p *ngIf="!_groupForm.ddlGuestHouseID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+          <select formControlName="txtRoomType" class="form-input" type="text" id="RoomType" placeholder="Enter Room Type"
+                  [(ngModel)]="request.RoomType" (change)="changeSeats()">
+            <option value="0">--Choose Room Type--</option>
+            <!--<option *ngFor="let item of RoomTypeList" [value]="item.ID">{{item.Name}}</option>-->
+            <option value="172">1 Bed</option>
+            <option value="173">2 Bed</option>
+            <option value="174">3 Bed</option>
+            <option value="175">4 Bed</option>
+            <option value="176">Dormitory/Hall</option>
+          </select>
+          <small>(1 Bed, 2 Bed, 3 Bed, 4 Bed)</small>
+          <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+            <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Capacity</label>
+          <input formControlName="txtSeatCapacity" class="form-input" type="text" id="SeatCapacity" placeholder="Enter Seat Capacity"
+                 [(ngModel)]="request.SeatCapacity">
+          <div *ngIf="isSubmitted && groupForm.controls.txtSeatCapacity.errors" class="text-danger">
+            <p *ngIf="_groupForm.txtSeatCapacity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Room Quantity <span class="StarMarking">*</span>
+          </label>
+          <input formControlName="txtRoomQuantity"
+                 class="form-input"
+                 type="text"
+                 id="RoomQuantity"
+                 placeholder="Enter Room Quantity"
+                 [(ngModel)]="request.RoomQuantity"
+                 maxlength="3"
+                 (keypress)="validateNumber($event)">
+          <div *ngIf="groupForm.controls.txtRoomQuantity.hasError('required') && groupForm.controls.txtRoomQuantity.touched"
+               class="text-danger">
+            This field is required!
+          </div>
+          <div *ngIf="groupForm.controls.txtRoomQuantity.hasError('min') && groupForm.controls.txtRoomQuantity.touched"
+               class="text-danger">
+            Room quantity cannot be zero!
+          </div>
+          <div *ngIf="groupForm.controls.txtRoomQuantity.hasError('pattern') && groupForm.controls.txtRoomQuantity.touched"
+               class="text-danger">
+            Only numbers are allowed!
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees <span class="StarMarking">*</span></label>
+          <input formControlName="txtRoomFee" class="form-input" type="text" id="RoomFee" placeholder="Enter Room Fees"
+                 [(ngModel)]="request.RoomFee" (keypress)="validateNumber($event)" maxlength="6">
+          <div *ngIf="groupForm.controls.txtRoomFee.hasError('required') && groupForm.controls.txtRoomFee.touched"
+               class="text-danger">
+            This field is required!
+          </div>
+          <div *ngIf="groupForm.controls.txtRoomFee.hasError('min') && groupForm.controls.txtRoomFee.touched"
+               class="text-danger">
+            Room fee cannot be zero!
+          </div>
+          <div *ngIf="groupForm.controls.txtRoomFee.hasError('pattern') && groupForm.controls.txtRoomFee.touched"
+               class="text-danger">
+            Only numbers are allowed!
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" class="btn bg-info text-white mb-4 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Guest Room / Seat List</b>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Guest House Name</th>
+            <th class="text-left">Room Type</th>
+            <th class="text-left">Seat Capacity</th>
+            <th class="text-left">Room Quantity</th>
+            <th class="text-left">Room Fee</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of GuestRoomList;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.GuestHouseName}}</td>
+            <td>{{item.RoomTypeName}}</td>
+            <td>{{item.SeatCapacity}}</td>
+            <td>{{item.RoomQuantity}}</td>
+            <td>{{item.FeePerBad}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)=" GetByGRSMasterID(item.GRSMasterID)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" (click)=" DeleteDataByGRSMasterID(item.GRSMasterID)" title="Delete"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,185 @@
+<!--Page Title Start-->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{IssuedId>0?'Edit':'Add'}} Issued</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/NodalOfficer" class="text-sm font-medium text-slate-700" aria-current="page">Issued</a>-->
+      <a [routerLink]="['/NodalOfficer']" class="text-sm font-medium text-slate-700" aria-current="page">Issued</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{IssuedId>0?'Edit':'Add'}}
+        Issued
+      </a>
+    </div>
+  </div>
+  <!--<a href="DteIssuedItems" class="inline-flex items-center btn bg-dark text-white btn-sm">-->
+  <a [routerLink]="['/DteIssuedItems']"  class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!--Page Title End-->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{IssuedId>0?'Edit':'Add'}} Issued</b>
+    </div>
+    <form [formGroup]="RequestFormGroup" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Branch: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="ddlTradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="StreamName"
+                     bindValue="StreamID" placeholder="--Select--" [searchable]="true" [clearable]="true"
+                     [searchFn]="customSearch" (change)="GetCategoryDDL()" [loading]="isLoading" [loadingText]="'Loading...'">
+          </ng-select>
+
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlTradeId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlTradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Category: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="ddlCategoryId" [(ngModel)]="request.CategoryId" [items]="CategoryddlList" bindLabel="Name"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true"
+                     [searchFn]="customSearch" (change)="GetEquipmentDDL($event)" [loading]="isLoading" [loadingText]="'Loading...'">
+          </ng-select>
+
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlCategoryId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlCategoryId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+
+        <!--{{EquipmentddlList|json}}-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="ddlEquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentddlList" bindLabel="Name"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true" [searchFn]="customSearch"
+                     [loading]="isLoading" [loadingText]="'Loading...'" (change)="GetitemsDDL()">
+            <!--<ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>-->
+          </ng-select>
+
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlEquipmentsId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlEquipmentsId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Item: <span class="StarMarking">*</span>
+          </label>
+          <select formControlName="ddlItemId" class="form-select" id="ddlItemId" [(ngModel)]="request.ItemId">
+            <option value="0">--Select--</option>
+
+            <option *ngFor="let item of ItemddlList" [value]="item.EquipmentsId">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _RequestFormGroup.ddlItemId.errors" class="text-danger">
+            <p *ngIf="!_RequestFormGroup.ddlItemId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.!
+            </p>
+          </div>
+        </div> -->
+
+        <div>
+          <label for="IssueNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Issue Number: <span class="StarMarking">*</span>
+          </label>
+          <!--<input type="text" class="form-input" id="txtIssueNumber" name="IssueNumber" formControlName="txtIssueNumber"
+                     [(ngModel)]="request.IssueNumber"  (keypress)="allowOnlyNumbers($event)"  (change)="request.IssueNumber = filterNumber(request.IssueNumber)"
+    maxlength="10">-->
+          <input type="text"
+                 class="form-input"
+                 id="txtIssueNumber"
+                 name="IssueNumber"
+                 formControlName="txtIssueNumber"
+                 [(ngModel)]="request.IssueNumber"
+                 (keypress)="allowOnlyNumbers($event)"
+                 (change)="request.IssueNumber = +filterNumber(request.IssueNumber)"
+                 maxlength="10" />
+          <div *ngIf="isSubmitted && _RequestFormGroup.txtIssueNumber.errors" class="text-danger">
+            <p *ngIf="_RequestFormGroup.txtIssueNumber.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+            <!-- Check for pattern error -->
+            <p *ngIf="_RequestFormGroup.txtIssueNumber.errors.pattern">
+              <i aria-hidden="true"></i>
+              Only Positive numbers are allowed in the Voucher field!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="IssueNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Issue Quantity: <span class="StarMarking">*</span>
+          </label>
+          <input type="text"
+                 class="form-input"
+                 id="txtIssueQuantity"
+                 name="IssueQuantity"
+                 formControlName="txtIssueQuantity"
+                 [(ngModel)]="request.IssueQuantity"
+                 (keypress)="allowOnlyNumbers($event)"
+                 maxlength="10" />
+          <div *ngIf="isSubmitted && _RequestFormGroup.txtIssueQuantity.errors" class="text-danger">
+            <p *ngIf="_RequestFormGroup.txtIssueQuantity.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+            <!-- Check for pattern error -->
+            <p *ngIf="_RequestFormGroup.txtIssueQuantity.errors.pattern">
+              <i aria-hidden="true"></i>
+              Only Positive numbers are allowed in the Voucher field!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="IssueDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            IssueDate: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="IssueDate" name="IssueDate" formControlName="IssueDate"
+                 [ngModel]="request.IssueDate | date:'yyyy-MM-dd'" [min]="today.toISOString().split('T')[0]">
+          <div *ngIf="isSubmitted && _RequestFormGroup.IssueDate.errors" class="text-danger">
+            <p *ngIf="_RequestFormGroup.IssueDate.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+

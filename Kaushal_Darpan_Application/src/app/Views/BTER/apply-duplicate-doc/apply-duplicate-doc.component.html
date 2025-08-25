@@ -1,0 +1,146 @@
+<!-- Page Title Start -->
+<!--<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Grievance</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Grievance</a>
+    </div>
+  </div>
+</div>-->
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Apply For Duplicate Document</b>
+        <!--<div>
+            <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+            <a href="javascript:void(0);" class="btn bg-info text-white btn-sm"><i class="ti ti-download"></i>Export ITIs</a>
+        </div>-->
+      </div>
+      <form [formGroup]="GrievanceFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Document <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDoc')">
+              <option value=0 selected>--Choose Option--</option>
+              <option value="Marksheet" selected>Marksheet</option>
+              <option value="Migration" selected>Migration</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
+              <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
+            <select class="form-select" id="SemesterID" name="SemesterID" [(ngModel)]="request.SemesterID" formControlName="SemesterID">
+              <option value=0>--Choose Option--</option>
+              <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.SemesterID.errors" class="text-danger">
+              <p *ngIf="!form.SemesterID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Department <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID">
+              <option value=0 selected>--Choose Option--</option>
+              <option value=1 selected>BTER</option>
+              <option value=1 selected>Nodel Center</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlDepartmentID.errors" class="text-danger">
+              <p *ngIf="!form.ddlDepartmentID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Application/Enrollment No.
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Application/Enrollment No." formControlName="ApplicationNo" [(ngModel)]="request.ApplicationNo">
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Fees Amount
+            </label>
+            <input type="text" class="form-input" formControlName="FeeAmount" [(ngModel)]="request.FeeAmount">
+          </div>
+
+          <div class="card-footer text-center">
+            <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() "><i class="ti ti-currency-rupee"></i> Pay Now</button>
+          </div>
+
+        </div>
+      </form>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" style="width:100px">S.No</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Student ID</th>
+            <th class="text-left">Service ID</th>
+            <th class="text-left">Fees Amount</th>
+            <th class="text-left">Apply For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of PaymentDetailtList let idx=index;">
+            <td>{{idx+1}}</td>
+            <td align="left">{{item.UserName}}</td>
+            <td align="left">{{item.StudentID}}</td>
+            <td align="left">{{item.ServiceID}}</td>
+            <td align="left">{{item.Amount}}</td>
+            <td align="left">{{item.FeeFor}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

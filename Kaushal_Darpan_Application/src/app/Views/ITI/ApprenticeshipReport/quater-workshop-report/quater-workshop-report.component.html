@@ -1,0 +1,219 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Quarterly Progress Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Quarterly Progress Report</a>
+    </div>
+  </div>
+  <!--<a  routerLink="/PMNAM-MelaReportBeforeAfter" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Add</a>-->
+ 
+ 
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
+        <a *ngIf="SSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">त्रैमासिक अवधि  <span class="StarMarking">*</span></label>
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.QuaterID">
+
+            <option value="0">Choose Option</option>
+            <!--<option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.StreamName}}</option>-->
+            <option value="1">प्रथम त्रैमासिक</option>
+            <option value="2">द्वितीय त्रैमासिक</option>
+            <option value="3">तृतीय त्रैमासिक</option>
+            <option value="4">चतुर्थ त्रैमासिक</option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.DistrictID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+
+
+          </select>
+
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+      </div>
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <!--<select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>-->
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left whitespace-nowrap">Sr. No</th>
+              <th class="text-left">जिला</th>
+              <!--<th class="text-left"><span class="main-heading">भाग लेने वाले AAA का नाम</span></th>-->
+              <th class="text-left">कार्यशाला की तिथि</th>
+              <th class="text-left"><span class="main-heading">कार्यशाला मे दिये गये प्रजेंटेशन / जानक ारी का संक्षिप्त विवरण</span></th>
+              <th class="text-center" colspan="3">त्रैमास के प्रारंभ मे स्थिति</th>
+              <th class="text-center" colspan="3">त्रैमास की समाप्ति पर स्थिति</th>
+              <th class="text-center" colspan="3">त्रैमास में हुई वृद्धि</th>
+
+              <th class="text-left"><span class="main-heading">त्रैमास के दौरान शिक्षु पोर्टल पर फ्रेशर शिक्षुओं के पंजीयन की संख्या (सूची संलग्न करे)</span></th>
+              <th class="text-left"><span class="main-heading">त्रैमास के दौरान आई. टी. आई ग्रेजुए ट के पोर्टल पर पंजीय न की संख्या (सूची संलग्न करे)</span></th>
+              <!--<th class="text-left">विविध विवरण</th>-->
+              <th class="text-left">Action</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+
+              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
+              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
+              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
+
+              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
+              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
+              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
+
+
+              <th class="text-left whitespace-nowrap">प्रतिष्ठानों की संख्या</th>
+              <th class="text-left whitespace-nowrap">सीट् की संख्या</th>
+              <th class="text-left"><span class="heading-span">पोर्टल पर नियोंजित शिक्षुओं की संख्या</span></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <!--<th></th>-->
+              <!--<th></th>-->
+            </tr>
+
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+
+              <td align="left">{{idx+1}}</td>
+              <td>{{row.DistrictName}}</td>
+              <!--<td>{{row.ParticipateName}}</td>-->
+              <td class="whitespace-nowrap">{{row.WorkshopDateFormatted}}</td>
+              <td><span>{{row.workshopdetail}}</span></td>
+              <td>{{row.BeforeEstablishmentNo}}</td>
+              <td>{{row.BeforeEstablishmentSeat}}</td>
+              <td>{{row.BeforeStudentCount}}</td>
+              <td>{{row.AfterEstablishmentNo}}</td>
+              <td>{{row.AfterEstablishmentSeat}}</td>
+              <td>{{row.AfterStudentCount}}</td>
+              <td>{{row.QuaterIncreaseEstablishment}}</td>
+              <td>{{row.QuaterIncreaseSeat}}</td>
+              <td>{{row.QuaterIncreaseStudent}}</td>
+              <td class="text-center">
+                <a class="btn bg-success text-white" type="button" title="View"  (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.RegisterStudentPdf)">
+                  View
+                </a>
+                  
+              </td>
+
+              <td class="text-center">
+                <a class="btn bg-success text-white" type="button" title="View" (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + row.WorkshopPdf)">
+                  View
+                </a>
+
+              </td>
+
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>-->
+                  <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="View" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                  <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="view" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                  <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+      </div>
+
+
+
+
+  </div>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div cdkDrag class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- Preview Content -->
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        <!-- PDF Preview -->
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        <!-- Image Preview -->
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <!--<pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>-->
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Examiner Detail Report</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page"> Student Examiner Detail Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card" style="overflow:visible;">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+   
+      <div>
+        <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+        <ng-select formControlName="selectedSemester" [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          <ng-option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+        </ng-select>
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Export Execl </button>
+        
+      </div>
+    </div>  
+
+  </div>
+</div>
+
+

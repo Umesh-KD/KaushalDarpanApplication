@@ -1,0 +1,85 @@
+
+<form [formGroup]="LoginForm" class="form-horizontal" (ngSubmit)="Login()">
+  <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6 flex justify-center" style="margin-top:100px">
+    <a href="javascript:void(0);" class="flex logoTxt login">
+      <b>
+        Authentication.<br />
+        This Is One Time Authentication. Please enter your
+        login details given by Admin!
+      </b>
+    </a>
+
+    <h3 *ngIf="sSOLoginDataModel?.SSOID">Entered SSSOID:- <b>{{ sSOLoginDataModel?.SSOID }}</b></h3>
+
+    <div class="card tab-panels">
+      <div class="card-body p-5">
+        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+          <!-- Depatment -->
+          <div>
+            <label for="depatmentID" class="text-gray-800 text-sm font-medium inline-block mb-1">Depatment <span class="StarMarking">*</span></label>
+            <select formControlName="depatmentID" class="form-input" type="text">
+              <option value="0">--Choose Depatment Type--</option>
+              <option value="1">BTER</option>
+              <option value="2">ITI</option>
+            </select>
+            <div *ngIf="isSubmitted && LoginForm.get('depatmentID')?.errors" class="text-danger">
+              <p *ngIf="!LoginForm.get('depatmentID')?.errors?.['DropdownValidators']">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <!-- College Code -->
+          <div>
+            <label for="txtUserID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              College Code <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off"
+                   type="text"
+                   class="form-input"
+                   id="txtUserID"
+                   placeholder="Enter User Name"
+                   formControlName="txtUserID"
+                   (keyup.enter)="GotoPassword()" />
+            <div *ngIf="isSubmitted && LoginForm.get('txtUserID')?.errors" class="text-danger">
+              <p *ngIf="LoginForm.get('txtUserID')?.errors?.['required']">
+                <i aria-hidden="true"></i> This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div>
+            <label for="txtPassword" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              Password <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off"
+                   type="password"
+                   class="form-input"
+                   id="txtPassword"
+                   placeholder="Enter Your Password"
+                   formControlName="txtPassword"
+                   (keyup.enter)="Login()" />
+            <div *ngIf="isSubmitted && LoginForm.get('txtPassword')?.errors" class="text-danger">
+              <p *ngIf="LoginForm.get('txtPassword')?.errors?.['required']">
+                <i aria-hidden="true"></i> This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button type="submit" class="btn bg-info text-white">
+              Validate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center">
+      © DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN
+    </div>
+  </div>
+</form>
+
+

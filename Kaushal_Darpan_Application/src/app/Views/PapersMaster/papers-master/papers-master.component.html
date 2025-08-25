@@ -1,0 +1,165 @@
+  <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Masters</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Papers</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/addpapersmaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Paper Name</label>
+          <input type="text" class="form-input" placeholder="Search By Paper Name" [(ngModel)]="searchByPaper" >
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch</label>
+          <select class="form-select" [(ngModel)]="searchByBranch" >
+            <option value="">Choose option</option>
+            <option *ngFor="let item of BranchList" [value]="item.StreamID"  >({{item.Code}}) {{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Semester</label>
+          <select class="form-select" id="StreamStreamTypeId" [(ngModel)]="searchBySemester" >
+            <option value="">Choose Option</option>
+            <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Code</label>
+          <input type="text" class="form-input" placeholder="Search By Subject Code" [(ngModel)]="searchBySubjectCode" >
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Category</label>
+          <input type="text" class="form-input" placeholder="Search By Subject Category" [(ngModel)]="searchBySubjectCategory">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Name</label>
+          <input type="text" class="form-input" placeholder="Search By Subject Name" [(ngModel)]="searchBySubjectName" >
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            
+            <th rowspan="3">Branch</th>
+            <th rowspan="3">Semester</th>
+            <th rowspan="3">Subject Category</th>
+            <th rowspan="3">Subject Code</th>
+            <th rowspan="3">Subjects</th>
+            <th colspan="4">Distribution Of Time</th>
+            <th colspan="7">Distribution Of Max. Marks/Duration</th>
+            <th rowspan="3">Total Marks</th>
+            <th rowspan="3">Credits</th>
+            <th rowspan="3">Common Subject</th>
+            <th rowspan="3" style="width:10%;">Action</th>
+          </tr>
+
+          <tr>
+            <th colspan="4">Hours per week</th>
+            <th colspan="4">End Semester Exam</th>
+            <th colspan="3">Internal Assessment</th>
+          </tr>
+
+          <tr>
+            <th>L</th>
+            <th>T</th>
+            <th>P</th>
+            <th>Tot</th>
+
+            <th>TH</th>
+            <th>Hrs.</th>
+            <th>PR</th>
+            <th>Hrs.</th>
+
+            <th>CT</th>
+            <th>TU</th>
+            <th>PR(S)</th>
+          </tr>
+        </thead>
+
+        <tbody> 
+          <tr *ngFor="let paper of PaperMasterList | tableSearchFilter:Table_SearchText;let idx=index;   ">
+            
+            <td>{{paper.BranchName}}</td>
+           
+            <td align="center">{{ paper.SemesterID }}</td>
+            <td>{{ paper.SubjectCat }}</td>
+            <td>{{ paper.SubjectCode }}</td>
+            <td>{{ paper.SubjectName }}</td>
+            <td>{{ paper.l }}</td>
+            <td>{{ paper.t }}</td>
+            <td>{{ paper.p }}</td>
+            <td>{{ paper.l + paper.t + paper.p }}</td> <!-- Total Hours -->
+            <td>{{ paper.th }}</td>
+            <td></td> <!-- Placeholder for exam duration -->
+            <td>{{ paper.pr }}</td>
+            <td></td> <!-- Placeholder for practical exam duration -->
+            <td>{{ paper.ct }}</td>
+            <td>{{ paper.tu }}</td>
+            <td>{{ paper.prs }}</td>
+            <td align="center">{{ paper.th + paper.pr + paper.ct + paper.tu + paper.prs }}</td> <!-- Total Marks -->
+            <td align="center">{{ paper.Credit }}</td>
+            <td align="center">{{ paper.SubjectName }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)="onEdit(paper.PaperID)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" (click)="btnDelete_OnClick(paper.PaperID)"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->

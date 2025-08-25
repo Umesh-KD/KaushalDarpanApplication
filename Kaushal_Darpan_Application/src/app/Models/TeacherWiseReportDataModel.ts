@@ -1,0 +1,26 @@
+export class TeacherWiseDataModels {
+  public SSOID: string = ''
+  public TeacherName: string = ''
+  public MobileNumber: string = ''
+  public Email: string = ''
+  public Branch: string = ''
+  public SemesterName: string = ''
+  public TeachingSubject: string = ''
+  public OptionalSubject: string = ''
+  public RemainingSubjects: string = ''
+  public CollegeName: string = ''
+}
+export class SubjectWiseDataModels {
+  public DateOfJoining: string = ''
+  public SSOID: string = ''
+  public TeacherName: string = ''
+  public MobileNumber: string = ''
+  public Email: string = ''
+  public Branch: string = ''
+  public SemesterName: string = ''
+  public DistrictName: string = ''
+  public DivisionName: string = ''
+  public TehsilName: string = ''
+  public SubjectNames: string = ''
+  public CollegeName: string = ''
+}

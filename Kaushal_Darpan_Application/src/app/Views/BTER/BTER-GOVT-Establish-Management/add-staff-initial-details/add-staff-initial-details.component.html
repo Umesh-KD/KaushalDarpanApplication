@@ -1,0 +1,163 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Staff Initial Details</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Add Staff Initial Details</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Initial Details</b>
+      <a href="/bter-em-stafflist" class="inline-flex items-center btn bg-dark text-white btn-sm" >
+        <i class="ti ti-chevron-left"></i> Back
+      </a>
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label for="txtFields" class="text-gray-800 text-sm font-medium inline-block mb-2">SSO ID<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="SSOID" name="SSOID" formControlName="SSOID" [(ngModel)]="formData.SSOID" placeholder="Enter SSO ID">
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.SSOID.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SSOIDGetSomeDetails(formData.SSOID)">Get Details</button>
+        </div>
+      </div>
+
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label for="Name" class="text-gray-800 text-sm font-medium inline-block mb-2">Name</label>
+          <input type="text" class="form-input" id="Name" name="Name" formControlName="Name" [(ngModel)]="formData.Name"  placeholder="Enter Name">
+        </div>
+
+        <div>
+          <label for="Mobile" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile</label>
+          <input type="text" class="form-input" id="Mobile" name="Mobile" formControlName="Mobile" [(ngModel)]="formData.MobileNo"  placeholder="Enter Mobile">
+        </div>
+        <div>
+          <label for="EmailID" class="text-gray-800 text-sm font-medium inline-block mb-2">Email</label>
+          <input type="text" class="form-input" id="EmailID" name="EmailID" formControlName="EmailID" [(ngModel)]="formData.EmailID"  placeholder="Enter EmailID">
+        </div>
+      </div>
+
+
+
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+        <!--{{RoleMasterList|json}}-->
+        <!--{{PostList|json}}-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+          <select class="form-select" name="StaffType" id="StaffType" formControlName="StaffType"
+                  [(ngModel)]="formData.StaffTypeID"  (change)="StaffTypeChangePost()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.StaffType.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.StaffType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID" (change)="roleBySubDepartment()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.InstituteID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.InstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Role <span class="StarMarking">*</span></label>
+          <select class="form-select " name="RoleID" id="RoleID" formControlName="RoleID"
+                  [(ngModel)]="formData.RoleID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.RoleID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.RoleID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is
+              required .!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <br />
+          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            <input type="checkbox" id="IsNodal" name="IsNodal"
+                   formControlName="IsNodal" [(ngModel)]="formData.IsNodal"> Is Nodal
+          </label>
+        </div>
+
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="formData.LevelID" formControlName="LevelID" (change)="GetOfficeList()">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.LevelID.errors" class="text-danger">
+      <p *ngIf="!_AddStaffBasicDetailFromGroup.LevelID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div>
+  </div> -->
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+    <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="Office" (change)="roleBySubDepartment()">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.Office.errors" class="text-danger">
+      <p *ngIf="!_AddStaffBasicDetailFromGroup.Office.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div>
+  </div>-->
+
+      </div>
+      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Save Details</button>
+        </div>
+      </div>
+    </form>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+<!-- Page Title Start -->
+<!--<div class="card mb-3">
+</div>-->
+
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Instructor</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+        <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
+        <a [routerLink]="['/ItiInstructor']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Instructor</a>
+        <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
+        <div >
+        </div>
+      </div>   
+    </div>
+  </div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <!-- <div class="flex align-right justify-center actionBtns w-auto" style="width:auto !important">     -->
+      <!-- <a routerLink="/center-superitendent-exam-report" class="inline-flex items-right btn bg-dark text-white btn-sm"><i class="ti ti-chevron-right"></i> ADD</a>  -->
+    <!-- </div> -->
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
+         <!--<a routerLink="/ItiInstructorForm" class="inline-flex items-right btn bg-info text-white btn-sm"><i class="ti ti-plus"></i>Add Instructor</a>--> 
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <!-- Search By ssoid or uid -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSOID / UID</label>
+          <input class="form-input" type="text" id="Uid" [(ngModel)]="InstructorBindSearch.Uid" placeholder="SSOID / UID" formControlName="Uid">
+          <!-- <div *ngIf="isSubmitted && _searchForm.collegeCode.errors" class="text-danger">
+      <p *ngIf="_searchForm.collegeCode.errors.required">
+        <i aria-hidden="true"></i> This field is
+        required.!
+      </p>
+    </div> -->
+        </div>
+
+
+        <!-- Search By college name -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By name</label>
+          <input class="form-input" type="text" id="Name" [(ngModel)]="InstructorBindSearch.Name" placeholder="Name" formControlName="Name">
+
+          <!-- <div *ngIf="isSubmitted&&_searchForm.collegeID.errors" class="text-danger">
+      <p *ngIf="!_searchForm.collegeID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div> -->
+        </div>
+
+
+        <!-- Search By college name -->
+        <!--<div>-->
+          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application</label>-->
+          <!--<input class="form-input" type="text" id="Name" [(ngModel)]="InstructorBindSearch.ApplicationNo" placeholder="Enter Application No" formControlName="ApplicationNo">-->
+
+          <!-- <div *ngIf="isSubmitted&&_searchForm.collegeID.errors" class="text-danger">
+      <p *ngIf="!_searchForm.collegeID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div> -->
+        <!--</div>-->
+
+
+        <!-- Search By distict name -->
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District</label>
+    <select formControlName="districtID" id="DistrictID" [(ngModel)]="MarksheetSearch.DistrictID" class="form-input">
+      <option value="0">Select District</option>
+      <option value="1">1st Year</option>
+      <option value="2">2nd Year</option>
+    </select>
+
+    <div *ngIf="isSubmitted&&_searchForm.districtID.errors" class="text-danger">
+      <p *ngIf="!_searchForm.districtID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div>
+  </div> -->
+
+        <div>
+          <button class="btn bg-info text-white mt-6 me-1" type="submit" (click)="GetItiInstructorDatas()"><i class="ti ti-search"></i>Search</button>
+          <button class="btn bg-danger text-white mt-6" type="button" (click)="onResetClick()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- <div class="card-body p-5" style="min-height:400px;" *ngIf="GetInstructorDataList.length > 0"> -->
+  <div class="card-body p-5" style="min-height:400px;">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> List</b>
+        <div class="flex justify-end flex-wrap items-center">
+
+        </div>
+      </div>
+    </div>
+    <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" *ngIf="GetInstructorDataList.length > 0"> -->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="paginatedInTableData && paginatedInTableData.length > 0" >
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Gender</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Mobile</th>
+            <th class="text-left">Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData; let idx = index">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ item.Name }}</td>
+            <td>{{ item.Dob | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ item.Gender }}</td>
+            <td>{{ item.Category }}</td>
+            <td>{{ item.Mobile }}</td>
+            <td>{{ item.Email }}</td>
+            <td class="text-center">
+              <button (click)="onViewDetail(item.ID)" title="View Detail">
+                <i class="ti ti-eye"></i>
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="paginatedInTableData.length == 0">
+            <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full" *ngIf="GetInstructorDataList.length > 0">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+  </div>
+</div>
+

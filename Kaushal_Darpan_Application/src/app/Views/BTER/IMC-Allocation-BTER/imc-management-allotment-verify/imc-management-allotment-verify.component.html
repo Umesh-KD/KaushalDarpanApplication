@@ -1,0 +1,234 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Verify Student Phone</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/IMCManagementAllotment" class="text-sm font-medium text-slate-700" aria-current="page">IMC Allocation</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/IMCManagementAllotmentVerify" class="text-sm font-medium text-slate-700" aria-current="page">Verify Student Phone</a>
+    </div>
+  </div>
+  <a routerLink="/IMCManagementAllotment" class="btn bg-dark btn-sm text-white"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<div class="card" *ngIf="DetailsBox==true">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Verify Student Phone</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 detailsList">
+
+      <div>
+        <b>Application Number</b>
+      </div>
+      <div>
+        {{StudentVerifyPhoneData[0]?.ApplicationID}}
+      </div>
+      <div>
+        <b>
+          Student Name
+        </b>
+      </div>
+      <div>
+        {{StudentVerifyPhoneData[0]?.StudentName}}
+      </div>
+      <div>
+        <b>
+          Student Father Name
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.FatherName}}</div>
+      <div>
+        <b>
+          Student Mother Name
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.MotherName}}</div>
+      <div>
+        <b>
+          Date of Birth
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.DOB | date:'dd-MM-yyyy'}}</div>
+      <div>
+        <b>
+          Email
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.Email}}</div>
+      <div>
+        <b>
+          Mobile
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.MobileNo}}</div>
+      <div>
+        <b>
+          Stream Name
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.StreamName}}</div>
+      <div>
+        <b>
+          Stream Type
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.StreamType}}</div>
+      <div>
+        <b>
+          Reporting Remark
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.ReportingRemark}}</div>
+      <div>
+        <b>
+          Alloted Type
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.AllotedType}}</div>
+      <div>
+        <b>
+          Joining Status
+        </b>
+      </div><div>{{StudentVerifyPhoneData[0]?.JoiningStatus}}</div>
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-6">
+      <div class="text-center" *ngIf="ApplicationAlloted==true">
+        <button type="button" class="btn bg-success text-white mt-6" (click)="openModalGenerateOTP(modal_GenrateOTP)">Change Allotment Type</button>
+        <button type="button" class="btn bg-primary text-white mt-6" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button>
+      </div>
+      <div class="text-center" *ngIf="ApplicationAlloted==false">
+        <p class="text-success">This Record already Alloted. It something wrong please go back and revert it. !! Thanks</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="card" *ngIf="TradeBox==true">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Application Details</b>
+    </div>
+    <div class="overflow-x-auto mt-3 mb-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Application ID</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Date of Birth</th>
+            <th class="text-left">Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentDetailsList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{item.ApplicationID}}</td>
+            <td>{{item.StudentName}}</td>
+            <td>{{item.dob | date:'dd-MM-yyyy'}}</td>
+            <td>{{item.CasteCategoryNameEnglish}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Choose Branch And Allot the seat</b>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">Branch Name</th>
+            <th class="text-left">Branch Type</th>
+            <th class="text-left">MGM Steats</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of StudentOptinalTradeList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.StreamTypeName}}</td>
+            <td *ngIf="item.MGM != 0"><button type="button" class="btn bg-info btn-sm text-white" (click)="TradeWithAllot(modal_ShiftUnit, item.CollgeStreamID, item.SeatMetrixId, 'MGM')">{{item.MGM}} - MGM Seat</button></td>
+            <td *ngIf="item.MGM == 0"><span class="text-danger">Seat Not Available</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!--<div class="card-footer text-center">
+    <button class="btn bg-info text-white" type="button" (click)="SaveTradeWithAllot()">Submit</button>
+  </div>-->
+</div>
+
+
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_ShiftUnit let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; Change Mobile No.
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Choose Shift and Unit</label>
+          <select class="form-select" [(ngModel)]="request.ShiftUnit">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of  ShiftUnitList" [value]="item.SeatIntakeID">Shift ({{item.Shift}}) - Unit ({{item.UnitNo}})</option>
+
+          </select>
+        </div>
+      </div>
+      <div class="card-footer text-center flex items-center justify-center mt-3">
+        <button (click)="SaveTradeWithAllot()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Allot Now</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_ChangeMobileNo let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; Change Mobile No.
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter New Mobile No.</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="NewMobileNo" placeholder="Enter New Mobile Number">
+        </div>
+      </div>
+      <div class="card-footer text-center flex items-center justify-center mt-3">
+        <button (click)="UpdateMobileNo()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+      </div>
+    </div>
+  </div>
+</ng-template>

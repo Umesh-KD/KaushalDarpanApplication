@@ -1,0 +1,161 @@
+<!-- <div class="flex items-center mb-6">
+    <b>Correct Merit Document :8956523</b>
+</div> -->
+<div class="card tab-panels " id="Preview">
+  <div class="card-body p-5">
+    <div class="mb-6">
+      <!-- <h4 class="flex ">Application No:{{request.ApplicationNo}}</h4> -->
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+        <b class="text-1xl-5">
+          <span class="ti ti-download"></span>&nbsp;
+          अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+        </b>
+      </div>
+      <div class="overflow-auto mb-6">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Sr. No.</th>
+              <th style="width:500px">Document Name</th>
+              <th class="text-center">View Documents</th>
+              <th class="text-left">Remark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dOC of request.VerificationDocumentDetailList  let idx=index; ">
+              <td>{{idx+1}}</td>
+              <td>{{dOC.DisFileName}}</td>
+
+              <td class="text-center">
+                <button class="btn btn-primary">
+                  <a download target="_blank"
+                     
+                     href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.StudentsFolder}}/{{dOC.FileName}}"
+                     title="Download">
+                    <i class="ti ti-eye"></i> Download
+                  </a>
+                </button>
+
+                <!-- <a href="javascript:void(0)"
+                  (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + dOC.Folder + '/' + dOC.FileName)"
+                  class="text-success">
+                  <i class="ti ti-eye"></i> View {{ dOC.ColumnName }}
+                </a> -->
+              </td>
+
+              <td>
+                {{dOC.Remark}}
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex items-center tabMenu">
+      <a href="javascript:void(0);" class="active" *ngFor="let tab of tabs; let i = index"
+        [class.active]="i === selectedTabIndex"
+        [class.disabled]="i!= 0 && tab.Disabled"
+        (click)="selectTab(i)">
+        <i class="{{tab.TabIcon}}"></i>
+        <span>
+          {{sSOLoginDataModel.Application}}
+          {{tab.TabNameHI}} <br>({{tab.TabName}})
+        </span>
+      </a>
+    </div>
+
+    <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+      <div class="card tab-panels">
+        <div class="tab-content card tab-panels">
+          <!-- Load the selected tab's content dynamically -->
+          <ng-container #tabContent></ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
+            <b>नोट:</b> यदि आपने किसी भी टैब पर कोई परिवर्तन किया है तो Approve या Reject करने से पहले Save बटन दबाएं |
+          </div>
+
+    <div class="w-full flex justify-center items-center text-center mt-4">
+      <!-- <button *ngIf="changeshow" type="button" class="btn bg-primary text-white" (click)="SaveDataChange()"><i class="ti ti-device-floppy"></i>Change</button> -->
+
+      <button *ngIf="!changeshow" type="button" class="btn bg-primary text-white" (click)="ApproveMerit()"><i class="ti ti-device-floppy"></i> Approve </button>
+      <button type="button" class="btn bg-danger text-white" (click)="RejectPreview(MyModel_PreviewDetails)"><i class="ti ti-inr"></i>Reject</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    Header
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    Preview Content
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        PDF Preview
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        Image Preview
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_PreviewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>Are You Sure You Want To Reject? </b>
+        <button class="btn bg-info text-white" (click)="CloseModel()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div>
+            <label for="remark" class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Remark: <span class="text-red-500">*</span>
+            </label>
+            <textarea id="remark"
+                      placeholder="Enter your remarks here..."
+                      class="form-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                      [(ngModel)]="reject.Remark"></textarea>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer text-center">
+        <button type="button" class="btn bg-success text-white" (click)="RejectDocument()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+
+
+</ng-template>
+<app-student-status-history></app-student-status-history>

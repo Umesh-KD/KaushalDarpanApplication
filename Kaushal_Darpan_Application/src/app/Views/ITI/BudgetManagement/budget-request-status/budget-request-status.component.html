@@ -1,0 +1,159 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Request Budget List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <a routerLink="" class="text-sm font-medium text-slate-700" aria-current="page">Request Budget List</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+
+  <div class="mb-8">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="" style="padding-left: 23px;">
+        <label id="serach" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+        <select class="form-select" [(ngModel)]="BudgetModel.StatusId" (change)="GetReportAllData()">
+          <option value="0">--Select--</option>
+          <option value="84">Pending</option>
+          <option value="85">Approved</option>
+          <option value="86">Rejected</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Request Amount</th>
+            <th class="text-left">Approved Amount </th>
+
+            <th class="text-left">Status</th>
+            <th class="text-left">Remarks</th>
+            <th class="text-left">Uploaded Document</th>
+            <th class="text-left" *ngIf="ssoLoginDataModel.RoleID !=20">Action</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+            <td align="left">{{idx+1}}</td>
+            <td>{{row.CollegeName}}</td>
+            <td>{{row.RequestAmount|  number:digitsInfo:locale}}</td>
+            <td>{{row.ApprovedAmount|  number:digitsInfo:locale}}</td>
+            <td>
+              {{row.Statusrequest}}
+            </td>
+            <td>{{row.Remarks}}</td>
+            <td>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + 'ITI/BudgetRequest/' + row.RequestFileName}}"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+            <td *ngIf="ssoLoginDataModel.RoleID !=20">
+              <div *ngIf="row.RequestStatus == 84 ">
+                <a (click)="openModal(MyModel_ViewDetails,row.RequestID,row.RequestAmount)" class="inline-flex items-center btn bg-dark text-white btn-sm">
+                  <i class=""></i>
+                  Status
+                </a>
+              </div>
+            </td>
+            <!--<td>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+
+      <a *ngIf="sSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+
+      <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>
+
+      <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>
+    </div>
+  </td>-->
+
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content status-mdl">
+    <div class="card">
+      <div class="card-body">
+        <button class="modal-cls btn bg-info text-white" (click)="CloseModal(true)"><i class="ti ti-x"></i></button>
+        <h2 class="modal-title">Status</h2>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Request Status : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="BudgetModelStatus.StatusId" (change)="ResetAmount()">
+            <option value="0">--Select--</option>
+            <option value="85">Approved</option>
+            <option value="86">Rejected</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ApprovedAmount: <span class="StarMarking">*</span></label>
+          <input type="number"
+                 class="form-input"
+                 id="txtApprovedAmount"
+                 placeholder="Enter Approved Amount"
+                 [(ngModel)]="BudgetModelStatus.ApprovedAmount"
+                 min="0"
+                 step="any" />
+        </div>
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark: <span class="StarMarking">*</span></label>
+          <textarea class="form-input" rows="4" id="txtRemark" placeholder="Enter Remark" [(ngModel)]="BudgetModelStatus.Remarks"></textarea>
+        </div>
+        <div class="text-center mt-4">
+          <a (click)="Sumbit()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class=""></i>
+            Submit
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>

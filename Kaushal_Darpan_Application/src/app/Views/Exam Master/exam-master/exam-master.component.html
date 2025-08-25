@@ -1,0 +1,136 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Exam</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Exam </a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form [formGroup]="ExamFormGroup">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+          <button type="button" class="btn bg-info text-white btn-sm" (click)="AddExam()">
+            <i class="ti ti-plus"></i>
+            Add New Exam
+          </button>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
+            <input type="text" class="form-input" placeholder="Search By Name" id="Name" [(ngModel)]="request.ExamMasterID" />
+
+          </div>
+
+          <!-- Session Month Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Month: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="MonthID" formControlName="MonthID" [(ngModel)]="request.SessionMonthID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of MonthList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="ExamFormGroup.get('MonthID').hasError('required') && ExamFormGroup.get('MonthID').touched" class="text-danger">
+              This field is required.
+            </div>
+          </div>
+
+          <!-- Financial Year Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
+            <select class="form-select" id="StudentExamInstituteId" placeholderName="Please Select" formControlName="ddlFinancialYearID" [(ngModel)]="request.SessionYearID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
+                {{item.YearName}}
+              </option>
+            </select>
+            <div *ngIf="ExamFormGroup.get('ddlFinancialYearID').hasError('required') && ExamFormGroup.get('ddlFinancialYearID').touched" class="text-danger">
+              This field is required.
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="StreamTypeID" formControlName="StreamTypeID" [(ngModel)]="request.ProgramTypeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ProgramTypeList" [value]="item.CourseTypeID">
+                {{item.CourseTypeName}}
+              </option>
+            </select>
+            <div *ngIf="ExamFormGroup.get('StreamTypeID').hasError('required') && ExamFormGroup.get('StreamTypeID').touched" class="text-danger">
+              This field is required.
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetMasterDataList()"><i class="ti ti-search"></i> Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!--<div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>-->
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Program Type</th>
+            <th class="text-left">Exam Name</th>
+            <th class="text-left">Semester/Year</th>
+            <th class="text-left">Exam</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ExamMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              {{row.CourseTypeName}}
+            </td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Exam}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SemesterYear}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ExamType}}</td>
+            <!--<td align="center">
+              <a href="javascript:void(0);" 
+                 class="btn bg-info btn-sm text-white" (click)="onEditExam(row.StudentID)">
+                Edit Exam                
+              </a>
+            </td>-->
+            <td align="center">
+              <center>
+                <a [routerLink]="'/addexam'" [queryParams]="{ExamMasterID:row.ExamMasterID}" class="btn bg-info text-white">Edit</a>
+                <a href="javascript:void(0);" class="btn bg-info text-white me-2">Groups</a>
+                <a href="javascript:void(0);" class="btn bg-info text-white">Examiner</a>
+              </center>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

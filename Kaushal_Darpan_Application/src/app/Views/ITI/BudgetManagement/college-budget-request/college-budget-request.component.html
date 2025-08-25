@@ -1,0 +1,98 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Request Budget Amount</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <a routerLink="" class="text-sm font-medium text-slate-700" aria-current="page">Request Budget Amount</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Request Budget Amount</b>
+
+        <div class="flex justify-between items-center">
+        </div>
+      </div>
+      <form [formGroup]="BudgetRequestForm">
+        <div class="mb-3">
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 mb-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Request Budget Amount :<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Budget Amount" formControlName="Amount" [(ngModel)]="BudgetModel.RequestAmount" (input)="onDecimalInput($event)">
+              <div *ngIf="isSubmitted && _BudgetRequestForm.Amount.errors" class="text-danger">
+                <p *ngIf="_BudgetRequestForm.Amount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remarks :<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Remarks" formControlName="Remark" [(ngModel)]="BudgetModel.Remarks">
+              <div *ngIf="isSubmitted && _BudgetRequestForm.Remark.errors" class="text-danger">
+                <p *ngIf="_BudgetRequestForm.Remark.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">पंजीकरण संख्या: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Registration Count" [(ngModel)]="request.RegCount" formControlName="RegCount">
+              <div *ngIf="isSubmitted && _TimeTableForm.RegCount.errors" class="text-danger">
+                <p *ngIf="_TimeTableForm.RegCount.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>-->
+
+
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="fileStudentPhoto2">
+                Upload Document:<span class="StarMarking">*</span>
+              </label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto2" type="file" (change)="onFilechange($event)" formControlName="DocFileName">
+                <label for="fileStudentPhoto2">
+                  <span>Choose File</span>
+                  {{BudgetModel.RequestFileName === '' ? 'No File Choosen' : BudgetModel.RequestFileName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + 'ITI/BudgetRequest/' + BudgetModel.DocFileName}}"
+                     *ngIf="this.BudgetModel.DocFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                     (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+                    <i class="ti ti-trash"></i>
+                  </a>-->
+                </div>
+              </div>
+
+              <!--<div *ngIf="isSubmitted && _BudgetRequestForm.controls.DocFileName.errors" class="text-danger mt-1">
+                <p *ngIf="_BudgetRequestForm.controls.DocFileName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>-->
+
+            </div>
+
+            <div class="flex justify-center items-center">
+              <button type="submit" (click)="SaveData();" class="btn bg-info text-white">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+                <i class="ti ti-refresh"></i> Reset
+              </button>
+
+              <!--<button type="submit" class="btn bg-info text-white" (click)="saveData()">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+                <i class="ti ti-refresh"></i> Reset
+              </button>-->
+            </div>
+
+
+
+
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

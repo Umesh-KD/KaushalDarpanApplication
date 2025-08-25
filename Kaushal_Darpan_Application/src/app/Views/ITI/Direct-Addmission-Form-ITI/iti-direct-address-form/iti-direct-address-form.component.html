@@ -1,0 +1,295 @@
+
+<div class="card-body p-5">
+  <div class="mb-8">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Permanent Address</b>
+    </div>
+    <form [formGroup]="AddressDetailsFormGroup" id="AddressDetailsFormGroup" class="form-horizontal">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6 ">
+        <div>
+          <label for="AddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 1 (Address
+            Line 1): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="AddressLine1" placeholder="Enter Address Line 1"
+                 name="AddressLine1" formControlName="AddressLine1" [(ngModel)]="formData.AddressLine1">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.AddressLine1.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.AddressLine1.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="AddressLine2" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 2 (Address
+            Line 2): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="AddressLine2" placeholder="Enter Address Line 2"
+                 name="AddressLine2" formControlName="AddressLine2" [(ngModel)]="formData.AddressLine2">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.AddressLine2.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.AddressLine2.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAddressLine3" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 3 (Address
+            Line 3):
+          </label>
+          <input type="text" class="form-input" id="txtAddressLine3" placeholder="Enter Address Line 3"
+                 name="AddressLine3" formControlName="txtAddressLine3" [(ngModel)]="formData.AddressLine3">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtAddressLine3.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine3.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="State" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            राज्य (State): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="State" name="State" formControlName="State"
+                  [(ngModel)]="formData.StateID" (change)="ddlState_Change()">
+
+            <option value="0">Select State</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_AddressDetailsFormGroup.State.errors" class="text-danger">
+            <p *ngIf="!_AddressDetailsFormGroup.State.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="District" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            जिला (District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="District" name="District" formControlName="District"
+                  [(ngModel)]="formData.DistrictID" (change)="ddlDistrict_Change()">
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddressDetailsFormGroup.District.errors" class="text-danger">
+            <p *ngIf="!_AddressDetailsFormGroup.District.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div *ngIf="formData.StateID==6">
+          <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            ब्लॉक/तहसील
+            (Block/Tehsil): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="BlockTehsil"
+                  [(ngModel)]="formData.TehsilID">
+
+            <option value="0">Select Block/Tehsil</option>
+            <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div *ngIf="formData.StateID!=6 &&  formData.StateID!=0">
+          <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            ब्लॉक/तहसील
+            (Block/Tehsil): <span class="StarMarking">*</span>
+          </label>
+          <input maxlength="50" type="text" class="form-input" id="NonRajasthanBlockName" placeholder="Enter Block/Tehsil" name="NonRajasthanBlockName"
+                 formControlName="NonRajasthanBlockName" [(ngModel)]="formData.NonRajasthanBlockName">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.NonRajasthanBlockName.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.NonRajasthanBlockName.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="CityVillage" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            शहर /गांव
+            (City/Village): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="CityVillage" placeholder="Enter City/Village" name="CityVillage"
+                 formControlName="CityVillage" [(ngModel)]="formData.CityVillage">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.CityVillage.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.CityVillage.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Pincode" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पिन कोड (Pincode): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Pincode" placeholder="Enter Pincode" name="Pincode"
+                 formControlName="Pincode" [(ngModel)]="formData.Pincode" (change)="formData.Pincode = filterNumber(formData.Pincode)"
+                 maxlength="6" minlength="6">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.Pincode.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.Pincode.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+  <!--<div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Correspondence Address</b>
+      <div class="form-check">
+          <input type="checkbox" class="form-checkbox rounded text-primary" id="SameAddress">
+          <label class="ms-1.5" for="SameAddress">
+              Use Correspondence address as permanent address.
+          </label>
+      </div>
+  </div>
+  <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
+      <div>
+          <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">पता पंक्ति 1 (Address Line 1): <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtAddressLine1" placeholder="Enter Address Line 1">
+      </div>
+      <div>
+          <label for="txtAddressLine2" class="text-gray-800 text-sm font-medium inline-block mb-2">पता पंक्ति 2 (Address Line 2): <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtAddressLine2" placeholder="Enter Address Line 2">
+      </div>
+      <div>
+          <label for="txtAddressLine3" class="text-gray-800 text-sm font-medium inline-block mb-2">पता पंक्ति 3 (Address Line 3): <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtAddressLine3" placeholder="Enter Address Line 3">
+      </div>
+      <div>
+          <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">राज्य (State): <span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlState">
+
+              <option value="">Select State</option>
+              <option value="24">Andhra Pradesh</option>
+              <option value="10">Arunachal Pradesh</option>
+              <option value="16">Assam</option>
+              <option value="8">Bihar</option>
+              <option value="30">Chandigarh</option>
+              <option value="20">Chhattisgarh</option>
+              <option value="29">Delhi</option>
+              <option value="26">Goa</option>
+              <option value="22">Gujarat</option>
+              <option value="5">Haryana</option>
+              <option value="2">Himachal Pradesh</option>
+              <option value="1">Jammu and Kashmir</option>
+              <option value="18">Jharkhand</option>
+              <option value="25">Karnataka</option>
+              <option value="27">Kerala</option>
+              <option value="21">Madhya Pradesh</option>
+              <option value="23">Maharastra</option>
+              <option value="12">Manipur</option>
+              <option value="15">Meghalaya</option>
+              <option value="13">Mizoram</option>
+              <option value="11">Nagaland</option>
+              <option value="19">Orissa</option>
+              <option value="33">Puducherry</option>
+              <option value="3">Punjab</option>
+              <option value="6" selected="selected">Rajasthan</option>
+              <option value="9">Sikkim</option>
+              <option value="28">Tamil Nadu</option>
+              <option value="31">Telangana</option>
+              <option value="14">Tripura</option>
+              <option value="7">Uttar Pradesh</option>
+              <option value="4">Uttarakhand</option>
+              <option value="17">West Bengal</option>
+
+          </select>
+      </div>
+      <div>
+          <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">जिला (District): <span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlDistrict">
+
+              <option value="">Select District</option>
+              <option value="21">Ajmer</option>
+              <option value="6">Alwar</option>
+              <option value="34">Anoopgarh</option>
+              <option value="35">Balotara</option>
+              <option value="27">Banswara</option>
+              <option value="30">Baran</option>
+              <option value="17">Barmer</option>
+              <option value="36">Beawar</option>
+              <option value="7">Bharatpur</option>
+              <option value="24">Bhilwara</option>
+              <option value="3">Bikaner</option>
+              <option value="23">Bundi</option>
+              <option value="28">Chittorgarh</option>
+              <option value="4">Churu</option>
+              <option value="11">Dausa</option>
+              <option value="38">Deeg</option>
+              <option value="8">Dhaulpur</option>
+              <option value="39">Didwana-Kuchaman</option>
+              <option value="40">Dudu</option>
+              <option value="26">Dungarpur</option>
+              <option value="41">Gangapur City</option>
+              <option value="2">Hanumangarh</option>
+              <option value="12" selected="selected">Jaipur</option>
+              <option value="42">Jaipur(Rural)</option>
+              <option value="16">Jaisalmer</option>
+              <option value="18">Jalore</option>
+              <option value="31">Jhalawar</option>
+              <option value="5">Jhunjhunu</option>
+              <option value="15">Jodhpur</option>
+              <option value="44">Jodhpur(Rural)</option>
+              <option value="9">Karauli</option>
+              <option value="37">Kekri</option>
+              <option value="45">Khairthal-Tijara</option>
+              <option value="29">Kota</option>
+              <option value="46">Kotputli-Behror</option>
+              <option value="14">Nagaur</option>
+              <option value="47">Neem Ka Thana</option>
+              <option value="20">Pali</option>
+              <option value="43">Phalodi</option>
+              <option value="33">Pratapgarh</option>
+              <option value="25">Rajsamand</option>
+              <option value="48">Salumbar</option>
+              <option value="49">Sanchore</option>
+              <option value="10">Sawai Madhopur</option>
+              <option value="50">Shahpura</option>
+              <option value="13">Sikar</option>
+              <option value="19">Sirohi</option>
+              <option value="1">Sri Ganganagar</option>
+              <option value="22">Tonk</option>
+              <option value="32">Udaipur</option>
+
+          </select>
+      </div>
+      <div>
+          <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">ब्लॉक/तहसील (Block/Tehsil): <span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlPreferentialCategory">
+
+              <option value="">Select Block/Tehsil</option>
+              <option value="445">AMER</option>
+              <option value="443" selected="selected">JAIPUR</option>
+              <option value="444">sanganer</option>
+
+          </select>
+      </div>
+      <div>
+          <label for="txtCityVillage" class="text-gray-800 text-sm font-medium inline-block mb-2">शहर /गांव (City/Village): <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtCityVillage" placeholder="Enter City/Village">
+      </div>
+      <div>
+          <label for="txtPincode" class="text-gray-800 text-sm font-medium inline-block mb-2">पिन कोड (Pincode): <span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="txtPincode" placeholder="Enter Pincode">
+      </div>
+  </div>-->
+
+
+</div>
+<div class="card-footer text-center">
+  <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+  <button type="button" class="btn bg-primary text-white" (click)="SaveAddressDetails()"><i
+      class="ti ti-device-floppy"></i>Save & Next</button>
+  <button type="button" class="btn bg-light text-dark" (click)="ResetAddressDetails()"><i
+      class="ti ti-refresh"></i>Reset</button>
+</div>

@@ -1,0 +1,172 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration List (ITI Pass Out)</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+
+      <!--<a href="/AddITITimeTable" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit ITI Time Table</a>-->
+      <a [routerLink]="['/AddITITimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">Apprenticeship Registration List (ITI Pass Out) </a>
+    </div>
+  </div>
+  <!--<a href="/ItiTimeTable" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>-->
+ 
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <!--<a routerLink="/AddSchlorship" class="btn bg-info btn-sm text-white me-2">
+    <i class="ti ti-plus"></i>Add
+  </a>-->
+          <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class=""></i>
+            Add new
+          </a>
+          <a *ngIf="sSOLoginDataModel.RoleID == 97" (click)="DownloadPassoutApprenticeshipReport()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class=""></i>
+            Download Report
+          </a>
+          <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
+    <i class="ti ti-refresh"></i>Change Examiner
+  </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+    <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ExamList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
+        <!--semester-->
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID == 97" >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            संस्थान का नाम : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--Select--</option>
+
+            <option *ngFor="let row of InstituteMasterDDLList" [value]="row.ID">{{row.Name}}</option>
+          </select>
+
+        </div>
+
+        <div *ngIf="sSOLoginDataModel.RoleID != 97" >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            संस्थान का नाम : <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--Select--</option>
+
+            <option *ngFor="let row of InstituteMasterDDLList" [value]="row.InstituteID">{{row.InstituteName}}</option>
+          </select>
+
+        </div>
+
+
+        <!--commonsubject(yes/no)-->
+        <!--branch-->
+        <!--subject-->
+        <!--group code-->
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+      <!--<div class="flex justify-end flex-wrap items-center">
+      <a routerLink="" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class="ti ti-chevron-left"></i> Back
+      </a>
+    </div>-->
+
+
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">संस्थान का नाम</th>
+            <th class="text-left">पोर्टल पर पंजीकरण करने की तिथि</th>
+            <th class="text-left">पंजीकरण संख्या</th>
+            <th class="text-left">दस्तावेज़</th>
+            <th class="text-left">विविध विवरण</th>
+            <th class="text-left">कार्रवाई</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
+
+            <td>{{idx+1}}</td>
+            <td>{{row.Name}}</td>
+            <td>{{row.RegDate}}</td>
+            <td>{{row.RegCount}}</td>
+            <td>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+              </div>
+
+            </td>
+            <td>{{ row.Remarks}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!--<a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-pencil"></i></a>-->
+                <a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.ID)"><i class="ti ti-eye"></i></a>
+                <!--<a *ngIf="sSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.ID)"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>

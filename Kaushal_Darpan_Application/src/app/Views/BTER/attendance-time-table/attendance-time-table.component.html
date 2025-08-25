@@ -1,0 +1,263 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Assign Teacher For Subject</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <!--@if(sSOLoginDataModel.RoleID == 7 || sSOLoginDataModel.RoleID == 2 || sSOLoginDataModel.DepartmentID == 2){-->
+        <a href="javascript:void(0);" (click)="EditData(MyModel_EdiDetails)" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Add Assign Teacher For Subject
+        </a>
+        <!--}-->
+
+      </div>
+    </div>
+
+    <form [formGroup]="TableForm" (ngSubmit)="getData()">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+          <ng-select formControlName="SemesterID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of SemesterMasterDDL; track item.SemesterID) {
+            <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger">
+            <p *ngIf="formTable.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+          <ng-select formControlName="StreamID" (change)="getSubjectMasterDDL($event, TableForm.value.SemesterID)" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StreamMasterDDL; track item.StreamID) {
+            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.StreamID.errors" class="text-danger">
+            <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject</label>
+          <ng-select formControlName="SubjectID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of SubjectMasterDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SubjectID.errors" class="text-danger">
+            <p *ngIf="formTable.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-left">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="reset()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Added Assign Teacher For SubjectList</b>
+      <div class="flex">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+        <!--<a href="javascript:void(0);" (click)="downloadPDF()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
+          <i class="ti ti-pdf"></i> Export PDF
+        </a>-->
+      </div>
+
+    </div>
+    <!-- mat-table.component.html -->
+    <div class="table-container">
+      <!-- Table Filter Input -->
+      <!--<div class="search-container mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Filter</mat-label>
+          <input matInput (input)="applyFilter($event)" placeholder="Filter table" />
+        </mat-form-field>
+      </div>-->
+      <!-- Table -->
+      <div class="mat-elevation-z8 table-responsive" #pdfTable>
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+          <!-- ID Column -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- StaffSSOID Column -->
+          <ng-container matColumnDef="StaffSSOID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Staff SSO ID </th>
+            <td mat-cell *matCellDef="let element"> {{element.StaffSSOID}} </td>
+          </ng-container>
+
+          <!-- StaffName Column -->
+          <ng-container matColumnDef="StaffName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Staff Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.StaffName}} </td>
+          </ng-container>
+
+          <!-- SectionName Column -->
+          <ng-container matColumnDef="SectionName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Section Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.SectionName}} </td>
+          </ng-container>
+
+          <!-- EndTermName Column -->
+          <ng-container matColumnDef="EndTermName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> End Term </th>
+            <td mat-cell *matCellDef="let element"> {{element.EndTermName}} </td>
+          </ng-container>
+
+          <!-- SemesterName Column -->
+          <ng-container matColumnDef="SemesterName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Semester </th>
+            <td mat-cell *matCellDef="let element"> {{element.SemesterName}} </td>
+          </ng-container>
+
+          <!-- CourseTypeName Column -->
+          <ng-container matColumnDef="CourseTypeName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Course Type </th>
+            <td mat-cell *matCellDef="let element"> {{element.CourseTypeName}} </td>
+          </ng-container>
+
+          <!-- StreamName Column -->
+          <ng-container matColumnDef="StreamName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Stream </th>
+            <td mat-cell *matCellDef="let element"> {{element.StreamName}} </td>
+          </ng-container>
+
+          <!-- SubjectName Column -->
+          <ng-container matColumnDef="SubjectName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+            <td mat-cell *matCellDef="let element"> {{element.SubjectName}} </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="Actions">
+            <th mat-header-cell *matHeaderCellDef> Mark Attendance </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex actionBtns w-auto" style="width: auto !important;">
+                @if(sSOLoginDataModel.RoleID !== 7 && sSOLoginDataModel.RoleID !== 2 &&  !iSHOD){
+                <a href="javascript:void(0);" title="View Attendance" class="ng-star-inserted" (click)="AttendanceData(element)"><i class="ti ti-pencil"></i></a>
+                }
+                @if(sSOLoginDataModel.RoleID == 7 || sSOLoginDataModel.RoleID == 2 || iSHOD){
+                <a href="javascript:void(0);" title="Edit Staff" class="ng-star-inserted" (click)="EditData(MyModel_EdiDetails,element)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete SSOID" (click)="onDelete(element)"><i aria-hidden="true" class="ti ti-trash"></i></a>
+                }
+
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Table Header and Rows -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!-- Pagination and Excel Export -->
+      <div class="table-footer">
+        <mat-paginator [length]="totalRecords"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       (page)="onPaginationChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_EdiDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Add-Edit Assign Teacher For Subject</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Basic Details</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream Name</label>
+              <input formControlName="StreamName" class="form-input" />
+              <div *ngIf="isSubmitted && formEditData.StreamName.errors" class="text-danger">
+                <p *ngIf="formEditData.StreamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name</label>
+              <ng-select formControlName="SectionID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of GetSectionData; track item.SectionID) {
+                <ng-option [value]="item.SectionID">{{item.SectionName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SectionID.errors" class="text-danger">
+                <p *ngIf="formEditData.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Add Staff</label>
+              <select formControlName="AssignbyStaffID" class="form-select" id="SubjectID">
+                <option value="0">--All--</option>
+                <option *ngFor="let item of ApprovedTeacherList" value="{{item.StaffID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && formEditData.AssignbyStaffID.errors" class="text-danger">
+                <p *ngIf="formEditData.AssignbyStaffID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+              <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(resBranchHOD[0]?.StreamID, EditDataFormGroup.value.SemesterID)">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of SemesterMasterDDL; track item.SemesterID) {
+                <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SemesterID.errors" class="text-danger">
+                <p *ngIf="formEditData.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject</label>
+              <ng-select formControlName="SubjectID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of SubjectMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formEditData.SubjectID.errors" class="text-danger">
+                <p *ngIf="formEditData.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+
+          </div>
+          <div class="text-center flex items-center justify-center" style="margin-top:200px">
+            <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                    class="btn bg-info text-white">
+              <i class="ti ti-device-floppy"></i> Submit
+            </button>
+            <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

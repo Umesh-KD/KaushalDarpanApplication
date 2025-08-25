@@ -1,0 +1,184 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Company Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Company Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Company Details</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+
+
+<form [formGroup]="CompanyMasterFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Company Details</b>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
+                   [(ngModel)]="request.Name" formControlName="Name">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Website <span class="StarMarking">*</span>
+            </label>
+            <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
+                   [(ngModel)]="request.Website" formControlName="Website">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              State <span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlState" class="form-select" id="ddlState" [(ngModel)]="request.StateID"
+                    (change)="ddlState_Change()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlState.errors" class="text-danger">
+              <p *ngIf="!_CompanyMasterFormGroup.ddlState.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              District<span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlDistrict" class="form-select" id="ddlDistrict" [(ngModel)]="request.DistrictID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlDistrict.errors" class="text-danger">
+              <p *ngIf="!_CompanyMasterFormGroup.ddlDistrict.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Company Type<span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlCompanyType" class="form-select" id="ddlCompanyType" [(ngModel)]="request.CompanyTypeId">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlCompanyType.errors" class="text-danger">
+              <p *ngIf="!_CompanyMasterFormGroup.ddlCompanyType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
+            <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
+            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Address <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
+                   [(ngModel)]="request.Address" formControlName="Address">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.Address.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentPhoto">Photograph</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                   *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>

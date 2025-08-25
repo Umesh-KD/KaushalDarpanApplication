@@ -1,0 +1,216 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Guest Room Request</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/guestroomrequest']" class="text-sm font-medium text-slate-700" aria-current="page">Guest Room Request</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Department
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.DepartmentID">
+            <option value="1">BTER</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.Status">
+            <option value="0" selected="">--Choose Option--</option>
+            <option *ngFor="let item of statusList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GuestRequestList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="GuestRequestListCancel()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" style="width:100px">#</th>
+            <th class="text-left">Request Applier Information</th>
+            <th class="text-left">Employee ID</th>
+            <th class="text-left">From Date/Time</th>
+            <th class="text-left">To Date/Time</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Remark</th>
+            <th class="text-center" style="width:150px">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of RequestList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">
+              <span class="block fw-600">{{item.RequestName}} - ({{item.RoleNameEnglish}})</span>
+              <span class="block">Department - {{item.DepartmentName}}</span>
+              <span class="block">College - {{item.InstituteName}}</span>
+            </td>
+            <td align="left"><a title="View Employee" href="{{this.appsettingConfig.StaticFileRootPathURL}}{{item.EmplDCardPhoto}}" target="_blank">{{item.EmpID}}</a> </td>
+            <td align="left">{{item.FromDate}} {{item.FromTime}}</td>
+            <td align="left">{{item.ToDate}} {{item.ToTime}}</td>
+            <td align="left">{{item.StatusName}}</td>
+            <td align="left">{{item.Remark}}</td>
+            <td align="center">
+              <button type="button" class="bg-info btn text-white btn-sm" (click)="onSubmit(modal_SubmitReq, item)" *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID==_EnumRole.Admin || sSOLoginDataModel.RoleID==_EnumRole.AdminNon)">Action</button>
+              <button type="button" class="bg-success btn text-white btn-sm" (click)="CheckIn(item)" *ngIf="item.Status === 217 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">Check In</button>
+              <button type="button" class="bg-warning btn text-dark btn-sm" (click)="CheckIn(item)" *ngIf="item.Status === 220">Check Out</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--<div class="table-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search guests">
+      </mat-form-field>
+
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">-->
+
+        <!-- Columns definitions -->
+        <!--<ng-container matColumnDef="SNo">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RoomNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Room No</th>
+          <td mat-cell *matCellDef="let row">{{ row.RoomNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RoomType">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Room Type</th>
+          <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomTypeID) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="StudyTableFacilities">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Study Table Facilities</th>
+          <td mat-cell *matCellDef="let row">{{ row.StudyTableFacilities }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="FanFacilities">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fan Facilities</th>
+          <td mat-cell *matCellDef="let row">{{ row.FanFacilities }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CoolingFacilities">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cooling Facilities</th>
+          <td mat-cell *matCellDef="let row">{{ row.CoolingFacilities }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="AttachedBathFacilities">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Attached Bath Facilities</th>
+          <td mat-cell *matCellDef="let row">{{ row.AttachedBathFacilities }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let row">
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0)" (click)="btnEdit_OnClick(row)" title="Edit"><i class="ti ti-pencil"></i></a>
+              <a href="javascript:void(0)" (click)="btnDelete_OnClick(row.GuestRoomDetailID)" title="Delete"><i class="ti ti-trash"></i> </a>
+            </div>
+          </td>
+        </ng-container>-->
+
+        <!-- Header and row definitions -->
+        <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>-->
+  </div>
+</div>
+
+<ng-template #modal_SubmitReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Status <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="request.Status" formControlName="ddlStatus">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of filteredStatusList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlStatus.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="request.Remark" formControlName="txtRemark"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-- end row -->

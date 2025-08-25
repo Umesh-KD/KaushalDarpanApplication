@@ -1,0 +1,202 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI CBT Center</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/ItiTimeTable']" class="text-sm font-medium text-slate-700" aria-current="page">ITI CBT Center</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <!--<b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>-->
+        <div class="flex justify-between items-center" style="margin-left:1000px">
+          <div class="flex items-center me-3">
+            <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format Yearly</a>
+        </div>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Semester</label>
+          <select class="form-select" id="TimetableYear" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of SemesterList" [value]="row.SemesterID">{{row.SemesterName}}</option>
+          </select>
+        </div>-->
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Shift</label>
+          <select class="form-select" id="TimetableTime" [(ngModel)]="searchRequest.ShiftID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShiftWithTime}}</option>
+
+          </select>
+        </div>-->
+        <!--<div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetITITimeTableList()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>-->
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Show Excel Uploaded Data</b>
+
+      <div class="inline-flex items-center text-white btn-sm">
+        <a *ngIf="ShowPublishButton()" class="btn bg-success btn-sm text-white" (click)="DownloadTimeTable1()"><i class="ti ti-checklist"></i>Generate Order Time Table</a>
+        <a *ngIf="ShowPublishpublisButton()"
+           class="btn bg-success btn-sm text-white"
+           (click)="DownloadPDF1()">
+          <i class="ti ti-checklist"></i> Publish Order Time Table
+        </a>
+
+        <div *ngIf="Status==14" class="mt-2">
+          <button class="btn bg-success btn-sm text-white" (click)="DownloadTimeTable1()">
+            Download in PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDqropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!--CenterCode	CenterName	SSOID	MobileNumber	EndTermID	CCCode-->
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Center Code</th>
+            <th class="text-left">Center Name</th>
+            <th class="text-left">SSOID </th>
+            <th class="text-left">Mobile Number</th>
+            <th class="text-left">End Term</th>
+            <!--<th class="text-left">Action</th>-->
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of ITITimeTableList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td align="left">{{row.CenterCode}}</td>
+            <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.SSOID}}</td>
+            <td align="left">{{row.MobileNumber}}</td>
+            <td align="left">{{row.EndTermID}}</td>
+            <!--<td align="left">
+              <div *ngIf="Status!=14" class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="['/AddITITimeTable']" [queryParams]="{ id: row.TimeTableID }" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0)" title="Delete" (click)=" btnDelete_OnClick(row.TimeTableID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>-->
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <div class="text-center">
+          <b><i class="ti ti-plus"></i>Excel Data</b>
+        </div>
+        <a href="javascript:void(0);" style="display:none" class="btn bg-info text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export To Excel</a>
+        <button class="btn bg-info text-white" (click)="CloseModalPopupimport()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">CenterCode</th>
+                  <th class="text-left">CenterName</th>
+                  <th class="text-left">SSOID</th>
+                  <th class="text-left">MobileNumber</th>
+                  <th class="text-left">EndTermID</th>
+                  <th class="text-left"> CCCode</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of ImportExcelList; let idx = index;">
+                  <td class="text-left">{{idx+1}}</td>
+                  <td align="left">{{row.CenterCode}}</td>
+                  <td align="left">{{row.CenterName}}</td>
+                  <td align="left">{{row.SSOID}}</td>
+                  <td align="left">{{row.MobileNumber}}</td>
+                  <td align="left">{{row.EndTermID}}</td>
+                  <td align="left">{{row.CCCode}}</td>
+
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+        </div>
+        <div>
+          <button type="submit"
+                  id="btnSave"
+                  class="btn bg-info text-white mt-6" (click)="SaveCBTImportExcelData()">
+            Submit
+          </button>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<app-otpmodal #otpModal></app-otpmodal>

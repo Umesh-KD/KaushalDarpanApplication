@@ -1,0 +1,185 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Bter Certificate</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Certificates</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <!-- Add FormsModule in your module for this to work -->
+
+    <form #form="ngForm" (ngSubmit)="filterFormSubmit()" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+
+      <!-- Certificate Type -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Certificate Type</label>
+        <select class="form-select" [(ngModel)]="filterModel.Action" name="Type" (change)="onTypeChange($event.target.value)">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of ReportTypelist" [value]="item.URL">{{ item.Name }}</option>
+        </select>
+      </div>
+
+      <!-- Institute (Visible only for 'provisional-certificate') -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+        <ng-select [(ngModel)]="filterModel.InstituteID" name="InstituteID" [clearable]="false">
+          <ng-option [value]="0">--All--</ng-option>
+          <ng-option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">
+            {{ item.InstituteName }}
+          </ng-option>
+        </ng-select>
+      </div>
+
+      <!-- Enrollment No -->
+      <div *ngIf="(filterModel.Action === 'duplicate-provisional-certificate' || filterModel.Action === 'migration-certificate' || filterModel.Action === 'duplicate-marksheet')">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment</label>
+        <input type="text" class="form-input" placeholder="Enrollment" [(ngModel)]="filterModel.EnrollmentNo" name="EnrollmentNo">
+      </div>
+
+      <!-- Revised Type -->
+      <div *ngIf="(filterModel.Action === 'provisional-certificate' || filterModel.Action === 'migration-certificate')">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Revised</label>
+        <select class="form-select" [(ngModel)]="filterModel.RevisedType" name="RevisedType">
+          <option [value]="0">--Select--</option>
+          <option [value]="1">Yes</option>
+          <option [value]="2">No</option>
+        </select>
+      </div>
+
+      <!-- Result Type -->
+      <div *ngIf="(filterModel.Action === 'provisional-certificate' || filterModel.Action === 'migration-certificate')">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type</label>
+        <select class="form-select" [(ngModel)]="filterModel.ResultType" name="ResultType">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of ResultTypeList" [value]="item.ID">{{ item.Name }}</option>
+        </select>
+      </div>
+
+      <!-- Revised Type -->
+      <div *ngIf="filterModel.Action === 'migration-certificate'">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Migration Type</label>
+        <select class="form-select" [(ngModel)]="filterModel.MigrationType" name="RevisedType">
+          <option [value]="0">--Select Migration Type--</option>
+          <!-- <option [value]="1">Orignal</option>
+          <option [value]="2">Left out migration</option> -->
+          <option [value]="3">Duplicate</option>
+        </select>
+      </div>
+
+      <!-- Revised Type -->
+      <div *ngIf="filterModel.Action === 'certificate-letter'">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Certificate Type</label>
+        <select class="form-select" [(ngModel)]="filterModel.CertificateType" name="CertificateType">
+          <option [value]="0">--Select Certificate Type--</option>
+          <option [value]="1">Main Exam</option>
+          <option [value]="2">RWH Exam(Reval Effected)</option>
+          <option [value]="3">End Term Exam Effected</option>
+        </select>
+      </div>
+
+      <!-- Revised Type -->
+      <div *ngIf="filterModel.Action === 'diploma-certificate'">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Diploma Type</label>
+        <select class="form-select" [(ngModel)]="filterModel.DiplomaType" name="DiplomaType">
+          <option [value]="0">--Select Diploma Type--</option>
+          <option [value]="1">main</option>
+          <option [value]="2">Revised</option>
+          <option [value]="3">Duplicate</option>
+        </select>
+      </div>
+
+      <div *ngIf="filterModel.Action === 'duplicate-marksheet'">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Roll Number
+          </label>
+          <input type="text"
+                 class="form-input"
+                 [(ngModel)]="filterModel.RollNo"
+                 placeholder="Enter Roll Number" />
+        </div>
+
+
+      <!-- Buttons -->
+      <div>
+        <button type="submit" class="btn bg-info text-white mt-6">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+
+    </form>
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        
+        <a *ngIf="dataSource.data.length > 0" href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+        
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="mat-elevation-z8 table-responsive" #pdfTable>
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let column of columnSchema" [matColumnDef]="column.key">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ column.label }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container [ngSwitch]="column.key">
+              <!-- Action Column -->
+              <ng-container *ngSwitchCase="'Action'">
+                <a *ngIf="(filterModel.Action === 'duplicate-provisional-certificate' || filterModel.Action === 'migration-certificate'|| filterModel.Action === 'certificate-letter')" href="javascript:void(0);"
+                   (click)="CertificateDownload(element.StudentID)" title="Certificate"
+                   class="btn bg-info btn-sm text-white">
+                  <i class="ti ti-download"></i> Download
+                </a>
+
+                <a *ngIf="(filterModel.Action === 'duplicate-marksheet' )" href="javascript:void(0);"
+                   (click)="DownloadDuplicateMarksheet(element)" title="Download"
+                   class="btn bg-info btn-sm text-white">
+                  <i class="ti ti-download"></i> Download
+                </a>
+                
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                {{ element[column.key] }}
+              </ng-container>
+
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+    </div>
+
+    <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+      No Record Found
+    </div>
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords" (page)="onPaginationChange($event)">
+    </mat-paginator>
+
+
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">Campus Details</h3>
+</div>
+
+<div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="CampusPostDetail!=null">
+        <div class="card">
+          <div class="card-body">
+
+            <div class="row">
+              <!--<div class="col-md-6">
+                <img src="/assets/home/img/job-interview-conversation.jpg" class="img-fluid img-thumbnail" />
+              </div>-->
+              <div class="col-md-12">
+
+                <!--<div class="d-flex justify-content-between w-100 flex-wrap">
+                  <span>No. of Vacancy: <i class="fa fa-user-o"></i>&nbsp;40</span>
+                  <span>Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;10-10-2024 09:00AM</span>
+                </div>-->
+                <a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-sm btn-info text-white p-1 pull-right">Give Consent</a>
+                <div class="table-responsive">
+
+                  <table class="table table-border w-full mb-0" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th>Company Info</th>
+                        <th>Requirement</th>
+                        <th>Eligibility</th>
+                        <th>Job Description</th>
+                        <th>Date / Venue</th>
+                        <th>Venue Location</th>
+                        <th>Shortlist(S) / Final Result </th>
+                        <th>Campus Mode</th>
+                        <th>File JobDiscription</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td rowspan="3" valign="top">
+                          <div>
+                            <b>{{CampusPostDetail.CompanyName}}</b>
+                            <!--<p>Post: {{CampusPostDetail.PostNo}}</p>-->
+                            <p style="border-color: #b4cedf;" width="140px">
+                              Post: {{ ('2025-26')+ '-' + (CampusPostDetail.InstituteCode | number:'3.0') + '-' + CampusPostDetail.PostID }}
+                            </p>
+                            <p>Total No.of Vacancy: {{CampusPostDetail.TotalPositions}}</p>
+                            <a href="{{CampusPostDetail.Website}}" target="_blank">
+                              <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
+                            </a>
+                          </div>
+                        </td>
+                        <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
+                        <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
+                        <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
+                        <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
+                        <td>
+                          <!--{{CampusPostDetail.CampusVenueLocation|json}}-->
+                          <div>
+                            <a [href]="getSanitizedUrl(CampusPostDetail.CampusVenueLocation)" target="_blank">
+                              Get Location
+                            </a>
+                          </div>
+                        </td>
+                        <td>
+                          <a [routerLink]="'/ViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:2}" class="btn btn-outline-primary btn-sm d-block mb-2" *ngIf="CampusPostDetail.IsShortListed==true"><i class="fa fa-eye"></i>&nbsp;First Shortlist Candidates</a>
+                          <a [routerLink]="'/ViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:3}" class="btn btn-outline-primary btn-sm d-block" *ngIf="CampusPostDetail.IsPlaced==true"><i class="fa fa-eye"></i>&nbsp;Final Candidates</a>
+                        </td>
+                        <td> {{CampusPostDetail.CampusModeType}}</td>
+                        <td>
+                          <!--{{CampusPostDetail.JobDiscription|json}}-->
+                          <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+                        </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="row mt-2 justify-content-center">
+      <div class="col-lg-2 col-md-4 col-sm-6 col-12 mt-3" *ngFor="let item of PlacementCompanyList;">
+        <a href="{{item.Website}}" target="_blank" class="d-block">
+          <img src="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.PlacementCompanyFolder}}/{{item.Logo}}" class="img-fluid img-thumbnail" />
+        </a>
+      </div>
+    </div>-->
+
+  </div>
+</div>
+

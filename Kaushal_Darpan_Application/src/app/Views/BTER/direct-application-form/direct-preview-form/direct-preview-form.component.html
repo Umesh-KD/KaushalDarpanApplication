@@ -1,0 +1,891 @@
+
+<div class="card tab-panels " id="Preview">
+  <div class="card-body p-5">
+    <div class="mb-6">
+
+      <div *ngIf="request.Action == 4 || request.Action == 5 || request.Action == 6 " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">आवेदन की स्थिति (Application Status)</b>
+      </div>
+      <div class="flex items-center gap-3 mb-2">
+        <p *ngIf="request.Action == 4 || request.Action == 5 || request.Action == 6 " class="text-sm font-semibold text-gray-700 m-0">
+          <b>Application Status:<span class="text-danger"> {{ request.ActionName }} </span> </b>
+        </p>
+
+        <button *ngIf="request.Action == _EnumVerfication.Notified"
+                class="btn bg-success text-white btn-sm"
+                (click)="openRevertModal(modal_Open, request.ApplicationID)"
+                type="button">
+          Action
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
+      </div>
+
+      <h4 class="flex" *ngIf="request.ApplicationNo!='' && request.ApplicationNo!=null">Application No:{{request.ApplicationNo}}</h4>
+
+
+
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div class="col-span-2 text-center" style="text-align:center !important" *ngFor="let item of filteredDocumentDetails;">
+          <img appImageError="assets/images/dummyImg.jpg"
+               [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+               class="imgSignSelf"
+               alt="{{item.ColumnName}}" />
+          <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
+        </div>
+
+        <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+        <div>{{request.StudentName}}</div>
+
+        <div><b>आवेदक का नाम हिंदी में  (Applicant's Name in Hindi):</b></div>
+        <div>{{request.StudentNameHindi}}</div>
+
+        <div><b>पिता का नाम (Father's Name):</b></div>
+        <div>{{request.FatherName}}</div>
+
+        <div><b>पिता का नाम हिंदी में (Father's Name in Hindi):</b></div>
+        <div>{{request.FatherNameHindi}}</div>
+
+        <div><b>माता का नाम (Mother's Name):</b></div>
+        <div>{{request.MotherName}}</div>
+
+        <div><b>माता का नाम हिंदी में (Mother's Name in Hindi):</b></div>
+        <div>{{request.MotherNameHindi}}</div>
+
+        <div><b>लिंग (Gender):</b></div>
+        <div>{{request.Gender}}</div>
+
+        <div><b>धर्म  (Religion):</b></div>
+        <div>{{request.Religion}}</div>
+
+        <div><b>राष्ट्रीयता (Nationality):</b></div>
+        <div>{{request.Nationality}}</div>
+
+
+        <div><b>वैवाहिक स्थिति(Marital Status):</b></div>
+        <div>{{request.MaritalStatusName}}</div>
+
+        <div><b>जन्म तिथि (Date of Birth):</b></div>
+        <div>{{request.DOB}}</div>
+
+        <!--<div><b>21 मई, 2024 को आयु (Age as on ):</b></div>
+      <div>{{request.Age}}</div>-->
+
+        <div><b>ईमेल (Email Address):</b></div>
+        <div>{{request.Email}}</div>
+
+        <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+        <div>{{request.MobileNo}}</div>
+
+
+        <div><b>प्राथमिकता श्रेणी (Preferential Category):</b></div>
+        <div>{{request.PrefentialCategory}}</div>
+
+        <div><b>कश्मीरी विस्थापित/Kashmiri Migrant:</b></div>
+        <div>{{request.IsKM}}</div>
+
+        <div><b>प्राथमिकता श्रेणी प्रकार (Preferential Category Type):</b></div>
+        <div>{{request.PrefentialCategoryType}}</div>
+
+        <div>
+          <b>आरक्षण श्रेणी(Reservation Category):</b>
+        </div>
+        <div>{{request.CategoryA}}</div>
+
+        <div><b>पहचान पत्र (Identity Proof):</b></div>
+        <div>{{request.IdentityProofType}}</div>
+
+        <div><b>पहचान पत्र नंबर (Number of ID Proof):</b></div>
+        <div>{{request.IndentyProff}}</div>
+
+        <div *ngIf="request.PrefentialCategoryId == 6"><b>विभाग का नाम (Department's Name):</b></div>
+        <div *ngIf="request.PrefentialCategoryId == 6">{{request.DepartmentName}}</div>
+
+        <div *ngIf="request.CategoryAId == 3 && request.PrefentialCategoryId ==5"><b>अनुसूचित उप वर्ग  (ST SubCategory):</b></div>
+        <div *ngIf="request.CategoryAId == 3 && request.PrefentialCategoryId ==5">{{request.STSubCategory}}</div>
+
+        <div *ngIf="request.STSubCategoryId == 1 && request.CategoryAId == 3"><b>अनुसूचित जिला (Tribal District):</b></div>
+        <div *ngIf="request.STSubCategoryId == 1 && request.CategoryAId == 3">{{request.TspDistrictList}}</div>
+
+        <div *ngIf="request.STSubCategoryId == 1 && request.CategoryAId == 3"><b>अनुसूचित तहसील (Tribal Tehsil):</b></div>
+        <div *ngIf="request.STSubCategoryId == 1 && request.CategoryAId == 3">{{request.TspTehsi}}</div>
+
+
+        <div *ngIf="request.PrefentialCategoryTypeId == 1"><b>श्रेणी बी (सैनिक आश्रित) (Category B) (MP Ward):</b></div>
+        <div *ngIf="request.PrefentialCategoryTypeId == 1">{{request.CategoryB}}</div>
+
+        <div *ngIf="request.PrefentialCategoryTypeId == 1"><b>श्रेणी सी - दिव्यांग जन /Category C-Physical Handicap:</b></div>
+        <div *ngIf="request.PrefentialCategoryTypeId == 1">{{request.IsPH}}</div>
+
+        <div *ngIf="request.PrefentialCategoryTypeId == 1 && request.GenderId!=97 && request.MaritialStatsu!=62"><b>श्रेणी डी- विधवा/तलाकशुदा/ आश्रम राहवासिनी / Category D-Widow/Divorce/ Orphan Resident:</b></div>
+        <div *ngIf="request.PrefentialCategoryTypeId == 1 && request.GenderId!=97 && request.MaritialStatsu!=62">{{request.categoryD_ID}}</div>
+
+        <div *ngIf="request.PrefentialCategoryTypeId == 1"><b>श्रेणी ई एकल महिला आश्रित /Category E - Singal Mother Child:</b></div>
+        <div *ngIf="request.PrefentialCategoryTypeId == 1">{{request.Category_E}}</div>
+
+
+        <div *ngIf="request.CategoryAId == 4 || request.CategoryAId == 5 || request.CategoryAId == 9"><b>जाति प्रमाण पत्र संख्या (Caste Certificate No):</b></div>
+        <div *ngIf="request.CategoryAId == 4 || request.CategoryAId == 5 || request.CategoryAId == 9">{{request.CasteCertificateNo}}</div>
+
+        <div *ngIf="request.CategoryAId == 4 || request.CategoryAId == 5 || request.CategoryAId == 9"><b>जाति प्रमाण पत्र जारी दिनांक (Certificate generat date):</b></div>
+        <div *ngIf="request.CategoryAId == 4 || request.CategoryAId == 5 || request.CategoryAId == 9">{{request.CertificateGeneratDate}}</div>
+
+
+        <!--<div><b>माता-पिता की आय (Parent's Income):</b></div>
+      <div>{{request.ParentIncome}}</div>-->
+      </div>
+    </div>
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div><b>पता पंक्ति 1 (Address Line 1):</b></div>
+        <div>{{request.AddressLine1  }}</div>
+
+        <div><b>पता पंक्ति 2 (Address Line 2):</b></div>
+        <div>{{request.AddressLine2}}</div>
+
+        <div><b>पता पंक्ति 3 (Address Line 3):</b></div>
+        <div>{{request.AddressLine3  }}</div>
+
+        <div><b>राज्य (State):</b></div>
+        <div>{{request.StateName  }}</div>
+
+        <div><b>जिला (District):</b></div>
+        <div>{{request.DistrictName  }}</div>
+
+        <div><b>ब्लॉक/तहसील (Block/Tehsil):</b></div>
+        <div>{{request.BlockName    }}</div>
+
+        <div><b>शहर / गाँव (City/Village):</b></div>
+        <div>{{request.CityVillage  }}</div>
+
+        <div><b>पिन कोड (Pincode):</b></div>
+        <div>{{request.Pincode  }}</div>
+      </div>
+
+    </div>
+
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">10वीं योग्यता विवरण 10th Qualification Details</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>State of Study</th>
+              <th>Board</th>
+              @if(QualificationView10[0]?.BoardTypeName=='Other'){
+              <th>Board State</th>
+              <th>Board Exam</th>
+              }
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Marks Type</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of QualificationView10">
+              <!--<td>{{item.QualificationID}} </td>-->
+              <td>{{item.StateName}} </td>
+              <td>{{item.BoardTypeName}} </td>
+              @if(item.BoardTypeName=='Other'){
+              <td>{{item.BoardStateName}} </td>
+              <td>{{item.BoardName}} - {{item.BoardExamName}} </td>
+              }
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.Marktype}} </td>
+              <td>{{item.AggMaxMarks}} </td>
+              <td>{{item.AggObtMarks}} </td>
+              <td>{{item.Percentage}}% </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    @if(request.CourseTypeID==2 && request.IsHighestQualification==1) {
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">योग्यता में उच्चतम प्रतिशत Highest Percentage in Qualification</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Qualification</th>
+              @if(HighestQualificationView[0]?.QualificationID=='12'){
+              <th>State of Study</th>
+              <th>Board</th>
+              @if(HighestQualificationView[0]?.BoardTypeName=='Other'){
+              <th>Board State</th>
+              <th>Board Exam</th>
+              }
+              }
+
+              @if(HighestQualificationView[0]?.QualificationID!='12'){
+              <th>Board/University</th>
+              }
+              <th>School/College</th>
+              <th>Course/Degree:</th>
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Marks Type</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of HighestQualificationView">
+              <td>{{item.QualificationID}} </td><!--Qualification-->
+              @if(item.QualificationID=='12')
+              {
+              <td>{{item.StateName}} </td>
+              <td>{{item.BoardTypeName}} </td>
+              @if(item.BoardTypeName=='Other'){
+              <td>{{item.BoardStateName}} </td>
+              <td>{{item.BoardName}} - {{item.BoardExamName}} </td>
+              }
+              }
+
+              @if(item.QualificationID!='12')
+              {
+              <td>{{item.UniversityBoard}} </td><!--Board/University-->
+              }
+              <th>{{item.ClassSubject}}</th> <!--School/College-->
+              <th>{{item.ClassSubject}}</th> <!--Course/Degree-->
+
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.Marktype}} </td>
+              <td>{{item.AggMaxMarks}} </td>
+              <td>{{item.AggObtMarks}} </td>
+              <td>{{item.Percentage}}% </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+
+    @if (request.CourseTypeID==3) {
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">योग्यता परीक्षा विवरण डिप्लोमा / 10वीं + सी.वोक. / आईटीआई / 12वीं Qualifying Examination Details Diploma / 10th + C.Voc / 10th + ITI / 12 th</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Qualifying Examination</th>
+              @if(QualificationLateralView[0]?.QualificationPriority=='140' || QualificationLateralView[0]?.QualificationPriority=='141'){
+              <th>Branch</th>
+              }
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='142'){
+              <th>Trade</th>
+              <th>NCVT/SCVT</th>
+              }
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='140'){
+              <th>Board</th>
+              }
+
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='143'){
+              <th>Subject</th>
+              <th>State of Study</th>
+              <th>Board</th>
+              @if(QualificationLateralView[0]?.BoardTypeName=='Other'){
+              <th>Board State</th>
+              <th>Board Exam</th>
+              }
+              }
+
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Marks Type</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of QualificationLateralView">
+              <td>{{item.QualificationID}} </td><!--Qualification-->
+              @if(item.QualificationPriority=='140'){
+              <td>{{item.ClassSubject}} </td>
+              }
+
+              @if(item.QualificationPriority=='141'){
+              <td>{{item.ClassSubject}} </td>
+              }
+
+              @if(item.QualificationPriority=='142'){
+              <td>{{item.ClassSubject}} </td>
+              <td>{{item.BoardName}} </td>
+              }
+
+              @if(item.QualificationPriority=='140'){
+              <td>{{item.BoardTypeName}} </td>
+              }
+
+
+              @if(item.QualificationPriority=='143'){
+              <td>{{item.Subjects}} </td>
+              <td>{{item.StateName}} </td>
+              <td>{{item.BoardTypeName}} </td>
+              @if(item.BoardTypeName=='Other'){
+              <td>{{item.BoardStateName}} </td>
+              <td>{{item.BoardName}} - {{item.BoardExamName}} </td>
+              }
+              }
+
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.Marktype}} </td>
+              <td>{{item.AggMaxMarks}} </td>
+              <td>{{item.AggObtMarks}} </td>
+              <td>{{item.Percentage}}% </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    @if (request.CourseTypeID==4 || request.CourseTypeID==5) {
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">योग्यता परीक्षा विवरण 12वीं/डी-वोक/(10+आईटीआई+अंग्रेजी)/डिप्लोमा Qualifying examination details 12th/D-Voc/(10+ITI+English)/Diploma</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Qualifying Examination</th>
+              @if(request.CourseTypeID==5 && QualificationLateralView[0]?.QualificationPriority=='278'){
+                <th>Core Branch</th>
+              }
+              
+              @if(QualificationLateralView[0]?.QualificationPriority=='278' || QualificationLateralView[0]?.QualificationPriority=='279'){
+              <th>Branch</th>
+              }
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='280'){
+              <th>Trade</th>
+              <th>NCVT/SCVT</th>
+              }
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='278'){
+              <th>Board</th>
+              }
+
+
+              @if(QualificationLateralView[0]?.QualificationPriority=='281'){
+              <th>Subject</th>
+              <th>State of Study</th>
+              <th>Board</th>
+              @if(QualificationLateralView[0]?.BoardTypeName=='Other'){
+              <th>Board State</th>
+              <th>Board Exam</th>
+              }
+              }
+
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Marks Type</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of QualificationLateralView">
+              <td>{{item.QualificationID}} </td><!--Qualification-->
+              @if(request.CourseTypeID==5 && QualificationLateralView[0]?.QualificationPriority=='278'){
+                <th>{{item.CoreBranchName}}</th>
+              }
+
+              @if(request.CourseTypeID==4 && item.QualificationPriority=='278'){
+              <td>{{item.ClassSubject}} </td>
+              }
+              
+              @if(request.CourseTypeID==5 && item.QualificationPriority=='278'){
+              <td>{{item.BranchName}} </td>
+              }
+
+              @if(item.QualificationPriority=='279'){
+              <td>{{item.ClassSubject}} </td>
+              }
+
+              @if(item.QualificationPriority=='280'){
+              <td>{{item.ClassSubject}} </td>
+              <td>{{item.BoardName}} </td>
+              }
+
+              @if(item.QualificationPriority=='278'){
+              <td>{{item.BoardTypeName}} </td>
+              }
+
+
+              @if(item.QualificationPriority=='281'){
+              <td>{{item.ClassSubject}} </td>
+              <td>{{item.StateName}} </td>
+              <td>{{item.BoardTypeName}} </td>
+              @if(item.BoardTypeName=='Other'){
+              <td>{{item.BoardStateName}} </td>
+              <td>{{item.BoardName}} - {{item.BoardExamName}} </td>
+              }
+              }
+
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.Marktype}} </td>
+              <td>{{item.AggMaxMarks}} </td>
+              <td>{{item.AggObtMarks}} </td>
+              <td>{{item.Percentage}}% </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+
+    @if(request.CourseTypeID==4 && QualificationLateralView[0]?.QualificationPriority=='280')
+    {
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">
+          अंग्रेजी योग्यता विवरण (English Qualification Details)
+        </b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>State of Study</th>
+              <th>Board</th>
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Marks Type</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of EnglishQualificationLateralView">
+              <!--<td>{{item.QualificationID}} </td>-->
+              <td>{{item.StateName}} </td>
+              <td>{{item.UniversityBoard}} </td>
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.Marktype}} </td>
+              <td>{{item.AggMaxMarks}} </td>
+              <td>{{item.AggObtMarks}} </td>
+              <td>{{item.Percentage}}% </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    }
+
+    <div *ngIf="request.SupplementaryDetailList?.length > 0" class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">पूरक विवरण (Supplementary Details)</b>
+      </div>
+
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+            <tr class="text-left">
+              <th>Qualification Level</th>
+              <!--<th>State of Study</th>
+            <th>Board</th>-->
+              <th>Year of Passing</th>
+              <th>Roll Number</th>
+              <th>Subject Name</th>
+              <th>Aggregate Maximum Marks</th>
+              <th>Aggregate Marks Obtained</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let item of request.SupplementaryDetailList">
+              <td>{{item.Qualification}} </td>
+              <!--<td>{{item.StateNames}} </td>
+            <td>{{item.BoardNames}} </td>-->
+              <td>{{item.PassingYear}} </td>
+              <td>{{item.RollNumber}} </td>
+              <td>{{item.SubjectName}} </td>
+              <td>{{item.MaxMarksSupply}} </td>
+              <td>{{item.ObtMarksSupply}} </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">अन्य विवरण (Other Details)</b>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <!--<div><b>निवास का एरिया  (Area of residence):</b></div>
+      <div>{{request.Residence  }}</div>-->
+        <div><b>सभी स्रोतों से माता-पिता कीआय (Parent’s income from all sources):</b></div>
+        <div>{{request.ParentIncome  }}</div>
+
+        <div *ngIf="request.ParentIncome!='Upto and Greater than Rs 8 lacs'"><b>माता-पिता की आय राशि में (Parent's Income In Amount):</b></div>
+
+        <div *ngIf="request.ParentIncome!='Upto and Greater than Rs 8 lacs'">{{request.ParentIncomeAMT  }}</div>
+
+        <div *ngIf="request.ParentIncome!='Upto and Greater than Rs 8 lacs'"><b>क्या आप TFWS आवेदन करना चाहते हैं (Do you want apply for TFWS)::</b></div>
+        <div *ngIf="request.ParentIncome!='Upto and Greater than Rs 8 lacs'">{{request.ApplyScheme  }}</div>
+
+        <div><b>क्या आप मानदंडों के अनुसार खेल कोटा से संबंधित हैं? (Do you belong to Sports Quota as per norms?):</b></div>
+      <div>{{ request.IsSportsQuota ? 'Yes' : 'No' }}</div>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">विकल्प(Option Form)</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr class="text-left">
+              <th>Priority</th>
+              <th>Name of College</th>
+              <th>Branch Name</th>
+              <th>college Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of request.OptionalViewDatas; let idx = index">
+              <td>{{idx+1}}</td>
+              <td>{{item.InstituteName}}</td>
+              <td>{{item.BranchName}}</td>
+              <td>{{item.College_TypeName}}</td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+      <b class="text-1xl-5">
+        <span class="ti ti-download"></span>&nbsp;
+        अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+      </b>
+    </div>
+    <div class="overflow-auto mb-6">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Document Name</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let dOC of request.DocumentDetailList;  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>
+              <!--<a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{dOC.FolderName}}/{{dOC.FileName}}" class="text-success">{{dOC.DisplayColumnNameEn}}</a>-->
+              <a href="javascript:void(0)"
+                 (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + dOC.FolderName + '/' + dOC.FileName)"
+                 class="text-success">
+                {{ dOC.DisplayColumnNameEn }}
+              </a>
+            </td>
+          </tr>
+          <tr *ngIf="request.DocumentDetailList?.length==null">
+            <td colspan="7">No Document Uploaded</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" *ngIf="IsShowIncompleteData">
+      <b class="text-1xl-5">अधूरा डेटा (Incomplete Data)</b>
+    </div>
+
+    <div class="overflow-auto" *ngIf="IsShowIncompleteData">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Pending Data</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of request.PendingDataModel  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>{{item.Pending}}</td>
+            <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">घोषणा (Undertaking)</b>
+      </div>
+      <div class="w-full">
+        <label>
+          <input type="checkbox" class="mb-3 me-3" [(ngModel)]="IsTermAndCondition" />
+          मेरे द्वारा यह प्रमाणित किया जाता है कि मैने आवेदन पत्र भरने से पूर्व प्रवेश के सम्बन्ध में सभी दिशा निर्देश तथा नियम भलीभाँति से पढ़ लिये हैं। ऑनलाइन आवेदन पत्र में मेरे द्वारा भरी गयी सभी सूचनाएं सत्य एवं सही है। मेरे द्वारा यह भी प्रमाणित किया जाता है कि मुझे किसी भी संस्थान द्वारा पूर्व में कभी भी निष्काषित नहीं किया गया है। भविष्य में मेरे द्वारा दी गयी कोई सूचना गलत पाई जाती है तो विभाग द्वारा मेरा प्रवेश निरस्त किया जा सकता है, तथा मेरे विरुद्ध आई.पी.सी. की सम्बन्धित धारा के अंतर्गत नियमानुसार कार्यवाही की जा सकती है, जिसकी सम्पूर्ण जिम्मेवारी मेरी होगी। यदि मुझे प्रवेश प्राप्त होता हैं तो मेरे द्वारा संस्थान के सभी नियमों एवं अनुशासन का पालन करते हुए पूर्ण प्रशिक्षण प्राप्त किया जायेगा। मेरे द्वारा ऐसा कोई कृत्य नहीं किया जावेगा जो की शान्ति एवं
+          अनुशासन के विपरीत हो, अन्यथा मुझे संस्थान से निष्काषित किया जा सकेगा।
+        </label>
+      </div>
+
+    </div>
+    <div class="w-full text-center mt-4 flex align-center justify-center">
+
+
+      <button type="button" class="btn bg-primary text-white" (click)="DirectAdmissionPaymentUpdate() ">
+        <i class="ti ti-device-floppy"></i>Final Submit
+      </button>
+
+      <!--<button type="button" *ngIf="ShowfinalLButton" class="btn bg-primary text-white" (click)="SaveData() "><i class="ti ti-device-floppy"></i>Lock & Final Submit</button>-->
+
+      <!-- <button type="button" *ngIf="ShowPaymentButton" class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails,request.ApplicationID)">
+        <i class="ti ti-inr">
+        </i>Make Payment
+      </button> -->
+
+      <!--<button type="button" *ngIf="ShowPaymentButton && showFeeButton" class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails,request.ApplicationID)"><i class="ti ti-inr"></i>Make Payment</button>-->
+
+      <button type="button" (click)="DownloadApplicationForm()" class="btn bg-success text-white" title="Download Application">Download Application</button>
+
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    Header
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    Preview Content
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        PDF Preview
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        Image Preview
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #MyModel_PreviewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] ">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="ti ti-currency-rupee"></i> Please pay the application form fee for proceeding in the application status</b>
+        <button class="btn bg-info text-white" (click)="CloseModel()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+
+          <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+          <div>{{request.StudentName  }}</div>
+
+          <!--<div><b>आवेदक का नाम हिंदी में  (Applicant's Name in Hindi):</b></div>
+          <div>{{request.StudentNameHindi  }}</div>-->
+
+          <div><b>पिता का नाम (Father's Name):</b></div>
+          <div>{{request.FatherName  }}</div>
+
+          <!--<div><b>पिता का नाम हिंदी में (Father's Name in Hindi):</b></div>
+          <div>{{request.FatherNameHindi  }}</div>-->
+
+
+
+          <div><b>माता का नाम (Mother's Name):</b></div>
+
+          <div>{{request.MotherName  }}</div>
+
+
+
+          <!--<div><b>माता का नाम हिंदी में (Mother's Name in Hindi):</b></div>
+          <div>{{request.MotherNameHindi  }}</div>-->
+          <!--<div><b>आधार नंबर  (Aadhar Number):</b></div>
+          <div>{{request.AadharNo  }}</div>-->
+
+
+          <div><b>लिंग (Gender):</b></div>
+          <div>{{request.Gender}}</div>
+
+
+          <div><b>जन्म तिथि (Date of Birth):</b></div>
+          <div>{{request.DOB  }}</div>
+
+          <div>
+            <b>श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC):</b>
+          </div>
+          <div>{{request.CategoryA}}</div>
+
+          <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+          <div>{{request.MobileNo  }}</div>
+
+          <div><b>आवेदन शुल्क (Application Fees):</b></div>
+          <div>{{request.ApplicationFees}}</div>
+
+          <!--<div><b>सेवा आईडी (Service ID):</b></div>
+          <div>{{request.ServiceID}}</div>-->
+        </div>
+
+      </div>
+
+      <div class="card-footer text-center">
+        <!--<button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() "><i class="ti ti-currency-rupee"></i> Pay Now</button>-->
+
+        <button class="btn bg-primary text-white" [disabled]="isLoading" (click)="PayApplicationFees()">
+          <span *ngIf="!isLoading"><i class="ti ti-currency-rupee"></i> Pay Now</span>
+          <span *ngIf="isLoading">
+            <i class="fa fa-spinner fa-spin"></i> Processing...
+          </span>
+        </button>
+
+
+        <span *ngIf="this.sSOLoginDataModel.RoleID!=_EnumRole.Emitra">Or </span>
+        <button *ngIf="this.sSOLoginDataModel.RoleID!=_EnumRole.Emitra" type="button" class="btn bg-info text-white" (click)="DownloadChallan(searchrequest.ApplicationID)"><i class="ti ti-download"></i>Download Challan and kindly visit your nearest emitra counter to pay the fee</button>
+
+        <div class="col-span-2 pt-5" *ngIf="request.TransactionID>0">
+          <p class="text-danger">In case your transaction got failed, To verify your payment, please click on <b>Verify</b> button<br /> <button (click)="CheckPaymentSataus()" class="text-center text-white bg-success btn" style="margin-left:15px"><i class="ti ti-currency-rupee"></i> Verify Button</button></p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+<ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Revert documents </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div class="flex items-center gap-3 mb-2 flex justify-between">
+                <p class="text-sm font-semibold text-gray-700 m-0 ">
+                  <b>Application Remark:<span class="text-danger"> {{ CommonRemark }} </span> </b>
+                  
+                </p>
+                <p class="text-sm font-semibold text-gray-700 m-0 ">
+                  <b><span class="text-danger"> Note: Add Multiple Documents in single PDF </span> </b>
+                  
+                </p>
+                
+              </div>
+            <table class="w-full table-border" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                <tr class="text-left">
+                  <th>Sr. No.</th>
+                  <th>Document Name</th>
+                  <th> Revert Remark</th>
+                  <th class="text-left">Upload Document</th>
+
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let item of DocumentList; let idx = index;">
+                  <td>{{ idx + 1 }}</td>
+                  <td><a class="text-success">{{ item.DisplayColumnNameEn }}</a></td>
+                  <td>{{ item.Remark }}</td>
+
+                  <td>
+                    <div class="flex fileUploader">
+                      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                             id="filepanPhoto_{{idx+1}}" type="file" (change)="UploadDocument($event,item)" />
+                      <label for="filepanPhoto_{{idx+1}}">
+
+                        <span>Choose File</span>
+                        {{ item.Dis_FileName === '' ? 'No File Chosen' : item.Dis_FileName }}
+                      </label>
+                      <div class="flex" *ngIf="item.FileName !== ''">
+                        <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                        <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                           (click)="DeleteDocument(item)">
+                          <i class="ti ti-trash"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer text-center">
+            <button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

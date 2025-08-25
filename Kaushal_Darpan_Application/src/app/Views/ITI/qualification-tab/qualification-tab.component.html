@@ -1,0 +1,741 @@
+
+<div class="card-body p-5">
+
+  <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+        योग्यता विवरण भरें (Fill qualification
+        details):<span class="StarMarking">*</span>
+      </label>
+      <div  class="hidden">
+        <label class="me-2">
+          <input type="checkbox" value="8" id="Box8THForm" (click)="onClick8thCheckbox()"
+                 [checked]="box8Checked" />
+          8th
+        </label>
+        <label class="me-2">
+          <input type="checkbox" value="10" id="Box10THForm" (click)="onClick10thCheckbox()"
+                 [checked]="box10Checked" /> 10th
+        </label>
+        <label class="me-2">
+          <input type="checkbox" value="12" id="Box12THForm" (click)="onClick12thCheckbox()"
+                 [checked]="box12Checked" /> 12th
+        </label>
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="QualificationForm8th">
+    <div class=" mb-3 mt-3 w-full" *ngIf="box8Checked" id="FormBox8THForm">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">8th Qualification Details</b>
+        <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-3">
+
+        <div>
+          <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            State of Study:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="StateofStudy" formControlName="ddlState8" [(ngModel)]="formData8th.StateID8">
+            <option value="0">--- Select State ---</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm8th.ddlState8.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm8th.ddlState8.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            School Name:<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="" placeholder="Enter School Name"
+                 formControlName="txtSchoolCollege8" [(ngModel)]="formData8th.SchoolCollege8"
+                 (change)="formData8th.SchoolCollege8 = filterString(formData8th.SchoolCollege8)">
+          <div *ngIf="isSubmitted && _QualificationForm8th.txtSchoolCollege8.errors" class="text-danger">
+            <p *ngIf="_QualificationForm8th.txtSchoolCollege8.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Year of
+            Passing:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="YearofPassing" formControlName="txtYearOfPassing8"
+                  [(ngModel)]="formData8th.YearofPassing8">
+
+            <option value="" selected>Select Year of Passing</option>
+            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm8th.txtYearOfPassing8.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm8th.txtYearOfPassing8.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Roll Number:<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtRollNumber" (keypress)="numberOnly($event)" placeholder="Enter Roll Number"
+                 formControlName="txtRollNumber8" [(ngModel)]="formData8th.RollNumber8"
+                 (change)="formData8th.RollNumber8 = RollNumberValidation(formData8th.RollNumber8)">
+          <div *ngIf="isSubmitted && _QualificationForm8th.txtRollNumber8.errors" class="text-danger">
+            <p *ngIf="_QualificationForm8th.txtRollNumber8.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Marks Type:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType8"
+                  [(ngModel)]="formData8th.MarksTypeID8" (change)="calculatePercentage8th()">
+            <option selected value="0">Select Marks Type</option>
+            <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm8th.ddlMarksType8.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm8th.ddlMarksType8.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Maximum Marks:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMaximumMarks"
+                 placeholder="Enter Aggregate Maximum Marks" formControlName="txtMaxMarks8"
+                 [(ngModel)]="formData8th.MaxMarks8" (change)="calculatePercentage8th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm8th.txtMaxMarks8.errors" class="text-danger">
+            <p *ngIf="_QualificationForm8th.txtMaxMarks8.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Marks Obtained:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMarksObtained"
+                 placeholder="Enter Aggregate Marks Obtained" formControlName="txtMarksObatined8"
+                 [(ngModel)]="formData8th.MarksObtained8" (change)="calculatePercentage8th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm8th.txtMarksObatined8.errors" class="text-danger">
+            <p *ngIf="_QualificationForm8th.txtMarksObatined8.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+          <input type="text" class="form-input disabled" id="txtAggregateMarksObtained" disabled
+                 placeholder="Automatic Percentage calculate" formControlName="txtPercentage8"
+                 [(ngModel)]="formData8th.Percentage8">
+          <div *ngIf="isSubmitted && _QualificationForm8th.txtPercentage8.errors" class="text-danger">
+            <p *ngIf="_QualificationForm8th.txtPercentage8.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="QualificationForm10th">
+    <div class="mb-3 mt-3 w-full" id="FormBox10THForm" *ngIf="box10Checked">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">10th Qualification Details</b>
+        <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं), अगर 10 व़ी में गणित और विज्ञान विषय नहीं हों तो शुन्य (0) दर्ज करें </span>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-3">
+        <div>
+          <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            State of Study:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="StateofStudy" formControlName="ddlState10"
+                  [(ngModel)]="formData10th.StateID10">
+            <option value="0">--- Select State ---</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm10th.ddlState10.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm10th.ddlState10.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Board:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="Board" formControlName="txtBoardUniversity10"
+                  [(ngModel)]="formData10th.BoardUniversity10">
+            <option value="" selected>---Select Board---</option>
+            <option *ngFor="let item of BoardList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm10th.txtBoardUniversity10.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm10th.txtBoardUniversity10.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Year of
+            Passing:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="YearofPassing" formControlName="txtYearOfPassing10"
+                  [(ngModel)]="formData10th.YearofPassing10">
+            <option value="" selected>Select Year of Passing</option>
+            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm10th.txtYearOfPassing10.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm10th.txtYearOfPassing10.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Roll Number:<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtRollNumber" (keypress)="numberOnly($event)" placeholder="Enter Roll Number"
+                 formControlName="txtRollNumber10" [(ngModel)]="formData10th.RollNumber10"
+                 (change)="formData10th.RollNumber10 = RollNumberValidation(formData10th.RollNumber10)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtRollNumber10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtRollNumber10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Marks Type:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlMarksType"  formControlName="ddlMarksType10"
+                  [(ngModel)]="formData10th.MarksTypeID10" (change)="calculatePercentage10th()">
+            <option selected value="0">Select Marks Type</option>
+            <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm10th.ddlMarksType10.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm10th.ddlMarksType10.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Maximum Marks:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMaximumMarks"
+                 placeholder="Enter Aggregate Maximum Marks" formControlName="txtMaxMarks10"
+                 [(ngModel)]="formData10th.MaxMarks10" (change)="calculatePercentage10th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtMaxMarks10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtMaxMarks10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Marks Obtained:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMarksObtained"
+                 placeholder="Enter Aggregate Marks Obtained" formControlName="txtMarksObatined10"
+                 [(ngModel)]="formData10th.MarksObtained10" (change)="calculatePercentage10th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtMarksObatined10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtMarksObatined10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Maths Maximum Marks<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="" placeholder="Enter  Maths Maximum Marks"
+                 formControlName="txtMathsMaxMarks10" [(ngModel)]="formData10th.MathsMaxMarks10"
+                 (change)="ScienceAndMathsMarksValidation()" min="0" (input)="restrictInvalidCharacters($event)">
+        </div>
+        <div *ngIf="isSubmitted && _QualificationForm10th.txtMathsMaxMarks10.errors" class="text-danger">
+          <p *ngIf="_QualificationForm10th.txtMathsMaxMarks10.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Maths Marks Obtained<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="" placeholder="Enter Maths Marks Obtained"
+                 formControlName="txtMathsMarksObtained10" [(ngModel)]="formData10th.MathsMarksObtained10"
+                 (change)="ScienceAndMathsMarksValidation()" min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtMathsMarksObtained10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtMathsMarksObtained10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Science Maximum Marks<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="" placeholder="Enter Science Maximum Marks"
+                 formControlName="txtScienceMaxMarks10" [(ngModel)]="formData10th.ScienceMaxMarks10"
+                 (change)="ScienceAndMathsMarksValidation()" min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtScienceMaxMarks10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtScienceMaxMarks10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Science Marks Obtained<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="" placeholder="Enter Science Marks Obtained"
+                 formControlName="txtScienceMarksObtained10" [(ngModel)]="formData10th.ScienceMarksObtained10"
+                 (change)="ScienceAndMathsMarksValidation()" min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtScienceMarksObtained10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtScienceMarksObtained10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtAggregateMarksObtained"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+          <input type="text" class="form-input disabled" id="txtAggregateMarksObtained" disabled
+                 placeholder="Automatic Percentage calculate" formControlName="txtPercentage10"
+                 [(ngModel)]="formData10th.Percentage10">
+          <div *ngIf="isSubmitted && _QualificationForm10th.txtPercentage10.errors" class="text-danger">
+            <p *ngIf="_QualificationForm10th.txtPercentage10.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form [formGroup]="QualificationForm12th">
+    <div class=" mb-3 mt-3 w-full" *ngIf="box12Checked" id="FormBox12THForm">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">12th Qualification Details</b>
+        <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>
+      </div>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-3">
+
+        <div>
+          <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            State of Study:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="StateofStudy" formControlName="ddlState12" [(ngModel)]="formData12th.StateID12">
+            <option value="0">--- Select State ---</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm12th.ddlState12.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm12th.ddlState12.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            School Name:<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="" placeholder="Enter School Name"
+                 formControlName="txtSchoolCollege12" [(ngModel)]="formData12th.SchoolCollege12"
+                 (change)="formData12th.SchoolCollege12 = filterString(formData12th.SchoolCollege12)">
+          <div *ngIf="isSubmitted && _QualificationForm12th.txtSchoolCollege12.errors" class="text-danger">
+            <p *ngIf="_QualificationForm12th.txtSchoolCollege12.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Year of
+            Passing:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="YearofPassing" formControlName="txtYearOfPassing12"
+                  [(ngModel)]="formData12th.YearofPassing12">
+
+            <option value="" selected>Select Year of Passing</option>
+            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm12th.txtYearOfPassing12.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm12th.txtYearOfPassing12.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Roll Number:<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtRollNumber" (keypress)="numberOnly($event)" placeholder="Enter Roll Number"
+                 formControlName="txtRollNumber12" [(ngModel)]="formData12th.RollNumber12"
+                 (change)="formData12th.RollNumber12 = RollNumberValidation(formData12th.RollNumber12)">
+          <div *ngIf="isSubmitted && _QualificationForm12th.txtRollNumber12.errors" class="text-danger">
+            <p *ngIf="_QualificationForm12th.txtRollNumber12.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Marks Type:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType12"
+                  [(ngModel)]="formData12th.MarksTypeID12" (change)="calculatePercentage12th()">
+            <option selected value="0">Select Marks Type</option>
+            <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_QualificationForm12th.ddlMarksType12.errors" class="text-danger">
+            <p *ngIf="!_QualificationForm12th.ddlMarksType12.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Maximum Marks:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMaximumMarks"
+                 placeholder="Enter Aggregate Maximum Marks" formControlName="txtMaxMarks12"
+                 [(ngModel)]="formData12th.MaxMarks12" (change)="calculatePercentage12th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm12th.txtMaxMarks12.errors" class="text-danger">
+            <p *ngIf="_QualificationForm12th.txtMaxMarks12.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Marks Obtained:<span class="StarMarking">*</span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMarksObtained"
+                 placeholder="Enter Aggregate Marks Obtained" formControlName="txtMarksObatined12"
+                 [(ngModel)]="formData12th.MarksObtained12" (change)="calculatePercentage12th()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <div *ngIf="isSubmitted && _QualificationForm12th.txtMarksObatined12.errors" class="text-danger">
+            <p *ngIf="_QualificationForm12th.txtMarksObatined12.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+          <input type="text" class="form-input disabled" id="txtAggregateMarksObtained" disabled
+                 placeholder="Automatic Percentage calculate" formControlName="txtPercentage12"
+                 [(ngModel)]="formData12th.Percentage12">
+          <div *ngIf="isSubmitted && _QualificationForm12th.txtPercentage12.errors" class="text-danger">
+            <p *ngIf="_QualificationForm12th.txtPercentage12.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form [formGroup]="HighQualificationForm">
+
+    <div class="mb-3 mt-3 w-full">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Highest Qualification Details</b>
+        <span class="text-danger">(तारांकित (*) फील्ड भरना अनिवार्य हैं)</span>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-1 gap-3">
+        <div>
+          <label for="StateofStudy" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            State of Study:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="StateofStudy" formControlName="ddlState" [(ngModel)]="formData.StateIDHigh">
+            <option value="0">--- Select State ---</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <!-- <div *ngIf="isSubmitted&&_HighQualificationForm.ddlState.errors" class="text-danger">
+            <p *ngIf="!_HighQualificationForm.ddlState.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div> -->
+        </div>
+
+        <div>
+          <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Board/University:<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="Board" formControlName="txtBoardUniversity"
+                  [(ngModel)]="formData.BoardUniversityHigh">
+            <option value="" selected>---Select Board---</option>
+            <option *ngFor="let item of BoardList" [value]="item.Name">{{item.Name}}</option>
+          </select>
+         
+        </div>
+
+        <!-- <div>
+          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Board/University:<span class="StarMarking"></span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Board/University"
+                 formControlName="txtBoardUniversity" [(ngModel)]="formData.BoardUniversityHigh"
+                 (change)="formData.BoardUniversityHigh = filterString(formData.BoardUniversityHigh)" />
+          <div *ngIf="isSubmitted && _HighQualificationForm.txtBoardUniversity.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtBoardUniversity.errors.required"><i aria-hidden="true"></i>
+              This field is required.!
+            </p>
+          </div>
+        </div> -->
+        <div>
+          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            School/College:<span class="StarMarking"></span>
+          </label>
+          <input type="text" class="form-input" id="" placeholder="Enter School/College"
+                 formControlName="txtSchoolCollege" [(ngModel)]="formData.SchoolCollegeHigh"
+                 (change)="formData.SchoolCollegeHigh = filterString(formData.SchoolCollegeHigh)">
+          <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtSchoolCollege.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtSchoolCollege.errors.required"><i aria-hidden="true"></i>
+              This field is required.!
+            </p>
+          </div> -->
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Highest Qualification<span class="StarMarking">*</span></label>
+          <select class="form-select" id="UGQualificationID" name="UGQualificationID" formControlName="txtHighestQualification"
+                  [(ngModel)]="formData.HighestQualificationHigh">
+            <option value="">--- Select Highest Qualification ---</option>
+            <option *ngFor="let item of QualificationList" [value]="item.QualificationName">{{item.QualificationName}}</option>
+          </select>
+          
+        </div>
+
+        <!-- <div>
+          <label for="" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Highest Qualification:<span class="StarMarking"></span>
+          </label>
+          <input type="text" class="form-input" id="" placeholder="Enter Highest Qualification"
+                 formControlName="txtHighestQualification" [(ngModel)]="formData.HighestQualificationHigh">
+          <div *ngIf="isSubmitted && _HighQualificationForm.txtHighestQualification.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtHighestQualification.errors.required"><i aria-hidden="true"></i>
+              This field is required.!
+            </p>
+          </div>
+        </div> -->
+        <div>
+          <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Year of
+            Passing:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="YearofPassing" formControlName="txtYearOfPassing"
+                  [(ngModel)]="formData.YearofPassingHigh">
+            <option value="" selected>Select Year of Passing</option>
+            <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+          </select>
+          <!-- <div *ngIf="isSubmitted&&_HighQualificationForm.txtYearOfPassing.errors" class="text-danger">
+            <p *ngIf="!_HighQualificationForm.txtYearOfPassing.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div> -->
+        </div>
+
+        <div>
+          <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Roll Number:<span class="StarMarking"></span>
+          </label>
+          <input type="text" class="form-input" (keypress)="numberOnly($event)" id="txtRollNumber" placeholder="Enter Roll Number"
+                 formControlName="txtRollNumber" [(ngModel)]="formData.RollNumberHigh"
+                 (change)="formData.RollNumberHigh = RollNumberValidation(formData.RollNumberHigh)">
+          <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtRollNumber.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtRollNumber.errors.required"><i aria-hidden="true"></i> This
+              field is required.!
+            </p>
+          </div> -->
+        </div>
+
+
+        <div>
+          <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Marks Type:<span class="StarMarking"></span>
+          </label>
+          <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType"
+                  [(ngModel)]="formData.MarksTypeIDHigh" (change)="calculatePercentageHigh()">
+            <option selected value="0">Select Marks Type</option>
+            <option *ngFor="let item of MarksTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <!-- <div *ngIf="isSubmitted&&_HighQualificationForm.ddlMarksType.errors" class="text-danger">
+            <p *ngIf="!_HighQualificationForm.ddlMarksType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div> -->
+        </div>
+        <div>
+          <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Maximum Marks:<span class="StarMarking"></span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMaximumMarks"
+                 placeholder="Enter Aggregate Maximum Marks" formControlName="txtMaxMarks"
+                 [(ngModel)]="formData.MaxMarksHigh" (change)="calculatePercentageHigh()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+
+          <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtMaxMarks.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtMaxMarks.errors.required"><i aria-hidden="true"></i> This
+              field is required.!
+            </p>
+          </div> -->
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Aggregate
+            Marks Obtained:<span class="StarMarking"></span>
+          </label>
+          <input type="number" class="form-input" id="txtAggregateMarksObtained"
+                 placeholder="Enter Aggregate Marks Obtained" formControlName="txtMarksObatined"
+                 [(ngModel)]="formData.MarksObtainedHigh" (change)="calculatePercentageHigh()"
+                 min="0" (input)="restrictInvalidCharacters($event)">
+          <!-- <div *ngIf="isSubmitted && _HighQualificationForm.txtMarksObatined.errors" class="text-danger">
+            <p *ngIf="_HighQualificationForm.txtMarksObatined.errors.required"><i aria-hidden="true"></i>
+              This field is required.!
+            </p>
+          </div> -->
+        </div>
+        <div>
+          <label for="txtAggregateMarksObtained"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+          <input type="text" class="form-input disabled" id="txtAggregateMarksObtained" disabled
+                 placeholder="Automatic Percentage calculate" formControlName="txtPercentage"
+                 [(ngModel)]="formData.PercentageHigh">
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+<div class="card-footer text-center">
+  <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+  <button type="button" class="btn bg-primary text-white" (click)="SaveQualification()">
+    <i class="ti ti-device-floppy"></i>Save & Next
+  </button>
+  <button type="button" class="btn bg-light text-dark" (click)="ResetQualification()">
+    <i class="ti ti-refresh"></i>Reset
+  </button>
+</div>
+
+<ng-template #modal_Acknowledgement let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; Acknowledgement
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <p class="text-gray-800 text-sm font-medium inline-block mb-1">
+            यदि आप आठवीं(8th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है <br>
+            इसी प्रकार यदि दसवीं(10th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है <br>
+            तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| <br>
+            यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|
+          </p>
+
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="CloseModal()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> OK</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>

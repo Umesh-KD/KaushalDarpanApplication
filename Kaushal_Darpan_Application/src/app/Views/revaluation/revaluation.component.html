@@ -1,0 +1,178 @@
+<mat-stepper #stepper  >
+  <!-- Roll Number and DOB Section -->
+  <mat-step label="Step 1" state="phone">
+    <div *ngIf="rollDobSectionVisible" class="section">
+      <div class="">
+        <div class="card">
+          <div class="card-header backgoundheader" >
+            <b>Engineering Revaluation Semester 2024-25 (May)</b>
+          </div>
+          <div class="card-body p-5">
+            <div class="grid grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No.</label>
+                <input type="text" [(ngModel)]="searchRequest.RollNo" class="form-input" placeholder="Enter Roll No">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth</label>
+                <input type="date"
+                       [(ngModel)]="searchRequest.DOB"
+                       class="form-input"
+                       placeholder="Enter Date of Birth" />
+              </div>
+              <div>
+                <button (click)="submitRollDob(stepper)"
+                        class="block text-center text-white bg-success btn w-full">
+                  Submit & Next <span class="fa fa-chevron-right"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-step>
+
+
+  <!-- Student Details Section -->
+  <mat-step  [label]="'Step 2'" state="chat"  >
+    <div  *ngIf="studentDetailsSectionVisible" class="section">
+      <div class="">
+        <div class="card">
+          <div class="card-header backgoundheader">
+            <b>Engineering Revaluation Semester 2024-25 (May)</b>
+          </div>
+          <div class="card-body p-5">
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Name</label>
+                <input type="text" class="form-input disabled" [(ngModel)]="Request.StudentName" readonly />
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father Name</label>
+                <input type="text" class="form-input disabled" [(ngModel)]="Request.FatherName" readonly />
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment Number</label>
+                <input type="text" class="form-input disabled" [(ngModel)]="Request.EnrollmentNo" readonly />
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institution Name</label>
+                <input type="text" class="form-input disabled" [(ngModel)]="Request.InstituteNameEnglish" readonly />
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
+                <input type="text" class="form-input disabled" [(ngModel)]="Request.Name" readonly />
+              </div>
+
+              <div class="col-span-2">
+                <div class="overflow-x-auto mt-3">
+                  <table class="table table-border w-full table-auto" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th class="text-left">Year</th>
+                        <th class="text-left">Roll No.</th>
+                        <th class="text-left">Regular/Ex</th>
+                        <th class="text-center">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of StudentSemesterDetails">
+                        <td>{{row.Year}}</td>
+                        <td>{{row.RollNo}}</td>
+                        <td>{{row.StudentType}}</td>
+                        <td align="center">
+                          <button  (click)="GetRevalation(stepper, row)" class="btn bg-success text-white btn-sm centered-button">
+                            Revaluation
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div>
+                <button class="btn bg-success text-white btn-sm centered-button"  matStepperPrevious>Back</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-step>
+
+  <mat-step  [label]="'Step 3'" >
+    <!-- Payment Section -->
+    <div *ngIf="paymentSectionVisible" class="section" >
+      <div class="">
+        <div class="card" >
+          <div class="card-header backgoundheader">
+            <b>Payment Revaluation</b>
+          </div>
+          <div class="car-body p-5">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year</label>
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.Year">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Roll No.</label>
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.RollNo">
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Ragular/Ex</label>
+                <input type="text" class="form-input disabled" disabled [(ngModel)]="Request.StudentType">
+              </div>
+
+              <div class="col-span-2">
+                <div class="overflow-x-auto mt-3">
+                  <table class="table table-border w-full table-auto" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th class="text-left">Select</th>
+                        <th class="text-left">Subject Code</th>
+                        <th class="text-left">Subject Name</th>
+                        <th class="text-left">Subject Marks</th>
+                        <th class="text-left">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of GetStudentDetails let idx=index;">
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected"
+                                 [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}" (change)="onCheckboxChange(row)">
+                        </td>
+                        <td>{{row.SubjectCode}}</td>
+                        <td>{{row.SubjectName}}</td>
+                        <td>{{row.ObtainedTheory}}</td>
+                        <td>{{row.FeeAmount}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-span-2">
+                <button type="button"  class="block text-center text-white bg-success btn w-full" (click)="MultiPayment()"><i class="ti ti-currency-rupee"></i>Pay Now </button>
+              </div>
+              
+              <!--<div class="col-span-2">
+                <p>In case your transaction got failed, To verify your payment, please click on <b>Verify</b> button<button (click)="CheckPaymentSataus()" class="text-center text-white bg-success btn" style="margin-left:15px"><i class="ti ti-currency-rupee"></i> Verify Button</button></p>
+              </div>-->
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </mat-step>
+
+  <ng-template matStepperIcon="phone">
+    <mat-icon>call_end</mat-icon>
+  </ng-template>
+  <ng-template matStepperIcon="chat">
+    <mat-icon>forum</mat-icon>
+  </ng-template> 
+
+</mat-stepper>

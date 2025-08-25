@@ -1,0 +1,37 @@
+/* StateLevelPoolCampus */
+.StateLevelPoolCampus {
+  background-color: #3cbade42;
+}
+
+/* InstituteLevelCampus */
+.InstituteLevelCampus {
+  /*  background-color: lightgreen;*/
+  background-color: #3cbade61;
+}
+
+/* DivisionLevelPoolCampus */
+.DivisionLevelPoolCampus {
+  /*  background-color: lightcoral;*/
+  background-color: #3cbade82;
+}
+
+.all-post-filer.card .card-header h4 {
+  margin: 0;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+
+.marqueeUl.postlist-mar li a, .marqueeUl.postlist-mar li.marqueeUlCampus {
+  border-bottom: solid 1px #d3d3d3 !important;
+  padding: 5px 8px;
+}
+
+.downlod-btn-mar {
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+}

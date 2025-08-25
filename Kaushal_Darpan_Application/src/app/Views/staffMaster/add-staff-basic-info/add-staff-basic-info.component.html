@@ -1,0 +1,401 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Staff Basic Info</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/addstaffbasicinfo" class="text-sm font-medium text-slate-700" aria-current="page">
+        Add Staff Basic Info  Details
+      </a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+   
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Staff Basic Info  Details</b>
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3" >
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type</label>
+          <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
+                  [(ngModel)]="formData.StaffTypeID" (change)="StaffLevelType()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlStaffType.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlStaffType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID !=30">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level</label>
+          <select class="form-select" [(ngModel)]="formData.StaffLevelID" (change)="StaffLevelChild()" [ngModelOptions]="{standalone: true}">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of StaffLevelList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formData.StaffLevelID == 4 && formData.StaffTypeID !=31">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department</label>
+
+          <select class="form-select" name="SearchByBranchs" id="SearchByBranchs" [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="formData.BranchID" (change)="GetChange()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of BranchesMasterList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+
+        </div>
+        <div *ngIf="formData.BranchID !=0 && HOD_DDlList.length > 0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
+          <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"
+                  [(ngModel)]="formData.HODsId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of HOD_DDlList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+
+
+
+        <div *ngIf="formData.Show_StaffLevelChild === true && formData.StaffLevelID != 0">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 1">Ministerial Staff</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 2">Placement</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 3">Library</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 4 ">Hod's'</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 5">Hostel Warden</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1" *ngIf="formData.StaffLevelID == 16">GuestRoom Warden</label>
+          <select class="form-select" [(ngModel)]="formData.StaffLevelChildID" [ngModelOptions]="{standalone: true}">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of StaffLevelChildList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div *ngIf="formData.BranchID !=0 && formData.StaffLevelChildID == 12">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Technician</label>
+          <select class="form-select" [(ngModel)]="formData.TechnicianID" [ngModelOptions]="{standalone: true}">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of TechnicianList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+        <div *ngIf="formData.StaffLevelID == 5">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel</label>
+          <!--<select class="form-select" name="ddlHostel" id="ddlHostel"
+              [(ngModel)]="formData.HostelID" [ngModelOptions]="{standalone: true}">
+        <option value="0">Choose Option</option>
+        <option *ngFor="let item of HostelList" [value]="item.ID">{{item.Name}}</option>
+      </select>-->
+
+          <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                               [formControl]="_AddStaffBasicDetailFromGroup.ddlHostel"  [settings]="settingsMultiselect"
+                                   [data]="HostelList"
+                                   [(ngModel)]="formData.HostelIDs"
+                                   [disabled]="false"  (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
+                                   (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+          </ng-multiselect-dropdown>
+
+        </div>
+
+
+
+        <div class="AddStaffBox">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+          <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
+                 formControlName="txtSSOID" [(ngModel)]="formData.SSOID" />
+          <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name Of Person</label>
+          <div class="flex">
+
+            <input class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
+                   formControlName="Name" [(ngModel)]="formData.Displayname" />
+
+          </div>
+          <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Name.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.Name.errors.required">
+              <i aria-hidden="true"></i>
+              This
+              field is
+              required.!
+            </p>
+          </div>
+        </div>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+        <div>
+          <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="OnFormSubmit()">Submit</button>
+          <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
+        </div>
+      </div>
+
+    </form>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Staff List</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Staff Type</th>
+            <th class="text-left">Name/SSO Id</th>
+            <th class="text-left">StaffLevel Type</th>
+            <th class="text-left">Staff Level Child Type</th>
+            <th class="text-left">Course</th>
+            <th class="text-left">Subject</th>
+            <th class="text-left">Contact Details</th>
+            <th class="text-left">Address Details</th>
+            <th class="text-left">Profile Status</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StaffMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.StaffType}}</td>
+            <td><b>{{row.Name}}</b> ({{row.SSOID}})</td>
+            <td> {{row.StaffLevelTypeName}}</td>
+            <td> {{row.StaffLevelChildName}}</td>
+            <td>{{row.Stream}}</td>
+            <td>{{row.Subject}}</td>
+            <td>
+              <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
+              <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
+            </td>
+            <td>
+              <p *ngIf="row.Address?.length>0" style="max-width:350px">
+                {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
+              </p>
+            </td>
+            <td>
+              <span class="py-1 px-2 bg-danger text-white" *ngIf="row.ProfileStatus==0">Pending</span>
+              <span class="py-1 px-2 bg-success text-white" *ngIf="row.ProfileStatus==1">Completed</span>
+            </td>
+            <td>
+              <span class="py-1 px-2 bg-success text-white" *ngIf="row.ExaminerStatus==85">Approved</span>
+              <span class="py-1 px-2 bg-danger  text-white" *ngIf="row.ExaminerStatus==86">Draft</span>
+              <span class="py-1 px-2 bg-warning  text-white" *ngIf="row.ExaminerStatus==87">Submitted</span>
+            </td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)="EditInfo(row.StaffID)"><i class="ti ti-pencil"></i></a>
+                </div>
+                <!--<div class="flex align-center justify-center actionBtns w-auto"
+                     style="width:auto !important">
+                  <a (click)="OnConfirm(SttafModelPriview,row.StaffID)" title="View"><i class="ti ti-eye"></i></a>
+                </div>-->
+            </td>
+          </tr>
+          <tr *ngIf="StaffMasterList?.length==0">
+            <td colspan="10">
+              No Record Found
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<ng-template #SttafModelPriview let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <!--<div *ngIf="isModalOpen" >-->
+        <!--<h4 class="text-center text-lg font-semibold mb-4">Confirmation</h4>-->
+        <div class="card tab-panels " id="Preview">
+          <div class="card-body p-5">
+
+            <div class="mb-6 w-full text-center">
+              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Teacher Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <!--<div class="col-span-2 text-center" style="text-align:center !important">
+                    <img src="assets/images/dummyImg.jpg" class="imgSignSelf" />
+                    <b class="block">फोटो (Photograph)</b>
+                </div>
+                <div class="col-span-2 text-center">
+                    <img src="assets/images/signature.jpg" class="imgSignSelf" />
+                    <b class="block">हस्ताक्षर (Signature)</b>
+                </div>-->
+
+                <div><b>Teacher Name:</b></div>
+                <div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Email:</b></div>
+                <div>{{staffDetailsFormData.Email}}</div>
+                <div><b>Mobile:</b></div>
+                <div>{{staffDetailsFormData.MobileNumber}}</div>
+                <div><b>Designation:</b></div>
+                <div>{{staffDetailsFormData.DesignationID}}</div>
+                <div><b>Date of Joining as lecture:</b></div>
+                <div>{{staffDetailsFormData.DateOfJoining}}</div>
+                <div><b>Date of Retirement:</b></div>
+                <div>{{staffDetailsFormData.DateOfAppointment}}</div>
+                <div><b>Number of years experience:</b></div>
+                <div>
+                  {{staffDetailsFormData.Experience}}
+                </div>
+                <div><b>Teacher Branch & code:</b></div>
+                <div>{{staffDetailsFormData.StreamName}}</div>
+
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Current Working Institute</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Institute Name:</b></div>
+                <div>{{staffDetailsFormData.InstituteName}}</div>
+                <div><b>Division:</b></div>
+                <div>{{staffDetailsFormData.InstituteDivision}}</div>
+                <div><b>District:</b></div>
+                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
+                <div><b>Tehsil:</b></div>
+                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Qualification Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>UG:</b></div>
+                <div>B.Tech</div>
+                <div><b>PG:</b></div>
+                <div>M.E.</div>
+                <div><b>PhD:</b></div>
+                <div>No</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.District}}</div>
+                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>
+
+            <!--<div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.State}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.district}}</div>
+                <div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.TehssilName}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>-->
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Bank Account Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Bank Name</b></div><div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Branch Name</b></div><div>{{staffDetailsFormData.BranchName}}</div>
+                <div><b>Name In Bank Account</b></div><div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Account No.</b></div><div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div><div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div><div>{{staffDetailsFormData.PanCardNumber}}</div>
+              </div>
+            </div>
+
+
+          </div>
+          <!--<div class="card-footer text-center">
+            <button type="button" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Lock & Submit</button>
+          </div>-->
+        </div>
+
+
+      </div>
+
+
+      <!-- Close Button -->
+      <!--<div class="flex justify-center mt-4">
+        <button class="btn bg-info text-white" (click)="Confirm()">Confirm</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+      </div>-->
+    </div>
+    <!--</div>-->
+  </div>
+</ng-template>
+
+
+<!-- end row -->

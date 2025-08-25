@@ -1,0 +1,86 @@
+export class ItiCampusPostMasterModel {
+  public AID: number = 0;
+  public PostID: number = 0;
+  public PostNo: string = '';
+  public PostCollegeID: number = 0;
+  public RoleID: number = 0;
+  public PostSSOID: string = '';
+  public CompanyID: number = 0;
+  public CompanyTypeID:number=0;
+  public Website: string = '';
+  public StateID: number = 0;
+  public DistrictID: number = 0;
+  public IsMainRole: number = 0;
+  public Address: string = '';
+  public HR_Name: string = '';
+  public HR_MobileNo: string = '';
+  public HR_Email: string = '';
+  public HR_SSOID: string = '';
+  public JobDiscription: string = '';
+  public Dis_JobDiscription: string = '';
+  public CampusVenue: string = '';
+  public CampusVenueLocation: string = '';
+  public CampusFromDate: string = '';
+  public CampusFromTime: string = '';
+  public CampusToDate: string = '';
+  public CampusToTime: string = '';
+  public CampusAddress: string = '';
+  public Action: string = '';
+  public ActionRemarks: string = '';
+  public ActionBy: number = 0;
+  public ActionRTS?: string = '';
+  public Marked: boolean = false;
+  public ActiveStatus: boolean = false;
+  public DeleteStatus: boolean = false;
+  public RTS?: string = '';
+  public CreatedBy: number = 0;
+  public UserID: number = 0;
+  public ModifyBy: number = 0;
+  public ModifyDate?: string = '';
+  public IPAddress?: string = '';
+  public DepartmentID: number = 0;
+  public CampusPostType:number=0;
+  public EligibilityCriteriaModel: ItiCampusPostMaster_EligibilityCriteriaModel[] = [];
+}
+export class ItiCampusPostMaster_EligibilityCriteriaModel {
+  public AID: number = 0;
+  public PostID: number = 0;
+  public BranchID: number = 0;
+  public BranchName: string = '';
+  public PassingYear: number = 0;
+  public ToPassingYear: number = 0;
+  public SalaryTypeID: number = 0;
+  //public SemesterID: number = 0;
+  //public SemesterName: string = '';
+  public MinPre_10: number = 0;
+  public MinPre_12: number = 0;
+  public MinPre_Diploma: number = 0;
+  public NoofBackPapersAllowed: number = 0;
+  public AgeAllowedFrom: string = '';
+  public AgeAllowedTo: string = '';
+  public HiringRoleID: number = 0;
+  public HiringRoleName: string = '';
+  public NoofPositions: number = 0;
+  public CTC: string = '';
+  public SalaryRemark: string = '';
+  public Gender: string = '';
+  public OtherBenefit: string = '';
+  public CampusType: string = '0';
+  public InterviewType: string = 'Both';
+  public NoOfInterviewRound: number = 0;
+  public ActiveStatus: boolean = true;
+  public DeleteStatus: boolean = false;
+  public Dis_AgeAllowedFrom: string = '';
+  public Dis_AgeAllowedTo: string = '';
+  public EligibleInstitutesID: number = 0;
+  public EligibleInstitutesName: string = '';
+   public SalaryName: string ='';
+}
+
+export class ItiCampusPostMaster_Action {
+  public PostID: number = 0;
+  public Action: string = '0';
+  public ActionRemarks: string = '';
+  public ActionBy: number = 0;
+  public DepartmentID: number = 0;
+}

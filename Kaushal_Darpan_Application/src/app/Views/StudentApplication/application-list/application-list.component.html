@@ -1,0 +1,335 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Application List</a>
+    </div>
+  </div>
+
+  <button *ngIf="sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon || sSOLoginDataModel.RoleID == _EnumRole.Principal_NCVT
+              || sSOLoginDataModel.RoleID == _EnumRole.Principle_NonEng_Degree1Year || sSOLoginDataModel.RoleID == _EnumRole.Principle_NonEng_Degree2YearLateral"
+          type="submit" class="btn bg-success text-white" (click)="openApplyNowModal(modal_ApplyNow)">
+    <i class="ti ti-plus"></i> Apply Now
+  </button>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5"> 
+
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i> Search Application  </b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" [(ngModel)]="searchRequest.ApplicationNo">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No<span class="StarMarking">*</span> </label>
+          <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " [(ngModel)]="searchRequest.MobileNumber" maxlength="10" (keypress)="validateNumber($event)">
+
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" placeholder="Enter Select DOB" [(ngModel)]="searchRequest.DOB">
+
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetAllDataActionWise()"><i class="ti ti-search"></i>Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i>  Application List  </b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      </div>
+      <div class="overflow-auto w-full mt-3">
+        <table style="min-width: 1555px; max-width:100%;" class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Department</th>
+              <th class="text-left">Student Name</th>
+              <th class="text-left">Father Name</th>
+              <th class="text-left">Mother Name</th>
+              <th class="text-left">Mobile No</th>
+              <th style="width:8%;" class="text-left">Dob</th>
+              <th class="text-left">Email</th>
+              <th class="text-left">Application No</th>
+              <th class="text-left">Status</th>
+              <!--<th class="text-left">Seat Allotment Status</th>
+              <th class="text-left">Seat Allotment Category</th>-->
+
+              <th style="width:8%;">Last Modified </th>
+              <th>Download</th>
+
+              <th style="width:18%;" class="text-Center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of encryptedRows; let idx = index;">
+              <td>{{ idx + 1 }}</td>
+              <td>
+
+                @if(row.DepartmentID==2){
+                {{ row.Department }}
+                }
+
+                @if(row.DepartmentID==1) {
+                {{ row.CourseTypeName }}
+                }
+
+
+
+              </td>
+              <td>{{ row.StudentName }}</td>
+              <td>{{ row.FatherName }}</td>
+              <td>{{ row.MotherName }}</td>
+              <td>{{ row.MobileNo }}</td>
+              <td>{{ row.DOB }}</td>
+              <td>{{ row.Email }}</td>
+              <td>{{ row.ApplicationNo }}</td>
+              <td>{{ row.Status }}</td>
+              <!--<td>{{ row.SeatAllotmentStatus == 0? 'Allotment Pending': 'Seat Allotted' }}</td>
+              <td>{{ row.AllotedCategory == ''? 'N/A': row.AllotedCategory }}</td>-->
+
+
+              <td>
+                {{ row.DepartmentID == 2 ? row.LastUpdated : '' }}
+              </td>
+              <td>
+                <!--<a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true" (click)="DownloadApplicationForm(row.ApplicationID)" href="javascript:void(0);" title="Download"><i class="ti ti-download"></i></a>-->
+                <!--<a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true"
+                   (click)="DownloadApplicationForm(row.ApplicationID)"
+                   class="btn bg-info text-white btn-sm"> Download </a>-->
+
+              </td>
+
+
+          
+
+
+              <!--<td>
+                <a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true" (click)="DownloadApplicationForm(row.ApplicationID)" href="javascript:void(0);" title="Download"><i class="ti ti-download"></i></a>
+              </td>-->
+              <!--<td (click)="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess ? DownloadApplicationForm(row.ApplicationID) : null">
+                <i class="ti ti-download"
+                   *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess"></i>
+              </td>-->
+              <!--<td *ngIf="row.DepartmentID == 2">{{row.LastUpdated}}</td>
+              <td *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true"  (click)="DownloadApplicationForm(row.ApplicationID)"><i class="ti ti-download"></i></td>-->
+
+              <td class="text-center">
+
+                <a *ngIf="row.IsFinalSubmit == 2 && row.DepartmentID == _EnumDepartment.BTER" (click)="redirectApplication(row,1)"
+                   class="btn bg-info text-white btn-sm">
+                  View
+                </a>
+
+                <!--<a *ngIf="row.DepartmentID == _EnumDepartment.ITI" [routerLink]="'/Itipreviewform'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm">
+                  View
+                </a>-->
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.SeatAllotmentStatus != 0"
+                   (click)="DownloadAllotmentLetter(row.ApplicationID)"
+                   class="btn bg-info text-white btn-sm"> Download Letter</a>-->
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit !== 2" (click)="redirectApplication(row,2)"
+                   class="btn bg-info text-white btn-sm"> Complete Application</a>
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1"
+                   (click)="applyForDirectAdmission(row)"
+                   class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a>
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2"
+                   (click)="redirectToDirectAdmissionApplicationForm(row)"
+                   class="btn bg-info text-white btn-sm"> Complete Direct Admission Form</a>
+
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true" (click)="redirectApplication(row,2)"
+                   class="btn bg-info text-white btn-sm"> View & Submit</a>
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
+                   [routerLink]="'/ApplicationFormTab'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm"> Complete Application</a>-->
+
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
+                   [routerLink]="'/ApplicationFormTab'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm"> Edit Application</a>-->
+
+
+                <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
+                   [routerLink]="'/Itipreviewform'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm"> View & Make Payment</a>-->
+
+                <!--<a *ngIf="row.DepartmentID == _EnumDepartment.BTER && row.SeatAllotmentStatus == 0
+                 && row.DirectAdmissionType != 0 && row.IsPaymentSuccess == true
+                 && sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"
+                   [routerLink]="'/college-admission-seat-allotment'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm">
+                  Allotment
+                </a>
+
+                <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.SeatAllotmentStatus === 0
+                  && row.DirectAdmissionType !== 0 && (sSOLoginDataModel.RoleID == _EnumRole.ITIPrincipal || sSOLoginDataModel.RoleID == _EnumRole.Principal_NCVT)
+                  "
+                   [routerLink]="'/college-admission-seat-allotment'"
+                   [queryParams]="{ AppID: row.encryptedApplicationID }"
+                   class="btn bg-info text-white btn-sm">
+                  Allotment
+                </a>-->
+
+                <!--<button *ngIf="row.StatusID == _EnumVerfication.Notified"
+                        class="btn bg-success text-white btn-sm"
+                        (click)="openModal(modal_Open, row.ApplicationID)" type="button">
+                  Action
+                </button>-->
+              </td>
+            </tr>
+            <tr *ngIf="StudentDetailsModelList?.length === 0">
+              <td colspan="15"> No records found</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+  <ng-template #modal_Open let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Revert documents </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body p-5">
+          <div class="p-6">
+            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+              <div class="flex items-center gap-3 mb-2 flex justify-between">
+                <p class="text-sm font-semibold text-gray-700 m-0 ">
+                  <b>Application Remark:<span class="text-danger"> {{ CommonRemark }} </span> </b>
+
+                </p>
+                <p class="text-sm font-semibold text-gray-700 m-0 ">
+                  <b><span class="text-danger"> Note: Add Multiple Documents in single PDF </span> </b>
+
+                </p>
+
+              </div>
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr class="text-left">
+                    <th>Sr. No.</th>
+                    <th>Document Name</th>
+                    <th> Revert Remark</th>
+                    <th class="text-left">Upload Document</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let item of DocumentList; let idx = index;">
+                    <td>{{ idx + 1 }}</td>
+                    <td><a class="text-success">{{ item.DisplayColumnNameEn }}</a></td>
+                    <td>{{ item.Remark }}</td>
+
+                    <td>
+                      <div class="flex fileUploader">
+                        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                               id="filepanPhoto_{{idx+1}}" type="file" (change)="UploadDocument($event,item)" />
+                        <label for="filepanPhoto_{{idx+1}}">
+
+                          <span>Choose File</span>
+                          {{ item.Dis_FileName === '' ? 'No File Chosen' : item.Dis_FileName }}
+                        </label>
+                        <div class="flex" *ngIf="item.FileName !== ''">
+                          <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                          <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                             (click)="DeleteDocument(item)">
+                            <i class="ti ti-trash"></i>
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div class="card-footer text-center">
+              <button type="button" class="btn bg-success text-white" (click)="DocumentSave()">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+
+  <ng-template #modal_ApplyNow let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+    <div class="modal-content">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Proceed With </b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body p-5">
+          <div class="p-6">
+            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 ">
+              <div>
+                <h2 class="text-center text-2xl">Admission Apply For</h2>
+              </div>
+            </div>
+            <div class="grid xl:grid-cols-2 lg:grid-cols-3 md:grid-cols-3 gap-6 loginBox mt-2 px-lg-6">
+
+              <a *ngIf="sSOLoginDataModel.DepartmentID == _EnumDepartment.ITI && IsJailCollege"
+     (click)="Redirect(_EnumDirectAdmissionType.JailAdmission)"
+     class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">JAIL Admission <i class="ti ti-chevron-right"></i></a>
+
+             
+
+
+              <!-- <a  (click)="Redirect(sSOLoginDataModel.DepartmentID)"
+    class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">
+    BTER
+    <i class="ti ti-chevron-right"></i>
+  </a> -->
+
+              <a (click)="Redirect(sSOLoginDataModel.DepartmentID)"
+                 class="btn bg-info btn-lg text-white text-center py-4 c-pointer">
+                Direct Admission
+                <i class="ti ti-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </ng-template>
+
+  <app-student-status-history></app-student-status-history>

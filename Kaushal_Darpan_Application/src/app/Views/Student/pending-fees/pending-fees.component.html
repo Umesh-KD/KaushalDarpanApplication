@@ -1,0 +1,164 @@
+
+<div class="card" *ngIf="StudentDetailsModelList?.length>0">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Pending Fee Details</b>
+      <button *ngIf="isShowSelected" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
+    </div>
+    <div class="overflow-x-auto mt-3 w-full">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr.No</th>
+            <th *ngIf="isShowSelected" class="text-left">Select</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Stream Name</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Enrollment No.</th>
+            <th class="text-left">Roll No</th>
+            <th class="text-left">Amt. (INR)</th>
+            <th class="text-left">End Term</th>
+            <th class="text-left">Status</th>
+            <!--<th class="text-left">Last Date</th>-->
+            <th class="text-left">Exam Papers</th>
+            <th class="text-Center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td *ngIf="isShowSelected">
+              <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
+            </td>
+            <td>{{row.StudentName}}</td>
+            <td>{{row.StreamName}}</td>
+            <td>{{row.Semester}}</td>
+            <td>{{row.EnrollmentNo}}</td>
+            <td>{{row.RollNo}}</td>
+            <td>{{row.FeeAmount}}</td>
+            <td>{{row.EndTermName}}</td>
+            <td>{{row.StrStudenetStatus}}</td>
+            <td>{{row.Subjects}}</td>
+            <!--<td><span class="text-danger"><b>{{row.LastDate}}</b></span></td>-->
+            <!-- <td class="text-Center">
+              <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Paper</a>
+            </td> -->
+            <td class="text-center">
+              <button style="margin-bottom:5px" *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee" class="btn bg-success text-white btn-sm" (click)="PayEnrollmentFee(row)" type="button">Pay Enroll Fee </button>
+              <button style="margin-bottom:5px" *ngIf="row.TransactionID>0"  class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Verify Fee </button>
+              <button style="margin-bottom:5px" *ngIf="row.ServiceType==_EnumFeeFor.ExamFee" class="btn bg-success text-white btn-sm" (click)="PayExamFee(row)" type="button">Pay Exam Fee </button>
+              <button style="margin-bottom:5px" class="btn bg-success text-white btn-sm" (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" type="button">View History</button>
+            </td>
+          </tr>
+          <tr *ngIf="StudentDetailsModelList?.length === 0">
+            <td colspan="15" align="center">
+              <span>
+                <img class="ecte" src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- end row-->
+
+  </div>
+</div>
+
+<!--Modal Popup Start-->
+<ng-template #modal_viewPaper let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Paper List of {{SemesterName}}
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">SubjectName</th>
+                <th class="text-left">SubjectCode</th>
+                <th class="text-left">SubjectCategory </th>
+                <th class="text-left">StreamSubjectcode</th>
+                <th class="text-left">IsTheory</th>
+                <th class="text-left">IsPractical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of StudentSubjectList ; let idx=index; ">
+                <td>{{idx+1}}</td>
+                <td>{{item.SubjectName}}</td>
+                <td>{{item.SubjectCode}}</td>
+                <td>{{item.SubjectCategory}}</td>
+                <td>{{item.StreamSubjectcode}}</td>
+                <td> {{item.strIsTheory}}</td>
+                <td>{{item.strIsPractical}}</td>
+              </tr>
+              <tr *ngIf="StudentSubjectList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_viewTransaction let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;View Transaction Details
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Prn No</th>
+                <th class="text-left">Fee For</th>
+                <th class="text-left">Amount</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Status Message</th>
+                <th class="text-left">Trans Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of StudenetTranList ; let idx=index;">
+                <td>{{idx+1}}</td>
+                <td>
+                  {{row.PRN}}
+                </td>
+                <td>{{row.FeeFor}}</td>
+                <td>{{row.TransAmt}}</td>
+                <td>{{row.TransctionStatus}}</td>
+                <td>{{row.TransctionMSG}}</td>
+                <td>{{row.TransctionDate}}</td>
+              </tr>
+              <tr *ngIf="StudenetTranList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--End Modal Popup Start-->

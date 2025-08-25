@@ -1,0 +1,370 @@
+
+<div class="card-body p-5">
+  <div class="mb-8">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Correspondence Address</b>
+    </div>
+    <form [formGroup]="AddressDetailsFormGroup" id="AddressDetailsFormGroup" class="form-horizontal">
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6">
+        <div>
+          <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 1 (Address
+            Line 1): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtAddressLine1" placeholder="Enter Address Line 1"
+                 name="AddressLine1" formControlName="txtAddressLine1" [(ngModel)]="formData.AddressLine1" (ngModelChange)="syncAddress()" maxlength="50">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtAddressLine1.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine1.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine1.errors.maxlength">
+              <i aria-hidden="true"></i> Maximum 50 characters allowed!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtAddressLine2" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 2 (Address
+            Line 2): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtAddressLine2" placeholder="Enter Address Line 2"
+                 name="AddressLine2" formControlName="txtAddressLine2" [(ngModel)]="formData.AddressLine2" (ngModelChange)="syncAddress()" maxlength="50">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtAddressLine2.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine2.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine2.errors.maxlength">
+              <i aria-hidden="true"></i> Maximum 50 characters allowed!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="txtAddressLine3" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पता पंक्ति 3 (Address
+            Line 3):
+          </label>
+          <input type="text" class="form-input" id="txtAddressLine3" placeholder="Enter Address Line 3"
+                 name="AddressLine3" formControlName="txtAddressLine3" [(ngModel)]="formData.AddressLine3" (ngModelChange)="syncAddress()" maxlength="50">
+          <!-- <div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtAddressLine3.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtAddressLine3.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div> -->
+        </div>
+        <div>
+          <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            राज्य (State): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlState" name="State" formControlName="ddlState"
+                  [(ngModel)]="formData.StateID" (change)="ddlState_Change()" (ngModelChange)="syncAddress()">
+
+            <option value="0">Select State</option>
+            <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_AddressDetailsFormGroup.ddlState.errors" class="text-danger">
+            <p *ngIf="!_AddressDetailsFormGroup.ddlState.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            जिला (District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlDistrict" name="District" formControlName="ddlDistrict"
+                  [(ngModel)]="formData.DistrictID" (change)="ddlDistrict_Change()" (ngModelChange)="syncAddress()">
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddressDetailsFormGroup.ddlDistrict.errors" class="text-danger">
+            <p *ngIf="!_AddressDetailsFormGroup.ddlDistrict.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+        <!--<div>
+        <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          ब्लॉक/तहसील
+          (Block/Tehsil):
+        </label>
+        <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="ddlBlockTehsil"
+                [(ngModel)]="formData.TehsilID" (ngModelChange)="syncAddress()" >
+
+          <option value="0">Select Block/Tehsil</option>
+          <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+
+        </select>-->
+        <!--<div *ngIf="isSubmitted&&_AddressDetailsFormGroup.ddlBlockTehsil.errors" class="text-danger">
+          <p *ngIf="!_AddressDetailsFormGroup.ddlBlockTehsil.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>-->
+        <!--</div>-->
+
+        <div *ngIf="formData.StateID==6">
+          <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            ब्लॉक/तहसील
+            (Block/Tehsil) <!--<span class="StarMarking">*</span>-->
+          </label>
+          <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="ddlBlockTehsil"
+                  [(ngModel)]="formData.TehsilID"  (ngModelChange)="syncAddress()">
+
+            <option value="0">Select Block/Tehsil</option>
+            <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div *ngIf="formData.StateID!=6 &&  formData.StateID!=0">
+          <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            ब्लॉक/तहसील
+            (Block/Tehsil) <!--<span class="StarMarking">*</span>-->
+          </label>
+          <input maxlength="50" type="text" class="form-input" id="NonRajasthanBlockName" placeholder="Enter Block/Tehsil" name="NonRajasthanBlockName"
+                 formControlName="NonRajasthanBlockName"  (ngModelChange)="syncAddress()" [(ngModel)]="formData.NonRajasthanBlockName">
+          <!--<div *ngIf="isSubmitted && _AddressDetailsFormGroup.NonRajasthanBlockName.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.NonRajasthanBlockName.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>-->
+        </div>
+
+
+        <div>
+          <label for="txtCityVillage" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            शहर /गांव
+            (City/Village) <!--<span class="StarMarking">*</span>-->
+          </label>
+          <input type="text" class="form-input" id="txtCityVillage" placeholder="Enter City/Village" name="CityVillage"
+                 formControlName="txtCityVillage" [(ngModel)]="formData.CityVillage" (ngModelChange)="syncAddress()">
+          <!--<div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtCityVillage.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtCityVillage.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+          </div>-->
+        </div>
+        <div>
+          <label for="txtPincode" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पिन कोड (Pincode): <span class="StarMarking">*</span>
+          </label>
+          <input type="text" (keypress)="validateNumber($event)" class="form-input" id="txtPincode" placeholder="Enter Pincode" name="Pincode"
+                 formControlName="txtPincode" [(ngModel)]="formData.Pincode" maxlength="6" (ngModelChange)="syncAddress()">
+          <div *ngIf="isSubmitted && _AddressDetailsFormGroup.txtPincode.errors" class="text-danger">
+            <p *ngIf="_AddressDetailsFormGroup.txtPincode.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required.!
+            </p>
+            <p *ngIf="_AddressDetailsFormGroup.txtPincode.errors.pattern">
+              <i aria-hidden="true"></i> Enter Valid PinCode
+            </p>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+
+
+
+
+  <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5">Permanent Address</b>
+    <div class="form-check">
+      <input type="checkbox" class="form-checkbox rounded text-primary" style="border:solid;" (change)="toggleAddress($event)" id="SameAddress">
+      <label class="ms-1.5" for="SameAddress">
+        Permanent address as Correspondence address.
+      </label>
+    </div>
+  </div>
+
+  <form [formGroup]="CorsAddressDetailsFormGroup" id="AddressDetailsFormGroup" class="form-horizontal">
+    <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-6">
+
+      <div>
+        <label for="txtAddressLine1" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          पता पंक्ति 1 (Address
+          Line 1): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="txtAddressLine1" placeholder="Enter Address Line 1"
+               name="AddressLine1" formControlName="CorstxtAddressLine1" [(ngModel)]="formData.CorsAddressLine1" maxlength="50">
+        <div *ngIf="isSubmitted &&_CorsAddressDetailsFormGroup.CorstxtAddressLine1.errors" class="text-danger">
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtAddressLine1.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+      <div>
+        <label for="txtAddressLine2" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          पता पंक्ति 2 (Address
+          Line 2): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" class="form-input" id="txtAddressLine2" placeholder="Enter Address Line 2"
+               name="AddressLine2" formControlName="CorstxtAddressLine2" [(ngModel)]="formData.CorsAddressLine2" maxlength="50">
+        <div *ngIf="isSubmitted && _CorsAddressDetailsFormGroup.CorstxtAddressLine2.errors" class="text-danger">
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtAddressLine2.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>
+      </div>
+      <div>
+        <label for="txtAddressLine3" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          पता पंक्ति 3 (Address
+          Line 3):
+        </label>
+        <input type="text" class="form-input" id="txtAddressLine3" placeholder="Enter Address Line 3"
+               name="AddressLine3" formControlName="CorstxtAddressLine3" [(ngModel)]="formData.CorsAddressLine3" maxlength="50">
+        <!-- <div *ngIf="isSubmitted && _CorsAddressDetailsFormGroup.CorstxtAddressLine3.errors" class="text-danger">
+      <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtAddressLine3.errors.required">
+        <i aria-hidden="true"></i> This field is
+        required.!
+      </p>
+    </div> -->
+      </div>
+      <div>
+        <label for="ddlState" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          राज्य (State): <span class="StarMarking">*</span>
+        </label>
+        <select class="form-select" id="ddlState" name="State" formControlName="CorsddlState"
+                [(ngModel)]="formData.CorsStateID" (change)="ddlCorState_Change()">
+
+          <option value="0">Select State</option>
+          <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+
+        </select>
+        <div *ngIf="isSubmitted&&_CorsAddressDetailsFormGroup.CorsddlState.errors" class="text-danger">
+          <p *ngIf="!_CorsAddressDetailsFormGroup.CorsddlState.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
+      </div>
+      <div>
+        <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          जिला (District): <span class="StarMarking">*</span>
+        </label>
+        <select class="form-select" id="ddlDistrict" name="District" formControlName="CorsddlDistrict"
+                [(ngModel)]="formData.CorsDistrictID" (change)="ddlCorDistrict_Change()">
+          <option value="0">Select District</option>
+          <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+        <div *ngIf="isSubmitted&&_CorsAddressDetailsFormGroup.CorsddlDistrict.errors" class="text-danger">
+          <p *ngIf="!_CorsAddressDetailsFormGroup.CorsddlDistrict.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
+      </div>
+      <!--<div>
+    <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      ब्लॉक/तहसील
+      (Block/Tehsil):
+    </label>
+    <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="CorsddlBlockTehsil"
+            [(ngModel)]="formData.CorsTehsilID">
+
+      <option value="0">Select Block/Tehsil</option>
+      <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+
+    </select>-->
+      <!--<div *ngIf="isSubmitted&&_CorsAddressDetailsFormGroup.CorsddlBlockTehsil.errors" class="text-danger">
+    <p *ngIf="!_CorsAddressDetailsFormGroup.CorsddlBlockTehsil.errors.DropdownValidators">
+      <i aria-hidden="true"></i>This field is required .!
+    </p>
+  </div>-->
+      <!--</div>-->
+
+      <div *ngIf="formData.CorsStateID==6">
+        <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          ब्लॉक/तहसील
+          (Block/Tehsil) <!--<span class="StarMarking">*</span>-->
+        </label>
+        <select class="form-select" id="ddlPreferentialCategory" name="BlockTehsil" formControlName="CorsddlBlockTehsil"
+                [(ngModel)]="formData.CorsTehsilID">
+
+          <option value="0">Select Block/Tehsil</option>
+          <option *ngFor="let item of TehsilCorMasterList" [value]="item.ID">{{item.Name}}</option>
+        </select>
+      </div>
+      <div *ngIf="formData.CorsStateID!=6 &&  formData.CorsStateID!=0">
+        <label for="txtBlockTehsil" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          ब्लॉक/तहसील
+          (Block/Tehsil) <!--<span class="StarMarking">*</span>-->
+        </label>
+        <input maxlength="50" type="text" class="form-input" id="CorsNonRajasthanBlockName" placeholder="Enter Block/Tehsil" name="CorsNonRajasthanBlockName"
+               formControlName="CorsNonRajasthanBlockName" [(ngModel)]="formData.CorsNonRajasthanBlockName">
+        <!--<div *ngIf="isSubmitted && _CorsAddressDetailsFormGroup.CorsNonRajasthanBlockName.errors" class="text-danger">
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorsNonRajasthanBlockName.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>-->
+      </div>
+
+
+      <div>
+        <label for="CorstxtCityVillage" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          शहर /गांव
+          (City/Village) <!--<span class="StarMarking">*</span>-->
+        </label>
+        <input type="text" class="form-input" id="CorstxtCityVillage" placeholder="Enter City/Village" name="CityVillage"
+               formControlName="CorstxtCityVillage" [(ngModel)]="formData.CorsCityVillage">
+        <!--<div *ngIf="isSubmitted && _CorsAddressDetailsFormGroup.CorstxtCityVillage.errors" class="text-danger">
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtCityVillage.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+        </div>-->
+      </div>
+
+
+      <div>
+        <label for="CorstxtPincode" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          पिन कोड (Pincode): <span class="StarMarking">*</span>
+        </label>
+        <input type="text" (keypress)="validateNumber($event)" class="form-input" id="CorstxtPincode" placeholder="Enter Pincode" name="Pincode"
+               formControlName="CorstxtPincode" [(ngModel)]="formData.CorsPincode" maxlength="6">
+        <div *ngIf="isSubmitted && _CorsAddressDetailsFormGroup.CorstxtPincode.errors" class="text-danger">
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtPincode.errors.required">
+            <i aria-hidden="true"></i> This field is
+            required.!
+          </p>
+          <p *ngIf="_CorsAddressDetailsFormGroup.CorstxtPincode.errors.pattern">
+            <i aria-hidden="true"></i> Enter Valid PinCode
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+
+
+
+
+</div>
+
+
+<div class="card-footer text-center">
+  <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+  <button type="button" class="btn bg-primary text-white" (click)="saveAddressDetails()">
+    <i class="ti ti-device-floppy"></i>Save & Next
+  </button>
+  <button type="button" class="btn bg-light text-dark" (click)="CancelData()"><i class="ti ti-refresh"></i>Reset</button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+

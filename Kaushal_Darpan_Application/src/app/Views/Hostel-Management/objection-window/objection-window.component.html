@@ -1,0 +1,245 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Objection Window</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Objection Window</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Objection Window</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()">
+          <i class="ti ti-download"></i> Download Excel Data
+        </a>
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+      <!--<div class="">
+    <div class="d-flex align-items-center gap-2">
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" id="objectionToggle" [(ngModel)]="isObjectionActive">
+        <label class="form-check-label" style="margin:20px" for="objectionToggle">Objection</label>
+        <span class="badge" [ngClass]="isObjectionActive ? 'bg-success' : 'bg-danger'">
+          {{ isObjectionActive ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+    </div>
+  </div>-->
+
+      <div class="toggle-wrapper">
+        <label class="switch">
+          <input type="checkbox" [(ngModel)]="isObjectionActive">
+          <span class="slider round"></span>
+        </label>
+        <label class="form-check-label ms-2">Objection</label>
+        <span class="badge ms-2" [ngClass]="isObjectionActive ? 'bg-success' : 'bg-danger'">
+          {{ isObjectionActive ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+
+      <div class=""></div>
+
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <!-- Show table only when Active -->
+    <div class="overflow-x-auto mt-3" *ngIf="isObjectionActive">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" >
+              <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()"/>
+            </th>
+            <th class="text-left">Merit NO</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Application ID</th>
+            <th class="text-left">Type</th>
+            <th class="text-left">{{titleDDLBranchTrade}}</th>
+            <th class="text-left">Year</th>
+            <th class="text-left">Percentage</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentReqListList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left" >
+              <input type="checkbox"  [(ngModel)]="item.selected" (change)="checkIfAllSelected()"/>
+            </td>
+            <td align="left">{{ idx + 1 }}</td>
+            <td align="left">{{ item.StudentName }}</td>
+            <td align="left">{{ item.ApplicationId }}</td>
+            <td align="left">{{ item.StudentType }}</td>
+            <td align="left">{{ item.StreamName }}</td>
+            <td align="left">{{ item.EndTermName }}</td>
+            <td align="left">{{ item.ClassPercentage }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Request">
+                  <i class="ti ti-list"></i>
+                </a>
+                <a href="javascript:void(0);" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Edit"><i class="ti ti-pencil"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-default-200">
+        <button type="button" (click)="objectionwindowSavedata()" class="py-2 px-5 inline-flex items-center justify-center font-medium tracking-wide border align-middle duration-500 text-sm text-center bg-primary/5 hover:bg-primary border-primary/10 hover:border-primary text-primary hover:text-white rounded-md">
+          Submit
+        </button>
+      </div>
+    </div>
+
+    <!-- Show message when Inactive -->
+    <div class="overflow-x-auto mt-3" *ngIf="!isObjectionActive">
+      <p class="text-center text-danger text-lg">Objection window is inactive. No data to display.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- end row -->
+<!--Start Model Popup-->
+<ng-template #modal_ViewDetials let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b>Student Details For Hostel</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" *ngIf="StudentReqListList">
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Title</th>
+                <th class="text-left">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Name of Student</td>
+                <td>{{ViewRequest.StudentName}}</td>
+              </tr>
+              <tr>
+                <td>Father's Name</td>
+                <td>{{ViewRequest.FatherName}}</td>
+              </tr>
+              <tr>
+                <td>Contact/Mobile No.</td>
+                <td>{{ViewRequest.MobileNo}}</td>
+              </tr>
+              <tr>
+                <td>Permanet Address</td>
+                <td>{{ViewRequest.Address1}}</td>
+              </tr>
+              <tr>
+                <td>Cast/Category</td>
+                <td> {{ViewRequest.CasteCategoryNameEnglish}}</td>
+              </tr>
+              <tr>
+                <td>Father's Contact/Mobile No.</td>
+                <td>{{ViewRequest.FatherContactNo}}</td>
+              </tr>
+              <tr>
+                <td>Local Guardian Name</td>
+                <td>{{ViewRequest.LocalGuardianName}}</td>
+              </tr>
+              <tr>
+                <td>Local Guardian Contact No.</td>
+                <td>{{ViewRequest.LocalGuardianContactNo}}</td>
+              </tr>
+              <tr>
+                <td>Alloted Hostel in June 2023 Session</td>
+                <td>{{ViewRequest.AllotedHostelInLastSessionRoomNo}}</td>
+              </tr>
+              <tr>
+                <td>Alloted Hostel in Dec 2023 session</td>
+                <td>{{ViewRequest.AllotedHostelInLastSessionFeeDetails}}</td>
+              </tr>
+              <tr>
+                <td>Any Warning for Short of Attendance</td>
+                <td>{{ViewRequest.AnyWorningForShortOfAttendance}}</td>
+              </tr>
+              <tr>
+                <td>Any Warning for Invovement Against Discipline</td>
+                <td>{{ViewRequest.AnyWarningForInvovementAgainstDiscipline}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Application ID</td>
+                <td>{{ViewRequest.RoomPartnerApplicationID}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Name</td>
+                <td>{{ViewRequest.RoomPartnerName}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Year</td>
+                <td>{{ViewRequest.RoomPartnerYear}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Branch</td>
+                <td>{{ViewRequest.RoomPartnerBranch}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner SFS</td>
+                <td>{{ViewRequest.RoomPartnerSFS}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Regular</td>
+                <td>{{ViewRequest.RoomPartnerRegular}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #modal_ApplyForHostel let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="CancelRequestFormGroup">
+        
+          <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-default-200">
+            <button type="button" (click)="AllotmentCancelData()" class="py-2 px-5 inline-flex items-center justify-center font-medium tracking-wide border align-middle duration-500 text-sm text-center bg-primary/5 hover:bg-primary border-primary/10 hover:border-primary text-primary hover:text-white rounded-md">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>

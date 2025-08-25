@@ -1,0 +1,268 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add College</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITICollegeMaster" class="text-sm font-medium text-slate-700" aria-current="page">ITIs</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/additi" class="text-sm font-medium text-slate-700" aria-current="page">Add ITI</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add College</b>
+          <a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm" (click)="goBack()">
+            <i class="ti ti-chevron-left"></i> Back
+          </a>
+        </div>
+        <!-- Add College Form -->
+        <form [formGroup]="groupForm" (ngSubmit)="SaveData()">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <!-- Institute Type -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute category: <span class="StarMarking">*</span></label>
+              <select class="form-select" id="InstituteCategoryID" [(ngModel)]="request.InstituteTypeID" formControlName="ddlInstituteCategoryId">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of InstituteCategoryList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlInstituteCategoryId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlInstituteCategoryId.errors.required">This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- SSO ID -->
+            <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID: <span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" placeholder="Enter SSO ID" [(ngModel)]="request.SSOID" formControlName="txtSSOID" disabled readonly>
+        <div *ngIf="isSubmitted && groupForm.controls.txtSSOID.errors" class="text-danger">
+          <p *ngIf="groupForm.controls.txtSSOID.errors.required">This field is required .!</p>
+        </div>
+      </div>-->
+            <!-- Name -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name: <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Name:" [(ngModel)]="request.Name" formControlName="txtName">
+              <div *ngIf="isSubmitted && groupForm.controls.txtName.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtName.errors.required">This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- Email Address -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email Address: <!--<span class="StarMarking">*</span>--></label>
+              <input type="email" class="form-input" placeholder="Enter Email Address" [(ngModel)]="request.EmailAddress" formControlName="txtEmailAddress">
+              <div *ngIf="isSubmitted && groupForm.controls.txtEmailAddress.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtEmailAddress.errors.required">This field is required .!</p>
+                <p *ngIf="groupForm.controls.txtEmailAddress.errors.email">Please enter a valid email address.</p>
+              </div>
+            </div>
+
+            <!-- Fax Number -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Fax Number: <!--<span class="StarMarking">*</span>--></label>
+              <input type="text" class="form-input" placeholder="Enter Fax Number" [(ngModel)]="request.FaxNumber" formControlName="txtFaxNumber">
+              <div *ngIf="isSubmitted && groupForm.controls.txtFaxNumber.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtFaxNumber.errors.required">This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- Management Type -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Management Type: <span class="StarMarking">*</span></label>
+              <select class="form-select" name="ddlManagementType" id="ddlManagementType" [(ngModel)]="request.ManagementTypeID" formControlName="ddlManagementType">
+                <option value="0">--Select--</option>
+                <option value="1">Govt.</option>
+                <option value="5">Private</option>
+               
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlManagementType.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlManagementType.errors.required">This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- College Code -->
+            <div>
+              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">COLLEGE-CODE: <span class="StarMarking">*</span></label>
+                  <input type="text" class="form-input" placeholder="Enter College Code" [(ngModel)]="request.CollegeCode" formControlName="txtCollegeCode">
+                  <div *ngIf="isSubmitted && groupForm.controls.txtCollegeCode.errors" class="text-danger">
+                    <p *ngIf="groupForm.controls.txtCollegeCode.errors.required">This field is required .!</p>
+                  </div>
+                </div>
+
+                <!-- DGT Code -->
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">DGT-CODE: <span class="StarMarking">*</span></label>
+                  <input type="text" class="form-input" placeholder="Enter DGT Code" [(ngModel)]="request.DGETCode" formControlName="txtDGETCode">
+                  <div *ngIf="isSubmitted && groupForm.controls.txtDGETCode.errors" class="text-danger">
+                    <p *ngIf="groupForm.controls.txtDGETCode.errors.required">This field is required .!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mobile Number -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number: <!--<span class="StarMarking">*</span>--></label>
+              <input type="text" class="form-input" placeholder="Enter Mobile Number" [(ngModel)]="request.MobileNumber" formControlName="txtMobileNumber" maxlength="10">
+              <div *ngIf="isSubmitted && groupForm.controls.txtMobileNumber.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtMobileNumber.errors.required">This field is required .!</p>
+                <p *ngIf="groupForm.controls.txtMobileNumber.errors.pattern">Mobile number must be 10 digits starting with 6-9.</p>
+              </div>
+            </div>
+
+            <!-- Pincode -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pincode: <!--<span class="StarMarking">*</span>--></label>
+              <input type="text" class="form-input" placeholder="Enter Pincode" [(ngModel)]="request.Pincode" formControlName="txtPincode" maxlength="6">
+              <div *ngIf="isSubmitted && groupForm.controls.txtPincode.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtPincode.errors.required">This field is required .!</p>
+                <p *ngIf="groupForm.controls.txtPincode.errors.pattern">Pincode must be 6 digits.</p>
+              </div>
+            </div>
+
+            <!-- Checkboxes -->
+            <div class="flex flex-wrap gap-3 hidden">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6">
+                <input type="checkbox" id="has8th" [(ngModel)]="request.Has8th" formControlName="check8th" (change)="toggleCheck($event)" /> Has 8th
+              </label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6 ml-3">
+                <input type="checkbox" id="has10th" [(ngModel)]="request.Has10th" formControlName="check10th" (change)="toggleCheck10($event)" /> Has 10th
+              </label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1 mt-6 ml-3">
+                <input type="checkbox" id="has12th" [(ngModel)]="request.Has12th" formControlName="check12th" (change)="toggleCheck12($event)" /> Has 12th
+              </label>
+            </div>
+
+
+          </div>
+
+        </form>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 hidden">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Seat Intake</b>
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3 hidden">
+          <div class="overflow-x-auto mt-3">
+            <form [formGroup]="SeatIntakeForm">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+
+                    <th class="text-left">Trade</th>
+                    <th class="text-left">Trade Scheme</th>
+                    <th class="text-left">Remark</th>
+                    <th class="text-left">Shift</th>
+                    <th class="text-left">Unit</th>
+                    <th class="text-left">Last Session</th>
+                    <th class="text-left">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>
+                      <select class="form-select w-full" name="ddlTrade" [(ngModel)]="formdata.TradeID" formControlName="ddlTradeName">
+                        <option value="0" disabled selected hidden>Select Trade</option>
+                        <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
+                      </select>
+                      <div *ngIf="isSubmitted&&_SeatIntakeForm.ddlTradeName.errors" class="text-danger">
+                        <p *ngIf="!_SeatIntakeForm.ddlTradeName.errors.DropdownValidators">
+                          <i aria-hidden="true"></i>This field is required .!
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="formdata.TradeSchemeID" formControlName="ddlTradeScheme">
+                        <option value="0" disabled selected hidden>Select Trade Scheme</option>
+                        <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
+                      </select>
+                      <div *ngIf="isSubmitted&&_SeatIntakeForm.ddlTradeScheme.errors" class="text-danger">
+                        <p *ngIf="!_SeatIntakeForm.ddlTradeScheme.errors.DropdownValidators">
+                          <i aria-hidden="true"></i>This field is required .!
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <select class="form-select w-full" name="ddlRemark" [(ngModel)]="formdata.RemarkID" formControlName="ddlRemark">
+                        <option value="0">Select Remark</option>
+                        <option *ngFor="let item of ITIRemarkList" [value]="item.ID">{{item.Name}}</option>
+                      </select>
+                      <div *ngIf="isSubmitted&&_SeatIntakeForm.ddlRemark.errors" class="text-danger">
+                        <p *ngIf="!_SeatIntakeForm.ddlRemark.errors.DropdownValidators">
+                          <i aria-hidden="true"></i>This field is required .!
+                        </p>
+                      </div>
+                    </td>
+                    <td>
+                      <input type="text" class="form-input" [(ngModel)]="formdata.Shift" placeholder="Enter Shift" formControlName="txtshift">
+                      <div *ngIf="isSubmitted && _SeatIntakeForm.txtshift.errors" class="text-danger">
+                        <p *ngIf="_SeatIntakeForm.txtshift.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                      </div>
+                    </td>
+                    <td>
+                      <input type="text" class="form-input" [(ngModel)]="formdata.Unit" placeholder="Enter Unit" formControlName="txtUnit">
+                      <div *ngIf="isSubmitted && _SeatIntakeForm.txtUnit.errors" class="text-danger">
+                        <p *ngIf="_SeatIntakeForm.txtUnit.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                      </div>
+                    </td>
+                    <td>
+                      <input type="text" class="form-input" [(ngModel)]="formdata.LastSession" placeholder="Enter Session" formControlName="txtSession">
+                      <div *ngIf="isSubmitted && _SeatIntakeForm.txtSession.errors" class="text-danger">
+                        <p *ngIf="_SeatIntakeForm.txtSession.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="flex align-left  actionBtns w-auto">
+                        <a href="javascript:void(0);" (click)="addRow()" title="Add More Row"><i class="ti ti-plus"></i></a>
+
+                      </div>
+                    </td>
+                  </tr>
+                  <tr *ngFor="let item of request.SeatIntakes; let idx = index;">
+                    <td>{{item.TradeName}}</td>
+                    <td>{{item.TradeScheme}}</td>
+                    <td>{{item.Remark}}</td>
+                    <td>{{item.Shift}}</td>
+                    <td>{{item.Unit}}</td>
+                    <td>{{item.LastSession}}</td>
+                    <td>
+                      <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="deleteRow(item)">
+                        <i class="ti ti-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </form>
+
+          </div>
+
+
+
+
+        </div>
+        <div class="text-center">
+          <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" (click)="ResetControl()" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

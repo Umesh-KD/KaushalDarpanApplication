@@ -1,0 +1,17 @@
+.present {
+  background-color: #4caf50;
+  color: white;
+}
+
+.absent {
+  background-color: #f44336;
+  color: white;
+}
+.custom-button {
+  background-color: #4caf50 !important; /* Custom green color */
+  color: white !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+

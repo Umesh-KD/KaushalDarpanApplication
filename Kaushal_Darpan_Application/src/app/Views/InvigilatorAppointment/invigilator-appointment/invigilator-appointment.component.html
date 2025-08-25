@@ -1,0 +1,253 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">Add Invigilator Appointment</h4>
+
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a routerLink="/Branches" class="text-sm font-medium text-slate-700" aria-current="page">Add Invigilator
+                Appointment</a>
+        </div>
+    </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+    <div class="card-body p-5">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Invigilator Appointment</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <form [formGroup]="InvigilatorFormGroup">
+                <table class="table table-border w-full table-auto" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                        <tr>
+                            <th class="text-left">Course <span class="StarMarking">*</span></th>
+                            <th class="text-left">Semester <span class="StarMarking">*</span></th>
+                            <th class="text-left">Subjects <span class="StarMarking">*</span></th>
+                            <th class="text-left">Roll No. From-To <span class="StarMarking">*</span></th>
+                            <th class="text-left">Room No. <span class="StarMarking">*</span></th>
+                            <th class="text-left">Date <span class="StarMarking">*</span></th>
+                            <th class="text-left">Select OIA - Name <span class="StarMarking">*</span></th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+
+                            <td>
+                                <select class="form-select" name="CourseID" id="ddlCourse" formControlName="ddlCourse"
+                                    [(ngModel)]="invigilatorFormData.CourseID"   (change)="ddlStream_Change()"   >
+                                    <option value="0">Choose Option</option>
+                                    <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID"  >
+                                        {{item.StreamName}}
+                                    </option>
+                                </select>
+                                <div *ngIf="isFormSubmitted && _InvigilatorFormGroup.ddlCourse.errors"
+                                    class="text-danger">
+                                    <p *ngIf="!_InvigilatorFormGroup.ddlCourse.errors.DropdownValidators">
+                                        <i aria-hidden="true"></i>This field is required.!
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="form-select" name="SemesterID" id="ddlSemester"
+                                    formControlName="ddlSemester" [(ngModel)]="invigilatorFormData.SemesterID" (change)="ddlStream_Change()">
+                                    <option value="0">Choose Option</option>
+                                    <option *ngFor="let item of SemesterMasterDDL" [value]="item.SemesterID">
+                                        {{item.SemesterName}}</option>
+                                </select>
+                                <div *ngIf="isFormSubmitted && _InvigilatorFormGroup.ddlSemester.errors"
+                                    class="text-danger">
+                                    <p *ngIf="!_InvigilatorFormGroup.ddlSemester.errors.DropdownValidators">
+                                        <i aria-hidden="true"></i>This field is required.!
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <select class="form-select" name="SubjectID" id="ddlSubject"
+                                    formControlName="ddlSubject" [(ngModel)]="invigilatorFormData.SubjectID">
+                                    <option value="0">Choose Option</option>
+                                    <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{item.Name}}
+                                    </option>
+                                </select>
+                                <div *ngIf="isFormSubmitted && _InvigilatorFormGroup.ddlSubject.errors"
+                                    class="text-danger">
+                                    <p *ngIf="!_InvigilatorFormGroup.ddlSubject.errors.DropdownValidators">
+                                        <i aria-hidden="true"></i>This field is required.!
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                              <div class="flex">
+                                <input class="form-input me-1" placeholder="Roll No. From" name="RollNumberFrom"
+                                       id="txtRollNumberFrom" formControlName="txtRollNumberFrom"
+                                       [(ngModel)]="invigilatorFormData.RollNumberFrom" />
+                                <input class="form-input" placeholder="Roll No. To" id="txtRollNumberTo"
+                                       formControlName="txtRollNumberTo" (change)="checkRolleNumber()"
+                                       [(ngModel)]="invigilatorFormData.RollNumberTo" />
+                              </div>
+                              <div *ngIf="isFormSubmitted&& (_InvigilatorFormGroup.txtRollNumberFrom.errors || _InvigilatorFormGroup.txtRollNumberTo.errors)"
+                                   class="text-danger">
+                                <p *ngIf="_InvigilatorFormGroup?.txtRollNumberFrom?.errors?.required || _InvigilatorFormGroup?.txtRollNumberTo?.errors?.required">
+                                  <i aria-hidden="true"></i>
+                                  This field is required .!
+                                </p>
+
+                              </div>
+
+
+                            </td>
+                            
+                            <td>
+                                <input class="form-input" placeholder="Enter Room No." name="RoomNumber"
+                                    id="txtRoomNumber" formControlName="txtRoomNumber"
+                                    [(ngModel)]="invigilatorFormData.RoomNumber" />
+                                <div *ngIf="isFormSubmitted&&_InvigilatorFormGroup.txtRoomNumber.errors"
+                                    class="text-danger">
+                                    <p *ngIf="_InvigilatorFormGroup.txtRoomNumber.errors.required">
+                                        <i aria-hidden="true"></i>
+                                        This field is required .!
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="date" class="form-input" name="Date" id="txtDate" formControlName="txtDate"
+                                    [(ngModel)]="invigilatorFormData.Date" />
+                                <div *ngIf="isFormSubmitted&&_InvigilatorFormGroup.txtDate.errors" class="text-danger">
+                                    <p *ngIf="_InvigilatorFormGroup.txtDate.errors.required">
+                                        <i aria-hidden="true"></i>
+                                        This field is required .!
+                                    </p>
+                                </div>
+                            </td>
+                            <td>
+                                <div id="AddSSSOID">
+                                    <div class="flex">
+                                        <input type="radio" title="Mark As Primary" class="me-2 mt-3"
+                                            name="MarkAsPrimary" style="display:none"  formControlName="MarkAsPrimary"     />
+                                        <div class="flex SSOFieldsBox">
+                                          <select class="form-select" name="SubjectID" id="ddlSubject"  
+                                                  formControlName="ddlssoid" [(ngModel)]="newSSOId" >
+                                            <option value="">Choose Option</option>
+                                            <option *ngFor="let item of InvigilatorDDL" [value]="item.StaffID">
+                                              {{item.Name}}
+                                            </option>
+                                          </select>
+                                          <button type="button" class="btn bg-cyan-500 text-white"
+                                                  (click)="addSSOId()">
+                                            <i class="ti ti-plus"></i>
+                                          </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngFor="let row of invigilatorFormData.InvigilatorSSOID; let i = index"
+                                    class="flex mt-2 externalAdd">
+                                    <input type="radio"  class="me-2 mt-3"
+                                        (click)="markAsPrimary(i)" [checked]="row.IsPrimary"  [ngModelOptions]="{standalone: true}"    />
+                                    <div class="flex SSOFieldsBox">
+                                        <input class="form-input" [value]="row.Name" readonly  />
+                                        <button type="button" class="btn bg-danger text-white"
+                                            (click)="deleteSSO(row.i)">
+                                            <i class="ti ti-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <button class="bg-success btn text-white" (click)="SaveData()">Add More</button>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+            </form>
+
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> List Invigilator Appointment</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="">
+                <select id="ddlConter" class="form-select  couterDropDown">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+            </div>
+            <div class="">
+            </div>
+            <div class="">
+            </div>
+            <div class="">
+                <input class="form-input" placeholder="Search..." />
+            </div>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                    <tr  >
+                        <th class="text-left">Sr. No.</th>
+                        <th class="text-left">Course</th>
+                        <th class="text-left">Semester</th>
+                        <th class="text-left">Subjects</th>
+                        <th class="text-left">Roll No. From-To</th>
+                        <th class="text-left">OIA - SSO ID</th>
+                        <th class="text-left">Room No.</th>
+                        <th class="text-left">Date</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let item of InvigilatorAppointmentList; let idx=index;" >
+                        <td>
+                          {{idx+1}}  
+                        </td>
+                        <td>
+                          {{item.StreamName}}
+                        </td>
+                        <td>
+                          {{item.SemesterName}}
+                        </td>
+                        <td>
+                          {{item.SubjectName}}
+                        </td>
+                        <td>
+                          {{item.RollNo_From}}-{{item.RollNo_To}}
+                        </td>
+                        <td>
+                          {{item.InvigilatorDetails1}}
+                        </td>
+                        <td>
+                          {{item.Room_Number}}
+                        </td>
+                        <td>
+                          {{item.ExamDate}}
+                        </td>
+                        <td>
+                          <div class="flex align-center justify-center actionBtns w-auto"
+                               style="width:auto !important">
+                            <a href="javascript:void(0);" id="btnEdit" title="Edit" (click)="btnEdit_OnClick(item.InvigilatorAppointmentID)"><i class="ti ti-pencil"></i></a>
+                            <a  *ngIf="item.InvigilatorStatus === 0"   href="javascript:void(0);" title="Delete"><i class="ti ti-trash" (click)="DeleteById(item.InvigilatorAppointmentID)"  ></i></a>
+                          </div>
+                        </td>
+                    </tr>
+                  
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- end row -->

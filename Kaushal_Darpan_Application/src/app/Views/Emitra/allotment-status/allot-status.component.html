@@ -1,0 +1,236 @@
+
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" style="display:none" >
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon.... </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="card" id="Tabs5" >
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+        <h3 class="m-0">आवंटन स्थिति (Allotment Status)</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Application No.</label>
+        <input type="text" class="form-control" placeholder="Enter Application No"
+               [(ngModel)]="searchRequest.ApplicationNo">
+
+      </div>
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Date of Birth:</label>
+        <input type="date" class="form-control" placeholder="Enter Select DOB" [(ngModel)]="searchRequest.DOB">
+
+      </div>
+      <!--<div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Captcha Code:</label>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between">
+            <img src="assets/images/captcha.jpg" style="height:34px" />
+            <button class="btn bg-purple-100 icon-btn"><i class="ti ti-refresh"></i></button>
+          </div>
+          <input type="text" class="form-control" placeholder="Enter Captcha">
+        </div>
+
+      </div>-->
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <button type="button" class="btn btn-info text-white" (click)="GetAllotmentStatusList()"><i class="ti ti-search"></i>Search</button>
+        <button type="button" class="btn btn-danger mx-1" (click)="ResetControl()"><i class="ti ti-refresh"></i>Reset</button>
+      </div>
+    </div>
+
+
+
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No:</label>
+      <input type="text" class="form-input" placeholder="Enter Application No" name="ApplicationNo" [(ngModel)]="this.searchRequest.ApplicationNo">
+
+    </div>
+    <div>
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth:</label>
+      <input type="date" class="form-input" placeholder="Enter Select DOB" name="DOB" [(ngModel)]="this.searchRequest.DOB">
+
+    </div>
+    <div>
+      <label for="inputAddress2" class="text-gray-800 text-sm font-medium inline-block mb-2">Captcha Code:</label>
+      <div class="flex justify-between">
+        <div class="flex justify-between">
+          <img src="assets/images/captcha.jpg" style="height:34px" />
+          <button class="btn bg-purple-100 icon-btn"><i class="ti ti-refresh"></i></button>
+        </div>
+        <input type="text" class="form-input" placeholder="Enter Captcha" style="width:122px">
+      </div>
+
+    </div>
+
+    <div>
+      <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetAllotmentStatusList()">Search</button>
+      <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+    </div>
+  </div>-->
+
+    <div *ngIf="AllotmentStatusList && AllotmentStatusList.length > 0" class="overflow-x-auto mt-3">
+
+
+
+
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th align="left">Application Number</th>
+            <th align="left">Applicant Name</th>
+            <th align="left">Category</th>
+            <th align="left">Date of Birth</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of AllotmentStatusList; let idx=index; ">
+            <td align="left" style="width:25%">{{item.ApplicationNo}}</td>
+            <td align="left" style="width:25%">{{item.StudentName}}</td>
+            <td align="left" style="width:25%">{{item.StudentCategory}}</td>
+            <td align="left" style="width:25%">{{item.DOB | date:'dd/MM/yyyy'}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="AllotmentStatusList && AllotmentStatusList.length > 0" class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th align="left">College Name</th>
+            <th align="left">Branch Name</th>
+            <th align="left">Alloted Category</th>
+            <th align="left">Alloted Priority</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of AllotmentStatusList; let idx=index; ">
+            <td colspan="4" *ngIf="item.CollegeName=='Coice Exausted'" align="left">{{item.BranchName}}</td>
+            <td *ngIf="item.CollegeName!='Coice Exausted'" align="left" style="width:25%">{{item.CollegeName}}</td>
+            <td *ngIf="item.CollegeName!='Coice Exausted'" align="left" style="width:25%">{{item.BranchName}}</td>
+            <td *ngIf="item.CollegeName!='Coice Exausted'" align="left" style="width:25%">{{item.AllotedCategory}}</td>
+            <td *ngIf="item.CollegeName!='Coice Exausted'" align="left" style="width:25%">{{item.AllotedPriority}} </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex mb-2 mt-2 items-center " *ngIf="AllotmentStatusList && AllotmentStatusList.length > 0 && AllotmentStatusList[0].IsPayment==1 && AllotmentStatusList[0].IsPaymentSuccess==true">
+
+      <button type="button" id="btnDownload1" (click)="DownloadAllotmentLetter(AllotmentStatusList[0].AllotmentId)"
+              class="btn bg-info text-white me-2">
+        <i class="ti ti-download"></i> Download Allotment Letter
+      </button>
+
+      <button type="button" id="btnDownload2" (click)="DownloadAllotmentLetterFeeRpt(AllotmentStatusList[0].AllotmentId)"
+              class="btn bg-info text-white me-2">
+        <i class="ti ti-download"></i> Download Allotment Fee Receipt
+      </button>
+
+    </div>
+
+
+
+
+    <div *ngIf="AllotmentStatusList && AllotmentStatusList.length > 0 && AllotmentStatusList[0].IsPayment==1 && AllotmentStatusList[0].IsPaymentSuccess==false" class="text-right mt-3 w-full">
+      <button type="button" class="btn bg-primary text-white"
+              (click)="SavePreview(MyModel_PreviewDetails,request.ApplicationID)">
+        <i class="ti ti-inr"></i>Make Payment
+      </button>
+    </div>
+    <div class="col-lg-12 mb-3">
+      <div class="card bg-light">
+        <div class="card-body text-center">
+          <!--<h3>प्रथम वर्ष इंजीनियरिंग प्रवेश (I year Engineering Admission)</h3>-->
+          <p><b>Helpline Number: </b> {{HelplineNumber}}</p>
+          <p><b>For queries contact email id:</b>{{ContactEmail}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+
+<ng-template #MyModel_PreviewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] ">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i><i class="ti ti-info-hexagon"></i> Please pay the seat allotment fee for proceeding in the allotment status</b>
+        <button class="btn bg-info text-white" (click)="CloseModel()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+
+          <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+          <div>{{sendRequest.StudentName  }}</div>
+
+          <!--<div><b>आवेदक का नाम हिंदी में  (Applicant's Name in Hindi):</b></div>
+      <div>{{sendRequest.StudentNameHindi  }}</div>-->
+
+          <div><b>पिता का नाम (Father's Name):</b></div>
+          <div>{{sendRequest.FatherName  }}</div>
+
+          <!--<div><b>पिता का नाम हिंदी में (Father's Name in Hindi):</b></div>
+      <div>{{sendRequest.FatherNameHindi  }}</div>-->
+
+          <div><b>माता का नाम (Mother's Name):</b></div>
+          <div>{{sendRequest.MotherName  }}</div>
+
+          <!--<div><b>माता का नाम हिंदी में (Mother's Name in Hindi):</b></div>
+      <div>{{sendRequest.MotherNameHindi  }}</div>-->
+          <!--<div><b>आधार नंबर  (Aadhar Number):</b></div>
+      <div>{{sendRequest.AadharNo  }}</div>-->
+
+
+          <div><b>लिंग (Gender):</b></div>
+          <div>{{sendRequest.Gender  }}</div>
+
+          <div><b>जन्म तिथि (Date of Birth):</b></div>
+          <div>{{sendRequest.DOB | date: 'dd/MM/yyyy' }}</div>
+
+          <div>
+            <b>श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC):</b>
+          </div>
+          <div>{{sendRequest.StudentCategory}}</div>
+
+          <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+          <div>{{sendRequest.MobileNo  }}</div>
+
+          <div><b>आवेदन शुल्क (Application Fees):</b></div>
+          <div>{{sendRequest.FeeAmount}}</div>
+
+          <!--<div><b>सेवा आईडी (Service ID):</b></div>
+      <div>{{sendRequest.ServiceID}}</div>-->
+        </div>
+      </div>
+
+      <div class="card-footer text-center">
+
+        <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() "><i class="ti ti-currency-rupee"></i> Pay Now</button>
+        <span>Or </span>
+        <button type="button" class="btn bg-info text-white" (click)="DownloadChallan(searchrequest.ApplicationID)"><i class="ti ti-download"></i>Download Challan and kindly visit your nearest emitra counter to pay the fee</button>
+      </div>
+      <div class="col-span-2 pt-5" *ngIf="request.TransactionID>0">       
+        <p class="text-danger">In case your transaction got failed, To verify your payment, please click on <b>Verify</b> button<br /> <button (click)="CheckPaymentSataus()" class="text-center text-white bg-success btn" style="margin-left:15px"><i class="ti ti-currency-rupee"></i> Verify Button</button></p>
+      </div>
+
+      
+    </div>
+  </div>
+</ng-template>

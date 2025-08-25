@@ -1,0 +1,189 @@
+<!--Page Title Start-->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{NodalId>0?'Edit':'Add'}} NodalOfficer</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/NodalOfficer" class="text-sm font-medium text-slate-700" aria-current="page">Nodal</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{NodalId>0?'Edit':'Add'}}
+        NodalOfficer
+      </a>
+    </div>
+  </div>
+  <a routerLink="/NodalOfficers" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!--Page Title End-->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{NodalId>0?'Edit':'Add'}} Nodal Center</b>
+    </div>
+    <form [formGroup]="NodalRequestFormGroup" (ngSubmit)="SaveNodalData()">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="Name" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            College Name<span class="StarMarking">*</span>
+          </label>
+          <input type="text" placeholder="Name" class="form-input" id="Name" name="txtUserName" formControlName="Name"
+                 [(ngModel)]="request.Name">
+          <div *ngIf="isSubmitted && _NodalRequestFormGroup.Name.errors?.required" class="text-danger">
+            <p>This field is required!</p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label for="Email" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            User Email<span class="StarMarking">*</span>
+          </label>
+          <input type="email" placeholder="Email" class="form-input" id="Email" name="Email"
+                 formControlName="Email" [(ngModel)]="request.Email">
+          <div *ngIf="isSubmitted&& _NodalRequestFormGroup.Email.errors" class="text-danger">
+            <p *ngIf="_NodalRequestFormGroup.Email.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required .!
+            </p>
+            <!-- Check for pattern error -->
+            <p *ngIf="_NodalRequestFormGroup.Email.errors.pattern">
+              <i aria-hidden="true"></i> Please enter a valid email address.
+            </p>
+
+          </div>
+        </div>
+
+        <div>
+          <label for="MobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Mobile No<span class="StarMarking">*</span>
+          </label>
+          <input type="tel" placeholder="Mobile No" class="form-input" name="MobileNo" formControlName="MobileNo" 
+                 [(ngModel)]="request.MobileNo" (keypress)="enforceMaxLength($event, 10)" pattern="[6-9]{1}[0-9]{9}" maxlength="10" />
+          <div *ngIf="isSubmitted && _NodalRequestFormGroup.MobileNo.errors" class="text-danger">
+            <p *ngIf="_NodalRequestFormGroup.MobileNo.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required .!
+            </p>
+            <!-- Check for pattern error -->
+            <p *ngIf="_NodalRequestFormGroup.MobileNo.errors.pattern">
+              <i aria-hidden="true"></i> Please enter a valid 10-digit mobile number starting with 7, 8, or 9.
+            </p>
+          </div>
+        </div>
+
+
+        <!--<div>
+          <label for="IsEdit_Stu" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Is Edit Student?
+          </label>
+          <div>
+            <label class="me-3">
+              <input type="radio" [formControl]="_NodalRequestFormGroup['IsEdit_Stu']" [value]="true" [disabled]="_NodalRequestFormGroup['IsEdit_Stu'].value === false" [(ngModel)]="request.IsEdit_Stu" formControlName="IsEdit_Stu"> Yes
+            </label>
+            <label>
+              <input type="radio" [formControl]="_NodalRequestFormGroup['IsEdit_Stu']" [value]="false" [disabled]="_NodalRequestFormGroup['IsEdit_Stu'].value === true" [(ngModel)]="request.IsEdit_Stu" formControlName="IsEdit_Stu"> No
+            </label>
+          </div>
+        </div>-->
+
+        <!--<div>
+          <label for="IsAdd_CollageFees" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Is Add Collage Fees?
+          </label>
+          <div>
+            <label class="me-3">
+              <input type="radio" [formControl]="_NodalRequestFormGroup['IsAdd_CollageFees']" [value]="true" [disabled]="_NodalRequestFormGroup['IsAdd_CollageFees'].value === false" [(ngModel)]="request.IsAdd_CollageFees" formControlName="IsAdd_CollageFees"> Yes
+            </label>
+            <label>
+              <input type="radio" [formControl]="_NodalRequestFormGroup['IsAdd_CollageFees']" [value]="false" [disabled]="_NodalRequestFormGroup['IsAdd_CollageFees'].value === true" [(ngModel)]="request.IsAdd_CollageFees" formControlName="IsAdd_CollageFees"> No
+            </label>
+          </div>
+        </div>-->
+
+      </div>
+      <!--list-->
+      <div class="flex justify-between flex-wrap items-center mt-4 mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Nodal Officer Users</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label for="SSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            SSOID<span class="StarMarking">*</span>
+          </label>
+          <input type="text" placeholder="SSOID" class="form-input" id="SSOId" name="SSOID" formControlName="SSOId"
+                 [(ngModel)]="request.SSOID">
+          <div *ngIf="isSubmitted && _NodalRequestFormGroup.SSOId.errors" class="text-danger">
+            <p *ngIf="_NodalRequestFormGroup.SSOId.errors.required">
+              <i aria-hidden="true"></i> This field is
+              required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="AddListData()">Add More</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+
+              <th class="text-left" *ngIf="showColumn">Sr.No.</th>
+              <th class="text-left">Marked</th>
+              <th class="text-center">SSOID</th>
+              <th class="text-center" *ngIf="showColumn">Name</th>
+              <th class="text-center" *ngIf="showColumn">MobileNo</th>
+              <th class="text-center" *ngIf="showColumn">Email</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let row of request.NodalModellist let idx=index;">
+
+              <td *ngIf="showColumn">{{idx+1}}</td>
+
+              <td align="left">
+                <input type="checkbox" name="MarkCheck" [checked]="row.Marked" (change)="onMarkChanged($event, row)" />
+              </td>
+              <td>{{row.SSOID}}</td>
+              <td *ngIf="showColumn">{{row.Name}}</td>
+              <td *ngIf="showColumn">{{row.MobileNo}}</td>
+              <td *ngIf="showColumn">{{row.Email}}</td>
+              <td align="center">
+                <div class="flex align-center justify-center actionBtns" style="width:auto !important">
+                  <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnRowDelete_OnClick(row)">
+                    <i class="ti ti-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!--list-->
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+

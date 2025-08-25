@@ -1,0 +1,171 @@
+
+<!-- Page Title -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Group Centers</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl text-slate-500">chevron_right</i>
+      <a routerLink="/GroupCenters" class="text-sm font-medium text-slate-700" aria-current="page">Group Centers</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<!-- Card -->
+<div class="card">
+  <div class="card-body p-5">
+
+    <!-- Search Criteria -->
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="relative">
+          <div class="hs-dropdown relative inline-flex">
+            <button type="button" class="hs-dropdown-toggle btn bg-info text-white btn-sm flex items-center gap-2">
+              Export GroupCenter For Examiner Module In CSV
+              <svg class="w-2.5 h-2.5 ms-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+            <div class="hs-dropdown-menu mt-2 min-w-[12rem] rounded-lg border bg-white p-2 shadow-md hidden">
+              <ul>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (First Sem.)</a></li>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (Second Sem.)</a></li>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (Third Sem.)</a></li>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (Fourth Sem.)</a></li>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (Fifth Sem.)</a></li>
+                <li><a href="javascript:void(0);" class="block"><i class="fa fa-download"></i> Export GroupCenter (Sixth Sem.)</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Form -->
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium mb-1">Search By Center Code</label>
+          <input type="text" class="form-input" placeholder="Search By Center Code">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium mb-1">Search By Group Code</label>
+          <input type="text" class="form-input" placeholder="Search By Group Code">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium mb-1">Search By Branch Code</label>
+          <input type="text" class="form-input" placeholder="Search By Branch Code">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium mb-1">Search By Paper Code</label>
+          <input type="text" class="form-input" placeholder="Search By Paper Code">
+        </div>
+        <div class="flex gap-2 mt-3">
+          <button type="button" class="btn bg-info text-white">Search</button>
+          <button type="button" class="btn bg-danger text-white">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <!-- Search Criteria End -->
+
+    <!-- Search Results -->
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+
+    <!-- Results Filter -->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <select id="ddlConter" class="form-select">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div></div>
+      <div></div>
+      <div>
+        <input class="form-input" placeholder="Search....." />
+      </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto">
+        <thead class="bg-light/40 border-b border-gray-100 h-10">
+          <tr>
+            <th class="text-left">Center Code</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Branch Code</th>
+            <th class="text-left">Paper Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="left">7757</td>
+            <td align="left">11001</td>
+            <td align="left">ME</td>
+            <td align="left">ME1001</td>
+          </tr>
+          <tr>
+            <td align="left">7727</td>
+            <td align="left">11001</td>
+            <td align="left">EE</td>
+            <td align="left">EE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7709</td>
+            <td align="left">11001</td>
+            <td align="left">CE</td>
+            <td align="left">CE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7744</td>
+            <td align="left">11001</td>
+            <td align="left">CS</td>
+            <td align="left">CS1001</td>
+          </tr>
+          <tr>
+            <td align="left">7747</td>
+            <td align="left">11001</td>
+            <td align="left">EE</td>
+            <td align="left">EE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7720</td>
+            <td align="left">11001</td>
+            <td align="left">CE</td>
+            <td align="left">CE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7751</td>
+            <td align="left">11001</td>
+            <td align="left">EE</td>
+            <td align="left">EE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7742</td>
+            <td align="left">11001</td>
+            <td align="left">CE</td>
+            <td align="left">CE1001</td>
+          </tr>
+          <tr>
+            <td align="left">7716</td>
+            <td align="left">11002</td>
+            <td align="left">ME</td>
+            <td align="left">ME1001</td>
+          </tr>
+          <tr>
+            <td align="left">7758</td>
+            <td align="left">11003</td>
+            <td align="left">CE</td>
+            <td align="left">CE1001</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Card End -->

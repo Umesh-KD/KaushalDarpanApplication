@@ -1,0 +1,84 @@
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i>  Apply Now  </b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" style="display:none">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Department Name</th>
+              <th class="text-center">Link</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>BOARD OF TECHNICAL EDUCATION RAJASTHAN(BTER)</td>
+
+              <td class="text-center">
+
+                <a routerLink="/dtepublicinfo" [queryParams]="{type:1}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
+
+              </td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>INDUSTRIAL TRAINING INSTITUTE(ITI)</td>
+
+              <td class="text-center">
+
+                <a [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:encryptParameter(_EnumDepartment.ITI)}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
+
+                <!--<a [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:encryptParameter(_EnumDepartment.BTER)}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">BTER <i class="ti ti-chevron-right"></i></a>
+          <a [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:encryptParameter(_EnumDepartment.ITI)}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i class="ti ti-chevron-right"></i></a>-->
+              </td>
+            </tr>
+            <!--<tr>
+        <td>3</td>
+        <td>DIRECTORATE OF TECHNICAL EDUCATION(DTE)</td>
+
+        <td class="text-center">
+
+          <a class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
+
+        </td>
+      </tr>-->
+          </tbody>
+        </table>
+
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr. No.</th>
+              <th class="text-left">Department Name</th>
+              <th class="text-center">Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of DepartmentData;let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{item.DepartmentName}}</td>
+              <td class="text-center">
+                <a *ngIf="item.DepartmentID!=1" routerLink="/StudentJanAadharDetail" [queryParams]="{deptid:encryptParameter(item.DepartmentID)}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
+                <a *ngIf="item.DepartmentID==1" routerLink="/dtepublicinfo" [queryParams]="{type:1}" class="btn bg-success btn-sm text-white text-center  py-4 c-pointer">Apply Now </a>
+              </td>
+            </tr>
+            <tr *ngIf="DepartmentData.length==0">
+              <td colspan="5">No Service Found </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+

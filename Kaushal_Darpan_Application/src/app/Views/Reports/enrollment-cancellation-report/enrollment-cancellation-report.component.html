@@ -1,0 +1,93 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Enrollment Cancellation</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Student" class="text-sm font-medium text-slate-700" aria-current="page">Report</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+
+      <form [formGroup]="SearchStudentDataFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
+            <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
+                    formControlName="ddlstatus" (change)="GetPreExamStudent();">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div *ngIf="EnrollmentCancellationReportsList.length > 0" class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Father Name</th>
+            <th class="text-left">Application No.</th>
+            <th class="text-left">Enrollment No.</th>
+            <th class="text-left"> DOB.</th>
+            <th class="text-left">Roll No.</th>
+            <th class="text-left">Mobile No.</th>
+            <th class="text-left">Institute</th>
+            <th class="text-left">Branch</th>
+            <th class="text-left">Year/Semester</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of EnrollmentCancellationReportsList; let idx=index;">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.StudentName}}</td>
+            <td align="left">{{row.FatherName}}</td>
+            <td align="left">{{row.ApplicationNo}}</td>
+            <td align="left">{{row.EnrollmentNo}}</td>
+            <td align="left">{{row.Dis_DOB}}</td>
+            <td align="left">{{row.RollNo}}</td>
+            <td align="left">{{row.MobileNo}}</td>
+            <td align="left">{{row.InstituteName}},{{row.DistrictName}}</td>
+            <td align="left">{{row.BranchName}}</td>
+            <td align="left">{{row.SemesterName}}<br />{{row.StudentExamType}}</td>
+            <td align="left">{{row.StudentExamStatus}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

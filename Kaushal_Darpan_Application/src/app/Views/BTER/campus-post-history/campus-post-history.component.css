@@ -1,0 +1,55 @@
+/* StateLevelPoolCampus */
+.StateLevelPoolCampus {
+  background-color: lightblue;
+}
+
+  .StateLevelPoolCampus a {
+    color: darkblue; /* Make sure links stand out */
+    text-decoration: none; /* Optional: Removes underline from links */
+  }
+
+    .StateLevelPoolCampus a:hover {
+      color: darkred; /* Change color on hover for better interaction */
+    }
+
+/* InstituteLevelCampus */
+.InstituteLevelCampus {
+  background-color: lightgreen;
+}
+
+  .InstituteLevelCampus a {
+    color: darkblue;
+    text-decoration: none;
+  }
+
+    .InstituteLevelCampus a:hover {
+      color: darkred;
+    }
+
+/* DivisionLevelPoolCampus */
+.DivisionLevelPoolCampus {
+  background-color: lightcoral;
+}
+
+  .DivisionLevelPoolCampus a {
+    color: darkblue; /* Purple color */
+    text-decoration: none; /* Optional: Remove underline from links */
+  }
+
+    .DivisionLevelPoolCampus a:hover {
+      color: darkred; /* Lighter purple for hover effect */
+    }
+/* .DivisionLevelPoolCampus a {
+    color: darkred;
+    text-decoration: none;
+  }
+
+    .DivisionLevelPoolCampus a:hover {
+      color: darkblue;
+    }*/
+
+.disabled-link {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

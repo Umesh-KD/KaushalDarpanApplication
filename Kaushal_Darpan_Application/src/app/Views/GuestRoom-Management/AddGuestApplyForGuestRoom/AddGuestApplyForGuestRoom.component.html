@@ -1,0 +1,357 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Apply For Guest Room</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/guest-room-apply']" class="text-sm font-medium text-slate-700" aria-current="page">Apply For Guest Room</a>
+    </div>
+  </div> 
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
+        <div class="mb-3">
+          <label for="SSOID" class="form-label">SSOID</label>
+          <div class="input-group check-box-custom">
+            <input formControlName="SSOID" class="form-input" placeholder="Enter SSOID" (keyup)="CheckUserExists($event)" aria-describedby="basic-addon3 basic-addon4" />
+            <span *ngIf="SSOIDExists != null" class="input-group-text {{SSOIDExists?'text-success':'text-danger'}}"><i class="fa {{SSOIDExists?'fa-check':'fa-close'}}"></i></span>
+          </div>
+
+          <div *ngIf="isSubmit && _SSOIDFormGroup.SSOID.errors" class="form-text text-danger">
+            <p *ngIf="_SSOIDFormGroup.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <div class="text-left">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1">Verify</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <form [formGroup]="IIPMasterFormGroup" class="form-horizontal" *ngIf="IIPMasterFormGroup">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Guest Apply For Guest Room</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Department Name
+          </label>
+          <input type="text" class="form-input" placeholder="Enter DepartmentName" name="DepartmentName"
+                 [(ngModel)]="request.DepartmentName" formControlName="DepartmentName" readonly>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Institute Name
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Institute Name" name="InstituteName"
+                 [(ngModel)]="request.InstituteName" formControlName="InstituteName" readonly>
+        </div>-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Name<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Display Name" name="DisplayName"
+                 [(ngModel)]="request.DisplayName" formControlName="DisplayName" readonly>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.DisplayName.errors" class="form-text text-danger">
+            <p *ngIf="_IIPMasterFormGroup.DisplayName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mobile No<span class="StarMarking">*</span>
+
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Mobile No" name="MobileNo"
+                 [(ngModel)]="request.MobileNo" formControlName="MobileNo" readonly>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.MobileNo.errors" class="form-text text-danger">
+            <p *ngIf="_IIPMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Mail ID<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Mail Personal" name="MailPersonal"
+                 [(ngModel)]="request.MailPersonal" formControlName="MailPersonal" readonly>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.MailPersonal.errors" class="form-text text-danger">
+            <p *ngIf="_IIPMasterFormGroup.MailPersonal.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Postal Address<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Postal Address" name="PostalAddress"
+                 [(ngModel)]="request.PostalAddress" formControlName="PostalAddress" readonly>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalAddress.errors" class="form-text text-danger">
+            <p *ngIf="_IIPMasterFormGroup.PostalAddress.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Postal Code<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Postal Code" name="PostalCode"
+                 [(ngModel)]="request.PostalCode" formControlName="PostalCode" readonly>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalCode.errors" class="form-text text-danger">
+            <p *ngIf="_IIPMasterFormGroup.PostalCode.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Employee ID
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Employee IUD" name="EmpID"
+                 [(ngModel)]="request.EmpID" formControlName="EmpID">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                 for="fileEmployeePhoto">
+            Employee ID Card Photo :
+          </label>
+          <div class="flex fileUploader">
+            <input id="fileEmployeePhoto" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   type="file" (change)="onFilechange($event,'Photo')">
+            <label for="fileEmployeePhoto">
+              <span>Choose File</span>
+              {{request.Dis_EmpIDCardPhoto === '' ? 'No File Choosen' : request.Dis_EmpIDCardPhoto}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.EmpIDCardPhoto}}" *ngIf="this.request.EmpIDCardPhoto !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            From Date/Time : <span class="StarMarking">*</span>
+          </label>
+          <div class="flex">
+            <div style="width:calc(100% - 100px)">
+              <input formControlName="txtFromDate" class="form-input" placeholder="txtFromDate" type="date"
+                     [min]="todayDate" [(ngModel)]="request.FromDate" (change)="onFromDateChange()">
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtFromDate.errors" class="text-danger">
+                <p *ngIf="_IIPMasterFormGroup.txtFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div style="width:100px">
+              <input formControlName="txtFromTime" class="form-input" placeholder="txtFromTime" type="time"
+                     [(ngModel)]="request.FromTime">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            To Date/Time : <span class="StarMarking">*</span>
+          </label>
+          <div class="flex">
+            <div style="width:calc(100% - 100px)">
+              <input formControlName="txtToDate" [min]="minToDate" class="form-input" placeholder="txtToDate" type="date"
+                     [(ngModel)]="request.ToDate">
+              <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtToDate.errors" class="text-danger">
+                <p *ngIf="_IIPMasterFormGroup.txtToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div style="width:100px">
+              <input formControlName="txtToTime" class="form-input" placeholder="txtToTime" type="time"
+                     [(ngModel)]="request.ToTime">
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name<span class="StarMarking">*</span></label>
+          <select formControlName="ddlGuestHouseID" class="form-select" [(ngModel)]="request.GuestHouseID" (change)="GetRoomTypeList()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of GuestRoomNameList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.ddlGuestHouseID.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.ddlGuestHouseID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type<span class="StarMarking">*</span></label>
+          <select formControlName="txtRoomType" class="form-input" type="text" placeholder="Enter Room Type"
+                  [(ngModel)]="request.RoomType" (change)="changeSeats()">
+            <option value="0">--Choose Room Type--</option>
+            <option *ngFor="let item of RoomTypeList" [value]="item.RoomType">{{item.RoomTypeName}}</option>
+          </select>
+          <small>(1 Bed, 2 Bed, 3 Bed, 4 Bed)</small>
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomType.errors" class="text-danger">
+            <p *ngIf="!_IIPMasterFormGroup.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Capacity<span class="StarMarking">*</span></label>
+          <input formControlName="txtSeatCapacity" class="form-input" type="text" placeholder="Enter Seat Capacity"
+                 [(ngModel)]="request.SeatCapacity">
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtSeatCapacity.errors" class="text-danger">
+            <p *ngIf="_IIPMasterFormGroup.txtSeatCapacity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Availability<span class="StarMarking">*</span></label>
+          <div class="alert p-2 alert-warning">{{RoomAvailablity}}</div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Quantity<span class="StarMarking">*</span></label>
+          <input formControlName="txtRoomQuantity" class="form-input" type="text" placeholder="Enter Room Quantity"
+                 [(ngModel)]="request.RoomQuantity" (keyup)="getRoomPrice()">
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomQuantity.errors" class="text-danger">
+            <p *ngIf="_IIPMasterFormGroup.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fees<span class="StarMarking">*</span></label>
+          <input formControlName="txtRoomFee" class="form-input" type="text" placeholder="Enter Room Fees"
+                 [(ngModel)]="request.RoomFee">
+          <div *ngIf="isSubmitted && _IIPMasterFormGroup.txtRoomFee.errors" class="text-danger">
+            <p *ngIf="_IIPMasterFormGroup.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Reason
+          </label>
+          <input type="text" class="form-input" placeholder="Enter Reason" name="Reason"
+                 [(ngModel)]="request.Reason" formControlName="Reason">
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Guest Room Apply list</b>
+    </div>
+
+    <div class="table-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Search guests">
+      </mat-form-field>
+      <div class="overflow-auto mt-3">
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+          <!-- Columns definitions -->
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="RequestName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Request Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.RequestName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="InstituteName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.InstituteName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="DepartmentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
+            <td mat-cell *matCellDef="let row">{{ row.DepartmentName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="FromDateTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>From</th>
+            <td mat-cell *matCellDef="let row">{{ row.FromDate }} {{ row.FromTime }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ToDateTime">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>To</th>
+            <td mat-cell *matCellDef="let row">{{ row.ToDate }} {{ row.ToTime }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Reason">
+            <th mat-header-cell *matHeaderCellDef>Reason</th>
+            <td mat-cell *matCellDef="let row">{{ row.Reason }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="StatusName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">{{ row.StatusName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="Remark">
+            <th mat-header-cell *matHeaderCellDef>Remark</th>
+            <td mat-cell *matCellDef="let row">{{ row.Remark }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="GuestHouseName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Guest Room Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.GuestHouseName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="RoomQuantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Qty</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomQuantity }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="RoomType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+            <td mat-cell *matCellDef="let row">{{ getRoomTypeName(row.RoomType) }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="RoomFee">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Fee</th>
+            <td mat-cell *matCellDef="let row">{{ row.RoomFee }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="CheckinCheckout">
+            <th mat-header-cell *matHeaderCellDef>Check-In/Out</th>
+            <td mat-cell *matCellDef="let row">{{ row.FormattedCheckinDate }} – {{ row.FormattedCheckoutDate }}</td>
+          </ng-container>
+         
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let row">
+              <div *ngIf="row.StatusName === 'Pending'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </ng-container>
+
+          <!-- Header and row definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+      </div>
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord == 0">
+        No Record Found
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>    
+  </div>
+</div>

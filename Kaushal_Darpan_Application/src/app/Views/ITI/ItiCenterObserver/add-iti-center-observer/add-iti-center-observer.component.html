@@ -1,0 +1,197 @@
+<main class="flex-grow p-6">
+
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Add ITI Center Observer</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/iti-center-observer" class="text-sm font-medium text-slate-700" aria-current="page">ITI Center Observer</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/add-iti-center-observer" class="text-sm font-medium text-slate-700" aria-current="page">Add ITI Center Observer</a>
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add ITI Center Observer</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a routerLink="/iti-center-observer" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+          </div>
+        </div>
+        <form [formGroup]="CenterObserverForm">
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+                 <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Team Name</label>
+                    <input type="text" formControlName="TeamName" class="form-input" [(ngModel)]="request.TeamName" placeholder="Team Name">
+                    <div *ngIf="isFormSubmitted && centerObserverForm.TeamName.errors" class="text-danger">
+                      <p *ngIf="centerObserverForm.TeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                    </div>
+                 </div>
+            </div>
+        </form>
+        <form [formGroup]="FlyingSquadForm">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+              <ng-select formControlName="DistrictID" [clearable]="false" [(ngModel)]="requestObj.DistrictID" (change)="GovtITICollege_DistrictWise($event)">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of DistrictMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.DistrictID.errors" class="text-danger">
+                <p *ngIf="!formFlyingSquad.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Management Type</label>
+              <ng-select formControlName="ManagementTypeID" [(ngModel)]="requestObj.ManagementTypeID" [clearable]="false" (change)="GetInstituteMaster_ByDistrictWise()">
+                <ng-option [value]="0">--Select--</ng-option>
+                <ng-option [value]="1">Govt.</ng-option>
+                <ng-option [value]="5">Private</ng-option>
+                
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.InstituteID.errors" class="text-danger">
+                <p *ngIf="!formFlyingSquad.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
+              <ng-select formControlName="InstituteID" [(ngModel)]="requestObj.InstituteID" [clearable]="false" (change)="GetStaff_InstituteWise()">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of InstituteMasterDDL; track $index) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.InstituteID.errors" class="text-danger">
+                <p *ngIf="!formFlyingSquad.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Name</label>
+              <ng-select formControlName="StreamID" [(ngModel)]="requestObj.StreamID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of StreamMasterDDL; track item.Id) {
+                <ng-option [value]="item.Id">{{item.TradeName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.StreamID.errors" class="text-danger">
+                <p *ngIf="!formFlyingSquad.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+              <ng-select formControlName="SemesterID" [(ngModel)]="requestObj.SemesterID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of SemesterMasterDDL; track item.SemesterID) {
+                <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.SemesterID.errors" class="text-danger">
+                <p *ngIf="formFlyingSquad.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Teachers</label>
+              <ng-select formControlName="StaffID" [(ngModel)]="requestObj.StaffID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of ExaminerDDL; track item.StaffID) {
+                <ng-option [value]="item.UserID">{{item.SSOID}} - ({{item.Name}})</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.StaffID.errors" class="text-danger">
+                <p *ngIf="!formFlyingSquad.StaffID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teacher SSOID</label>
+                <input formControlName="SSOID" [(ngModel)]="requestObj.SSOID" class="form-input" type="text" placeholder="SSOID">
+                  
+                <div *ngIf="isSubmitted && formFlyingSquad.SSOID.errors" class="text-danger">
+                  <p *ngIf="formFlyingSquad.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+            </div> -->
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+              <ng-select formControlName="ShiftID" [(ngModel)]="requestObj.ShiftID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of ExamShiftDDL; track item.ShiftID) {
+                <ng-option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && formFlyingSquad.ShiftID.errors" class="text-danger">
+                <p *ngIf="formFlyingSquad.ShiftID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div> -->
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="postFlyingSquadForm()">Add More</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
+        
+      </div>
+
+      <div class="overflow-auto max-height500">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>#</th>
+            <th class="text-left">Observer Name</th>
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">SSOID</th>
+            <!-- <th class="text-left">Trade Name</th> -->
+            <!-- <th class="text-left">Exam Shift</th> -->
+            <th class="text-left">Member Type</th>
+            <th>Action</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of request.ObserverDetails; let idx = index;">
+            <td class="text-left">{{idx+1}}</td>
+            <td class="text-left">{{row.StaffName}}</td>
+            <td class="text-left">{{row.InstituteName}}</td>
+            <td class="text-left">{{row.SSOID}}</td>
+            <!-- <td class="text-left">{{row.StreamName}}</td> -->
+            <!-- <td class="text-left">{{row.ShiftName}}</td> -->
+            <td class="text-left">
+                <label><input type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)">&nbsp; Set Incharge</label>
+            </td>
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-4">
+      <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDate()">Submit</button>
+      <button type="button" id="btnReset" class="btn bg-danger text-white">
+        <i class="ti ti-refresh"></i> Reset
+      </button>
+    </div>
+
+    </div>
+  </div>
+
+  <!-- end row -->
+
+
+
+</main>

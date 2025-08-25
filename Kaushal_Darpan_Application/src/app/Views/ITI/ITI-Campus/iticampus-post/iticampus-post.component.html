@@ -1,0 +1,807 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" *ngIf="this.initialState == undefined">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Campus</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Campus Drived</a>
+    </div>
+  </div>
+  <a routerLink="/ItiCampusPostList" class="btn bg-info text-white btn-sm">Back To Campus Post List</a>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="card-header flex justify-between items-center">
+      <div class="flex-grow"></div> <!-- This ensures the button is pushed to the right -->
+      <button class="btn bg-info text-white" (click)="CloseModalPopup()" *ngIf="this.initialState != undefined">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    <!--{{request|json}}-->
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Add Basic Details</b>
+      </div>
+
+      <form [formGroup]="CampusForm" class="form-horizontal">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Company Name: <span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlCompanyID" class="form-select" id="ddlCompanyID" (change)="GetNameWiseData(request.CompanyID)"
+                    [(ngModel)]="request.CompanyID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CompanyMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlCompanyID.errors" class="text-danger">
+              <p *ngIf="!form.ddlCompanyID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Company Type:
+            </label>
+            <select formControlName="ddlCompanyType" class="form-select" id="ddlCompanyType"
+                    [(ngModel)]="request.CompanyTypeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlCompanyType.errors" class="text-danger">
+              <p *ngIf="!form.ddlCompanyType.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required
+                .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Website : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtWebsite" class="form-input" placeholder="Enter Website" type="text"
+                   id="txtWebsite" maxlength="200" [(ngModel)]="request.Website">
+            <div *ngIf="isSubmitted&&form.txtWebsite.errors" class="text-danger">
+              <p *ngIf="form.txtWebsite.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              State <span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlState" class="form-select" id="ddlState" [(ngModel)]="request.StateID"
+                    (change)="ddlState_Change()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlState.errors" class="text-danger">
+              <p *ngIf="!form.ddlState.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              District<span class="StarMarking">*</span>
+            </label>
+            <select formControlName="ddlDistrict" class="form-select" id="ddlDistrict" [(ngModel)]="request.DistrictID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&form.ddlDistrict.errors" class="text-danger">
+              <p *ngIf="!form.ddlDistrict.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Address : <span class="StarMarking">*</span>
+            </label>
+            <textarea formControlName="txtAddress" class="form-input" placeholder="Enter Address" type="text"
+                      id="txtAddress" maxlength="500" [(ngModel)]="request.Address"></textarea>
+            <div *ngIf="isSubmitted&&form.txtAddress.errors" class="text-danger">
+              <p *ngIf="form.txtAddress.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">HR Details</b>
+        </div>
+        <div class="grid">
+
+          <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr. No.</th>
+                <th align="left">
+                  Select
+                </th>
+
+                <th class="text-left">Name </th>
+                <th class="text-left">Mobile</th>
+                <th class="text-left">Email Name   </th>
+                <th class="text-left">SSOID </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of HRDetailsList ;let idx=index;">
+                <td>{{idx+1}}</td>
+                <td align="left">
+                  <input type="radio"
+                         [checked]="row.IsMainRole"
+                         name="radiocheck_{{idx+1}}"
+                         (change)="toggleIsMainRole(row)">
+                </td>
+                <td class="text-left">{{row.HR_Name}} </td>
+                <td class="text-left">{{row.HR_MobileNo}}</td>
+                <td class="text-left">{{row.HR_Email}}</td>
+                <td class="text-left">{{row.HR_SSOID}}</td>
+
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
+        <form [formGroup]="EligibilityCriteriaForm" class="form-horizontal">
+          <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Eligibility Criteria</b>
+          </div>
+          <div class="grid 2xl:grid-cols-4 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Passing Year From <span class="StarMarking">*</span>
+                  </label>
+                  <select formControlName="ddlPassingYear" class="form-select" id="ddlPassingYear"
+                          [(ngModel)]="request_EligibilityCriteriaModel.PassingYear" (change)="onPassingYearChange()">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of PassingYearMasterList" [value]="item.Year">{{item.Year}}</option>
+                  </select>
+                  <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlPassingYear.errors" class="text-danger">
+                    <p *ngIf="!form_Eligibility.ddlPassingYear.errors.DropdownValidators">
+                      <i aria-hidden="true"></i>This
+                      field is required .!
+                    </p>
+                  </div>
+
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Passing Year To<span class="StarMarking">*</span>
+                  </label>
+                  <select formControlName="ddlToPassingYear" class="form-select" id="ddlToPassingYear"
+                          [(ngModel)]="request_EligibilityCriteriaModel.ToPassingYear">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of filteredPassingYears" [value]="item.Year">{{item.Year}}</option>
+                  </select>
+                  <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlToPassingYear.errors" class="text-danger">
+                    <p *ngIf="!form_Eligibility.ddlToPassingYear.errors.DropdownValidators">
+                      <i aria-hidden="true"></i>This
+                      field is required .!
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!--<div *ngIf="request_EligibilityCriteriaModel.ToPassingYear < request_EligibilityCriteriaModel.PassingYear">
+
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Semester<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlSemesterID" class="form-select" id="ddlSemesterID"
+                      [(ngModel)]="request_EligibilityCriteriaModel.SemesterID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of filteredSortedSemesters" [value]="item.SemesterID">{{item.SemesterName}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails && form_Eligibility.ddlSemesterID.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlSemesterID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>-->
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                10th Percentage(minimum)
+              </label>
+              <select formControlName="ddlMinPre_10" class="form-select" id="ddlMinPre_10"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinPre_10">
+                <option value="0">--Select--</option>
+                <option value="1">Any(%)</option>
+                <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_10.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlMinPre_10.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field
+                  is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                12th Percentage(minimum)<span class="StarMarking"></span>
+              </label>
+              <select formControlName="ddlMinPre_12" class="form-select" id="ddlMinPre_12"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinPre_12">
+                <option value="0">--Select--</option>
+                <option value="1">Any(%)</option>
+                <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
+              </select>
+              <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_12.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlMinPre_12.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>-->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Diploma Percentage(minimum)
+              </label>
+              <select formControlName="ddlMinPre_Diploma" class="form-select" id="ddlMinPre_Diploma"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinPre_Diploma">
+                <option value="0">--Select--</option>
+                <option value="1">Any(%)</option>
+                <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_Diploma.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlMinPre_Diploma.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Back papers allowed</label>
+              <select formControlName="ddlNoofBackPapersAllowed" class="form-select" id="ddlNoofBackPapersAllowed"
+                      [(ngModel)]="request_EligibilityCriteriaModel.NoofBackPapersAllowed">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+              <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlNoofBackPapersAllowed.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>-->
+            </div>
+            <div>
+              <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Age Allowed (Born Between) From<span class="StarMarking">*</span>
+                  </label>
+                  <input type="date" class="form-input" id="txtAgeAllowedFrom" formControlName="txtAgeAllowedFrom"
+                         [(ngModel)]="request_EligibilityCriteriaModel.AgeAllowedFrom" (change)="onAgeRangeChange()">
+                  <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtAgeAllowedFrom.errors" class="text-danger">
+                    <p *ngIf="form_Eligibility.txtAgeAllowedFrom.errors.required">
+                      <i aria-hidden="true"></i> This field
+                      is required .!
+                    </p>
+                  </div>
+                </div>
+
+
+                <div *ngIf="calculatedAge!=''">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Calculated Age
+                  </label>
+                  <input type="text"
+                         class="form-input"
+                         [value]="calculatedAge"
+                         readonly>
+                </div>
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Age Allowed (Born Between) To<span class="StarMarking">*</span>
+                  </label>
+                  <input type="date" class="form-input" id="txtAgeAllowedTo" formControlName="txtAgeAllowedTo"
+                         [(ngModel)]="request_EligibilityCriteriaModel.AgeAllowedTo" [min]="minDate" (change)="onAgeRangeChange()">
+                  <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtAgeAllowedTo.errors" class="text-danger">
+                    <p *ngIf="form_Eligibility.txtAgeAllowedTo.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required .!
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Hiring Role<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlHiringRoleID" class="form-select" id="ddlHiringRoleID"
+                      [(ngModel)]="request_EligibilityCriteriaModel.HiringRoleID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of HiringRoleMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlHiringRoleID.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlHiringRoleID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                No. of Positions (tentive) <span class="StarMarking">*</span>
+              </label>
+              <input type="number" class="form-input" id="txtNoofPositions"
+                     formControlName="txtNoofPositions" [(ngModel)]="request_EligibilityCriteriaModel.NoofPositions"
+                     (input)="checkValue($event)">
+              <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>-->
+
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Salary/Stipend/CTC<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtCTC" formControlName="txtCTC"
+                     [(ngModel)]="request_EligibilityCriteriaModel.CTC" (input)="checkValue($event)">
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtCTC.errors" class="text-danger">
+                <p *ngIf="form_Eligibility.txtCTC.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div> -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Salary/Stipend/CTC<span class="StarMarking">*</span></label>
+              <select formControlName="SalaryTypeID" class="form-select" id="SalaryTypeID"
+                      [(ngModel)]="request_EligibilityCriteriaModel.SalaryTypeID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of SalaryListList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.SalaryTypeID.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.SalaryTypeID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Amount<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtCTC" formControlName="txtCTC"
+                     [(ngModel)]="request_EligibilityCriteriaModel.CTC" (input)="checkValue($event)">
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtCTC.errors" class="text-danger">
+                <p *ngIf="form_Eligibility.txtCTC.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark About Salary
+              </label>
+              <select class="form-select" id="txtSalaryRemark" formControlName="txtSalaryRemark"
+                      [(ngModel)]="request_EligibilityCriteriaModel.SalaryRemark">
+                <option value="0">-- Select --</option>
+                <option value="Per Month">Per Month</option>
+                <option value="Per Annual">Per Annual</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtSalaryRemark.errors" class="text-danger">
+                <p *ngIf="form_Eligibility.txtSalaryRemark.errors.required">
+                  <i aria-hidden="true"></i> This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender</label>
+              <select class="form-select" id="ddlGender" name="ddlGender" [(ngModel)]="request_EligibilityCriteriaModel.Gender"
+                      formControlName="ddlGender">
+                <option value="">-- Select --</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="Male and Female Both">Male and Female Both</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlGender.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlGender.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Other Eligibility Criteria and other Benefit
+              </label>
+              <input type="text" class="form-input" id="txtOtherBenefit" maxlength="100"
+                     formControlName="txtOtherBenefit" [(ngModel)]="request_EligibilityCriteriaModel.OtherBenefit" (input)="checkValue($event)">
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtOtherBenefit.errors" class="text-danger">
+                <p *ngIf="form_Eligibility.txtOtherBenefit.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Campus Type<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlCampusType" class="form-select" id="ddlCampusType"
+                      [(ngModel)]="request_EligibilityCriteriaModel.CampusType">
+                <option value="0">--Select--</option>
+                <option value="State Level Pool Campus">State Level Pool Campus</option>
+                <option value="Division Level Pool Campus">Division Level Pool Campus</option>
+                <option value="Institute Level Campus">Institute Level Campus</option>
+              </select>
+
+              <div *ngIf="isSubmittedItemDetails&&request_EligibilityCriteriaModel.CampusType=='0'" class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Selection Process
+              </label>
+              <select formControlName="ddlInterviewType" class="form-select" id="ddlInterviewType"
+                      [(ngModel)]="request_EligibilityCriteriaModel.InterviewType">
+                <option value=''>-- Select --</option>
+                <option value="GD">Group Discussion</option>
+                <option value="Retrun">Written</option>
+                <option value="Interview">Interview</option>
+                <option value="Written And Interview">Written And Interview</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                No Of Interview Round
+              </label>
+              <select formControlName="ddlNoOfInterviewRound" class="form-select" id="ddlNoOfInterviewRound"
+                      [(ngModel)]="request_EligibilityCriteriaModel.NoOfInterviewRound">
+                <option value="0">--Select--</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Eligible Institutes<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlEligibleInstitutes" class="form-select" id="ddlEligibleInstitutes"
+                      [(ngModel)]="request_EligibilityCriteriaModel.EligibleInstitutesID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of EligibleInstitutesList;" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlEligibleInstitutes.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlEligibleInstitutes.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Campus Mode
+              </label>
+              <select formControlName="ddlCampusPostType" class="form-select" id="ddlCampusPostType"
+                      [(ngModel)]="request.CampusPostType" (change)="CampusPostTypechange()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of CampusPostTypeList;" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+            </div>
+
+
+
+          </div>
+
+          <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Eligibility Criteria</b>
+          </div>
+          <div class="grid 2xl:grid-cols-4 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Trade<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlBranch" class="form-select" id="ddlBranch"
+                      [(ngModel)]="request_EligibilityCriteriaModel.BranchID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlBranch.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlBranch.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
+              </div>
+            </div>-->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Trade<span class="StarMarking">*</span>
+              </label>
+              <!-- <select formControlName="ddlBranch" class="form-select" id="ddlBranch"
+                      [(ngModel)]="request_EligibilityCriteriaModel.BranchID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
+              </select> -->
+
+              <ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="StreamMasterList"
+                                       [(ngModel)]="BranchList" [settings]="settingsMultiselect" [ngModelOptions]="{standalone: true}"
+                                       [disabled]="false" (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                       (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                       (onDeSelectAll)="onDeSelectAll($event)">
+              </ng-multiselect-dropdown>
+              <div *ngIf="isSubmittedItemDetails" class="text-danger">
+                <!-- <p *ngIf="!form_Eligibility.ddlBranch.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p> -->
+                <!-- [(ngModel)]="BranchList" -->
+              </div>
+
+            </div>
+
+            <div>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="AddNewRole()">Add</button>
+            </div>
+
+          </div>
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+
+                  <th class="text-left">Sr.No.</th>
+                  <th class="text-left">Branch</th>
+                  <th class="text-left">Passing Year</th>
+                  <!--<th class="text-left">Semester</th>-->
+                  <th class="text-left">10<sup>th</sup>%(min)</th>
+                  <th class="text-left">12<sup>th</sup>%(min)</th>
+                  <th class="text-left">Diploma%(min)</th>
+                  <th class="text-left">Back papers allowed</th>
+                  <th class="text-left">Age Allowed (Born Between) From - To</th>
+                  <th class="text-left">Hiring Role</th>
+                  <th class="text-center">Positions</th>
+                  <th class="text-center">Salary/Stipend/CTC</th>
+                  <th class="text-center">Amount</th>
+                  <th class="text-center">Salary Remark</th>
+                  <th class="text-center">Gender</th>
+                  <th class="text-center">Other Benefit</th>
+                  <th class="text-center">Campus Type</th>
+                  <th class="text-center">Interview Type</th>
+                  <th class="text-center">Interview Round</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let row of request.EligibilityCriteriaModel | tableSearchFilter:searchText;let idx=index;">
+                  <td>{{idx+1}}</td>
+                  <td>{{row.BranchName}}</td>
+                  <td>{{row.PassingYear}}</td>
+
+
+
+                  <!--<td>{{row.SemesterName}}</td>-->
+                  <td>{{ row.MinPre_10 == 1 ? 'Any (%)' : row.MinPre_10 }}</td>
+                  <td>{{ row.MinPre_12 == 1 ? 'Any (%)' : row.MinPre_12 }}</td>
+                  <td>{{ row.MinPre_Diploma == 1 ? 'Any (%)' : row.MinPre_Diploma }}</td>
+
+
+
+
+                  <td>{{row.NoofBackPapersAllowed}}</td>
+                  <td>{{row.Dis_AgeAllowedFrom}}-{{row.Dis_AgeAllowedTo}}</td>
+                  <td>{{row.HiringRoleName}}</td>
+                  <td>{{row.NoofPositions}}</td>
+                  <td class="text-center">{{row.SalaryName}}</td>
+                  <td>{{row.CTC}}</td>
+                  <td>{{row.SalaryRemark}}</td>
+                  <td>{{row.Gender}}</td>
+                  <td>{{row.OtherBenefit}}</td>
+                  <td>{{row.CampusType}}</td>
+                  <td>{{row.InterviewType}}</td>
+                  <td>{{row.NoOfInterviewRound}}</td>
+                  <td align="center">
+                    <div class="flex align-center justify-center actionBtns" style="width:auto !important">
+                      <a href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnRowDelete_OnClick(row)">
+                        <i class="ti ti-trash"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </form>
+
+
+        <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Venue Details</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus Venue : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtCampusVenue" class="form-input" maxlength="200" placeholder="Campus Venue"
+                   type="text" id="txtCampusVenue" [(ngModel)]="request.CampusVenue">
+            <div *ngIf="isSubmitted&&form.txtCampusVenue.errors" class="text-danger">
+              <p *ngIf="form.txtCampusVenue.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus From Date : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtCampusFromDate" class="form-input" placeholder="txtCampusFromDate" type="date"
+                   id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate" (change)="onStartCampusDateChange()">
+            <div *ngIf="isSubmitted&&form.txtCampusFromDate.errors" class="text-danger">
+              <p *ngIf="form.txtCampusFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus To Date : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtCampusToDate" class="form-input" placeholder="txtCampusToDate" type="date"
+                   id="txtCampusToDate" [(ngModel)]="request.CampusToDate" [min]="mincampusDate">
+            <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
+              <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus Time :
+            </label>
+            <input formControlName="txtCampusFromTime" class="form-input" placeholder="txtCampusFromTime" type="time"
+                   id="txtCampusFromTime" [(ngModel)]="request.CampusFromTime">
+            <div *ngIf="isSubmitted&&form.txtCampusFromTime.errors" class="text-danger">
+              <p *ngIf="form.txtCampusFromTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus To Time : <span class="StarMarking">*</span>
+            </label>
+            <input formControlName="txtCampusToTime" class="form-input" placeholder="txtCampusToTime" type="time"
+                   id="txtCampusToTime" [(ngModel)]="request.CampusToTime">
+            <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
+              <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>-->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Campus Venue Location Link:
+            </label>
+            <input formControlName="txtCampusVenueLocation" class="form-input" maxlength="200" placeholder="Campus Venue Location Link"
+                   type="text" id="txtCampusVenueLocation" [(ngModel)]="request.CampusVenueLocation">
+            <div *ngIf="isSubmitted&&form.txtCampusVenueLocation.errors" class="text-danger">
+              <p *ngIf="form.txtCampusVenueLocation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Address : <span class="StarMarking">*</span>
+            </label>
+            <textarea formControlName="txtCampusAddress" class="form-input" placeholder="Enter CampusAddress"
+                      maxlength="500" type="text" id="txtCampusAddress" [(ngModel)]="request.CampusAddress"></textarea>
+            <div *ngIf="isSubmitted&&form.txtCampusAddress.errors" class="text-danger">
+              <p *ngIf="form.txtCampusAddress.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                   for="fileStudentPhoto">
+              Upload Job Description :
+            </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{request.Dis_JobDiscription === '' ? 'No File Choosen' : request.Dis_JobDiscription}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.JobDiscription}}" *ngIf="this.request.JobDiscription !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                 *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                   (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
+                  <i class="ti ti-trash"></i>
+                </a>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <input formControlName="txtMarked" type="checkbox"
+                 id="txtMarked" [(ngModel)]="request.Marked">
+          घोषणा : उपरोक्त कंपनी के कैंपस हेतु हमे अधिकारिक ईमेल प्राप्त हो गई है एवं समस्त विवरण की सत्यता जाँच लिया गया है | <span class="StarMarking">*</span>
+          <div *ngIf="isSubmitted&&form.txtMarked.errors" class="text-danger">
+            <p *ngIf="form.txtMarked.errors.required"><i aria-hidden="true"></i> Please Select Declaration .!</p>
+          </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="saveData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" id="btnReset"
+                    (click)="ResetControl()">
+              Reset
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- end row -->

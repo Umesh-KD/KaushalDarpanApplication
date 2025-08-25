@@ -1,0 +1,17 @@
+.mainUL .dropdown-menu {
+  position: relative !important;
+  margin: 0px !important;
+  padding: 0px !important;
+  transform: none !important;
+}
+.graphSection h3 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+}
+.graphSection h3, .graphSection h4 {
+  font-size: 1.75rem !important;
+  font-weight: 600 !important;
+}
+.dropdown-toggle i {
+  margin-right: 5px;
+}

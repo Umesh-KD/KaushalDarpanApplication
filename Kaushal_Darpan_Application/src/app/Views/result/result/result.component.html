@@ -1,0 +1,165 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student's {{url}} result</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Results</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student's {{url}} result</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5">Generate {{url }} result</b></div>
+    <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 mb-8">
+      <div [formGroup]="resultGenerateForm" class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3 mb-8">
+        <div>
+          <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Generate Semester Result </label>
+          <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+            <option value="all">--All--</option>
+            <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+        <!--<div *ngIf="MapKeyEng == 1">
+          <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
+        </div>-->
+        <div>
+          <button type="button" class="btn  text-white mt-6 {{ isGenerateResult ? 'bg-info' : 'bg-success' }}" (click)="SubmitGenerateResultData()">{{ isGenerateResult ? 'Generate Result' : 'Publish' }}</button>
+        </div>
+      </div>
+    </div>
+   
+    @if(viewAdminDashboardList.length > 0){
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <div [formGroup]="filterForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div class="Search">
+        <div class="form-group row">
+          <label for="searchTerm" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" formControlName="searchTerm" placeholder="Search...">
+          </div>
+        </div>
+      </div>
+
+      <!--<div>
+      <label for="selectedInstitute" class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+      <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedInstitute">
+        <option value="all">--All--</option>
+        <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="selectedSemester" class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+      <select class="form-select ng-pristine ng-valid ng-touched" formControlName="selectedSemester">
+        <option value="all">--All--</option>
+        <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterName">{{item.SemesterName}}</option>
+      </select>
+    </div>-->
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="applyFilter(filterForm.value)">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()"><i class="ti ti-refresh"></i> Reset</button>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+
+    <div class="table-responsive">
+      <!-- result.component.html -->
+     
+
+      <cdk-virtual-scroll-viewport itemSize="50" class="example-viewport">
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+          <!-- SrNo Column -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef> Sr. No. </th>
+            <td mat-cell *matCellDef="let element; let i = index">
+              {{ i + startInTableIndex }}
+            </td>
+          </ng-container>
+
+          <!-- StudentName Column -->
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+          </ng-container>
+
+          <!-- FatherName Column -->
+          <ng-container matColumnDef="FatherName">
+            <th mat-header-cell *matHeaderCellDef>Father Name</th>
+            <td mat-cell *matCellDef="let element">{{ element.FatherName }}</td>
+          </ng-container>
+
+          <!-- RollNo Column -->
+          <ng-container matColumnDef="RollNo">
+            <th mat-header-cell *matHeaderCellDef>Roll No</th>
+            <td mat-cell *matCellDef="let element">{{ element.RollNo }}</td>
+          </ng-container>
+
+          <!-- EnrollmentNo Column -->
+          <ng-container matColumnDef="EnrollmentNo">
+            <th mat-header-cell *matHeaderCellDef>Enrollment No</th>
+            <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
+          </ng-container>
+
+          <!-- Division Column -->
+          <!--<ng-container matColumnDef="Division">
+            <th mat-header-cell *matHeaderCellDef>Division</th>
+            <td mat-cell *matCellDef="let element">{{ element.Division }}</td>
+          </ng-container>-->
+
+          <!-- Percentage Column -->
+          <!--<ng-container matColumnDef="Percentage">
+            <th mat-header-cell *matHeaderCellDef>Percentage</th>
+            <td mat-cell *matCellDef="let element">{{ element.Percentage }}</td>
+          </ng-container>-->
+
+          <!-- Result Column -->
+          <ng-container matColumnDef="Result">
+            <th mat-header-cell *matHeaderCellDef>Result</th>
+            <td mat-cell *matCellDef="let element">{{ element.Result }}</td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <!-- Example: a button to view details -->
+              <button class="btn bg-success btn-sm text-white" (click)="DownloadMarksheet(element.StudentId,element.SemesterId)">
+                Download
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Header and Row Declarations -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <div class="overflow-x-auto">
+          <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+            No Record Found
+          </div>
+
+          <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                         [length]="totalRecords" (page)="onPaginationChange($event)">
+          </mat-paginator>
+        </div>
+      </cdk-virtual-scroll-viewport>
+
+    </div>
+
+    }
+
+  </div>
+</div>

@@ -1,0 +1,78 @@
+
+
+<!-- Navigation bar -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2" id="AddExam">Add Rooms</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/exammaster" class="text-sm font-medium text-slate-700" aria-current="page">Rooms</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/addrooms" class="text-sm font-medium text-slate-700" id="AddExamSm" aria-current="page">Add Rooms</a>
+    </div>
+  </div>
+</div>
+
+<!-- Main content section -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <!-- Form start -->
+      <form [formGroup]="RoomFormGroup">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5" id="AddExamIn"><i class="ti ti-plus"></i> Add Rooms</b>
+          <button type="button" class="btn bg-dark text-white btn-sm" (click)="Rooms()">
+            <i class="ti bi-text-indent-left"></i> Back
+          </button>
+        </div>
+
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!-- Room No -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room No: <span class="text-red-500">*</span></label>
+            <input class="form-input" placeholder="Enter Room Number" formControlName="RoomNumber" type="text" id="roomNo" [(ngModel)]="request.RoomNumber" required />
+          </div>
+
+          <!-- Total Rows -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Rows: <span class="text-red-500">*</span></label>
+            <input class="form-input" placeholder="Enter Total Rows" formControlName="TotalRows" type="number" id="totalRows" [(ngModel)]="request.TotalRows" required />
+          </div>
+
+          <!-- Total Columns -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Columns: <span class="text-red-500">*</span></label>
+            <input class="form-input" placeholder="Enter Total Columns" formControlName="TotalColumns" type="number" id="totalColumns" [(ngModel)]="request.TotalColumns" required />
+          </div>
+
+          <!-- Total Seats -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Seats: <span class="text-red-500">*</span></label>
+            <input class="form-input" placeholder="Enter Total Seats" formControlName="TotalSeats" type="number" id="totalSeats" [(ngModel)]="request.TotalSeats" required />
+          </div>
+
+          <!-- Institute Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institution: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="InstituteID" formControlName="InstituteID" [(ngModel)]="request.InstituteID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+            <div *ngIf="RoomFormGroup.get('InstituteID').hasError('required') && RoomFormGroup.get('InstituteID').touched" class="text-danger">
+              This field is required.
+            </div>
+          </div>
+
+          <!-- Submit and Reset buttons -->
+          <div>
+            <button type="submit" id="btnSave" class="btn bg-info text-white mt-6" (click)="SaveDataRoom()">Submit</button>
+            <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="ResetControls()">Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

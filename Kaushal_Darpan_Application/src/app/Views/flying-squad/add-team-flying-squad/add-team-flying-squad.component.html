@@ -1,0 +1,511 @@
+<main class="flex-grow p-6">
+
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Add Flying Squad</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/team-flying-squad" class="text-sm font-medium text-slate-700" aria-current="page">Team Flying Squad</a>
+        <i *ngIf="sSOLoginDataModel && sSOLoginDataModel.RoleID != 40 && sSOLoginDataModel.RoleID != 48 && sSOLoginDataModel.RoleID !== 53 && sSOLoginDataModel.RoleID !== 55" class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" *ngIf="sSOLoginDataModel && sSOLoginDataModel.RoleID != 40 && sSOLoginDataModel.RoleID != 48 && sSOLoginDataModel.RoleID !== 53 && sSOLoginDataModel.RoleID !== 55" class="text-sm font-medium text-slate-700" aria-current="page">Add Team</a>
+        
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8" *ngIf="sSOLoginDataModel && sSOLoginDataModel.RoleID != 40 && sSOLoginDataModel.RoleID != 48 && sSOLoginDataModel.RoleID !== 53 && sSOLoginDataModel.RoleID !== 55"  >
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Team Deployment Details</b>
+          <div>
+            <a routerLink="addteam" title="Add Team" class="btn bg-info text-white"><i class="ti ti-edit"></i> Add Team</a>
+          </div>
+        </div>
+        <form [formGroup]="TeamDeploymentFlyingSquadForm" (ngSubmit)="postTeamDeploymentFlyingSquadForm()">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Team Name</label>
+              <ng-select formControlName="TeamID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of getFlyingSquadTeamData; track item.ID) {
+                <ng-option [value]="item.ID">{{item.TeamName}}</ng-option>
+                }
+              </ng-select>
+
+              <!--<div *ngIf="isSubmitted && formFlyingSquad.TeamID.errors" class="text-danger">
+                <p *ngIf="formFlyingSquad.TeamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>-->
+            </div>
+            
+          </div>
+
+          <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Shift Morning</b>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" formGroupName="ShiftA">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+              <ng-select formControlName="DistrictID" [clearable]="false" (change)="GetInstituteMaster_ByDistrictWise($event, 'ShiftA')">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of DistrictMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && shiftAControls.DistrictID.errors" class="text-danger">
+                <p *ngIf="shiftAControls.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Center Name</label>
+              <ng-select formControlName="InstituteID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of InstituteMasterDDL; track item.CenterID) {
+                <ng-option [value]="item.CenterID">{{item.CenterName}}</ng-option>
+                }
+              </ng-select>
+              <div *ngIf="isSubmitted && shiftAControls.InstituteID.errors" class="text-danger">
+                <p *ngIf="shiftAControls.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
+              <input formControlName="DeploymentDate" class="form-input" type="date" (change)="checkValidDate($event)">
+
+              <div *ngIf="isSubmitted && shiftAControls.DeploymentDate.errors" class="text-danger">
+                <p *ngIf="shiftAControls.DeploymentDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+              <select class="form-select" formControlName="ShiftID">
+                <option [value]="0">--Select--</option>
+                @for (item of ExamShiftDDL; track item.ShiftID) {
+                <option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
+                }
+              </select>
+              <div *ngIf="isSubmitted && shiftAControls.ShiftID.errors" class="text-danger">
+                <p *ngIf="shiftAControls.ShiftID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+            <b class="text-1xl-5">
+              <input type="checkbox"
+                     [(ngModel)]="IsDeploymentDetails"
+                     [ngModelOptions]="{ standalone: true }"
+                     (change)="AddDeploymentDetails($event)" />
+              Shift Evening
+            </b>
+          </div>
+
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3" formGroupName="ShiftB">
+            <!--<div *ngIf="TeamDeploymentFlyingSquadForm.get('ShiftB')?.errors?.DistrictIDRequired">
+              District ID is required if filling Shift B
+            </div>-->
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+              <ng-select formControlName="DistrictID" [clearable]="false" (change)="GetInstituteMaster_ByDistrictWise($event,'ShiftB')">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of DistrictMasterDDL; track item.ID) {
+                <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                }
+              </ng-select>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Center Name</label>
+              <ng-select formControlName="InstituteID" [clearable]="false">
+                <ng-option [value]="0">--Select--</ng-option>
+                @for (item of InstituteMasterDDL; track item.CenterID) {
+                <ng-option [value]="item.CenterID">{{item.CenterName}}</ng-option>
+                }
+              </ng-select>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
+              <input formControlName="DeploymentDate" class="form-input" type="date" (change)="checkValidDate($event)">
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+              <select class="form-select" formControlName="ShiftID">
+                <option [value]="0">--Select--</option>
+                @for (item of ExamShiftDDL; track item.ShiftID) {
+                <option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
+                }
+              </select>
+            </div>
+          </div>
+          <div>
+            <div class="text-left">
+              <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" >
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Team List</b>
+        <!--<div class="flex">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
+            <i class="ti ti-excel"></i> Export Excel
+          </a>
+        </div>-->
+      </div>
+
+      <div class="overflow-x-auto mt-3">
+        <div class="table-container">
+          <!-- Table Filter Input -->
+          <div class="search-container mt-2 mb-3" >
+            <!--<mat-form-field appearance="fill">
+      <mat-label>Filter</mat-label>
+      <input matInput (input)="applyFilter($event)" placeholder="Filter table" />
+    </mat-form-field>-->
+            <form [formGroup]="GetFlyingSquadForm" (ngSubmit)="getTeamDeploymentFlyingSquad()">
+              <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Team Name</label>
+                  <ng-select formControlName="TeamID" [clearable]="false">
+                    <ng-option [value]="0">--Select--</ng-option>
+                    @for (item of getFlyingSquadTeamData; track item.ID) {
+                    <ng-option [value]="item.ID">{{item.TeamName}}</ng-option>
+                    }
+                  </ng-select>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+                  <ng-select formControlName="DistrictID" [clearable]="false" (change)="GetInstituteMaster_ByDistrictWise($event,'')">
+                    <ng-option [value]="0">--Select--</ng-option>
+                    @for (item of DistrictMasterDDL; track item.ID) {
+                    <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                    }
+                  </ng-select>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Center Name</label>
+                  <ng-select formControlName="InstituteID" [clearable]="false">
+                    <ng-option [value]="0">--Select--</ng-option>
+                    @for (item of InstituteMasterDDL; track item.CenterID) {
+                    <ng-option [value]="item.CenterID">{{item.CenterName}}</ng-option>
+                    }
+                  </ng-select>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Shift</label>
+                  <select class="form-select" formControlName="ShiftID">
+                    <option [value]="0">--Select--</option>
+                    @for (item of ExamShiftDDL; track item.ShiftID) {
+                    <option [value]="item.ShiftID">{{item.ExamShift}} ({{item.StartTime}})</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <div class="text-left">
+                    <button type="submit" class="btn bg-info text-white mt-6">Search</button>
+                    <button type="button" class="btn bg-danger text-white mt-6" (click)="resetSearch()">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- Table -->
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Added Team List</b>
+            <div class="flex">
+              @if (this.ListStatusCount > 0 && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48){
+              <a (click)="AllGenerateOrder()" class="btn bg-success btn-sm text-white"> All Generate Order</a>
+              } @else if(this.ListStatus1Count > 0 &&(sSOLoginDataModel.RoleID === 40 || sSOLoginDataModel.RoleID === 48 || sSOLoginDataModel.RoleID === 53 || sSOLoginDataModel.RoleID === 55)){
+              <a (click)="openModalGenerateOTP(modal_GenrateOTP)" class="btn bg-success btn-sm text-white"> Verify Deployment</a>
+              }
+              <!--<a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
+    <i class="ti ti-excel"></i> Export Excel
+  </a>-->
+            </div>
+          </div>
+          <div class="mat-elevation-z8 table-responsive" #pdfTable>
+            <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+              <!-- ID Column -->
+              <ng-container matColumnDef="SrNo">
+                <th mat-header-cell *matHeaderCellDef width="100px">
+                  @if (this.ListStatusCount > 0 && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48){
+                  <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox1()" />
+                  } @else if(this.ListStatus1Count > 0 &&(sSOLoginDataModel.RoleID === 40 || sSOLoginDataModel.RoleID === 48 || sSOLoginDataModel.RoleID === 53 || sSOLoginDataModel.RoleID === 55)){
+                  <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+                  }
+
+                  Sr. No.
+                </th>
+                <td mat-cell *matCellDef="let element; let i = index" width="100px">
+                  {{ i + 1 }}&nbsp;
+                  @if (element.Status == 2 && (sSOLoginDataModel.RoleID === 40 || sSOLoginDataModel.RoleID === 48 || sSOLoginDataModel.RoleID === 53 || sSOLoginDataModel.RoleID === 55)){
+                  <input type="checkbox" class="checkboxSize" [(ngModel)]="element.Selected"
+                         #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,element)">
+                  } @else if(element.Status === 3 && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48){
+                  <input type="checkbox" class="checkboxSize" [(ngModel)]="element.Selected"
+                         #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,element)">
+                  }
+
+                </td>
+              </ng-container>
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="TeamName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Team Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.TeamName}} </td>
+              </ng-container>
+
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="DistrictNameEnglish">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> District Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.DistrictNameEnglish}} </td>
+              </ng-container>
+
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="StartTime">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Shift Time </th>
+                <td mat-cell *matCellDef="let element"> {{element.StartTime}} </td>
+              </ng-container>
+
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="InstituteNameEnglish">
+                <th width="350" mat-header-cell *matHeaderCellDef mat-sort-header> Center Name </th>
+                <td width="350" mat-cell *matCellDef="let element"> {{element.InstituteNameEnglish}} </td>
+              </ng-container>
+
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="DeploymentDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Deployment Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.DeploymentDate | date}} </td>
+              </ng-container>
+
+              <!-- StaffSSOID Column -->
+              <ng-container matColumnDef="Status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+                <td mat-cell *matCellDef="let element">
+                  <span class="btn {{element.Status == 0?'bg-danger':element.Status == 1?'bg-info':element.Status == 2?'bg-info':element.Status == 3?'bg-primary':'bg-success'}} text-white me-1">{{element.Status == 0?"Pending":element.Status == 1?"Assigned":element.Status == 3?"verified":element.Status == 5?"Completed":element.Status == 2?"Forward for verify":"Order Generated"}}</span>
+                </td>
+              </ng-container>
+
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex">
+                    <!--<button type="button" class="btn bg-info  text-white me-1" *ngIf="element.Status >= 3" matTooltip="Team Attendance" (click)="Model_Attendance(MyModel_Attendance,element)">Team Attendance</button>-->
+
+                    <!-- <a href="javascript:void(0);" title="Add Deployment Details" (click)="AddDeploymentDetails(element)" class="ng-star-inserted"><i class="ti ti-user"></i></a>-->
+                    
+                    
+                    <div class="flex actionBtns w-auto" style="width: auto !important;">
+                      <!--<a *ngIf="element.showAddLink && (element.Status == 0 ||element.Status == 1 || element.Status == 2) && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48 && sSOLoginDataModel.RoleID !== 53 && sSOLoginDataModel.RoleID !== 55 && sSOLoginDataModel.RoleID !== 50 && sSOLoginDataModel.RoleID !== 54" [routerLink]="['/team-flying-squad/addteam/', element.TeamID,element.ID]"
+     matTooltip="Add Staff">
+    <i class="ti ti-user"></i>
+  </a>
+  <a *ngIf="element.Status >= 3" [routerLink]="['/team-flying-squad/team/', element.ID]"
+     matTooltip="View Staff">
+    <i class="ti ti-user"></i>
+  </a>-->
+                      <!--<a *ngIf="element.showAddLink && (sSOLoginDataModel.RoleID === 40 || sSOLoginDataModel.RoleID === 48)" [routerLink]="['/team-flying-squad/team/', element.ID]"
+     matTooltip="View Staff">
+    <i class="ti ti-user"></i>
+  </a>-->
+                      <!--<a href="javascript:void(0);" matTooltip="Delete SSOID" (click)="onDelete(element)"><i aria-hidden="true" class="ti ti-trash"></i></a>-->
+                      <!--<a href="javascript:void(0);" matTooltip="Flying Squad Duty Order" (click)="downloadPDF(element)"><i class="ti ti-pdf"></i></a>-->
+                      <a *ngIf="element.IsRequest == 1 && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48 " href="javascript:void(0);" matTooltip="Flying Squad Locked" (click)="unLockIsRequest(element, 2)"><i class="ti ti-lock"></i></a>
+                      <a *ngIf="element.IsRequest == 2 && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48" href="javascript:void(0);" matTooltip="Flying Squad Un Lock" (click)="unLockIsRequest(element, 1)"><i class="ti ti-lock-open"></i></a>
+                      <a *ngIf="element.Status >= 3" [routerLink]="['/team-flying-squad/team/', element.ID]"
+                         matTooltip="View Staff">
+                        <i class="ti ti-user"></i>
+                      </a>
+                      <a *ngIf="element.Status == 3 || element.Status == 4 && element.showAddLink && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48" href="javascript:void(0);" matTooltip="Flying Squad Duty Order" (click)="downloadPDF(element)"><i class="ti ti-pdf"></i></a>
+                      <a *ngIf="element.Status >= 5 && element.showAddLink && sSOLoginDataModel.RoleID !== 40 && sSOLoginDataModel.RoleID !== 48" href="javascript:void(0);" matTooltip="Flying Squad Duty Report" (click)="GetFlyingSquadReports(element)"><i class="ti ti-pdf"></i></a>
+                    </div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Table Header and Rows -->
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </div>
+
+          <!-- Pagination and Excel Export -->
+          <div class="table-footer">
+            <mat-paginator [length]="totalRecords"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                           (page)="onPaginationChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+
+      </div>
+
+      <!--<div class="flex justify-center flex-wrap items-center mt-3">
+        <button type="button" class="btn bg-success me-2 text-white">Submit</button>
+        <button type="button" class="btn bg-danger text-white">Reset</button>
+      </div>-->
+
+    </div>
+  </div>
+
+  <!-- end row -->
+
+
+
+</main>
+
+<ng-template #MyModel_Attendance let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Team Attendance</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5">Team Attendance</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table mat-table [dataSource]="dataSource1" matSort class="mat-elevation-z8">
+            <!-- ID Column -->
+            <ng-container matColumnDef="SrNo">
+              <th mat-header-cell *matHeaderCellDef width="100px">
+                Sr. No.
+              </th>
+              <td mat-cell *matCellDef="let element; let i = index" width="100px">
+                {{ i + 1 }}
+              </td>
+            </ng-container>
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="StaffName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Staff Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.StaffName}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="TeamName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Team Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.TeamName}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="SSOID">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> SSOID </th>
+              <td mat-cell *matCellDef="let element"> {{element.SSOID}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="Institute">
+              <th width="350" mat-header-cell *matHeaderCellDef mat-sort-header> Center Name </th>
+              <td width="350" mat-cell *matCellDef="let element"> {{element.Institute}} </td>
+            </ng-container>
+
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="DeploymentDate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Deployment Date </th>
+              <td mat-cell *matCellDef="let element"> {{element.DeploymentDate | date}} </td>
+            </ng-container>
+
+  <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="IsPresent">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> IsPresent </th>
+              <td mat-cell *matCellDef="let element"> {{element.IsPresent}} </td>
+            </ng-container>
+            <!-- StaffSSOID Column -->
+            <ng-container matColumnDef="Remark">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> Remark </th>
+              <td mat-cell *matCellDef="let element"> {{element.Remark}} </td>
+            </ng-container>
+
+            
+
+            <!-- Table Header and Rows -->
+            <tr mat-header-row *matHeaderRowDef="AttendanceListColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: AttendanceListColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_AddTeam let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content" cdkDrag>
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Add Team</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5">Add Team</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+
+          <form [formGroup]="FlyingSquadForm" class="mb-3" (ngSubmit)="postFlyingSquadForm()">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+              <!--<div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Team Name</label>
+                <input formControlName="TeamName" class="form-input" placeholder="Enter Team Name" />
+                <div *ngIf="isSubmitted && formFlyingSquad.TeamName.errors" class="text-danger">
+                  <p *ngIf="formFlyingSquad.TeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>-->
+              <div class="mb-3">
+                <label for="TeamName" class="form-label">Team Name</label>
+                <div class="input-group">
+                  <span class="input-group-text" id="basic-addon3">{{getFlyingSquadTeamDefault}}</span>
+                  <input formControlName="TeamName" class="form-input" placeholder="Enter Team Name" aria-describedby="basic-addon3 basic-addon4" />
+                </div>
+                <div *ngIf="isSubmitted && formFlyingSquad.TeamName.errors" class="form-text text-danger">
+                  <p *ngIf="formFlyingSquad.TeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+              <div>
+                <div class="text-left">
+                  <button type="submit" class="btn bg-info text-white mt-6 me-1">Add More</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+

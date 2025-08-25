@@ -1,0 +1,213 @@
+  <!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Paper Set Professor List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="#" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Paper Set Professor List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a (click)="GoToPaperSetAssign()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Years Trade</label>
+          <div class="flex">
+            <label class="flex items-center">&nbsp;&nbsp;<input type="radio" value="0" name="yearTrade" [(ngModel)]="request.yearTrade" (change)="RBTYearTradeChange(0)" checked />&nbsp;&nbsp;All </label>
+            <label class="flex items-center">&nbsp;&nbsp;<input type="radio" value="6" name="yearTrade" [(ngModel)]="request.yearTrade" (change)="RBTYearTradeChange(6)" />&nbsp;&nbsp;6 Month Trade</label>
+            <label class="flex items-center">&nbsp;&nbsp;<input type="radio" value="1" name="yearTrade" [(ngModel)]="request.yearTrade" (change)="RBTYearTradeChange(1)" />&nbsp;&nbsp;1 Year Trade</label>
+            <label class="flex items-center mx-2">&nbsp;&nbsp;<input type="radio" value="2" name="yearTrade" [(ngModel)]="request.yearTrade" (change)="RBTYearTradeChange(2)" />&nbsp;&nbsp;2 Year Trade</label>
+          </div>
+        </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Years Trade: <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="request.yearTrade" (change)="DDLYearTradeChange()">
+            <option value="0" selected>--All--</option>
+            <option value="6">6 Month Trade</option>
+            <option value="1">1 Year Trade</option>
+            <option value="2">2 Year Trade</option>
+          </select>
+        </div>
+        <div style="display:none">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Exam Type: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlExamType" [(ngModel)]="request.ExamType" (change)="DDLExamTypeChange()">
+            <option value="0" selected>--Choose Option--</option>
+            <option value="1">Practical</option>
+            <option value="2">Theory</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="DDLtradeID" [(ngModel)]="request.TradeID" (change)="ddlTradeChange()">
+            <option value="0" selected>--Choose Option--</option>
+            <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+          </select>
+        </div>
+
+        <div style="display:none">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject: <span class="StarMarking">*</span></label>
+          <select class="form-select" id="ddlSubjectList" [(ngModel)]="request.SubjectId">
+            <option value="0" selected>--Choose Option--</option>
+            <option *ngFor="let item of SubjectListAll" value="{{item.SubjectID}}">{{item.SubjectName}}</option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="Search()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="Clear()">Reset</button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" rowspan="2">#</th>
+            <th class="text-left" rowspan="2">Years Trade</th>
+            <th class="text-left" rowspan="2">Trade</th>
+            <th class="text-left" rowspan="2">Subject</th>
+            <th class="text-left" rowspan="2">Paper Submition Last Date</th>
+            <th class="text-left" rowspan="2">Paper Code/Name</th>
+            <th class="text-left text-center" colspan="2">Professor Details</th>
+            <th class="text-left" rowspan="2">Remark</th>
+            <th class="text-center" rowspan="2">Action</th>
+          </tr>
+          <tr>
+            <th class="text-left">District</th>
+            <th class="text-left">Professor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="AllAssignListDataArray.length > 0 ; else noData">
+            <ng-container *ngFor="let item of AllAssignListDataArray | tableSearchFilter:Table_SearchText; let i = index">
+              <tr>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ i + 1 }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.yearTrade }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.Tradename }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.SubjectName }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.papperSubmitionLastDate }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.PapperCode_Name }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.DistrictName }}</td>
+                <td *ngIf="item.AssignprofessorListModel.length" [ngClass]="{'highlight-row': item.AssignprofessorListModel[0]?.ishighlight}">{{ item.AssignprofessorListModel[0]?.ProfessorName }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">{{ item.Remark }}</td>
+                <td [attr.rowspan]="item.AssignprofessorListModel?.length || 1">
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <!--<a href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/GuideLinesDocPDF/'}}{{item.UploadGuidelinePath }}" target="_blank" title="Guidelines"><i class="ti ti-paperclip"></i></a>-->
+
+                    <a href="javascript:void(0)" title="GuideLines"
+                       (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/ITIPaperSetter/GuideLinesDocPDF' + '/' + item.UploadGuidelinePath)">
+                      <i class="ti ti-paperclip"></i>
+                    </a>
+
+                    <a *ngIf="item.IsAutoSelectComplete !='1'" href="javascript:void(0)" title="Edit" (click)="EditData(item.id)"><i class="ti ti-pencil"></i></a>
+                    <a href="javascript:void(0)" title="View" (click)="ViewData(item.id)"><i class="ti ti-eye"></i></a>
+                    <a *ngIf="item.IsAutoSelectComplete !='1'" href="javascript:void(0)" title="Delete" (click)="DeleteByID(item.id)"><i class="ti ti-trash"></i></a>
+
+                    <a href="javascript:void(0)" title="Download Selected Paper" *ngIf="item.IsAutoSelectComplete =='1'"
+                       (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL  + 'ITIPaperSetter/UploadedPaperPDF/' + item.FinalAutoSelectedPaperFile)">
+                      <i class="ti ti-download"></i>
+                    </a>
+
+                  </div>
+                </td>
+              </tr>
+              <tr *ngFor="let prof of item.AssignprofessorListModel.slice(1)">
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.DistrictName }}</td>
+                <td [ngClass]="{'highlight-row': prof.ishighlight}">{{ prof.ProfessorName }}</td>
+              </tr>
+              <tr *ngIf="!item.AssignprofessorListModel.length">
+                <td colspan="2"><em>No professors assigned</em></td>
+              </tr>
+
+            </ng-container>
+          </ng-container>
+
+
+          <ng-template #noData>
+            <div class="text-center p-3 text-muted">
+              <em>No record found</em>
+            </div>
+          </ng-template>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+</div>
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- Preview Content -->
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+
+      <ng-container *ngIf="showPdfModal">
+        <!-- PDF Preview -->
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        <!-- Image Preview -->
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <!--<pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>-->
+    </div>
+
+  </div>
+</div>
+
+
+<!-- end row -->

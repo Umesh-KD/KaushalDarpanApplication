@@ -1,0 +1,29 @@
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page">Dashboard</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700" aria-current="page">Dashboard</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  <div class="card" *ngFor="let stat of viewITITeacherDashboardList; let i = index">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+      <!-- Title -->
+      <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+      <!-- Count -->
+      <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+      <!-- View All Link -->
+      <a routerLink="/{{stat.URL}}" [queryParams]="{ status: stat.Status }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+</div>

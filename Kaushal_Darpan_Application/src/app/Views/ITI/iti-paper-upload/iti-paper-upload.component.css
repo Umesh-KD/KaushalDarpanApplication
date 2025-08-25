@@ -1,0 +1,74 @@
+.container {
+  margin: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+mat-table {
+  margin-top: 20px;
+  width: 100%;
+}
+.CenterCode, .CenterCode:focus {
+  display: block;
+  width: 100%;
+  border-radius: 0.25rem;
+  --tw-border-opacity: 1;
+  border: 1px solid rgb(229 231 235 / var(--tw-border-opacity)) !important;
+  --tw-bg-opacity: 1;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+.mdc-data-table__cell {
+  padding: 16px;
+}
+.password-container {
+  display: flex;
+  align-items: center;
+}
+
+.eye-icon,
+.copy-icon {
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.password-container #password- {
+  width: 100px;
+  border: none;
+  padding: 0px;
+}
+/* Hide the checkbox input */
+.collapse-checkbox {
+  display: none;
+}
+
+/* Initially hide the collapsible element */
+.collapse.multi-collapse {
+  display: none;
+  transition: all 0.3s ease;
+}
+
+/* When the checkbox is checked, show the collapsible element */
+.collapse-checkbox:checked + label + .collapse {
+  display: block;
+}
+
+.multi-collapse.collapse.show {
+  display: block !important;
+  visibility: visible;
+  position: relative;
+}
+
+  .eyeButton {
+    position: absolute;
+    right: 0px;
+    top: 70%;
+    transform: translateY(-50%);
+    background: #edd6de;
+    padding: 8px;
+  }

@@ -1,0 +1,275 @@
+ <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Practical Remuneration Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Remuneration Details</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <!-- <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID" [disabled]="isInstituteDisabled" >
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+              {{item.InstituteName}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester Name</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
+              {{item.SemesterName}}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+          <select class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StreamMasterDDLList" [value]="item.StreamID">
+              {{item.StreamName}}
+            </option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getExaminerData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div> -->
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List of Remuneration Data</b>
+      <div class="flex justify-end flex-wrap items-center">
+          <a routerLink="/dashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i> Back
+        </a>
+        </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">CCode</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left">Semester Name</th>
+            <th class="text-left">Subject Name</th>
+            <th class="text-left">Total Checked</th>
+            <th class="text-left">Status</th>
+            <!--<th class="text-left">Assigned Date</th>-->
+            <th class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AppointedExaminerList; let idx=index; ">
+            <td align="left">{{idx+1}}</td>
+            <td>{{row.CenterCode}}</td>
+            <td>{{row.StreamName}}</td>
+            <td>{{row.SemesterName}}</td>
+            <td>{{row.SubjectName}}</td>
+            <td>{{row.CheckedCount}}</td>
+            <td>
+              @if(row.adminstatus == 0){
+              <label class="btn btn-sm bg-warning text-white">Pending</label>
+              }
+              @else if(row.adminstatus == 1){
+              <label class="btn btn-sm bg-info text-white">Forwarded To Admin</label>
+              }
+              @else if(row.adminstatus == 2){
+              <label class="btn btn-sm bg-success text-white">Approved</label>
+              }
+            </td>
+         
+                <!--@if(this.ExamTypeID==1) {
+       <a [routerLink]="'/Ititheorymarks'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+      }
+      @if(this.ExamTypeID==2) {
+          <a [routerLink]="'/PracticalAssesment'" [queryParams]="{id:row.AppointExaminerID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+      }-->
+                <!--<a (click)="OpenModalPopup(MyModel_ExaminerCodeLogin,row.AppointExaminerID,row.ExaminerCode)" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>-->
+            <td>
+              <!--<input type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(row.ExaminerID, row.adminstatus)" title="click here to preview file" />-->
+
+              @if(row.filename == null || row.filename == ""){
+              <input type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(row.ExaminerID, row.adminstatus)" title="click here to preview file" />
+              }
+              @else{
+              <!--<input type="button" class="btn btn-sm bg-info text-white" value="Show PDF" (click)="GenerateAndViewPdf(row.ExaminerID, row.adminstatus)" title="click here to preview file" />-->
+              <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.filename}}"
+                 title="Download Bill" class="btn btn-sm bg-green-600 text-white">
+                <i class="ti ti-download"></i>
+              </a>
+              }
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="z-index:123;">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;View Remuneration Examiner PDF</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="flex-grow mt-4 overflow-hidden" style="width:100%;height:100%;">
+      <ng-container *ngIf="pdfUrl; else loading">
+        <object [data]="pdfUrl"
+                type="application/pdf"
+                class="h-full w-full" style="width:100%;height:100%;">
+        </object>
+      </ng-container>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-4 text-center">
+      <!--@if(forwardflag == true){
+      <label class="btn btn-warning">Pending..</label>
+      }-->
+      <button type="button" class="btn bg-info text-white" (click)="SavePDFSubmitAndForwardToAdmin(AppointExaminerID)" *ngIf="forwardflag">
+        Submit And Forward to Admin
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- <ng-template #MyModel_UpdateAppoint let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Eamination 2024-25 (May) </b>
+        <button class="btn bg-info text-white" (click)="CloseViewStudentDetails()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
+              <input type="text" class="form-input disabled" disabled value="Student Name" [(ngModel)]="requestStudent.StudentName">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Instituter Name:</label>
+              <input type="text" class="form-input disabled" disabled value="Father Name" [(ngModel)]="requestStudent.FatherName">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth:</label>
+              <input type="text" class="form-input disabled" disabled value="00/00/0000" [(ngModel)]="requestStudent.Dis_DOB">
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sex:</label>
+              <input type="text" class="form-input disabled" disabled value="Male" [(ngModel)]="requestStudent.Gender">
+            </div>
+
+
+          </div>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ng-template> -->
+
+
+<!-- end row -->
+
+
+
+<ng-template #MyModel_ExaminerCodeLogin let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Verify Examiner </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup(true)"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="grid sm:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+         
+        
+              <div>
+                <label for="ExaminerCode">Examiner Code <span class="StarMarking">*</span></label>
+                <input class="form-input" type="text" id="ExaminerCode" placeholder="Enter Examiner Code"
+                       [(ngModel)]="Code">
+             
+              </div>
+         
+          </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="openPageAfterExaminerLogin()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+

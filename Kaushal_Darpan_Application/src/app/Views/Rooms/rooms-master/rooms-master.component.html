@@ -1,0 +1,109 @@
+<app-loader> </app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Room</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Rooms </a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form [formGroup]="RoomFormGroup">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+          <button type="button" class="btn bg-info text-white btn-sm" (click)="AddRooms()">
+            <i class="ti ti-plus"></i>
+            Add New Rooms
+          </button>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Room No.</label>
+            <input type="text" class="form-input" placeholder="Search By Room No." id="Name" [(ngModel)]="request.RoomNumber" />
+
+          </div>
+
+          <!-- Institute Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institution: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="InstituteID" formControlName="InstituteID" [(ngModel)]="request.InstituteID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of InstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+            <div *ngIf="RoomFormGroup.get('InstituteID').hasError('required') && RoomFormGroup.get('InstituteID').touched" class="text-danger">
+              This field is required.
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetMasterDataList()"><i class="ti ti-search"></i> Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!--<div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>-->
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Institution</th>
+            <th class="text-left">Room No</th>
+            <th class="text-left">Total rows</th>
+            <th class="text-left">Total Columns</th>
+            <th class="text-left">Total seat</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of RoomMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              {{row.Institution}}
+            </td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RoomNumber}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TotalRows}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TotalColumns}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TotalSeats}}</td>
+            <!--<td align="center">
+              <a href="javascript:void(0);"
+                 class="btn bg-info btn-sm text-white" (click)="onEditExam(row.StudentID)">
+                Edit Exam
+              </a>
+            </td>-->
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="'/addrooms'" [queryParams]="{RoomMasterID:row.RoomMasterID}" title="Edit Room"><i class="ti ti-pencil"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

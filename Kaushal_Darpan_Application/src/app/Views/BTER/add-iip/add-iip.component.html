@@ -1,0 +1,82 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Institutes</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="dashboard.html" class="text-sm font-medium text-slate-700">Dasboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="ITIs.html" class="text-sm font-medium text-slate-700" aria-current="page">Institutes</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="addinstitutes.html" class="text-sm font-medium text-slate-700" aria-current="page">Add Institutes</a>
+    </div>
+  </div>
+  <a routerLink="/IIP-List" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Institutes</b>
+      </div>
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="InstituteSsoid">प्रिंसिपल आईटीआई का नाम<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="प्रिंसिपल आईटीआई का नाम" type="text" id="InstituteSsoid">
+        </div>
+        <div>
+          <label for="InstituteSsoid">त्रैमास प्रारम्भ की प्रथम तारीख को उपलब्ध राशि<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="त्रैमास प्रारम्भ की प्रथम तारीख को उपलब्ध राशि" type="number" id="InstituteSsoid">
+        </div>
+        <div>
+          <label for="InstituteSsoid">त्रैमास में प्राप्त की गई राशि<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="त्रैमास में प्राप्त की गई राशि" type="number" id="InstituteSsoid">
+        </div>
+
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+        <div>
+          <label for="InstituteSsoid">त्रैमास में आई. डी. एफ. नियम 3 के अतिरिक्त अन्य मद की जमा राशि<span class="StarMarking">*</span></label>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="प्राप्त की गई राशि" type="number" id="InstituteSsoid">
+        </div>
+        <div>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="प्राप्त की गई राशि" type="number" id="InstituteSsoid">
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white">Add More</button>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-4">
+
+        <div>
+          <label for="InstituteSsoid">त्रैमास में आई.डी.एफ. नियम 6 के तहत व्यय की गई राशि<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="त्रैमास में आई.डी.एफ. नियम 6 के तहत व्यय की गई राशि" type="text" id="InstituteSsoid">
+        </div>
+        <div>
+          <label for="InstituteSsoid">त्रैमास की अन्तिम तारीख को आई.डी. एफ. में उपलब्ध शुद्ध राशि (3+4-5-6)<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="त्रैमास प्रारम्भ की प्रथम तारीख को उपलब्ध राशि" type="number" id="InstituteSsoid">
+        </div>
+        <div>
+          <label for="InstituteSsoid">अन्य कोई विवरण<span class="StarMarking">*</span></label>
+          <input name="data[Institute][ssoid]" class="form-input" placeholder="अन्य कोई विवरण" type="text" id="InstituteSsoid">
+        </div>
+
+      </div>
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

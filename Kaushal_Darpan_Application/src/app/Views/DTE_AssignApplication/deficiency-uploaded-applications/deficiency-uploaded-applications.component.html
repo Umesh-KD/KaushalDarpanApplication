@@ -1,0 +1,262 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Deficiency Uploaded Applications</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/assignapplication" class="text-sm font-medium text-slate-700" aria-current="page">Deficiency Uploaded Applications</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/assignapplication" class="btn bg-dark text-white btn-sm">Back</a>
+      </div>
+      <form [formGroup]="SearchDataFormGroup">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deficiency Mark By</label>
+            <select class="form-select" formControlName="ddlCategoryA"  [(ngModel)]="searchRequest.VerifierID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of VerifierList" value="{{item.VerifierID}}">
+                {{item.Verifier}}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Cat A</label>
+            <select class="form-select" formControlName="ddlCategoryA" [(ngModel)]="searchRequest.CategoryA">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">
+                {{item.CasteCategoryName}}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Cat B</label>
+            <select class="form-select" formControlName="ddlCategoryB" [(ngModel)]="searchRequest.CategoryB">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of CategoryBlist" value="{{item.ID}}">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Cat C</label>
+            <select class="form-select" formControlName="ddlCategoryC" [(ngModel)]="searchRequest.CategoryC">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of category_CList" value="{{item.ID}}">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Cat D</label>
+            <select class="form-select" formControlName="ddlCategoryD" [(ngModel)]="searchRequest.CategoryD">
+              <option value="0">--All--</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Gender</label>
+            <select class="form-select" formControlName="ddlGender" [(ngModel)]="searchRequest.Gender">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of GenderList" value="{{item.ID}}">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
+            <input class="form-input" type="text" formControlName="txtName" [(ngModel)]="searchRequest.Name">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Mobile</label>
+            <input class="form-input" type="text" formControlName="txtMobileNo" [(ngModel)]="searchRequest.MobileNumber">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application Status</label>
+            <select class="form-select" formControlName="ddlApplicationStatus" [(ngModel)]="searchRequest.ApplicationStatus">
+              <option value="0">--All--</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application No From</label>
+            <input class="form-input" type="text" formControlName="txtApplicaitonFrom" [(ngModel)]="searchRequest.FromApplication">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Application No To</label>
+            <input class="form-input" type="text" formControlName="txtApplicaitonTo" [(ngModel)]="searchRequest.ToApplication">
+          </div>
+
+        </div>
+
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetStudentsData()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="clearSearchData()">Clear</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <!-- <div class="flex justify-end">
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white me-1">Applied</a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">Verified</a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white me-1">Notified</a>
+      <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">Rejected</a>
+    </div> -->
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+      <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+
+
+
+
+      <!--<div *ngIf="CurrentVerifier!=0" class="flex items-center">
+
+          <label class="text-gray-800 text-sm font-medium text-nowrap me-1">Assign Verifier</label>
+          <select class="form-select" [(ngModel)]="AssignVerifierID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of assignverifierlist1" value="{{item.ID}}">
+              {{item.Name}}
+            </option>
+          </select>
+
+          <button type="button" class="btn bg-info text-white inline-block " (click)="SaveStudent()">Assign</button>
+       
+      </div>-->
+
+
+    </div>
+
+
+
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <!--<th>
+    <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+  </th>-->
+            <th class="text-left">Sr.No.</th>
+            <!--<th class="text-center">Action</th>-->
+            <!--sorting column-->
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              Applicant Name
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ApplicationID')">
+              Application No
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ApplicationID'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <!--<th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('FatherName')">
+    Father Name
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th>-->
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('MobileNo')">
+              Mobile No
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
+            <!--<th class="text-left cursorHand">
+    Gender
+  </th>-->
+            <th class="text-left cursorHand">
+              Category A (By Candidate)
+            </th>
+            
+
+            <th class="text-left cursorHand">
+              Category A (By Checker)
+            </th>
+            <th class="text-left cursorHand">
+              Category B
+            </th>
+
+            <!--<th class="text-left cursorHand">
+    Verifier
+  </th>-->
+            <th class="text-left cursorHand">
+              Category C
+            </th>
+  <!--<th class="text-left cursorHand">
+      Category D
+  </th>-->
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <!--<td>
+    <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+           #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+  </td>-->
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <!--<td>
+  <div class="flex fa-align-right bi-justify-center actionBtns w-auto" style="width:auto !important">-->
+            <!--<a [routerLink]="'/documentationscrutiny'" [queryParams]="{ApplicationID:row.ApplicationID}" title="View Student Details">-->
+            <!--<a (click)="Onrouting(row.ApplicationID)" title="View Student Details"><i class="ti ti-eye" aria-hidden="true"></i></a>
+
+    </div>
+  </td>-->
+            <td align="left">{{row.Name}}</td>
+            <td align="left">{{row.ApplicationNo}}</td>
+            <!--<td align="left">{{row.FatherName}}</td>-->
+            <td align="left">{{row.MobileNo}}</td>
+            <!--<td align="left">{{row.Gender_Name}}</td>-->
+            <td align="left">{{row.CategoryA_Name}}</td>
+            <td align="left">{{row.CategoryAbyChecker}}</td>
+            <td align="left">{{row.CategoryB_Name}}</td>
+            <td align="left">{{row.CategoryC_Name}}</td>
+  <!--<td align="left">{{row.CategoryD_Name}}</td>-->
+            <!--<td align="left">{{row.Verifier}}</td>-->
+            <td align="left">{{row.StatusName}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a (click)="Onrouting(row.ApplicationID)" title="Document Mark"><i class="ti ti-check"></i></a>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>

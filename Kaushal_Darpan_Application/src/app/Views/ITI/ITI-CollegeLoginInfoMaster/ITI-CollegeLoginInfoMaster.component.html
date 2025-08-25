@@ -1,0 +1,147 @@
+
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Login Info</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ITI-CollegeLoginInfoMaster" class="text-sm font-medium text-slate-700" aria-current="page">ITI_CollegeLoginInfoMaster</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
+          <select class="form-select w-full" name="ddlDistrictID" [(ngModel)]="requestCollege.DistrictID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of Districtlist" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="requestCollege.CollegeCode" placeholder="Search By College Code:">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By ITI Type:
+          </label>
+          <select class="form-select" [(ngModel)]="requestCollege.ITItypeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">
+              {{item.InstitutionManagementType}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By SSO ID:</label>
+          <input type="text" class="form-input" [(ngModel)]="requestCollege.SSOID" placeholder="Search By SSO ID">
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetCollegeLoginInfoByCode()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onSearchCancel()">Cancel</button>
+        </div>
+
+
+      </div>
+    </div>
+
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="btnAllRestSSOID_Password()"><i class="ti ti-download"></i> All Rest SSOID & Password</a>-->
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Excel</a>
+
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download PDF</a> -->
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!--<input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />-->
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">S.No</th>
+            <th class="text-left">College Code</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Ssoid</th>
+            <th class="text-left">Password</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData;let idx=index;">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{item.CollegeCode}}</td>
+            <td>{{item.CollegeName}}</td>
+            <td>{{item.Ssoid}}</td>
+            <td>{{item.Password}}</td>
+            <td>
+              <div class="flex align-center justify-center" style="width:auto !important">
+
+                <a href="javascript:void(0);" (click)=" btnRestIdWiseUpdateSSOID_Password(item.CollegeId)" title="WiseUpdateSSOID">Reset</a>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+
+  </div>
+</div>
+
+<!-- end row -->

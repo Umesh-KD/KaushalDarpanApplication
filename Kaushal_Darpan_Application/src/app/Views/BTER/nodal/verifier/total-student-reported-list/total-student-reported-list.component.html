@@ -1,0 +1,156 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Nodal</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/nodal-verifier" class="text-sm font-medium text-slate-700" aria-current="page">Total Student Reported List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <form [formGroup]="SearchVerifierFormGroup" (ngSubmit)="onSearch()">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Name</label>
+          <input class="form-input" type="text" placeholder="Name..." formControlName="Name" [(ngModel)]="searchRequest.Name" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By SSO ID</label>
+          <input class="form-input" type="text" placeholder="SSOID...." formControlName="SSOID" [(ngModel)]="searchRequest.SSOID" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search By Mobile No.</label>
+          <input class="form-input" type="text" placeholder="MobileNo...." formControlName="MobileNo" [(ngModel)]="searchRequest.MobileNo" />
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+
+      </div>
+    </form>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="overflow-x-auto mt-3">   
+
+      <div class="table-container" *ngIf="dataSource.data.length > 0; else noData">
+        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+
+          <!-- SrNo -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ startInTableIndex + i }}</td>
+          </ng-container>
+
+          <!-- ApplicationNo -->
+          <ng-container matColumnDef="ApplicationNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Application No</th>
+            <td mat-cell *matCellDef="let row">{{ row.ApplicationNo }}</td>
+          </ng-container>
+
+          <!-- StudentName -->
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.StudentName }}</td>
+          </ng-container>
+
+          <!-- DOB -->
+          <ng-container matColumnDef="DOB">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>DOB</th>
+            <td mat-cell *matCellDef="let row">{{ row.DOB | date }}</td>
+          </ng-container>
+
+          <!-- MobileNo -->
+          <ng-container matColumnDef="MobileNo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile No</th>
+            <td mat-cell *matCellDef="let row">{{ row.MobileNo }}</td>
+          </ng-container>
+
+          <!-- ReportingStatus -->
+          <ng-container matColumnDef="ReportingStatus">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Reporting Status</th>
+            <td mat-cell *matCellDef="let row">{{ row.ReportingStatus }}</td>
+          </ng-container>
+
+          <!-- InstituteNameEnglish -->
+          <ng-container matColumnDef="InstituteNameEnglish">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Institute Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.InstituteNameEnglish }}</td>
+          </ng-container>
+
+          <!-- Branchname -->
+          <ng-container matColumnDef="Branchname">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.Branchname }}</td>
+          </ng-container>
+
+          <!-- AllotedPriority -->
+          <ng-container matColumnDef="AllotedPriority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Allotted Priority</th>
+            <td mat-cell *matCellDef="let row">{{ row.AllotedPriority }}</td>
+          </ng-container>
+
+          <!-- VerifyBy -->
+          <ng-container matColumnDef="VerifyBy">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified By</th>
+            <td mat-cell *matCellDef="let row">{{ row.VerifyBy }}</td>
+          </ng-container>
+
+          <!-- VerifyBySSO -->
+          <ng-container matColumnDef="VerifyBySSO">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Verified By (SSO)</th>
+            <td mat-cell *matCellDef="let row">{{ row.VerifyBySSO }}</td>
+          </ng-container>
+
+          <!-- VerifyBySSO -->
+          <ng-container matColumnDef="CenterName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Center Name</th>
+            <td mat-cell *matCellDef="let row">{{ row.CenterName }}</td>
+          </ng-container>
+
+          <!-- AllotmentType -->
+          <ng-container matColumnDef="AllotmentType">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Allotment Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.AllotmentType }}</td>
+          </ng-container>
+
+
+          <!-- Header and Row Definitions -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="totalRecords"
+                       [pageSize]="pageSize"
+                       [pageSizeOptions]="[10, 25, 50, 100]"
+                       (page)="onPaginationChange($event)"
+                       showFirstLastButtons>
+        </mat-paginator>
+      </div>
+
+      <ng-template #noData>
+        <div class="no-data-message">
+          No student records found.
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+</div>

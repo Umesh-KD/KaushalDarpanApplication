@@ -1,0 +1,99 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">
+        <i class="ti ti-plus"></i> Edit TPO Details
+      </b>
+      <button mat-mini-fab aria-label="Example icon button with a delete icon" (click)="closeDialog()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <form [formGroup]="editForm" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!-- Institute Name Field -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Institute Name</mat-label>
+            <input matInput formControlName="InstituteNameEnglish" type="text" [readonly]="true" [(ngModel)]="request.InstituteNameEnglish">
+          </mat-form-field>
+        </div>
+
+        <!-- Mobile Number Field -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="MobileNumber" type="text" [(ngModel)]="request.MobileNumber">
+            <!--<mat-error *ngIf="isSubmitted && editForm.get('MobileNumber').errors?.required">
+              This field is required.
+            </mat-error>
+            <mat-error *ngIf="isSubmitted && editForm.get('MobileNumber').errors?.pattern">
+              Enter a valid 10-digit mobile number.
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="Email" type="email" [(ngModel)]="request.Email">
+            <mat-error *ngIf="isSubmitted && editForm.get('Email').errors?.required">
+              This field is required.
+            </mat-error>
+            <mat-error *ngIf="isSubmitted && editForm.get('Email').errors?.email">
+              Please enter a valid email address.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Email Official</mat-label>
+            <input matInput formControlName="EmailOfficial" type="email" [(ngModel)]="request.EmailOfficial">
+            <!--<mat-error *ngIf="isSubmitted && editForm.get('EmailOfficial').errors?.required">
+              This field is required.
+            </mat-error>
+            <mat-error *ngIf="isSubmitted && editForm.get('EmailOfficial').errors?.email">
+              Please enter a valid Email Official address.
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="Name" type="text" [(ngModel)]="request.Name">
+            <!--<mat-error *ngIf="isSubmitted && editForm.get('Name').errors?.required">
+              This field is required.
+            </mat-error>
+            <mat-error *ngIf="isSubmitted && editForm.get('Name').errors?.Name">
+              Please enter a valid email address.
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+
+        <!-- SSOID Field -->
+        <div class="form-group">
+          <mat-form-field appearance="fill" class="w-full">
+            <mat-label>SSOID</mat-label>
+            <input matInput formControlName="SSOID" type="text" [(ngModel)]="request.SSOID">
+            <!--<mat-error *ngIf="isSubmitted && editForm.get('SSOID').errors?.required">
+              This field is required.
+            </mat-error>-->
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button mat-raised-button color="primary" type="submit" class="me-1">Submit</button>
+          <button mat-raised-button color="warn" type="button" id="btnReset" (click)="ResetControl()" class="me-1">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

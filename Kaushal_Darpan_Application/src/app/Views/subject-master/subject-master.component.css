@@ -1,0 +1,8 @@
+.additional-options-check > .flex.items-center{
+    width:100px;
+    flex: 0 0 auto; 
+}
+
+.additional-options-check input {
+  border: 1px solid #cacaca;
+}

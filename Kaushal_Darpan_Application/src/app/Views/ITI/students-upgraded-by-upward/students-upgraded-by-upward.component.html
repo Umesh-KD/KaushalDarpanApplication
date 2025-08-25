@@ -1,0 +1,362 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Students upgraded/Changed by Upward</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/iti-students-upgraded-by-upward" class="text-sm font-medium text-slate-700" aria-current="page">Students upgraded/Changed by Upward</a>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Trade Lavel: <span class="StarMarking">*</span>
+    </label>
+    <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.TradeLevel">
+      <option value=0>--Select--</option>
+      <option value="8">8th</option>
+      <option value="10">10th</option>
+    </select>
+  </div>-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Allotment Type: <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="searchRequest.AllotmentMasterId" (change)="AllotmentChange()">
+            <option value="0">--Select--</option>-->
+            <!--<option value="1">IMC Allotment</option>-->
+            <!--<option value="-2">Horizonatl Allotment</option>
+            <option value="2">First Allotment</option>
+            <option value="4">Second Allotment</option>-->
+            <!--<option value="6">Internal Sliding</option>-->
+          <!--</select>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Scheme: <span class="StarMarking">*</span></label>
+          <select class="form-select w-full" name="ddlTradeScheme" [(ngModel)]="searchRequest.TradeSchemeId">
+            <option value="0">Select Trade Scheme</option>
+            <option *ngFor="let item of ITITradeSchemeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.ReportingStatus">
+            <option value="0">--Select--</option>
+            <option value="1">Allotted</option>
+            <option value="2">Choice Exhausted</option>
+            <option value="3">Cancelled</option>
+            <option value="4">Reported</option>
+            <option value="5">Not Reported</option>
+            <option value="6">Applied Upward</option>
+            <option value="7">Rejected</option>
+            <option value="8">Admitted</option>
+            <option value="9">Withdrawal</option>
+            <option value="10">Internal Sliding</option>
+            <option value="11"> Reject With Deficiency</option>
+            <option value="13">Dropout</option>
+          </select>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application ID:</label>
+          <input class="form-input" type="number" [(ngModel)]="searchRequest.ApplicationID" />
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getStudentsJoiningStatusMarksList(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" *ngIf="StudentsJoiningStatusMarksList.length>0" (click)="ExPortExcelData()"><i class="ti ti-download"></i> Download Excel</a>
+        <a href="javascript:void(0);" (click)="exportPDFData()" *ngIf="StudentsJoiningStatusMarksList.length>0" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i>Download PDF</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown"  [(ngModel)]="pageSize" (change)="getStudentsJoiningStatusMarksList(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+          <tr>
+
+            <!--<th class="text-left">#</th>
+  <th class="text-left">Application ID</th>
+  <th class="text-left">Student Name</th>
+  <th class="text-left">FatherName</th>
+  <th class="text-left">Mobile No</th>
+  <th class="text-left">Trade</th>
+  <th class="text-left">Trade Scheme</th>
+  <th class="text-left">Alloted Category</th>
+  <th class="text-left">Alloted Priority</th>-->
+
+            <th class="text-left">SrNo              </th>
+            <th class="text-left">ApplicationNo    </th>
+            <th class="text-left">Name               </th>
+            <th class="text-left">FatherName         </th>
+            <th class="text-left">DOB                </th>
+            <th class="text-left">Gender             </th>
+            <th class="text-left">Category        </th>
+            <th class="text-left">Mobile No             </th>
+            <th class="text-left">Trade Code                </th>
+            <th class="text-left">Trade Name             </th>
+            <th class="text-left">Alloted Category            </th>
+            <th class="text-left">Trade Scheme             </th>
+            <th class="text-left">Alloted Priority         </th>
+            <th class="text-left">Shift                     </th>
+            <th class="text-left">Unit                     </th>
+            <th class="text-left">Status                     </th>
+            <th class="text-left">Remark                   </th>
+            <th style="width:125px;">Download  </th>           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentsJoiningStatusMarksList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+            <td>{{item.ApplicationNo    }}</td>
+            <td>{{item.Name             }}</td>
+            <td>{{item.FatherName       }}</td>
+            <td>{{item.DOB              }}</td>
+            <td>{{item.Gender           }}</td>
+            <td>{{item.StudentCategory  }}</td>
+            <td>{{item.MobileNo         }}</td>
+            <td>{{item.TradeCode        }}</td>
+            <td>{{item.TradeName        }}</td>
+            <td>{{item.AllotedCategory  }}</td>
+            <td>{{item.TradeSchemeName  }}</td>
+            <td>{{item.AllotedPriority }}</td>
+            <td>{{item.Shift           }}</td>
+            <td>{{item.Unit           }}</td>
+            <td>{{item.JoiningStatus}}</td>
+            <td>{{item.ReportingRemark}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="item.IsUpgraded==0">
+                <a href="javascript:void(0);" (click)="DownloadApplicationForm(item.ApplicationID)" title="Download Application Form"><i class="ti ti-download"></i></a>
+                <a href="javascript:void(0);" (click)="DownloadAllotmentLetter(item.AllotmentId)" title="Download Allotment Letter"><i class="ti ti-download"></i></a>
+                <a href="javascript:void(0);" *ngIf="item.AllotmentStatus!=1" (click)="DownloadAllotmentReportingReceipt(item.AllotmentId)" title="Download Allotment Reporting Receipt"><i class="ti ti-download"></i></a>
+                <!--<button type="button" class="btn bg-success text-white mt-6" (click)="openModalGenerateOTP(modal_GenrateOTP,item.AllotmentId)">Allotment</button>-->
+              </div>
+            </td>           
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  StudentsJoiningStatusMarksList?.length }} of {{StudentsJoiningStatusMarksList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="getStudentsJoiningStatusMarksList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="StudentsJoiningStatusMarksList[0]?.TotalRecords==0" (change)="getStudentsJoiningStatusMarksList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="getStudentsJoiningStatusMarksList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_StatusMark let-modal
+class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Status Mark </b>
+        <button class="btn bg-info text-white" (click)="CloseAddStatusMark()"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm" (ngSubmit)="saveData()">
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+                    <th class="text-left">Title</th>
+                    <th class="text-left">Details</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td><b>Application ID</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.ApplicationID}}</td></tr>
+                  <tr><td><b>Enrollment No.</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.EnrollmentNo}}</td></tr>
+
+                  <tr>
+                    <td><b>Student Name</b></td>
+                    <td>
+                      {{StudentsJoiningStatusMarksDetails[0]?.StudentName}} ({{StudentsJoiningStatusMarksDetails[0]?.StudentNameHindi}})
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Father Name</b></td>
+                    <td>
+                      {{StudentsJoiningStatusMarksDetails[0]?.FatherName}} ({{StudentsJoiningStatusMarksDetails[0]?.FatherNameHindi}})
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Mother Name</b></td>
+                    <td>
+                      {{StudentsJoiningStatusMarksDetails[0]?.MotherName}} ({{StudentsJoiningStatusMarksDetails[0]?.MotherNameHindi}})
+                    </td>
+                  </tr>
+                  <tr><td><b>Gender</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.GenderNm}}</td></tr>
+                  <tr><td><b>Mobile No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.MobileNo}}</td></tr>
+                  <tr><td><b>Telephone No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.TelephoneNo}}</td></tr>
+                  <tr><td><b>Email</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.Email}}</td></tr>
+                  <tr><td><b>Address</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.fullAddress}}, </td></tr>
+                  <tr><td><b>Aadhar No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.AadharNo}}</td></tr>
+                  <tr><td><b>FatherAadhar No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.FatherAadharNo}}</td></tr>
+                  <tr><td><b>JanAadhar No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.JanAadharNo}}</td></tr>
+                  <tr><td><b>Jan Aadhar Mobile No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.JanAadharMobileNo}}</td></tr>
+                  <tr><td><b>Jan Aadhar Name</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.JanAadharName}}</td></tr>
+                  <tr><td><b>Bank Name</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.BankName}}</td></tr>
+                  <tr><td><b>Bank Account Name</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.BankAccountName}}</td></tr>
+                  <tr><td><b>Bank Account No</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.BankAccountNo}}</td></tr>
+                  <tr><td><b>IFSC Code</b></td><td>{{StudentsJoiningStatusMarksDetails[0]?.IFSCCode}}</td></tr>
+                </tbody>
+
+              </table>
+            </div>
+            <div class="">
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining Status</label>
+                  <select class="form-select" formControlName="ddlReportingStatus" [(ngModel)]="request.ReportingStatus">
+                    <option value="" selected>--Choose Option--</option>
+                    <option value="J">Joining</option>
+                    <option value="N">Not Joining</option>
+                    <option value="R">Reject</option>
+                  </select>
+                  <div *ngIf="isSubmitted && groupForm.get('ddlReportingStatus').errors" class="text-danger">
+                    <p *ngIf="!groupForm.get('ddlReportingStatus').errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining Status</label>
+                  <textarea class="form-input" formControlName="txtReportingRemark" [(ngModel)]="request.ReportingRemark"></textarea>
+                  <div *ngIf="isSubmitted && groupForm.get('txtReportingRemark').errors" class="text-danger">
+                    <p *ngIf="groupForm.get('txtReportingRemark').errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+                <div>
+                  <button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+                  <button type="button" id="btnCancel" (click)="ResetControl()" class="btn bg-danger text-white mt-6">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_ShiftUnit let-modal modal-l class="h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; Update Shit Unit 
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>:
+          &nbsp; &nbsp;<label><b>{{shiftUnitRequest.ApplicationNo}}</b></label>
+        </div>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>:
+          &nbsp; &nbsp; <label><b>{{shiftUnitRequest.Name}}</b></label>
+        </div>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name</label>:
+          &nbsp; &nbsp; <label><b>{{shiftUnitRequest.TradeName}}</b></label>
+        </div>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Alloted Category</label>:
+          &nbsp; &nbsp;<label><b>{{shiftUnitRequest.AllotedCategory}}</b></label>
+        </div>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Choose Shift and Unit</label>
+          <select class="form-select" [(ngModel)]="shiftUnitRequest.SeatIntakeId">
+            <option value="0">Choose Option</option>
+            <!--<option *ngFor="let item of  ShiftUnitList" [value]="item.SeatIntakeID">Shift ({{item.Shift}}) - Unit ({{item.UnitNo}})</option>-->
+            <option *ngFor="let item of ShiftUnitList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="card-footer text-center flex items-center justify-center mt-3">
+        <button (click)="SaveShitUnit()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Submit </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

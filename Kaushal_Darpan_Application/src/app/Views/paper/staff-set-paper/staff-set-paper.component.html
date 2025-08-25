@@ -1,0 +1,287 @@
+<main class="flex-grow p-6">
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Set Paper</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Staff</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Paper</a>
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Add Assign Staff</b>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <form [formGroup]="AssignStaffDataFormGroup" class="form-horizontal">
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+                <ng-select formControlName="SemesterID" [clearable]="false">
+                  <ng-option [value]="0">--Select--</ng-option>
+                  @for (item of SemesterMasterDDL; track item.SemesterID) {
+                  <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+                  }
+                </ng-select>
+                <div *ngIf="isSubmitted && formAssignStaffData.SemesterID.errors" class="text-danger">
+                  <p *ngIf="formAssignStaffData.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+                <ng-select formControlName="StreamID" (change)="getSubjectMasterDDL($event,AssignStaffDataFormGroup.value.SemesterID)" [clearable]="false">
+                  <ng-option [value]="0">--Select--</ng-option>
+                  @for (item of StreamMasterDDL; track item.StreamID) {
+                  <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+                  }
+                </ng-select>
+                <div *ngIf="isSubmitted && formAssignStaffData.StreamID.errors" class="text-danger">
+                  <p *ngIf="formAssignStaffData.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject</label>
+                <ng-select formControlName="SubjectID" [clearable]="false">
+                  <ng-option [value]="0">--Select--</ng-option>
+                  @for (item of SubjectMasterDDL; track item.ID) {
+                  <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+                  }
+                </ng-select>
+                <div *ngIf="isSubmitted && formAssignStaffData.SubjectID.errors" class="text-danger">
+                  <p *ngIf="formAssignStaffData.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+            </div>
+            <div class="grid grid-cols-1 gap-3 mt-3">
+              <div class="text-left flex">
+                <button type="button" id="btnSave" (click)="GetAllAssignStaffData()" class="btn bg-info text-white">
+                  <i class="ti ti-device-floppy"></i> Submit
+                </button>
+                <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5">Added Assign Staff</b>
+      </div>
+      <div class="overflow-x-auto mt-3" *ngIf="filterAssignStaffData.length > 0">
+        <div class="table-container">
+          <!--Table-->
+          <div class="mat-elevation-z8 table-responsive">
+            <table mat-table [dataSource]="dataAssignStaffSource" matSort class="mat-elevation-z8">
+              <ng-container matColumnDef="SrNo">
+                <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+                <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="Name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+              </ng-container>
+              <ng-container matColumnDef="SSOID">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> SSOID </th>
+                <td mat-cell *matCellDef="let element"> {{element.SSOID}} </td>
+              </ng-container>
+              <ng-container matColumnDef="SemesterName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Semester </th>
+                <td mat-cell *matCellDef="let element"> {{element.SemesterName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="SubjectName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+                <td mat-cell *matCellDef="let element"> {{element.SubjectName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="TradeName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Trade Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="QuestionLimit">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Question Limit </th>
+                <td mat-cell *matCellDef="let element"> {{element.QuestionLimit}} </td>
+              </ng-container>
+
+              Actions Column
+              <ng-container matColumnDef="Actions">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="flex actionBtns w-auto" style="width: auto !important;">
+                    <a href="javascript:void(0);" title="Edit Staff" class="ng-star-inserted" (click)="EditData(MyModel_EdiDetails,element)"><i class="ti ti-eye"></i></a>
+                  </div>
+                </td>
+              </ng-container>
+
+              Table Header and Rows
+              <tr mat-header-row *matHeaderRowDef="displayedAssignStaffColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedAssignStaffColumns;"></tr>
+            </table>
+          </div>
+
+          <!--Pagination and Excel Export-->
+          <div class="table-footer">
+            <mat-paginator [length]="totalAssignStaffRecords"
+                           [pageSize]="pageAssignStaffSize"
+                           [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                           (page)="onPaginationAssignStaffChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<ng-template #MyModel_EdiDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Set Question Paper</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">       
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+          <b class="text-1xl-5">Select Question</b>
+        </div>
+        <div class="overflow-x-auto mt-3" *ngIf="filterQuestionData.length > 0">
+          <div class="table-container">
+            <!-- Table -->
+            <div class="mat-elevation-z8 table-responsive">
+              <table mat-table [dataSource]="dataQuestionSource" matSort class="mat-elevation-z8">
+                <ng-container matColumnDef="SrNo">
+                  <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+                  <td mat-cell *matCellDef="let element; let i = index" width="80px">
+                    {{ i + 1 }}
+                    <input type="checkbox" class="checkboxSize" [(ngModel)]="element.isSelected" (change)="selectInTableSingleCheckbox(element)">
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="SemesterName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Semester </th>
+                  <td mat-cell *matCellDef="let element"> {{element.SemesterName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="SubjectName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject </th>
+                  <td mat-cell *matCellDef="let element"> {{element.SubjectName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="TradeName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Trade Name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.TradeName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="QuestionText">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Question </th>
+                  <td mat-cell *matCellDef="let element"> {{element.QuestionText}} </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="Actions">
+                  <th mat-header-cell *matHeaderCellDef> Action </th>
+                  <td mat-cell *matCellDef="let element">
+                    <div class="flex actionBtns w-auto" style="width: auto !important;">
+                      <a href="javascript:void(0);" title="View Staff" class="ng-star-inserted" (click)="EditQuestionData(MyModel_View_Details,element)"><i class="ti ti-eye"></i></a>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <!-- Table Header and Rows -->
+                <tr mat-header-row *matHeaderRowDef="displayedQuestionColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedQuestionColumns;"></tr>
+              </table>
+            </div>
+
+            <!-- Pagination and Excel Export -->
+            <div class="table-footer">
+              <mat-paginator [length]="totalQuestionRecords"
+                             [pageSize]="pageQuestionSize"
+                             [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                             (page)="onPaginationQuestionChange($event)">
+              </mat-paginator>
+              <button class="btn bg-info text-white QuestionBotton" type="button" (click)="QuestionSelectedRecords()">Submit</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_View_Details let-modal class="modal-dialog w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Set Question Paper</b>
+        <button class="btn bg-info text-white" (click)="CloseEditDataFormGroupModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="EditDataFormGroup" class="form-horizontal">            
+
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Question</label>
+                  <input formControlName="Question" class="form-input" placeholder="Enter Question" />
+                  <div *ngIf="isSubmitted && formEditData.Question.errors" class="text-danger">
+                    <p *ngIf="formEditData.Question.errors.required">This field is required.!</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-3 mt-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Answer</label>
+                  <ng-select formControlName="Answer" [clearable]="false">
+                    <ng-option [value]="0">--Select--</ng-option>
+                    <ng-option [value]="1">Select Option Answer A</ng-option>
+                    <ng-option [value]="2">Select Option Answer B</ng-option>
+                    <ng-option [value]="3">Select Option Answer C</ng-option>
+                    <ng-option [value]="4">Select Option Answer D</ng-option>
+                  </ng-select>
+                  <div *ngIf="isSubmitted && formEditData.Answer.errors" class="text-danger">
+                    <p *ngIf="formEditData.Answer.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Option A</label>
+                  <input formControlName="Option1" class="form-input" placeholder="Enter Option A" />
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Option B</label>
+                  <input formControlName="Option2" class="form-input" placeholder="Enter Option B" />
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Option C</label>
+                  <input formControlName="Option3" class="form-input" placeholder="Enter Option C" />
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Option D</label>
+                  <input formControlName="Option4" class="form-input" placeholder="Enter Option D" />
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

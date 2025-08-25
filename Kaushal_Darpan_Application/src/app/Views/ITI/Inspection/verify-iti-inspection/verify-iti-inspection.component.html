@@ -1,0 +1,189 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Generate ITI Inspection Order</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/verify-observer-deployment" class="text-sm font-medium text-slate-700" aria-current="page">Generate ITI Inspection Order</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" >
+            <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
+            <div class="flex justify-end flex-wrap items-center">
+            </div>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+            <select class="form-select disabled" id="ddlFilterByStatus" [(ngModel)]="Status" (change)="GetAllData_GenerateOrder()" [disabled]="true">
+                <option value="0">Select Status</option>
+                <option value="{{_EnumDeploymentStatus.Assigned}}">Assigned</option>
+                <option selected value="{{_EnumDeploymentStatus.ForwardToVerify}}">ForwardToVerify</option>
+                <option value="{{_EnumDeploymentStatus.Verified}}">Verified</option>
+                <option value="{{_EnumDeploymentStatus.OrderGenerated}}">OrderGenerated</option>
+                <option value="{{_EnumDeploymentStatus.Completed}}">Completed</option>
+            </select>
+        </div>
+        <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date</label>
+            <input [(ngModel)]="searchRequest.ExamDate" class="form-input" type="date" (change)="checkValidDate($event)">
+        </div> -->
+        <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetAllData_GenerateOrder()">Search</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+            </button>
+        </div>
+        </div>
+        
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+            <!-- <a href="" class="btn bg-success btn-sm text-white"> Verify Deployment</a> -->
+            <!-- <a *ngIf="searchRequest.SemesterID!=0" class="btn bg-info btn-sm text-white" (click)="DownloadTimeTable()"><i class="ti ti-download"></i>{{searchRequest.SemesterID==1 ?'DownloadSemester':'DownloadYearly'}}</a> -->
+
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="">
+                <select id="ddlConter" class="form-select  couterDropDown"  [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                </select>
+            </div>
+            <div class="">
+                <!-- <a *ngIf="Status==_EnumDeploymentStatus.ForwardToVerify &&
+                  (sSOLoginDataModel.RoleID == _EnumRole.Secretary_JD || sSOLoginDataModel.RoleID == _EnumRole.Registrar)"
+                  (click)="openOTP()" class="btn bg-success btn-sm text-white"> Verify Deployment</a> -->
+                  
+                <a (click)="openOTP()" class="btn bg-success btn-sm text-white"> Generate Order</a>
+            </div>
+            <div class=""></div>
+            <div class="">
+                <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+            </div>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                    <th >
+                        <input  type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+                    </th>
+                    <th width="80px" align="left">Sr. No.</th>
+                    <th class="text-left">Team Name</th>
+                    <th class="text-left">Team Type</th>
+                    <th class="text-left">Deployed Institute</th>
+                    <th class="text-left">Deployment Date</th>
+                    <th class="text-left">Deployment Staus</th>
+                    
+                    <th class="text-left">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let row of paginatedInTableData;let idx=index;">
+                    <td>
+                        <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                            #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+                    </td>
+                    <td>{{(startInTableIndex+1)+idx}}</td>
+                    <td>{{row.InspectionTeamName}}</td>
+                    <td>{{row.TeamTypeName}}</td>
+                    <td align="left">{{row.InstituteName}}</td>
+                    <td align="left">{{row.DeploymentDate}}</td>
+                    <td align="left">
+                        <!-- <a *ngIf="row.IsDeployed==true && row.DeploymentStatus==_EnumDeploymentStatus.Assigned" [routerLink]="'/center-observer-deployment'" [queryParams]="{ id: row.CenterObserverTeamID }" class="mx-2">
+                            Edit Deployment
+                        </a> -->
+                        <!-- <a *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Pending" id="btnReset" [routerLink]="'/center-observer-deployment'" [queryParams]="{ id: row.CenterObserverTeamID }" class="btn bg-info text-white">
+                            Deploy Team
+                        </a> -->
+                        <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Assigned" class="py-1 px-2 bg-success text-white">Team Deployed</span>
+                        <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.ForwardToVerify" class="py-1 px-2 bg-success text-white">Forward To Verify</span>
+                        <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Verified" class="py-1 px-2 bg-success text-white">Team Verified</span>
+                        <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.OrderGenerated" class="py-1 px-2 bg-success text-white">Duty Order Generated</span>
+                        <span *ngIf="row.DeploymentStatus==_EnumDeploymentStatus.Completed" class="py-1 px-2 bg-success text-white">Center Observation Completed</span>
+                    </td>
+                    <td align="left">
+                    <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                         <a href="javascript:void(0);" title="View Team Details" 
+                        (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionTeamID)">
+                        <i class="ti ti-eye"></i></a>
+                    </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+            <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+            <div class="paginationBoxItems flex items-center">
+                <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+                <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+                <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                    [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+                <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+                <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+                <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+            </div>
+        </div>
+        <!--end pagination-->
+        </div>
+        
+    </div>
+</div>
+
+
+ <ng-template #MyModel_ViewDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Team Member Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+        
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">SSOID</th>
+                  <th class="text-left">District</th>
+                  <th class="text-left">Institute</th>
+                  <th class="text-left">Member Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of this.request.InspectionMemberDetails; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.StaffName}}</td>
+                  <td align="left">{{row.SSOID}}</td>
+                  <td align="left">{{row.DistrictName}}</td>
+                  <td align="left">{{row.InstituteName}}</td>
+                  <td align="left">{{row.IsIncharge? 'Incharge' : 'Member'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal>

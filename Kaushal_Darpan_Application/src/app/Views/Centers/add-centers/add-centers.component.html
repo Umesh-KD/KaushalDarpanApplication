@@ -1,0 +1,156 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Center' : 'Add Center' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Create Center</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">{{ isUpdate ? 'Update Center' : 'Add
+        Center' }}</a>
+    </div>
+  </div>
+  <a routerLink="/CenterCreate" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i>
+    Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Center' : 'Add Center' }}</b>
+    </div>
+    <form [formGroup]="centerForm" (ngSubmit)="saveData()">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="CenterSsoid">SSO ID: <span class="StarMarking">*</span></label>
+          <input formControlName="ssoid" class="form-input" placeholder="Enter SSO ID" type="text" id="ssoid"
+                 [(ngModel)]="request.SSOID">
+          <div *ngIf="isSubmitted && centerForm.get('ssoid').errors" class="text-danger">
+            <p *ngIf="centerForm.get('ssoid').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="CenterCode">Center Code: <span class="StarMarking">*</span></label>
+          <input formControlName="centerCode" class="form-input" placeholder="Enter Center Code" type="text"
+                 id="centerCode" [(ngModel)]="request.CenterCode">
+          <div *ngIf="isSubmitted && centerForm.get('centerCode').errors" class="text-danger">
+            <p *ngIf="centerForm.get('centerCode').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
+
+
+
+
+        <div>
+          <label for="CenterName">Center Name: <span class="StarMarking">*</span></label>
+          <input formControlName="centerName" class="form-input" type="text" id="centerName"
+                 placeholder="Enter Center Name" [(ngModel)]="request.CenterName">
+          <div *ngIf="isSubmitted && centerForm.get('centerName').errors" class="text-danger">
+            <p *ngIf="centerForm.get('centerName').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="InstitutePhone">Mobile Number: <span class="StarMarking">*</span></label>
+          <input formControlName="MobileNumber" class="form-input" type="text" id="MobileNumber"
+                 placeholder="Enter Mobile Number" [(ngModel)]="request.MobileNumber" maxlength="10">
+          <div *ngIf="isSubmitted && centerForm.get('MobileNumber').errors" class="text-danger">
+            <p *ngIf="centerForm.get('MobileNumber').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label>Division<span class="StarMarking">*</span></label>
+          <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()"
+                  [(ngModel)]="request.DivisionID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted && centerForm.get('divisionID').errors" class="text-danger">
+            <p *ngIf="!centerForm.get('divisionID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>District<span class="StarMarking">*</span></label>
+          <select formControlName="districtID" class="form-select" id="districtID" (change)="ddlDistrict_Change()"
+                  [(ngModel)]="request.DistrictID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && centerForm.get('districtID').errors" class="text-danger">
+            <p *ngIf="!centerForm.get('districtID').errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label>Tehsil<span class="StarMarking">*</span></label>
+          <select formControlName="tehsilID" class="form-select" id="tehsilId" [(ngModel)]="request.TehsilID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && centerForm.get('tehsilID').errors" class="text-danger">
+            <p *ngIf="!centerForm.get('tehsilID').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="CenterAddress">Address: <span class="StarMarking">*</span></label>
+          <input formControlName="address" class="form-input" type="text" id="address" placeholder="Enter Address"
+                 [(ngModel)]="request.Address">
+          <div *ngIf="isSubmitted && centerForm.get('address').errors" class="text-danger">
+            <p *ngIf="centerForm.get('address').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Pincode">Pincode: <span class="StarMarking">*</span></label>
+          <input formControlName="pinCode" class="form-input" type="text" id="pincode" placeholder="Enter Pincode"
+                 [(ngModel)]="request.PinCode">
+          <div *ngIf="isSubmitted && centerForm.get('pinCode').errors" class="text-danger">
+            <p *ngIf="centerForm.get('pinCode').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="Capacity">Capacity: <span class="StarMarking">*</span></label>
+          <input formControlName="Capacity" (keypress)="numberOnly($event)" class="form-input" placeholder="Enter Center Capcity" type="text"
+                 id="centerCode" [(ngModel)]="request.Capacity">
+          <div *ngIf="isSubmitted && centerForm.get('Capacity').errors" class="text-danger">
+            <p *ngIf="centerForm.get('Capacity').errors.required">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i
+              class="ti ti-refresh"></i> Reset</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

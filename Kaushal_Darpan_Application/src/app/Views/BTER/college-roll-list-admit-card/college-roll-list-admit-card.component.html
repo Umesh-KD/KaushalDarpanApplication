@@ -1,0 +1,230 @@
+ <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Roll List and Admit Card</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Roll List and Admit Card</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Code</label>
+          <input type="text" class="form-input" placeholder=" Institute Code"
+                 [(ngModel)]="searchByInstituteCode">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute Name</label>
+          <input type="text" class="form-input" placeholder=" Institute Name"
+                 [(ngModel)]="searchByInstituteName">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute Email</label>
+          <input type="text" class="form-input" placeholder=" Institute Email"
+                 [(ngModel)]="searchByInstituteEmail">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Management Type</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ManagementType">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of ManagmentTypeList" [value]="item.InstitutionManagementTypeID">{{item.InstitutionManagementType}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+          <select class="form-select" [(ngModel)]="searchRequest.DistrictId">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> SSOID</label>
+          <input type="text" class="form-input" placeholder=" SSOID" [(ngModel)]="searchBySSOID">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
+          <select class="form-select" [(ngModel)]="searchRequest.Status">
+            <option value="2">--All--</option>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetCollegeMasterList(1)">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="note-box">
+      <p><strong>Note:</strong> Please create center before generate roll list & admit card.</p>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+           (click)="DownloadStudentRollNumber()"><i class="ti ti-download"></i> Generate Roll List</a>
+
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+           (click)="GetStudentAdmitCardBulk()"><i class="ti ti-download"></i> Generate Admit Card</a>
+      </div>
+
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetCollegeMasterList(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" (change)="filteredItems()" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th width="80px" align="left">Sr. No.</th>
+            <th>Institute Code</th>
+            <th>Name</th>
+            <th>Management Type</th>
+            <th>Email</th>
+            <th>SSOID</th>
+            <th>Roll List / Admit Card</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let college of CollegeMasterList; let idx=index; ">
+            <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+
+            <td align="left">{{college.InstituteCode}}</td>
+
+            <td align="left">{{college.InstituteNameEnglish}}     </td>
+
+            <td align="left">{{college.ManagementType}}</td>
+            <td align="left">{{college.Email}}</td>
+
+            <td align="left">
+              {{college.SSOID}}
+            </td>
+
+            <td align="center">
+              <div class="flex">
+                <button *ngIf="MapKeyEng == 1" class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menu" style="width: 105px; padding: 5px;">
+                  Roll List <i class="ti ti-chevron-down"></i>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                  @if(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
+                  {
+
+
+                  <a *ngFor="let sem of Type1List"
+                     mat-menu-item
+                     [href]="appsettingConfig.StaticFileRootPathURL + _GlobalConstants.ReportsFolder + '/' + sem.FileName"
+                     download="{{sem.SemesterName}}"
+                     target="_blank"
+                     matTooltip="Roll List {{sem.SemesterName}}">
+                    <i class="ti ti-download"></i>{{sem.SemesterName}}
+                  </a>
+
+
+                  }
+                  @else
+                  {
+                  <button *ngFor="let sem of SemesterDetails"
+                          mat-menu-item
+                          [routerLink]="'/DownloadRollNumberList'"
+                          [queryParams]="{ semid: sem.SemesterID, instID: college.InstituteID }"
+                          matTooltip="Roll List {{sem.SemesterName}}">
+                    <i class="ti ti-download"></i>{{sem.SemesterName}}
+                  </button>
+                  }
+
+
+                </mat-menu>
+
+                <button *ngIf="MapKeyEng == 1" class="dropdown" mat-raised-button [matMenuTriggerFor]="menuAdmit" style="width: 130px; padding: 5px;">
+                  Admit Cards <i class="ti ti-chevron-down"></i>
+                </button>
+
+                <mat-menu #menuAdmit="matMenu">
+                  <!-- First Semester -->
+                  @if(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon)
+                  {
+                  <a *ngFor="let sem of Type2List"
+                     mat-menu-item
+                     [href]="appsettingConfig.StaticFileRootPathURL + _GlobalConstants.ReportsFolder + '/' + sem.FileName"
+                     download
+                     target="_blank"
+                     matTooltip="Admit Cards {{sem.SemesterName}}">
+                    <i class="ti ti-download"></i>{{sem.SemesterName}}
+                  </a>
+                  }
+                  @else
+                  {
+                  <button mat-menu-item [routerLink]="'/GenerateAdmitCardBulk'" *ngFor="let sem of SemesterDetails;"
+                          [queryParams]="{ semid: sem.SemesterID, instID: college.InstituteID }"
+                          matTooltip="Admit Cards {{sem.SemesterName}}">
+                    <i class="ti ti-download"></i>{{sem.SemesterName}}
+                  </button>
+                  }
+
+
+                </mat-menu>
+              </div>
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  CollegeMasterList?.length }} of {{CollegeMasterList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetCollegeMasterList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="CollegeMasterList[0]?.TotalRecords==0" (change)="GetCollegeMasterList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetCollegeMasterList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+<!-- end row -->

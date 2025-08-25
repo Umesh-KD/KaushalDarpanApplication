@@ -1,0 +1,208 @@
+<!--<p>iti-invigilator works!</p>-->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Invigilator</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">  </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ItiInvigilator" class="text-sm font-medium text-slate-700" aria-current="page">ITI Invigilator</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Year <span class="StarMarking">*</span></label>
+          <select class="form-select" id="TimetableYear" [(ngModel)]="searchRequest.SemesterID">
+            <option value="0">Select Option </option>
+            <option [value]="1">1st Year</option>
+            <option [value]="2">2nd Year</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">All Shift</label>
+          <select class="form-select" id="TimetableTime" [(ngModel)]="searchRequest.ShiftID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let row of ExamShiftList" [value]="row.ShiftID">{{row.ExamShiftWithTime}}</option>
+
+          </select>
+        </div>
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subjects</label>
+          <select class="form-select" id="TimetableSujectId" [(ngModel)]="searchbySubject">
+            <option value="">Choose Option</option>
+            <option *ngFor="let row of SubjectList" [value]="row.SubjectName">{{row.SubjectName}}</option>
+
+
+          </select>
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetInvigilatorList()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap  mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Exam Shift Time</th>
+            <th class="text-left">Year</th>
+            <th class="text-left">Subject</th>
+            <th class="text-left">Invigilators</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let row of ITITimeTableList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.ExamShiftWithTime}}</td>
+            <td align="left">{{row.SemesterName}}</td>
+            <td align="left">{{row.SubjectName}}</td>
+            <td align="left">{{row.Invigilators}}</td>
+
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <!--<a href="javascript:void(0);" title="{{sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng  || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge ? 'View': 'Update Invigilator'}}"
+                   (click)="ViewandUpdate(MyModel_ViewDetails,row.TimeTableID)">
+                  <i class="{{sSOLoginDataModel.RoleID == _EnumRole.Admin  || sSOLoginDataModel.RoleID == _EnumRole.AdminNon || sSOLoginDataModel.RoleID == _EnumRole.ExaminationIncharge ? 'ti ti-eye': 'ti ti-pencil'}}"></i>
+                </a>-->
+
+                <div class="flex">
+                  <a (click)="openViewApplicationPopup(row.TimeTableID)" title="Edit">
+                    <i class="ti ti-pencil"></i>
+                  </a>
+                  <a (click)="GetAllTheoryStudents(modal_ViewStudent,row.SubjectName,row.SemesterID)" title="View">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                  <a (click)="DownloadTheoryStudentITI(row.SubjectName,row.SemesterID)" title="View">
+                    <i class="ti ti-download"></i>
+                  </a>
+
+
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<ng-template #modal_ViewStudent let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between  items-center">
+      <b><i class="fa fa-plus"></i>&nbsp; Trainee List</b>
+      <!--<button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>-->
+      <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+    </div>
+ 
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Trainee List</b>
+            </div>
+
+
+
+          </div>
+
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+                <tr>
+                  <th width="80px" align="left">Sr. No.</th>
+                  <th class="text-left">Institute Name</th>
+                  <th class="text-left">CC Code</th>
+                  <th class="text-left">Trainee Name</th>
+                  <th class="text-left">Father Name</th>
+                  <th class="text-left">Roll No</th>
+                  <th class="text-left">Year Name</th>
+                  <th class="text-left">Subject Name</th>
+                  <th class="text-left">Invigilators</th>
+                  <th class="text-left">Persent</th>
+                  <th class="text-left">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let row of StudentList let idx=index;">
+                  <td>{{idx+1}}</td>
+                  <td>{{row.InstituteName}}</td>
+                  <td align="left">{{row.CCCode }}</td>
+                  <td align="left">{{row.StudentName}}</td>
+                  <td align="left">{{row.FatherName}}</td>
+                  <td align="left">{{row.RollNo}}</td>
+                  <td align="left">{{row.SemesterName}}</td>
+                  <td align="left">{{row.SubjectName}}</td>
+
+                  <td align="left">{{row.UserName}}</td>
+                  <td align="left">
+                    
+                   
+                    <span *ngIf="row.UserName!=''" [class]="row.IsPresent==true?'fa fa-check text-success':'fa fa-remove text-danger'"></span>
+                    
+                  </td>
+                  <td align="left">{{row.ActionDate}}</td>
+
+
+
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+  </div>
+</ng-template>
+<app-add-iti-invigilator #ViewAppModal (callParentFunction)="GetInvigilatorList()"></app-add-iti-invigilator>

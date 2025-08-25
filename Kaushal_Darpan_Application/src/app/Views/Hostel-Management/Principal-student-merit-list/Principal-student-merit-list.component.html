@@ -1,0 +1,287 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Principal Student Merit List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Principal Student Merit List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a href="/AddItemMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Semester Year</label>
+          <select class="form-select" id="SemesterId"
+                  [(ngModel)]="Searchrequest.SemesterId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of SemesterDDLList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By {{titleDDLBranchTrade}}</label>
+          <select class="form-select" id="BrachId"
+                  [(ngModel)]="Searchrequest.BrachId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of BrachDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllPrincipalstudentmeritlist()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+       
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="onGenerateMeritList()"
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon" >
+           Generate Merit List({{ getSelectedItems().length }} selected)
+        </a>
+
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+     
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+              <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()" />
+            </th>
+            <th class="text-left">SR NO</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Application ID</th>
+            <th class="text-left">Type</th>
+            <th class="text-left">{{titleDDLBranchTrade}}</th>
+            <th class="text-left">Year</th>
+            <th class="text-left">Percentage</th>
+            <th class="text-center" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentReqListList | tableSearchFilter:Table_SearchText; let idx = index">
+            <td align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+              <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
+            </td>
+            <td align="left">{{idx + 1}}</td>
+            <td align="left">{{item.StudentName}}</td>
+            <td align="left">{{item.ApplicationId}}</td>
+            <td align="left">{{item.StudentType}}</td>
+            <td align="left">{{item.StreamName}}</td>
+            <td align="left">{{item.EndTermName}}</td>
+            <td align="left">{{item.ClassPercentage}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
+                <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<!-- end row -->
+<!--Start Model Popup-->
+<ng-template #modal_ViewDetials let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b>Student Details For Hostel</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body"  *ngIf="StudentReqListList">
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Title</th>
+                <th class="text-left">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!--<tr>
+                <td>Name of Student</td>
+                <td><input type="text" class="form-control" [(ngModel)]="StudentReqListList[0].StudentName" /></td>
+              </tr>-->
+              <tr>
+                <td>Name of Student</td>
+                <!--<td>{{StudentReqListList[0]?.StudentName}}</td>-->
+              <td>{{ViewRequest.StudentName}}</td>
+              </tr>
+              <tr>
+                <td>Father's Name</td>
+                <td>{{ViewRequest.FatherName}}</td>
+              </tr>
+              <tr>
+                <td>Contact/Mobile No.</td>
+                <td>{{ViewRequest.MobileNo}}</td>
+              </tr>
+              <tr>
+                <td>Permanet Address</td>
+                <td>{{ViewRequest.Address1}}</td>
+              </tr>
+              <tr>
+                <td>Cast/Category</td>
+                <td> {{ViewRequest.CasteCategoryNameEnglish}}</td>
+              </tr>
+                <!--<tr *ngIf="MarksDetailsList">
+                  <td>(A).Aggregate Marks in 10th & Percentage</td>
+                  <td>{{ViewRequest.Marks10}} - {{ViewRequest.AvgMarks10}}%</td>
+                </tr>
+                <tr *ngIf="MarksDetailsList">
+                  <td>(B).Aggregate Marks in 1st year & Percentage</td>
+                  <td>{{ViewRequest.MarksFirstYear}} - {{ViewRequest.AvgMarksFirstYear}}%</td>
+                </tr>
+                <tr *ngIf="MarksDetailsList">
+                  <td>(C).Aggregate Marks in 2nd year & Percentage</td>
+                  <td>{{ViewRequest.MarksSecondYear}} - {{ViewRequest.AvgMarksSecondYear}}%</td>
+                </tr>
+                <tr *ngIf="MarksDetailsList">
+                  <td>(D). Total (A)+(B)+(C) Aggregate & Percentage</td>
+                  <td>{{ViewRequest.TotalAvg}}%</td>
+                </tr>-->
+              <tr>
+                <td>Father's Contact/Mobile No.</td>
+                <td>{{ViewRequest.FatherContactNo}}</td>
+              </tr>
+              <tr>
+                <td>Local Guardian Name</td>
+                <td>{{ViewRequest.LocalGuardianName}}</td>
+              </tr>
+              <tr>
+                <td>Local Guardian Contact No.</td>
+                <td>{{ViewRequest.LocalGuardianContactNo}}</td>
+              </tr>
+              <tr>
+                <td>Alloted Hostel in {{ViewRequest.EndTermName}} Session</td>
+                <td>{{ViewRequest.AllotedHostelInLastSessionRoomNo}}</td>
+              </tr>
+              <tr>
+                <td>Alloted Hostel in {{ViewRequest.EndTermName}} session</td>
+                <td>{{ViewRequest.AllotedHostelInLastSessionFeeDetails}}</td>
+              </tr>
+              <tr>
+                <td>Any Warning for Short of Attendance</td>
+                <td>{{ViewRequest.AnyWorningForShortOfAttendance}}</td>
+              </tr>
+              <tr>
+                <td>Any Warning for Invovement Against Discipline</td>
+                <td>{{ViewRequest.AnyWarningForInvovementAgainstDiscipline}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Application ID</td>
+                <td>{{ViewRequest.RoomPartnerApplicationID}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Name</td>
+                <td>{{ViewRequest.RoomPartnerName}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Year</td>
+                <td>{{ViewRequest.RoomPartnerYear}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Branch</td>
+                <td>{{ViewRequest.RoomPartnerBranch}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner SFS</td>
+                <td>{{ViewRequest.RoomPartnerSFS}}</td>
+              </tr>
+              <tr>
+                <td>Room Partner Regular</td>
+                <td>{{ViewRequest.RoomPartnerRegular}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>
+
+<!--End Model Popup-->
+<!--Start Model Popup-->
+<ng-template #modal_ApplyForHostel let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="CancelRequestFormGroup">
+          <!--<div class="mb-8">
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Cancel Allotment </b>
+              <span class="text-danger">(* fields are mandatory)</span>
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reason/Remark <span class="StarMarking">*</span></label>
+                <textarea class="form-input" placeholder="Enter Reason/Remark" id="remark" name="remark" formControlName="remark" [(ngModel)]="Allotmentrequest.Remark"></textarea>
+                <div *ngIf="isSubmitted && _CancelRequestFormGroup.remark.errors" class="text-danger">
+                  <p *ngIf="_CancelRequestFormGroup.remark.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>-->
+          <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-default-200">
+            <button type="button" (click)="AllotmentCancelData()" class="py-2 px-5 inline-flex items-center justify-center font-medium tracking-wide border align-middle duration-500 text-sm text-center bg-primary/5 hover:bg-primary border-primary/10 hover:border-primary text-primary hover:text-white rounded-md">
+              Submit
+            </button>
+          </div>
+        </form>
+      </div> <!-- Close this div here for card-body -->
+    </div>
+  </div>
+</ng-template>
+<!--End Model Popup-->

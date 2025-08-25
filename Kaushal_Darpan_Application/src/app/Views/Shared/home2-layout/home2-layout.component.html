@@ -1,0 +1,371 @@
+<head>
+  <title>Welcome to BTER Rajasthan</title>
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <link href="fontawesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="/assets/KD5/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="/assets/KD5/css/animations1.css" rel="stylesheet">
+  <link href="/assets/KD5/css/owl.carousel.min.css" rel="stylesheet" />
+  <link href="/assets/KD5/css/slick.css" rel="stylesheet" />
+  <link href="/assets/KD5/css/Style.css?2" rel="stylesheet" />
+  <!--<link href="/assets/css/app.css" rel="stylesheet" />-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+</head>
+
+<div class="headerTopsFixed sticky-top">
+  <div class="top_section py-1">
+    <div Class="container-fluid">
+      <div Class="row">
+        <div Class="col-lg-12 d-flex justify-content-between align-items-center flex-wrap">
+          <a href="#" class="text-white"><i class="fa fa-envelope-o" aria-hidden="true"></i> </a>
+          <!--<a href="#" class="text-white"><i class="fa fa-phone" aria-hidden="true"></i> 0291-2434395</a>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <header class="logoSections" Style="background:#fff;">
+    <div class="container-fluid py-3">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12 d-flex justify-content-center align-items-center">
+          <div>
+            <img src="/assets/KD5/images/logo.png" Class="img-fluid">
+          </div>
+          <button class="navbar-toggler d-lg-none d-xxl-none d-xl-none d-block" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                  aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-navicon"></i>
+          </button>
+        </div>
+        <!--<div class="col-lg-6 col-md-12 col-sm-12 col-12 text-end d-flex justify-content-end align-items-center">
+            <img src="/assets/KD5/images/DTE_Logo.jpg" Class="img-fluid">
+            <img src="/assets/KD5/images/BTER_Logo.jpg" Class="img-fluid">
+        </div>-->
+
+
+      </div>
+    </div>
+  </header>
+
+  <header class="logoSections_one">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-lg-9 col-md-12 col-sm-12 col-12 d-flex align-items-center justify-content-start">
+          <nav class="navbar navbar-expand-lg p-0">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="/">
+                    <i class="fa fa-home home_btn m-0" aria-hidden="true" style="margin:0px !important;"></i>
+                  </a>
+                </li>
+
+              <li class="nav-item dropdown show">
+                <a class="nav-link" href="javascript:void(0)">
+                  <span>Admission  </span>  <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <!--<a class="dropdown-item" href="/dtepublicinfo"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>-->
+                    <a class="dropdown-item" [routerLink]="['/dtepublicinfo']"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <!--<li><a class="dropdown-item" href="/dtepublicinfo?courseid=1"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
+                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=2"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
+                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=3"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
+                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=4"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
+                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=5"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>-->
+
+                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 1 }"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
+                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 2 }"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
+                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 3 }"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
+                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 4 }"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
+                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 5 }"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <!--<a class="dropdown-item" href="/itipublicinfo"><span>ITI </span> <i class="fa fa-angle-right"></i></a>-->
+                    <a class="dropdown-item" [routerLink]="['/itipublicinfo']"><span>ITI </span> <i class="fa fa-angle-right"></i></a>
+                    <!--<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li><a class="dropdown-item" href="iti_admission.html"><span><span>Online Admission </span><span>(राजकीय/निजी औधोगिक प्रशिक्षण संस्थानों में प्रवेश) </span></span></a></li>
+                      <li><a class="dropdown-item" href="#"><span><span>Direct Admission </span><span>(संस्थान स्तर प्रवेश) </span></span></a></li>
+                    </ul>-->
+                  </li>
+                  <!--<li>
+    <a class="dropdown-item" href="#"><span>DCE </span> <i class="fa fa-angle-right"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="#"><span><span>UG Courses</span><span> (स्रातक महाविद्यालयों में प्रवेश) </span></span></a></li>
+      <li><a class="dropdown-item" href="#"><span><span>PG Courses </span><span>(स्नातकोत्तर महाविद्यालयों में प्रवेश) </span></span></a></li>
+    </ul>
+  </li>-->
+                </ul>
+              </li>
+              <!--   <!--<li class="nav-item dropdown show">
+                <a class="nav-link" href="#">
+                  <span>Examinations  </span>  <i class="fa fa-angle-down"></i>
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a class="dropdown-item" href="#"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li>
+                        <a class="dropdown-item" href="#"><span>Eng Yearly Scheme </span> <i class="fa fa-angle-right"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Reval</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#"><span>Non-Eng Yearly Scheme  </span> <i class="fa fa-angle-right"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Reval</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#"><span>Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Reval</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#"><span>Non-Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Reval</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#"><span>ITI</span> <i class="fa fa-angle-right"></i></a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <li>
+                        <a class="dropdown-item" href="#"><span>SCVT</span> <i class="fa fa-angle-right"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                        </ul>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#"><span>NCVT</span> <i class="fa fa-angle-right"></i></a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <li>
+                            <a class="dropdown-item" href="#">Examination</a>
+                          </li>
+                          <li>
+                            <a class="dropdown-item" href="#">Results</a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="#">DCE</a>
+                  </li>
+
+                </ul>
+              </li>-->
+              <li class="nav-item dropdown show">
+                <a class="nav-link" href="#"> <span>Placement  </span>  <i class="fa fa-angle-down"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="/allpost" target="_blank">Polytechnic </a></li>
+                  <li><a class="dropdown-item" href="/ITIallpost" target="_blank">ITI </a></li>
+                  <!--<li><a class="dropdown-item" href="#">ITI </a></li>-->
+                </ul>
+              </li>
+
+
+              <li class="nav-item"><a class="nav-link" routerLink="/citizensuggestion">Citizen Suggestion </a></li>
+              <!--<li class="nav-item"><a class="nav-link" href="#">Department </a></li>-->
+              <!--<li class="nav-item dropdown show">
+                <a class="nav-link" href="#"> <span>Information  </span>  <i class="fa fa-angle-down"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">About BTER </a></li>
+                  <li><a class="dropdown-item" href="#">T&C </a></li>
+                  <li><a class="dropdown-item" href="#">Privacy Policy </a></li>
+                </ul>
+              </li>-->
+              <!--<li class="nav-item dropdown show">
+                <a class="nav-link" href="#"> <span>Proceeding</span>  <i class="fa fa-angle-down ms-1 d-block"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="#">Latest News </a></li>
+                  <li><a class="dropdown-item" href="#">Notifications </a></li>
+                  <li><a class="dropdown-item" href="#">Events </a></li>
+                  <li><a class="dropdown-item" href="#">Downloads </a></li>
+                </ul>
+              </li>-->
+              <!--<li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>-->
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+
+        <div Class="col-lg-3 d-flex align-items-center justify-content-end">
+          <a href="https://sso.rajasthan.gov.in/signin" target="_blank" class="btn btn-dark btn-style view_btn">
+            Office Login
+          </a>
+          <a href="https://sso.rajasthan.gov.in/signin" target="_blank" class="btn btn-dark btn-style view_btn ms-1">Student Login</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+</div>
+
+<div class="SideFixedIcons">
+  <ul class="d-flex flex-column">
+    <li><a href="#" class="d-flex justify-content-center align-items-center"><span>Skip to main content</span><i class="fa fa-angle-double-right"></i></a></li>
+    <li>
+      <a href="#" class="d-flex justify-content-center align-items-center">
+        <span>E/अं</span>
+        <img src="/assets/KD5/images/header-icon.svg#src-11" style="width:24px;">
+        <!--<i class="fa fa-language" aria-hidden="true"></i>-->
+      </a>
+    </li>
+    <li><a href="#" class="d-flex justify-content-center align-items-center"><span>Enter Search</span><i class="fa fa-search"></i></a></li>
+  </ul>
+</div>
+
+<router-outlet></router-outlet>
+
+
+<footer class="py-5 footer wow bounceIn fadeInUp">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12 footerLinks">
+        <div class="row">
+          <div class="col-lg-10 col-md-12 col-sm-12 col-12">
+            <div class="row">
+              <div class="col-lg-4 col-md-6 col-sm-12 col-12">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <h3>Important Links</h3>
+                    <ul>
+                      <li><a target="_blank" href="https://dte.rajasthan.gov.in/">DTE</a></li>
+                      <li><a href="javascript:void(0)">About Us</a></li>
+                      <li><a target="_blank" href="https://hte.rajasthan.gov.in/">Higher and Technical Education</a></li>
+                      <li><a target="_blank" href="https://ceg.rajasthan.gov.in/">Center for e-governance</a></li>
+                    </ul>
+                  </div>
+                  <!--<div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                    <h3>Contact Us</h3>
+                    <ul Class="text-white mt-3">
+                      <li><i class="fa fa-envelope-o margin-r-5"></i> {{'dte_raj@rajasthan.gov.in'}}</li>
+                      <li><i class="fa fa-phone margin-r-5"></i> 0291-2434395</li>
+                      <li><i class="fa fa-fax margin-r-5"></i> Fax : 0291-2430398</li>
+                    </ul>
+                  </div>-->
+                </div>
+              </div>
+
+              <div class="col-lg-8 col-md-6 col-sm-12 col-12">
+                <h3>About</h3>
+                <p class="mb-0 text-white">
+                  Directorate of Technical Education Jodhpur is governing body that conducts examination of polytechnics and ITI in the state of Rajasthan. Its head office is in Jodhpur district of state Rajasthan.
+                </p>
+              </div>
+            </div>
+            <!--<div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12 mt-3 socialMedia">
+                <h3>Our Social Media</h3>
+
+                <ul class="socialMedia_icon">
+                  <li><a href=""><img src="/assets/KD5/images/s01.png"></a></li>
+                  <li><a href=""><img src="/assets/KD5/images/s02.png"></a></li>
+                  <li><a href=""><img src="/assets/KD5/images/s03.png"></a></li>
+                  <li><a href=""><img src="/assets/KD5/images/s04.png"></a></li>
+                </ul>
+              </div>
+            </div>-->
+          </div>
+
+          <div class="col-lg-2 col-md-12 col-sm-12 col-12">
+            <h3>Mobile App</h3>
+            <img src="/assets/KD5/images/social.png" class="img-fluid" />
+            <!--<div class="row align-items-center">
+              <div class="col-4">
+                <img src="/assets/KD5/images/QRCode.png" class="img-fluid img-thumbnail" />
+              </div>
+              <div class="col-8">
+                <h3 class="m-0">Download By QR Code</h3>
+              </div>
+            </div>-->
+
+          </div>
+
+        </div>
+      </div>
+      <!--<div class="col-lg-2 col-md-2 col-sm-12 col-12">
+      <div class="visitorBox d-flex align-items-center justify-content-center flex-column w-100">
+      <p class="mb-0">Visitor:</p>
+      <h4 class="mb-0">001234</h4>
+      <img src="/assets/KD5/images/certificate.png" class="img-fluid d-none">
+      </div>
+
+            </div>-->
+    </div>
+  </div>
+</footer>
+
+<section class="copyrights py-3">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+        <p class="m-0 text-white">Copyright &copy; 2025-26 | All Rights Reserved | <!--. Department of Kaushal Darpan--></p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<link href="/assets/KD5/js/wow.min.js">
+<script src="/assets/KD5/js/jquery-3.7.0.min.js"></script>
+<script src="/assets/KD5/js/owl.carousel.min.js"></script>
+<script src="/assets/KD5/js/slick.min.js"></script>
+<script src="/assets/KD5/js/bootstrap.bundle.min.js"></script>
+<script src="/assets/KD5/js/main.js"></script>
+<script>
+  function js_clickedUL(item) {
+    $(item).closest('li').children('ul').first().toggle();
+  }
+</script>
+
+
+
+

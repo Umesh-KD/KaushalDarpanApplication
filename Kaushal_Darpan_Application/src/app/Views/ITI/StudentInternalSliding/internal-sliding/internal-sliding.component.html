@@ -1,0 +1,410 @@
+  <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{this.searchRequest.TradeLevel}}th Internal Sliding</h4>
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Institutes</a>
+    </div>-->
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
+          <input type="text" class="form-input" placeholder="Enter Application No "
+                 [(ngModel)]="searchRequest.ApplicationNo">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Name</label>
+          <select class="form-select" name="TradeID" [(ngModel)]="searchRequest.TradeID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of ItiTradeList" value="{{item.Id}}">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Trade Lavel: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="TradeLevel" [(ngModel)]="searchRequest.TradeLevel">
+            <option value=0>--Select--</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+          </select>
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetInternalSliding()">Search</button>
+          <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>-->
+
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <div *ngIf="IsPublishSeatMetrix==false" style="text-align: right;">
+        <h2 style="color:red;">Seat Matrix for internal sliding is not published. Before internal sliding generate and publish seat matrix</h2>
+      </div>
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+
+            <th width="80px" align="left">Sr. No.</th>
+            <th align="left">Allotment Type</th>
+            <th align="left">Application Number</th>
+            <th align="left">Applicant Name</th>
+            <th align="left">Castcategory</th>
+            <th align="left">Gender</th>
+            <th align="left">MobileNo</th>
+            <th align="left">Trade</th>
+            <th align="left">Trade Scheme</th>
+
+            <th align="left">AllotedCategory</th>
+            <th align="left">AllotedPriority</th>
+
+            <th align="left">Status</th>
+            <th class="text-center">Action</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ShowInternalSlidingList; let idx=index; ">
+            <td>{{idx+1}}</td>
+
+            <td align="left">{{item.AllotmentType}}</td>
+            <td align="left">{{item.ApplicationNo}}</td>
+            <td align="left">{{item.Name}}</td>
+            <td align="left">{{item.Castcategory}}</td>
+            <td align="left">{{item.Gender}}</td>
+            <td align="left">{{item.MobileNo}}</td>
+            <td align="left">{{item.TradeName}}</td>
+            <td align="left">{{item.TradeScheme}}</td>
+            <td align="left">{{item.AllotedCategory}}</td>
+            <td align="left">{{item.AllotedPriority}}</td>
+            <td>
+              {{item.ReportingStatus}}
+            </td>
+            <td align="center">
+              <div class="flex align-center justify-center actionBtns" *ngIf="DateConfigSetting[0]['INTERNAL SLIDING']==1 && IsPublishSeatMetrix==true">
+                <a href="javascript:void(0);" title="Change To Internal Sliding" (click)="OpenInternalsliding('ALLOT',MyModel_Action,item)" *ngIf="item.AllotmentMasterId!=6">
+                  <i class="ti ti-pencil"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Swap Trade" (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)" *ngIf="item.AllotmentMasterId!=6">
+                  <i class="ti ti-transfer"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Revert Application" (click)="openRevertOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId==0">
+                  <i class="ti ti-arrow-back-up"></i>
+                </a>
+
+                <a href="javascript:void(0);" title="Revert Application" (click)="openRevertSwapOTP(item)" *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
+                  <i class="ti ti-arrow-back-up"></i>
+                </a>
+
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Internal Sliding </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <form class="form-horizontal">
+        <div class="card">
+          <div class="card-body p-5">
+            <div class="mb-8">
+
+              <div class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+                <div>
+                  <b>Application No </b>: {{this.Request.ApplicationNo}}<br />
+                  <b>Mobile No </b>: {{this.Request.MobileNo}}<br />
+                  <b>Category </b>: {{InternalSlidingList[0].CasteCategory}}<br />
+                  <b>Alloted Category </b>: {{InternalSlidingList[0].AllotedCategory}}<br />
+                  <b>Gender </b>: {{Gender}}<br />
+                </div>
+
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Please choose Trade for Internal Sliding<span class="StarMarking">*</span>
+                  </label>
+
+                  <!-- First select with change event handler -->
+                  <!-- <select class="form-select" name="InsID" [(ngModel)]="Request.InsID" (change)="GetDDLInternalSlidingUnitList()">
+                    <option value="0">--Select Trade--</option>
+                    <option *ngFor="let item of InternalSlidingList" [value]="item.ID">{{item.Name}}</option>
+                  </select> -->
+                  <!-- <table class="table table-border w-full table-auto" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th width="80px" align="left">Sr. No.</th>
+                        <th  align="left">Trade Name</th>
+                        <th  align="left">GEN</th>
+                        <th  align="left">GEN F</th>
+                        <th  align="left">OBC</th>
+                        <th  align="left">OBC F</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of InternalSlidingList; let idx=index; ">
+                        <td>{{idx+1}}</td>
+                        <td class="text-left">{{row.Name}} </td>
+                        <td class="text-left">
+                          <input type="radio" id="TradeID" name="TradeID" value="row.ID" *ngIf="row.GEN > 0" (change)="GetDDLInternalSlidingUnitList(row.ID)">
+                          <label *ngIf="row.GEN > 0">{{row.GEN}}</label>
+                        </td>
+                        <td class="text-left">
+                          <input type="radio" id="TradeID" name="TradeID" value="row.ID">
+                        </td>
+                        <td class="text-left">
+                          <input type="radio" id="TradeID" name="TradeID" value="row.ID">
+                        </td>
+                        <td class="text-left">
+                          <input type="radio" id="TradeID" name="TradeID" value="row.ID">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+
+                  <table class="table table-border w-full table-auto" cellpadding="5">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th width="80px" align="left">Sr. No.</th>
+                        <th align="left">Trade Name</th>
+                        <th align="left">GEN</th>
+                        <th align="left" *ngIf="Gender!='M'">GEN F</th>
+                        <th align="left" *ngIf="CategoryId==4">OBC</th>
+                        <th align="left" *ngIf="CategoryId==4 && Gender!='M'">OBC F</th>
+                        <th align="left" *ngIf="CategoryId==2">SC</th>
+                        <th align="left" *ngIf="CategoryId==2 && Gender!='M'">SC F</th>
+                        <th align="left" *ngIf="CategoryId==3">ST</th>
+                        <th align="left" *ngIf="CategoryId==3 && Gender!='M'">ST F</th>
+                        <th align="left" *ngIf="IsTSP==true">TSP</th>
+                        <th align="left" *ngIf="IsTSP==true && Gender!='M'">TSP F</th>
+                        <th align="left" *ngIf="IsSahariya==true">SAH</th>
+                        <th align="left" *ngIf="IsSahariya==true && Gender!='M'">SAH F</th>
+                        <th align="left" *ngIf="CategoryId==9">EWS</th>
+                        <th align="left" *ngIf="CategoryId==9 && Gender!='M'">EWS F</th>
+                        <th align="left" *ngIf="CategoryId==5">MBC</th>
+                        <th align="left" *ngIf="CategoryId==5 && Gender!='M'">MBC F</th>
+                        <th align="left" *ngIf="IsDevnarayan==true">DEV</th>
+                        <th align="left" *ngIf="IsDevnarayan==true && Gender!='M'">DEV F</th>
+                        <th align="left" *ngIf="IsMinority==true">MIN</th>
+                        <th align="left" *ngIf="IsMinority==true && Gender!='M'">MIN F</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let row of InternalSlidingList; let idx = index;">
+                        <td>{{ idx + 1 }}</td>
+                        <td class="text-left">{{ row.Name }} </td>
+                        <td class="text-left">
+                          <input type="radio" name="TradeID" [value]="row.ID" *ngIf="row.GEN > 0" (change)="GetDDLInternalSlidingUnitList(row.ID,'GEN',row.SeatMetrixId)">
+                          <label *ngIf="row.GEN > 0">Vacant Seats- {{ row.GEN }}</label>
+                          <label *ngIf="row.GEN == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.Gender!='M'">
+                          <input *ngIf="row.GEN_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'GEN_F',row.SeatMetrixId)">
+                          <label *ngIf="row.GEN_F > 0">Vacant Seats-{{ row.GEN_F }}</label>
+                          <label *ngIf="row.GEN_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==4">
+                          <input *ngIf="row.OBC > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'OBC',row.SeatMetrixId)">
+                          <label *ngIf="row.OBC > 0">Vacant Seats-{{ row.OBC }}</label>
+                          <label *ngIf="row.OBC == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==4 && row.Gender!='M'">
+                          <input *ngIf="row.OBC_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'OBC_F',row.SeatMetrixId)">
+                          <label *ngIf="row.OBC_F > 0">Vacant Seats-{{ row.OBC_F }}</label>
+                          <label *ngIf="row.OBC_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==2">
+                          <input *ngIf="row.SC > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'SC',row.SeatMetrixId)">
+                          <label *ngIf="row.SC > 0">Vacant Seats-{{ row.SC }}</label>
+                          <label *ngIf="row.SC == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==2 && row.Gender!='M'">
+                          <input *ngIf="row.SC_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'SC_F',row.SeatMetrixId)">
+                          <label *ngIf="row.SC_F > 0">Vacant Seats-{{ row.SC_F }}</label>
+                          <label *ngIf="row.SC_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==3">
+                          <input *ngIf="row.ST > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'ST',row.SeatMetrixId)">
+                          <label *ngIf="row.ST > 0">Vacant Seats-{{ row.ST }}</label>
+                          <label *ngIf="row.ST == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==3 && row.Gender!='M'">
+                          <input *ngIf="row.ST_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'ST_F',row.SeatMetrixId)">
+                          <label *ngIf="row.ST_F > 0">Vacant Seats-{{ row.ST_F }}</label>
+                          <label *ngIf="row.ST_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsTSP==true">
+                          <input *ngIf="row.TSP > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'TSP',row.SeatMetrixId)">
+                          <label *ngIf="row.TSP > 0">Vacant Seats-{{ row.TSP }}</label>
+                          <label *ngIf="row.TSP == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsTSP==true && row.Gender!='M'">
+                          <input *ngIf="row.TSP_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'TSP_F',row.SeatMetrixId)">
+                          <label *ngIf="row.TSP_F > 0">Vacant Seats-{{ row.TSP_F }}</label>
+                          <label *ngIf="row.TSP_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+
+                        <td class="text-left" *ngIf="row.IsSahariya==true">
+                          <input *ngIf="row.SAH > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'SAH',row.SeatMetrixId)">
+                          <label *ngIf="row.SAH > 0">Vacant Seats-{{ row.SAH }}</label>
+                          <label *ngIf="row.SAH == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsSahariya==true && row.Gender!='M'">
+                          <input *ngIf="row.SAH_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'SAH_F',row.SeatMetrixId)">
+                          <label *ngIf="row.SAH_F > 0">Vacant Seats-{{ row.SAH_F }}</label>
+                          <label *ngIf="row.SAH_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+
+                        <td class="text-left" *ngIf="row.CategoryId==9">
+                          <input *ngIf="row.EWS > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'EWS',row.SeatMetrixId)">
+                          <label *ngIf="row.EWS > 0">Vacant Seats-{{ row.EWS }}</label>
+                          <label *ngIf="row.EWS == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==9 && row.Gender!='M'">
+                          <input *ngIf="row.EWS_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'EWS_F',row.SeatMetrixId)">
+                          <label *ngIf="row.EWS_F > 0">Vacant Seats-{{ row.EWS_F }}</label>
+                          <label *ngIf="row.EWS_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==5">
+                          <input *ngIf="row.MBC > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'MBC',row.SeatMetrixId)">
+                          <label *ngIf="row.MBC > 0">Vacant Seats-{{ row.MBC }}</label>
+                          <label *ngIf="row.MBC == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.CategoryId==5 && row.Gender!='M'">
+                          <input *ngIf="row.MBC_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'MBC_F',row.SeatMetrixId)">
+                          <label *ngIf="row.MBC_F > 0">Vacant Seats-{{ row.MBC_F }}</label>
+                          <label *ngIf="row.MBC_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsDevnarayan==true">
+                          <input *ngIf="row.DEV > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'DEV',row.SeatMetrixId)">
+                          <label *ngIf="row.DEV > 0">Vacant Seats-{{ row.DEV }}</label>
+                          <label *ngIf="row.DEV == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsDevnarayan==true && row.Gender!='M'">
+                          <input *ngIf="row.DEV_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'DEV_F',row.SeatMetrixId)">
+                          <label *ngIf="row.DEV_F > 0">Vacant Seats-{{ row.DEV_F }}</label>
+                          <label *ngIf="row.DEV_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsMinority==true">
+                          <input *ngIf="row.MIN > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'MIN',row.SeatMetrixId)">
+                          <label *ngIf="row.MIN > 0">Vacant Seats-{{ row.MIN }}</label>
+                          <label *ngIf="row.MIN == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                        <td class="text-left" *ngIf="row.IsMinority==true && row.Gender!='M'">
+                          <input *ngIf="row.MIN_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'MIN_F',row.SeatMetrixId)">
+                          <label *ngIf="row.MIN_F > 0">Vacant Seats-{{ row.MIN_F }}</label>
+                          <label *ngIf="row.MIN_F == 0" style="color:red">Seat Not Available</label>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Please choose Shift for Internal Sliding<span class="StarMarking">*</span>
+                  </label>
+                  <!-- Second select that depends on the first -->
+                  <select class="form-select" name="UnitID" [(ngModel)]="Request.UnitID">
+                    <option value="0">--Select Shift/Unit--</option>
+                    <option *ngFor="let item of InternalSlidingUnitList" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                </div>
+
+
+              </div>
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                <div class="text-center">
+                  <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="openAllotOTP()">Submit</button>
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<ng-template #MyModel_SwapAction let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Internal Swapping </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <form class="form-horizontal">
+        <div class="card">
+          <div class="card-body p-5">
+            <div class="mb-8">
+              <div class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+                <div>
+
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Please enter Application number of other student which you want to swap : <span class="StarMarking">*</span>
+                  </label><br />
+                          <label class="text-gray-800 text-sm font-medium inline-block mb-1 text-red" style="color:red">
+                            Both students must be of the same category and gender.(दोनों छात्र एक ही श्रेणी और जेंडर के होने चाहिए।)
+                          </label>
+                  <input type="text" class="form-input" placeholder="Enter Application No " name="SwapApplicationID"
+                         [(ngModel)]="Request.SwapApplicationNo">
+                </div>
+              </div>
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                <div class="text-center">
+                  <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="openSawpOTP()">Submit</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+  </div>
+</ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal>
+<app-otpmodal #otpModal1></app-otpmodal>
+<app-otpmodal #otpModal2></app-otpmodal>
+<app-otpmodal #otpModal3></app-otpmodal>

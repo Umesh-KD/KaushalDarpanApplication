@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+
+  <!-- App favicon -->
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="/assets/manifest.webmanifest.json">
+  <meta name="theme-color" content="#1976d2">
+  <base href="/">
+  <!-- Icons css -->
+  <link href="/assets/css/icons.min.css" rel="stylesheet" type="text/css">
+  <!-- Google Font Family (Mandatory in All Pages)-->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="/assets/home/js/bootstrap.js"></script>
+  <script src="/assets/home/js/jquery-3.7.1.min.js"></script>
+  <!-- App css -->
+  <script src="/assets/js/head.js"></script>
+  <script type="text/javascript">
+    function preventBack() {
+      window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () { null };
+
+
+    function js_SubMenu(elem) {
+
+      $('li').removeClass('showChildMenu');
+
+      $(elem).parents('li').addClass('showChildMenu');
+
+    }
+
+    function ShowActiveCurrentPage() {
+      var pageName = window.location.href.split('/')[window.location.href.split('/').length - 1];
+      pageName = pageName.replace(/#/g, '')
+      setTimeout(function () {
+        // alert(pageName);
+        $(".admin-menu").find("a[href='/" + pageName + "']").addClass("active");
+        $(".admin-menu").find("a[href='/" + pageName + "']").parents("li").addClass("showChildMenu");
+        $(".admin-menu").find("a[href='" + pageName + "']").addClass("active");
+        $(".admin-menu").find("a[href='" + pageName + "']").parents("li").addClass("showChildMenu");
+      }, 1000)
+
+    }
+    ShowActiveCurrentPage();
+  </script>
+  <script src="/assets/js/gtransapi.js"></script>
+  <script type="text/javascript">
+    google.load("elements", "1", { packages: "transliteration" });
+    var control;
+    function onLoad() {
+      //var options = {
+      //Source Language
+      //  sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+      //  // Destination language to Transliterate
+      //  destinationLanguage: [google.elements.transliteration.LanguageCode.HINDI],
+      //  shortcutKey: "ctrl+g",
+      //  transliterationEnabled: true
+      //},
+      //  control = new google.elements.transliteration.TransliterationControl(options);
+      //const element = document.getElementById("txtRoleNameHindi");
+      //const txtStudentNameHindi = document.getElementById("txtStudentNameHindi");
+      //if (element != null) {
+      //  control.makeTransliteratable(["txtRoleNameHindi"]);
+      //}
+      //if (txtStudentNameHindi != null) {
+      //  control.makeTransliteratable(["txtStudentNameHindi"]);
+      //}
+    }
+    google.setOnLoadCallback(onLoad);
+
+  </script>
+
+  <script>
+    function LoadData() {
+      var options = {
+        //Source Language
+        sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+        // Destination language to Transliterate
+        destinationLanguage: [google.elements.transliteration.LanguageCode.HINDI],
+        shortcutKey: "ctrl+g",
+        transliterationEnabled: true
+      },
+        control = new google.elements.transliteration.TransliterationControl(options);
+      //set by attr to all
+      const gtranslateElements = document.querySelectorAll("input[gtranslate]");
+      gtranslateElements.forEach(x => {
+        control.makeTransliteratable([x]);
+      });
+    }
+  </script>
+
+</head>
+<body class="mat-typography">
+  <app-root></app-root>
+
+  <!-- Plugin Js -->
+  <script src="/assets/libs/simplebar/simplebar.min.js"></script>
+  <!--<script src="assets/libs/jquery/jquery.min.js"></script>-->
+
+  <script src="/assets/libs/iconify-icon/iconify-icon.min.js"></script>
+  <script src="/assets/libs/node-waves/waves.min.js"></script>
+  <script src="/assets/libs/preline/preline.js"></script>
+  <!-- App Js -->
+  <script src="/assets/js/app.js"></script>
+  <!-- Apexcharts js -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!--<script src="/assets/libs/apexcharts/apexcharts.min.js"></script>-->
+
+  <!-- Morris Js-->
+  <script src="/assets/libs/morris.js/morris.min.js"></script>
+  <!-- Raphael Js-->
+  <script src="/assets/libs/raphael/raphael.min.js"></script>
+
+  <!-- Dashboard Project Page js -->
+  <script src="/assets/js/pages/dashboard.js"></script>
+
+  <script>
+    function js_StatusYesNoActiveInActive(elem) {
+      if ($(elem).is(':checked')) {
+        $(elem).parents('label.toggleCheckBox').addClass('Active');
+      }
+      else {
+        $(elem).parent('label.toggleCheckBox').removeClass('Active');
+      }
+    }
+  </script>
+  <script src="/assets/js/gtransapi.js"></script>
+  <script type="text/javascript">
+    google.load("elements", "1", { packages: "transliteration" });
+    var control;
+    function onLoad() {
+    }
+    google.setOnLoadCallback(onLoad);
+  </script>
+  <script>
+    function LoadData() {
+      var options =
+      {
+        //Source Language
+        sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+        // Destination language to Transliterate
+        destinationLanguage: [google.elements.transliteration.LanguageCode.HINDI],
+        shortcutKey: "ctrl+g",
+        transliterationEnabled: true
+      },
+        control = new google.elements.transliteration.TransliterationControl(options);
+      //set by attr to all
+      const gtranslateElements = document.querySelectorAll("input[gtranslate]");
+      gtranslateElements.forEach(x => {
+        control.makeTransliteratable([x]);
+      });
+    }
+  </script>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+</body>
+</html>

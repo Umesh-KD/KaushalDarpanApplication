@@ -1,0 +1,220 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Issue Tracker</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a routerLink="/branchesmaster" class="text-sm font-medium text-slate-700" aria-current="page">Issue Tracker</a>-->
+      <a routerLink="/add-issue-tracker" class="text-sm font-medium text-slate-700" aria-current="page">Issue Tracker</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a routerLink="/add-issue-tracker" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Issue</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Issue Name</label>
+          <input type="text" class="form-input" placeholder="Search By Issue Name" [(ngModel)]="selectedITICode">
+        </div>
+
+        <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Issue Discription</label>
+        <input type="text" class="form-input" placeholder="Search By Discription " [(ngModel)]="selecDiscription">
+      </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Issue Priority</label>
+          <select class="form-select" id="PriorityTypeId" [(ngModel)]="selectPriorityID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of priorityList" [value]="item.id">{{item.name}}</option>
+
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Issue Status</label>
+          <select class="form-select" id="StatususTypeId" [(ngModel)]="selectStatus">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of statusList" [value]="item.id">{{item.name}}</option>
+          </select>
+        </div>
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search By Issue Date</label>
+          <input type="date" class="form-input" [(ngModel)]="issueDate" placeholder="Search By Issue Date">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Search By Resolved Date</label>
+          <input type="date" class="form-input" [(ngModel)]="resolvedDate" placeholder="Search By Resolved Date">
+        </div>
+
+
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearch()">Search</button>
+          <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="Reset()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Role</label>
+        <select class="form-select" id="RoleID" [(ngModel)]="RoleID" (change)="GetUserMasterData()">
+          <option value="0">Choose Option</option>
+          <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+
+        </select>
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By User</label>
+        <select class="form-select" id="selectUserID" [(ngModel)]="selectUserID">
+          <option value="0">Choose Option</option>
+          <option *ngFor="let item of UserMasterList" [value]="item.id">{{item.Name}}</option>
+
+        </select>
+      </div>
+
+      <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="SaveStudent()">
+        Assign
+
+      </button>
+
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>
+              <input type="checkbox"
+                     [checked]="isAllSelected()"
+                     (change)="toggleAllSelection($event.target.checked)" />
+            </th>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Project Name</th>
+            <th class="text-left">Issue Name</th>
+            <th class="text-center">Discription</th>
+            <th class="text-left">Created By</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-center">Priority</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Module</th>
+            <th class="text-center">Issue Type</th>
+            <th class="text-center">Issue Type Description</th>
+
+            <!--<th class="text-center">Fixed By</th>-->
+          </tr>
+        </thead>
+        <tbody>
+
+          
+          <tr *ngFor="let row of paginatedInTableData;let idx=index; ">
+
+            <td>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
+
+            <!--<td>{{idx+1}}</td>-->
+            <td>{{ (startInTableIndex+1) + idx }}</td>
+            <td>{{row.ProjectName }}</td>
+            <td>{{row.Issue }}</td>
+            <td class="text-center">{{ row.Description }}</td>
+            <td>{{row.CreatedBy }}</td>
+            <!--<td>{{row.IssueDate | date: 'dd-mm-yyyy' }}</td>-->
+            <td>{{ row.IssueDate | date: 'dd-MM-yyyy' }}</td>
+            <!--<td class="text-center">{{ row.PriorityName }}</td>-->
+            <td class="text-center">
+              <select class="form-select text-center"
+                      [(ngModel)]="row.PriorityID"
+                      (change)="onPriorityChange(row)">
+                <option [value]="1">Low</option>
+                <option [value]="2">Medium</option>
+                <option [value]="3">High</option>
+              </select>
+            </td>
+
+            <td class="text-center">
+              <select class="form-select text-center"
+                      [(ngModel)]="row.StatusID"
+                      (change)="onStatusChange(row)">
+                <option [value]="1">Open</option>
+                <option [value]="2">In Progress</option>
+                <option [value]="3">Closed</option>
+                <option [value]="4">More Info</option>
+                <option [value]="5">Forward</option>
+              </select>
+            </td>
+            <!--<td class="text-center">{{ statusMap[row.StatusID] }}</td>-->
+            <td class="text-center">{{ row.Module }}</td>
+            <td class="text-center">{{ row.IssueTypeName }}</td>
+            <td class="text-center">{{ row.TypeDescription }}</td>
+
+            <!--<td>-->
+            <!--<div class="flex align-center justify-center actionbtns w-auto" style="width:auto !important">
+    <a href="javascript:void(0);" title="edit" (click)=" onedit(stream.streamid)"><i class="ti ti-pencil"></i></a>
+    <a href="javascript:void(0);" title="delete" (click)=" btndelete_onclick(stream.streamid)"><i class="ti ti-trash"></i></a>
+  </div>-->
+            <!--</td>-->
+          </tr>
+
+
+
+        </tbody>
+      </table>
+
+    </div>
+
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+
+  </div>
+</div>
+
+

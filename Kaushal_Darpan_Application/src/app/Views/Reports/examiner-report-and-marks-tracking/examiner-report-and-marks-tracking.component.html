@@ -1,0 +1,294 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reports</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Examiner Report And Marks Tracking</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reports</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics" *ngIf="ExaminerReportAndMarksTracking.length > 0">
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">Marks Filled</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.MarksFilled != null?ExaminerReportAndMarksTracking[0]?.MarksFilled:0 }}</h3>
+            <button (click)="MarksTracking(1)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.MarksFilled">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">Marks Pending</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.MarksPending != null?ExaminerReportAndMarksTracking[0]?.MarksPending:0 }}</h3>
+            <button (click)="MarksTracking(0)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.MarksPending">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">Present</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.Present != null?ExaminerReportAndMarksTracking[0]?.Present:0 }}</h3>
+            <button (click)="PresentTracking(1)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.Present">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">Absent</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.Absent != null?ExaminerReportAndMarksTracking[0]?.Absent:0 }}</h3>
+            <button (click)="PresentTracking(0)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.Absent">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">Detain</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.Detain != null?ExaminerReportAndMarksTracking[0]?.Detain:0 }}</h3>
+            <button (click)="PresentTracking(3)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.Detain">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="p-5">
+            <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+            <h6 class="text-muted text-sm uppercase">UFM</h6>
+            <h3 class="text-2xl mb-3" data-plugin="counterup">{{  ExaminerReportAndMarksTracking[0]?.UFM != null?ExaminerReportAndMarksTracking[0]?.UFM:0 }}</h3>
+            <button (click)="PresentTracking(4)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1" *ngIf="ExaminerReportAndMarksTracking[0]?.UFM">
+              View All <i class="ti ti-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-container *ngIf="ExaminerReportAndMarksTrackingStudent.length >0">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+        </div>
+      </div>
+      <!-- Table -->
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+        <!-- Sr. No Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="40px"> # </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="40px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="GroupCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Group Code
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.GroupCode }}
+          </td>
+        </ng-container>
+
+        <!-- College Name Column with Sorting and Filtering -->
+        <ng-container matColumnDef="RollNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Roll No
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.RollNo }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="StudentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.StudentName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="FatherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Father Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.FatherName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="MotherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Mother Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.MotherName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="SubjectCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject Code </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.SubjectCode }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="ObtainedTheory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Obtained Theory</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.ObtainedTheory }}
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+        No Record Found
+      </div>
+      <!-- Pagination Controls -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                     [length]="totalRecords" (page)="onPaginationChange($event)">
+      </mat-paginator>
+    </ng-container>
+    <ng-container *ngIf="ExaminerReportAndPresentTrackingStudent.length > 0">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" (click)="exportToPresentAndAbsentReport()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Download Pdf
+          </a>
+          <a href="javascript:void(0);" (click)="exportToPresentExcel()" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+        </div>
+      </div>
+      <!-- Table -->
+      <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" matSort>
+
+        <!-- Sr. No Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="40px"> # </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="40px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="GroupCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Group Code
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.GroupCode }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="CenterCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Center Code
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.CenterCode }}
+          </td>
+        </ng-container>
+
+        <!-- College Name Column with Sorting and Filtering -->
+        <ng-container matColumnDef="RollNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Roll No
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.RollNo }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="StudentName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.StudentName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="FatherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Father Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.FatherName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="MotherName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Mother Name </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.MotherName }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="SubjectCode">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Subject Code </th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.SubjectCode }}
+          </td>
+        </ng-container>
+
+        <!-- Total Students Column -->
+        <ng-container matColumnDef="ObtainedTheory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Obtained Theory</th>
+          <td mat-cell *matCellDef="let element">
+            <!-- Dynamic routerLink based on element's student ID -->
+            {{ element.ObtainedTheory }}
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedPresentColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedPresentColumns;"></tr>
+      </table>
+
+      <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+        No Record Found
+      </div>
+      <!-- Pagination Controls -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                     [length]="totalRecords" (page)="onPaginationChange($event)">
+      </mat-paginator>
+    </ng-container>
+  </div>
+</div>

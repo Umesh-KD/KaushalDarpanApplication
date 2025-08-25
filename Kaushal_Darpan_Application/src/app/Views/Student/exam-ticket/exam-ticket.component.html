@@ -1,0 +1,160 @@
+
+
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Exam Ticket</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a  class="text-sm font-medium text-slate-700" aria-current="page">Exam Ticket</a>
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+  <!-- end row -->
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Student Exam Details</b>
+      </div>
+      <div class="overflow-x-auto mt-3 w-full">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr No</th>
+              <th class="text-left">Name</th>
+              <th class="text-left">Stream Name</th>
+              <th class="text-left">Semester/Year</th>
+              <th class="text-left">End Term Name</th>
+              <th class="text-left">Enroll No</th>
+              <th class="text-left">Roll No</th>
+              <th class="text-left">Max Marks</th>
+              <th class="text-left">Min Marks</th>
+              <th class="text-left">Marks Obtained</th>
+              <th class="text-left">Result Status</th>
+              <th class="text-left">View Papers</th>
+              <!--<th class="text-center">Downloads</th>-->
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
+              <td>{{idx+1}}</td>
+              <td>{{row.StudentName}}</td>
+              <td>{{row.StreamName}}</td>
+              <td>{{row.Semester}}</td>
+              <td>{{row.EndTermName}}</td>
+              <td>{{row.EnrollmentNo}}</td>
+              <td>{{row.RollNo}} </td>
+              <td>{{row.MaxMarks}} </td>
+              <td>{{row.MinMarks}} </td>
+              <td>{{row.ObtainedMarks}} </td>
+              <td>{{row.ResultStatus}} </td>
+              <td class="text-Center">
+                <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Papers</a>
+              </td>
+              <!--<td class="text-center">
+
+                <button *ngIf="row.DownloadExaminationForm==1" type="button"
+                        class="btn bg-info btn-sm text-white" (click)="GetStudentEnrolled(row)">
+
+                  <i class="ti ti-download"></i> Download Examination Form
+                </button>-->
+                <!--<a  *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" class="btn bg-primary btn-sm text-white" download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.AdmitCard}}" title="Download"><i class="ti ti-download"></i> Download Admit Card</a>-->
+
+                <!--<a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" (click)="DownloadAdmitFile(row.AdmitCard)" class="btn bg-primary btn-sm text-white" title="Download"><i class="ti ti-download"></i> Download Admit Card</a>
+
+              </td>-->
+
+              <td align="center">
+                <div class="flex">
+
+                  <button class="dropdown mr-1" mat-raised-button [matMenuTriggerFor]="menuAction" style="width: 105px; padding: 5px;">
+                    ACTION <i class="ti ti-chevron-down"></i>
+                  </button>
+
+                  <mat-menu #menuAction="matMenu">
+
+                    <button *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" mat-menu-item
+                            (click)="DownloadAdmitFile(row.AdmitCard)"
+                            matTooltip="Download Admit Card">
+                      <i class="ti ti-download"></i> Download Admit Card
+                    </button>
+
+                    <button *ngIf="row.isPublish" mat-menu-item
+                            (click)="GetITIStudent_Marksheet()"
+                            matTooltip="Marksheet">
+                      <i class="ti ti-download"></i> Marksheet
+                    </button>
+
+                    <button *ngIf="row.isPublish" mat-menu-item
+                            (click)="ConsolidatedDownload(row.StudentID)"
+                            matTooltip="Dowmload Consolidated Marksheet">
+                      <i class="ti ti-download"></i> Consolidated Marksheet
+                    </button>
+
+
+                  </mat-menu>
+                </div>
+
+              </td>
+            </tr>
+            <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No Pending Fee Found</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- end row-->
+
+    </div>
+  </div>
+
+<!--Modal Popup Start-->
+<ng-template #modal_viewPaper let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Paper List of {{SemesterName}}
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">SubjectName</th>
+                <th class="text-left">SubjectCode</th>
+                <!-- <th class="text-left">SubjectCategory </th> -->
+                <th class="text-left">StreamSubjectcode</th>
+                <th *ngIf="this.sSOLoginDataModel==1" class="text-left">IsTheory</th>
+                <th *ngIf="this.sSOLoginDataModel==1" class="text-left">IsPractical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of StudentSubjectList ; let idx=index; ">
+                <td>{{idx+1}}</td>
+                <td>{{item.SubjectName}}</td>
+                <td>{{item.SubjectCode}}</td>
+                <!-- <td>{{item.SubjectCategory}}</td> -->
+                <td>{{item.StreamSubjectcode}}</td>
+                <td *ngIf="this.sSOLoginDataModel==1"> {{item.IsTheory? 'Yes' : 'No'}}</td>
+                <td *ngIf="this.sSOLoginDataModel==1">{{item.IsPractical? 'Yes' : 'No'}}</td>
+              </tr>
+              <tr *ngIf="StudentSubjectList?.length === 0">
+                <td colspan="10">
+                  No records found
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>

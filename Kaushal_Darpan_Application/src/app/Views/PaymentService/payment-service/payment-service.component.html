@@ -1,0 +1,131 @@
+
+  <!-- Page Title Start -->
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Payment Services</h4>
+  
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/payment-service" class="text-sm font-medium text-slate-700" aria-current="page">Payment Services</a>
+      </div>
+    </div>
+  </div>
+  <!-- Page Title End -->
+  
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+          <a routerLink="/add-payment-service" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Service</a>
+        </div>
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+  
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Search By Branch:
+              </label>
+              <select class="form-select" [(ngModel)]="searchRequest.ServiceName">
+                <option value="0">Choose Option</option>
+              </select>
+            </div>
+  
+            <div>
+              <button type="button" class="btn bg-info text-white mt-6" (click)="onSearch()">Search</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+            </div>
+          </div>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <!-- <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportExcelData()">
+            <i class="ti ti-download"></i> Download Data Execl
+          </a>
+  
+        </div> -->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option [value]="50">50</option>
+            <option [value]="100">100</option>
+            <option [value]="500">500</option>
+            <option [value]="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..."/>
+        </div>
+      </div>
+      <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto " cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+  
+                <th align="left">Service Id</th>
+                <th align="left">Service Name</th>
+                <th align="left">Service URL</th>
+                <th align="left">REDIRECT URL</th>
+                <th align="left">Success URL</th>
+                <th align="left">Success Failed URL</th>
+                <th align="left">Web Service URL</th>
+                <th align="left">Verify URL</th>
+                <th align="left">Revenue Head</th>
+                <th align="left">Office Code</th>
+                <th align="left">Merchant Code</th>
+
+
+                <th class="text-left">Status</th>
+                <th style="width: 80px;">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of PaymentServicesList; let idx=index;">
+                <td >{{idx+1}}</td>
+                <td align="left">{{row.ServiceId}}</td>
+                <td align="left">{{row.ServiceName}}</td>
+                <td align="left">{{row.ServiceURL}}</td>
+                <td align="left">{{row.REDIRECTURL}}</td>
+                <td align="left">{{row.SuccessURL}}</td>
+                <td align="left">{{row.SuccessFailedURL}}</td>
+                <td align="left">{{row.WebServiceURL}}</td>
+                <td align="left">{{row.VerifyURL}}</td>
+                <td align="left">{{row.RevenueHead}}</td>
+                <td align="left">{{row.OfficeCode}}</td>
+                <td align="left">{{row.MerchantCode}}</td>
+  
+                <td align="left">
+                  <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">
+
+                    <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                      <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (change)="onToggleChange(row.CollegeStreamId, row.ActiveStatus)">
+                      <span class="toggleIcon">
+                        <span class="toggleTitle">{{ row.ActiveStatus == 1 ? '' : '' }}</span>
+                      </span>
+                    </label>
+                  </div> -->
+                </td>
+  
+                <td>
+                  <!-- <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important" *ngIf="DateConfigSetting[0][BranchMapKeyEng]==1">
+                    <a href="javascript:void(0);" title="Edit" [routerLink]="'/BTERAddSeatIntakes'" [queryParams]="{id:row.CollegeStreamId}"><i class="ti ti-pencil"></i></a>
+                    <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.CollegeStreamId)"><i class="ti ti-trash"></i></a>
+                  </div> -->
+                </td>
+              </tr>
+  
+            </tbody>
+          </table>
+      </div>
+    </div>
+  </div>
+  
+  <!-- end row -->
+  

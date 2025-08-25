@@ -1,0 +1,145 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">College</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">College Nodal</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">College Nodal Reports</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div class="Search">
+        <div class="form-group row">
+          <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-input ng-pristine ng-valid ng-touched" id="Search" (input)="applyFilter($event.target.value)" placeholder="Search...">
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" (change)="applyFilter($event.target.value)">
+          <option value="all" ng-reflect-value="0">--All--</option>
+          @for (item of InstituteMasterList; track item) {
+          <option [value]="item.InstituteName">{{item.InstituteName}}</option>
+          }
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" (change)="applyFilter($event.target.value)">
+          <option value="all" ng-reflect-value="0">--All--</option>
+          @for (item of SemesterMasterList; track item) {
+          <option [value]="item.SemesterName">{{item.SemesterName}}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center" *ngIf="sSOLoginDataModel">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-download"></i> Export Execl
+        </a>
+      </div>
+    </div>
+
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
+        <!-- Sr. No Column -->
+        <ng-container matColumnDef="SrNo">
+          <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ApplicantName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Applicant Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.ApplicantName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ApplicationNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Application No.</th>
+          <td mat-cell *matCellDef="let element" matTooltip="{{ element.InstituteName }}">{{ element.ApplicationNo }}</td>
+        </ng-container>
+
+     
+
+        <ng-container matColumnDef="Dis_Gender">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Gender</th>
+          <td mat-cell *matCellDef="let element">{{ element.Dis_Gender }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="MobileNo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mobile</th>
+          <td mat-cell *matCellDef="let element">{{ element.MobileNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CategoryA_Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cat.A</th>
+          <td mat-cell *matCellDef="let element">{{ element.CategoryA_Name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CategoryB_Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cat.B</th>
+          <td mat-cell *matCellDef="let element">{{ element.CategoryB_Name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CategoryC_Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cat.C</th>
+          <td mat-cell *matCellDef="let element">{{ element.CategoryC_Name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CategoryD_Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cat.D</th>
+          <td mat-cell *matCellDef="let element">{{ element.CategoryD_Name }}</td>
+        </ng-container>
+
+        <!--<ng-container matColumnDef="NodalCenterReportedDate">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nodal Center Reported Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.NodalCenterReportedDate }}</td>
+  </ng-container>-->
+
+        <ng-container matColumnDef="Status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+          <td mat-cell *matCellDef="let element">{{ element.Status }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Action">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header width="260px">Action</th>
+          <td mat-cell *matCellDef="let element; let i = index" width="260px">
+            <!--<a title="Edit" routerLink="/updatecollegemaster" [queryParams]="i">
+        <i class="ti ti-pencil"></i>
+      </a>-->
+            <a href="javascript:void(0);" (click)="DownloadApplicationForm(element.ApplicationNo)" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-download"></i> Export Admission E-Receipt
+            </a>
+          </td>
+        </ng-container>
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+      </table>
+      <div class="overflow-x-auto mt-3">
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+          No Record Found
+        </div>
+
+        <!-- Pagination Controls -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                       [length]="totalRecords" (page)="onPaginationChange($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </div>
+</div>

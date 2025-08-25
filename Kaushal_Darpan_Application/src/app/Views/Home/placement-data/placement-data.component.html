@@ -1,0 +1,103 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">Placement Details</h3>
+</div>
+
+<div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+          <div class="card-header">
+           
+            <div class="flex justify-end flex-wrap items-center">
+              <b><i class="fa fa-th-list"></i> Placement Data List</b>
+              <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" style="float: right;">
+                <i class="ti ti-download"></i> Export Execl
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table mat-table [dataSource]="dataSource" matSort class="table table-border w-full table-auto" cellpadding="5">
+                <!-- Sr. No Column -->
+                <ng-container matColumnDef="SrNo">
+                  <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
+                  <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="CampusID">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus ID</th>
+                  <td mat-cell *matCellDef="let element">{{ element.CampusID }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="StudentName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Student Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="EnrollmentNo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Enrollment No</th>
+                  <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="CollegeName">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>College Name</th>
+                  <td mat-cell *matCellDef="let element">{{ element.CollegeName }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Branch">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Branch</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Branch }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="CampusDate">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Campus Date</th>
+                  <td mat-cell *matCellDef="let element">{{ element.CampusDate }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Company">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Company</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Company }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="HiringRole">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Hiring Role</th>
+                  <td mat-cell *matCellDef="let element">{{ element.HiringRole }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Status">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Status }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Package">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header>Package (If available)</th>
+                  <td mat-cell *matCellDef="let element">{{ element.Package }}</td>
+                </ng-container>
+
+                <!-- Table Header and Rows -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              </table>
+              <div class="overflow-x-auto mt-3">
+                <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+                  No Record Found
+                </div>
+                
+                <!-- Pagination Controls -->
+                <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                               [length]="totalRecords" (page)="onPaginationChange($event)">
+                </mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

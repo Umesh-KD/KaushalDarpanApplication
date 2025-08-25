@@ -1,0 +1,54 @@
+.input-group {
+  position: relative !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+
+  .input-group:not(.has-validation) > .dropdown-toggle:nth-last-child(n+3), .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-control, .input-group:not(.has-validation) > .form-floating:not(:last-child) > .form-select, .input-group:not(.has-validation) > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating) {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+.input-group-text {
+  display: flex !important;
+  align-items: center !important;
+  padding: .375rem .75rem !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  color: #333 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  background-color: #fff !important;
+  border: #ccc solid 1px !important;
+  border-radius: 4px !important;
+}
+
+.input-group > :not(:first-child):not(.dropdown-menu):not(.valid-tooltip):not(.valid-feedback):not(.invalid-tooltip):not(.invalid-feedback) {
+  margin-left: calc(-1 * 1px) !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important!;
+}
+
+.input-group > .form-control, .input-group > .form-floating, .input-group > .form-select {
+  position: relative !important;
+  flex: 1 1 auto !important;
+  width: 1% !important;
+  min-width: 0 !important;
+}
+
+.input-group input {
+  width: 280px !important;
+}
+
+.input-group span {
+  width: 180px !important;
+}
+.ml-5{
+    margin-left:50px !important;
+}
+.mr-5 {
+  margin-right: 50px !important;
+}

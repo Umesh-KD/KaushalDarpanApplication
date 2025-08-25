@@ -1,0 +1,158 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dispatch Group Reval List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management Reval</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/DispatchGroupRevalList" class="text-sm font-medium text-slate-700" aria-current="page">Dispatch Group Reval List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5" style="min-height:400px;">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-end flex-wrap items-center" >
+          <a routerLink="/DispatchToInstituteReval" class="btn bg-info btn-sm text-white me-2">
+            <i class="ti ti-plus"></i>Add New
+          </a>
+          <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
+            <i class="ti ti-refresh"></i>Change Examiner
+          </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+    <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of ExamList" [value]="item.ID">
+        {{item.Name}}
+      </option>
+    </select>
+  </div>-->
+        <!--semester-->
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <!--<select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID" [disabled]="isInstituteDisabled">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+        {{item.InstituteName}}
+      </option>
+    </select>-->
+          <ng-select [clearable]="false" [(ngModel)]="searchRequest.InstituteID">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of InstituteMasterDDLList; track item.ID) {
+            <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            }
+          </ng-select>
+
+
+        </div>
+        <!--{{StatusTypelist|json}}-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Dispatch Status Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.Status">
+            <!--<option value="0" ng-reflect-value="0">--Select--</option>-->
+            <option value="0">Pending</option>
+            @for (item of StatusTypelist; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getgroupData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>-->
+      </div>
+      <div class="" >
+        <button class="btn bg-success text-white pull-right" (click)="OnSTatusUpdate()" type="button">Assign to College From Bter</button>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngIf="Status!=_DispatchDDlValue.AdminToPrincipal">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize"
+                     [checked]="AllSelect"
+                     (change)="checkboxthView_checkboxchange($event.target.checked)">
+
+            </th>
+            <th class="text-left">Sr No</th>
+            <!--<th class="text-left">Exam Name</th>-->
+            <th class="text-left">Institute Name</th>
+            <th class="text-left">Dispatch Number</th>
+            <th class="text-left">Dispatch Date</th>
+            <th class="text-left">Company Name</th>
+            <!--<th class="text-left">Recipient Date</th>-->
+
+            <th class="text-left">Group Code Details (Subject Code) </th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let examiner of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td *ngIf="Status!=_DispatchDDlValue.AdminToPrincipal">
+            <input type="checkbox" name="MarkCheck"
+                   [(ngModel)]="examiner.Selected" />
+            </td>
+            <td align="left">{{idx+1}}</td>
+            <td>{{examiner.InstituteNameEnglish}}</td>
+            <td>{{examiner.DispatchNo}}</td>
+            <td>{{examiner.DispatchDate}}</td>
+            <td>{{examiner.CompanyName}}</td>
+            <!--<td>{{examiner.RecipientDate}}</td>-->
+            <td>{{examiner.GroupCode}}</td>
+            <td>{{examiner.DispatchStatus}}</td>
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a  href="javascript:void(0);" title="Download"><i class="ti ti-download" (click)="DownloadDispatchGroupForm(examiner.InstituteID)"></i></a>
+                <a *ngIf="examiner.Status==0" [routerLink]="'/DispatchToInstituteReval'" [queryParams]="{DispatchGroupID:examiner.DispatchGroupID}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
+                <a *ngIf="examiner.Status==0" href="javascript:void(0);" title="Remove"
+                   (click)="btnDelete_OnClick(examiner.DispatchGroupID)"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+<app-otpmodal #otpModal></app-otpmodal>

@@ -1,0 +1,268 @@
+
+<div class="card-body p-5">
+  <div class="mb-8">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Option Form for Trades</b>
+      <span class="text-danger">तारांकित (*) फील्ड भरना अनिवार्य हैं</span>
+    </div>
+    <form [formGroup]="OptionsFormGroup">
+      <div class="grid xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full"
+             role="alert" id="WihoutJanadharAlert">
+          <b>Note:</b> अभ्यार्थी Option Form में ज्यादा से ज्यादा Option भरने का प्रयास करें जिससे आपका प्रवेश सुनिश्चित
+          हो सके I <br>
+          <p *ngIf="this.PersonalDetailsData.CategoryC == 69">
+            <br><b>विकलांग व्यावसायिक पुनर्वास केंद्र द्वारा प्राप्त उपयुकता प्रमाण पत्र के अनुसार व्यवसाय का चयन करे </b>
+          </p>
+        </div>
+
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            जिला
+            (District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlDistrict" id="ddlDistrict" formControlName="ddlDistrict"
+                  [(ngModel)]="formData.DistrictID" (change)="GetInstituteListDDL()">
+
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList" value="{{item.ID}}">{{item.Name}}</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlDistrict.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlDistrict.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            आईटीआई
+            का प्रकार (Type of ITI):: <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlManagementType" id="ddlManagementType"
+                  formControlName="ddlManagementType" [(ngModel)]="formData.ManagementTypeID" (change)="GetInstituteListDDL()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ManagmentTypeList" value="{{item.InstitutionManagementTypeID}}">
+              {{item.InstitutionManagementType}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlManagementType.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlManagementType.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtParentsincomefromallsources"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">
+            व्यवसाय स्तर चुनें (Choose Trade Level):
+            <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="TradeLevel" id="TradeLevel" formControlName="TradeLevel"
+                  [(ngModel)]="formData.TradeLevel" (change)="GetInstituteListByTradeType()">
+            <option value="0">--Choose Option--</option>
+            <!--<option *ngIf="box8thChecked" value="8">8th Level Trades</option>
+      <option *ngIf="box10thChecked" value="10">10th Level Trades</option>
+      <option *ngIf="box12thChecked" value="12">12th Level Trades</option>-->
+
+            <option value="8">8th Level Trades</option>
+            <option value="10">10th Level Trades</option>
+            <option value="12">12th Level Trades</option>
+
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.TradeLevel.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.TradeLevel.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            आईटीआई
+            का नाम (Name of ITI): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlITI" id="ddlInstitute" formControlName="ddlInstitute"
+                  [(ngModel)]="formData.InstituteID" (change)="GetTradeListDDL()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ItiCollegesList" value="{{item.Id}}">
+              {{item.CodeAndName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlInstitute.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlInstitute.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label for="txtParentsincomefromallsources"
+                 class="text-gray-800 text-sm font-medium inline-block mb-2">
+            व्यवसाय
+            का नाम (Trade Name): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlTrade" id="ddlTrade" formControlName="ddlTrade"
+                  [(ngModel)]="formData.TradeID">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ItiTradeList" value="{{item.Id}}">
+              {{item.TradeName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlTrade.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlTrade.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+        <div class="pt-30">
+          <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+            <i class="ti ti-plus"></i> Add
+            Choice
+          </button>
+          <button type="button" class="btn bg-light text-dark" (click)="ResetChoice()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
+      </div>
+      <!-- <div *ngIf="this.PersonalDetailsData.CategoryC == 69" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6 mt-4" id="DivLateral">
+        <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert">
+          <b>नोट:</b>  <br />
+          1. अगर अभियार्थी 12वीं (Senior Secondary) कक्षा को कला, वाणिज्य एवं कृषि विषय से उतीर्ण की है तो ऐसे अभियार्थी पार्श्व प्रवेश के लिए पात्र नही है इसलिए ऐसे अभियार्थी इस फॉर्म को नही भरें | <br />
+          
+        </div>
+      </div> -->
+    </form>
+
+  </div>
+
+  <div *ngIf="AddedChoices8.length > 0">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Option Choose List for 8th Level Trades</b>
+    </div>
+
+    <div class="overflow-auto">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr>
+            <th>Priority</th>
+            <th>Trade Level</th>
+            <th>Name of College</th>
+            <th>Branch Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedChoices8; let idx = index">
+            <td class="text-center">{{row.Priority}}</td>
+            <td class="text-center">{{row.TradeLevel}}th</td>
+            <td class="text-center">{{row.InstituteName}}</td>
+            <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+              <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="PriorityChange(row, 'UP')" [disabled]="idx === 0">
+                <i class="ti ti-arrow-narrow-up"></i>
+              </button>
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="PriorityChange(row, 'DOWN')" [disabled]="idx === AddedChoices8.length - 1">
+                <i class="ti ti-arrow-narrow-down"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Trade Level 10 List -->
+  <div *ngIf="AddedChoices10.length > 0" class="mt-8">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Option Choose List for 10th Level Trades</b>
+    </div>
+
+    <div class="overflow-auto">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr>
+            <th>Priority</th>
+            <th>Trade Level</th>
+            <th>Name of College</th>
+            <th>Branch Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedChoices10; let idx = index">
+            <td class="text-center">{{row.Priority}}</td>
+            <td class="text-center">{{row.TradeLevel}}th</td>
+            <td class="text-center">{{row.InstituteName}}</td>
+            <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+              <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="PriorityChange(row, 'UP')" [disabled]="idx === 0">
+                <i class="ti ti-arrow-narrow-up"></i>
+              </button>
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="PriorityChange(row, 'DOWN')" [disabled]="idx === AddedChoices10.length - 1">
+                <i class="ti ti-arrow-narrow-down"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div *ngIf="AddedChoices12.length > 0" class="mt-8">
+    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5">Option Choose List for 12th Level Trades</b>
+    </div>
+
+    <div class="overflow-auto">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr>
+            <th>Priority</th>
+            <th>Trade Level</th>
+            <th>Name of College</th>
+            <th>Branch Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of AddedChoices12; let idx = index">
+            <td class="text-center">{{row.Priority}}</td>
+            <td class="text-center">{{row.TradeLevel}}th</td>
+            <td class="text-center">{{row.InstituteName}}</td>
+            <td class="text-center">{{row.TradeName}}</td>
+            <td class="text-center">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
+                <i class="ti ti-trash"></i>
+              </button>
+              <button class="btn bg-primary text-white" type="button" title="Priority Up" (click)="PriorityChange(row, 'UP')" [disabled]="idx === 0">
+                <i class="ti ti-arrow-narrow-up"></i>
+              </button>
+              <button class="btn bg-info text-white" type="button" title="Priority Down" (click)="PriorityChange(row, 'DOWN')" [disabled]="idx === AddedChoices12.length - 1">
+                <i class="ti ti-arrow-narrow-down"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+<div class="card-footer text-center">
+  <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
+  <button type="button" class="btn bg-primary text-white" (click)="SaveOptionDetailsData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
+  <!-- <button type="button" class="btn bg-light text-dark" (click)="ResetOptions()"><i class="ti ti-refresh"></i>Reset</button> -->
+</div>

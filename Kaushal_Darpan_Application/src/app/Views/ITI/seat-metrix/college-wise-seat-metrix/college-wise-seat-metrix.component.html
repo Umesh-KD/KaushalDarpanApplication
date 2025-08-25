@@ -1,0 +1,529 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Collage Trade Seat Matrix</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/dashboard']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Trade</a>-->
+      <a [routerLink]="['/ITISeatMetrix']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Seat Metrix</a>
+    </div>
+
+
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a routerLink="/AddSeatMetrix{{searchRequest.TradeLevelId }}th/{{searchRequest.TradeLevelId }}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Create Seat Matrix</a>-->
+        <!--<a *ngIf="DateConfigSetting[0]['CREATE SEAT MATRIX']==1" routerLink="/AddSeatMetrix{{searchRequest.TradeLevelId }}th/{{searchRequest.TradeLevelId }}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Create Seat Matrix</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade Level:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeLevelId">
+            <option value="0">Choose Option</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+            <option value="12">12th</option>
+          </select>
+
+          <!-- Validation message -->
+          <p *ngIf="showTradeLevelError" class="text-danger text-sm mt-1">Please select the trade level.</p>
+
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade Scheme:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeSchemeId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITITradeScheme" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Seats Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.SeatStatus">
+            <option value="2">Vacant Seats</option>
+            <option value="1">Original Seats</option>
+          </select>
+        </div>
+
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+    <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+  </div>-->
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetTradeAndColleges(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Reset</button>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" (click)="exportExcelData()" *ngIf="ListITICollegeTrade.length>0" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+        <a href="javascript:void(0);" (click)="exportPDFData()"   *ngIf="ListITICollegeTrade.length>0" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i>Download PDF</a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!--<div>
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetTradeAndColleges(1)">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>-->
+      <!--<div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>-->
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Trade Name</th>
+            <th class="text-left">Trade Scheme</th>
+            <!--<th class="text-left">Total Seats</th>
+            <th class="text-left">Original Seats</th>
+            <th class="text-left">Fees Per Year</th>
+            <th class="text-left">IMC Fees Per Year</th>-->
+
+
+            <th align="left">TotalSeats</th>
+            <th align="left">GEN       </th>
+            <th align="left">GEN_F     </th>
+            <th align="left">SC        </th>
+            <th align="left">SC_F      </th>
+            <th align="left">ST        </th>
+            <th align="left">ST_F      </th>
+            <th align="left">TSP       </th>
+            <th align="left">TSP_F     </th>
+            <th align="left">SAH       </th>
+            <th align="left">SAH_F     </th>
+            <th align="left">OBC       </th>
+            <th align="left">OBC_F     </th>
+            <th align="left">MIN       </th>
+            <th align="left">MIN_F     </th>
+            <th align="left">EWS       </th>
+            <th align="left">EWS_F     </th>
+            <th align="left">MBC       </th>
+            <th align="left">MBC_F     </th>
+            <th align="left">DEV       </th>
+            <th align="left">DEV_F     </th>
+            <th align="left">WID_DIV   </th>
+            <th align="left">EX        </th>
+            <th align="left">PH        </th>
+            <th align="left" *ngIf="IsIMC==true">IMC_SC    </th>
+            <th align="left" *ngIf="IsIMC==true">IMC_ST    </th>
+            <th align="left" *ngIf="IsIMC==true">IMC_OBC   </th>
+            <th align="left" *ngIf="IsIMC==true">IMC_GEN   </th>
+
+            <!--<th align="center">Action</th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ListITICollegeTrade | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.Collegename}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TradeName}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TradeSchemeName}}</td>
+            <!--<td align="left" class="{{item.SeatNotAvailable}}">{{item.TotalSeats}}</td>
+  <td align="left" class="{{item.SeatNotAvailable}}">{{item.TotalSeats}}</td>
+  <td align="left" class="{{item.SeatNotAvailable}}">{{item.Fee}}</td>
+  <td align="left" class="{{item.SeatNotAvailable}}">{{item.ImcFee}}</td>-->
+
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TotalSeats }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.GEN        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.GEN_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SC         }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SC_F       }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.ST         }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.ST_F       }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TSP        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.TSP_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SAH        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.SAH_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.OBC        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.OBC_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MIN        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MIN_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EWS        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EWS_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MBC        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.MBC_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.DEV        }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.DEV_F      }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.WID_DIV    }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.EX         }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.PH         }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}" *ngIf="IsIMC==true">{{item.IMC_SC }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}" *ngIf="IsIMC==true">{{item.IMC_ST }}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}" *ngIf="IsIMC==true">{{item.IMC_OBC}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}" *ngIf="IsIMC==true">{{item.IMC_GEN}}</td>            
+
+            <!--<td>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0)" (click)="openViewSeatDetails(MyModel_ViewSeatDetails, item.CollegeTradeId, item.Collegename, item.TradeName, item.TradeSchemeName)" title="View"><i class="ti ti-eye"></i></a>
+    </div>
+  </td>-->
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ListITICollegeTrade?.length }} of {{ListITICollegeTrade[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetTradeAndColleges(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="ListITICollegeTrade[0]?.TotalRecords==0" (change)="GetTradeAndColleges(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetTradeAndColleges(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for Publish Seat Metrix
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Veryfy OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+<ng-template #MyModel_ViewSeatDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Seat Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <h4><b>College Name:</b> {{CollegeNamePop}}</h4>
+        <h4><b>Trade :</b> {{TradeNamePop}}</h4>
+        <h4><b>Trade Scheme:</b> {{TradeSchemeNamePop}}</h4>
+
+
+
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">TotalSeats</th>
+                <th class="text-left">GEN</th>
+                <th class="text-left">GEN_F</th>
+                <th class="text-left">SC</th>
+                <th class="text-left">SC_F</th>
+                <th class="text-left"> ST</th>
+                <th class="text-left">ST_F</th>
+                <th class="text-left">TSP</th>
+                <th class="text-left">TSP_F</th>
+                <th class="text-left">SAH</th>
+                <th class="text-left">SAH_F</th>
+                <th class="text-left">OBC</th>
+                <th class="text-left">OBC_F</th>
+
+                <th class="text-left">MIN</th>
+                <th class="text-left">MIN_F</th>
+                <th class="text-left">EWS</th>
+                <th class="text-left">EWS_F</th>
+                <th class="text-left">MBC</th>
+                <th class="text-left">MBC_F</th>
+                <th class="text-left">DEV</th>
+                <th class="text-left">DEV_F</th>
+
+                <th class="text-left">IMC_SC</th>
+                <th class="text-left">IMC_ST</th>
+                <th class="text-left">IMC_OBC</th>
+                <th class="text-left">IMC_GEN</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td class="text-left">{{item.TotalSeats}}</td>
+                <td class="text-left">{{item.GEN}}</td>
+                <td class="text-left">{{item.GEN_F}}</td>
+                <td class="text-left">{{item.SC}}</td>
+                <td class="text-left">{{item.SC_F}}</td>
+                <td class="text-left">{{item. ST}}</td>
+                <td class="text-left">{{item.ST_F}}</td>
+                <td class="text-left">{{item.TSP}}</td>
+                <td class="text-left">{{item.TSP_F}}</td>
+                <td class="text-left">{{item.SAH}}</td>
+                <td class="text-left">{{item.SAH_F}}</td>
+                <td class="text-left">{{item.OBC}}</td>
+                <td class="text-left">{{item.OBC_F}}</td>
+                <td class="text-left">{{item.MIN}}</td>
+                <td class="text-left">{{item.MIN_F}}</td>
+                <td class="text-left">{{item.EWS}}</td>
+                <td class="text-left">{{item.EWS_F}}</td>
+                <td class="text-left">{{item.MBC}}</td>
+                <td class="text-left">{{item.MBC_F}}</td>
+                <td class="text-left">{{item.DEV}}</td>
+                <td class="text-left">{{item.DEV_F}}</td>
+
+                <td class="text-left">{{item.IMC_SC}}</td>
+                <td class="text-left">{{item.IMC_ST}}</td>
+                <td class="text-left">{{item.IMC_OBC}}</td>
+                <td class="text-left">{{item.IMC_GEN}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 mt-3 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Horizontal Seats</b>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+
+                <th class="text-left">WIDOW/DIVORCEE</th>
+                <th class="text-left">EX-SERVICE MEN</th>
+                <th class="text-left">PH</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+
+                <td class="text-left">{{item.WID_DIV}}</td>
+                <td class="text-left">{{item.EX}}</td>
+                <td class="text-left">{{item.PH}}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+<ng-template #MyModel_SeatMatrix let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Seat Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="gap-3">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+              <!-- File Input for Excel -->
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <div class="mt-5">
+            <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Seat Matrix List</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" (click)="BTERSaveSeatsMatrixlist()" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Save
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead>
+              <tr>
+                <th *ngFor="let item of DataExcel4">{{ item  }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let items of DataExcel; let indx=index">
+
+                <td *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>
+
+                <!--<td *ngFor="let item of items.values">{{item}}</td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <div class="flex-grow text-center">
+          <b><i class="fa fa-plus"></i>&nbsp; IMC MARGE </b>
+        </div>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <form class="form-horizontal">
+        <div class="card">
+          <div class="card-body p-5">
+            <div class="mb-8">
+
+              <div>
+
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4">
+                  Alltmet Type
+                </label>
+                <select class="form-select" name="ddlAllotmentId" [(ngModel)]="imcRequest.AllotmentId">
+                  <option value='0'>--Select--</option>
+                  <option value="2">First Allotment</option>
+                  <option value="4">Second Allotment</option>
+                  <option value="6">Internal Sliding</option>
+                </select>
+
+              </div>
+
+              <div>
+                <!-- Label on the left -->
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4 pt-3">IMC-SC: </label>
+                <!-- Dropdown on the right -->
+                <select class="form-select" name="ddlAllotmentId" [(ngModel)]="imcRequest.IMC_SC">
+                  <option value=''>--Select--</option>
+                  <option value="SC">SC</option>
+                  <option value="SC_F">SC_F</option>
+                  <option value="GEN">GEN</option>
+                  <option value="GEN_F">GEN_F</option>
+                </select>
+              </div>
+
+              <div>
+                <!-- Label on the left -->
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4 pt-3">IMC-ST: </label>
+                <!-- Dropdown on the right -->
+                <select class="form-select" name="ddlAllotmentId" [(ngModel)]="imcRequest.IMC_ST">
+                  <option value=''>--Select--</option>
+                  <option value="ST">ST</option>
+                  <option value="ST_F">ST_F</option>
+                  <option value="GEN">GEN</option>
+                  <option value="GEN_F">GEN_F</option>
+                </select>
+              </div>
+
+              <div>
+                <!-- Label on the left -->
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4 pt-3">IMC-OBC: </label>
+                <!-- Dropdown on the right -->
+                <select class="form-select" name="ddlAllotmentId" [(ngModel)]="imcRequest.IMC_OBC">
+                  <option value=''>--Select--</option>
+                  <option value="OBC">OBC</option>
+                  <option value="OBC_F">OBC_F</option>
+                  <option value="GEN">GEN</option>
+                  <option value="GEN_F">GEN_F</option>
+                </select>
+              </div>
+
+              <div>
+                <!-- Label on the left -->
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1 mr-4 pt-3">IMC-GEN: </label>
+                <!-- Dropdown on the right -->
+                <select class="form-select" name="ddlAllotmentId" [(ngModel)]="imcRequest.IMC_GEN">
+                  <option value=''>--Select--</option>
+                  <option value="GEN">GEN</option>
+                  <option value="GEN_F">GEN_F</option>
+                </select>
+              </div>
+
+              <!--<div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-1">-->
+              <div class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+
+
+
+
+              </div>
+
+              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                <div class="text-center">
+                  <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="saveData()">Submit</button>
+                </div>
+
+              </div>
+
+
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+  </div>
+</ng-template>

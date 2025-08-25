@@ -1,0 +1,102 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="BTEBTEjavascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Dashboard</a>
+    </div>-->
+  </div>
+  <!--<div class="flex items-center justify-end">
+    <select class="form-select me-3" style="min-width:250px;margin-right:10px">
+      <option>Institute Wise</option>
+      <option>A</option>
+      <option>V</option>
+    </select>
+    <select class="form-select me-3" style="min-width:250px">
+      <option>Branch wise</option>
+      <option>A</option>
+      <option>V</option>
+    </select>
+  </div>-->
+</div>
+<!-- Page Title End -->
+
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+
+  <!--<div class="card">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">group</span>
+      <h6 class="text-muted text-sm uppercase">Total<br />Company Visited</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">45</h3>
+      <a [routerLink]="['/PlacementReport', 1]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">fact_check</span>
+      <h6 class="text-muted text-sm uppercase">Total <br />Placed Student</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">90</h3>
+      <a [routerLink]="['/PlacementReport', 2]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">currency_rupee</span>
+      <h6 class="text-muted text-sm uppercase">Average <br />Package LPA</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">5</h3>
+      <a [routerLink]="['/PlacementReport', 3]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">currency_rupee</span>
+      <h6 class="text-muted text-sm uppercase">Total <br />Male Student</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">80</h3>
+      <a [routerLink]="['/PlacementReport', 4]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>
+  <div class="card">
+    <div class="p-5">
+      <span class="material-symbols-rounded float-end text-3xl text-default-400">checklist</span>
+      <h6 class="text-muted text-sm uppercase">Total <br />Female</h6>
+      <h3 class="text-2xl mb-3" data-plugin="counterup">80</h3>
+      <a href="" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+    </div>
+  </div>-->
+  <div class="col-lg-3" *ngFor="let item of viewPlacementDashboardList; let i = index">
+
+    <div class="card">
+      <div class="p-5">
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+        <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+        <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/campusvalidation/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        <a *ngIf="item.SRC == 'group'" [routerLink]="['/PlacementDashReport/', item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/CompanyValidation/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+      </div>
+    </div>
+    </div>
+
+
+    <!--<div class="row">
+      <div class="col-lg-3" *ngFor="let item of viewPlacementDashboardList; let i = index">-->
+    <!-- small box -->
+    <!--<div class="small-box">
+        <div class="inner">
+          <p> <span class="material-symbols-rounded float-end text-3xl text-default-400"> {{item.TotalText}} </span> </p>
+          <h3>{{item.TotalCount}}</h3>
+        </div>
+        <div class="icon">
+          <img class="d-100" src="{{item.SRC}}" alt="thumb">
+        </div>
+        <a href="{{item.URL}}" class="small-box-footer">
+          MoreInfo
+          <i class="fa fa-arrow-circle-right smal-icon"></i>
+        </a>
+      </div>
+    </div>-->
+
+
+  </div>
+
+  <!--</div>-->

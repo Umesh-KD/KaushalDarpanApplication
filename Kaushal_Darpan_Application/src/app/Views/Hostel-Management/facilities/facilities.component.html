@@ -1,0 +1,112 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Hostel Facilities' : 'Create Hostel Facilities' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Seat/Room Type</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+ isUpdate ? 'Update Hostel Facilities' : 'Add Hostel Facilities'
+        }}
+      </a>
+    </div>
+  </div>
+  <a routerLink="/dtedashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Hostel Facilities' : 'Add Hostel Facilities' }}</b>
+    </div>
+    <form [formGroup]="groupForm" (ngSubmit)="SaveFacilities()">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Facilities Name  <span class="StarMarking"></span></label>
+          <input formControlName="txtFacilitiesName" class="form-input" type="text" id="FacilitiesName"
+                 placeholder="Enter Facilities Name" [(ngModel)]="request.FacilitiesName">
+          <div *ngIf="isSubmitted && groupForm.controls.txtFacilitiesName.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtFacilitiesName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+</form>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Hostel Facilities</b>
+
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+          <tr>
+
+            <th class="text-left">#</th>
+            <th class="text-left">Facilities Name</th>
+            <th class="text-left">Is Facilities</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+          <tr *ngFor="let item of FacilityList;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.FacilitiesName}}</td>
+
+            <td>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <!--<label class="block">Status</label>-->
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="IsFacilities"
+                         [checked]="item.IsFacilities == 1"
+                         (change)="onToggleChange(item.HFID, item.IsFacilities)">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ item.IsFacilities == 1 ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>
+            </td>
+            <!--<td>
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+            <!--<label class="block">Status</label>-->
+            <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+        <input class="sr-only peer" type="checkbox" id="IsFacilities" [checked]="item.IsFacilities == 1" (change)="onToggleChange(item.HFID, college.IsFacilities)">
+        <span class="toggleIcon">
+          <span class="toggleTitle">{{ item.IsFacilities == 1 ? '' : '' }}</span>
+        </span>
+      </label>
+    </div>
+  </td>-->
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="Edit" (click)=" GetByHFID(item.HFID)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" (click)=" DeleteDataByHFID(item.HFID)" title="Delete"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

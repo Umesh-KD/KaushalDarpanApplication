@@ -1,0 +1,218 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Verify Roll List </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Verify Roll List </a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.Admin||this.sSOLoginDataModel.RoleID==_enumRole.AdminNon||this.sSOLoginDataModel.RoleID==_enumRole.Principal||this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNon">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Search Filter</b>
+      <div class="flex justify-end flex-wrap items-center">
+      </div>
+    </div>
+
+    <!--{{_RollListStatus|json}}-->
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3" *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.Admin||this.sSOLoginDataModel.RoleID==_enumRole.AdminNon||this.sSOLoginDataModel.RoleID==_enumRole.Principal||this.sSOLoginDataModel.RoleID==_enumRole.PrincipalNon">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Filter By Status.<span class="StarMarking">*</span></label>
+        <select class="form-select" id="ddlFilterByStatus" [(ngModel)]="Status" (change)="GetAllData()">
+          <option value="0">Select Status</option>
+          <option value="{{_RollListStatus.Published}}">Published</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+        <select [disabled]="insDisabled" class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+            {{item.InstituteName}}
+          </option>
+        </select> 
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester</label>
+        <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.SemesterID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of SemesterMasterDDLList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+        </select>
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetFilter()">Cancel</button>
+      </div>
+    </div>
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Verify Roll List </b>
+        <div class="flex justify-end flex-wrap items-center">
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel Data</a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="flex" *ngIf="this.Status!=14">
+          <select *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.ExaminationIncharge ||this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng ||this.sSOLoginDataModel.RoleID ==_enumRole.ExaminationIncharge_NonEng" class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
+            <option value="0">Select Status</option>
+            <option *ngIf="Status!=13&&Status!=15 &&Status!=14" value="{{_RollListStatus.Verified}}">Verified</option>
+            <option *ngIf="Status!=14&&Status!=15" value="{{_RollListStatus.Reverted}}">Reverted</option>
+          </select>
+          <button *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.ExaminationIncharge ||this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng ||this.sSOLoginDataModel.RoleID ==_enumRole.ExaminationIncharge_NonEng" type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>
+
+        </div>
+        <div class="">
+
+        </div>
+        <!--<div class="">
+      <div *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.Admin||this.sSOLoginDataModel.RoleID==_enumRole.AdminNon">
+        @if(Status==_RollListStatus.Verified )
+        {
+        <button *ngIf="VerifyRollList?.length > 0" class="btn bg-success text-white pull-right" (click)="openModalGenerateOTP(modal_GenrateOTPPublish)" type="button"> Publish (Roll List)</button>
+        }
+        @if(Status==_RollListStatus.Generated )
+        {
+        <button *ngIf="VerifyRollList?.length > 0" class="btn bg-success text-white pull-right" (click)="ForwardRollNo()" type="button"><i class="fa fa-check"></i> Forward for Verify</button>
+        }
+      </div>
+    </div>-->
+        <div class="flex items-center">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <!--{{VerifyRollList|json}}-->
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5" id="tbl_placementStudent">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+
+              <th class="text-center">Sr. No.</th>
+              <th class="text-center">Financial Year Name</th>
+              <th class="text-center">EndTerm Name</th>
+
+              <th class="text-center">Institute Name</th>
+              <th class="text-center">Semester Name</th>
+              <!--<th class="text-center">File Name</th>-->
+
+              <th class="text-center">ExamIncharge Status</th>
+              <th class="text-center">Registrar Status</th>
+              <th class="text-center">Final Status</th>
+              <!--<th class="text-center">Student Count</th>-->
+              <!--<th class="text-center">Created Date</th>-->
+              <th class="text-center">Roll List / Admit Card</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of VerifyRollList | tableSearchFilter:Table_SearchText;let idx=index;">
+
+              <td class="text-center">{{idx+1}}</td>
+              <td class="text-center">{{row.FinancialYearName}}</td>
+              <td class="text-center">{{row.EndTermName}}</td>
+              <td class="text-center">{{row.InstituteNameEnglish	}}</td>
+              <td class="text-center">{{row.SemesterName	}} </td>
+              <!--<td class="text-center">{{row.FileName}}</td>-->
+              <td class="text-center">
+                {{ row.IsExaminationVerified ? 'Verified' : 'Not Verified' }}
+              </td>
+
+              <td class="text-center">
+                {{ row.IsRegistrarVerified ? 'Verified' : 'Not Verified' }}
+              </td>
+
+              <td class="text-center">{{row.ActionCode}}</td>
+              <!--<td class="text-center">{{row.TotalStudent}}</td>-->
+              <!--<td class="text-center">{{row.CreatedDate}}</td>-->
+              <td class="text-center">
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a *ngIf="row.RollListFileName" download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.RollListFileName}}" title="Roll No Card Download ({{row.RollListDate}})"><i class="ti ti-download"></i></a>
+                  <a *ngIf="row.AdmitCardFileName" download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.ReportsFolder}}/{{row.AdmitCardFileName}}" title="Admit Card Download ({{row.AdmitCardDate}})"><i class="ti ti-download"></i></a>
+                </div>
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+
+
+
+
+<!--<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>-->
+
+
+
+<!--<ng-template #modal_GenrateOTPPublish let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp; OTP Verification
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseOTPModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <p class="text-center">
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+        </p>
+        <div class="mt-4">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+        </div>
+      </div>
+      <div class="text-center flex items-center justify-center mt-3">
+        <button (click)="VerifyOTPPublish()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+      </div>
+      <br />
+    </div>
+  </div>
+</ng-template>-->
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,195 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Renumeration Examiner</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Renumeration Examiner</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Renumeration Examiner List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Search Criteria</b>
+        <div>
+          <select class="form-select" [(ngModel)]="RenumerationExaminerRequest.RenumerationExaminerStatusID" (change)="GetAllData()">
+            <option value="0">Pending</option>
+            <option value="36">Submitted And Forwarded to JD</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List </b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>-->
+        <div class="text-center flex">
+          <button type="button" title="Track Examiner Data" class="btn bg-info text-white" (click)="TrackExaminerData(MyModel_TrackExaminerDetails)">
+            Track Status
+          </button>
+        </div>
+      </div>
+
+      <div class="flex">
+      </div>
+
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <!-- pending-->
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.Pending">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Alloted Copy</th>
+            <th class="text-left">Pending Copy</th>
+            <th class="text-left">Saved Copy</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of RenumerationExaminerList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.GroupCode}}</td>
+            <td>{{item.TotalAllotedCopy}}</td>
+            <td>{{item.TotalPendingCopy}}</td>
+            <td>{{item.TotalSavedCopy}}</td>
+            <td>{{item.StatusName}}</td>
+            <td><input type="button" class="btn btn-sm bg-info text-white" value="View" (click)="GenerateAndViewPdf(item.ExaminerID)" title="click here to preview file" /> </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Submitted And Forwarded to JD -->
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationExaminerRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.SubmittedAndForwardedtoJD">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Saved Copy</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of RenumerationExaminerList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.GroupCode}}</td>
+            <td>{{item.TotalSavedCopy}}</td>
+            <td>{{item.StatusName}}</td>
+            <td><a href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{item.FileName}}" alt="pdf" target="_blank" title="click here to Generate & View file">Generate & View</a>  </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" style="z-index:123;">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;View Remuneration Examiner PDF</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div class="flex-grow mt-4 overflow-hidden" style="width:100%;height:100%;">
+      <ng-container *ngIf="pdfUrl; else loading">
+        <object [data]="pdfUrl"
+                type="application/pdf"
+                class="h-full w-full" style="width:100%;height:100%;">
+        </object>
+      </ng-container>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-4 text-center">
+      <button type="button" class="btn bg-info text-white" (click)="SavePDFSubmitAndForwardToJD()">
+        Submit And Forward to JD
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_TrackExaminerDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b> Track Status Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr. No.</th>
+                  <th class="text-left">Group Code</th>
+                  <th class="text-left">SSOID</th>
+                  <th class="text-left">Total Checked Copy</th>
+                  <th class="text-left">Total Payment</th>
+                  <th class="text-left">Per Copy Charge</th>
+                  <th class="text-left">Status</th>
+                  <th class="text-left">Date</th>
+                  <!--<th class="text-left">User</th>-->                  
+                  <th class="text-left">Role</th>                  
+                  <th class="text-left">File</th>                  
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of TrackstatusList; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.GroupCode}}</td>
+                  <td align="left">{{row.SSOID}}</td>
+                  <td align="left">{{row.TotalSavedCopy}}</td>
+                  <td align="left">{{row.TotalSavedCopyPayment}}</td>
+                  <td align="left">{{row.PerCopyCharge}}</td>
+                  <td align="left">{{row.StatusName}}</td>
+                  <td align="left">{{row.ModifyDate}}</td>
+                  <!--<td align="left">{{row.UserName}}</td>-->
+                  <td align="left">{{row.RoleName}}</td>
+                  <td><a href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{row.FileName}}" alt="pdf" target="_blank" title="click here to view file">View</a>  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>

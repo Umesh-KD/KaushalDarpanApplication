@@ -1,0 +1,144 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List Allotment Configuration</b>
+    </div>
+    <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+   <div class="">
+     <select id="ddlConter" class="form-select couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+       <option value="2">2</option>
+       <option value="50">50</option>
+       <option value="100">100</option>
+       <option value="500">500</option>
+       <option value="1000">1000</option>
+     </select>
+   </div>
+   <div class="">
+   </div>
+   <div class="">
+
+   </div>
+   <div>
+     <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+   </div>
+  </div>-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" width="80">Sr. No.</th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Name')">
+              Type
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Name'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('From_Date')">
+              From Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='From_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('To_Date')">
+              To Date
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='To_Date'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-right" width="150">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of DateConfigList | tableSearchFilter:Table_SearchText; let idx=index; ">
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.Name}}  <label *ngIf="row.CourseSubTypeID==3">(Lateral)</label></td>
+            <td>
+
+              @if (row.ConfigurationID==148 || row.Name== 'OPTION FORM EDIT') {
+              <input type="datetime-local" name="Date" [(ngModel)]="row.From_Date" [max]="todayDate">
+              }
+
+              @if (idx==0 && row.ConfigurationID!=148 &&  row.Name!= 'OPTION FORM EDIT') {
+              <input type="datetime-local" name="Date" [(ngModel)]="row.From_Date" [min]="todayDate">
+              }
+              @if(idx!=0 && row.ConfigurationID!=148  &&  row.Name!= 'OPTION FORM EDIT'){
+              <input type="datetime-local" name="Date" [(ngModel)]="row.From_Date" [min]="DateConfigList[idx-1].From_Date" (keydown)="disableKeys($event)">
+              }
+            </td>
+            <td>             
+              <input *ngIf="row.ConfigurationID!=148" type="datetime-local" name="ToDate" [(ngModel)]="row.To_Date" [min]="row.From_Date" (keydown)="disableKeys($event)">
+            </td>
+            <td>
+              <div class="flex items-end justify-end actionBtns w-auto" style="width:auto !important">
+                <button class="bg-success btn text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,row)">{{row.DateConfigID>0?'Update':'Submit'}}</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr *ngIf="DateConfigList.length==0">
+            <td colspan="5" align="center">
+              <span>
+                <img src="../../../assets/images/no_record_found_1.png" width="180" /><br />
+              </span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Veryfy OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #modal_GenrateOTPForList let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTPForList()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Veryfy OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTPForList(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  <div class="flex justify-center items-end w-full py-4">
+    <button class="bg-success btn text-white" (click)="openModalGenerateOTPForList(modal_GenrateOTPForList)">Submit</button>
+  </div>
+</div>

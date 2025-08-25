@@ -1,0 +1,188 @@
+ <!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Admin Remuneration Lists</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Remuneration Invigilator Lists</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Approve List of Remuneration Invigilator </b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a routerLink="/dashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+          <i class="ti ti-chevron-left"></i> Back
+        </a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Invigilator Name</th>
+            <th class="text-left">Request Date</th>
+            <th class="text-left">Total Amount</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">View PDF</th>
+            <th class="text-left">View Details</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of DataList; let idx=index; ">
+
+            <td align="left">{{idx+1}}</td>
+            <td>{{row.Invigilatorname}}</td>
+            <td>{{row.RequestDate}}</td>
+            <td>{{row.TotalAmount}}</td>
+            <td>{{row.Status}}</td>
+            <td>
+              <div class="actionBtns w-auto">
+                <!--<a (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/ITIPaperSetter/GuideLinesDocPDF' + '/' + row.FileName)" title="View Generated PDF"><i class="ti ti-paperclip"></i></a>-->
+                <a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL+ '/Reports/ITI/Remuneration/Invigilator' + '/' + row.FileName}}" title="View Generated PDF"><i class="ti ti-paperclip"></i></a>
+              </div>
+              <!--<a href="javascript:void(0)" title="View generated PDF"
+                 (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/ITIPaperSetter/GuideLinesDocPDF' + '/' + row.FileName)">
+                <i class="ti ti-paperclip"></i>
+              </a>-->
+            </td>
+            <td>
+              <div class="actionBtns w-auto">
+                <a (click)="OpenModalPopup2(MyModel_ViewDetails ,  row.RemunerationID )" title="View"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+            <!--<td>
+              <button class="btn bg-info text-white" (click)="OpenModalPopup(MyModel_ExaminerCodeLogin , row.RemunerationID)">Approved to Pay</button>
+            </td>-->
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!--<ng-template #MyModel_ViewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Status</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup(true)"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sr No</th>
+                <th class="text-left">Invigilator Name</th>
+                <th class="text-left">Request Date</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">View Pdf</th>
+                <th class="text-left">View Details</th>
+                <th class="text-left">Action</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of AppointedExaminerList; let idx=index; ">
+                <td align="left">{{idx+1}}</td>
+                <td>{{row.CenterCode}}</td>
+                <td>{{row.StreamName}}</td>
+                <td>{{row.SemesterName}}</td>
+                <td>{{row.SubjectName}}</td>
+                <td>
+                  <div class="actionBtns w-auto">
+                    <a (click)="OpenModalPopup(MyModel_ViewDetails)" title="View"><i class="ti ti-eye"></i></a>
+                  </div>
+                </td>
+                <td> </td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>-->
+
+
+<ng-template #MyModel_ViewDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Remuneration invigilator Detail</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup(true)"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S.No</th>
+                <!--<th class="text-left">Exam Shift</th>
+                <th class="text-left">Exam Date</th>-->
+                <th class="text-left">Examshift with time</th>
+                <th class="text-left">Semester</th>
+                <th class="text-left">Financial Year</th>
+                <th class="text-left">End Term</th>
+                <th class="text-left">Trade Name</th>
+                <th class="text-left">Subject Name</th>
+                <th class="text-left">RollNo From</th>
+                <th class="text-left">RollNo To</th>
+                <th class="text-left">Amount</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <tr *ngFor="let iti of InvigilatorDetails; let idx=index; ">
+                <td> {{ idx + 1 }}</td>
+                <!--<td> {{ iti.ExamShift }}</td>
+                <td> {{ iti.Dis_Date }}</td>-->
+                <td> {{ iti.ExamShiftWithTime }}</td>
+                <td> {{ iti.SemesterName }}</td>
+                <td> {{ iti.FinancialYear }}</td>
+                <td> {{ iti.EndTerm }}</td>
+                <td> {{ iti.TradeName }}</td>
+                <td> {{ iti.SubjectName }}</td>
+                <td> {{ iti.RollNumberFrom }}</td>
+                <td> {{ iti.RollNumberTo }}</td>
+                <td> {{ iti.Amount }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

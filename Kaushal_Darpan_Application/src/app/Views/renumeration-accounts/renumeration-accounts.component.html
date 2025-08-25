@@ -1,0 +1,348 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Renumeration Accounts</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Renumeration JD</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Renumeration Accounts List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Search Criteria</b>
+        <div>
+          <select class="form-select" [(ngModel)]="RenumerationAccountsRequest.RenumerationExaminerStatusID" (change)="GetAllData()">
+            <option value="42">Approved And Send to Accounts</option>
+            <option value="43">Approved from Accounts</option>
+
+          </select>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List </b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!--<div class="">
+      <select id="ddlConter" class="form-select  couterDropDown">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>
+      </div>-->
+      <div class="flex"
+           *ngIf="RenumerationAccountsRequest.RenumerationExaminerStatusID==_EnumRenumerationExaminer.ApprovedfromAccounts">
+        <!--<button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataApprovedAndSendToAccounts()">
+          Approved and send to Accounts
+        </button>-->
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <!-- Submitted And Forwarded to JD-->
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationAccountsRequest.RenumerationExaminerStatusID == _EnumRenumerationExaminer.ApprovedAndSendtoAccounts">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">SSO Id</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Saved Copy</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">File</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of RenumerationAccountsList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.SSOID}}</td>
+            <td>{{item.GroupCode}}</td>
+            <td>{{item.TotalSavedCopy}}</td>
+            <td>{{item.StatusName}}</td>
+            <td>
+              <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{item.FileName}}" alt="pdf" target="_blank" title="click here to view file">View</a>
+            </td>
+            <td>
+              <a *ngIf="RenumerationAccountsRequest.RenumerationExaminerStatusID == _EnumRenumerationExaminer.ApprovedAndSendtoAccounts && item.IsBillGenerated == false"
+                 href="javascript:void(0);"
+                 title="Verify"
+                 (click)="EditAccountsData(MyModel_EditAccountsDetails, item.RenumerationExaminerID)">
+                Verify
+              </a>
+                <span>   </span>
+              <a *ngIf="RenumerationAccountsRequest.RenumerationExaminerStatusID == _EnumRenumerationExaminer.ApprovedAndSendtoAccounts && item.IsBillGenerated == true"
+                 href="javascript:void(0);"
+                 title="Add More Details"
+                 (click)="AddMoreAccountsData(MyModel_AddMoreAccountsDetails, item.RenumerationExaminerID)">
+                 Add More Details
+              </a>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- Approved from Accounts -->
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="RenumerationAccountsRequest.RenumerationExaminerStatusID == _EnumRenumerationExaminer.ApprovedfromAccounts">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">SSO Id</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Saved Copy</th>
+            <th class="text-left">TV No</th>
+            <!-- <th class="text-left">Vouchar No</th> -->
+            <th class="text-left">Clear Date</th>
+            <th class="text-left">BillStatus</th>
+            <th class="text-left">Remark</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">File</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of RenumerationAccountsList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.SSOID}}</td>
+            <td>{{item.GroupCode}}</td>
+            <td>{{item.TotalSavedCopy}}</td>
+            <td>{{item.TVNo}}</td>
+            <!-- <td>{{item.VoucharNo}}</td> -->
+            <td>{{item.ClearDate | date: 'dd-MM-yyyy'}}</td>
+            <!--<td>{{item.BillStatus}}</td>-->
+            <td>
+              {{ item.BillStatus == 1 ? 'Success' : item.BillStatus == 2 ? 'Fail' : 'Unknown' }}
+            </td>
+            <td>{{item.Remark}}</td>
+            <td>{{item.StatusName}}</td>
+            <td>
+              <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{_GlobalConstants.ReportsFolder}}/{{item.FileName}}" alt="pdf" target="_blank" title="click here to view file">View</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<ng-template #MyModel_EditAccountsDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="AccountsFormGroup" id="accountsFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-right">
+          <!--<b><i class="fa fa-plus"></i>&nbsp;Menu # {{requestMenu.MenuId}}</b>-->
+          <button class="btn bg-info text-white" (click)="CloseViewAccountsDetails()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Bill Generated</label>
+              <select class="form-select" id="BillStatuss" formControlName="IsBillGenerated" [(ngModel)]="AccountsSave.IsBillGenerated">
+                <option [value]="1"> Yes</option>
+                <option [value]="0"> No</option>
+              </select>
+              
+            </div>
+
+            <div *ngIf="AccountsSave.IsBillGenerated == 1">
+              <label for="ClearDates" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Bill Generated Date 
+              </label>
+              <input type="date" id="ClearDates" formControlName="BillGeneratedDate" class="form-input"
+                     placeholder="Enter Clear Date" [(ngModel)]="AccountsSave.BillGeneratedDate" >
+              
+            </div>
+
+            <!-- <div>
+              <label for="TVNos" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                TV NO <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="TVNos" formControlName="TVNos" class="form-input" placeholder="Enter TV Number" [(ngModel)]="AccountsSave.TVNo">
+              <div *ngIf="isSubmitted && _AccountsFormGroup.TVNos.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.TVNos.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="VoucharNos" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Vouchar No <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="VoucharNos" formControlName="VoucharNos" class="form-input" placeholder="Enter Vouchar Number" [(ngModel)]="AccountsSave.VoucharNo">
+              <div *ngIf="isSubmitted && _AccountsFormGroup.VoucharNos.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.VoucharNos.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="ClearDates" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Clear Date <span class="StarMarking">*</span>
+              </label>
+              <input type="date" id="ClearDates" formControlName="ClearDates" class="form-input"
+                     placeholder="Enter Clear Date" [(ngModel)]="AccountsSave.ClearDate" [min]="minDate"onkeydown="return false"
+                      onpaste="return false"onkeypress="return false"oninput="return false">
+              <div *ngIf="isSubmitted && _AccountsFormGroup.ClearDates.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.ClearDates.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+              <select class="form-select" id="BillStatuss" formControlName="BillStatuss" [(ngModel)]="AccountsSave.BillStatus">
+                <option value="0"> Choose Bill Status</option>
+                <option value="1"> Success</option>
+                <option value="2"> Fail</option>
+              </select>
+              <div *ngIf="isSubmitted&&_AccountsFormGroup.BillStatuss.errors" class="text-danger">
+                <p *ngIf="!_AccountsFormGroup.BillStatuss.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea type="text" id="Remarks" formControlName="Remarks" class="form-input" placeholder="Enter Remark" [(ngModel)]="AccountsSave.Remark"> </textarea>
+              <div *ngIf="isSubmitted && _AccountsFormGroup.Remarks.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.Remarks.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div> -->
+
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+            <div class="text-center flex items-center justify-center">
+              <button type="button" id="btnSave" (click)="UpdateDataApprovedFromAccounts()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i>Update From Accounts</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_AddMoreAccountsDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="AddMoreFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-right">
+          <!--<b><i class="fa fa-plus"></i>&nbsp;Menu # {{requestMenu.MenuId}}</b>-->
+          <button class="btn bg-info text-white" (click)="CancelAddMoreDetails()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label for="TVNos" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                TV NO 
+              </label>
+              <input type="text" id="TVNos" formControlName="TVNo" class="form-input" placeholder="Enter TV Number" [(ngModel)]="requestAddMore.TVNo">
+              <!-- <div *ngIf="isSubmitted && _AccountsFormGroup.TVNos.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.TVNos.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div> -->
+            </div>
+
+            <!-- <div>
+              <label for="VoucharNos" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Vouchar No <span class="StarMarking">*</span>
+              </label>
+              <input type="text" id="VoucharNos" formControlName="VoucharNos" class="form-input" placeholder="Enter Vouchar Number" [(ngModel)]="requestAddMore.VoucharNo">
+              <div *ngIf="isSubmitted && _AccountsFormGroup.VoucharNos.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.VoucharNos.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div> -->
+
+            <div>
+              <label for="ClearDates" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Clear Date
+              </label>
+              <input type="date" id="ClearDates" formControlName="ClearDate" class="form-input"
+                     placeholder="Enter Clear Date" [(ngModel)]="requestAddMore.ClearDate" [min]="minDate"onkeydown="return false"
+                      onpaste="return false"onkeypress="return false"oninput="return false">
+              <!-- <div *ngIf="isSubmitted && _AccountsFormGroup.ClearDates.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.ClearDates.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div> -->
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+              <select class="form-select" id="BillStatuss" formControlName="BillStatus" [(ngModel)]="requestAddMore.BillStatus">
+                <option value="0"> Choose Bill Status</option>
+                <option value="1"> Success</option>
+                <option value="2"> Fail</option>
+              </select>
+              <!-- <div *ngIf="isSubmitted&&_AccountsFormGroup.BillStatuss.errors" class="text-danger">
+                <p *ngIf="!_AccountsFormGroup.BillStatuss.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div> -->
+            </div>
+
+            <div>
+              <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark 
+              </label>
+              <textarea type="text" id="Remarks" formControlName="Remarks" class="form-input" placeholder="Enter Remark" [(ngModel)]="requestAddMore.Remark"> </textarea>
+              <!-- <div *ngIf="isSubmitted && _AccountsFormGroup.Remarks.errors" class="text-danger">
+                <p *ngIf="_AccountsFormGroup.Remarks.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div> -->
+            </div>
+
+          </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4">
+            <div class="text-center flex items-center justify-center">
+              <button type="button" id="btnSave" (click)="SaveDataApprovedFromAccounts()" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i>Approved From Accounts</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+

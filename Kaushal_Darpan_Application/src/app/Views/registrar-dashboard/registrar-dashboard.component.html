@@ -1,0 +1,310 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="BTEBTEjavascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Dashboard</a>
+    </div>-->
+  </div>
+  <!--<div class="flex items-center justify-end">
+    <select class="form-select me-3" style="min-width:250px;margin-right:10px">
+      <option>Institute Wise</option>
+      <option>A</option>
+      <option>V</option>
+    </select>
+    <select class="form-select me-3" style="min-width:250px">
+      <option>Branch wise</option>
+      <option>A</option>
+      <option>V</option>
+    </select>
+  </div>-->
+</div>
+<!-- Page Title End -->
+
+
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>Eligible For Enrollment Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='EnrollNumber'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Student Examination Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='studentexamination'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Roll Number Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='RollNumber'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Revaluation Roll Number Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='RevalRollNumber'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>Enrollment Cancellation Request</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="card" *ngIf="item.ListType=='EnrollmentCancel'">
+      <div class="p-5">
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+        <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+        <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+           class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          View
+          All <i class="ti ti-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+<!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Enrollment Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+  <div class="col-lg-3" *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="card" *ngIf="item.ListType=='EnrollNumber'">
+      <div class="p-5">
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+        <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+        <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+           class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          View
+          All <i class="ti ti-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>-->
+
+<div class="flex justify-between flex-wrap items-center p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Roll List</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='RollList'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Admit Card</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='AdmitCard'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Time Table Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='TimeTable'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Center Observer Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='CenterObserver'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> FlyingSquad  Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='FlyingSquad'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i> Center Superintendent Verification</b>
+</div>
+<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of viewPlacementDashboardList; let i = index">
+    <div class="col-lg-3" *ngIf="item.ListType=='CenterSuperintendentVerification'">
+      <div class="card">
+        <div class="p-5">
+          <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+          <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+
+          <a [routerLink]="[item.URL]"
+             class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+            View
+            All <i class="ti ti-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

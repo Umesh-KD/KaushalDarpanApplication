@@ -1,0 +1,226 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Report</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/planning-details-report" class="text-sm font-medium text-slate-700" aria-current="page">Planning Details</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.ITICollegeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status: </label>
+          <select class="form-select w-full" name="ddlStatusID" [(ngModel)]="searchRequest.StatusID">
+            <option value="0">Choose Option</option>
+            <option value="2">Pending For Approval</option>
+            <option value="3">Approved</option>
+            <option value="4">Rejected</option>
+           
+          </select>
+        </div>
+
+        <div>
+          <button type="submit" (click)="BtnSearch()" class="btn bg-info text-white mt-6 me-1">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetClick()"><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+
+
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+    </div>
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">College Code</th>
+            <th class="text-left">Principal Mobile</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">MIS Code</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Management</th>
+            <th class="text-left">Trust Society</th>
+            <th class="text-left">Society Name</th>
+            <th class="text-left">RegNo.</th>
+            <th class="text-left">RegDate</th>
+            <th class="text-left">RegOffice</th>
+            <th class="text-left">State</th>
+            <th class="text-left">District</th>
+            <th class="text-left">Last Election Date</th>
+            <th class="text-left">Valid Upto</th>
+            <th class="text-left">Ownership</th>
+            <th class="text-left">Date of Agreement</th>
+            <th class="text-left">Valid Upto</th>
+            <th class="text-left">Ins Reg Office</th>
+            <th class="text-left">Ins Reg State</th>
+            <th class="text-left">Ins Reg District</th>
+            <th class="text-left">Plot/House/Building No</th>
+            <th class="text-left">Street/Road/Lane</th>
+            <th class="text-left">Area/Locality/Sector</th>
+            <th class="text-left">LandMark</th>
+            <th class="text-left">Ins Division</th>
+            <th class="text-left">Ins District</th>
+            <th class="text-left">Ins Sub Division</th>
+            <th class="text-left">Tehsil</th>
+            <th class="text-left">Urban/Rural</th>
+            <th class="text-left">City</th>
+            <th class="text-left">Administrative Body</th>
+            <th class="text-left">Ward number</th>
+            <th class="text-left">Khasra No/Khata No</th>
+            <th class="text-left">Rakba (Bigha/Yard)</th>
+            <th class="text-left">Latitude</th>
+            <th class="text-left">Longitude</th>
+            <th class="text-left">Contact No</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Alternate Email</th>
+            <th class="text-left">Website</th>
+            <th class="text-left">Consumer Name</th>
+            <th class="text-left">K No</th>
+            <th class="text-left">Connection Type</th>
+            <th class="text-left">Sanction load (KW)</th>
+            <th class="text-left">Contract Demand</th>
+            <th class="text-left">Name Of DISCOM</th>
+            <th class="text-left">Sub-Division Office</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.CollegeName}}</td>
+            <td>{{row.CollegeCode}}</td>
+            <td>{{row.PrincipalMobile}}</td>
+            <td>{{row.Email}}</td>
+            <td>{{row.StatusName}}</td>
+            <td>{{row.MISCode}}</td>
+            <td>{{row.CategoryName}}</td>
+            <td>{{row.ManagementTypeName}}</td>
+            <td>{{row.TrustSocietyName}}</td>
+            <td>{{row.SocietyName}}</td>
+            <td>{{row.RegNo}}</td>
+            <td>{{row.RegDate}}</td>
+            <td>{{row.ManageRegOffice}}</td>
+            <td>{{row.StateName}}</td>
+            <td>{{row.DistrictName}}</td>
+            <td>{{row.LastElectionDate}}</td>
+            <td>{{row.LastElectionValidUpTo}}</td>
+            <td>{{row.OwnerShipName}}</td>
+            <td>{{row.AgreementLeaseDate}}</td>
+            <td>{{row.ValidUpToLeaseDate}}</td>
+            <td>{{row.InstituteRegOffice}}</td>
+            <td>{{row.Ins_RegistrationStateName}}</td>
+            <td>{{row.Ins_RegistrationDistirctName}}</td>
+            <td>{{row.PlotHouseBuildingNo}}</td>
+            <td>{{row.StreetRoadLane}}</td>
+            <td>{{row.AreaLocalitySector}}</td>
+            <td>{{row.LandMark}}</td>
+            <td>{{row.InsDivisionName}}</td>
+            <td>{{row.InsSubDivisionName}}</td>
+            <td>{{row.InsDistrictName}}</td>
+            <td>{{row.InsTehsil}}</td>
+            <td>{{row.InsUrbanName}}</td>
+            <td>{{row.InsCityName}}</td>
+            <td>{{row.AdministrativeBodyName}}</td>
+            <td>{{row.WardNo}}</td>
+            <td>{{row.KhasraKhataNo}}</td>
+            <td>{{row.BighaYard}}</td>
+            <td>{{row.Latitude}}</td>
+            <td>{{row.Longitude}}</td>
+            <td>{{row.ContactNo}}</td>
+            <td>{{row.ConEmail}}</td>
+            <td>{{row.AlternateEmail}}</td>
+            <td>{{row.Website}}</td>
+            <td>{{row.ConsumerName}}</td>
+            <td>{{row.KNo}}</td>
+            <td>{{row.ConnectionType}}</td>
+            <td>{{row.SanctionLoad}}</td>
+            <td>{{row.ContractDemand}}</td>
+            <td>{{row.Discom}}</td>
+            <td>{{row.SubDivOffice}}</td>
+
+
+          </tr>
+          <tr *ngIf="paginatedInTableData?.length==0"><td colspan="11">No Record Found</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+

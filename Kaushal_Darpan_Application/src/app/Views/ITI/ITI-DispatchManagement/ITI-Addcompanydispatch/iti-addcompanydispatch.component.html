@@ -1,0 +1,72 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Company Dispatch' : 'Add Company Dispatch' }}</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a routerLink="/BoardUniversity" class="text-sm font-medium text-slate-700" aria-current="page">Board University</a>-->
+      <!--<i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>-->
+      <a routerLink="/ITIAddcompanydispatch" class="text-sm font-medium text-slate-700" aria-current="page">{{ isUpdate ? 'Update Company Dispatch' : 'Add Company Dispatch' }}</a>
+    </div>
+  </div>
+  <a routerLink="/ITICompanydispatchlist" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">
+            <i class="ti ti-plus"></i> {{ isUpdate ? 'Update Company Dispatch' : 'Add Company Dispatch' }}
+          </b>
+        </div>
+        <form [formGroup]="groupForm" (ngSubmit)="saveData()">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name: <span class="StarMarking">*</span></label>
+              <input [readonly]="isEditing" formControlName="txtcompanyName" class="form-input" placeholder="Enter Company Name" [(ngModel)]="request.companyName">
+              <div *ngIf="isSubmitted && groupForm.controls.txtcompanyName.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtcompanyName.errors.required">This field is required!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supplier Name: <span class="StarMarking">*</span></label>
+              <input formControlName="txtsupplierName" class="form-input" placeholder="Enter Company Name" [(ngModel)]="request.supplierName">
+              <div *ngIf="isSubmitted && groupForm.controls.txtsupplierName.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtsupplierName.errors.required">This field is required!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supplier Mobile No: <span class="StarMarking">*</span></label>
+              <input formControlName="txtsupplierMobileNo" class="form-input" placeholder="Enter Supplier Mobile No" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,10)" [(ngModel)]="request.supplierMobileNo">
+              <div *ngIf="isSubmitted && groupForm.controls.txtsupplierMobileNo.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtsupplierMobileNo.errors.required">This field is required!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supplier Vehicle No: <span class="StarMarking">*</span></label>
+              <input formControlName="txtsupplierVechileNo" class="form-input" placeholder="Enter Supplier Vehicle No" [(ngModel)]="request.supplierVehicleNo" maxlength="8">
+              <div *ngIf="isSubmitted && groupForm.controls.txtsupplierVechileNo.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtsupplierVechileNo.errors.required">This field is required!</p>
+              </div>
+            </div>
+
+            <div>
+              <button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end row -->

@@ -1,0 +1,234 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">DTE {{StreamTypeName}} Internal Sliding</h4>
+
+        <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Institutes</a>
+      </div>-->
+    </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+            </div>
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application ID</label>
+                    <input type="text" class="form-input" placeholder="Enter Application Id "
+                        [(ngModel)]="searchRequest.ApplicationNo">
+                </div>
+
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+                    <select class="form-select" name="StreamID" [(ngModel)]="searchRequest.StreamID">
+                        <option value="0">--All--</option>
+                        <option *ngFor="let item of StreamMasterDDLList" value="{{item.StreamID}}">
+                            {{item.StreamName}}
+                        </option>
+                    </select>
+                </div>
+
+                <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade Lavel: <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" name="TradeLevel" [(ngModel)]="searchRequest.TradeLevel">
+              <option value=0>--Select--</option>
+              <option value="8">8th</option>
+              <option value="10">10th</option>
+            </select>
+          </div>-->
+
+                <div>
+                    <button type="button" class="btn bg-info text-white mt-6 mx-1" (click)="GetInternalSliding()">Search</button>
+                    <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>-->
+
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        </div>
+
+        <div class="overflow-x-auto mt-3">
+          <div *ngIf="IsPublishSeatMetrix==false" style="text-align: right;">
+            <h2 style="color:red;">Seat Matrix for internal sliding is not submitted. Before internal sliding generate and submit seat matrix</h2>
+          </div>
+            <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+
+                    <th width="80px" align="left">Sr. No.</th>
+                    <th  align="left">Application Number</th>
+                    <th  align="left">Student Name</th>
+                    <th  align="left">Student Category</th>
+                    <th  align="left">Branch</th>
+                    <th  align="left">Shift Name</th>
+                    <th  align="left">Alloted Category</th>
+                    <th  align="left">Alloted Priority</th>
+                    <th  align="left">Allotment Type</th>
+                    <th  align="left">Status</th>
+                    <th class="text-center">Action</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of ShowInternalSlidingList; let idx=index; ">
+                        <td>{{idx+1}}</td>
+
+                        <td align="left">{{item.ApplicationNo}}</td>
+                        <td align="left">{{item.Name}}</td>
+                        <td align="left">{{item.StudentCategory}}</td>
+                        <td align="left">{{item.InstituteStreamName}}</td>
+                        <td align="left">{{item.ShiftName}}</td>
+                        <td align="left">{{item.AllotedCategory}}</td>
+                        <td align="left">{{item.AllotedPriority}}</td>
+                        <td align="left">{{item.allotmentName}}</td>
+                        <td>
+                            {{item.ReportingStatus}}
+                        </td>
+                        <td align="center">
+                            <div class="flex align-center justify-center actionBtns"  *ngIf="DateConfigSetting[0]['INTERNAL SLIDING']==1 && IsPublishSeatMetrix==true">
+                                <a href="javascript:void(0);" title="Change To Internal Sliding"
+                                    (click)="OpenInternalsliding('ALLOT',MyModel_Action,item)"
+                                    *ngIf="item.AllotmentMasterId!=6">
+                                    <i class="ti ti-pencil"></i>
+                                </a>
+
+                                <!--<a href="javascript:void(0);" title="Swap Trade"
+                                    (click)="OpenInternalsliding('SWAP',MyModel_SwapAction,item)"
+                                    *ngIf="item.AllotmentMasterId!=6">
+                                    <i class="ti ti-transfer"></i>
+                                </a>-->
+
+                                <a href="javascript:void(0);" title="Revert Application"
+                                    (click)="OpenInternalsliding('REVERT',MyModel_Action,item)"
+                                    *ngIf="item.AllotmentMasterId == 6 && item.SwappingId==0">
+                                    <i class="ti ti-arrow-back-up"></i>
+                                </a>
+
+                                <a href="javascript:void(0);" title="Revert Swep Application"
+                                    (click)="OpenInternalsliding('SWAP_REVERT',MyModel_Action,item)"
+                                    *ngIf="item.AllotmentMasterId == 6 && item.SwappingId!=0">
+                                    <i class="ti ti-arrow-back-up"></i>
+                                </a>
+
+                            </div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+<ng-template #MyModel_Action let-modal
+    class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+    <div class="modal-content">
+
+        <div class="card">
+            <div class="card-header flex justify-between  items-center">
+                <b><i class="fa fa-plus"></i>&nbsp; Internal Sliding </b>
+                <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+            </div>
+            <form class="form-horizontal">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="mb-8">
+
+                            <div
+                                class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+
+                                <div>
+                                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                                        Please choose trade and shift for Internal Sliding<span
+                                            class="StarMarking">*</span>
+                                    </label>
+
+                                    <select class="form-select" name="InsID" [(ngModel)]="Request.StreamID">
+                                        <option value="0">--Select Trade--</option>
+                                        <option *ngFor="let item of InternalSlidingList" [value]="item.ID">{{item.Name}}
+                                        </option>
+                                    </select>
+
+                                </div>
+                                <div
+                                    class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                                    <div class="text-center">
+                                        <button type="submit" class="btn bg-info text-white mt-6 me-1"
+                                            (click)="saveData('ALLOT')">Submit</button>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</ng-template>
+
+
+<ng-template #MyModel_SwapAction let-modal
+    class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static]">
+    <div class="modal-content">
+
+        <div class="card">
+            <div class="card-header flex justify-between  items-center">
+                <b><i class="fa fa-plus"></i>&nbsp; Internal Sliding </b>
+                <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+            </div>
+            <form class="form-horizontal">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <div class="mb-8">
+
+                            <div
+                                class="grid 2xl:grid-cols-10 xl:grid-cols-10 lg:grid-cols-10 md:grid-cols-10 grid-cols-10 gap-10">
+
+                                <div>
+                                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                                        Please enter Application number of other student which you want to swap : <span
+                                            class="StarMarking">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" placeholder="Enter Application Id "
+                                        name="SwapApplicationNO" [(ngModel)]="Request.SwapApplicationNO">
+                                </div>
+
+
+                            </div>
+                            <div
+                                class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                                <div class="text-center">
+                                    <button type="submit" class="btn bg-info text-white mt-6 me-1"
+                                        (click)="saveSwapData('SWAP')">Submit</button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+    </div>
+</ng-template>

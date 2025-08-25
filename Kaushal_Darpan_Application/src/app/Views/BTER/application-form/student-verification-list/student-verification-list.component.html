@@ -1,0 +1,190 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Document Verification List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">BTER</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/DocumentStudentList" class="text-sm font-medium text-slate-700" aria-current="page">Students Verification</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<!-- end row -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Name</label>
+        <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.StudentName">
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+        <select class="form-select" name="DistrictID" id="ddlAction" [(ngModel)]="searchRequest.Status">
+          <option value="0">--Choose--</option>
+          <option *ngFor="let item of DocumentStatusList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllStudentData()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+          <i class="ti ti-refresh"></i>
+          Cancel
+        </button>
+      </div>
+
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3 w-full">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">ApplicationNo</th>
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Father Name</th>
+            <th class="text-left">Mother Name</th>
+            <th class="text-left">Mobile Number</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Document Verification</th>
+            <th class="text-Center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let Stud of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.ApplicationNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.StudentName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.FatherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.MotherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.MobileNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Stud.Email}}</td>
+            <td class="text-left">{{Stud.Status}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!--<button type="button" class="btn bg-info text-white" (click)="ViewHistory(row,Stud.ApplicationID)">Tap To See</button>-->
+                <a (click)="ViewHistory(row,Stud.ApplicationID)" title="View history"><i class="ti ti-eye"></i></a>
+                <a (click)="Onrouting(Stud.ApplicationID)" title="Document Mark"><i class="ti ti-check"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!--<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="modal-content">
+    <div class="card">
+
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Document List of Student</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Student Details</b>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+            <div><b>Student Name</b></div>
+            <div>{{request.StudentName}}</div>
+
+            <div><b>Father Name</b></div>
+            <div>{{request.FatherName}}</div>
+
+            <div><b>Mother Name</b></div>
+            <div>{{request.MotherName}}</div>
+
+            <div><b>Email</b></div>
+            <div>{{request.Email}}</div>
+
+            <div><b>MobileNumber</b></div>
+            <div>{{request.MobileNumber}}</div>
+
+          </div>
+          <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Document List</b>
+          </div>
+
+          <div class="overflow-x-auto mt-3 w-full">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr. No.</th>
+                  <th class="text-left">Document Name</th>
+                  <th class="text-left">Status</th>
+                  <th class="text-left">Remark</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dOC of request.VerificationDocumentDetailList; let idx=index  ">
+                  <td>{{idx+1}}</td>
+                  <td><a target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + dOC.Folder + '/' + dOC.FileName}}" class="text-success">{{dOC.ColumnName}}</a></td>
+                  <td>
+                    <select class="form-select" name="DistrictID" id="ddlAction" [(ngModel)]="dOC.Status">
+                      <option value="0">--Select--</option>
+                      <option *ngFor="let item of DocumentStatusList" [value]="item.ID">
+                        {{item.Name}}
+                      </option>
+                    </select>
+                    <div *ngIf="isSubmitted&&dOC.Status=='0'" class="text-danger">
+                      This field is required .!
+                    </div>
+                  </td>
+                  <td>
+                    <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="dOC.Remark"></textarea>
+                    <div *ngIf="isSubmitted&&dOC.Remark==''" class="text-danger">
+                      This field is required .!
+                    </div>
+                  </td>
+
+                </tr>
+
+              </tbody>
+            </table>
+
+            <div class="button-section">
+              <button type="button" (click)="SaveData_ApprovedCampus()" class="btn bg-info text-white mt-6">Approved</button>
+              <button type="button" class="btn bg-info text-white mt-6">Revert</button>
+            </div>
+
+          </div>
+           end row
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>-->
+<app-student-status-history></app-student-status-history>

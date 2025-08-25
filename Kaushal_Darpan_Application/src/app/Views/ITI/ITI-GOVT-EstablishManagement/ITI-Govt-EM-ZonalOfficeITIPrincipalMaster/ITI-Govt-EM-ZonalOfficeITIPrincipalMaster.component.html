@@ -1,0 +1,315 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6" >
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Zonal Office ITI Principal  </h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add-ITI-Govt-EM-Zonal-Office-ITI-Principal</b>
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Division</label>
+          <select class="form-select" [(ngModel)]="searchRequest.DivisionID" formControlName="ddlDivision">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of DivisionList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlDivision.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlDivision.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+        <div>
+          <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="OnFormSubmit()">Submit</button>
+          <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
+        </div>
+      </div>
+    </form>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Officers List</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--ID	DivisionName	DivisionID	DistrictID	DepartmentID	NameOfDistrict	NameOfInstitution_office	NameOfOfficer_DDO	AdditionalCharage_DDO	ActiveStatus	DeleteStatus	RTS	CreatedBy	ModifyBy	ModifyDate	IPAddress-->
+    <!--{{StaffMasterList|json}}-->
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Division Name</th>
+            <th class="text-left">Name Of District</th>
+            <th class="text-left">Name Of Institution  Office</th>
+            <th class="text-left">Name Of Officer DDO</th>
+            <th class="text-left">Additional Charage DDO</th>
+          
+            <!--<th class="text-left">Status</th>-->
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of ITIGovtEMOFFICERSList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.DivisionName}}</td>
+            <td>{{row.NameOfDistrict}}</td>
+            <td>{{row.NameOfInstitution_office}}</td>
+            <td>{{row.NameOfOfficer_DDO}}</td>
+            <td>{{row.AdditionalCharage_DDO}}</td>
+        
+          <!--<td>
+            <span class="py-1 px-2 bg-success text-white" *ngIf="row.ExaminerStatus==85">Approved</span>
+            <span class="py-1 px-2 bg-danger  text-white" *ngIf="row.ExaminerStatus==86">Draft</span>
+            <span class="py-1 px-2 bg-warning  text-white" *ngIf="row.ExaminerStatus==87">Submitted</span>
+          </td>-->
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <!--<a *ngIf="GetRoleID== _EnumRole.TITDTETraining || GetRoleID == _EnumRole.ITIAdmin_SCVT || GetRoleID == _EnumRole.DTETraing" href="javascript:void(0);" title="Edit" (click)="EditInfo(row.StaffID)"><i class="ti ti-pencil"></i></a>-->
+                <a href="javascript:void(0);" title="Update SSOID By Zonal" (click)="GetPopupSSOIDByZonal(row.ID)"><i class="ti ti-user"></i></a>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="ITIGovtEMOFFICERSList?.length==0">
+            <td colspan="10">
+              No Record Found
+            </td>
+
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<ng-template #SttafModelPriview let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div *ngIf="isModalOpen" class="card-header flex justify-between items-center">
+        <div class="flex-1 text-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Preview</b>
+        </div>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <!--<div *ngIf="isModalOpen" >-->
+        <!--<h4 class="text-center text-lg font-semibold mb-4">Confirmation</h4>-->
+        <div class="card tab-panels " id="Preview">
+          <div class="card-body p-5">
+
+            <div class="mb-6 w-full text-center">
+              <h3 class="m-0 text-3xl">Preview Staff Details</h3>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Teacher Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <!--<div class="col-span-2 text-center" style="text-align:center !important">
+                    <img src="assets/images/dummyImg.jpg" class="imgSignSelf" />
+                    <b class="block">फोटो (Photograph)</b>
+                </div>
+                <div class="col-span-2 text-center">
+                    <img src="assets/images/signature.jpg" class="imgSignSelf" />
+                    <b class="block">हस्ताक्षर (Signature)</b>
+                </div>-->
+
+                <div><b>Teacher Name:</b></div>
+                <div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Email:</b></div>
+                <div>{{staffDetailsFormData.Email}}</div>
+                <div><b>Mobile:</b></div>
+                <div>{{staffDetailsFormData.MobileNumber}}</div>
+                <div><b>Designation:</b></div>
+                <div>{{staffDetailsFormData.DesignationID}}</div>
+                <div><b>Date of Joining as lecture:</b></div>
+                <div>{{staffDetailsFormData.DateOfJoining}}</div>
+                <div><b>Date of Retirement:</b></div>
+                <div>{{staffDetailsFormData.DateOfAppointment}}</div>
+                <div><b>Number of years experience:</b></div>
+                <div>
+                  {{staffDetailsFormData.Experience}}
+                </div>
+                <div><b>Teacher Branch & code:</b></div>
+                <div>{{staffDetailsFormData.StreamName}}</div>
+
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5">Current Working Institute</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Institute Name:</b></div>
+                <div>{{staffDetailsFormData.InstituteName}}</div>
+                <div><b>Division:</b></div>
+                <div>{{staffDetailsFormData.InstituteDivision}}</div>
+                <div><b>District:</b></div>
+                <div>{{staffDetailsFormData.InstituteDistrict}}</div>
+                <div><b>Tehsil:</b></div>
+                <div>{{staffDetailsFormData.InstituteTehsil}}</div>
+
+              </div>
+            </div>
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Qualification Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>UG:</b></div>
+                <div>B.Tech</div>
+                <div><b>PG:</b></div>
+                <div>M.E.</div>
+                <div><b>PhD:</b></div>
+                <div>No</div>
+              </div>
+            </div>
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.StateName}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.District}}</div>
+                <!--<div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>-->
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>
+
+            <!--<div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Permanent Address</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Address Line 1</b></div><div>{{staffDetailsFormData.Address}}</div>
+                <div><b>State        </b></div><div>{{staffDetailsFormData.State}}</div>
+                <div><b>District     </b></div><div>{{staffDetailsFormData.district}}</div>
+                <div><b>Block/Tehsil </b></div><div>{{staffDetailsFormData.TehssilName}}</div>
+                <div><b>City/Village </b></div><div>{{staffDetailsFormData.City}}</div>
+                <div><b>Pincode      </b></div><div>{{staffDetailsFormData.Pincode}}</div>
+              </div>
+            </div>-->
+
+
+            <div class="mb-6">
+              <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"> Bank Account Details</b>
+              </div>
+              <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+                <div><b>Bank Name</b></div><div>{{staffDetailsFormData.BankName}}</div>
+                <div><b>Branch Name</b></div><div>{{staffDetailsFormData.BranchName}}</div>
+                <div><b>Name In Bank Account</b></div><div>{{staffDetailsFormData.Name}}</div>
+                <div><b>Account No.</b></div><div>{{staffDetailsFormData.BankAccountNo}}</div>
+                <div><b>IFSC Code</b></div><div>{{staffDetailsFormData.IFSCCode}}</div>
+                <div><b>PAN Card</b></div><div>{{staffDetailsFormData.PanCardNumber}}</div>
+              </div>
+            </div>
+
+
+          </div>
+          <!--<div class="card-footer text-center">
+            <button type="button" class="btn bg-primary text-white"><i class="ti ti-device-floppy"></i>Lock & Submit</button>
+          </div>-->
+        </div>
+
+
+      </div>
+
+
+      <!-- Close Button -->
+      <!--<div class="flex justify-center mt-4">
+        <button class="btn bg-info text-white" (click)="Confirm()">Confirm</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+      </div>-->
+    </div>
+    <!--</div>-->
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Dispatch Documents Uploads</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <!--{{searchRequestUpdateSSOIDByPricipleModel|json}}-->
+      <form [formGroup]="QueryReqFormGroup" id="QueryReqFormGroup">
+        <div class="card-body">
+
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+
+
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+            <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtSSOID"
+                   formControlName="txtSSOID" [(ngModel)]="searchRequestUpdateSSOIDByPricipleModel.SSOID" />
+            <div *ngIf="isSubmitted && _QueryReqFormGroup.txtSSOID.errors" class="text-danger">
+              <p *ngIf="_QueryReqFormGroup.txtSSOID.errors.required">
+                <i aria-hidden="true"></i>
+                This
+                field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </form>
+      <div class="card-footer text-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="UpdateSSOIDByPriciple()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</ng-template>
+
+<!-- end row -->

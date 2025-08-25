@@ -1,0 +1,157 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reservation Roster</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/ReservationRoster" class="text-sm font-medium text-slate-700" aria-current="page">Reservation Roster</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a href="javascript:void(0);" (click)="addReservationRoster(MyModel_AddReservationRoster,0)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i> Add Reservation Roster</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.CategoryId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Village</label>
+          <input type="text" class="form-input" placeholder="Search By Village Name:" [(ngModel)]="searchRequest.VillageName">
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getReservationRosterList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+     
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">Cast Category Name</th>
+            <th class="text-left">Reservation Percentage</th>
+            <th class="text-left">Is Horizontal Cateogory</th>
+            <th class="text-left">Department</th>
+            <th class="text-left">Academic Year</th>
+            <th class="text-left">Remarks</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ReservationRosterList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.CasteCategoryNameEnglish}}</td>
+            <td>{{item.ReservationPr}}</td>
+            <!--<td *ngIf="item.IsHorizontalCateogory==1">Yes</td>
+            <td *ngIf="item.IsHorizontalCateogory==0">No</td>-->
+            <td>{{item.HorizontalCateogory}}</td>
+            <td>{{item.DepartmentName}}</td>
+            <td>{{item.AcademicYearID}}</td>
+            <td>{{item.Remarks}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" (click)="addReservationRoster(MyModel_AddReservationRoster,item.Reservation_Id)" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" (click)="btnDeleteOnClick(item.Reservation_Id)" title="Delete"><i class="ti ti-trash"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_AddReservationRoster let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; {{Reservation_Id != 0 ? 'Edit Reservation Roster' : 'Add Reservation Roster'}} </b>
+        <button class="btn bg-info text-white" (click)="CloseAddReservationRoster()"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm" (ngSubmit)="saveData()">
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+              <select class="form-select" formControlName="ddlCategoryId" [(ngModel)]="request.CategoryId" [disabled]="isDisabled">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of CategoryList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlCategoryId.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlCategoryId.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Reservation Percentage</label>
+              <input class="form-input" formControlName="txtReservationPr" [(ngModel)]="request.ReservationPr" type="text" placeholder="" />
+              <div *ngIf="isSubmitted && groupForm.controls.txtReservationPr.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtReservationPr.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remarks</label>
+              <textarea class="form-input" formControlName="txtRemarks" [(ngModel)]="request.Remarks"  placeholder="" ></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemarks.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemarks.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"><input [(ngModel)]="request.IsHorizontalCateogory" type="checkbox" [ngModelOptions]="{standalone: true}"/> Is Horizontal Cateogory </label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button type="submit" id="btnSave" class="btn bg-info text-white mt-6">Submit</button>
+          <button type="button" id="btnCancel" (click)="ResetControl()" class="btn bg-info text-white mt-6">Cancel</button>
+        </div>
+        </form>
+    </div>
+  </div>
+</ng-template>
+
+<!-- end row -->

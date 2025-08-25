@@ -1,0 +1,22 @@
+/* Hide the checkbox input */
+.collapse-checkbox {
+  display: none;
+}
+
+/* Initially hide the collapsible element */
+.collapse.multi-collapse {
+  display: none;
+  transition: all 0.3s ease;
+}
+
+/* When the checkbox is checked, show the collapsible element */
+.collapse-checkbox:checked + label + .collapse {
+  display: block;
+}
+
+.multi-collapse.collapse.show {
+  display: block !important;
+  visibility: visible;
+  position: relative;
+}
+

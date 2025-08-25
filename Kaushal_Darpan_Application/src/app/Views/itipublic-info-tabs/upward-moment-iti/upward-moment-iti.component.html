@@ -1,0 +1,201 @@
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" *ngIf="!isOnStatus" >
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card" *ngIf="isOnStatus">
+  <div class="card-body p-5" >
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+        <h3 class="m-0">Apply For Upward Movement</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Application No.</label>
+        <input type="text" class="form-control" placeholder="Enter Application/Enrollment No"
+               [(ngModel)]="searchRequest1.ApplicationNo">
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">DOB</label>
+        <input type="date" class="form-control" placeholder="Enter Select DOB"
+               [(ngModel)]="searchRequest1.DOB">
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <label class="form-label">Captcha Code:</label>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex justify-content-between">
+            <img src="assets/images/captcha.jpg" style="height:34px" />
+            <button class="btn bg-purple-100 icon-btn"><i class="ti ti-refresh"></i></button>
+          </div>
+          <input type="text" class="form-control" placeholder="Enter Captcha">
+        </div>
+
+      </div>
+
+      <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+        <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClickAllotListITI()">
+          <i class="ti ti-search"></i>Search
+        </button>
+        <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-3" *ngIf="isShowGrid">
+      <div class="col-lg-12">
+        <div class="w-100 mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        </div>
+        <div *ngIf="StudentDetailsModelList && StudentDetailsModelList.length > 0" class="w-100">
+          <h5>Application Info:</h5>
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th align="left">Application Number</th>
+                  <th align="left">Applicant Name</th>
+                  <th align="left">Category</th>
+                  <th align="left">Date of Birth</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td align="left" style="width:20%">{{StudentDetailsModelList[0].ApplicationNo}}</td>
+                  <td align="left" style="width:25%">{{StudentDetailsModelList[0].StudentName}}</td>
+                  <td align="left" style="width:25%">{{StudentDetailsModelList[0].StudentCategory}}</td>
+                  <td align="left" style="width:25%">{{StudentDetailsModelList[0].DOB | date:'dd/MM/yyyy'}}</td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngIf="StudentDetailsModelList && StudentDetailsModelList.length > 0">
+          <h5>Allotment Info:</h5>
+          <div class="table-responsive mt-3">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th align="left">Trade Level</th>
+                  <th align="left">College Name</th>
+                  <th align="left">Trade Name</th>
+                  <th align="left">Alloted Category</th>
+                  <th align="left">Alloted Priority</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of StudentDetailsModelList; let idx=index; ">
+                  <td align="left" style="width:20%">{{item.TradeLevelId}}th</td>
+                  <td align="left" style="width:20%">{{item.CollegeName}}</td>
+                  <td align="left" style="width:20%">{{item.BranchName}}({{item.TradeScheme}})</td>
+                  <td align="left" style="width:12.5%">{{item.AllotedCategory}}</td>
+                  <td align="left" style="width:12.5%">{{item.AllotedPriority}} </td>
+                  <td align="center">
+                    <button class="btn bg-success text-white btn-sm" *ngIf="item.AllotmentStatus==4 && item.AllotedPriority>1"
+                            (click)="openSubmitOTP(modal_UpwardMovement,item)" type="button">
+                      Apply In Upward
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+ <!--<div class="overflow-x-auto mt-3" *ngIf="isShowGrid">
+     <table class="table table-border w-full table-auto" cellpadding="5">
+       <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+         <tr>
+           <th class="text-left">Sr. No.</th>
+           <th class="text-left">Student Name</th>
+           <th class="text-left">Father Name</th>
+           <th class="text-left">Mother Name</th>
+
+           <th class="text-left">Email</th>
+           <th class="text-Center">Action</th>
+         </tr>
+       </thead>
+       <tbody>
+         <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
+           <td>{{idx+1}}</td>
+           <td>{{row.StudentName}}</td>
+           <td>{{row.FatherName}}</td>
+           <td>{{row.MotherName}}</td>
+
+           <td>{{row.Email}}</td>
+
+           <td class="text-center">
+
+             <button class="btn bg-success text-white btn-sm"
+                     (click)="openModal(modal_UpwardMovement,row)" type="button">
+               Upward Moment?
+             </button>
+           </td>
+         </tr>
+         <tr *ngIf="StudentDetailsModelList?.length === 0">
+           <td colspan="15"> No records found</td>
+         </tr>
+       </tbody>
+     </table>
+
+
+</div>-->
+</div>
+
+
+
+<ng-template #modal_UpwardMovement let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="modal-header d-flex align-items-center justify-content-between">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Acknowledgement </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body p-5">
+        <div class="row">
+          <div class="col-md-12">
+            <input class="me-2" type="checkbox" value="true" [(ngModel)]="request.IsUpward" />
+            <label class="me-2">
+              क्या आप अपवर्ड मोमेंट के लिए आवेदन करना चाहते हो(Do you want to apply for
+              Upward Movement?)
+            </label>
+          </div>
+          <div class="col-md-12">
+            <button [disabled]="!request.IsUpward" type="button" class="btn bg-info text-white mt-6 me-1"
+                    (click)="ITIUpwardMomentUpdate()">
+              Submit
+            </button>
+          </div>
+          <div class="col-md-12">
+            <div class="w-100 my-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-pencil"></i> Note - यदि आप यहां अपवर्ड मूवमेंट के लिए आवेदन करते हैं और आपको नया कॉलेज आवंटित किया जाता है, तो पुराने आवंटित कॉलेज में आपकी उपस्थिति रद्द कर दी जाएगी और आपको नए आवंटित कॉलेज में अपनी उपस्थिति दर्ज करानी होगी।</b>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal>

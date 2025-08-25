@@ -1,0 +1,144 @@
+<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+  <h3 class="mt-0 text-white">All Campus List</h3>
+  <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p>
+</div>
+
+<div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
+  <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
+  <div class="container-xl position-relative" style="z-index:9999">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card all-post-filer mb-3">
+          <div class="card-header">
+            <h4>Filter</h4>
+          </div>
+          <div class="card-body">
+
+            <form class="row g-3 align-items-end">
+              <div class="col-md-3">
+                <label for="inputState" class="form-label">Branch</label>
+                <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
+                        name="branch" [(ngModel)]="StreamID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of BranchMasterList"
+                          [value]="item.StreamID">
+                    ({{item.Code}}) {{item.Name}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date"
+                       class="form-control"
+                       [(ngModel)]="CampusFromDate"
+                       name="CampusFromDate"
+                       [max]="CampusToDate">
+              </div>
+              <div class="col-md-3">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date"
+                       class="form-control"
+                       [(ngModel)]="CampusToDate"
+                       name="CampusToDate"
+                       [min]="CampusFromDate">
+              </div>
+              <div class="col-md-3">
+                <label for="inputState" class="form-label">Session Year</label>
+                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
+                  <option value=0>--All--</option>
+                  <option value=8>2024-2025</option>
+                  <option value=9>2025-2026</option>
+                  <!--<option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
+                    {{item.YearName}}
+                  </option>-->
+                </select>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">College Name: </label>
+                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
+                  <option value=0>--All--</option>
+                  <option *ngFor="let item of CollegeList" [value]="item.InstituteID">
+                    {{item.InstituteName}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">
+                  <i class="ti ti-search me-2"></i> Search
+                </button>
+              </div>
+              <div>
+                <div class="btn text-white StateLevelPoolCampus mt-4"></div><label>State Level Pool Campus</label>
+                <div class="btn text-white InstituteLevelCampus mt-4"></div><label>Institute Level Campus</label>
+                <div class="btn text-white DivisionLevelPoolCampus mt-4"></div><label>Division Level Pool Campus</label>
+                <!--<div  class="btn text-white SuspendLevelCampus mt-4"></div><label>Suspend Level Campus</label>-->
+              </div>
+            </form>
+          </div>
+        </div>
+        <!--{{CampusPostList|json}}-->
+
+        <div class="card">
+          <div class="card-body p-0">
+            <ul class="marqueeUl postlist-mar">
+              <li class="marqueeUlCampus p-0" *ngFor="let item of CampusPostList;">
+                <div class="d-flex {{item.CampusTypeClass}} p-3">
+                  <div class="iconMarquee d-flex justify-content-center align-items-center">
+                    <i class="fa fa-building-o"></i>
+                  </div>
+                  <div class="contentMarquee">
+                    <!--<b class="d-block">{{item.PostNo}}</b>-->
+
+                    <div class="d-flex justify-content-between">
+                      <div class="postno">
+                        <!--<b class="d-block">{{item.PostNo}}</b>-->
+
+                        <b style="border-color: #b4cedf;" width="140px">
+                          {{ ('2025-26')+ '-' + (item.InstituteCode | number:'3.0') + '-' + item.PostID }}
+                        </b>
+
+                      </div>
+                      <div class="compButton d-flex">
+                        <a *ngIf="item.ConsentList != null && item.ConsentList != undefined" class="btn bg-primary text-white downlod-btn-mar" (click)="DownloadPdf(item.ConsentList)"><i class="ti ti-download"></i></a>
+                        <a *ngIf="item.FinalPlaceList != null && item.FinalPlaceList != undefined" class="btn bg-primary text-white downlod-btn-mar mx-2" (click)="DownloadPdf(item.FinalPlaceList)"><i class="ti ti-download"></i></a>
+                        <a *ngIf="item.ShortList != null && item.ShortList != undefined" class="btn bg-primary text-white downlod-btn-mar" (click)="DownloadPdf(item.ShortList)"><i class="ti ti-download"></i></a>
+                      </div>
+
+
+                    </div>
+                    <h4 class="my-2">{{item.CompanyName}}</h4>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>Total No. of Vacancy:{{item.TotalPositions}} </span>
+                      <span [innerHtml]="item.JobDescription"></span>
+                    </div>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>
+                        Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;{{item.CampusFromDate}}<br />
+                        <span class="bold">Campus Orgnize By: {{item.TPOCollegeName}}</span>
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-end w-100">
+                      <a [routerLink]="'/singlepost'" [queryParams]="{post:item.PostID}" class="btn  btn-primary text-white  me-2" *ngIf="item.IsShowMoreDetails==true">View More Details</a>
+                      <a href="https://sso.rajasthan.gov.in/" target="_blank" class="btn btn-info text-white ">Give Consent</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<div class="row mt-2 justify-content-center">
+      <div class="col-lg-2 col-md-4 col-sm-6 col-12 mt-3" *ngFor="let item of PlacementCompanyList;">
+        <a href="{{item.Website}}" target="_blank" class="d-block">
+          <img src="{{appsettingConfig.StaticFileRootPathURL}}{{_GlobalConstants.PlacementCompanyFolder}}/{{item.Logo}}" class="img-fluid img-thumbnail" />
+        </a>
+      </div>
+    </div>-->
+
+  </div>
+</div>

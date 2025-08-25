@@ -1,0 +1,312 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">User Approve</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">User Request</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!--<a href="/UserRequest" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>-->
+
+        <div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Approved Status</label>
+            <select class="form-select" [(ngModel)]="userRequest.UserStatus">
+              <option value="">--All--</option>
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetUserRequestList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">Designation</th>
+            <th class="text-left">AadhaarNo</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">MobileNo</th>
+            <th class="text-left">Division</th>
+            <th class="text-left">District</th>
+            <th class="text-left">Institute</th>
+            <th class="text-left">Role</th>
+            <th class="text-left">UserStatus</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let userReq of UserRequestList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.SSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.Designation}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.AadhaarID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.Email}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.MobileNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.Division}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.District}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.Institute}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{userReq.RoleNameEnglish}}</td>
+            <td>{{userReq.UserStatus}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" title="User Approved" (click)="onEdit(MyModel_UpdateUserReq, userReq)"><i class="ti ti-pencil"></i></a>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+<!-- Modal -->
+<ng-template #MyModel_UpdateUserReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><!--<i class="fa fa-plus"></i>&nbsp;Edit Student Details # {{userReq.UserID}}--></b>
+        <button class="btn bg-info text-white" (click)="closeModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <form [formGroup]="UserRequestFormGroup">
+
+          <div class="mb-8">
+            <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Update User Satatus</b>
+              <span class="text-danger">(* fields are mandatory)</span>
+            </div>
+            <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+
+              <div>
+                <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  User Name<span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="User Name" class="form-input" id="txtUserName" name="txtUserName" formControlName="Name"
+                       [(ngModel)]="request.Name">
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.Name.errors?.required" class="text-danger">
+                  <p>This field is required!</p>
+                </div>
+
+              </div>
+
+              <div>
+                <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  User Email<span class="StarMarking">*</span>
+                </label>
+                <input type="email" placeholder="Email" class="form-input" id="Email" name="Email"
+                       formControlName="Email" [(ngModel)]="request.Email">
+                <div *ngIf="isSubmitted&&_UserRequestFormGroup.Email.errors" class="text-danger">
+                  <p *ngIf="_UserRequestFormGroup.Email.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Designation <span class="StarMarking">*</span>
+                </label>
+                <select formControlName="ddlDesignation" class="form-select" id="ddlDesignation" [(ngModel)]="request.DesignationID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of DesignationMasterList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isSubmitted&&_UserRequestFormGroup.ddlDesignation.errors" class="text-danger">
+                  <p *ngIf="!_UserRequestFormGroup.ddlDesignation.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="AadhaarID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Aadhaar No<span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="Aadhaar ID" class="form-input" id="AadhaarID" name="AadhaarID" formControlName="AadhaarID"
+                       [(ngModel)]="request.AadhaarID" maxlength="12">
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.AadhaarID.errors" class="text-danger">
+                  <p *ngIf="_UserRequestFormGroup.AadhaarID.errors.required">
+                    <i aria-hidden="true"></i> This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="SSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  SSO ID<span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="SSO ID" class="form-input" id="SSOID" name="SSOID" formControlName="SSOID"
+                       [(ngModel)]="request.SSOID">
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.SSOID.errors" class="text-danger">
+                  <p *ngIf="_UserRequestFormGroup.SSOID.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="MobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                  Mobile No<span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="Mobile No" class="form-input" id="MobileNo" name="MobileNo" formControlName="MobileNo"
+                       [(ngModel)]="request.MobileNo" maxlength="10">
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.MobileNo.errors" class="text-danger">
+                  <p *ngIf="_UserRequestFormGroup.MobileNo.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="divisionID" class="text-gray-800 text-sm font-medium inline-block mb-2">Division<span class="StarMarking">*</span></label>
+                <select formControlName="divisionID" class="form-select" id="divisionID" (change)="ddlDivision_Change()"
+                        [(ngModel)]="request.DivisionID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+                </select>
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.divisionID.errors" class="text-danger">
+                  <p *ngIf="!_UserRequestFormGroup.divisionID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="districtID" class="text-gray-800 text-sm font-medium inline-block mb-2"> District<span class="StarMarking">*</span></label>
+                <select formControlName="districtID" class="form-select" id="districtID" (change)="ddlDistrict_Change()"
+                        [(ngModel)]="request.DistrictID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+                    {{item.Name}}
+                  </option>
+                </select>
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.districtID.errors" class="text-danger">
+                  <p *ngIf="!_UserRequestFormGroup.districtID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="InstituteID" class="text-gray-800 text-sm font-medium inline-block mb-2"> Institute <span class="StarMarking">*</span></label>
+                <select formControlName="InstituteID" class="form-select" id="InstituteID"
+                        [(ngModel)]="request.InstituteID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let item of InstituteMasterList" [value]="item.ID">
+                    {{item.Name}}
+                  </option>
+                </select>
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.InstituteID.errors" class="text-danger">
+                  <p *ngIf="!_UserRequestFormGroup.InstituteID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="UserStatus" class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+                <select formControlName="UserStatus" class="form-select" id="UserStatus" [(ngModel)]="request.UserStatus">
+                  <option value="0">--Select Sataus--</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Approved">Approved</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.UserStatus.errors" class="text-danger">
+                  <p *ngIf="_UserRequestFormGroup.UserStatus.errors.required">
+                    <i aria-hidden="true"></i> This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
+
+
+              <div>
+                <label for="RoleID" class="text-gray-800 text-sm font-medium inline-block mb-2">Roles<span class="StarMarking">*</span></label>
+                <select formControlName="RoleID" class="form-select" id="RoleID"
+                        [(ngModel)]="request.RoleID">
+                  <option value="0">--Select--</option>
+                  <option *ngFor="let Role of RoleMasterList" [value]="Role.ID">{{Role.Name}}</option>
+
+                </select>
+                <div *ngIf="isSubmitted && _UserRequestFormGroup.RoleID.errors" class="text-danger">
+                  <p *ngIf="!_UserRequestFormGroup.RoleID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div>
+            <button type="button" (click)="UpdateUserReqData()" class="btn bg-info text-white mt-6 me-1">Update</button>
+            <button type="button" (click)="closeModal()" class="btn bg-danger text-white">Cancel</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>

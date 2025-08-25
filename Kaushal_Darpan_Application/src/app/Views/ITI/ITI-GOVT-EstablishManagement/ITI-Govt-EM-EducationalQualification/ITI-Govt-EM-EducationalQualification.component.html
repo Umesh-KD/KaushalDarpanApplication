@@ -1,0 +1,226 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Govt EM Educational Qualification</h4>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div *ngIf="!IsLockandSubmit" class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add ITI Govt EM Educational Qualification</b>
+      <!--<a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class="ti ti-chevron-left"></i> Back
+      </a>-->
+    </div>
+    <form [formGroup]="AddStaffBasicDetailFromGroup">
+
+
+
+      <div *ngIf="!IsLockandSubmit" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level Of Exam <span class="StarMarking">*</span> </label>
+
+          <select class="form-select" [(ngModel)]="formData.LevelOfExamID" formControlName="ddlLevelOfExamId">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ExamOfLevelList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlLevelOfExamId.errors" class="text-danger">
+        <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlLevelOfExamId.errors.DropdownValidators">
+          <i aria-hidden="true"></i>This
+          field is required .!
+        </p>
+      </div>
+        </div>
+
+        <div>
+          <label for="txtNameOfTheExam" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of The Exam <span class="StarMarking">*</span> </label>
+          <input type="text" class="form-input" id="txtNameOfTheExam" name="txtNameOfTheExam" formControlName="txtNameOfTheExam" [(ngModel)]="formData.NameOfTheExam" placeholder="Enter Name Of The Exam" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtNameOfTheExam.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtNameOfTheExam.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtNameOfTheExam.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">  Exam Type <span class="StarMarking">*</span></label>
+
+          <select class="form-select" [(ngModel)]="formData.ExamTypeID" formControlName="ddlExamTypeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlExamTypeID.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlExamTypeID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="txtNameOfTheBoard" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name
+            of the Board/University <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="txtNameOfTheBoard" name="txtNameOfTheBoard" formControlName="txtNameOfTheBoard" [(ngModel)]="formData.NameOfTheBoard_University" placeholder="Enter Name Of The Board/University" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtNameOfTheBoard.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtNameOfTheBoard.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtNameOfTheBoard.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtStateOfTheBoard" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            State of the Board/University
+          </label>
+          <input type="text" class="form-input" id="txtStateOfTheBoard" name="txtStateOfTheBoard" formControlName="txtStateOfTheBoard" [(ngModel)]="formData.StateOfTheBoard_University" placeholder="Enter State of the Board/University" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtStateOfTheBoard.errors" class="text-danger">
+            
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtStateOfTheBoard.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="txtDateOfPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Date Of Passing
+          </label>
+          <input type="date" class="form-input" id="txtDateOfPassing" name="txtDateOfPassing" formControlName="txtDateOfPassing" [(ngModel)]="formData.DateOfPassing" placeholder="Enter Date Of Passing" />
+
+        </div>
+
+        <!--<div>
+          <label for="txtYearOfPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Year Of Passing
+          </label>
+          <input type="date" class="form-input" id="txtYearOfPassing" name="txtYearOfPassing" formControlName="txtYearOfPassing" [(ngModel)]="formData.YearOfPassing" placeholder="Enter Year Of Passing" />
+
+        </div>-->
+
+        <div>
+          <label for="txtSubject_Occupation_Branch" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Subject/Occupation/Branch
+          </label>
+          <input type="text" class="form-input" id="txtSubject_Occupation_Branch" name="txtSubject_Occupation_Branch" formControlName="txtSubject_Occupation_Branch" [(ngModel)]="formData.Subject_Occupation_Branch" placeholder="Enter Subject/Occupation/Branch" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtSubject_Occupation_Branch.errors" class="text-danger">
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSubject_Occupation_Branch.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="txtNameOfTheInstituteFromWherePassed" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Name Of The Institute From Where Passed
+          </label>
+          <input type="text" class="form-input" id="txtNameOfTheInstituteFromWherePassed" name="txtNameOfTheInstituteFromWherePassed" formControlName="txtNameOfTheInstituteFromWherePassed" [(ngModel)]="formData.NameOfTheInstituteFromWherePassed" placeholder="Enter Name Of The Institute From Where Passed" />
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.txtNameOfTheInstituteFromWherePassed.errors" class="text-danger">
+
+            <p *ngIf="_AddStaffBasicDetailFromGroup.txtNameOfTheInstituteFromWherePassed.errors.pattern"><i aria-hidden="true"></i> Only letters and spaces are allowed. Numbers or symbols are not permitted.</p>
+          </div>
+        </div>
+
+
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3" *ngIf="CheckUserID==0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+        <div class="text-end">
+          <button type="button"
+                  class="btn bg-info text-white mt-6" (click)="AddEducation()">
+            Add
+          </button>
+          <button type="button"
+                  class="btn bg-danger text-white mt-6" (click)="ResetControl()">
+            Cancel
+          </button>
+        </div>
+      </div>
+      <div *ngIf="AddedEducationList?.length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Educational Qualification List</b>
+      </div>
+      <div *ngIf="AddedEducationList?.length>0" class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">Sr</th>
+              <th class="text-left">Level of Exam</th>
+              <th class="text-left">Name of the Exam</th>
+              <th class="text-left">Type</th>
+              <th class="text-left">Name of the Board/University</th>
+              <th class="text-left">
+                State of the Board/University (Rajasthan/Other than
+                Rajasthan)
+              </th>
+              <th class="text-left">Date of passing</th>
+              <!--<th class="text-left">Year of Passing</th>-->
+              <th class="text-left">Subject/Occupation/Branch </th>
+              <th class="text-left">Name of the Institute from where passed</th>
+              <th>Action </th>
+
+            </tr>
+
+          </thead>
+        
+          <tbody>
+            <tr *ngFor="let row of AddedEducationList; let idx = index;">             
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.LevelOfExamName}}</td>
+              <td class="text-left">{{row.NameOfTheExam}}</td>
+              <td class="text-left">{{row.ExamTypeName}}</td>
+              <td class="text-left">{{row.NameOfTheBoard_University}}</td>
+              <td class="text-left">{{row.StateOfTheBoard_University}}</td>
+              <td class="text-left">{{row.DateOfPassing}}</td>
+              <!--<td class="text-left">{{row.YearOfPassing}}</td>-->
+              <td class="text-left">{{row.Subject_Occupation_Branch}}</td>
+              <td class="text-left">{{row.NameOfTheInstituteFromWherePassed}}</td>
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)" *ngIf="CheckUserID==0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="mt-4" style="margin-top:20px;">
+        <strong>Note 01.</strong> Enter only one exam in one line. 02.
+        If there is more than one qualification of one level, use separate names for
+        each qualification (one qualification in one line). 03. Use either Rajasthan
+        or Other than Rajasthan in column 6. 04. In column 7, enter the date of the
+        exam result only after looking at the mark sheet of the employee.
+
+        05. In case you have qualification more than 10, get a photocopy of this
+        page and enter it on other page using lower number 11.
+      </p>
+
+      <div class="p-4" *ngIf="CheckUserID==0 && (_EnumEMProfileStatus.Pending == sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Revert== sSOLoginDataModel.ProfileID || _EnumEMProfileStatus.Completed== sSOLoginDataModel.ProfileID)">
+        <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+     
+      </div>
+
+    </form>
+
+
+
+  </div>
+</div>
+
+
+
+
+
+
+<!-- end row -->

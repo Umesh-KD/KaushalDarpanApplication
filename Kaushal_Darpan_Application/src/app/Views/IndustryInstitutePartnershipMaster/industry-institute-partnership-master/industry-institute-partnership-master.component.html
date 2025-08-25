@@ -1,0 +1,198 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Industry Institute Partnership Master</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Industry Institute Partnership Master</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+            <option value="0">--All--</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Hold">Hold</option>
+          </select>
+        </div>
+        <div>
+
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--{{IndustryInstitutePartnershipMasterList|json}}-->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Website</th>
+            <th class="text-left">Address</th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of IndustryInstitutePartnershipMasterList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Website}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Address}}</td>
+            <td>{{item.Status}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{IndustryInstitutePartnershipID:item.ID, key:1}" *ngIf="(item.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete" *ngIf="(item.Status=='Pending')" (click)="DeleteById(item.ID)">
+                  <i class="ti ti-trash"></i>
+                </a>
+                <a href="javascript:void(0);" title="Event" (click)="onSubmit(modal_SubmitReq, item)" *ngIf="(item.Status=='Pending')">
+                  <i class="ti ti-calendar-week"></i>
+                </a>
+                <a [routerLink]="'/IndustryTrainingList'" [queryParams]="{IndustryID:item.ID, key:1}" title="Event List"><i class="ti ti-list"></i></a>
+                <div *ngIf="item.CompanyDocument" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a download target="_blank" href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.CompanyDocument}}" title="Download"><i class="ti ti-download"></i></a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- end row -->
+<ng-template #modal_SubmitReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Event Type <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="request.EventTypeID" formControlName="ddlEventTypeID">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of EventTypelist" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlEventTypeID.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlEventTypeID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Event Date : <span class="StarMarking">*</span>
+              </label>
+              <input formControlName="txtEventDate" class="form-input" placeholder="txtEventDate" type="date"
+                     id="txtEventDate" [min]="todayDate" [(ngModel)]="request.EventDate" (change)="onEventDateChange()">
+              <div *ngIf="isSubmitted && groupForm.controls.txtEventDate.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtEventDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester : <span class="StarMarking">*</span></label>
+              <select class="form-select ng-pristine ng-valid ng-touched" formControlName="ddlSemesterID" [(ngModel)]="request.SemesterID">
+                <option value="0">--Select--</option>
+                @for (item of SemesterMasterList; track item) {
+                <option [value]="item.SemesterID">{{item.SemesterName}}</option>
+                }
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlSemesterID.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlSemesterID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch : <span class="StarMarking">*</span></label>
+              <select class="form-select ng-pristine ng-valid ng-touched" formControlName="ddlTradeID" [(ngModel)]="request.TradeID">
+                <option value="0">--Select--</option>
+                @for (item of ItiTradeList; track item) {
+                <option [value]="item.StreamID">{{item.StreamName}}</option>
+                }
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlTradeID.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlTradeID.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+
+            
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Purpose <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="request.Purpose" formControlName="txtPurpose"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtPurpose.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtPurpose.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

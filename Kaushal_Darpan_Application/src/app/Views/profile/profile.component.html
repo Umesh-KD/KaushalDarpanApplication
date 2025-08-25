@@ -1,0 +1,76 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/profile" class="text-sm font-medium text-slate-700" aria-current="page">Profile</a>
+    </div>
+  </div>
+</div>
+<div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body">
+      <div class="Profilebox flex justify-between">
+        <div class="profilePic">
+          <img src="assets/images/users/avatar-6.jpg" />
+        </div>
+        <div class="userInfos">
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-3">
+            <div>
+              <label>SSOID:</label>
+              <span>{{ProfileLists.SSOID}}</span>
+            </div>
+            <!-- <div>
+              <label>Name:</label>
+              <span>{{ProfileLists.FirstName}}</span>
+            </div>
+            <div>
+              <label>Name:</label>
+              <span>{{ProfileLists.LastName}}</span>
+            </div> -->
+            <div>
+              <label>Name: </label>
+              <span>{{ProfileLists.FirstName}} {{ProfileLists.LastName}}</span>
+            </div>
+            <div>
+              <label>Email : </label>
+              <span>{{ProfileLists.MailPersonal}}</span>
+            </div>
+            <div>
+              <label>Phone : </label>
+              <span>{{ProfileLists.Mobileno}}</span>
+            </div>
+            <div>
+              <label>Gender : </label>
+              <span>{{ProfileLists.Gender}}</span>
+            </div>
+            <!-- <div>
+              <label>Institute Name : </label>
+              <span>{{ProfileLists.InstituteName}}</span>
+            </div> -->
+            <!-- <div>
+              <label>Stream Name : </label>
+              <span>{{ProfileLists.StreamName}}</span>
+            </div>
+            <div>
+              <label>Semester : </label>
+              <span>{{ProfileLists.SemesterName}}</span>
+            </div>
+            <div>
+              <label>Enrollment No : </label>
+              <span>{{ProfileLists.EnrollmentNo}}</span>
+            </div> -->
+            <div>
+              <label>Address : </label>
+              <span>{{ProfileLists.PostalAddress}}</span>
+            </div>
+            <div>
+              <label>PostalCode : </label>
+              <span>{{ProfileLists.PostalCode}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

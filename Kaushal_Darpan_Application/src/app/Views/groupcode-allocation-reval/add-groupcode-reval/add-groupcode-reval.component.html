@@ -1,0 +1,207 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Group Code Add Reval</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Group Code Allocation Reval</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Group Code Add Reval</a>
+    </div>
+  </div>
+  <a routerLink="/groupcodeallocationreval" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div>
+          <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Center CCode</a>
+          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white">
+            <i class="ti ti-list"></i>Selected Center
+            List
+          </a>-->
+        </div>
+      </div>
+      <form [formGroup]="GroupCodeAllocationSearchForm">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <!--semester-->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="SemesterID" id="SemesterID" [(ngModel)]="searchRequest.SemesterId" >
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SemestarMasterDDLList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+            </select>
+            <div *ngIf="isSubmitted && GroupCodeAllocationSearchForm.get('SemesterID').errors" class="text-danger">
+              <p *ngIf="!GroupCodeAllocationSearchForm.get('SemesterID').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+          <!--commonsubject(yes/no)-->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Common Subject (Yes/No) <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="CommonSubjectYesNo" id="CommonSubjectYesNo" [(ngModel)]="searchRequest.CommonSubjectYesNo">
+              <option value="0">--Select--</option>
+              <option value="1">No</option>
+              <option value="2">Yes</option>
+            </select>
+            <div *ngIf="isSubmitted && GroupCodeAllocationSearchForm.get('CommonSubjectYesNo').errors" class="text-danger">
+              <p *ngIf="!GroupCodeAllocationSearchForm.get('CommonSubjectYesNo').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+          <!--Size-->
+          <div>
+            <label for="PartitionSize">Partition Size: <span class="StarMarking">*</span></label>
+            <input formControlName="PartitionSize" class="form-input" type="number" min="0" id="PartitionSize" placeholder="Enter Page Size"
+                   [(ngModel)]="searchRequest.PartitionSize" max="10000000">
+            <div *ngIf="isSubmitted && GroupCodeAllocationSearchForm.get('PartitionSize').errors" class="text-danger">
+              <p *ngIf="!GroupCodeAllocationSearchForm.get('PartitionSize').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetPartitionData()">Search & Create Part</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </div>
+      </form>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> List For Select</b>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Semester</th>
+            <th class="text-left">Subject Code</th>
+            <th class="text-left">Common Subject</th>
+            <th class="text-left">Total Paper</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let item of GroupCodeList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.SemesterName}}</td>
+            <td>{{item.SubjectCode}} ({{item.SubjectName}})</td>
+            <td>{{item.CommonSubjectName}}</td>
+            <td>
+              {{item.Total}} &nbsp;&nbsp;
+              <button type="button" class="btn bg-info text-white mt-6" *ngIf="item.UpShiftPageNumber>0" 
+                  title="click here to up shift the record."
+                  (click)="OpenPopupAndMergeGroupSubject(ModelPopup_MergeGroupCode, item)">
+                Shift & Merge
+              </button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-4" *ngIf="GroupCodeList.length>0">
+      <div class="text-center">
+        <button class="btn bg-success text-white" type="button" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"
+         (click)="SavePartitionData()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- end row -->
+
+<!--Model shift and merge, start-->
+<ng-template #ModelPopup_MergeGroupCode let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-edit"></i>&nbsp;Merge Group Subject Paper </b>
+        <button class="btn bg-info text-white" (click)="ClosePopupAndMergeGroupSubject()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div>
+            <div class="overflow-x-auto mt-3">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                  <tr>
+                    <th class="text-center" style="width:8%;">Merge into</th>
+                    <th class="text-left">Semester</th>
+                    <th class="text-left">Subject Code</th>
+                    <th class="text-left">Common Subject</th>
+                    <th class="text-left">Total Paper</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of RemaningShiftableGroupSubjects; let idx=index;">
+                    <td class="text-center"><input type="radio" name="ToSelected" [(ngModel)]="toSelectedIndex" [value]="idx"
+                               (change)="updateSelectionInListOfToSelected(idx)"/> </td>
+                    <td>{{item.SemesterName}}</td>
+                    <td>{{item.SubjectCode}}</td>
+                    <td>{{item.CommonSubjectName}}</td>
+                    <td>{{item.Total}}</td>
+                  </tr>
+                </tbody>
+
+                <tbody>
+                  <tr>
+                    <td class="text-center" style="font-weight: bold;">Merge from >> </td>
+                    <td>{{FromShiftableGroupSubjects.SemesterName}}</td>
+                    <td>{{FromShiftableGroupSubjects.SubjectCode}}</td>
+                    <td>{{FromShiftableGroupSubjects.CommonSubjectName}}</td>
+                    <td>{{FromShiftableGroupSubjects.Total}}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="card-footer text-center">
+        <button type="button" (click)="ShiftAndMergeToSubject()"
+                class="btn bg-info text-white inline-block mt-5">
+          <i class="fa fa-check"></i>   Ok
+        </button>
+
+        <button type="button" (click)="ClosePopupAndMergeGroupSubject()"
+                class="btn bg-danger text-white inline-block mt-5">
+          <i class="fa fa-remove"></i>   Close
+        </button>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+<!--Model shift and merge, end-->

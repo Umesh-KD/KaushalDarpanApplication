@@ -1,0 +1,133 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Principle Multiple Institute Alloat</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">ITI GOVT Establish Management</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/principle-multiple-institute-alloat" class="text-sm font-medium text-slate-700" aria-current="page">Principle Multiple Institute Alloat List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <!--<div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+      </div>
+
+    </div>-->
+    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+    </div>-->
+    <!--<button type="button" class="btn bg-info text-white mt-6" (click)="btn_Update()">Save</button>-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">Principal Name</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of PrincipleList; let idx = index;">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ row.Name }}</td>
+            <td>{{ row.SSOID }}</td>
+            <!--<td>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+                <ng-select [(ngModel)]="row.InstituteID"
+                           [clearable]="false"
+                           (change)="onInstituteSelect(row.UserID, row.InstituteID)">
+
+                  <ng-option [value]="0">--All--</ng-option>
+
+                  <ng-option *ngFor="let item of InstituteMasterList"
+                             [value]="item.InstituteID"
+                             [disabled]="isInstituteSelectedByAnotherRow(row.UserID, item.InstituteID)">
+                    {{ item.InstituteName }}
+                  </ng-option>
+
+                </ng-select>
+              </div>
+            </td>-->
+
+          <td>
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
+    <ng-select [(ngModel)]="row.InstituteID"
+               [clearable]="false"
+               (change)="onInstituteSelect(row.UserID, row.InstituteID)">
+
+      <ng-option [value]="0">--All--</ng-option>
+
+      <ng-option *ngFor="let item of InstituteMasterList"
+                 [value]="item.InstituteID"
+                 [disabled]="isInstituteSelectedByAnotherRow(row.UserID, item.InstituteID)">
+        {{ item.InstituteName }}
+      </ng-option>
+
+    </ng-select>
+  </div>-->
+            <a  href="javascript:void(0);" id="btnDelete" title="Assign Institute" (click)="openModal(modal_AddInsitute,row)"><i class="ti ti-plus"></i></a>
+          </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+
+  </div>
+</div>
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>
+          <i class="fa fa-plus"></i>&nbsp;Assign Insitute Principal
+
+        </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 400px;overflow:auto">
+        <div class="mb-8">
+          <!--<label>Select Child Subject<span class="text-danger">*</span></label>-->
+          <!--<ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="ParentList"
+                                   [(ngModel)]="AddParent.SubjectList"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+          </ng-multiselect-dropdown>-->
+         
+          <button class="btn bg-info text-white mt-6" type="button" (click)="MapInsitute()">Submit</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</ng-template>
+<!-- End Modal Popup Start For Add Insitute-->

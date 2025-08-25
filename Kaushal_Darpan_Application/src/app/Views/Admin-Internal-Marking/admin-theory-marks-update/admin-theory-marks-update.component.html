@@ -1,0 +1,143 @@
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1" for="PracticalPaperRollNo">Student
+                    Roll No.: </label>
+                <input class="form-input" placeholder="Student Roll No" type="text" id="txtStudentRollNo"
+                    [(ngModel)]="searchRequest.RollNo">
+            </div>
+
+
+            <div>
+                <button type="button" class="btn bg-info text-white mt-6"
+                    (click)="GetTheoryMarksDetailList()">Search</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="reset()">Cancel</button>
+            </div>
+        </div>
+
+    <div class="overflow-x-auto mt-3">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+            <div class="flex justify-end flex-wrap items-center">
+                <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i
+                        class="ti ti-download"></i> Download Excel</a>
+                <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a> -->
+
+            </div>
+        </div>
+
+        <div class="mb-2">
+            <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize"
+                (change)="loadInTable()">
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            </select>
+        </div>
+
+        <table class="table table-border w-full tab-content" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+
+                    <th align="center" width="100">
+                        <input type="checkbox" class="checkboxSize"
+                            [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+                    </th>
+                    <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
+                        Center C-Code
+                        <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'"
+                            [innerHTML]="sortInTableDirectionAero"></span>
+                    </th>
+                    <th class="text-left">Group Code</th>
+                    <th class="text-left" title="Click to sorting" (click)="sortInTableData('SubjectCode')">
+                        Subject Code
+                        <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'"
+                            [innerHTML]="sortInTableDirectionAero"></span>
+                    </th>
+                    <th class="text-left" title="Click to sorting" (click)="sortInTableData('RollNo')">
+                        Student Roll No.
+                        <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'"
+                            [innerHTML]="sortInTableDirectionAero"></span>
+                    </th>
+                    <th class="text-left">Max Marks</th>
+                    <th class="text-left">Marks Obtained</th>
+                    <th class="text-left">Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let row of paginatedInTableData ;let idx=index;" [ngClass]="row.rowclass">
+                    <td align="center">
+                        <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+                            [disabled]="row.IsDetain || row.IsUFM" #checkboxInTableSeletedSingle
+                            (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+                    </td>
+                    <td align="left">{{row.CenterCode}}</td>
+                    <td align="left">{{row.GroupCode}}</td>
+                    <td align="left">{{row.SubjectCode}}</td>
+                    <td class="" align="left">{{row.RollNo}}</td>
+                    <td align="left">{{row.MaxTheory}}</td>
+
+                    <td align="left">
+                        <div class="flex">
+                            <!--<input class="form-input" style="width:100px" type="text" (keypress) = "numberOnly($event)" [disabled]="!row.Marked" id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
+                            <input class="form-input" style="width:100px" type="text" (keypress)="numberOnly($event)"
+                                tabindex="{{idx}}"
+                                [disabled]="!row.Marked || row.IsPresentTheory==0" id="txtObtainedTheory"
+                                [(ngModel)]="row.ObtainedTheory" (keydown)="onTabPress($event, idx)">
+                            <button class="btn bg-info text-white" [disabled]="!row.Marked" type="button"
+                                (click)="openOTP(row.StudentExamPaperMarksID)">Save</button>
+                        </div>
+                    </td>
+                    <td align="left">
+                        <span class="text-red-500" *ngIf="row.IsDetain">Detained</span>
+                        <span class="text-red-500" *ngIf="row.IsUFM">UFM</span>
+                        <select *ngIf="row.IsDetain==false && row.IsUFM==false" class="form-select" id="IsPresentTheory"
+                            [disabled]="!row.Marked" [(ngModel)]="row.IsPresentTheory"
+                            (change)="onStatusThoryMarks(row)">
+                            <option value="">Choose Option</option>
+                            <option value="0">Absent</option>
+                            <option value="1">Present</option>
+                        </select>
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+        <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+        <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no."
+                [(ngModel)]="currentInTablePage" [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()"
+                [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()"
+                [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+        </div>
+    </div>
+    <!--end pagination-->
+
+    <div *ngIf="TheoryMarksDetailList.length>0"
+        class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
+        <div class="flex text-center justify-center">
+            <button type="button" class="btn bg-success text-white me-2" (click)="SubmitAllOTP()">Submit All</button>
+            <!-- <button *ngIf="AllInTableSelect==true" type="button" class="btn bg-success text-white me-2"
+                (click)="LockAndSubmit(0,1)">Lock & Submit</button> -->
+        </div>
+    </div>
+    </div>
+</div>
+
+<app-otpmodal #otpModal></app-otpmodal>

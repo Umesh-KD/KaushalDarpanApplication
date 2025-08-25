@@ -1,0 +1,209 @@
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">
+            <i class="ti ti-plus"></i> Add/Edit Branch
+          </b>
+          <a routerLink="/IssueTracker" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i> Back
+          </a>
+        </div>
+
+      
+
+        <form [formGroup]="_IssueTrackerFormGroup">
+
+
+          <!--(ngSubmit)="SaveData()"-->
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <!--<div>
+    <label for="txtProjectName">Project Name: <span class="StarMarking">*</span></label>
+    <input formControlName="txtProjectName" class="form-input" placeholder="Enter Project Name" type="text" id="txtProjectName" [(ngModel)]="request.ProjectName">
+    <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('txtProjectName').errors" class="text-danger">
+      <p *ngIf="_IssueTrackerFormGroup.get('txtProjectName').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+    </div>
+  </div>-->
+            <div>
+              <label for="txtProjectName">Project Name: <span class="StarMarking">*</span></label>
+              <input formControlName="txtProjectName"
+                     class="form-input"
+                     type="text"
+                     id="txtProjectName"
+                     placeholder="Enter Project Name">
+            </div>
+
+            <!--[(ngModel)]="request.ProjectName"-->
+            <div>
+              <label for="issueTitle">Issue: <span class="StarMarking">*</span></label>
+              <input formControlName="Issue" class="form-input" placeholder="Enter Issue" type="text" id="txtIssue" [(ngModel)]="request.IssueName">
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('Issue').errors" class="text-danger">
+                <p *ngIf="_IssueTrackerFormGroup.get('Issue').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+            <!--[(ngModel)]="request.Title"-->
+
+            <div>
+              <label for="txtDiscription">Discription: <span class="StarMarking">*</span></label>
+              <input formControlName="txtDescription" class="form-input" placeholder="Enter Discription" type="text" id="txtDescription"
+                     [(ngModel)]="request.Discription">
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('txtDescription').errors" class="text-danger">
+                <p *ngIf="_IssueTrackerFormGroup.get('txtDescription').errors?.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+
+
+            </div>
+
+            <div>
+              <label for="txtComment">Leave a Comment: </label>
+              <input formControlName="txtComment" class="form-input" placeholder="Enter Leave a Comment" type="text" id="txtComment" [(ngModel)]="request.Comment">
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('txtComment').errors" class="text-danger">
+                <p *ngIf="_IssueTrackerFormGroup.get('txtComment').errors.required"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+            <!--[(ngModel)]="request.Comment"-->
+            <div>
+              <label>Status<span class="StarMarking">*</span></label>
+              <select formControlName="StatusTypeID" class="form-select" id="ddlStatusTypeID" [(ngModel)]="request.StatusTypeID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let mmm of StatusTypeList" [value]="mmm.StatusID">{{mmm.Status}}</option>
+              </select>
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('StatusTypeID').errors" class="text-danger">
+                <p *ngIf="!_IssueTrackerFormGroup.get('StatusTypeID').errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <div>
+              <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Module <span class="StarMarking">*</span></label>
+              <select formControlName="RoleID" class="form-select " name="RoleID" id="RoleID" [(ngModel)]="request.RoleID"
+                      [disabled]="isDisabled">
+
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of RoleMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('RoleID')?.errors" class="text-danger">
+                <p *ngIf="_IssueTrackerFormGroup.get('RoleID')?.errors?.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
+              </div>
+
+            </div>
+
+
+            <div>
+              <label class=" text-gray-800 text-sm font-medium inline-block mb-1">Issue Type <span class="StarMarking">*</span></label>
+              <select formControlName="IssueTypeID" class="form-select " name="IssueTID" id="IssueTypeID" [(ngModel)]="request.IssueTypeID"
+                      [disabled]="isDisabled">
+
+                <option value="0">Choose Option</option>
+                <option *ngFor="let item of IssueTypeList" [value]="item.IssueTypeID">{{item.IssueType}}</option>
+              </select>
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('IssueTypeID')?.errors" class="text-danger">
+                <p *ngIf="_IssueTrackerFormGroup.get('IssueTypeID')?.errors?.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label>Issue Type Description <span class="StarMarking">*</span></label>
+              <select formControlName="IssueTypeDescriptionID" class="form-select" name="IssueTypeDescriptionID" id="IssueTypeDescriptionID" [(ngModel)]="request.IssueTypeDescriptionID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let mmm of IssueTypeDescription" [value]="mmm.IssueTypeDescriptionID">{{ mmm.TypeDescription }}</option>
+              </select>
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('IssueTypeDescriptionID')?.errors" class="text-danger">
+                <p *ngIf="!_IssueTrackerFormGroup.get('IssueTypeDescriptionID')?.errors?.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>
+
+            <!--<div>
+              <label>Priority <span class="StarMarking">*</span></label>
+              <select formControlName="PriorityTypeID" class="form-select" id="ddlPriorityID" [(ngModel)]="request.PriorityID">
+                <option value="0">Choose Option</option>
+                <option *ngFor="let mmm of PriorityTypeList" [value]="mmm.PriorityID">{{ mmm.Priority }}</option>
+              </select>
+              <div *ngIf="isSubmitted && _IssueTrackerFormGroup.get('PriorityTypeID')?.errors" class="text-danger">
+                <p *ngIf="!_IssueTrackerFormGroup.get('PriorityTypeID')?.errors?.DropdownValidators"><i aria-hidden="true"></i>This field is required.</p>
+              </div>
+            </div>-->
+            <!--Attachment-->
+            <!--<div>
+    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+           for="fileStudentPhoto"> Document</label>
+    <div class="flex fileUploader">
+      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+      <label for="fileStudentPhoto">
+        <span>Choose File</span>
+        {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Document}}"
+           *ngIf="this.request.Document !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+      </div>
+    </div>
+  </div>-->
+            <!--<input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+  id="fileStudentPhoto"
+  type="file"
+  multiple
+  (change)="onFilechange($event, 'Photo')" />-->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">  Document <span class="StarMarking">*</span> </label>
+              <div class="flex fileUploader">
+                <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="RegFileName" type="file" (change)="onFilechange($event,'RegFileName')" />
+
+                <label for="RegFileName">
+                  <span>Choose File</span>
+                  {{ AddRequest.RegDisFileName === '' ? 'No File Chosen' : AddRequest.RegDisFileName }}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + AddRequest.RegFileName}}"
+                     *ngIf="this.request.RegFileName  !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+
+                <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
+                  <i class="ti ti-plus"></i> Add
+                  More
+                </button>
+              </div>
+
+              <div *ngFor="let row of request.IssueFile">
+                {{  row.RegDisFileName}}
+                <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.RegFileName}}">
+                  <i class="ti ti-eye"></i>
+                </a>
+
+              </div>
+            </div>
+
+
+
+            <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+              <div class="text-center">
+                <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Submit</button>
+                <button type="button" id="btnReset" class="btn bg-danger text-white" (click)="Reset()"><i class="ti ti-refresh"></i> Reset</button>
+
+
+              </div>
+
+
+
+
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

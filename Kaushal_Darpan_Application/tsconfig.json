@@ -1,0 +1,46 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "baseUrl": "./src/*",
+    "declaration": false,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "lib": [
+      "ES2022",
+      "dom"
+    ],
+    "module": "ES2022",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "outDir": "./dist/rishi",
+    "paths": {
+      "@components/*": [ "app/Views/components/*" ],
+      "@guards/*": [ "app/Pipes/*" ],
+      "@modules/*": [ "app/Models/*" ],
+      "@Views/*": [ "app/Views/*" ],
+      "@services/*": [ "app/Services/*" ],
+      "@/*": [ "app/*" ]
+    },
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2022",
+    "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": false,
+    "strictNullChecks": false,
+    "fullTemplateTypeCheck": false,
+    "compilationMode": "full",
+    "enableIvy": false
+  }
+}

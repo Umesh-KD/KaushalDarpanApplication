@@ -1,0 +1,125 @@
+<app-loader> </app-loader>
+
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">
+      @if(UserType==1) {Admin} @else {User} Menu Rights
+    </h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">@if(UserType==1) {Admin} @else {User} master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">@if(UserType==1) {Admin} @else {User} Menu Rights</a>
+    </div>
+  </div>
+  @if(UserType==1){
+  <a routerLink="/AdminUser" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+  }
+  @else{
+  <a routerLink="/usermaster" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
+  }
+</div>
+<!-- Page Title End -->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <form class="form-horizontal">
+            <div class="row">
+              <div class="col-sm-12" style="padding: 0px !important;" id="ExportMaster_Table">
+                <div class="fixTableHead">
+                  <!--<table class="table table-bordered dataTable dtr-inline table-head-fixed text-nowrap">-->
+                  <table class="table table-border w-full" cellpadding="5">
+
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                      <tr>
+                        <th valign="middle">Sr.No.</th>
+                        <th>Menu Name</th>
+                        <th valign="middle">
+                          <input type="checkbox" id="checkboxView" class="checkboxSize" [checked]="All_U_View"
+                                 #checkboxView (change)="checkboxthView_checkboxchange($event,checkboxView.checked)">
+                          View
+                        </th>
+                        <th valign="middle">
+                          <input type="checkbox" id="checkboxAdd" class="checkboxSize" [checked]="All_U_Add"
+                                 #checkboxAdd (change)="checkboxthAdd_checkboxchange($event,checkboxAdd.checked)">
+                          Add
+                        </th>
+                        <th valign="middle">
+                          <input type="checkbox" id="checkboxUpdate" class="checkboxSize" [checked]="All_U_Update"
+                                 #checkboxUpdate (change)="checkboxthUpdate_checkboxchange($event,checkboxUpdate.checked)">
+                          Update
+                        </th>
+                        <th valign="middle">
+                          <input type="checkbox" id="checkboxDelete" class="checkboxSize" [checked]="All_U_Delete"
+                                 #checkboxDelete (change)="checkboxthDelete_checkboxchange($event,checkboxDelete.checked)">
+                          Delete
+                        </th>
+                        <th valign="middle">
+                          <input type="checkbox" id="checkboxPrint" class="checkboxSize" [checked]="All_U_Print"
+                                 #checkboxPrint (change)="checkboxthPrint_checkboxchange($event,checkboxPrint.checked)">
+                          Print
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+
+                      <tr *ngFor="let row of MenuList ;let idx=index;">
+
+                        <td style="width:40px !important"> {{idx+1}}</td>
+                        <td align="left">
+
+
+                          <b *ngIf="row.ParentId==0" style="color:#01a9ac !important">{{row.MenuName}}</b>
+                          <!--<span *ngIf="row.LevelNo==2" style="color:#01a9ac !important;margin-left: 20px !important;">{{row.MenuName}}</span>-->
+                          <span *ngIf="row.ParentId!=0" style="margin-left: 40px !important;">{{row.MenuName}}</span>
+
+
+                        </td>
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.U_View" [(ngModel)]="row.U_View" id="U_View{{idx+1}}" name="U_View{{idx+1}}" *ngIf="row.ParentId!=0">
+                        </td>
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.U_Add" [(ngModel)]="row.U_Add" id="U_Add{{idx+1}}" name="U_Add{{idx+1}}" *ngIf="row.ParentId!=0">
+                        </td>
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.U_Update" [(ngModel)]="row.U_Update" id="U_Update{{idx+1}}" name="U_Update{{idx+1}}" *ngIf="row.ParentId!=0">
+                        </td>
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.U_Delete" [(ngModel)]="row.U_Delete" id="U_Delete{{idx+1}}" name="U_Delete{{idx+1}}" *ngIf="row.ParentId!=0">
+                        </td>
+                        <td>
+                          <input type="checkbox" class="checkboxSize" [checked]="row.U_Print" [(ngModel)]="row.U_Print" id="U_Print{{idx+1}}" name="U_Print{{idx+1}}" *ngIf="row.ParentId!=0">
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="col-span-3 text-center">
+                <button name="btnSave" id="btnSave" class="btn bg-info text-white" (click)="SaveData()">
+                  Save
+                </button>
+                <button type="button" class="btn bg-danger text-white" name="btnReset" id="btnReset" (click)="ResetControl()" style="margin-left:10px">
+                  Reset
+                </button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

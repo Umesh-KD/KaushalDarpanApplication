@@ -1,0 +1,856 @@
+import { Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import * as XLSX from 'xlsx';
+import { EnumEnrollNoStatus, enumExamStudentStatus, EnumMessageType, EnumRole, EnumRollNoStatus, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import {
+  GenerateRollData,
+  GenerateRollSearchModel,
+} from '../../Models/GenerateRollDataModels';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { GetRollService } from '../../Services/GenerateRoll/generate-roll.service';
+import { LoaderService } from '../../Services/Loader/loader.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { ToastrService } from 'ngx-toastr';
+import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../Models/GenerateEnrollDataModel';
+import { EligibleStudentButPendingForVerification, StudentMarkedModel } from '../../Models/StudentMasterModels';
+import { GetEnrollService } from '../../Services/GenerateEnroll/generateEnroll.service';
+@Component({
+  selector: 'app-eligible-verification-enroll-no',
+  standalone: false,
+  templateUrl: './eligible-verification-enroll-no.component.html',
+  styleUrl: './eligible-verification-enroll-no.component.css'
+})
+export class EligibleVerificationEnrollNoComponent {
+  public SearchForm!: FormGroup;
+  public SemesterMasterDDLList: any[] = [];
+  public StreamMasterDDLList: any[] = [];
+  public SubjectMasterDDLList: any[] = [];
+  public StudentTypeList: any[] = [];
+  public ExamList: any[] = [];
+  public Table_SearchText: any = '';
+  public StudentList: GenerateEnrollData[] = [];
+  public InstituteMasterList: any = [];
+  public isSubmitted: boolean = false;
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public searchRequest = new GenerateEnrollSearchModel();
+  public UserID: number = 0;
+  public RoleID: number = 0;
+  public ddlRollListStatus: number = 0;
+  public _RollListStatus = EnumEnrollNoStatus;
+  public SearchReqForEnroll = new GenerateRollSearchModel()
+  //table feature default
+  public paginatedInTableData: any[] = []; //copy of main data
+  public currentInTablePage: number = 1;
+  public pageTab: number = 0;
+  public pageInTableSize: string = '50';
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  public selectedEndTermID: number = 0;
+  public currentStatus: number = 0;
+  public PageNameTitile: string = '';
+  public currentTab: number = 0;
+  public _EnumRole = EnumRole;
+  public AllSelect: boolean = false;
+  //end table feature default
+  closeResult: string | undefined;
+
+  timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
+  showResendButton: boolean = false; // Whether to show the "Resend OTP" button
+  private interval: any; // Holds the interval reference
+  public MobileNo: number = 0;
+  public OTP: string = '';
+  public GeneratedOTP: string = '';
+
+  @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
+  constructor(
+    private commonMasterService: CommonFunctionService,
+    private GetRollService: GetRollService,
+    private GetEnrollRollService: GetEnrollService,
+    private loaderService: LoaderService,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private swal2: SweetAlert2,
+    private toastr: ToastrService,
+    private sMSMailService: SMSMailService,
+    private modalService: NgbModal,
+    private routers: Router
+  ) { }
+
+  async ngOnInit() {
+    this.SearchForm = this.formBuilder.group({
+      ddlInstitute: [''],
+      ddlSemester: [''],
+      ddlStream: [''],
+      /*ddlStudentTypeID: [''],*/
+    });
+
+    this.sSOLoginDataModel = await JSON.parse(
+      String(localStorage.getItem('SSOLoginUser'))
+    );
+    this.RoleID = this.sSOLoginDataModel.RoleID;
+    this.selectedEndTermID = Number(this.route.snapshot.queryParamMap.get("EndTermID") ?? 0);
+    this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
+    this.currentTab = Number(this.route.snapshot.queryParamMap.get("tab") ?? 0);
+
+
+
+    this.GetPageName(this.currentTab);
+
+    this.UserID = this.sSOLoginDataModel.UserID;
+    this.getSemesterMasterList();
+    this.getStreamMasterList();
+    this.ddlStream_Change();
+    this.GetAllData();
+    this.getInstituteMasterList();
+    this.getExamMasterList();
+
+
+  }
+
+  async getSemesterMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.SemesterMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterMasterDDLList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getStreamMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.StreamMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDLList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  checkboxthView_checkboxchange(isChecked: boolean) {
+    this.AllSelect = isChecked;
+    for (let item of this.StudentList) {
+      item.Selected = isChecked;  // Set all checkboxes based on the parent checkbox state
+    }
+  }
+
+ 
+
+  checkIfAllSelected() {
+    this.AllSelect = this.StudentList.length > 0 &&
+      this.StudentList.every((item: any) => item.selected);
+  }
+
+
+
+
+  async GetAllData() {
+    try {
+      
+      this.StudentList = []
+      //session
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.ShowAll = this.selectedEndTermID > 0 ? 1 : 0;
+      this.searchRequest.Status = this.currentStatus;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      //call
+      this.loaderService.requestStarted();
+
+      if (this.pageTab == 1) {
+        await this.GetEnrollRollService.GetEligibleStudentButPendingForVerification(this.searchRequest)
+          .then((data: any) => {
+            
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              this.StudentList = data['Data'];
+              console.log(this.StudentList, "Studentlist")
+              //this.updateButtonStates();
+              //this.GetVerifyRollData();
+              //table feature load
+              this.loadInTable();
+              //end table feature load
+            }
+          }, (error: any) => console.error(error)
+          );
+      }
+     else if (this.pageTab == 2) {
+        await this.GetEnrollRollService.GetEligibleStudentVerified(this.searchRequest)
+          .then((data: any) => {
+            
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              this.StudentList = data['Data'];
+              console.log(this.StudentList, "Studentlist")
+              //this.updateButtonStates();
+              //this.GetVerifyRollData();
+              //table feature load
+              this.loadInTable();
+              //end table feature load
+            }
+          }, (error: any) => console.error(error)
+          );
+      }
+       
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getInstituteMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService
+        .InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteMasterList = data.Data;
+        });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async ddlStream_Change() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService
+        .SubjectMaster_StreamIDWise(
+          this.searchRequest.StreamID,
+          this.sSOLoginDataModel.DepartmentID,
+          this.searchRequest.SemesterID
+        )
+        .then(
+          (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.SubjectMasterDDLList = data.Data;
+          },
+          (error) => console.error(error)
+        );
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getExamMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetExamName().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.ExamList = data.Data;
+      });
+
+      await this.commonMasterService.StudentType()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StudentTypeList = data['Data'];
+          console.log("StudentTypeList", this.StudentTypeList)
+        }, (error: any) => console.error(error));
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async ResetControl() {
+    this.isSubmitted = false;
+    this.searchRequest = new GenerateEnrollSearchModel();
+
+    this.SubjectMasterDDLList = [];
+    this.GetAllData()
+  }
+
+  //table feature
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(
+      this.totalInTableRecord / parseInt(this.pageInTableSize)
+    );
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex =
+      (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex =
+      this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex =
+      this.endInTableIndex > this.totalInTableRecord
+        ? this.totalInTableRecord
+        : this.endInTableIndex;
+    this.paginatedInTableData = [...this.StudentList].slice(
+      this.startInTableIndex,
+      this.endInTableIndex
+    );
+    console.log(this.paginatedInTableData,"paginatedData")
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (
+      this.currentInTablePage < this.totalInTablePage &&
+      this.totalInTablePage > 0
+    ) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (
+      this.currentInTablePage < this.totalInTablePage &&
+      this.totalInTablePage > 0
+    ) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (
+      this.currentInTablePage <= 0 ||
+      this.currentInTablePage > this.totalInTablePage
+    ) {
+      this.currentInTablePage = 1;
+    }
+    if (
+      this.currentInTablePage > 0 &&
+      this.currentInTablePage < this.totalInTablePage &&
+      this.totalInTablePage > 0
+    ) {
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  resetInTableValiable() {
+    this.paginatedInTableData = []; //copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.StudentList.length;
+  }
+
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+
+  //get totalInTableSelected(): number {
+  //  return this.StudentList.filter((x) => x.Selected)?.length;
+  //}
+
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  // end table feature
+
+  exportToExcel(): void {
+    // Define the columns in the exact order you want for the export
+    const columnOrder = [
+      'SrNo', 'StudentName', 'FatherName', 'DOB', 'InstituteName', 'StreamName', 'SemesterName', 'EnrollmentNo', 'RollNumber',
+    ];
+
+    // Define the list of columns to exclude from the export
+    const unwantedColumns = [
+      'StudentID', 'RollNumber', 'dob_org', 'StreamID', 'SemesterID', 'InstituteID', 'InstituteCode', 'streamCode', 'MobileNo', 'EndTermID',
+    ];
+
+    // Filter the data based on unwanted columns and map it to the correct order
+    const filteredData = this.StudentList.map((item: any, index: number) => {
+      const filteredItem: any = {};
+
+      // Manually order the columns based on the columnOrder array
+      columnOrder.forEach((column, idx) => {
+        // Add 'SrNo' as the first column (index + 1 for numbering)
+        if (column === 'SrNo') {
+          filteredItem[column] = index + 1;
+        } else if (item[column] && !unwantedColumns.includes(column)) {
+          filteredItem[column] = item[column];
+        }
+      });
+
+      return filteredItem;
+    });
+
+    // Create worksheet from filtered data
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // Calculate column widths based on max length of content in each column
+    const columnWidths = columnOrder.map((column) => ({
+      wch:
+        Math.max(
+          column.length, // Header length
+          ...filteredData.map((item: any) =>
+            item[column] ? item[column].toString().length : 0
+          ) // Max content length
+        ) + 2, // Add extra padding
+    }));
+
+    // Apply column widths
+    ws['!cols'] = columnWidths;
+
+    // Apply header styling (bold + background color)
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    if (range.s && range.e) {
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
+        if (!ws[cellAddress]) continue;
+
+        // Bold the header text and apply a background color
+        ws[cellAddress].s = {
+          font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
+          fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
+          alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
+        };
+      }
+    }
+
+    // Create a new workbook and append the sheet
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    // Export the file as "GeneratedRollNumber.xlsx"
+    XLSX.writeFile(wb, 'EligibleStudentData.xlsx');
+  }
+
+
+
+
+
+
+
+
+  // save enrolled status
+  async SaveEligibleForEnrollment() {
+    // confirm
+    const selectedStudents = this.StudentList?.filter(x => x.Selected) || [];
+    if (selectedStudents.length == 0) {
+      this.toastr.warning('Please Select Students');
+      return;
+    }
+
+    this.swal2.Confirmation("Are you sure to continue?", async (result: any) => {
+
+      //confirmed
+      if (result.isConfirmed) {
+        try {
+
+          this.openModalGenerateOTP(this.modal_GenrateOTP);
+
+          this.isSubmitted = true;
+          this.loaderService.requestStarted();
+          // Filter out only the selected students
+        
+
+          
+        } catch (ex) {
+          console.log(ex);
+        } finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+            this.isSubmitted = false;
+          }, 200);
+        }
+      }
+    });
+  }
+
+
+  async SaveEligibleData() {
+    
+    try {
+
+      const selectedStudents = this.StudentList?.filter(x => x.Selected) || [];
+      if (selectedStudents.length == 0) {
+        this.toastr.warning('Please Select Students');
+        return;
+      }
+
+    const request: EligibleStudentButPendingForVerification[] = selectedStudents.map(x => ({
+      StudentId: x.StudentID,
+
+    }));
+    // Call service to save student exam status
+    await this.GetEnrollRollService.SaveEligibleStudentButPendingForVerification(request)
+      .then(async (data: any) => {
+
+        if (data.State == EnumStatus.Success) {
+         /* this.toastr.success(data.Message)*/
+          this.GetAllData();
+          this.CloseOTPModal();
+          this.toastr.success('Status Changed Successfully');
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+          if (data['Data'] == -6) {
+            this.GetAllData();
+
+          }
+        }
+        else {
+          this.toastr.error(data.Message)
+          this.GetAllData();
+        }
+      })
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isSubmitted = false;
+      }, 200);
+    }
+
+  }
+
+
+
+
+
+
+
+
+  VerifyRollNumber() {
+   
+    if (this.ddlRollListStatus > 0) {
+      //if (this.ddlRollListStatus == EnumEnrollNoStatus.Reverted) {
+      //  this.swal2.Confirmation("Are you sure you want to revert Enroll no list?", async (result: any) => {
+      //    // Check if the user confirmed the action
+      //    if (result.isConfirmed) {
+      //      this.SaveApplicationWorkFlow(EnumEnrollNoStatus.Reverted);
+      //    }
+      //  });
+      //}
+
+      if (this.ddlRollListStatus == EnumEnrollNoStatus.Return) {
+        Swal.fire({
+          title: 'Return Enrollment No. List',
+          input: 'textarea',
+          inputLabel: 'Remark',
+          inputPlaceholder: 'Enter your remark here...',
+          inputAttributes: {
+            'aria-label': 'Type your remark here'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Save Remark',
+          cancelButtonText: 'Cancel'
+        }).then(async (result: any) => {
+          if (result.isConfirmed && result.value?.trim()) {
+            const remark = result.value.trim();
+            await this.ChangeEnRollNoStatus("_ReturnByRegistrar", EnumEnrollNoStatus.Return, remark);
+          } else if (result.isConfirmed && !result.value?.trim()) {
+            this.toastr.warning('Remark is required.');
+          }
+        });
+      }
+
+      if (this.ddlRollListStatus == EnumEnrollNoStatus.VerifiedByRegistrar) {
+
+        if (this.currentStatus == EnumEnrollNoStatus.Published) {
+
+          this.swal2.Info('The Enrollment number has already been published and cannot be verified again.');
+
+        }
+        else {
+          this.swal2.Confirmation("Are you sure you want to verified Enrollment no?", async (result: any) => {
+            // Check if the user confirmed the action
+            if (result.isConfirmed) {
+              this.openModalGenerateOTP(this.modal_GenrateOTP);
+            }
+          });
+        }
+
+        //this.ChangeRollNoStatus("_UpdateStatusVerify", EnumRollNoStatus.Verified);
+      }
+
+
+    }
+    else {
+
+      this.toastr.error('please select status')
+    }
+  }
+
+
+  async ChangeEnRollNoStatus(action: string, Status: number, remark: string) {
+    
+    try {
+      this.StudentList = [];
+      //session
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.Status = Status;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      this.searchRequest.action = action;
+      this.searchRequest.Remark = remark;
+      this.loaderService.requestStarted();
+      //call
+      await this.GetEnrollRollService.ChangeEnRollNoStatus(this.searchRequest).then(
+        (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.CloseOTPModal();
+            this.toastr.success(data.Message);
+
+
+            setTimeout(() => {
+              this.routers.navigate(['/dashboard']);
+            }, 200);
+
+
+          }
+          else {
+            this.toastr.error(data.Message);
+          }
+        },
+        (error: any) => console.error(error)
+      );
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  //async SaveApplicationWorkFlow(Action: number) {
+  //  try {
+  //    this.StudentList = [];
+  //    //session
+  //    this.SearchReqForEnroll.EndTermID = this.sSOLoginDataModel.EndTermID;
+  //    this.SearchReqForEnroll.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //    this.SearchReqForEnroll.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+  //    /*      this.SearchReqForEnroll.action = "_GenerateRollNumbers"*/
+  //    this.SearchReqForEnroll.Status = Action
+
+  //    this.SearchReqForEnroll.ModuleID = 2;
+
+  //    this.loaderService.requestStarted();
+  //    //call
+  //    await this.GetEnrollRollService.SaveApplicationWorkFlow(this.SearchReqForEnroll).then(
+  //      (data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if (data.State == EnumStatus.Success) {
+  //          this.StudentList = data['Data'];
+  //          this.CloseOTPModal()          
+  //          this.GetAllData()
+  //        }
+  //      },
+  //      (error: any) => console.error(error)
+  //    );
+  //  } catch (ex) {
+  //    console.log(ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+  numberOnly(event: KeyboardEvent): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
+
+  resetOTPControls() {
+    this.OTP = "";
+    this.GeneratedOTP = "";
+
+  }
+
+  startTimer(): void {
+    this.showResendButton = false;
+    this.timeLeft = GlobalConstants.DefaultTimerOTP * 60;
+
+
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.showResendButton = true; // Show the button when time is up
+      }
+    }, 1000); // Update every second
+  }
+
+  formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+
+
+
+  async VerifyOTP() {
+    if (this.OTP.length > 0) {
+      if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
+        try {
+          //Call Function
+          /* this.SaveApplicationWorkFlow( EnumEnrollNoStatus.Verified);*/
+         /* this.ChangeEnRollNoStatus("_StatusVerifyRegistrar", EnumEnrollNoStatus.VerifiedByRegistrar, this.searchRequest.Remark);*/
+          this.SaveEligibleData();
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+
+
+      }
+      else {
+        this.toastr.warning('Invalid OTP Please Try Again');
+      }
+    }
+    else {
+      this.toastr.warning('Please Enter OTP');
+    }
+  }
+
+  async SendOTP(isResend?: boolean) {
+    try {
+      this.GeneratedOTP = "";
+      this.loaderService.requestStarted();
+      //this.sSOLoginDataModel.Mobileno = "7737348604";
+      await this.sMSMailService.SendMessage(this.sSOLoginDataModel.Mobileno, EnumMessageType.Bter_OTP)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.startTimer();
+            //open modal popup
+            this.GeneratedOTP = data['Data'];
+            if (isResend) {
+              this.toastr.success('OTP resent successfully');
+            }
+          }
+          else {
+            this.toastr.warning('Something went wrong');
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  //Start Section Model
+  async openModalGenerateOTP(content: any) {
+    this.resetOTPControls();
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this.SendOTP();
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+
+  CloseOTPModal() {
+
+    this.modalService.dismissAll();
+  }
+
+  GetPageName(tabno: number) {
+    if (tabno == 1) {
+      this.PageNameTitile = 'Eligible Verification Enroll No'
+      this.pageTab = 1;
+    }
+    else if (tabno == 2) {
+      this.PageNameTitile = 'Eligible Student  Verified List'
+      this.pageTab = 2;
+    }
+    else if (tabno == 3) {
+      this.PageNameTitile = 'Reverted EnrollMent Number List'
+    }
+    else if (tabno == 4) {
+      this.PageNameTitile = 'Published EnrollMent Number List'
+    }
+    else {
+      this.PageNameTitile = 'EnrollMent Number List'
+    }
+  }
+}

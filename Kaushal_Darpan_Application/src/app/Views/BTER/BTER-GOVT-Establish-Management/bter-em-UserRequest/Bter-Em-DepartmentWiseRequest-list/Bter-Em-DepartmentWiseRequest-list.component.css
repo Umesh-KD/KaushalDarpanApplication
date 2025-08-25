@@ -1,0 +1,30 @@
+.Transfer {
+  background-color: lightblue;
+}
+
+  .Transfer a {
+    color: darkblue;
+    text-decoration: none;
+  }
+
+    .Transfer a:hover {
+      color: darkred;
+    }
+
+.VRS {
+  background-color: lightgreen;
+}
+
+  .VRS a {
+    color: darkblue;
+    text-decoration: none;
+  }
+
+    .VRS a:hover {
+      color: darkred;
+    }
+
+
+
+
+

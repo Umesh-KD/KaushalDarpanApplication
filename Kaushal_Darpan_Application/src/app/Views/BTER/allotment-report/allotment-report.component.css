@@ -1,0 +1,10 @@
+.custom-tooltip {
+  font-size: 14px; /* Bigger text */
+  background: #333; /* Dark background */
+  color: white; /* White text */
+  padding: 12px 16px; /* Increase padding for a bigger box */
+  border-radius: 8px; /* More rounded corners */
+  max-width: 300px; /* Increase width */
+  text-align: center; /* Center text */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); /* Bigger shadow */
+}

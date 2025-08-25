@@ -1,0 +1,203 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add Paper Set Professors</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Paper Set Professors</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a  class="text-sm font-medium text-slate-700" aria-current="page">Add Paper Set Professors</a>
+    </div>
+  </div>
+  <a (click)="GoToPaperSetAssignListPage()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+<!-- Page Title End -->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Set Paper Trade & Guidelines</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3" [formGroup]="PaperFormGroup" id="HrMasterFormGroup">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Years Trade: <span class="StarMarking">*</span></label>
+            <div class="flex">
+              <!--<label class="flex items-center"><input type="radio" name="AddCollegeFee" value="1" onclick="js_YearTrade(this)" />&nbsp;&nbsp;6 Month Trade</label>
+              <label class="flex items-center mx-2"><input type="radio" name="AddCollegeFee" value="2" onclick="js_YearTrade(this)" />&nbsp;&nbsp;1 Year Trade</label>
+              <label class="flex items-center mx-2"><input type="radio" name="AddCollegeFee" value="3" onclick="js_YearTrade(this)" />&nbsp;&nbsp;2 Year Trade</label>-->
+              <label class="flex items-center"><input type="radio"      name="yearTrade" value="6" (change)="YearTradeChange(6)"       formControlName="yearTrade" />&nbsp;&nbsp;6 Month Trade</label>
+              <label class="flex items-center mx-2"><input type="radio" name="yearTrade" value="1" (change)="YearTradeChange(1)"  formControlName="yearTrade" />&nbsp;&nbsp;1 Year Trade</label>
+              <label class="flex items-center mx-2"><input type="radio" name="yearTrade" value="2" (change)="YearTradeChange(2)"  formControlName="yearTrade" />&nbsp;&nbsp;2 Year Trade</label>
+            </div>
+          </div>
+
+          <div id="twoYearList" style="display:none">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Two Year Trade Years: <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="TwoYearTradeID" [(ngModel)]="request.TwoYearTradeID">
+              <option value="0" selected>--Choose Option--</option>
+              <option value="1">First Year of Two Year Trade</option>
+              <option value="2">Second Year of Two Year Trade</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Schemes: <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="TradeSchemeId" [(ngModel)]="request.TradeSchemeId">
+              <option value="0" selected>--Choose Option--</option>
+              <option value="1">NCVT</option>
+              <option value="2">SCVT</option>
+              <!--<option value="3">NCVT(Women Only)</option>
+              <option value="4">SCVT(Women Only)</option>-->
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Exam Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ddlExamType" formControlName="ExamType" [(ngModel)]="request.ExamType" (change)="DDLExamTypeChange()">
+              <option value="0" selected>--Choose Option--</option>
+              <option value="1" >Practical</option> 
+              <option value="2" *ngIf="request.TradeSchemeId !=1" >Theory</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="TradeID" [(ngModel)]="request.TradeID" (change)="ddlTradeChange()">
+              <option value="0" selected>--Choose Option--</option>
+              <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ddlSubjectList" formControlName="SubjectId" [(ngModel)]="request.SubjectId" (change)="ddlSubjectChange()">
+              <option value="0" selected>--Choose Option--</option>
+              <option *ngFor="let item of SubjectListAll" value="{{item.SubjectID}}">{{item.SubjectName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Paper Submition Last Date: <span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" formControlName="PapperSubmitionLastDate" [(ngModel)]="request.PapperSubmitionLastDate">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Paper Code/Name: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="textPapercodeName" placeholder="Enter Paper Code" formControlName="PaperCodeName" [(ngModel)]="request.PaperCodeName"  disabled >
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> No. Of Question: <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter No. Of Question" formControlName="NumberofQuestion" [(ngModel)]="request.NumberofQuestion" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Guidelines: <span class="StarMarking">*</span></label>
+            <div class="flex">
+              <input type="file" class="form-input" id="fileUploadGuidlinesDoc" (change)="onFilechange($event)">
+              <a href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIPaperSetter/GuideLinesDocPDF/' + GuideLineDoc}}" *ngIf="GuideLineDoc !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark: <span class="StarMarking">*</span></label>
+            <textarea class="form-input" placeholder="Enter Remark" formControlName="Remark" [(ngModel)]="request.Remark"></textarea>
+          </div>
+
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Professor</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">#</th>
+                <th class="text-left">Select District <span class="StarMarking">*</span></th>
+                <th class="text-left">Select Professor <span class="StarMarking">*</span></th>
+                <th class="text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td>
+                  <select class="form-select" id="ddlDistrict" name="District" [(ngModel)]="request.DistrictID">
+                    <option value="0">Select District</option>
+                    <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+                  </select>
+                  <!--<select class="form-select">
+                    <option value="">--Select Option--</option>
+                    <option value="">Udaipur</option>
+                  </select>-->
+                </td>
+                <td>
+                  <select class="form-select" id="ddlProfessor" [(ngModel)]="request.ProfessorId">
+                    <option value="0">--Select Option--</option>
+                    <!--<option value="1">ABC Professor</option>
+                    <option value="2">DEF Professor</option>
+                    <option value="3">GHI Professor</option>-->
+                    <option *ngFor="let item of ProfessorListAll" value="{{item.professorId}}">{{item.ProfessorName}}</option>
+
+                  </select>
+                </td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" title="Add More" (click)="AddMore()"><i class="ti ti-plus"></i></a>
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngFor="let row of request.PapperSetterListModel; let i = index">
+                <td>{{ i + 1 }}</td>
+                <td>{{ row.DistrictName }}</td>
+                <td>{{ row.ProfessorName }}</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" title="Delete" (click)="deleteRow(i)">
+                      <i class="ti ti-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+
+              <!--<tr>
+                <td>01.</td>
+                <td>Ajmer</td>
+                <td>ABC Professor</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" title="Delete"><i class="ti ti-trash"></i></a>
+                  </div>
+                </td>
+              </tr>-->
+              <!--<tr>
+                <td>02.</td>
+                <td>Jaipur</td>
+                <td>DEF Professor</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" title="Delete"><i class="ti ti-trash"></i></a>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>03.</td>
+                <td>Hanumangarh</td>
+                <td>GHI Professor</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a href="javascript:void(0)" title="Delete"><i class="ti ti-trash"></i></a>
+                  </div>
+                </td>
+              </tr>-->
+            </tbody>
+          </table>
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button type="button" class="btn bg-info text-white mt-6" (click)="SubmitData()">Submit</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Clear</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> 
+<!-- end row -->

@@ -1,0 +1,145 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Workshop Progress Report List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a class="text-sm font-medium text-slate-700" aria-current="page">Progress Report List</a>
+    </div>
+  </div>
+
+
+</div>
+<!-- Page Title End -->
+
+
+
+
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
+          <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+          <a *ngIf="SSOLoginDataModel.RoleID == 97" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+  
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+       
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Clear</button>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <a *ngIf="SSOLoginDataModel.RoleID == 97" (click)="DownloadWorkshopProgressReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+
+        </div>
+        <div class="">
+                <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+
+
+          <div>
+        
+          </div>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th class="text-left">क्र.सं.</th>
+              <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
+              <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
+              <th class="text-left">कार्यशाला की तिथि</th>
+              <th class="text-left">कार्यशाला आयोजन करने <br /> वाले जिलें का नाम</th>
+              <th class="text-left">कार्यशाला मे भाग लेने वाले जिलें</th>
+              <th class="text-left">कार्यशाला भाग लेने वाले प्रतिष्ठानों<br /> का नाम व पता </th>
+              <th class="text-left">कार्यशाला मे भाग लेने वाले <br /> प्रतिनिधि का नाम ,पद व मो.नं.</th>
+              <th class="text-left">विविध विवरण</th>
+              <th class="text-left">कार्रवाई</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of RowAddedList | tableSearchFilter:Table_SearchText; let idx=index; ">
+              <td align="left">{{idx+1}}</td>
+              <td *ngIf="SSOLoginDataModel.RoleID != 97" align="left">{{row.NodalOfficerName}}</td>
+              <!--<td *ngIf="SSOLoginDataModel.RoleID != 97" align="left">{{row.NodalOfficerDistrictName}}</td>-->
+              <td>{{row.workshopDate}}</td>
+              <td>{{row.OrganisedDistrictName}}</td>
+              <td>{{row.ParticipatedDistrictNameList}}</td>
+              <td>{{row.establishmentNameAddress}}</td>
+              <td>{{row.representativeNameDesignationMobile}}</td>
+              <td>{{row.Remars}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="view" (click)="EditData(row.PKID)"><i class="ti ti-eye"></i></a>
+                  <!--<a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="Delete" (click)="DeleteByID(row.PKID)"><i class="ti ti-trash"></i></a>-->
+                  <a *ngIf="SSOLoginDataModel.RoleID != 97" href="javascript:void(0)" title="Edit" (click)="EditData(row.PKID)"><i class="ti ti-eye"></i></a>
+                </div>
+              </td>
+
+            </tr>
+
+          </tbody>
+        </table>
+
+        <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full" *ngIf="paginatedInTableData.length > 0">
+          <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                   [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+          </div>
+        </div>
+        <!--end pagination-->
+
+
+      </div>
+
+
+
+    </div>
+    </div>
+  </div>
+
+
+

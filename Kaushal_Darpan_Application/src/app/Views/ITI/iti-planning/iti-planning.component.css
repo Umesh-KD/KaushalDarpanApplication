@@ -1,0 +1,18 @@
+/* In your component CSS or global styles */
+.pdf-enlarge-header h4 {
+  font-size: 28px !important;
+/*  margin-left:20px*/
+}
+
+.pdf-enlarge-header .md\\:flex {
+  font-size: 18px !important;
+ /* margin-left: 20px */
+}
+
+.pdf-container {
+  background: white;
+}
+.pdf-section {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}

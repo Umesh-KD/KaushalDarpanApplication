@@ -1,0 +1,86 @@
+<div class="card">
+    <div class="card-body p-5">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> ITI Trades Wise Number of Forms With Priority</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="">
+                <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+            </div>
+            <div class=""></div>
+            <div class=""></div>
+            <div class="">
+                <!-- <input class="form-input" placeholder="Search....." /> -->
+            </div>
+        </div>
+        <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                    <tr>
+
+                        <th style="width: 124px;">#</th>
+                        <th style="width: 124px;" title="Click to sorting" (click)="sortInTableData('ITIName')">
+                            ITI Name
+                            <span class="shortingSpan" *ngIf="sortInTableColumn=='ITIName'" [innerHTML]="sortInTableDirectionAero"></span>
+                        </th>
+                        <th style="width: 160px;" title="Click to sorting" (click)="sortInTableData('TradeName')">Trade Name
+                            <span class="shortingSpan" *ngIf="sortInTableColumn=='TradeName'" [innerHTML]="sortInTableDirectionAero"></span>
+                        </th>
+                        <th style="width: 150px;" title="Click to sorting" (click)="sortInTableData('TotalSeats')">Total Seats
+                            <span class="shortingSpan" *ngIf="sortInTableColumn=='TotalSeats'" [innerHTML]="sortInTableDirectionAero"></span>
+                        </th>
+                        <th style="width: 63px;">P-1</th>
+                        <th style="width: 63px;">P-2</th>
+                        <th style="width: 63px;">P-3</th>
+                        <th style="width: 63px;">P-4</th>
+                        <th style="width: 63px;">P-5</th>
+                        <th style="width: 63px;">P-6</th>
+                        <th style="width: 63px;">P-7</th>
+                        <th style="width: 63px;">P-8</th>
+                        <th style="width: 63px;">P-9</th>
+                        <th style="width: 76px;">P-10</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of ITIsWithNumberOfFormsPriorityList; let i = index">
+                        <td>{{(startInTableIndex+1)+i}}</td>
+                        <td>{{row.ITIName}}</td>
+                        <td>{{row.TradeName}}</td>
+                        <td>{{row.TotalSeats}}</td>
+                        <td>{{row.P1}}</td>
+                        <td>{{row.P2}}</td>
+                        <td>{{row.P3}}</td>
+                        <td>{{row.P4}}</td>
+                        <td>{{row.P5}}</td>
+                        <td>{{row.P6}}</td>
+                        <td>{{row.P7}}</td>
+                        <td>{{row.P8}}</td>
+                        <td>{{row.P9}}</td>
+                        <td>{{row.P10}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+            <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+            <div class="paginationBoxItems flex items-center">
+                <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+                <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+                <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no."
+                    [(ngModel)]="currentInTablePage" [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+                <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+                <button (click)="nextInTablePage()"
+                    [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+                <button (click)="lastInTablePage()"
+                    [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+            </div>
+        </div>
+        <!--end pagination-->
+    </div>
+</div>

@@ -1,0 +1,156 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ isUpdate ? 'Update Room Type/Seats/No. of Rooms' : 'Create Room Type/Seats/No. of Rooms' }}</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Seat/Room Type</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+ isUpdate ? 'Update Seat/Room Type' : 'Add Seat/Room Type'
+        }}
+      </a>
+    </div>
+  </div>
+  <a routerLink="/dtedashboard" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> {{ isUpdate ? 'Update Room Type/Seats/No. of Rooms' : 'Add Room Type/Seats/No. of Rooms' }}</b>
+    </div>
+    <form [formGroup]="groupForm">
+      <div class="grid 2xl:grid-cols-5 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Name</label>
+          <select formControlName="ddlHostelID" #hostelNameRef class="form-select" id="HostelID" [(ngModel)]="request.HostelID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of HostelNameList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _groupForm.ddlHostelID.errors" class="text-danger">
+            <p *ngIf="!_groupForm.ddlHostelID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>  
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+          <select formControlName="txtRoomType" class="form-input" type="text" id="RoomType" placeholder="Enter Room Type"
+                  [(ngModel)]="request.RoomType" (change)="changeSeats()">
+            <option value="0">--Choose Room Type--</option>
+            <option *ngFor="let item of RoomTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
+          <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+            <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bed Capacity</label>
+          <input formControlName="txtSeatCapacity" class="form-input" type="text" id="SeatCapacity" placeholder="Enter Seat Capacity"
+                 [(ngModel)]="request.SeatCapacity">
+          <div *ngIf="isSubmitted && groupForm.controls.txtSeatCapacity.errors" class="text-danger">
+            <p *ngIf="_groupForm.txtSeatCapacity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Quantity</label>
+          <input formControlName="txtRoomQuantity" class="form-input" type="text" id="RoomQuantity" placeholder="Enter Room Quantity" [(ngModel)]="request.RoomQuantity">
+          <div *ngIf="isSubmitted && groupForm.controls.txtRoomQuantity.errors" class="text-danger">
+            <p *ngIf="_groupForm.txtRoomQuantity.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Fee Per Bed</label>
+          <input formControlName="txtRoomFee" class="form-input" type="text" id="RoomFee" placeholder="Enter Fee Per Bed" [(ngModel)]="request.RoomFee">
+          <div *ngIf="isSubmitted && groupForm.controls.txtRoomFee.errors" class="text-danger">
+            <p *ngIf="groupForm.controls.txtRoomFee.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <!--<button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveRoomSeatData()">Submit</button>-->
+
+
+          <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveRoomSeatData()">
+            {{ isUpdate ? 'Update' : 'Submit' }}
+          </button>
+
+
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Hostel Room /Seat List</b>
+
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+          <tr>
+
+            <th class="text-left">#</th>
+            <th class="text-left">Hostel Name</th>
+            <th class="text-left">Room Type</th>
+            <th class="text-left">Seat Capacity</th>
+            <th class="text-left">Room Quantity</th>
+            <th class="text-left">Room Fee</th>
+
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+          <!--<tr *ngFor="let item of HostelList;let idx=index;">-->
+          <tr *ngFor="let item of paginatedHostelList; let idx = index;">
+            <!--<td>{{idx+1}}</td>-->
+            <td>{{ (currentPage - 1) * itemsPerPage + idx + 1 }}</td>
+            <td>{{item.HostelName}}</td>
+            <td>{{item.RoomTypeName}}</td>
+            <td>{{item.SeatCapacity}}</td>
+            <td>{{item.RoomQuantity}}</td>
+            <td>{{item.FeePerBad}}</td>
+            <!--<td>
+      <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+        <a href="javascript:void(0);" title="Edit" (click)="onEditClick(item.HRSMasterID)"><i class="ti ti-pencil"></i></a>
+
+        <a href="javascript:void(0);" (click)=" DeleteDataByHRSMasterID(item.HRSMasterID)" title="Delete"><i class="ti ti-trash"></i></a>
+      </div>
+    </td>-->
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto">
+                <a href="javascript:void(0);" title="Edit" (click)="onEditClick(item.HRSMasterID)">
+                  <i class="ti ti-pencil"></i>
+                </a>
+                <a href="javascript:void(0);" (click)="DeleteDataByHRSMasterID(item.HRSMasterID)" title="Delete">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

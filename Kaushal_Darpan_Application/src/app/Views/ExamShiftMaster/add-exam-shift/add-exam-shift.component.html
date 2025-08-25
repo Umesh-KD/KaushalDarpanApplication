@@ -1,0 +1,127 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">Add Exam Shift</h4>
+  
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+        <a routerLink="/addexamshift" class="text-sm font-medium text-slate-700" aria-current="page">Add Exam Shift</a>
+      </div>
+    </div>
+    <a routerLink="/examshift" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+  </div>
+  <!-- Page Title End -->
+
+  <div class="card">
+      <div class="card">
+        <div class="card-body p-5">
+          <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Exam Shift</b>
+            </div>
+            <form [formGroup]="ExamShiftForm">
+                <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+                <div>
+                    <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Exam Shift<span class="StarMarking">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="ExamShiftName" placeholder="Exam Shift Name" name="ExamShiftName" formControlName="ExamShiftName"
+                        [(ngModel)]="request.ExamShiftName">
+                    <div *ngIf="isSubmitted && _ExamShiftForm.ExamShiftName.errors" class="text-danger">
+                    <p *ngIf="_ExamShiftForm.ExamShiftName.errors.required">
+                        <i aria-hidden="true"></i> This field is required.!
+                    </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Exam Shift<span class="StarMarking">*</span>
+                    </label>
+                    <input type="date" class="form-input" id="ExamShiftName" placeholder="Exam Shift Name" name="ExamShiftName" formControlName="StartTime"
+                        [(ngModel)]="request.StartTime">
+                    <div *ngIf="isSubmitted && _ExamShiftForm.StartTime.errors" class="text-danger">
+                    <p *ngIf="_ExamShiftForm.StartTime.errors.required">
+                        <i aria-hidden="true"></i> This field is required.!
+                    </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Exam Shift<span class="StarMarking">*</span>
+                    </label>
+                    <input type="date" class="form-input" id="ExamShiftName" placeholder="Exam Shift Name" name="ExamShiftName" formControlName="EndTime"
+                        [(ngModel)]="request.EndTime">
+                    <div *ngIf="isSubmitted && _ExamShiftForm.EndTime.errors" class="text-danger">
+                    <p *ngIf="_ExamShiftForm.EndTime.errors.required">
+                        <i aria-hidden="true"></i> This field is required.!
+                    </p>
+                    </div>
+                </div>
+
+                <!-- <div>
+                    <label for="txtMobileNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Mobile No<span class="StarMarking">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="txtMobileNo" placeholder="Mobile Number" name="txtMobileNo" formControlName="txtMobileNo"
+                        [(ngModel)]="request.MobileNo" maxlength="10">
+                    <div *ngIf="isSubmitted&&_ExamShiftForm.txtMobileNo.errors" class="text-danger">
+                    <p *ngIf="_AdminUserFormGroup.txtMobileNo.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required .!
+                    </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    SSO ID<span class="StarMarking">*</span>
+                    </label>
+                    <input type="text" class="form-input" id="txtSSOID" placeholder="Enter SSOID"name="txtSSOID" formControlName="txtSSOID"
+                        [(ngModel)]="request.SSOID">
+                    <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtSSOID.errors" class="text-danger">
+                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required .!
+                    </p>
+                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.pattern">
+                        <i aria-hidden="true"></i> Please Enter valid SSSOID .!
+                    </p>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    User Email<span class="StarMarking">*</span>
+                    </label>
+                    <input type="email" class="form-input" id="txtUserEmail" placeholder="User Email" name="txtUserEmail"
+                        formControlName="txtUserEmail" [(ngModel)]="request.Email">
+                    <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtUserEmail.errors" class="text-danger">
+                    <p *ngIf="_AdminUserFormGroup.txtUserEmail.errors.required">
+                        <i aria-hidden="true"></i> This field is
+                        required .!
+                    </p>
+                    </div>
+                </div> -->
+
+                </div>
+            </form>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" id="btnSave" >Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" >
+                  <i class="ti ti-refresh"></i> Reset
+                </button>
+              </div>
+
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+  </div>

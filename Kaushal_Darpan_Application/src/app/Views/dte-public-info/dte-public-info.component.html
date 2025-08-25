@@ -1,0 +1,23 @@
+
+<div class="container-fluid p-0 smallBanner">
+  <img src="../../../assets/KD5/images/bannerSmall.jpg"  style="width:100%" />
+</div>
+<!--<section class="py-5 Admission school-choice-section0 wow bounceIn fadeInRight bgShapN">-->
+<section class="py-5 school-choice-section0 wow bounceIn fadeInRight">
+  <div class="container-fluid">
+    <div class="container text-center">
+      <h4>DIRECTORATE OF TECHNICAL EDUCATION, RAJASTHAN<br /> ONLINE ADMISSION APPLICATION</h4>
+      <form [formGroup]="groupForm" style="display:none">
+        <select class="form-select" formControlName="ddlDepartmentID" [(ngModel)]="DepartmentID" (change)="chooseDeparment()">
+          <option value="1">BTER</option>
+          <option value="2">ITI</option>
+        </select>
+      </form>
+    </div>
+    <app-dtepublic-info-tabs [TypeId]="TypeId"></app-dtepublic-info-tabs>
+  </div>
+</section>
+
+
+
+

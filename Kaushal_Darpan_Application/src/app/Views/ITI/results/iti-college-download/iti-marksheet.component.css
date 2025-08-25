@@ -1,0 +1,13 @@
+
+.customEditorStyle {
+  background-color: lightyellow;
+  padding: 10px;
+  border: solid 1px #a0a0a5;
+  line-height: 30px;
+  font-family: Arial, sans-serif;
+}
+#pdfTable {
+  border: solid 1px #a0a0a5 !important;
+  padding: 20px;
+}
+

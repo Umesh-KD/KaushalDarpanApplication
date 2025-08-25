@@ -1,0 +1,444 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{searchRequest.StreamTypeId=='1' ?'Engineering':searchRequest.StreamTypeId=='2' ?'Non Engineering':searchRequest.StreamTypeId=='3' ?'lateral':''}} Seats Distributions</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <!--<a href="/AdminDashboardBTER" class="text-sm font-medium text-slate-700">Dashboard</a>-->
+      <a [routerLink]="['/AdminDashboardBTER']" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <!--<a href="/BTERCollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">BTER College Trade</a>-->
+      <a [routerLink]="['/BTERCollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">BTER College Trade</a>
+    </div>
+
+
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <a *ngIf="DateConfigSetting[0]['CREATE SEAT MATRIX']==1" routerLink="/BTERAddSeatMetrix{{searchRequest.StreamTypeId=='1' ?'ENG':searchRequest.StreamTypeId=='2' ?'NonENG':searchRequest.StreamTypeId=='3' ?'Lit':'' }}/{{searchRequest.StreamTypeId }}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Create Seat Matrix</a>
+      </div>
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getBTERCollege()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListBTERManagementType" [value]="item.ID">{{item.Name}}</option>
+          </select>
+
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By College:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getBTERTrade()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListBTERCollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.StreamID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListBTERTrade" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+        </div>
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade Scheme:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.StreamTypeId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListBTERTradeScheme" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Shift
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.ShiftID">
+            <option value=0>Choose Option</option>
+            <option value="1">GAS</option>
+            <option value="2">I Shift</option>
+            <option value="3">SFS(II Shift)</option>
+          </select>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Seat Available
+          </label>
+          <select class="form-select" (change)="GetTradeAndColleges(1)" [(ngModel)]="searchRequest.TotalSeatAvailable">
+            <option value=2>Choose Option</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <!--<div>
+
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Alltmet Type
+          </label>
+          <select class="form-select" (change)="AllotmentChange()" [(ngModel)]="searchRequest.AllotmentMasterId">
+            <option value="1">First Allotment</option>
+            <option value="3">Upward Allotment</option>
+            <option value="4">Second Allotment</option>
+            <option value="6">Internal Sliding</option>
+          </select>
+        </div>-->
+
+
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Fee Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.FeeStatus">
+            <option value="0">Choose Option</option>
+            <option value="1">ABC</option>
+            <option value="2">DEF</option>
+          </select>
+        </div>-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Status:
+          </label>
+          <select class="form-select" [(ngModel)]="ActiveStatusModel">
+            <option value="0">--Choose Option--</option>
+            <option value="1">Active</option>
+            <option value="2">In-Active</option>
+          </select>
+        </div>-->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetTradeAndColleges(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+        </div>
+
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+
+
+        <!--<a href="javascript:void(0)" (click)="SeatMatixInternalSliding()" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsLockSecondAllotment == 1 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 6" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i>Generate Seat Matrix For Internal Sliding</a>
+  <a href="javascript:void(0)" (click)="SeatMatixSecondAllotment()" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsLockFirstAllotment  == 1 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 4" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i>Generate Seat Matrix For Second Allotment</a>-->
+
+        <a href="javascript:void(0)" (click)="PublishSeatMatrix(6)" class="btn bg-info btn-sm text-white me-2" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsLockSecondAllotment== 1 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 6"><i class="ti ti-download"></i> Final lock and submit Internal Sliding Seat Matrix</a>
+        <!--<a href="javascript:void(0)" (click)="PublishSeatMatrix(4)" class="btn bg-info btn-sm text-white me-2" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsLockFirstAllotment == 1 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 4"><i class="ti ti-download"></i> Final lock and submit Second Allotment Seat Matrix</a>
+  <a href="javascript:void(0)" (click)="PublishSeatMatrix(1)" class="btn bg-info btn-sm text-white me-2" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 1"><i class="ti ti-download"></i> Final lock and submit Seat Matrix</a>
+  <a href="javascript:void(0)" (click)="OpenSeatMatrix(MyModel_SeatMatrix)" class="btn bg-info btn-sm text-white me-2" *ngIf="ListBTERCollegeTrade.length>0 && ListBTERCollegeTrade[0].IsPublish==0 && searchRequest.AllotmentMasterId == 1"><i class="ti ti-download"></i> Upload Seat Matrix</a>-->
+        <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
+
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div>
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetTradeAndColleges(1)">
+          <option value="10">10</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">#</th>
+            <th class="text-left">College Name</th>
+            <th class="text-left">Branch Name</th>
+            <th class="text-left">Branch Code</th>
+            <th class="text-left">Shift</th>
+            <th class="text-left">Total Seats</th>
+            <th class="text-left">SC</th>
+            <th class="text-left">SC F</th>
+            <th class="text-left">TSP</th>
+            <th class="text-left">TSP F</th>
+            <th class="text-left">ST</th>
+            <th class="text-left">ST F</th>
+            <th class="text-left">OBC</th>
+            <th class="text-left">OBC F</th>
+            <th class="text-left">MBC </th>
+            <th class="text-left">MBC F</th>
+            <th class="text-left">GEN</th>
+            <th class="text-left">GEN F</th>
+            <th class="text-left">TOTAL</th>
+            <th class="text-left">TFWS</th>
+            <th class="text-left">Total Seats for centralised Adm</th>
+            <th class="text-left">Management Seats</th>
+            <th class="text-left">G Total</th>
+            <th class="text-left">KM</th>
+            <th class="text-left">EXS(MP)</th>
+            <th class="text-left">PH</th>
+            <th class="text-left">WID</th>
+            <th class="text-left">SMD</th>
+            <th class="text-left">EWS</th>
+            <th class="text-left">EWS F</th>
+
+            <th align="center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ListBTERCollegeTrade | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.Collegename}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.InstituteStreamName}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.BranchCode}}</td>
+            <td align="left" class="{{item.SeatNotAvailable}}">{{item.ShiftName}}</td>
+            <td>{{item.TotalSeats - item.TFWS}}</td>
+            <td>{{item.SC}}</td>
+            <td>{{item.SC_F}}</td>
+            <td>{{item.TSP}}</td>
+            <td>{{item.TSP_F}}</td>
+            <td>{{item.ST}}</td>
+            <td>{{item.ST_F}}</td>
+            <td>{{item.OBC}}</td>
+            <td>{{item.OBC_F}}</td>
+            <td>{{item.MBC}} </td>
+            <td>{{item.MBC_F}}</td>
+            <td>{{item.GEN}}</td>
+            <td>{{item.GEN_F}}</td>
+            <td>{{item.TotalSeats}}</td>
+            <td>{{item.TFWS}}</td>
+            <td>{{item.TotalSeats }}</td>
+            <td>{{item.MGM}}</td>
+            <td>{{item.TotalSeats + item.TFWS +item.MGM}}</td>
+            <td>{{item.KM}}</td>
+            <td>{{item.EX}}</td>
+            <td>{{item.PH}}</td>
+            <td>{{item.WID}}</td>
+            <td>{{item.SMD}}</td>
+            <td>{{item.EWS}}</td>
+            <td>{{item.EWS_F}}</td>
+
+
+
+
+
+
+
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="openViewSeatDetails(MyModel_ViewSeatDetails, item.CollegeTradeId, item.Collegename, item.InstituteStreamName, item.ShiftName)" title="View"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  ListBTERCollegeTrade?.length }} of {{ListBTERCollegeTrade[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetTradeAndColleges(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="ListBTERCollegeTrade[0]?.TotalRecords==0" (change)="GetTradeAndColleges(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetTradeAndColleges(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<ng-template #MyModel_ViewSeatDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Seat Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <h4><b>College Name:</b> {{CollegeNamePop}}</h4>
+        <h4><b>Branch name :</b> {{TradeNamePop}}</h4>
+        <h4><b>Shift:</b> {{TradeSchemeNamePop}}</h4>
+
+
+
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">TotalSeats</th>
+                <th class="text-left">GEN</th>
+                <th class="text-left">GEN_F</th>
+                <th class="text-left">SC</th>
+                <th class="text-left">SC_F</th>
+                <th class="text-left"> ST</th>
+                <th class="text-left">ST_F</th>
+                <th class="text-left">TSP</th>
+                <th class="text-left">TSP_F</th>
+
+                <th class="text-left">OBC</th>
+                <th class="text-left">OBC_F</th>
+
+
+                <th class="text-left">EWS</th>
+                <th class="text-left">EWS_F</th>
+                <th class="text-left">MBC</th>
+                <th class="text-left">MBC_F</th>
+
+
+                <th class="text-left">TFWS</th>
+                <th class="text-left">MANAGEMENT</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td class="text-left">{{item.TotalSeats}}</td>
+                <td class="text-left">{{item.GEN}}</td>
+                <td class="text-left">{{item.GEN_F}}</td>
+                <td class="text-left">{{item.SC}}</td>
+                <td class="text-left">{{item.SC_F}}</td>
+                <td class="text-left">{{item. ST}}</td>
+                <td class="text-left">{{item.ST_F}}</td>
+                <td class="text-left">{{item.TSP}}</td>
+                <td class="text-left">{{item.TSP_F}}</td>
+                <td class="text-left">{{item.OBC}}</td>
+                <td class="text-left">{{item.OBC_F}}</td>
+                <td class="text-left">{{item.EWS}}</td>
+                <td class="text-left">{{item.EWS_F}}</td>
+                <td class="text-left">{{item.MBC}}</td>
+                <td class="text-left">{{item.MBC_F}}</td>
+
+                <td class="text-left">{{item.TFWS}}</td>
+                <td class="text-left">{{item.MGM}}</td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 mt-3 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Horizontal Seats</b>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+
+                <th class="text-left">Single Mother Dependent(SMD)</th>
+                <th class="text-left">WIDOW/DIVORCEE</th>
+                <th class="text-left">EX-SERVICE MEN</th>
+                <th class="text-left">PH</th>
+                <th class="text-left">KM</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of ListViewSeatDetails | tableSearchFilter:Table_SearchText;let idx=index;">
+
+
+                <td class="text-left">{{item.SMD}}</td>
+                <td class="text-left">{{item.WID_DIV}}</td>
+                <td class="text-left">{{item.EX}}</td>
+                <td class="text-left">{{item.PH}}</td>
+                <td class="text-left">{{item.KM}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #MyModel_SeatMatrix let-modal class="w-full h-full fixed top-0 left-0 z-[80] transBTERon-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Seat Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div class="gap-3">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+              <!-- File Input for Excel -->
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <div class="mt-5">
+            <a href="javascript:void(0)" (click)="SampleexportExcelData()" class="btn bg-info btn-md text-white mt-3"><i class="ti ti-download"></i>Download Sample</a>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-5" *ngIf="DataExcel.length > 0">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> Seat Matrix List</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a href="javascript:void(0);" (click)="openOTPUploadExcel()" class="btn bg-info btn-sm text-white">
+              <i class="ti ti-edit"></i> Save
+            </a>
+          </div>
+        </div>
+
+        <div class="table-responsive" *ngIf="DataExcel4.length > 0 && DataExcel.length>0 ">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead>
+              <tr>
+                <th *ngFor="let item of DataExcel4">{{ item  }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let items of DataExcel; let indx=index">
+
+                <td *ngFor="let item of DataExcel4">{{ DataExcel[indx][item] }}</td>
+
+                <!--<td *ngFor="let item of items.values">{{item}}</td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+<app-otpmodal #otpModal1></app-otpmodal>

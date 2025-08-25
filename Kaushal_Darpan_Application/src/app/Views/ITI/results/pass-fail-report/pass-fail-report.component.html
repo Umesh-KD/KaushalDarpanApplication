@@ -1,0 +1,99 @@
+<div class="card">
+  <div class="card-body p-5">
+    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Year<span class="StarMarking">*</span></label>
+          <select formControlName="ddlExamYearID" id="ExamYearID" [(ngModel)]="MarksheetSearch.ExamYearID" class="form-input">
+            <option value="0">--Select--</option>
+            <option value="1">1st Year</option>
+            <option value="2">2nd Year</option>
+          </select>
+
+          <div *ngIf="isSubmitted&&_searchForm.ddlExamYearID.errors" class="text-danger">
+            <p *ngIf="!_searchForm.ddlExamYearID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Fail/Pass<span class="StarMarking">*</span></label>
+          <select formControlName="ddlPassFailID" id="PassFailID" [(ngModel)]="MarksheetSearch.PassFailID" class="form-input">
+            <option value="0">--Select--</option>
+            <option value="1">Pass</option>
+            <option value="2">Fail</option>
+          </select>
+          <div *ngIf="isSubmitted&&_searchForm.ddlPassFailID.errors" class="text-danger">
+            <p *ngIf="!_searchForm.ddlPassFailID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+        <div>
+          <button class="btn bg-info text-white mt-6 me-1" type="submit"><i class="ti ti-search"></i>Search</button>
+          <button *ngIf="GetStudentITI_MarksheetList.length > 0" class="btn bg-info text-white mt-6 me-1" type="submit" (click)="GetITIStudent_PassList()"><i class="ti ti-search"></i>Download</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="card-body p-5" style="min-height:400px;" *ngIf="GetStudentITI_MarksheetList.length > 0">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> List</b>
+        <div class="flex justify-end flex-wrap items-center">
+
+        </div>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+
+      <!--{{GetStudentITI_MarksheetList|json}}-->
+      <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="GetStudentITI_MarksheetList.length > 0">
+        <tbody>
+
+          <tr *ngIf="GetStudentITI_MarksheetList1.length>0">
+            <th colspan="2" style="text-align:left" class="p-5">1 Year Engineering</th>
+          </tr>
+
+          <tr *ngIf="GetStudentITI_MarksheetList1.length>0">
+            <th class="text-left p-5">Trade</th>
+            <th class="text-left p-5">{{SearchTypeText}} </th>
+          </tr>
+
+          <tr *ngFor="let item of GetStudentITI_MarksheetList1 ;let idx=index;">
+            <td class="p-5">{{item.Trade}}</td>
+            <td class="p-5">{{item.PassStudentRollNos}}</td>
+          </tr>
+
+          <tr *ngIf="GetStudentITI_MarksheetList2.length>0">
+            <th colspan="2" style="text-align:left" class="p-5">2 Year Engineering</th>
+          </tr>
+
+          <tr *ngIf="GetStudentITI_MarksheetList2.length>0">
+            <th class="text-left p-5">Trade</th>
+            <th class="text-left p-5">Pass Student </th>
+          </tr>
+
+          <tr *ngFor="let item of GetStudentITI_MarksheetList2 ;let idx=index;">
+            <td class="p-5">{{item.Trade}}</td>
+            <td class="p-5">{{item.PassStudentRollNos}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+    </div>
+    <div *ngIf="GetStudentITI_MarksheetList.length == 0" class="text-center text-gray-500 p-5">
+      {{SearchTypeText}} No records found.
+    </div>
+  </div>
+</div>
+

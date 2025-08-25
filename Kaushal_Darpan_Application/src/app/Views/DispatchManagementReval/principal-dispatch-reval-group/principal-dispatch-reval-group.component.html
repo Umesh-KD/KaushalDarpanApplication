@@ -1,0 +1,220 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Principal Dispatch Reval Group List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dispatch Management Reval</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/PrincipalDispatchRevalGroup" class="text-sm font-medium text-slate-700" aria-current="page">Principal Dispatch Reval Group List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <!--<a routerLink="/DispatchToInstitute" class="btn bg-info btn-sm text-white me-2">
+          <i class="ti ti-plus"></i>Add
+        </a>-->
+          <!--<a routerLink="/Changerow" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-refresh"></i>Change row
+        </a>-->
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Name</label>
+        <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.ExamID"> 
+          <option value="0">Choose Option</option>
+          <option *ngFor="let item of ExamList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>-->
+        <!--semester-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status Type</label>
+          <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.Status">
+            <!--<option value="0" ng-reflect-value="0">--Select--</option>-->
+            <option value="0">Pending</option>
+            @for (item of StatusTypelist; track item) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
+
+
+
+
+        <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+        <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID" [disabled]="isInstituteDisabled">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">
+            {{item.InstituteName}}
+          </option>
+        </select>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status Type</label>
+        <select class="form-select ng-pristine ng-valid ng-touched" [(ngModel)]="searchRequest.Status">
+          <option value="0" ng-reflect-value="0">--Select--</option>
+          @for (item of StatusTypelist; track item) {
+          <option [value]="item.ID">{{item.Name}}</option>
+          }
+        </select>
+      </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getgroupteacherData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <button type="button" class="btn bg-info text-white" (click)="DownloadAckReportPri()">Download Report</button>
+    </div>
+
+    <div class="flex justify-end mt-3">
+      <button type="button" class="btn bg-primary text-white" (click)="submitSelected()">
+        <i class="ti ti-device-floppy"></i> Handed over to the examiner
+      </button>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+      </select>-->
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--{{GroupList|json}}-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th  class="text-left" *ngIf=" searchRequest.Status==0  " > <input type="checkbox" [(ngModel)]="isAllSelected" (change)="toggleAllSelection()" /></th>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Teacher Name</th>
+            <th class="text-left">Group Code</th>
+            <th class="text-left">Dispatch No</th>
+            <th class="text-left">Dispatch Date</th>
+            <th class="text-left">Due Date</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">File</th>
+            <th class="text-center">Action</th>
+
+          </tr>
+
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of GroupList | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left" *ngIf=" searchRequest.Status==0 ">  <input type="checkbox" [(ngModel)]="row.selected" (change)="checkIfAllSelected()" /></td>
+            <td align="left">{{idx+1}}</td>
+            <td>{{row.StaffName}}</td>
+            <td>{{row.GroupCode}}</td>
+            <td>{{row.DispatchNo}}</td>
+            <td>{{row.DispatchDate}}</td>
+            <td>{{row.DueDate}}</td>
+            <td>{{row.DispatchStatus}}</td>
+            <td>  <a *ngIf="row.DispatchGroupFileName != null && row.DispatchGroupFileName != ''" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.DispatchGroupFileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a></td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto"
+                   style="width:auto !important">
+                <a href="javascript:void(0);" title="Download"><i class="ti ti-download" (click)="DownloadDispatchGroupCertificate(row.DispatchGroupID,row.Id)"></i></a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b>Dispatch Documents Uploads</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup1()"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="QueryReqFormGroup" id="QueryReqFormGroup">
+        <div class="card-body">
+
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+              <textarea type="text" class="form-input" placeholder="Remark" formControlName="Remark" [(ngModel)]="UpdateFileHandover.Remark"></textarea>
+
+            </div>
+
+
+            <div>
+              <label for="txtDueDate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                Due Date:
+              </label>
+              <input type="date" class="form-input" id="txtDueDate" name="txtDueDate" formControlName="txtDueDate"
+                     [(ngModel)]="UpdateFileHandover.DueDate" >
+            </div>
+
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     for="fileStudentPhoto">Attachments</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                <label for="fileStudentPhoto">
+                  <span>Choose File</span>
+                  {{UpdateFileHandover.FileName === '' ? 'No File Choosen' : UpdateFileHandover.FileName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + UpdateFileHandover.FileName}}" *ngIf="UpdateFileHandover.ReplayAttachment !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+        </div>
+      </form>
+      <div class="card-footer text-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="openOTP()">Submit</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup1()">Cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+</ng-template>
+
+
+<app-otpmodal #otpModal></app-otpmodal>
+
+
+

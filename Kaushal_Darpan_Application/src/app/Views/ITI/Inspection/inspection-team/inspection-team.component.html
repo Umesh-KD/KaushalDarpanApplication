@@ -1,0 +1,178 @@
+<main class="flex-grow p-6">
+
+    <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Inspection Members</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a routerLink="/iti-inspection" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+          </div>
+        </div>
+        <form *ngIf="InspectionFormGroup"  [formGroup]="InspectionFormGroup">
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+              <!-- <div class="mt-1" *ngIf="this.showTeamInitials">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> </label>
+                <input type="text" formControlName="TeamInitials" class="form-input disabled" readonly [(ngModel)]="request.TeamInitials" placeholder="Team Name">
+                <div *ngIf="isFormSubmitted && inspectionForm.TeamInitials.errors" class="text-danger">
+                  <p *ngIf="inspectionForm.TeamInitials.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div> -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Team Name</label>
+                <input type="text" formControlName="InspectionTeamName" class="form-input" [(ngModel)]="request.InspectionTeamName" placeholder="Team Name" [readonly]="isFormReadOnly">
+                <div *ngIf="isFormSubmitted && _inspectionForm.InspectionTeamName.errors" class="text-danger">
+                  <p *ngIf="_inspectionForm.InspectionTeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Team Type</label>
+                <select type="text" class="form-input" formControlName="TeamTypeID" [(ngModel)]="request.TeamTypeID" [disabled]="isFormReadOnly">
+                  <option [value]="0">--Select--</option>
+                  <option [value]="_EnumInspectionDeploymentType.Planned">Planned</option>
+                  <option [value]="_EnumInspectionDeploymentType.Unplanned">Unplanned</option>
+                </select>
+
+                <div *ngIf="isSubmitted && _inspectionForm.TeamTypeID.errors" class="text-danger">
+                  <p *ngIf="!_inspectionForm.TeamTypeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+
+               <div>
+               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date From</label>
+               <input type="date"
+                      formControlName="DeploymentDateFrom"
+                      [(ngModel)]="request.DeploymentDateFrom"
+                      class="form-input"
+                      [readonly]="isFormReadOnly"
+                      min="1900-01-01"
+                      max="2099-12-31" />
+             
+               <div *ngIf="isSubmitted && _inspectionForm.DeploymentDateFrom.errors" class="text-danger">
+                 <p *ngIf="_inspectionForm.DeploymentDateFrom.errors.required">
+                   <i aria-hidden="true"></i> This field is required.!
+                 </p>
+               </div>
+             </div>
+             
+             <div>
+               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date To</label>
+               <input formControlName="DeploymentDateTo"
+                      [(ngModel)]="request.DeploymentDateTo"
+                      [min]="request.DeploymentDateFrom"
+                      class="form-input"
+                      type="date"
+                      [readonly]="isFormReadOnly"
+                      min="1900-01-01"
+                      max="2099-12-31" />
+             
+               <div *ngIf="isSubmitted && _inspectionForm.DeploymentDateTo.errors" class="text-danger">
+                 <p *ngIf="_inspectionForm.DeploymentDateTo.errors.required">
+                   <i aria-hidden="true"></i> This field is required.!
+                 </p>
+               </div>
+             </div>
+            </div>
+        </form>
+        <form *ngIf="InspectionMemberFormGroup" [formGroup]="InspectionMemberFormGroup">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+           
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+    <select type="text" class="form-input" formControlName="DistrictID" [(ngModel)]="requestMember.DistrictID"  (change)="GetInstituteMaster_ByDistrictWise()">
+      <option [value]="0">--Select--</option>
+      @for (item of DistrictMasterDDL; track item.ID) {
+      <option [value]="item.ID">{{item.Name}}</option>
+      }
+    </select>
+    <div *ngIf="isSubmitted && _inspectionMemberForm.DistrictID.errors" class="text-danger">
+      <p *ngIf="!_inspectionMemberForm.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> College Name</label>
+    <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="requestMember.InstituteID"  (change)="GetStaff_InstituteWise()">
+      <option [value]="0">--Select--</option>
+      @for (item of InstituteMasterDDL; track item.Id) {
+      <option [value]="item.Id">{{item.Name}}</option>
+      }
+    </select>
+    <div *ngIf="isSubmitted && _inspectionMemberForm.InstituteID.errors" class="text-danger">
+      <p *ngIf="!_inspectionMemberForm.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>-->
+            <div>
+              <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1"> Teachers</label>
+
+    <select type="text" class="form-input" formControlName="StaffID" [(ngModel)]="requestMember.StaffID">
+      <option [value]="0">--Select--</option>
+      @for (item of ExaminerDDL; track item.ID) {
+      <option [value]="item.StaffID">{{item.SSOID}} - ({{item.Name}})</option>
+      }
+    </select>
+    <div *ngIf="isSubmitted && _inspectionMemberForm.StaffID.errors" class="text-danger">
+      <p *ngIf="!_inspectionMemberForm.StaffID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>-->
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID</label>
+              <input type="text" formControlName="SSOID" class="form-input" [(ngModel)]="requestMember.SSOID" placeholder="SSO ID">
+              <div *ngIf="isFormSubmitted && _inspectionMemberForm.SSOID.errors" class="text-danger">
+                <p *ngIf="_inspectionMemberForm.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddMoreMember()">Verify</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
+        
+      </div>
+
+      <div class="overflow-auto max-height500">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr>
+              <th>#</th>
+              <th class="text-left">Name</th>
+              <!--<th class="text-left">User ID</th>-->
+              <th class="text-left">SSOID</th>
+              <th class="text-left">Member Type</th>
+              <th>Action</th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of request.InspectionMemberDetails; let idx = index;">
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.StaffName}}</td>
+              <!--<td class="text-left">{{row.StaffID}}</td>-->
+              <td class="text-left">{{row.SSOID}}</td>
+              <td class="text-left">
+                <label><input type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)">&nbsp; Set Incharge</label>
+              </td>
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <div class="p-4">
+      <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+      <button type="button" id="btnReset" class="btn bg-danger text-white">
+        <i class="ti ti-refresh"></i> Reset
+      </button>
+    </div>
+
+    </div>
+  </div>
+</main>

@@ -1,0 +1,178 @@
+<main class="flex-grow p-6">
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Apprenticeship Deployment</b>
+          <div class="flex justify-end flex-wrap items-center">
+            <a routerLink="/iti-apprenticeship" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+          </div>
+        </div>
+        <form *ngIf="ApprenticeshipDeploymentFromGroup" [formGroup]="ApprenticeshipDeploymentFromGroup">
+          <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Industry Name</label>
+              <input type="text" formControlName="IndustryName" class="form-input" [(ngModel)]="request.IndustryName" placeholder="Industry Name">
+              <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.IndustryName.errors" class="text-danger">
+                <p *ngIf="_ApprenticeshipDeploymentFromGroup.IndustryName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Head Name</label>
+              <input type="text" formControlName="HeadName" class="form-input" [(ngModel)]="request.HeadName" placeholder="Head Name" >
+              <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.HeadName.errors" class="text-danger">
+                <p *ngIf="_ApprenticeshipDeploymentFromGroup.HeadName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Head Designation</label>
+              <input type="text" formControlName="Designation" class="form-input" [(ngModel)]="request.Designation" placeholder="Designation" >
+              <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.Designation.errors" class="text-danger">
+                <p *ngIf="_ApprenticeshipDeploymentFromGroup.Designation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Address</label>
+              <input type="text" formControlName="Address" class="form-input" [(ngModel)]="request.Address" placeholder="Address" >
+              <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.Address.errors" class="text-danger">
+                <p *ngIf="_ApprenticeshipDeploymentFromGroup.Address.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+    <select type="text" class="form-input" formControlName="DistrictID" [(ngModel)]="requestDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
+      <option value="0">--Select--</option>
+      @for (item of DistrictMasterDDL; track item.ID) {
+      <option [value]="item.ID">{{item.Name}}</option>
+      }
+    </select>
+
+
+    <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.DistrictID.errors" class="text-danger">
+      <p *ngIf="!_ApprenticeshipDeploymentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
+    <select type="text" class="form-input" formControlName="InstituteID" [(ngModel)]="requestDeploy.InstituteID">
+      <option value="0">--Select--</option>
+      @for (item of InstituteMasterDDL; track item.Id) {
+      <option [value]="item.Id">{{item.Name}}</option>
+      }
+    </select>
+
+
+    <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.InstituteID.errors" class="text-danger">
+      <p *ngIf="!_ApprenticeshipDeploymentFromGroup.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>-->
+            <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date From</label>
+    <input formControlName="DeploymentDateFrom"
+           [(ngModel)]="requestDeploy.DeploymentDateFrom"
+           class="form-input"
+           type="date" />
+
+    <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.DeploymentDateFrom.errors" class="text-danger">
+      <p *ngIf="_ApprenticeshipDeploymentFromGroup.DeploymentDateFrom.errors.required">
+        <i aria-hidden="true"></i> This field is required.!
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Date To</label>
+    <input formControlName="DeploymentDateTo"
+           [(ngModel)]="requestDeploy.DeploymentDateTo"
+           [min]="requestDeploy.DeploymentDateFrom"
+           class="form-input"
+           type="date" />
+
+    <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.DeploymentDateTo.errors" class="text-danger">
+      <p *ngIf="_ApprenticeshipDeploymentFromGroup.DeploymentDateTo.errors.required">
+        <i aria-hidden="true"></i> This field is required.!
+      </p>
+    </div>
+  </div>-->
+            <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Deployment Type</label>
+    <select type="text" class="form-input" formControlName="DeploymentType" [(ngModel)]="requestDeploy.DeploymentType">
+      <option [value]="0">--Select--</option>
+      <option [value]="_EnumApprenticeshipDeploymentType.Planned">Planned</option>
+      <option [value]="_EnumApprenticeshipDeploymentType.Unplanned">Unplanned</option>
+
+    </select>
+
+
+    <div *ngIf="isSubmitted && _ApprenticeshipDeploymentFromGroup.InstituteID.errors" class="text-danger">
+      <p *ngIf="!_ApprenticeshipDeploymentFromGroup.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div> -->
+
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddDeployment()">Add More</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Added Apprenticeship Deployment List</b>
+
+      </div>
+
+      <div class="overflow-auto max-height500">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr>
+              <th>#</th>
+              <th class="text-left">Industry Name</th>
+              <th class="text-left">Head Name</th>
+              <th class="text-left">Designation</th>
+              <th class="text-left">Address</th>
+              <!--<th class="text-left">Deployment Date From</th>
+              <th class="text-left">Deployment Date To</th>-->
+              <!-- <th class="text-left">Deployment Type</th> -->
+              
+              <th>Action</th>
+            </tr>
+
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of AddedDeploymentList; let idx = index;">
+              <td class="text-left">{{idx+1}}</td>
+              <td class="text-left">{{row.IndustryName}}</td>
+              <td class="text-left">{{row.HeadName}}</td>
+              <td class="text-left">{{row.Designation}}</td>
+              <td class="text-left">{{row.Address}}</td>
+              <!--<td class="text-left">{{row.DeploymentDateFrom}}</td>
+              <td class="text-left">{{row.DeploymentDateTo}}</td>-->
+              <!-- <td class="text-left">{{row.DeploymentTypeName}}</td> -->
+
+              <td class="text-center">
+                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                  <i class="ti ti-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="p-4">
+        <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+        <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+
+    </div>
+  </div>
+</main>
