@@ -9,6 +9,7 @@ import { ABCIDStudentDetailsDataModel } from '../../Models/ABCIDStudentDetailsDa
 @Injectable({
   providedIn: 'root'
 })
+
 export class AbcIdStudentDetailsService {
   readonly APIUrl = this.appsettingConfig.apiURL + "AbcIdStudentDetails";
   readonly headersOptions: any;
