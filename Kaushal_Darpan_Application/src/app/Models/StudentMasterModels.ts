@@ -190,10 +190,16 @@ export class RevertDataModel {
 
 
 export interface EligibleStudentButPendingForVerification {
- 
+  RoleId?: number;
+  ModifyBy?: number;
   StudentId: number;
- 
+  Remark?: String;
+
+  EndTermID?: number;
+  DepartmentID?: number;
+  Eng_NonEng?: number;
 }
+
 export interface ForSMSEnrollmentStudentMarkedModel extends RequestBaseModel {
   StudentId: number;
   Status: number;
