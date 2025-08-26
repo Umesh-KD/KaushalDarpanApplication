@@ -104,7 +104,7 @@
                        [readonly]="ItemDetailsList[i]?.EquipmentWorking === 2"
                        (focus)="clearIfZero(item, 'txtEquipmentCode')"
                        (blur)="resetIfEmpty(item, 'txtEquipmentCode')"
-                       (change)="equipmentCodeDuplicate(item.get('txtEquipmentCode')?.value, i)"
+                       (change)="equipmentCodeDuplicate(item.get('txtEquipmentCode')?.value, i,itemDetails.Category)"
                        />
 
                 <div *ngIf="isSubmitted && item.get('txtEquipmentCode')?.errors" class="text-danger">
