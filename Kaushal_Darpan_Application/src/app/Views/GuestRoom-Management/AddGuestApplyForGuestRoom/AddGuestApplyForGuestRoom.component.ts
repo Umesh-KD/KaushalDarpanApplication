@@ -73,10 +73,10 @@ export class AddGuestApplyForGuestRoomComponent {
     this.IIPMasterFormGroup = this.formBuilder.group(
       {
         DisplayName: ['', Validators.required],
-        PostalCode: ['', Validators.required],
+        PostalCode: [''],
         MailPersonal: ['', Validators.required],
         MobileNo: ['', Validators.required],
-        PostalAddress: ['', Validators.required],
+        PostalAddress: [''],
         EmpID: ['', []],
         txtFromDate: ['', Validators.required],
         txtFromTime: [''],

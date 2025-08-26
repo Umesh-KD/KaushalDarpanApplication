@@ -19,7 +19,7 @@
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
-          <ng-select formControlName="StreamID" [clearable]="false">
+          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamDDL(TableForm.value.StreamID)">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of StreamMasterDDL; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
@@ -29,7 +29,7 @@
             <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
-
+        <!--{{GetSectionData|json}}-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
           <ng-select formControlName="SectionID" [clearable]="false">

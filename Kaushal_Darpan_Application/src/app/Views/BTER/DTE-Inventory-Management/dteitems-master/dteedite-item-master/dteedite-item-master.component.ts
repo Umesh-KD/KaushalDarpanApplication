@@ -70,6 +70,9 @@ export class DteEditeItemMasterComponent {
     this.addItemsControls();
 
     // ✅ Disable status where needed
+
+
+    debugger
     this.itemsFormArray.controls.forEach((group, index) => {
       const equipmentWorking = this.ItemDetailsList[index]?.EquipmentWorking;
       if (equipmentWorking === 2) {
@@ -334,21 +337,64 @@ getRange(quantity: string | number): number[] {
     }
   }
 
-  equipmentCodeDuplicate(currentValue: string, index: number) {
+  async equipmentCodeDuplicate(currentValue: string, index: number, categoryName:string) {
     if (!currentValue) return;
 
     const normalized = currentValue.trim().toUpperCase(); // normalize for comparison
     if (!normalized) return;
+    
+    try {
+      this.loaderService.requestStarted();
+
+      debugger
+
+      this.searchdata.ItemCategoryName = categoryName;
+      this.searchdata.EquipmentsCode = currentValue;
+      const data: any = await this.dteItemsMasterService.EquipmentCodeDuplicate(this.searchdata);
+
+      // If API returns an array from SQL
+      if (data && data.State === 3) {
+        this.Message = data.Message;
+        this.IsDuplicate = data.IsDuplicate;
+
+        this.toastr.warning(`Duplicate Equipment Code: ${normalized}`)
+        this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
+
+       
+      }
+      // If API returns a single object
+      else if (data && data.State === 1) {
+        this.Message = data.Message;
+        this.IsDuplicate = data.IsDuplicate;
+
+        const otherValues = this.itemsFormArray.controls
+          .map((ctrl, i) => i !== index ? (ctrl.get('txtEquipmentCode')?.value || '').trim().toUpperCase() : null)
+          .filter(v => !!v); // remove null/empty
+
+        if (otherValues.includes(normalized)) {
+          /*alert();*/
+          this.toastr.warning(`Duplicate Equipment Code: ${normalized}`)
+          this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
+
+
+        }
+
+      }
+    }
+    catch (ex) {
+      console.error('Error checking duplicate code:', ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
 
     // Collect all values excluding the current index
-    const otherValues = this.itemsFormArray.controls
-      .map((ctrl, i) => i !== index ? (ctrl.get('txtEquipmentCode')?.value || '').trim().toUpperCase() : null)
-      .filter(v => !!v); // remove null/empty
+   
 
-    if (otherValues.includes(normalized)) {
-      alert(`Duplicate Equipment Code: ${normalized}`);
-      this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
-    }
+
+    
   }
 
 

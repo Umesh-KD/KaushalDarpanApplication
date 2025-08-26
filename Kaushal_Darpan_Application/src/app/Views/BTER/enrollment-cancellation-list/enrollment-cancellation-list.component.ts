@@ -18,6 +18,7 @@ import { StudentEnrollmentCancelationService } from '../../../Services/Enrollmen
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { StudentService } from '../../../Services/Student/student.service';
+import { ReportService } from '../../../Services/Report/report.service';
 
 @Component({
   selector: 'app-enrollment-cancellation-list',
@@ -50,6 +51,8 @@ export class EnrollmentCancellationListComponent implements OnInit, OnDestroy {
   encryptedParam!: string;
   public DefaultApplicationText: String = '';
 
+  public ActionDynamic: string = 'Cancel-Enrollment-migration';
+
   public statusOptions = [
     { value: 205, label: 'Section Incharge Requested' },
     { value: 3, label: 'Student Requested' },
@@ -71,10 +74,19 @@ export class EnrollmentCancellationListComponent implements OnInit, OnDestroy {
   modalReference: NgbModalRef | undefined;
   ShowBTERApply: boolean = false;
   dateConfiguration = new DateConfigurationModel();
-  constructor(private loaderService: LoaderService, private encryptionService: EncryptionService,
-    private commonservice: CommonFunctionService, public appsettingConfig: AppsettingService, private Swal2: SweetAlert2,
-    private studentService: StudentService, private EnrollmentCancelation: StudentEnrollmentCancelationService, private modalService: NgbModal, private toastrService:
-      ToastrService, private sMSMailService: SMSMailService, private cookieService: CookieService, private formBuilder: FormBuilder, private dateMasterService: DateConfigService) { }
+  constructor(private loaderService: LoaderService,
+    private encryptionService: EncryptionService,
+    private commonservice: CommonFunctionService,
+    public appsettingConfig: AppsettingService,
+    private Swal2: SweetAlert2,
+    private studentService: StudentService,
+    private EnrollmentCancelation: StudentEnrollmentCancelationService,
+    private modalService: NgbModal, private toastrService: ToastrService,
+    private sMSMailService: SMSMailService,
+    private cookieService: CookieService,
+    private formBuilder: FormBuilder,
+    private reportService: ReportService,
+    private dateMasterService: DateConfigService) { }
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
   showResendButton: boolean = false; // Whether to show the "Resend OTP" button
@@ -229,6 +241,45 @@ export class EnrollmentCancellationListComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  downloadBase64PDF(base64: string, filename: string): void {
+    const byteCharacters = atob(base64);
+    const byteArray = new Uint8Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteArray[i] = byteCharacters.charCodeAt(i);
+    }
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(blobUrl);
+  }
+
+  async CertificateDownload(row: any): Promise<void> {
+    try {
+      this.loaderService.requestStarted();
+      this.Request.Action = this.ActionDynamic;
+      this.Request.StudentID = row.StudentID;
+      this.Request.EnrollmentNo = row.EnrollmentNo;
+      this.Request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.Request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+      const data = await this.reportService.BterCertificateReportDownload(this.Request);
+      if (data && data.Data) {
+        this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
+      } else {
+        this.toastrService.error('Data not found');
+      }
+    } catch (ex) {
+      console.error(ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
 
   async CancelEnrolment(row: any) {
 
