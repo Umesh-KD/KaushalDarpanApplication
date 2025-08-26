@@ -91,6 +91,8 @@ export class AttendanceTimeTableComponent implements OnInit {
       AssignbyStaffID: [0, Validators.required],
       SemesterID: [0, Validators.required]
     });
+    
+
     this.GetAttendanceTimeTable();
     this.loadDropdownData();
  /*   this.getBranchHodData();*/
@@ -196,7 +198,7 @@ export class AttendanceTimeTableComponent implements OnInit {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      StreamID: this.streamID,
+      StreamID: 43,
 
     }
     await this.staffMasterService.GetBranchSectionData(obj)
@@ -222,24 +224,42 @@ export class AttendanceTimeTableComponent implements OnInit {
       this.ApprovedTeacherList = data['Data'];
     });
   }
-
-
-  getSubjectMasterDDL(ID: any, SemesterID: any) {
-    this.streamID = Number(ID); // Corrected property name
-
-
-    alert(this.streamID);
+  getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
+    this.streamID = 43; // Store selected stream ID
     this.getupBranchHodData();
-    if (ID && SemesterID != "" && SemesterID != null) {
-      this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.SubjectMasterDDL = data.Data;
-      })
-    } else {
-      console.error('Event or value is undefined');
-    }
 
+    if (StreamID && SemesterID) {
+      this.commonMasterService
+        .SubjectMaster_StreamIDWise(StreamID, this.sSOLoginDataModel.DepartmentID, SemesterID)
+        .then((data: any) => {
+          this.SubjectMasterDDL = data?.Data || [];
+        })
+        .catch(error => {
+          console.error('Error fetching subject master:', error);
+        });
+    } else {
+      console.warn('StreamID or SemesterID is missing');
+    }
   }
+
+
+  //getSubjectMasterDDL(ID: any, SemesterID: any) {
+  //  debugger
+  //  this.streamID = Number(ID); // Corrected property name
+
+
+  //  alert(this.streamID);
+  //  this.getupBranchHodData();
+  //  if (ID && SemesterID != "" && SemesterID != null) {
+  //    this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.SubjectMasterDDL = data.Data;
+  //    })
+  //  } else {
+  //    console.error('Event or value is undefined');
+  //  }
+
+  //}
 
   async GetAttendanceTimeTable() {
     try {

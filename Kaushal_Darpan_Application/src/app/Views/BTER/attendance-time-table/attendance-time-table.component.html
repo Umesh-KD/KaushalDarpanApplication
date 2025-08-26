@@ -29,7 +29,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
-          <ng-select formControlName="StreamID" (change)="getSubjectMasterDDL($event, TableForm.value.SemesterID)" [clearable]="false">
+          <ng-select formControlName="StreamID" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of StreamMasterDDL; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
