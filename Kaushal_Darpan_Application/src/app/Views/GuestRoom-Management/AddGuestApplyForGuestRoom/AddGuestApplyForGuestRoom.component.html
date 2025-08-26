@@ -93,25 +93,25 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Postal Address<span class="StarMarking">*</span>
+            Postal Address<!--<span class="StarMarking">*</span>-->
           </label>
           <input type="text" class="form-input" placeholder="Enter Postal Address" name="PostalAddress"
                  [(ngModel)]="request.PostalAddress" formControlName="PostalAddress" readonly>
-          <div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalAddress.errors" class="form-text text-danger">
+          <!--<div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalAddress.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.PostalAddress.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>
+          </div>-->
         </div>
 
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Postal Code<span class="StarMarking">*</span>
+            Postal Code<!--<span class="StarMarking">*</span>-->
           </label>
           <input type="text" class="form-input" placeholder="Enter Postal Code" name="PostalCode"
                  [(ngModel)]="request.PostalCode" formControlName="PostalCode" readonly>
-          <div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalCode.errors" class="form-text text-danger">
+          <!--<div *ngIf="isSubmitted && _IIPMasterFormGroup.PostalCode.errors" class="form-text text-danger">
             <p *ngIf="_IIPMasterFormGroup.PostalCode.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>
+          </div>-->
         </div>
 
         <div>
