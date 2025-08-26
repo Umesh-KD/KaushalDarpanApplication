@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { BranchHODModel } from '../../../Models/StaffMasterDataModel';
+import { AssignTeacherForSubjectReqModel, BranchHODModel } from '../../../Models/StaffMasterDataModel';
 import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
 import { StaffMasterService } from '../../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -54,6 +54,8 @@ export class AttendanceTimeTableComponent implements OnInit {
   endInTableIndex: number = 10;
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
+  public ReqModel = new AssignTeacherForSubjectReqModel()
+  public streamID?: number = 0;
 
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
@@ -91,6 +93,8 @@ export class AttendanceTimeTableComponent implements OnInit {
     });
     this.GetAttendanceTimeTable();
     this.loadDropdownData();
+ /*   this.getBranchHodData();*/
+   
   }
 
 
@@ -111,7 +115,7 @@ export class AttendanceTimeTableComponent implements OnInit {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.StreamMasterDDL = data.Data;
       //})
-      await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
       })
@@ -156,7 +160,7 @@ export class AttendanceTimeTableComponent implements OnInit {
             StreamName: this.resBranchHOD[0]?.StreamName
           });
 
-          this.getBranchHodData();          
+          /*this.getBranchHodData();  */        
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -165,12 +169,16 @@ export class AttendanceTimeTableComponent implements OnInit {
   }
 
   async getBranchHodData() {
+    debugger
+    const selectedStreamId = this.EditDataFormGroup.get('StreamName')?.value;
+    
     let obj = {
       Action: "GET_BY_ID",
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      StreamID: this.resBranchHOD[0]?.StreamID,
+      StreamID: selectedStreamId,
+     
     }
     await this.staffMasterService.GetBranchSectionData(obj)
       .then((data: any) => {
@@ -179,6 +187,27 @@ export class AttendanceTimeTableComponent implements OnInit {
       }, (error: any) => console.error(error)
       );
   }
+  async getupBranchHodData() {
+    debugger
+    const selectedStreamId = this.TableForm.get('StreamID')?.value;
+
+    let obj = {
+      Action: "GET_BY_ID",
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      StreamID: this.streamID,
+
+    }
+    await this.staffMasterService.GetBranchSectionData(obj)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GetSectionData = data.Data
+      }, (error: any) => console.error(error)
+      );
+  }
+
+  
 
 
   loadDropdownData(): void {
@@ -196,7 +225,11 @@ export class AttendanceTimeTableComponent implements OnInit {
 
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
-    this.getBranchHodData();
+    this.streamID = Number(ID); // Corrected property name
+
+
+    alert(this.streamID);
+    this.getupBranchHodData();
     if (ID && SemesterID != "" && SemesterID != null) {
       this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -211,7 +244,7 @@ export class AttendanceTimeTableComponent implements OnInit {
   async GetAttendanceTimeTable() {
     try {
       this.isSubmitted = true;
-
+      debugger
       let obj = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID ?? 0,
         EndTermID: this.sSOLoginDataModel.EndTermID ?? 0,
