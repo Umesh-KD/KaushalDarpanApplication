@@ -75,6 +75,7 @@
           <th class="text-left">Document</th>
           <th class="text-left">Revert Remark</th>
           <th class="text-Center">Action</th>
+          <th class="text-Center">Migration-Certificate</th>
         </tr>
       </thead>
       <tbody>
@@ -94,15 +95,17 @@
             </a>
           </td>
           <td>{{row.Remark}}</td>
+
           <td>
             <ng-container *ngIf="row.Status == 297; else normalStatus">
               <ng-container [ngSwitch]="row.ActionBy">
-                <span *ngSwitchCase="7">Dropout By Principal</span>
-                <span *ngSwitchCase="38">Dropout By ExamIncharge</span>
-                <span *ngSwitchCase="40">Dropout By Registrar</span>
-                <span *ngSwitchCase="2">Dropout By Admin</span>
-                <span *ngSwitchCase="206">Dropout By IT-Cell</span>
-                <span *ngSwitchDefault>Dropout</span>
+                <span *ngSwitchCase="7">Revert By Principal</span>
+                <span *ngSwitchCase="38">Revert By ExamIncharge</span>
+                <span *ngSwitchCase="40">Revert By Registrar</span>
+                <span *ngSwitchCase="2">Revert By Admin</span>
+                <span *ngSwitchCase="206">Revert By IT-Cell</span>
+                <span *ngSwitchCase="205">Revert By SectionIncharge</span>
+                <span *ngSwitchDefault>Revert</span>
               </ng-container>
             </ng-container>
 
@@ -120,6 +123,13 @@
             </ng-template>
           </td>
 
+          <td *ngIf="row.Status == 206">
+            <a href="javascript:void(0);"
+               (click)="CertificateDownload(row)" title="Migration Certificate"
+               class="btn bg-info btn-sm text-white">
+              <i class="ti ti-download"></i> Download Migration
+            </a>
+          </td>
 
         </tr>
         <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No records found</td></tr>

@@ -105,5 +105,29 @@ export class GetEnrollService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async StudentEnrollment_RegistrarStatus(request: EligibleStudentButPendingForVerification[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentEnrollment_RegistrarStatus`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async StudentEnrollment_ReturnByRegistrar(request: EligibleStudentButPendingForVerification[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentEnrollment_ReturnByRegistrar`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEnRollData_RegistrarVerify(request: GenerateEnrollSearchModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetEnRollData_RegistrarVerify", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
