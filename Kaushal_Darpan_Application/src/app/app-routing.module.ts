@@ -809,6 +809,7 @@ const routes: Routes = [
       { path: 'team-flying-reports', loadChildren: () => import('./Views/Reports/flying-squad-reports/flying-squad-reports.module').then(m => m.FlyingSquadReportsModule) },
 
       { path: 'PublishedEnrollNo', loadChildren: () => import('./Views/published-enroll-no/published-enroll-no.module').then(m => m.PublishedEnrollNoModule) },
+      { path: 'verify-enroll-no', loadChildren: () => import('./Views/verify-enroll-no/verify-enroll-no.module').then(m => m.VerifyEnrollNoModule), title: 'Verify Enroll No' },
       { path: 'eligible-verification-enroll-no', loadChildren: () => import('./Views/eligible-verification-enroll-no/eligible-verification-enroll-no.module').then(m => m.EligibleVerificationEnrollNoModule) },
       { path: 'paper', loadChildren: () => import('./Views/paper/set-paper.module').then(m => m.SetPaperModule) },
       { path: 'bter-cerifications', loadChildren: () => import('./Views/BTER/bter-certificate/bter-certificate.module').then(m => m.BterCertificateModule) },

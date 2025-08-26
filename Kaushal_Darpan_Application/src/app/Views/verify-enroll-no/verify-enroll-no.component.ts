@@ -1,33 +1,33 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrService } from 'ngx-toastr';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import * as XLSX from 'xlsx';
+import { EnumEnrollNoStatus, enumExamStudentStatus, EnumMessageType, EnumRole, EnumRollNoStatus, EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
+import {
+  GenerateRollData,
+  GenerateRollSearchModel,
+} from '../../Models/GenerateRollDataModels';
+import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
+import { GetRollService } from '../../Services/GenerateRoll/generate-roll.service';
+import { LoaderService } from '../../Services/Loader/loader.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { ToastrService } from 'ngx-toastr';
+import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { GetEnrollService } from '../../Services/GenerateEnroll/generateEnroll.service';
 import Swal from 'sweetalert2';
-import { EnumEnrollNoStatus, EnumRole, GlobalConstants, EnumStatus, EnumMessageType, EnumEnrollCancelStatus } from '../../../Common/GlobalConstants';
-import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../../Models/GenerateEnrollDataModel';
-import { GenerateRollSearchModel } from '../../../Models/GenerateRollDataModels';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { GetEnrollService } from '../../../Services/GenerateEnroll/generateEnroll.service';
-import { LoaderService } from '../../../Services/Loader/loader.service';
-import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
-import { GetRollService } from '../../../Services/GenerateRoll/generate-roll.service';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { StudentEnrolmentCancelModel } from '../../../Models/StudentDetailsModel';
-import { StudentEnrollmentCancelationService } from '../../../Services/EnrollmentCancelation/student-enrollment-cancelation.service';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { ReportService } from '../../../Services/Report/report.service';
+import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../Models/GenerateEnrollDataModel';
+import { EligibleStudentButPendingForVerification } from '../../Models/StudentMasterModels';
+import { StudentDetailsViewModalComponent } from '../Student/student-details-view-modal/student-details-view-modal.component';
 
 @Component({
-  selector: 'app-enrollment-cancelation-verify',
+  selector: 'app-verify-enroll-no',
   standalone: false,
-  templateUrl: './enrollment-cancelation-verify.component.html',
-  styleUrl: './enrollment-cancelation-verify.component.css'
+  templateUrl: './verify-enroll-no.component.html',
+  styleUrl: './verify-enroll-no.component.css'
 })
-
-export class EnrollmentCancelationVerifyComponent {
+export class VerifyEnrollNoComponent {
   public SearchForm!: FormGroup;
   public SemesterMasterDDLList: any[] = [];
   public StreamMasterDDLList: any[] = [];
@@ -39,15 +39,16 @@ export class EnrollmentCancelationVerifyComponent {
   public InstituteMasterList: any = [];
   public isSubmitted: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public searchRequest = new StudentEnrolmentCancelModel();
+  public searchRequest = new GenerateEnrollSearchModel();
   public UserID: number = 0;
   public RoleID: number = 0;
   public ddlRollListStatus: number = 0;
-  public _RollListStatus = EnumEnrollCancelStatus;
+  public _RollListStatus = EnumEnrollNoStatus;
   public SearchReqForEnroll = new GenerateRollSearchModel()
   //table feature default
   public paginatedInTableData: any[] = []; //copy of main data
   public currentInTablePage: number = 1;
+  public pageTab: number = 0;
   public pageInTableSize: string = '50';
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
@@ -61,21 +62,7 @@ export class EnrollmentCancelationVerifyComponent {
   public PageNameTitile: string = '';
   public currentTab: number = 0;
   public _EnumRole = EnumRole;
-  public VerifierStatusDDL: any = [];
-
-  public RoleIdStatusMap: { [key: number]: string } = {
-    [EnumEnrollCancelStatus.Verified]: 'Dropout',
-    [EnumEnrollCancelStatus.Return]: 'Returned',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByAdmin]: 'Admin Approved',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByPrincipal]: 'Principal Approved',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByRegistrar]: 'Registrar Approved',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByExamIncharge]: 'Exam Incharge Approved',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByITSupport]: 'Dropout',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelBySectionIncharge]: 'Section Incharge Requested',
-    [EnumEnrollCancelStatus.VerifiedEnrollCancelByStudent]: 'Student Requested',
-  };
-
-
+  public AllSelect: boolean = false;
   //end table feature default
   closeResult: string | undefined;
 
@@ -85,9 +72,10 @@ export class EnrollmentCancelationVerifyComponent {
   public MobileNo: number = 0;
   public OTP: string = '';
   public GeneratedOTP: string = '';
-  public ActionDynamic: string = 'Cancel-Enrollment-migration';
 
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
+  @ViewChild('MyModel_ViewStudent') childComponent!: StudentDetailsViewModalComponent;
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private GetRollService: GetRollService,
@@ -96,12 +84,9 @@ export class EnrollmentCancelationVerifyComponent {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private swal2: SweetAlert2,
-    private reportService: ReportService,
     private toastr: ToastrService,
     private sMSMailService: SMSMailService,
     private modalService: NgbModal,
-    public appsettingConfig: AppsettingService, 
-    private EnrollmentCancelation: StudentEnrollmentCancelationService,
     private routers: Router
   ) { }
 
@@ -112,113 +97,100 @@ export class EnrollmentCancelationVerifyComponent {
       ddlStream: [''],
       /*ddlStudentTypeID: [''],*/
     });
-    debugger;
+
     this.sSOLoginDataModel = await JSON.parse(
       String(localStorage.getItem('SSOLoginUser'))
     );
     this.RoleID = this.sSOLoginDataModel.RoleID;
     this.selectedEndTermID = Number(this.route.snapshot.queryParamMap.get("EndTermID") ?? 0);
-    //this.currentStatus = Number(this.route.snapshot.paramMap.get("id") ?? 0);
-    //this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
+    this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
     this.currentTab = Number(this.route.snapshot.queryParamMap.get("tab") ?? 0);
 
-    if (this.RoleID == 7 || this.RoleID == 2) {
-      this.currentStatus = Number(this.route.snapshot.paramMap.get("id") ?? 0);
-    } else {
-      this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
-    }
 
 
-    this.GetPageName(this.currentStatus);
+    this.GetPageName(this.currentTab);
 
     this.UserID = this.sSOLoginDataModel.UserID;
+    this.getSemesterMasterList();
+    this.getStreamMasterList();
+    this.ddlStream_Change();
     this.GetAllData();
     this.getInstituteMasterList();
     this.getExamMasterList();
-    this.GetVerifierStatusDDL();
 
 
   }
 
-
-  downloadBase64PDF(base64: string, filename: string): void {
-    const byteCharacters = atob(base64);
-    const byteArray = new Uint8Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteArray[i] = byteCharacters.charCodeAt(i);
-    }
-    const blob = new Blob([byteArray], { type: 'application/pdf' });
-    const blobUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = blobUrl;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(blobUrl);
-  }
-
-  async CertificateDownload(row: any): Promise<void> {
+  async getSemesterMasterList() {
     try {
-      debugger;
       this.loaderService.requestStarted();
-      this.searchRequest.Action = this.ActionDynamic;
-      this.searchRequest.StudentID = row.StudentID;
-      this.searchRequest.EnrollmentNo = row.EnrollmentNo;
-      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-
-      const data = await this.reportService.BterCertificateReportDownload(this.searchRequest);
-      if (data && data.Data) {
-        this.downloadBase64PDF(data.Data, `${this.ActionDynamic}.pdf`);
-      } else {
-        this.toastr.error('Data not found');
-      }
-    } catch (ex) {
-      console.error(ex);
+      await this.commonMasterService.SemesterMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterMasterDDLList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
     } finally {
-      this.loaderService.requestEnded();
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 
-
-  async GetVerifierStatusDDL() {
+  async getStreamMasterList() {
     try {
-      await this.commonMasterService.GetCommonMasterDDLStatusByType('EnrollmentCancelation')
-        .then((data: any) => {
-          this.VerifierStatusDDL = data['Data'];
-
-          /*this.VerifierStatusDDL = this.VerifierStatusDDL.filter((f: any) => f.ID != EnumEnrollNoStatus.Published);*/
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
+      this.loaderService.requestStarted();
+      await this.commonMasterService.StreamMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDLList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
+
+  checkboxthView_checkboxchange(isChecked: boolean) {
+    this.AllSelect = isChecked;
+    for (let item of this.StudentList) {
+      item.Selected = isChecked;  // Set all checkboxes based on the parent checkbox state
+    }
+  }
+
+ 
+
+  checkIfAllSelected() {
+    this.AllSelect = this.StudentList.length > 0 &&
+      this.StudentList.every((item: any) => item.selected);
+  }
+
+
 
 
   async GetAllData() {
     try {
-      debugger;
       this.StudentList = []
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.ShowAll = this.selectedEndTermID > 0 ? 1 : 0;
       this.searchRequest.Status = this.currentStatus;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       //call
       this.loaderService.requestStarted();
-      await this.EnrollmentCancelation.GetEnrollCancelationData(this.searchRequest)
+      await this.GetEnrollRollService.GetEnRollData_RegistrarVerify(this.searchRequest)
         .then((data: any) => {
-          debugger;
+
           data = JSON.parse(JSON.stringify(data));
 
           if (data.State == EnumStatus.Success) {
             this.StudentList = data['Data'];
             console.log(this.StudentList, "Studentlist")
-            //this.updateButtonStates();
-            //this.GetVerifyRollData();
+
             //table feature load
             this.loadInTable();
             //end table feature load
@@ -254,6 +226,30 @@ export class EnrollmentCancelationVerifyComponent {
     }
   }
 
+  async ddlStream_Change() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService
+        .SubjectMaster_StreamIDWise(
+          this.searchRequest.StreamID,
+          this.sSOLoginDataModel.DepartmentID,
+          this.searchRequest.SemesterID
+        )
+        .then(
+          (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.SubjectMasterDDLList = data.Data;
+          },
+          (error) => console.error(error)
+        );
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async getExamMasterList() {
     try {
@@ -281,7 +277,7 @@ export class EnrollmentCancelationVerifyComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.searchRequest = new StudentEnrolmentCancelModel();
+    this.searchRequest = new GenerateEnrollSearchModel();
 
     this.SubjectMasterDDLList = [];
     this.GetAllData()
@@ -308,7 +304,7 @@ export class EnrollmentCancelationVerifyComponent {
       this.startInTableIndex,
       this.endInTableIndex
     );
-    console.log(this.paginatedInTableData, "paginatedData")
+    console.log(this.paginatedInTableData,"paginatedData")
     this.loaderService.requestEnded();
   }
   previousInTablePage() {
@@ -384,33 +380,25 @@ export class EnrollmentCancelationVerifyComponent {
   // end table feature
 
   exportToExcel(): void {
+    // Define the columns in the exact order you want for the export
     const columnOrder = [
-      'SrNo', 'StudentName', 'MotherName', 'FatherName', 'DOB', 'InstituteName', 'StreamName', 'SemesterName', 'EnrollmentNo', 'RollNumber', 'Action',
+      'SrNo', 'StudentName', 'FatherName', 'DOB', 'InstituteName', 'StreamName', 'SemesterName', 'EnrollmentNo', 'RollNumber',
     ];
 
+    // Define the list of columns to exclude from the export
     const unwantedColumns = [
       'StudentID', 'RollNumber', 'dob_org', 'StreamID', 'SemesterID', 'InstituteID', 'InstituteCode', 'streamCode', 'MobileNo', 'EndTermID',
     ];
 
-    // ✅ Define status labels (same as in your template)
-    const statusLabels: { [key: number]: string } = {
-      205: 'Section Incharge Requested',
-      7: 'Principal Approved',
-      38: 'Exam Incharge Approved',
-      40: 'Registrar Approved',
-      2: 'Admin Approved',
-      206: 'Verified',
-    };
-
+    // Filter the data based on unwanted columns and map it to the correct order
     const filteredData = this.StudentList.map((item: any, index: number) => {
       const filteredItem: any = {};
 
-      columnOrder.forEach((column) => {
+      // Manually order the columns based on the columnOrder array
+      columnOrder.forEach((column, idx) => {
+        // Add 'SrNo' as the first column (index + 1 for numbering)
         if (column === 'SrNo') {
           filteredItem[column] = index + 1;
-        } else if (column === 'Action') {
-          // ✅ Set Action column based on Status
-          filteredItem[column] = statusLabels[item.Status] || 'Pending';
         } else if (item[column] && !unwantedColumns.includes(column)) {
           filteredItem[column] = item[column];
         }
@@ -419,44 +407,52 @@ export class EnrollmentCancelationVerifyComponent {
       return filteredItem;
     });
 
+    // Create worksheet from filtered data
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
 
+    // Calculate column widths based on max length of content in each column
     const columnWidths = columnOrder.map((column) => ({
-      wch: Math.max(
-        column.length,
-        ...filteredData.map((item: any) => item[column]?.toString().length || 0)
-      ) + 2,
+      wch:
+        Math.max(
+          column.length, // Header length
+          ...filteredData.map((item: any) =>
+            item[column] ? item[column].toString().length : 0
+          ) // Max content length
+        ) + 2, // Add extra padding
     }));
 
+    // Apply column widths
     ws['!cols'] = columnWidths;
 
+    // Apply header styling (bold + background color)
     const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
     if (range.s && range.e) {
       for (let col = range.s.c; col <= range.e.c; col++) {
-        const cellAddress = XLSX.utils.encode_col(col) + '1';
+        const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
         if (!ws[cellAddress]) continue;
 
+        // Bold the header text and apply a background color
         ws[cellAddress].s = {
-          font: { bold: true, color: { rgb: 'FFFFFF' } },
-          fill: { fgColor: { rgb: '#f3f3f3' } },
-          alignment: { horizontal: 'center', vertical: 'center' },
+          font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
+          fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
+          alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
         };
       }
     }
 
+    // Create a new workbook and append the sheet
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    XLSX.writeFile(wb, 'EnrollmentCancellationVerifiedData.xlsx');
+    // Export the file as "GeneratedRollNumber.xlsx"
+    XLSX.writeFile(wb, 'EligibleStudentData.xlsx');
   }
 
-
   VerifyRollNumber() {
-    debugger;
     if (this.ddlRollListStatus > 0) {
-      if (this.ddlRollListStatus == EnumEnrollCancelStatus.Return) {
+      if (this.ddlRollListStatus == EnumEnrollNoStatus.Return) {
         Swal.fire({
-          title: 'Return Enrollment No. Cancel',
+          title: 'Return Enrollment No. List',
           input: 'textarea',
           inputLabel: 'Remark',
           inputPlaceholder: 'Enter your remark here...',
@@ -469,108 +465,31 @@ export class EnrollmentCancelationVerifyComponent {
         }).then(async (result: any) => {
           if (result.isConfirmed && result.value?.trim()) {
             const remark = result.value.trim();
-            await this.ChangeEnRollNoStatus("_Return", EnumEnrollCancelStatus.Return, remark);
+            await this.SaveReturnByRegistrarData(remark);
           } else if (result.isConfirmed && !result.value?.trim()) {
             this.toastr.warning('Remark is required.');
           }
         });
       }
 
-      if (this.ddlRollListStatus == EnumEnrollCancelStatus.Verified) {
-
-        this.swal2.Confirmation("Are you sure you want to verified Enrollment Cancellation no?", async (result: any) => {
-          // Check if the user confirmed the action
-          if (result.isConfirmed) {
-            this.openModalGenerateOTP(this.modal_GenrateOTP);
-          }
-        });
-
-        //this.ChangeRollNoStatus("_UpdateStatusVerify", EnumRollNoStatus.Verified);
+      if (this.ddlRollListStatus == EnumEnrollNoStatus.VerifiedByRegistrar) {
+        if (this.currentStatus == EnumEnrollNoStatus.Published) {
+          this.swal2.Info('The Enrollment number has already been published and cannot be verified again.');
+        }
+        else {
+          this.swal2.Confirmation("Are you sure you want to verify selected students?", async (result: any) => {
+            // Check if the user confirmed the action
+            if (result.isConfirmed) {
+              this.openModalGenerateOTP(this.modal_GenrateOTP);
+            }
+          });
+        }
       }
-
-
     }
     else {
-
       this.toastr.error('please select status')
     }
   }
-
-
-  async ChangeEnRollNoStatus(action: string, Status: number, remark: string) {
-    debugger;
-    try {
-      this.StudentList = [];
-      //session
-      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-      this.searchRequest.Status = Status;
-      this.searchRequest.Remark = remark;
-      this.searchRequest.Action = action;
-      this.loaderService.requestStarted();
-      //call
-      await this.EnrollmentCancelation.ChangeEnRollNoStatus(this.searchRequest).then(
-        (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
-            this.CloseOTPModal();
-            this.toastr.success('Status Changed Successfully');
-
-
-            setTimeout(() => {
-              this.routers.navigate(['/dashboard']);
-            }, 200);
-
-
-          }
-          else {
-            this.toastr.error(data.Message);
-          }
-        },
-        (error: any) => console.error(error)
-      );
-    } catch (ex) {
-      console.log(ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  //async SaveApplicationWorkFlow(Action: number) {
-  //  try {
-  //    this.StudentList = [];
-  //    //session
-  //    this.SearchReqForEnroll.EndTermID = this.sSOLoginDataModel.EndTermID;
-  //    this.SearchReqForEnroll.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //    this.SearchReqForEnroll.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-  //    /*      this.SearchReqForEnroll.action = "_GenerateRollNumbers"*/
-  //    this.SearchReqForEnroll.Status = Action
-
-  //    this.SearchReqForEnroll.ModuleID = 2;
-
-  //    this.loaderService.requestStarted();
-  //    //call
-  //    await this.GetEnrollRollService.SaveApplicationWorkFlow(this.SearchReqForEnroll).then(
-  //      (data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        if (data.State == EnumStatus.Success) {
-  //          this.StudentList = data['Data'];
-  //          this.CloseOTPModal()          
-  //          this.GetAllData()
-  //        }
-  //      },
-  //      (error: any) => console.error(error)
-  //    );
-  //  } catch (ex) {
-  //    console.log(ex);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
 
   numberOnly(event: KeyboardEvent): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -608,17 +527,14 @@ export class EnrollmentCancelationVerifyComponent {
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 
-
-
-
   async VerifyOTP() {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
           //Call Function
           /* this.SaveApplicationWorkFlow( EnumEnrollNoStatus.Verified);*/
-          this.ChangeEnRollNoStatus("_StatusVerify", this.currentStatus, this.searchRequest.Remark);
-
+         /* this.ChangeEnRollNoStatus("_StatusVerifyRegistrar", EnumEnrollNoStatus.VerifiedByRegistrar, this.searchRequest.Remark);*/
+          this.SaveVerifyByRegistrarData();
         }
         catch (ex) {
           console.log(ex);
@@ -671,8 +587,6 @@ export class EnrollmentCancelationVerifyComponent {
     }
   }
 
-
-
   //Start Section Model
   async openModalGenerateOTP(content: any) {
     this.resetOTPControls();
@@ -701,47 +615,129 @@ export class EnrollmentCancelationVerifyComponent {
   }
 
   GetPageName(tabno: number) {
-    if (tabno == 205) {
-      this.PageNameTitile = 'Pending For Principal EnrollMent Cancellation Request'
+    if (tabno == 1) {
+      this.PageNameTitile = 'Eligible Verification Enroll No'
+      this.pageTab = 1;
     }
-    else if (tabno == 7 && this.RoleID == 7) {
-      this.PageNameTitile = 'Verified By Principal EnrollMent Cancellation Request'
+    else if (tabno == 2) {
+      this.PageNameTitile = 'Eligible Student  Verified List'
+      this.pageTab = 2;
     }
-    else if (tabno == 7 && this.RoleID == 38) {
-      this.PageNameTitile = 'Pending For ExamIncharge Enrollment Cancellation Request'
+    else if (tabno == 3) {
+      this.PageNameTitile = 'Reverted EnrollMent Number List'
     }
-    else if (tabno == 38 && this.RoleID == 38) {
-      this.PageNameTitile = 'Verified By ExamIncharge EnrollMent Cancellation Request'
+    else if (tabno == 4) {
+      this.PageNameTitile = 'Published EnrollMent Number List'
     }
-    else if (tabno == 38 && this.RoleID == 40) {
-      this.PageNameTitile = 'Pending For Registrar Enrollment Cancellation Request'
-    }
-    else if (tabno == 40 && this.RoleID == 40) {
-      this.PageNameTitile = 'Verified By Registrar EnrollMent Cancellation Request'
-    }
-    else if (tabno == 40 && this.RoleID == 2) {
-      this.PageNameTitile = 'Pending For Admin(BTER) Enrollment Cancellation Request'
-    }
-    else if (tabno == 2 && this.RoleID == 2) {
-      this.PageNameTitile = 'Verified By Admin(BTER) EnrollMent Cancellation Request'
-    }
-
-    else if (tabno == 2 && this.RoleID == 206) {
-      this.PageNameTitile = 'Pending For IT-Cell Enrollment Cancellation Request'
-    }
-    else if (tabno == 206 && this.RoleID == 206) {
-      this.PageNameTitile = 'Verified By IT-Cell EnrollMent Cancellation Request'
-    }
-
-    else if (tabno == 3 && this.RoleID == 205) {
-      this.PageNameTitile = 'Pending For Student-Section-Incharge Enrollment Cancellation Request'
-    }
-    else if (tabno == 205 && this.RoleID == 205) {
-      this.PageNameTitile = 'Verified By Student-Section-Incharge EnrollMent Cancellation Request'
-    }
-
     else {
       this.PageNameTitile = 'EnrollMent Number List'
     }
+  }
+
+  async SaveVerifyByRegistrarData() {
+    try {
+      const selectedStudents = this.StudentList?.filter(x => x.Selected) || [];
+      if (selectedStudents.length == 0) {
+        this.toastr.warning('Please Select Students');
+        return;
+      }
+
+    const request: EligibleStudentButPendingForVerification[] = selectedStudents.map(x => ({
+      StudentId: x.StudentID,
+      RoleId: this.sSOLoginDataModel.RoleID,
+      ModifyBy: this.sSOLoginDataModel.UserID,
+
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng
+    }));
+    // Call service to save student exam status
+    await this.GetEnrollRollService.StudentEnrollment_RegistrarStatus(request)
+      .then(async (data: any) => {
+
+        if (data.State == EnumStatus.Success) {
+         /* this.toastr.success(data.Message)*/
+          this.GetAllData();
+          this.CloseOTPModal();
+          this.toastr.success('Status Updated Successfully');
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+          if (data['Data'] == -6) {
+            this.GetAllData();
+
+          }
+        }
+        else {
+          this.toastr.error(data.Message)
+          this.GetAllData();
+        }
+      })
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isSubmitted = false;
+      }, 200);
+    }
+
+  }
+
+  async SaveReturnByRegistrarData(remark: string) {
+    try {
+      const selectedStudents = this.StudentList?.filter(x => x.Selected) || [];
+      if (selectedStudents.length == 0) {
+        this.toastr.warning('Please Select Students');
+        return;
+      }
+
+    const request: EligibleStudentButPendingForVerification[] = selectedStudents.map(x => ({
+      StudentId: x.StudentID,
+      RoleId: this.sSOLoginDataModel.RoleID,
+      ModifyBy: this.sSOLoginDataModel.UserID,
+      Remark: remark,
+
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng
+    }));
+    // Call service to save student exam status
+    await this.GetEnrollRollService.StudentEnrollment_ReturnByRegistrar(request)
+      .then(async (data: any) => {
+
+        if (data.State == EnumStatus.Success) {
+         /* this.toastr.success(data.Message)*/
+          this.GetAllData();
+          this.CloseOTPModal();
+          this.toastr.success('Status Updated Successfully');
+        }
+        else if (data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+          if (data['Data'] == -6) {
+            this.GetAllData();
+
+          }
+        }
+        else {
+          this.toastr.error(data.Message)
+          this.GetAllData();
+        }
+      })
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isSubmitted = false;
+      }, 200);
+    }
+
+  }
+
+  openViewStudentDetailsPopup(StudentID: number) {
+    //debugger
+    this.childComponent.StudentID = StudentID;
+    this.childComponent.OpenViewStudentDetailsPopup();
   }
 }
