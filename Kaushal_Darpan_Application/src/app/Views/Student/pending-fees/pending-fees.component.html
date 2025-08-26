@@ -16,7 +16,7 @@
             <th class="text-left">Semester</th>
             <th class="text-left">Enrollment No.</th>
             <th class="text-left">Roll No</th>
-            <th class="text-left">Amt. (INR)</th>
+            <th class="text-left">(Enroll + Exam) Fee Amt. (INR)</th>
             <th class="text-left">End Term</th>
             <th class="text-left">Status</th>
             <!--<th class="text-left">Last Date</th>-->
@@ -35,7 +35,7 @@
             <td>{{row.Semester}}</td>
             <td>{{row.EnrollmentNo}}</td>
             <td>{{row.RollNo}}</td>
-            <td>{{row.FeeAmount}}</td>
+            <td>{{row.EnrollFeeAmount}} + {{row.FeeAmount}}</td>
             <td>{{row.EndTermName}}</td>
             <td>{{row.StrStudenetStatus}}</td>
             <td>{{row.Subjects}}</td>

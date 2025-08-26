@@ -202,7 +202,8 @@ export class PendingFeesComponent implements OnInit {
   async PayEnrollmentFee(item: StudentDetailsModel) {
     this.emitraRequest = new EmitraRequestDetails();
     //Set Parameters for emitra
-    this.emitraRequest.Amount = Number(item.FeeAmount);
+    this.emitraRequest.Amount = Number(item.FeeAmount)
+    this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
     this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
     this.emitraRequest.ServiceID = item.ServiceID.toString();
     this.emitraRequest.UserName = item.StudentName;
@@ -213,7 +214,7 @@ export class PendingFeesComponent implements OnInit {
     this.emitraRequest.DepartmentID = EnumDepartment.BTER;
     this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
     this.emitraRequest.ID = item.ID;
-
+    debugger
     //student details
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
 

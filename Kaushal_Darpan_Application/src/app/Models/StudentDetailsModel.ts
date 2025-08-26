@@ -11,6 +11,7 @@ export class StudentDetailsModel {
   public StreamName: string = '';
   public Semester: string = '';
   public FeeAmount: string = '';
+  public EnrollFeeAmount?: string = '';
   public LastDate?: string = '';
   public FeeStatus: string = '';
   public RoleName: string = '';
