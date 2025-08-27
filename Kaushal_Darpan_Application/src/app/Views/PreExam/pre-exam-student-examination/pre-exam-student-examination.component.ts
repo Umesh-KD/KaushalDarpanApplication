@@ -1275,7 +1275,8 @@ export class PreExamStudentExaminationComponent {
               EndTermID: this.sSOLoginDataModel.EndTermID,
               DepartmentID: this.sSOLoginDataModel.DepartmentID,
               Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-              RoleID: this.sSOLoginDataModel.RoleID
+              RoleID: this.sSOLoginDataModel.RoleID,
+              SemesterID: x.SemesterID
             })
           });
           // Call service to save student exam status

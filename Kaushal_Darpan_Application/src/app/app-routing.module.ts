@@ -1,6 +1,4 @@
 
-
-
 import { Title } from '@angular/platform-browser';
 import { RouterModule, Routes, TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { MasterLayoutComponent } from './Views/Shared/master-layout/master-layout.component';
@@ -1322,6 +1320,8 @@ const routes: Routes = [
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
+
+      { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
     ]
   },
   
@@ -1384,8 +1384,6 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-
-
     ]
   },
 
@@ -1416,8 +1414,7 @@ const routes: Routes = [
       { path: 'DTEdocumentationscrutiny', loadChildren: () => import('./Views/BTER/application-form/documentation-scrutiny/documentation-scrutiny.module').then(m => m.DocumentationScrutinyModule), title: 'Documentation Scrutiny' },
       { path: 'DTEStudentVerificationList', loadChildren: () => import('./Views/BTER/application-form/student-verification-list/student-verification-list.module').then(m => m.StudentVerificationListModule), title: 'Student Verification List' },
       { path: 'DirectDTEApplicationform', loadChildren: () => import('./Views/BTER/direct-application-form/direct-application-form/direct-application-form.module').then(m => m.DirectApplicationFormModule), title: 'BTER-DirectApplication Form' },
-      
-
+          
 
     ]
   },

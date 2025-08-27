@@ -150,8 +150,9 @@ export interface StudentMarkedModel extends RequestBaseModel {
   Status: number;
   StudentFilterStatusId: number;
   ModifyBy: number;
-  RoleId: number;
+  RoleId?: number;
   StudentExamID?: number;  
+  SemesterID?: number
 }
 export class StudentMarkedModelForJoined {
   public Marked: boolean = false;
