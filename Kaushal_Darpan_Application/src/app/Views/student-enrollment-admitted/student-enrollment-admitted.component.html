@@ -42,21 +42,21 @@
           </div>
 
           <!--<div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
-      <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
-        formControlName="ddlFinancialYearID">
-        <option value="0">--All--</option>
-        <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
-          {{
-          item.FinancialYearName
-          }}
-        </option>
-      </select>
-      <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
-        <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
-            aria-hidden="true"></i>This field is required.</p>
-      </div>
-    </div>-->
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
+              formControlName="ddlFinancialYearID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
+                {{
+                item.FinancialYearName
+                }}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
+              <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
+                  aria-hidden="true"></i>This field is required.</p>
+            </div>
+          </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
@@ -66,9 +66,9 @@
               <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
-        <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
-          field is required.</p>
-      </div>-->
+              <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
+                field is required.</p>
+            </div>-->
           </div>
 
           <div>
@@ -79,9 +79,9 @@
               <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-        <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-          field is required.</p>
-      </div>-->
+              <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+                field is required.</p>
+            </div>-->
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
@@ -107,15 +107,15 @@
         </div>
 
         <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-    <div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
-      <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
-              formControlName="ddlstatus" (change)="GetPreExamStudent();">
-        <option value="0">--All--</option>
-        <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
-      </select>
-    </div>
-    -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
+          <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
+                  formControlName="ddlstatus" (change)="GetPreExamStudent();">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
+        -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
@@ -137,7 +137,8 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="flex"><!--*ngIf="MapKeyEng == 1"-->
+      <div class="flex">
+        <!--*ngIf="MapKeyEng == 1"-->
 
         <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel" disabled="true">
           <option value="0">Choose Mark As (*)</option>
@@ -215,17 +216,17 @@
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <!--<td>
-              <div class="flex actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Student Details"
-                   (click)="ViewStudentDetails(MyModel_ViewStudent, row.ApplicationID)">
-                  <i class="ti ti-eye" aria-hidden="true"></i>
-                </a>-->
-                <!--<a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER"
-                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
-                  <i class="ti ti-user"></i>
-                </a>-->
-              <!--</div>
-            </td>-->
+  <div class="flex actionBtns w-auto" style="width:auto !important">
+    <a href="javascript:void(0);" title="View Student Details"
+       (click)="ViewStudentDetails(MyModel_ViewStudent, row.ApplicationID)">
+      <i class="ti ti-eye" aria-hidden="true"></i>
+    </a>-->
+            <!--<a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER"
+     title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
+    <i class="ti ti-user"></i>
+  </a>-->
+            <!--</div>
+  </td>-->
             <td>{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.ApplicationNo}}</td>
@@ -236,7 +237,16 @@
             <td align="left">{{row.InstituteName}}</td>
             <td align="left">{{row.BranchName}}</td>
             <td align="left">{{row.SemesterName}}</td>
-            <td align="left">{{row.StudentExamStatus}}</td>
+            <td align="left">
+              {{ row.StudentExamStatus }}
+              <span *ngIf="row.st_his_StatusId > 0"
+                    style="color: #dc3545; cursor: pointer; font-size: 11px; position: relative; display: inline-block; "
+                    matTooltip="{{ row.st_his_Remark }}"
+                    matTooltipPosition="above"
+                    matTooltipClass="custom-tooltip">
+                ({{ row.st_his_StatusName }})
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -266,7 +276,7 @@
         <b><i class="fa fa-plus"></i>&nbsp;View Student Details </b>
         <button class="btn bg-info text-white" (click)="CloseViewStudentDetails()"><i class="ti ti-x"></i></button>
       </div>
-      <div class="card-body" >
+      <div class="card-body">
         <div class="grid s:grid-cols-2  grid-cols-1 gap-3">
 
           <div class="overflow-x-auto mt-3">
@@ -349,7 +359,7 @@
               </tr>-->
             </table>
           </div>
-        </div>        
+        </div>
       </div>
     </div>
   </div>
@@ -659,7 +669,8 @@
 
             <!--document-->
             <div *ngFor="let item of requestStudent.DocumentDetails;">
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="{{item.ColumnName}}">{{item.DisplayColumnNameEn}}
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="{{item.ColumnName}}">
+                {{item.DisplayColumnNameEn}}
               </label>
               <div class="flex fileUploader">
                 <input [ngModelOptions]="{standalone: true}"
@@ -671,10 +682,10 @@
                 <div class="flex" *ngIf="item.FileName!=''">
                   <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
-                  <i class="ti ti-eye"></i>
+                    <i class="ti ti-eye"></i>
                   </a>
                   <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
-                  <i class="ti ti-trash"></i>
+                    <i class="ti ti-trash"></i>
                   </a>
                 </div>
               </div>

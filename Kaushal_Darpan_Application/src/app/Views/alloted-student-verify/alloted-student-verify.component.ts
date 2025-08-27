@@ -259,42 +259,41 @@ export class AllotedStudentVerifyComponent {
   async SaveAdmittedStudentForReturnByAcp() {
     // confirm
 
-    this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
+    this.Swal2.ConfirmationWithRemark("Are you sure to continue?", async (result: any) => {
       //confirmed
-      if (result.isConfirmed) {
-        try {
-          this.isSubmitted = true;
-          this.loaderService.requestStarted();
-          // Filter out only the selected students
-          var request: StudentApplicationSaveModel[] = [];
-          const selectedStudents = this.studentApplicationList.filter(x => x.Selected);
-          selectedStudents.forEach(x => {
-            request.push({
-              ApplicationID: x.ApplicationID,
-              ModifyBy: this.sSOLoginDataModel.UserID,
-              RoleID: this.sSOLoginDataModel.RoleID,
-              DepartmentID: this.sSOLoginDataModel.DepartmentID,
-              Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-              EndTermID: this.sSOLoginDataModel.EndTermID,
-            })
-          });
-          // Call service to save student exam status
-          await this.allotedStudentVerifyService.SaveAdmittedStudentForReturnByAcp(request)
-            .then(async (data: any) => {
-              this.State = data['State'];
-              this.Message = data['Message'];
-              this.ErrorMessage = data['ErrorMessage'];
-              //
-              if (this.State == EnumStatus.Success) {
-                await this.GetAdmittedStudentToVerify();
-              }
-              this.toastr.success(this.Message)
+      try {
+        this.isSubmitted = true;
+        this.loaderService.requestStarted();
+        // Filter out only the selected students
+        var request: StudentApplicationSaveModel[] = [];
+        const selectedStudents = this.studentApplicationList.filter(x => x.Selected);
+        selectedStudents.forEach(x => {
+          request.push({
+            ApplicationID: x.ApplicationID,
+            ModifyBy: this.sSOLoginDataModel.UserID,
+            RoleID: this.sSOLoginDataModel.RoleID,
+            DepartmentID: this.sSOLoginDataModel.DepartmentID,
+            Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+            EndTermID: this.sSOLoginDataModel.EndTermID,
+            Remark: result
+          })
+        });
+        // Call service to save student exam status
+        await this.allotedStudentVerifyService.SaveAdmittedStudentForReturnByAcp(request)
+          .then(async (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            //
+            if (this.State == EnumStatus.Success) {
+              await this.GetAdmittedStudentToVerify();
+            }
+            this.toastr.success(this.Message)
 
-            })
-        } catch (ex) {
-          console.log(ex);
-          console.log(this.ErrorMessage);
-        }
+          })
+      } catch (ex) {
+        console.log(ex);
+        console.log(this.ErrorMessage);
       }
     });
   }
