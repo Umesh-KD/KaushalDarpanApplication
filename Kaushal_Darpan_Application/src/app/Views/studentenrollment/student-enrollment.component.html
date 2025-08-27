@@ -252,7 +252,10 @@
             <td>{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.ApplicationNo}}</td>
-            <td align="left">{{row.EnrollmentNo}}</td>
+            <td align="left">
+              <!-- {{row.EnrollmentNo}} -->
+               {{ (row.EnrollmentNo === 0 || row.EnrollmentNo == null) ? '' : row.EnrollmentNo }}
+            </td>
             <td align="left">{{row.Dis_DOB}}</td>
             <td align="left">{{row.RollNo}}</td>
             <td align="left">{{row.MobileNo}}</td>

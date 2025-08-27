@@ -75,6 +75,7 @@ export class EmitraRequestDetails {
   public ServiceID: string = '';
   public ApplicationIdEnc: string = '';
   public Amount: number = 0; 
+  public EnrollFeeAmount?: number = 0; 
   public UserName: string = ''
   public MobileNo: string = ''
   public RegistrationNo: string = ''

@@ -400,5 +400,28 @@ export class StudentAttendanceComponent implements OnInit {
   // Method to handle individual attendance toggle change
   //onAttendanceChange(event: MatSlideToggleChange, element: any) {
   //  element.Attendance = event.checked ? 'P' : 'A';
+
+
   //}
+
+  ChangeStreamDDL(StreamID: number) {
+    
+    let obj = {
+      Action: "GET_BY_ID",
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      StreamID: StreamID,
+    }
+
+     this.staffMasterService.GetBranchSectionData(obj)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GetSectionData = data.Data
+      }, (error: any) => console.error(error)
+      );
+
+  
+  }
 }
+

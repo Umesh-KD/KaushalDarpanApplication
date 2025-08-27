@@ -198,7 +198,9 @@ export enum enumExamStudentStatus {
   Dropout = 4,
   RevokeDropout = 209,
   Detained = 230,
-  DetainedRevoke = 233
+  DetainedRevoke = 233,
+  ReturnByAcp = 316,
+  ApproveByAcp = 317,
 }
 
 export enum EnumUserType {

@@ -44,7 +44,7 @@ export class ItemsDetailsModel {
 
 
 export class EquipmentCodeDuplicateSearch {
-  public ItemCategoryId: number = 0;
+  public ItemCategoryName: string = '';
   public IsDuplicate: number = 0;
   public EquipmentsCode: string = '';
 

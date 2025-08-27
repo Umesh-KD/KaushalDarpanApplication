@@ -104,7 +104,7 @@ export class StudentEnrollmentAdmittedComponent {
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
   public currentInTablePage: number = 1;
-  public pageInTableSize: string = "10";
+  public pageInTableSize: string = "50";
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';

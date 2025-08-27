@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants,EnumRole } from '../../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { DTEEquipmentsDataModel } from '../../../../Models/DTEInventory/DTEEquipmentsDataModel';
 import { DTEEquipmentsMasterService } from '../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
@@ -38,6 +38,9 @@ export class DteEquipmentsMasterComponent {
   public EquipmentsMasterList: any = [];
   public UnitDDLList: any = [];
   public CategoryDDLList: any = [];
+  public _EnumRole = EnumRole;
+  public getRoleID: number =0;
+
 
   constructor(
     private toastr: ToastrService,
@@ -71,6 +74,7 @@ export class DteEquipmentsMasterComponent {
     if (this.EquipmentsId > 0) {
       await this.GetByID(this.EquipmentsId);
     }
+    this.getRoleID = this.sSOLoginDataModel.RoleID;
   }
 
   get _EquipmentsRequestFormGroup() { return this.EquipmentsRequestFormGroup.controls; }
