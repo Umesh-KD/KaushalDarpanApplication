@@ -214,6 +214,9 @@ export class EnrollmentCancellationListComponent implements OnInit, OnDestroy {
     this.searchRequest.action = "_GetStudentForEnrollCancelation";
 
     this.searchRequest.DepartmentID = this.searchRequest.DepartmentID;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
+
 
     this.StudentDetailsModelList = [];
     try {

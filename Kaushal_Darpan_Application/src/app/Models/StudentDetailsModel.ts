@@ -53,6 +53,8 @@ export class StudentEnrolmentCancelModel {
   public StudentID: number = 0;
   public NextRoleId: number = 0;
   public EnrollmentNo: string = '';
+  public EndTermName: string = '';
+  public EndTermType: string = '';
   public SemesterID: number = 0;
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
