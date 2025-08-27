@@ -44,6 +44,8 @@ export class GenerateEnrollData extends RequestBaseModel {
   public Status: number = 0
 
   public EnrollmentNo: string = ''
+  public EndTermName: string = ''
+  public EndTermType: string = ''
   public RollNumber: string = ''
   public StudentCategory: string = ''
   public InstituteCode: string = ''
