@@ -534,35 +534,35 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       this.formData.IsHod = false; // reset value
     }
 
+    /// this code use duplicate check office and role wise ////////////////////  uncommt 27-08-2025 
 
+    //try {
+    //  let request = {
+    //    RoleID: this.sSOLoginDataModel.RoleID,
+    //    OfficeID: this.sSOLoginDataModel.OfficeID
+    //  };
 
-    try {
-      let request = {
-        RoleID: this.sSOLoginDataModel.RoleID,
-        OfficeID: this.sSOLoginDataModel.OfficeID
-      };
-
-      this.loaderService.requestStarted();
-      this.ITIGovtEMStaffMasterService.ITIEMStaffDuplicateCheck(request)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Warning) {
-            this.toastr.warning("This role is already assigned in this office");
-            this.formData.RoleID = 0;
-          }
+    //  this.loaderService.requestStarted();
+    //  this.ITIGovtEMStaffMasterService.ITIEMStaffDuplicateCheck(request)
+    //    .then((data: any) => {
+    //      data = JSON.parse(JSON.stringify(data));
+    //      if (data.State == EnumStatus.Warning) {
+    //        this.toastr.warning("This role is already assigned in this office");
+    //        this.formData.RoleID = 0;
+    //      }
 
 
          
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+    //    }, error => console.error(error));
+    //}
+    //catch (Ex) {
+    //  console.log(Ex);
+    //}
+    //finally {
+    //  setTimeout(() => {
+    //    this.loaderService.requestEnded();
+    //  }, 200);
+    //}
 
 
 
