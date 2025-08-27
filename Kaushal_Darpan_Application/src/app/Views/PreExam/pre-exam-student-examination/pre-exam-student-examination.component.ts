@@ -955,6 +955,7 @@ export class PreExamStudentExaminationComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.requestStudent.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.requestStudent.RoleID = this.sSOLoginDataModel.RoleID;
 
     if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && this.requestStudent.status == enumExamStudentStatus.SelectedForEnrollment) {
       this.requestStudent.status = enumExamStudentStatus.VerifiedForEnrollment// verified for enrollment(bter) 
@@ -975,7 +976,6 @@ export class PreExamStudentExaminationComponent {
     try {
 
       // this.requestStudent.StudentPaper = sPaperString;
-
 
       await this.preExamStudentExaminationService.EditStudentData_PreExam(this.requestStudent)
         .then(async (data: any) => {
