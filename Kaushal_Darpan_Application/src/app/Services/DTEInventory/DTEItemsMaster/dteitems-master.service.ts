@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -119,5 +119,8 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  
+
+
 
 }
