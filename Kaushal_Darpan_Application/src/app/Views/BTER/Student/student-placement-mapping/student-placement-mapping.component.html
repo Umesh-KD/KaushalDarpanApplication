@@ -27,7 +27,7 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department<span class="StarMarking">*</span></label>
             <select class="form-select" id="ddlDepartment" formControlName="ddlDepartment" [(ngModel)]="searchRequest.DepartmentID">
               <option value="0" selected>--Select Department--</option>
@@ -38,7 +38,7 @@
             <div *ngIf="isSubmitted && _searchssoform.ddlDepartment.errors" class="text-danger">
               <p *ngIf="!_searchssoform.ddlDepartment.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
-          </div>
+          </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.<span class="StarMarking">*</span></label>
@@ -47,13 +47,13 @@
               <p *ngIf="_searchssoform.txtApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
           </div>
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No<span class="StarMarking">*</span> </label>
             <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " formControlName="txtMobileNo" [(ngModel)]="searchRequest.MobileNumber">
             <div *ngIf="isSubmitted && _searchssoform.txtMobileNo.errors" class="text-danger">
               <p *ngIf="_searchssoform.txtMobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
-          </div>
+          </div>-->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB<span class="StarMarking">*</span></label>
             <input type="date" class="form-input" min="1000-01-01" max="9999-12-31" placeholder="Enter Select DOB" formControlName="DOB" [(ngModel)]="searchRequest.DOB">
@@ -98,11 +98,22 @@
             <td>{{row.StudentName}}</td>
             <td>{{row.FatherName}}</td>
             <td>{{row.DOB}}</td>
-            <td>{{row.MobileNo  | mobileMask}}</td>
+            <!--<td>{{row.MobileNo  | mobileMask}}</td>-->
+          <td>
+            <div>
+              <input type="text"
+                     class="form-input"
+                     placeholder="Enter Mobile 10 Digit"
+                     [(ngModel)]="row.MobileNo"
+                     maxlength="10"
+                     pattern="^\d{10}$"
+                     (keypress)="validateNumber($event)" />
+            </div>
+          </td>
             <td>{{row.Email}}</td>
             <!--<td>{{row.InstituteName}}</td>
-            <td>{{row.StreamName}}</td>
-            <td>{{row.Semester}}</td>-->
+  <td>{{row.StreamName}}</td>
+  <td>{{row.Semester}}</td>-->
             <td>{{row.EnrollmentNo}}</td>
             <td class="text-center">
               <button class="btn bg-success text-white btn-sm" (click)="openModalGenerateOTP(modal_GenrateOTP,row)" type="button">Map SSO</button>
