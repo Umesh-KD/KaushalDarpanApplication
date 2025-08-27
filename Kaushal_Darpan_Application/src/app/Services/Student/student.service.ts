@@ -96,6 +96,14 @@ export class StudentService
       ).toPromise();
   }
 
+  public async StudentPlacementMapping(searchRequest: StudentSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/StudentPlacementMapping`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetProfileDashboard(searchRequest: StudentSearchModel) {
     const body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetProfileDashboard`, body, this.headersOptions)

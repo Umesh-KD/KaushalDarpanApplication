@@ -16,13 +16,14 @@
     </div>
   </div>
 
-  <button type="button" (click)="BackControl()" class="inline-flex items-center btn bg-dark text-white btn-sm" >
+  <button type="button" (click)="BackControl()" class="inline-flex items-center btn bg-dark text-white btn-sm">
     <i class="ti ti-chevron-left"></i> Back
   </button>
 
 </div>
 <!--Page Title End-->
-
+<!--{{itemDetails|json}}
+{{ItemDetailsList|json}}-->
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mt-4 mb-3 p-3 py-2 bg-light">
@@ -58,101 +59,98 @@
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
     </div>
-    <!-- Form template -->
+   
+
     <form [formGroup]="EditeItemsRequestFormGroup" (ngSubmit)="saveData()" *ngIf="EditeItemsRequestFormGroup">
-      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-        <table class="table table-border w-full table-auto" cellpadding="5">
-          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-            <tr>
-              <th class="border p-2">SNo</th>
-              <th class="border p-2">Item</th>
-              <th class="border p-2">EquipmentCode</th>
-              <th class="border p-2" *ngIf="dnone==true">ItemDetailsId</th>
-              <th class="border p-2">EquipmentWorking</th>
-              <th class="border p-2">Is Eligible For Auction</th>
-            </tr>
-          </thead>
-          <tbody *ngIf="ItemDetailsList?.length > 0">
-            <tr *ngFor="let item of itemsFormArray.controls; let i = index" [formGroup]="item">
-              <td class="border p-2">{{ i + 1 }}</td>
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="border p-2">SNo</th>
+            <th class="border p-2">Item</th>
+            <th class="border p-2">EquipmentCode</th>
+            <th class="border p-2" *ngIf="dnone==true">ItemDetailsId</th>
+            <th class="border p-2">EquipmentWorking</th>
+            <th class="border p-2">Is Eligible For Auction</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="ItemDetailsList?.length > 0">
+          <tr *ngFor="let item of itemsFormArray.controls; let i = index" [formGroup]="item">
+            <td class="border p-2">{{ i + 1 }}</td>
 
-              <td class="border p-2">
-                {{ ItemDetailsList[i]?.ItemCode }}
-              </td>
+            <td class="border p-2">
+              {{ ItemDetailsList[i]?.ItemCode }}
+            </td>
 
-              <td class="border p-2" *ngIf="dnone == true">
-                {{ ItemDetailsList[i].ItemDetailsId }}
-              </td>
+            <td class="border p-2" *ngIf="dnone == true">
+              {{ ItemDetailsList[i].ItemDetailsId }}
+            </td>
 
-              <!-- Equipment Code Input -->
-              <!--<td class="border p-2">
-    <label>Equipment Code: <span class="StarMarking">*</span></label>
-    <input type="text"
-           class="form-input"
-           formControlName="txtEquipmentCode"
-           [readonly]="ItemDetailsList[i]?.EquipmentWorking === 2" />
-    <div *ngIf="isSubmitted && item.get('txtEquipmentCode')?.errors" class="text-danger">
-      <p *ngIf="item.get('txtEquipmentCode')?.hasError('required')">This field is required.</p>
+            <td class="border p-2">
+              <label>Equipment Code: <span class="StarMarking">*</span></label>
+              <input type="text"
+                     class="form-input"
+                     formControlName="txtEquipmentCode"
+                     [readonly]="ItemDetailsList[i]?.AuctionStatus === '1'"
+                     (focus)="clearIfZero(item, 'txtEquipmentCode')"
+                     (blur)="resetIfEmpty(item, 'txtEquipmentCode')"
+                     [ngClass]="{'bg-gray-200': ItemDetailsList[i]?.AuctionStatus === '1'}"
+                     (change)="equipmentCodeDuplicate(item.get('txtEquipmentCode')?.value, i,itemDetails.Category)" />
+
+              <div *ngIf="isSubmitted && item.get('txtEquipmentCode')?.errors" class="text-danger">
+                <p *ngIf="item.get('txtEquipmentCode')?.hasError('required')">This field is required.</p>
+                <p *ngIf="item.get('txtEquipmentCode')?.hasError('invalidZero')">Value cannot be 0.</p>
+              </div>
+            </td>
+            <td class="border p-2">
+              <label>Equipment Working: <span class="StarMarking">*</span></label>
+              <!--{{ItemDetailsList[i]?.AuctionStatus |json}}-->
+              <select class="form-input" formControlName="equipmentStatus"
+                      [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"
+                      [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}">
+                <option value="0">-- Select Status --</option>
+                <option value="1">Working</option>
+                <option value="2">Not Working</option>
+              </select>
+
+              <div *ngIf="isSubmitted && item.get('equipmentStatus')?.errors" class="text-danger">
+                <p>Please select a status.</p>
+              </div>
+            </td>
+            <!--<td class="border p-2">
+     <label>
+       <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'">
+         <input type="checkbox" formControlName="isOption" [disabled]="ItemDetailsList[i]?.AuctionStatus === '1'"
+  [ngClass]="{'cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1'}" /> Is Auction
+       </ng-container>
+     </label>
+   </td>-->
+            <td class="border p-2">
+              <label>
+
+                <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'">
+                  <input type="checkbox"
+                         formControlName="isOption"
+                         (click)="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
+                  Is Auction
+                </ng-container>
+              </label>
+            </td>
+
+
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </td>-->
-              <!--{{errorLList|json}}-->
-              <td class="border p-2">
-                <label>Equipment Code: <span class="StarMarking">*</span></label>
-                <input type="text"
-                       class="form-input"
-                       formControlName="txtEquipmentCode"
-                       [readonly]="ItemDetailsList[i]?.EquipmentWorking === 2"
-                       (focus)="clearIfZero(item, 'txtEquipmentCode')"
-                       (blur)="resetIfEmpty(item, 'txtEquipmentCode')"
-                       (change)="equipmentCodeDuplicate(item.get('txtEquipmentCode')?.value, i,itemDetails.Category)"
-                       />
-
-                <div *ngIf="isSubmitted && item.get('txtEquipmentCode')?.errors" class="text-danger">
-                  <p *ngIf="item.get('txtEquipmentCode')?.hasError('required')">This field is required.</p>
-                  <p *ngIf="item.get('txtEquipmentCode')?.hasError('invalidZero')">Value cannot be 0.</p>
-                </div>
-              </td>
-              <!-- Equipment Status -->
-              <td class="border p-2">
-                <label>Equipment Working: <span class="StarMarking">*</span></label>
-                <select class="form-input" formControlName="equipmentStatus">
-                  <option value="0">-- Select Status --</option>
-                  <option value="1">Working</option>
-                  <option value="2">Not Working</option>
-                </select>
-                <div *ngIf="isSubmitted && item.get('equipmentStatus')?.errors" class="text-danger">
-                  <p>Please select a status.</p>
-                </div>
-              </td>
-
-              <!-- Auction Checkbox -->
-              <td class="border p-2">
-                <label>
-                  <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'">
-                    <input type="checkbox" formControlName="isOption" /> Is Auction
-                  </ng-container>
-                  <!--<ng-container *ngIf="item.get('equipmentStatus')?.value === '2' || ItemDetailsList[i]?.EquipmentWorking === 2; else editableAuction">
-      </ng-container>
-      <ng-template #editableAuction>
-        <input type="checkbox" formControlName="isOption" />  Is Auction
-      </ng-template>-->
-
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+      <div class="text-center">
+        <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
+        <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
       </div>
-
-      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
-        <div class="text-center">
-          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
-          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-            <i class="ti ti-refresh"></i> Reset
-          </button>
-        </div>
-      </div>
-    </form>
+    </div>
+  </form>
 
   </div>
 </div>

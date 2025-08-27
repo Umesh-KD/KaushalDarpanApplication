@@ -47,7 +47,7 @@
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select>
-        
+
       </div>
       <div class="">
       </div>
@@ -57,6 +57,7 @@
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
+    <!--{{ItemMasterList|json}}-->
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -88,22 +89,22 @@
             <td align="left">{{item.PricePerUnit}}</td>
             <!-- <td align="left">{{item.TotalPrice}}</td> -->
             <!--<td align="left">
-              {{ item.IsOption == '1' ? 'Pending' : (item.AuctionStatus == '1' ? 'Done' : 'N/A') }}
-            </td>-->
-          <td align="left">
-            {{
+            {{ item.IsOption == '1' ? 'Pending' : (item.AuctionStatus == '1' ? 'Done' : 'N/A') }}
+          </td>-->
+            <td align="left">
+              {{
                   (item.IsOption == '1' && item.AuctionStatus == '1') ? 'Done' :
                   item.IsOption == '1' ? 'Pending' : 'N/A'
-            }}
-          </td>
-          <td>
-            <div *ngIf="item.IsOption != 'true' && item.AuctionStatus != '1'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a href="javascript:void(0);"
-                 (click)="ViewandUpdate(MyModel_ViewDetails, item)">
-                <i [ngClass]="MyModel_ViewDetails ? 'ti ti-eye' : 'ti ti-eye'"></i>
-              </a>
-            </div>
-          </td>
+              }}
+            </td>
+            <td>
+              <div *ngIf="item.IsOption != 'true' && item.AuctionStatus != '1'" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);"
+                   (click)="ViewandUpdate(MyModel_ViewDetails, item)">
+                  <i [ngClass]="MyModel_ViewDetails ? 'ti ti-eye' : 'ti ti-eye'"></i>
+                </a>
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>

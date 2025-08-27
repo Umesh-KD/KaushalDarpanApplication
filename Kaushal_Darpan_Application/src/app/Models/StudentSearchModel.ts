@@ -1,5 +1,6 @@
 export class StudentSearchModel {
   public studentId: number=0;
+  public StudentID: number=0;
   public roleId: number=0;
   public RoleID: number=0;
   public Status: number=0;

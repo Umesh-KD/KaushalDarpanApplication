@@ -72,6 +72,8 @@
           <th class="text-left">Institute Name</th>
           <th class="text-left">Stream Name</th>
           <th class="text-left">Enrollment No.</th>
+          <th class="text-left">EndTerm Type</th>
+          <th class="text-left">EndTerm Name</th>
           <th class="text-left">Document</th>
           <th class="text-left">Revert Remark</th>
           <th class="text-Center">Action</th>
@@ -88,7 +90,8 @@
           <td>{{row.InstituteName}}</td>
           <td>{{row.StreamName}}</td>
           <td>{{row.EnrollmentNo}}</td>
-
+          <td>{{row.EndTermType}}</td>
+          <td>{{row.EndTermName }}</td>
           <td class="text-center">
             <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.ENRCancelDoc}}">
               <i class="ti ti-eye"></i>

@@ -49,3 +49,9 @@ export class EquipmentCodeDuplicateSearch {
   public EquipmentsCode: string = '';
 
 }
+
+export class CheckItemAuctionSearch {
+  public ItemCategoryName: string = '';
+  public EquipmentsCode: string = '';
+  public ItemId: number = 0;
+}

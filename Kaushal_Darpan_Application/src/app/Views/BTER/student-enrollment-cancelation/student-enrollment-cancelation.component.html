@@ -58,6 +58,8 @@
             <th class="text-left">Institute Name</th>
             <th class="text-left">Stream Name</th>
             <th class="text-left">Enrollment No.</th>
+            <th class="text-left">EndTerm Type</th>
+            <th class="text-left">EndTerm Name</th>
             <th class="text-Center">Action</th>
           </tr>
         </thead>
@@ -71,6 +73,8 @@
             <td>{{row.InstituteName}}</td>
             <td>{{row.StreamName}}</td>
             <td>{{row.EnrollmentNo}}</td>
+            <td>{{row.EndTermType}}</td>
+            <td>{{row.EndTermName }}</td>
             <td>
               <div>
                 <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails, row)">

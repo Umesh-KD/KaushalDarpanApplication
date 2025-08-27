@@ -13,6 +13,7 @@ export class ExaminerDashboardSearchModel extends RequestBaseModel {
   public ExaminerCode: string = '';
   public SSOID: string = '';
   public InstituteID: any = 0;
+  public UserID: any = 0;
 }
 
 export class DDL_GroupCode_ExaminerWise extends RequestBaseModel {

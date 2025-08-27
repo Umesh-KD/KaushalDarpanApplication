@@ -179,6 +179,8 @@
               <th class="text-left">Branch Name   </th>
               <!--<th class="text-left">Semester Name</th>-->
               <th class="text-left">Enrollment No</th>
+              <th class="text-left">EndTerm Type</th>
+              <th class="text-left">EndTerm Name</th>
               <th class="text-left">Document</th>
               <th class="text-left">Status</th>
               <th *ngIf="currentStatus == 206 && RoleID == 2 || currentStatus == 206 && RoleID == 206" class="text-left">Action</th>
@@ -193,6 +195,8 @@
               <td class="text-left">{{ row.InstituteName }}</td>
               <td class="text-left">{{ row.StreamName }}</td>
               <td class="text-left">{{ row.EnrollmentNo }}</td>
+              <td class="text-left">{{row.EndTermType}}</td>
+              <td class="text-left">{{row.EndTermName }}</td>
               <td class="text-left">
                 <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.ENRCancelDoc}}">
                   <i class="ti ti-eye"></i>

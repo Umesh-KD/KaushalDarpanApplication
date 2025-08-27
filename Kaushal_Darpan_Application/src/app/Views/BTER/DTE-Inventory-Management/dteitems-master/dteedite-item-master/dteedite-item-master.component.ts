@@ -12,7 +12,7 @@ import { EnumRole, EnumStatus } from '../../../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { uniqueEquipmentCodeValidator } from '../../../../../Pipes/uniqueEquipmentCodeValidator';
 import { debounceTime } from 'rxjs';
-import { EquipmentCodeDuplicateSearch } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { CheckItemAuctionSearch, EquipmentCodeDuplicateSearch } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 
 @Component({
   selector: 'app-dteedite-item-master',
@@ -41,6 +41,7 @@ export class DteEditeItemMasterComponent {
   public ItemDetailsList: any[] = [];
   public _EnumRole = EnumRole;
   public errorLList: any = [];
+  public CheckAuctionSearch = new CheckItemAuctionSearch();
   constructor(
     private dteItemsMasterService: DteItemsMasterService,
     private toastr: ToastrService,
@@ -75,7 +76,11 @@ export class DteEditeItemMasterComponent {
     debugger
     this.itemsFormArray.controls.forEach((group, index) => {
       const equipmentWorking = this.ItemDetailsList[index]?.EquipmentWorking;
-      if (equipmentWorking === 2) {
+      const AuctionStatus = this.ItemDetailsList[index]?.AuctionStatus;
+
+      
+
+      if (AuctionStatus == 1) {
         // Disable the status control
         group.get('equipmentStatus')?.disable();
         //if (group.get('equipmentStatus')?.disabled) {
@@ -112,6 +117,8 @@ this.itemsFormArray.get('items')?.valueChanges
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
         this.ItemDetailsList = data.Data;
+
+
         this.addItemsControls();
       }
     });
@@ -128,6 +135,7 @@ addItemsControls() {
         EquipmentCode: [item.EquipmentsCode],
       }));
     });
+
   }
 }
   get _EditeItemsRequestFormGroup() { return this.EditeItemsRequestFormGroup.controls; }
@@ -396,6 +404,8 @@ getRange(quantity: string | number): number[] {
 
     
   }
+
+
 
 
 //  equipmentCodeDuplicate(currentValue: string, categoryId: number) {
