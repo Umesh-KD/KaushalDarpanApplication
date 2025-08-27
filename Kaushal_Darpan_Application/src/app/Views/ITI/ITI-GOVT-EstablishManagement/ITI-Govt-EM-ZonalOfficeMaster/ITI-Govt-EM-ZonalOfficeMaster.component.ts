@@ -75,6 +75,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   public GetIsHodOldID: number = 0
   public isSSOVisible: boolean = false;
   public ListITICollegeByManagement: any = [];
+  public StaffListCheckDuplicate: any = [];
   public requestSSoApi = new CommonVerifierApiDataModel();
   AddedZonalList: ITI_Govt_EM_ZonalOFFICERSDataModel[] = [];
   public GetDesignationID: number = 0
@@ -432,7 +433,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
     debugger
     try {
       this.searchRequestITi.Action = "_ITICollegeByManagementType";
-      this.searchRequestITi.FinancialYearID = 9;
+      this.searchRequestITi.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequestITi.ManagementTypeId = 1;
 
       this.loaderService.requestStarted();
@@ -532,6 +533,41 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
       this.IsHodIsDisable = true;  // disable the checkbox
       this.formData.IsHod = false; // reset value
     }
+
+
+
+    try {
+      let request = {
+        RoleID: this.sSOLoginDataModel.RoleID,
+        OfficeID: this.sSOLoginDataModel.OfficeID
+      };
+
+      this.loaderService.requestStarted();
+      this.ITIGovtEMStaffMasterService.ITIEMStaffDuplicateCheck(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Warning) {
+            this.toastr.warning("This role is already assigned in this office");
+            this.formData.RoleID = 0;
+          }
+
+
+         
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
+
+
+
   }
 
 

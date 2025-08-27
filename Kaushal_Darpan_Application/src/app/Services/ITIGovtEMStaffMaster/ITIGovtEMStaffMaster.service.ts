@@ -537,7 +537,14 @@ export class ITIGovtEMStaffMaster {
 
 
 
+  public async ITIEMStaffDuplicateCheck(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
 
+    return await this.http.post(`${this.APIUrl}/ITIEMStaffDuplicateCheck`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 
