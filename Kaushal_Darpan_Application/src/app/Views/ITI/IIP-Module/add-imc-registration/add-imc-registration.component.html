@@ -32,21 +32,21 @@
             </div>
           </div>
           <div>
-            <label for="RegNumber">IMC Registration Number<span class="StarMarking">*</span></label>
+            <label for="RegNumber">IMC registration number<span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="IMC Registration Number" type="number" [(ngModel)]="formData.RegNumber" required #RegNumber="ngModel" name="RegNumber" [disabled]="isFormReadOnly">
             <div class="text-red-500 text-sm" *ngIf="RegNumber.invalid && (RegNumber.dirty || RegNumber.touched)">
               <div *ngIf="RegNumber.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="RegDate">IMC Registration Date<span class="StarMarking">*</span></label>
+            <label for="RegDate">IMC registration date<span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="IMC Registration Date" type="date" [(ngModel)]="formData.RegDate" required #RegDate="ngModel" name="RegDate" [disabled]="isFormReadOnly">
             <div class="text-red-500 text-sm" *ngIf="RegDate.invalid && (RegDate.dirty || RegDate.touched)">
               <div *ngIf="RegDate.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="RegLink">Society Formation Format (upload link)<span class="StarMarking">*</span></label>
+            <label for="RegLink">Society formation format (upload link)<span class="StarMarking">*</span></label>
             <!--<input class="form-input" type="file" [(ngModel)]="formData.RegLink" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">-->
             <!--<div class="flex fileUploader">
               <input formControlName="FileName" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"(change)="onFileSelected($event)" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
@@ -60,33 +60,39 @@
                 </a>
               </div>
             </div>-->
+          <div class="flex">
 
-            <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event)" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
-
-            <button type="button"
-                    class="btn btn-primary btn-sm ml-2"
-                    (click)="previewFile()"
-                    [disabled]="!selectedFileUrl">
-              Preview
-            </button>
-            <div class="text-red-500 text-sm" *ngIf="RegLink.invalid && (RegLink.dirty || RegLink.touched)">
-              <div *ngIf="RegLink.errors?.['required']"> This field is required .!</div>
+            <div>
+              <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event, 'RegLink')" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
+              <div class="text-red-500 text-sm" *ngIf="RegLink.invalid && (RegLink.dirty || RegLink.touched)">
+                <div *ngIf="RegLink.errors?.['required']"> This field is required .!</div>
+              </div>
+            </div>
+            <div>
+              <button type="button"
+                      class="btn bg-primary btn-sm text-white"
+                      (click)="previewFile()"
+                      [disabled]="!selectedFileUrl">
+                <i class="ti ti-eye"></i>
+              </button>
+            </div>
+            
             </div>
           </div>
         </div>
 
         <div class="m-8">
           <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i> IMC Member Details</b>
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> IMC member details</b>
           </div>
           <!--<form (ngSubmit)="submit()" #memberForm="ngForm">-->
 
           <table class="table-auto w-full border border-gray-300">
             <thead>
               <tr class="bg-gray-100">
-                <th class="p-2 border">Member Type</th>
-                <th class="p-2 border">Member Name</th>
-                <th class="p-2 border">Company/Address</th>
+                <th class="p-2 border">Member type</th>
+                <th class="p-2 border">Member name</th>
+                <th class="p-2 border">Company/address</th>
                 <th class="p-2 border">Email</th>
                 <th class="p-2 border">Contact</th>
                 <th class="p-2 border">Action</th>
@@ -142,13 +148,15 @@
                          name="MemberContact{{i}}"
                          class="form-input w-full"
                          placeholder="Member Contact"
+                         type="number"
+                         (input)="item.MemberContact = item.MemberContact.toString().slice(0,10)"
                          required>
                 </td>
 
                 <!-- Action -->
                 <td class="p-2 border text-center">
                   <!-- Show buttons only if MemberTypeName === Industry Representative -->
-                  <ng-container *ngIf="item.MemberTypeName == 'Industry Representative'">
+                  <ng-container *ngIf="item.MemberTypeName == 'Industry representative'">
                     <button *ngIf="i==7" type="button" class="btn btn-sm bg-info text-white"
                             (click)="addRepresentive()">
                       <span class="fa fa-plus"></span> Add More

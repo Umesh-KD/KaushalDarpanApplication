@@ -11,7 +11,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TspAreasService } from '../../../../Services/Tsp-Areas/Tsp-Areas.service';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumDepartment, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { StudentJanAadharDetailService } from '../../../../Services/StudentJanAadharDetail/student-jan-aadhar-detail.service';
 import { ItiReportDataModel } from '../../../../Models/ITI/ItiReportDataModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
@@ -23,9 +24,10 @@ import jsPDF from 'jspdf';
 import { HttpClient } from '@angular/common/http';
 import { DeferBlockBehavior } from '@angular/core/testing';
 import html2canvas from 'html2canvas';
-import { ITI_InstructorDataModel } from '../../../../Models/ITI/ItiInstructorDataModel';
+import { ITI_InstructorDataModel, ITI_InstructorEducationalQualification, ITI_InstructorEmploymentDetails, ITI_InstructorTechnicalQualification } from '../../../../Models/ITI/ItiInstructorDataModel';
 import { ITI_InstructorService } from '../../../../Services/ITI/ITI_Instructor/ITI_Instructor.Service';
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
+import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
 
 @Component({
   selector: 'app-iti-instructor',
@@ -35,19 +37,43 @@ import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/
 })
 export class ItiInstructorFormComponent {
 
-  public urlId:number=0;
+  public urlId: number = 0;
   public InstructorForm!: FormGroup
+  public EducationForm!: FormGroup
+  public TechnicalForm!: FormGroup
+  public EmploymentForm!: FormGroup
   public isSSOVisible: boolean = false;
-  public showAadhaar: boolean = false; // ✅ Declare and initialize
-  public showJanAadhaar: boolean = false; // ✅ If you also need for JanAadhaar
+  public showAadhaar: boolean = false;
+  public showJanAadhaar: boolean = false;
   public ResidenceList: any = []
   public CompanyMasterDDLList: any[] = [];
+  @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
   public DistrictMasterList: any[] = [];
   public StateMasterList: any[] = [];
   public DistrictMasterList3: any[] = [];
   public BoardList: any = []
   closeResult: string | undefined;
+
   public request = new ITI_InstructorDataModel()
+  public educationList: ITI_InstructorEducationalQualification[] = [];
+  public educationRequest: ITI_InstructorEducationalQualification = new ITI_InstructorEducationalQualification();
+  public techRequestList: ITI_InstructorTechnicalQualification[] = [];
+  public techRequest = new ITI_InstructorTechnicalQualification()
+  public employeeRequest = new ITI_InstructorEmploymentDetails()
+  public employeeRequestList: ITI_InstructorEmploymentDetails[] = [];
+
+  public resendModel = new IStudentJanAadharDetailModel()
+  public model = new ApplicationStudentDatamodel()
+  showResendButton: boolean = false;
+  public janaadharMemberDetails = new JanAadharMemberDetails()
+  public ID: number = 0;
+  public JAN_AADHAR: string = '';
+  public ModifyBy: number = 0;
+  public IsShowDropdown: boolean = false
+  public IsShowDrop: boolean = false
+  public IsShow: boolean = false
+  private interval: any;
+  public _enumDepartment = EnumDepartment
   // requestAction = new ItiVerificationModel();
   // public member = new ItiMembersModel()
   // public addmore = new ItiAffiliationList()
@@ -62,6 +88,7 @@ export class ItiInstructorFormComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  public ResposeOTPModel = new IStudentJanAadharDetailModel();
   public errorMessage = '';
   public HrMasterFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -92,16 +119,37 @@ export class ItiInstructorFormComponent {
   public ItiMemberPostList: any = [];
   public DISCOM: any = [];
   public VillageList: any = [];
+  public AdharMemberList: IStudentJanAadharDetailModel[] = [];
   isViewMode: boolean = false;
   showGetDetailsButton: boolean = false;
+  public OTP: string = '';
+  public GeneratedOTP: string = '';
+  public MobileNo: string = '';
+  timeLeft: number = GlobalConstants.DefaultTimerOTP;
   // @ViewChild('otpModal') childComponent!: OTPModalComponent;
   public Collegeid: number = 0
   public Type: number = 0
+  public Address: any = {
+    addressEng: '',
+    districtName: '',
+    block_city: '',
+    gp: '',
+    village: '',
+    pin: '',
+    addressHnd: ''
+  }
+  isRajasthan: boolean = false;
+  records: any[] = []; // store added rows
+  showTable: boolean = false; // hide/show table
+  showOnlyUidField: boolean = false;
   // @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
+
+
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
+    private StudentJanAadharDetailService: StudentJanAadharDetailService,
     private ApplicationService: ITIsService,
     private toastr: ToastrService,
     private dataService: DataServiceService,
@@ -113,25 +161,11 @@ export class ItiInstructorFormComponent {
     private http: HttpClient,
     private ItiInstructorService: ITI_InstructorService,
     private route: ActivatedRoute,
-    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster
+    private ITIGovtEMStaffMasterService: ITIGovtEMStaffMaster,
+    private Swal2: SweetAlert2
   ) { }
 
   async ngOnInit() {
-
-    // Listen to IsDomicile changes
-    //this.InstructorForm.get('IsDomicile')?.valueChanges.subscribe(value => {
-    //  if (value === true) {
-    //    this.showAadhaar = true;
-    //    this.showJanAadhaar = true;
-    //  } else if (value === false) {
-    //    this.showAadhaar = true;
-    //    this.showJanAadhaar = false;
-    //  } else {
-    //    // default - hide all
-    //    this.showAadhaar = false;
-    //    this.showJanAadhaar = false;
-    //  }
-    //});
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -150,365 +184,132 @@ export class ItiInstructorFormComponent {
       }
     });
 
+
     this.InstructorForm = this.formBuilder.group(
-    {
-       // Personal Details
-      Uid: ['', Validators.required],
-      IsDomicile: [false, Validators.requiredTrue],
-      Name: ['', Validators.required],
-      FatherOrHusbandName: [''],
-      MotherName: [''],
-      Dob: [''],
-      Gender: [''],
-      MaritalStatus: [''],
-      Category: [''],
-      Mobile: ['', Validators.pattern(GlobalConstants.MobileNumberPattern)],
-      Email: ['',Validators.pattern(GlobalConstants.EmailPattern)],
+      {
+        // Personal Details
+        Uid: ['', Validators.required],
+        IsDomicile: [false, Validators.required] ,
+        Name: ['', Validators.required],
+        FatherOrHusbandName: ['', Validators.required],
+        MotherName: ['', Validators.required],
+        Dob: ['', Validators.required],
+        Gender: ['', [DropdownValidators]],
+        MaritalStatus: ['', [DropdownValidators]],
+        Category: ['', [DropdownValidators]],
+        Mobile: ['', Validators.pattern(GlobalConstants.MobileNumberPattern)],
+        Email: ['', Validators.pattern(GlobalConstants.EmailPattern)],
 
-      // Permanent Address
-      PlotHouseBuildingNo: ['', Validators.required],
-      StreetRoadLane: ['', Validators.required],
-      AreaLocalitySector: ['', Validators.required],
-      LandMark: ['',Validators.required],
-      ddlState: [''],
-      ddlDistrict: [''],
-      PropTehsilID: [''],
-      PropUrbanRural: [''],
-      City: [''],
-      villageID: [''],
-      pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
-      //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+        // Permanent Address
+        PlotHouseBuildingNo: ['', Validators.required],
+        StreetRoadLane: ['', Validators.required],
+        AreaLocalitySector: ['', Validators.required],
+        LandMark: ['', Validators.required],
+        ddlState: ['', [DropdownValidators]],
+        ddlDistrict: ['', [DropdownValidators]],
+        PropTehsilID: ['', [DropdownValidators]],
+        PropUrbanRural: [''],
+        City: ['', Validators.required],
+        villageID: ['', Validators.required],
+        pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
-      // Correspondence Address
-      Correspondence_PlotHouseBuildingNo: ['', Validators.required],
-      Correspondence_StreetRoadLane: ['', Validators.required],
-      Correspondence_AreaLocalitySector: ['', Validators.required],
-      Correspondence_LandMark: ['',Validators.required],
-      Correspondence_ddlState: [''],
-      Correspondence_ddlDistrict: [''],
-      Correspondence_PropTehsilID: [''],
-      Correspondence_PropUrbanRural: [''],
-      Correspondence_City: [''],
-      Correspondence_villageID: [''],
-      Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        // Correspondence Address
+        Correspondence_PlotHouseBuildingNo: ['', Validators.required],
+        Correspondence_StreetRoadLane: ['', Validators.required],
+        Correspondence_AreaLocalitySector: ['', Validators.required],
+        Correspondence_LandMark: ['', Validators.required],
+        Correspondence_ddlState: ['', [DropdownValidators]],
+        Correspondence_ddlDistrict: ['', [DropdownValidators]],
+        Correspondence_PropTehsilID: ['', [DropdownValidators]],
+        Correspondence_PropUrbanRural: [''],
+        Correspondence_City: ['', Validators.required],
+        Correspondence_villageID: ['', Validators.required],
+        Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
 
-      // Educational Qualification
-      Education_Exam: [''],
-      Education_Board: [''],
+        // Educational Qualification
+        Education_Exam: [''],
+        Education_Board: [''],
+        Education_Year: [''],
+        Education_Subjects: [''],
+        Education_Percentage: [''],
+        QualificationDocument: [''],
+
+        // Technical Qualification
+        Tech_Exam: [''],
+        Tech_Board: [''],
+        Tech_Subjects: [''],
+        Tech_Year: [''],
+        Tech_Percentage: [''],
+        TechQualificationDocument: [''],
+
+        // Employment Details
+        Pan_No: [''],
+        Employee_Type: [''],
+        Employer_Name: [''],
+        Employer_Address: [''],
+        Tan_No: [''],
+        Aadhar: ['', Validators.pattern(GlobalConstants.AadhaarPattern)],
+        JanAadhar: [''],
+        Employment_From: [''],
+        Employment_To: [''],
+        Basic_Pay: ['', [Validators.min(0)]],
+        EmploymentDocument: [''],
+        TehsilName: ['', Validators.required]
+      });
+
+
+    this.EducationForm = this.formBuilder.group({
+      Education_Exam: ['', Validators.required],
+      Education_Board: ['', Validators.required],
       Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Education_Subjects: [''],
+      Education_Subjects: ['', Validators.required],
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
+      QualificationDocument: ['', Validators.required]
+    });
 
-      // Technical Qualification
-      Tech_Exam: [''],
-      Tech_Board: [''],
-      Tech_Subjects: [''],
-      Tech_Year: ['', [ Validators.pattern('^[0-9]{4}$')]],
-      Tech_Percentage: ['', [ Validators.min(0), Validators.max(100)]],
 
-      // Employment Details
-      Pan_No: [''],
-      Employee_Type: [''],
-      Employer_Name: [''],
-      Employer_Address: [''],
-      Tan_No: [''],
-      Aadhar: [''],
-      JanAadhar: [''],
+    this.TechnicalForm = this.formBuilder.group({
+      Tech_Exam: ['', Validators.required],
+      Tech_Board: ['', Validators.required],
+      Tech_Subjects: ['', Validators.required],
+      Tech_Year: ['', Validators.pattern('^[0-9]{4}$')],
+      Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
+      TechQualificationDocument: ['', Validators.required]
+    });
+
+
+    this.EmploymentForm = this.formBuilder.group({
+      Pan_No: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      Employee_Type: ['', Validators.required],
+      Employer_Name: ['', Validators.required],
+      Employer_Address: ['', Validators.required],
+      Tan_No: ['', Validators.required],
+      //Aadhar: [''],
+      //JanAadhar: [''],
       Employment_From: [''],
       Employment_To: [''],
-      Basic_Pay: ['', [Validators.min(0)]]
-    }); 
+      Basic_Pay: ['', [Validators.min(0)]],
+      EmploymentDocument: ['', Validators.required]
+    });
 
- 
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    //this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
-    //this.searchrequest.DepartmentID = EnumDepartment.BTER;
-    //this.request.DepartmentID = EnumDepartment.BTER;
-    /*    this.HRManagerID = Number(this.activatedRoute.snapshot.queryParamMap.get('HRManagerID')?.toString());*/
-
-    //await this.loadDropdownData('Board')
-    //await this.GetStateMatserDDL()
-    //await this.GetPassingYearDDL()
-
-    //this.request.CollegeName = this.sSOLoginDataModel.InstituteName
-
-
     let idParam = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());
-    this.urlId=idParam;
-    // const Type = this.activatedRoute.snapshot.queryParamMap.get('Type');
-    // this.Collegeid = Number(idParam);
-    // if (!idParam || isNaN(this.Collegeid)) {
-    //   this.Collegeid = 0;
-
-
-    // }
-    // this.Type = Number(Type);
-    // if (!idParam || isNaN(this.Type)) {
-    //   this.Type = 0;
-    // }
-
-   
-    // if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
-    //   this.request.CollegeId = this.sSOLoginDataModel.InstituteID
-    // } else {
-    //   this.request.CollegeId = this.Collegeid
-
-    // }
-
-
-    // if (this.request.CollegeId > 0) {
-    //   await this.GetById(this.request.CollegeId)
-    //   if (this.Type != 1) {
-    //     if (this.request.Status == 2 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing || this.request.Status == 3 && this.sSOLoginDataModel.RoleID != EnumRole.DTETraing) {
-    //       window.open("/ItiPlanningList?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
-    //     }
-    //   }
-      
-    // }
+    this.urlId = idParam;
 
     this.GetInstituteCategoryList();
     this.GetManagmentType();
     this.GetStateMaterData()
-
     this.GetLateralCourse()
-    //console.log("meri id hai ye",idParam)
-    await this.GetById(idParam);
-
-
-
-//     this.InstructorForm.patchValue(JSON.parse(`{
-//     "Uid": "sdsd",
-//     "Name": "sdsd",
-//     "FatherOrHusbandName": "sdsd",
-//     "MotherName": "sdsd",
-//     "Dob": "2025-07-19",
-//     "Gender": "Male",
-//     "MaritalStatus": "Married",
-//     "Category": "OBC",
-//     "Mobile": 9876534564,
-//     "Email": "1212121@gmail.com",
-//     "PlotHouseBuildingNo": "ss",
-//     "StreetRoadLane": "ssd",
-//     "AreaLocalitySector": "sdsd",
-//     "LandMark": "sdsd",
-//     "ddlState": "6",
-//     "ddlDistrict": "21",
-//     "PropTehsilID": "190",
-//     "PropUrbanRural": "",
-//     "City": "dsds",
-//     "villageID": "",
-//     "pincode": 659856,
-//     "Correspondence_PlotHouseBuildingNo": "sdsd",
-//     "Correspondence_StreetRoadLane": "sdsd",
-//     "Correspondence_AreaLocalitySector": "sdsd",
-//     "Correspondence_LandMark": "ssd",
-//     "Correspondence_ddlState": "6",
-//     "Correspondence_ddlDistrict": "6",
-//     "Correspondence_PropTehsilID": "46",
-//     "Correspondence_PropUrbanRural": "",
-//     "Correspondence_City": "sdsd",
-//     "Correspondence_villageID": "",
-//     "Correspondence_pincode": 987456,
-//     "Education_Exam": "sdsd",
-//     "Education_Board": "sdsd",
-//     "Education_Year": 2020,
-//     "Education_Subjects": "sdsd",
-//     "Education_Percentage": 98,
-//     "Tech_Exam": "sdsd",
-//     "Tech_Board": "dsd",
-//     "Tech_Subjects": "sdsds",
-//     "Tech_Year": 2024,
-//     "Tech_Percentage": 65,
-//     "Pan_No": "sdsd",
-//     "Employee_Type": "Regular",
-//     "Employer_Name": "sdsd",
-//     "Employer_Address": "sdsd",
-//     "Tan_No": "sdsds",
-//     "Employment_From": "2025-07-26",
-//     "Employment_To": "2025-07-26",
-//     "Basic_Pay": 98745632145,
-//     "CreatedBy": "240",
-//     "DepartmentID": "2"
-// }`))
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
-
-
-  // get minValidUpToDate(): string | null {
-  //   if (this.request.AgreementLeaseDate) {
-  //     const agreementDate = new Date(this.request.AgreementLeaseDate);
-  //     agreementDate.setFullYear(agreementDate.getFullYear() + 5);
-  //     return agreementDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
-  //   }
-  //   return null;
-  // }
-
-
-  // setMinDate(): void {
-  //   const today = new Date();
-  //   this.minDate = today.toISOString().split('T')[0];
-  // }
-
-
-  // async GetGramPanchayatSamiti() {
-  //   try {
-  //     if (this.request.PropUrbanRural == 75) {
-  //       this.request.GramPanchayatSamiti = 0
-  //       return
-  //     }
-
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.GramPanchayat(this.request.PropTehsilID)
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-
-  //         this.GramPanchayatList = data['Data'];
-
-  //         // console.log(this.DivisionMasterList)
-  //       }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-
-  // async GetPanchayatSamiti() {
-  //   try {
-  //     if (this.request.PropUrbanRural == 75) {
-  //       return
-  //     }
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.PanchayatSamiti(this.request.PropDistrictID)
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-
-  //         this.PanchayatSamitiList = data['Data'];
-
-  //         // console.log(this.DivisionMasterList)
-  //       }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-
-  // async villageMaster() {
-  //   try {
-  //     if (this.request.PropUrbanRural == 75) {
-  //       this.request.villageID = '0';
-  //       return
-  //     }
-
-  //     this.loaderService.requestStarted();
-  //   //   await this.commonMasterService.villageMaster(this.request.GramPanchayatSamiti)
-  //   //     .then((data: any) => {
-  //   //       data = JSON.parse(JSON.stringify(data));
-
-  //   //       this.VillageList = data['Data'];
-  //   //  /*     console.log(this.ParliamentMasterList)*/
-  //   //       // console.log(this.DivisionMasterList)
-  //   //     }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-  // async GetcOmmonData() {
-  //   try {
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.GetCommonMasterDDLByType('DISCOM')
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-  //         this.State = data['State'];
-  //         this.Message = data['Message'];
-  //         this.ErrorMessage = data['ErrorMessage'];
-  //         this.DISCOM = data['Data'];
-  //       }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-  // async GetVillageData() {
-  //  try {
-  //    if (this.request.PropUrbanRural == 75) {
-  //      return
-  //    }
-  //    this.loaderService.requestStarted();
-  //    await this.commonMasterService.GetCommonMasterData('VillageMaster', this.sSOLoginDataModel.DepartmentID, this.request.PropTehsilID)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        this.VillageList = data['Data'];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  // }
-
-
-  // async GetDivisionMasterList() {
-  //   try {
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.GetDivisionMaster()
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-  //         this.State = data['State'];
-  //         this.Message = data['Message'];
-  //         this.ErrorMessage = data['ErrorMessage'];
-  //         this.DivisionMasterList = data['Data'];
-  //       }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
 
   async ddlDistrict_Change() {
 
     try {
       this.loaderService.requestStarted();
-
-      // let InstituteDistrictID: number = Number(this.InstructorForm.value.ddlDistrict) ?? 0;
 
       await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.ddlDistrict)
         .then((data: any) => {
@@ -516,19 +317,6 @@ export class ItiInstructorFormComponent {
           this.TehsilMasterList = data['Data'];
 
         }, error => console.error(error));
-      // await this.commonMasterService.SubDivisionMaster_DistrictIDWise(InstituteDistrictID)
-      //   .then((data: any) => {
-      //     data = JSON.parse(JSON.stringify(data));
-      //     this.SubDivisionMasterList = data['Data'];
-      //     console.log(this.SubDivisionMasterList, "SubDivisionMasterList")
-      //   }, error => console.error(error));
-
-      //await this.commonMasterService.AssemblyMaster_DistrictIDWise(this.request.DistrictId)
-      //  .then((data: any) => {
-      //    data = JSON.parse(JSON.stringify(data));
-      //    this.AssemblyMasterList = data['Data'];
-      //    console.log(this.AssemblyMasterList, "AssemblyMasterList")
-      //  }, error => console.error(error));
 
       await this.commonMasterService.CityMasterDistrictWise(this.InstructorForm.value.ddlDistrict)
         .then((data: any) => {
@@ -536,17 +324,6 @@ export class ItiInstructorFormComponent {
           this.CityMasterDDLList = data['Data'];
           console.log(this.CityMasterDDLList, "CityMasterDDLList")
         }, error => console.error(error));
-
-      // await this.commonMasterService.PanchayatSamiti(InstituteDistrictID)
-      //   .then((data: any) => {
-      //     data = JSON.parse(JSON.stringify(data));
-      //     this.State = data['State'];
-      //     this.Message = data['Message'];
-      //     this.ErrorMessage = data['ErrorMessage'];
-      //     this.PanchayatSamitiList = data['Data'];
-   
-      //   }, error => console.error(error));
-
     }
     catch (Ex) {
       console.log(Ex);
@@ -559,12 +336,10 @@ export class ItiInstructorFormComponent {
   }
 
 
-    async ddlDistrict_Change2() {
-   
+  async ddlDistrict_Change2() {
+
     try {
       this.loaderService.requestStarted();
-
-      // let InstituteDistrictID: number = Number(this.InstructorForm.value.ddlDistrict) ?? 0;
 
       await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
         .then((data: any) => {
@@ -572,19 +347,7 @@ export class ItiInstructorFormComponent {
           this.TehsilMasterList2 = data['Data'];
 
         }, error => console.error(error));
-      // await this.commonMasterService.SubDivisionMaster_DistrictIDWise(InstituteDistrictID)
-      //   .then((data: any) => {
-      //     data = JSON.parse(JSON.stringify(data));
-      //     this.SubDivisionMasterList = data['Data'];
-      //     console.log(this.SubDivisionMasterList, "SubDivisionMasterList")
-      //   }, error => console.error(error));
 
-      //await this.commonMasterService.AssemblyMaster_DistrictIDWise(this.request.DistrictId)
-      //  .then((data: any) => {
-      //    data = JSON.parse(JSON.stringify(data));
-      //    this.AssemblyMasterList = data['Data'];
-      //    console.log(this.AssemblyMasterList, "AssemblyMasterList")
-      //  }, error => console.error(error));
 
       await this.commonMasterService.CityMasterDistrictWise(this.InstructorForm.value.ddlDistrict)
         .then((data: any) => {
@@ -592,16 +355,6 @@ export class ItiInstructorFormComponent {
           this.CityMasterDDLList = data['Data'];
           console.log(this.CityMasterDDLList, "CityMasterDDLList")
         }, error => console.error(error));
-
-      // await this.commonMasterService.PanchayatSamiti(InstituteDistrictID)
-      //   .then((data: any) => {
-      //     data = JSON.parse(JSON.stringify(data));
-      //     this.State = data['State'];
-      //     this.Message = data['Message'];
-      //     this.ErrorMessage = data['ErrorMessage'];
-      //     this.PanchayatSamitiList = data['Data'];
-   
-      //   }, error => console.error(error));
 
     }
     catch (Ex) {
@@ -636,49 +389,6 @@ export class ItiInstructorFormComponent {
     }
   }
 
-
-  // async ItiMemberPost() {
-  //   try {
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.GetCommonMasterData('ItiMemberPost')
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-  //         console.log(data, 'ggg');
-  //         this.ItiMemberPostList = data['Data'];
-
-  //       }, (error: any) => console.error(error)
-  //       );
-  //   }
-  //   catch (ex) {
-  //     console.log(ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-  // async ddlDivision_Change() {
-  //   try {
-  //     this.loaderService.requestStarted();
-  //     await this.commonMasterService.DistrictMaster_DivisionIDWise(this.request.InstituteDivisionID)
-  //       .then((data: any) => {
-  //         data = JSON.parse(JSON.stringify(data));
-  //         this.DistrictMasterList1 = data['Data'];
-  //       }, error => console.error(error));
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   }
-  //   finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 2000);
-  //   }
-  // }
-
-
   async GetStateMaterData() {
     try {
       this.loaderService.requestStarted();
@@ -701,7 +411,7 @@ export class ItiInstructorFormComponent {
   }
 
   async ddlState_Change() {
-    console.log("State changed - (", this.InstructorForm.value.ddlState , ")");
+    console.log("State changed - (", this.InstructorForm.value.ddlState, ")");
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
@@ -719,6 +429,60 @@ export class ItiInstructorFormComponent {
       }, 200);
     }
   }
+
+
+  addEducationQualification() {
+    if (!this.educationRequest.Education_Exam || !this.educationRequest.Education_Board) {
+      alert("Please fill required fields before adding");
+      return;
+    }
+
+    this.educationList.push({ ...this.educationRequest });
+
+    this.educationRequest = new ITI_InstructorEducationalQualification();
+
+    this.EducationForm.reset();
+  }
+
+  removeEducation(index: number) {
+    this.educationList.splice(index, 1);
+  }
+
+
+
+  addTechQualification() {
+    if (!this.techRequest.Tech_Exam || !this.techRequest.Tech_Board) {
+      alert("Please fill required fields before adding");
+      return;
+    }
+
+    this.techRequestList.push({ ...this.techRequest });
+
+    this.techRequest = new ITI_InstructorTechnicalQualification();
+
+    this.TechnicalForm.reset();
+  }
+
+  removeTech(index: number) {
+    this.techRequestList.splice(index, 1);
+  }
+
+
+  addEmployeeQualification() {
+    if (!this.employeeRequest.Pan_No || !this.employeeRequest.Employer_Name) {
+      alert("Please fill required fields before adding");
+      return;
+    }
+
+    this.employeeRequestList.push({ ...this.employeeRequest });
+
+    this.EmploymentForm.reset();
+  }
+
+  removeEmployee(index: number) {
+    this.employeeRequestList.splice(index, 1);
+  }
+
 
   async GetInstituteCategoryList() {
     try {
@@ -767,158 +531,33 @@ export class ItiInstructorFormComponent {
     }
   }
 
-  onReset():void{
+  onReset(): void {
     this.InstructorForm.reset();
   }
 
-   
 
+  async onSubmit() {
 
-  // public file!: File;
+    debugger;
 
-  // async onFilechange(event: any, Type: string) {
-  //   try {
-
-  //     this.file = event.target.files[0];
-  //     if (this.file) {
-
-  //       //if (!this.validateFileName(this.file.name))
-  //       //{
-  //       //  this.toastr.error('Invalid file name. Please remove special characters from file');
-  //       //  return;
-  //       //}
-  //       // Type validation
-  //       if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
-  //         // Size validation
-  //         if (this.file.size > 2000000) {
-  //           this.toastr.error('Select less than 2MB File');
-  //           return;
-  //         }
-  //       }
-  //       else {
-  //         this.toastr.error('Select Only jpeg/jpg/png file');
-  //         return;
-  //       }
-
-  //       //if (this.file.name.split('.').length > 2)
-  //       //{
-  //       //  this.toastr.error('Invalid file name. Please remove extra . from file');
-  //       //  return ;
-  //       //}
-
-
-
-  //       // Upload to server folder
-  //       this.loaderService.requestStarted();
-  //       await this.commonMasterService.UploadDocument(this.file)
-  //         .then((data: any) => {
-  //           data = JSON.parse(JSON.stringify(data));
-  //           console.log("photo data", data);
-  //           if (data.State === EnumStatus.Success) {
-
-
-
-
-
-  //             switch (Type) {
-  //               case "RegFileName":
-
-  //                 this.request.RegFileName = data['Data'][0]["FileName"];
-  //                 this.request.RegDisFileName = data['Data'][0]["Dis_FileName"];
-
-  //                 break;
-  //               case "IDFileName":
-
-  //                 this.member.IDFileName = data['Data'][0]["FileName"];
-  //                 this.member.IDdis_Filename = data['Data'][0]["Dis_FileName"];
-  //                 break;
-  //               case "MemberIdProofName":
-
-  //                 this.request.MemberIdProofName = data['Data'][0]["FileName"];
-  //                 this.request.MemberIdDisProofName = data['Data'][0]["Dis_FileName"];
-
-  //                 break;
-  //               case "AgreementFileName":
-  //                 this.request.AgreementFileName = data['Data'][0]["FileName"];
-  //                 this.request.AgreementDisFileName = data['Data'][0]["Dis_FileName"];
-
-  //                 break;
-  //               case "LatLongFileName":
-  //                 this.request.LatLongFileName = data['Data'][0]["FileName"];
-  //                 this.request.LatLongDisFileName = data['Data'][0]["Dis_FileName"];
-
-
-  //                 break;
-  //               case "Bill_Filename":
-  //                 this.request.Bill_Filename = data['Data'][0]["FileName"];
-  //                 this.request.Bill_DisFilename = data['Data'][0]["FileName"];
-
-
-  //                 break;
-  //               case "FileName":
-  //                 this.addmore.FileName = data['Data'][0]["FileName"];
-  //                 this.addmore.Dis_Filename = data['Data'][0]["FileName"];
-
-
-                 
-
-  //                 break;
-  //               default:
-  //                 break;
-  //             }
-  //           }
-  //           event.target.value = null;
-  //           if (data.State === EnumStatus.Error) {
-  //             this.toastr.error(data.ErrorMessage);
-
-  //           } else if (data.State === EnumStatus.Warning) {
-  //             this.toastr.warning(data.ErrorMessage);
-  //           }
-  //         });
-  //     }
-  //   } catch (Ex) {
-  //     console.log(Ex);
-  //   } finally {
-  //     this.loaderService.requestEnded();
-  //   }
-  // }
-
-
-// onSubmit(): void {
-//     if (this.ReportForm.valid) {
-//       console.log('Form Submitted', this.ReportForm.value);
-//       // You can replace this with API call
-//     } else {
-//       console.log('Form is invalid');
-//       this.ReportForm.markAllAsTouched();
-//     }
-//   }
-
-
-
-    async onSubmit() {
     console.log('Form submitted:iinstructor', this.InstructorForm.value);
     this.isLoading = true;
     this.isSubmitted = true;
-    //Show Loading
     this.loaderService.requestStarted();
 
     try {
       if (this.InstructorForm.valid) {
-        // Handle form submission logic here
 
-        // debugger;
-        //console.log('Form submitted successfully:', this.InstructorForm.value);
-        // this.request.CopyPacket = this.RelievingPracticalForm.value.CopyPacket === 'Yes' ? true : false;
-        // this.request.Uid = this.InstructorForm.value.Uid;
-
+        var ssoid = this.request.Uid
         this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-        this.request.id=this.urlId;
-        //console.log('Form Submitted:request', this.request);
+
         this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
         this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-        // this.request.InstituteID=this.sSOLoginDataModel.InstituteID;
-        this.request.InstituteID=1;
+
+        this.request.Uid = ssoid
+        this.request.EmploymentDetails = this.employeeRequestList;
+        this.request.TechnicalQualifications = this.techRequestList;
+        this.request.EducationalQualifications = this.educationList;
 
         await this.ItiInstructorService.SaveInstructorData(this.request)
           .then((response: any) => {
@@ -926,12 +565,9 @@ export class ItiInstructorFormComponent {
             this.Message = response['Message'];
             this.ErrorMessage = response['ErrorMessage'];
 
-            if (this.State == EnumStatus.Success)
-            {
+            if (this.State == EnumStatus.Success) {
               this.toastr.success(this.Message);
-              // setTimeout(() => {
-                // this.router.navigate(['/PracticalExaminerRelieving']);
-              // }, 300);
+
             }
             else {
               this.toastr.error(this.ErrorMessage)
@@ -955,294 +591,55 @@ export class ItiInstructorFormComponent {
   }
 
 
-//   async SaveData(Status:number=0) {
-   
-//     this.nonItiValidator()
+  async GetById(ID: string) {
 
-// /*    this.request.CollegeId=2227*/
-//     try {
-//       this.isSubmitted = true;
-
-//       // if (this.request.InstituteManagementId == 5) {
-//       //   if (this.InstructorForm.invalid) {
-//       //     return
-//       //   }
-//       // }
-  
-
-//       // if (this.request.InstituteManagementId == 5 && this.request.RegFileName == '') {
-//       //   this.toastr.error("Please Upload Registration Document")
-//       //   return
-//       // }
-
-
-
-//       // if (this.request.Bill_Filename == '') {
-//       //   this.toastr.error("Please Upload Last Month Electricity")
-//       //   return
-//       // }
-
-
-//       // if (this.request.LatLongFileName == '') {
-//       //   this.toastr.error("Please Upload Lat/Long* (along with college gate photo)")
-//       //   return
-//       // }
-
-//       if (this.request.OwnerShipID == 1 && this.request.AgreementFileName =='') {
-//         this.toastr.error("Please Upload Rent Agreement Document")
-//         return
-//       }
-//       if (this.request.OwnerShipID == 2 && this.request.AgreementFileName == '') {
-//         this.toastr.error("Please Upload Owned Property  Document")
-//         return
-//       }
-
-//       if (this.request.InstituteManagementId == 0) {
-//         this.toastr.warning("Please Select Management Type")
-//         return
-//       }
-     
-//         if (this.InstructorForm.invalid) {
-//           return
-//         }
-
-
-//       if (this.request.InstituteManagementId == 5 && this.request.LastElectionDate == '') {
-//         this.toastr.error("Please Enter Date of Last Election")
-//         return
-//       }
-
-//       if (this.request.InstituteManagementId == 5 && this.request.LastElectionValidUpTo == '') {
-//         this.toastr.error("Please Add Date of Last Election Vaid Upto")
-//         return
-//       }
-
-
-//       if (this.request.ItiAffiliationList.length < 1) {
-//         this.toastr.error("Please Add Affiliation Details")
-//         return
-//       }
-
-
-//       if (this.request.ItiMembersModel.length < 1 && this.request.InstituteManagementId==5) {
-//         this.toastr.error("Please Add Members Details")
-//         return
-//       }
-
-//       if (this.request.InstituteManagementId == 5 && this.request.MemberIdProofName == '') {
-//         this.toastr.error("Please Upload Member Document")
-//         return
-//       }
-
-
-
-//       if (this.request.OwnerShipID == 2) {
-//         this.request.AgreementLeaseDate = ''
-//         this.request.ValidUpToLeaseDate = ''
-//         this.request.InstituteRegOffice = ''
-//         this.request.InstituteDistrictID = 0
-//         //this.request.AgreementFileName = ''
-//         //this.request.AgreementDisFileName = ''
-//       }
-
-//       if (this.request.PropUrbanRural == 75) {
-//         this.request.PanchayatSamiti = 0
-//         this.request.GramPanchayatSamiti = 0
-//         this.request.VillageID = 0
-//       } else {
-//         this.request.CityID = 0
-//         this.request.AdministrativeBodyId = 0
-//       }
-
-
-//       // if (!this.validateLeaseDates()) {
-//       //   return; // prevent form submission or save
-//       // }
-
-
-
-//       if (this.request.InstituteManagementId == 1) {
-//         this.request.ItiMembersModel = []
-//         this.request.TrustSociety = 0
-//         this.request.TrustSocietyName = ''
-//         this.request.RegNo = ''
-//         this.request.RegDate = ''
-//         this.request.RegFileName = ''
-//         this.request.RegDisFileName = ''
-//         this.request.RegOfficeDistrictID = 0
-//         this.request.RegOfficeStateID = 0
-//    /*     this.request.InstituteRegOffice = ''*/
-// /*        this.request.InstituteRegOffice = ''*/
-//       }
-//       console.log(this.request) 
-//       this.isLoading = true;
-//       this.loaderService.requestStarted();
-
-//       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-//       this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
-//       this.request.CollegeId = this.sSOLoginDataModel.InstituteID
-//       this.request.Status=Status
-//       //save
-//       await this.ApplicationService.SaveDataPlanning(this.request)
-//         .then((data: any) => {
-//           data = JSON.parse(JSON.stringify(data));
-
-//           if (data.State == EnumStatus.Success) {
-//             this.toastr.success(data.Message)
-//             this.router.navigate(['/ItiPlanning']);
-//             // this.GetById(this.request.CollegeId)
-            
-//             if (this.request.Status == 2) {
-//                window.open("/ItiPlanningList?id=" + this.sSOLoginDataModel.InstituteID, "_Self")
-//             }
-//             /* this.routers.navigate(['/Hrmaster']);*/
-
-//           }
-//           else {
-//             this.toastr.error(data.ErrorMessage)
-//           }
-
-//         }, (error: any) => console.error(error)
-//         );
-//     } catch (ex) {
-//       console.log(ex);
-//     } finally {
-//       setTimeout(() => {
-//         this.loaderService.requestEnded();
-//       }, 2000);
-//     }
-//   }
-
-
-
-
-
-  // nonItiValidator() {
-  //   if (this.request.PropUrbanRural == 76) {
-  //     this.InstructorForm.controls['CityID'].clearValidators();
-  //     // this.AddressFormGroup.controls['AdministrativeBodyId'].clearValidators();
-  //     this.InstructorForm.controls['village'].setValidators([DropdownValidators]);
-  //     // this.AddressFormGroup.controls['GramPanchayatSamiti'].setValidators([DropdownValidators]);
-  //     // this.AddressFormGroup.controls['PanchayatSamiti'].setValidators([DropdownValidators]);
-  //   } else {
-  //     this.InstructorForm.controls['CityID'].setValidators([DropdownValidators]);
-  //     this.InstructorForm.controls['village'].clearValidators();
-  //   }
-  //   this.InstructorForm.controls['CityID'].updateValueAndValidity();
-  //   // this.AddressFormGroup.controls['AdministrativeBodyId'].updateValueAndValidity();
-  //   this.InstructorForm.controls['village'].updateValueAndValidity();
-  // }
-
-
- async GetById(ID: number) {
     try {
-  
-      // this.request.ItiAffiliationList = []
-      // this.request.ItiMembersModel=[]
-      this.loaderService.requestStarted();
-      const data: any = await this.ItiInstructorService.GetInstructorDataByID(ID);
-      const parsedData = JSON.parse(JSON.stringify(data));
-      console.log("parseddata",parsedData);
-      this.InstructorForm.patchValue(parsedData);
+      if (ID == "") {
+        this.toastr.error("Please Enter SSOID");
+        return;
+      }
 
+      await this.ItiInstructorService.GetInstructorDataBySsoid(ID)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
 
-        await this.ItiInstructorService.GetInstructorDataByID(ID)
-          .then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            debugger
-                    this.request = data.Data[0];
-                    const parsedData = JSON.parse(JSON.stringify(data));
-                    data.Data[0].Employment_From=data.Data[0].Employment_From.slice(0,10);
-                    data.Data[0].Employment_To=data.Data[0].Employment_To.slice(0,10);
-                    data.Data[0].Dob=data.Data[0].Dob.slice(0,10);
-                    data.Data[0].CreatedAt=data.Data[0].CreatedAt.slice(0,10);
-                    this.InstructorForm.patchValue(data.Data[0]);
-                    await this.ddlState_Change2();
-                    await this.ddlState_Change();
-                    await this.ddlDistrict_Change();
-                    await this.ddlDistrict_Change2();
+          if (data['Data']['Table'] && data['Data']['Table'].length === 0) {
 
-                }, (error: any) => console.error(error));
-        console.log('Request Datas:', this.request);
+            await this.SSOIDGetSomeDetails(ID)
+            return
 
-      // if (parsedData['Data'] != null) {
-        // this.request = parsedData['Data'];
-        // await this.ddlState_Change2()
-        // this.request.InstituteDivisionID = parsedData['Data']["InstituteDivisionID"]
-        // await this.ddlDivision_Change()
-        // this.request.PropDistrictID = parsedData['Data']["PropDistrictID"]
-        // await this.ddlDistrict_Change()
-        // this.request.InstituteSubDivisionID = parsedData['Data']["InstituteSubDivisionID"]
-        // this.request.PropTehsilID = parsedData['Data']["PropTehsilID"]
-        // this.request.CityID = parsedData['Data']["CityID"]
-        // await this.ddlState_Change()
-        // if (this.request.PropUrbanRural == 76) {
-        //   await this.GetGramPanchayatSamiti();
-        // }
-        
-      // }
-      //// Assign default values for null or undefined fields
-      // Object.keys(this.request).forEach((key) => {
-      //   const value = this.request[key as keyof ITI_PlanningCollegesModel];
+          } else {
 
-      //   if (value === null || value === undefined) {
-      //     // Default to '' if string, 0 if number
-      //     if (typeof this.request[key as keyof ITI_PlanningCollegesModel] === 'number') {
-      //       (this.request as any)[key] = 0;
-      //     } else {
-      //       (this.request as any)[key] = '';
-      //     }
-      //   }
-      // })
-      // if (this.request.ItiAffiliationList == null || this.request.ItiAffiliationList == undefined) {
-      //   this.request.ItiAffiliationList=[]
-      // }
+            this.toastr.error("Already Fill")
+            this.isSSOVisible = true;
+            this.request = data['Data']['Table'][0]
+            this.InstructorForm.patchValue(this.request);
+            if (data['Data']['Table1'] && data['Data']['Table1'].length > 0) {
+              this.educationList = data['Data']['Table1']
+            }
 
-      // if (this.request.ItiMembersModel == null || this.request.ItiMembersModel == undefined) {
-      //   this.request.ItiMembersModel = [];
-      // }
-      //if (this.request.ItiMembersModel.length > 0) {
-      //  this.ItiMemberPost()
-      //  this.request.ItiMembersModel.forEach((member) => {
-      //    
+            if (data['Data']['Table2'] && data['Data']['Table2'].length > 0) {
+              this.employeeRequestList = data['Data']['Table2']
+            }
+            if (data['Data']['Table3'] && data['Data']['Table3'].length > 0) {
+              this.techRequestList = data['Data']['Table3']
 
-      //       this.member.PostName = this.ItiMemberPostList.filter((x: any) => x.ID == this.member.PostID)[0]['Name'];
-      //  });
+            }
 
-      //}
-      // if (this.request.PropUrbanRural == 76) {
+            this.EducationForm.disable()
+            this.EmploymentForm.disable()
+            this.TechnicalForm.disable()
+            this.InstructorForm.disable()
 
-      
-/*        this.GetGramPanchayatSamiti()*/
-      //   this.villageMaster()
-      // } 
-      
-      //});
-      //if (data['Data']['CollegeName'] == null) {
-      //  this.request.CollegeName=''
-      //}
-      // Optional: override with login data
-      /*     this.request.CollegeName = this.sSOLoginDataModel.InstituteName;*/
+            await this.ddlState_Change2();
+            await this.ddlState_Change();
+            await this.ddlDistrict_Change();
+            await this.ddlDistrict_Change2();
 
-      /*    Format specific date fields*/
-      // const dateFields: (keyof ITI_PlanningCollegesModel)[] = [
-      //   'AgreementLeaseDate', 'LastElectionDate', 'ValidUpToLeaseDate',
-      //   'RegDate', 'LastElectionValidUpTo'
-      // ];
+          }
 
-      // dateFields.forEach((field) => {
-      //   const value = this.request[field];
-      //   if (value) {
-      //     const rawDate = new Date(value as string);
-      //     const year = rawDate.getFullYear();
-      //     const month = String(rawDate.getMonth() + 1).padStart(2, '0');
-      //     const day = String(rawDate.getDate()).padStart(2, '0');
-      //     (this.request as any)[field] = `${year}-${month}-${day}`;
-      //   }
-      // });
-/*      this.request.InstituteManagementId=5*/
-
-      // console.log(parsedData,"dsw");
+        }, (error: any) => console.error(error));
+      console.log('Request Datas:', this.request);
     } catch (ex) {
       console.log(ex);
     } finally {
@@ -1251,13 +648,6 @@ export class ItiInstructorFormComponent {
       }, 2000);
     }
   }
-
-  //async resetrow() {
-  //  this.isSubmitted = false
-  //  this.request = new ItiReportDataModel()
-  //  this.request.CollegeID = this.sSOLoginDataModel.InstituteID
-  //  this.request.CollegeName = this.sSOLoginDataModel.InstituteName
-  //}
 
   async changeUrbanRural() {
     // this.GetGramPanchayatSamiti()
@@ -1268,78 +658,18 @@ export class ItiInstructorFormComponent {
     const charCode = event.which ? event.which : event.keyCode;
     const inputChar = String.fromCharCode(charCode);
 
-    // Allow control keys (like backspace)
     if (charCode <= 31) return true;
-
-    // Allow digits (0–9)
     if (charCode >= 48 && charCode <= 57) return true;
 
-    // Allow one dot (.)
     if (inputChar === '.') {
       const input = (event.target as HTMLInputElement).value;
-      // Only allow one dot
       if (input.indexOf('.') === -1) return true;
     }
-
-    // Disallow everything else
     return false;
   }
 
 
-  // openOTP() {
-  //   this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-  //   this.childComponent.OpenOTPPopup();
-
-  //   this.childComponent.onVerified.subscribe(() => {
-  //     //this.PublishTimeTable();
-  //     this.SaveData(2);
-  //   })
-  // }
-
-
-
-
-  async DuplicateCheck(SSOID: string) {
-    debugger;
-
-    // console.log('id test ', this.searchRequest.DivisionID);
-    try {
-      this.loaderService.requestStarted();
-      await this.ITIGovtEMStaffMasterService.ITIGovtEM_SSOIDCheck(SSOID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
-
-
-          }
-          else if (data.State == EnumStatus.Warning) {
-
-            const msg = `SSOID ${SSOID} is already mapped.To assign a new role, please use the Additional Role Mapping section.`;
-            this.toastr.warning(msg);
-            this.request.Uid = '';
-            this.isSSOVisible = false;
-            this.InstructorForm.get('txtSSOID')?.enable();
-          }
-          else {
-            this.toastr.error(data.ErrorMessage);
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-    //debugger;
-    //this.isSSOVisible = true; // show fields now
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
 
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
@@ -1357,7 +687,6 @@ export class ItiInstructorFormComponent {
     this.requestSSoApi.password = password;
 
 
-
     try {
 
       this.loaderService.requestStarted();
@@ -1367,12 +696,8 @@ export class ItiInstructorFormComponent {
         this.isSSOVisible = false;
         if (response?.Data) {
 
-          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          let parsedData = JSON.parse(response.Data);
           if (parsedData != null) {
-            console.log("parsedDatagdfhdfghgfdh",parsedData)
-           // this.DuplicateCheck(this.requestSSoApi.SSOID);
-            //this.formData.Displayname = parsedData.displayName
-            debugger
             this.isSSOVisible = true;
             this.request.Name = parsedData.displayName;
             this.request.Mobile = parsedData.mobile;
@@ -1382,12 +707,10 @@ export class ItiInstructorFormComponent {
             this.request.Correspondence_PlotHouseBuildingNo = parsedData.postalAddress;
             this.request.ddlState = parsedData.st;
             this.request.Aadhar = parsedData.AadhaarId,
-            this.request.JanAadhar = parsedData.JanaadhaarId
-            
-            //this.request.pincode = parsedData.postalCode
-            //this.InstructorForm.get('txtSSOID')?.disable();
+              this.request.JanAadhar = parsedData.JanaadhaarId,
+              this.request.Uid = SSOID
+
             this.InstructorForm.get('Uid')?.disable();
-            debugger;
             this.InstructorForm.patchValue({
               Name: this.request.Name,
               Mobile: this.request.Mobile,
@@ -1398,35 +721,17 @@ export class ItiInstructorFormComponent {
               Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
               ddlState: this.request.ddlState,
               Aadhar: this.request.Aadhar,
-              JanAadhar: this.request.JanAadhar
+              JanAadhar: this.request.JanAadhar,
+              Uid: this.request.Uid
 
             });
-          
-
-            console.log(this.request.Gender, this.InstructorForm.value);
-            //const localData : any =  this.GetById(parsedData.SSOID);
-              
-            //if (localData) {
-            //  console.log("localdata", localData);
-            //  // Merge DB data into your request object
-            //  this.request = { ...this.request, ...localData };
-
-            //}
-            //else {
-            //  //this.request.PostID = 0;
-            //}
 
           }
           else {
-           // this.toastr.error("Record Not Found");
             this.request.Uid = "";
             this.isSSOVisible = true;
             return;
           }
-
-          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
-          //alert(this.request.Name)
-          //this.request.Name='daqdfas'
         }
       });
     } catch (error) {
@@ -1436,9 +741,272 @@ export class ItiInstructorFormComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
 
 
+  async GetDetailsByJanAadhaar() {
 
+    if (this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
+      this.toastr.error("Invalid Janadhar Details")
+    }
+    try {
+      this.loaderService.requestStarted();
+      await this.StudentJanAadharDetailService.JanAadhaarMembersList(this.request.JanAadhar)
+
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.AdharMemberList = data.Data;
+            console.log(this.AdharMemberList, "adhar");
+            this.request.Name = data['Data']['NAME'];
+            console.log(this.request, "request");
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message + " Please check Janadhar/ Adhar Number again")
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async SendJanaadharOTP(row: IStudentJanAadharDetailModel) {
+    try {
+      this.Swal2.Confirmation("Are you sure you want to Generate OTP ?", async (result: any) => {
+        // Check if the user confirmed the action
+        if (result.isConfirmed) {
+          this.SendOTP(row)
+        }
+      });
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  ResendOTP() {
+    this.SendOTP(this.resendModel)
+    this.resendModel = new IStudentJanAadharDetailModel()
+  }
+
+
+  async SendOTP(row: IStudentJanAadharDetailModel) {
+    this.resendModel = row
+    await this.StudentJanAadharDetailService.SendJanaadharOTP(row)
+      .then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+        console.log(data);
+        this.State = data['State'];
+        this.Message = data['Message'];
+        this.ErrorMessage = data['ErrorMessage'];
+
+        if (this.State == EnumStatus.Success) {
+          this.startTimer();
+          this.toastr.success('OTP sent Successfully')
+          this.ResposeOTPModel = data['Data'];
+          this.openModalGenerateOTP(this.modal_GenrateOTP, row);
+
+        }
+        else {
+          this.toastr.error(this.ErrorMessage)
+        }
+
+      }, (error: any) => console.error(error)
+      );
+  }
+
+
+  async VerifyOTP() {
+
+    if (this.OTP.length > 0) {
+      try {
+        this.isSubmitted = true;
+        this.loaderService.requestStarted();
+        this.ResposeOTPModel.OTP = this.OTP;
+        await this.StudentJanAadharDetailService.VerifyOTP(this.ResposeOTPModel)
+          .then(async (data: any) => {
+            debugger
+            data = JSON.parse(JSON.stringify(data));
+            console.log(data);
+            if (this.State == EnumStatus.Success) {
+              if (data.Data.janmemid == null || data.Data.janmemid == undefined || data.Data.janmemid == " " || data.Data.janaadhaarId == null || data.Data.janaadhaarId == undefined || data.Data.janaadhaarId == " ") {
+                this.janaadharMemberDetails.janaadhaarId = this.resendModel.JAN_AADHAR
+                this.janaadharMemberDetails.janmemid = this.resendModel.JAN_MEMBER_ID
+              } else {
+                this.janaadharMemberDetails = data.Data;
+              }
+
+              this.CloseModal();
+              this.IsShow = true;
+              this.IsShowDropdown = false;
+              this.Address = data.Data.Address;
+              await this.FillMemberDetails();
+
+              this.toastr.success("Succesfully Verified")
+            }
+            else {
+              this.toastr.warning('Invalid OTP Please Try Again');
+            }
+
+          }, (error: any) => console.error(error)
+          );
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+    else {
+      this.toastr.warning('Please Enter OTP');
+    }
+  }
+
+  startTimer(): void {
+    this.showResendButton = false;
+    this.timeLeft = GlobalConstants.DefaultTimerOTP * 60;
+
+
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.showResendButton = true;
+      }
+    }, 1000);
+  }
+
+  CloseModal() {
+
+    this.modalService.dismissAll();
+  }
+
+  async openModalGenerateOTP(content: any, row: IStudentJanAadharDetailModel) {
+    console.log(row)
+
+    this.OTP = '';
+    this.MobileNo = '';
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
 
   }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+
+  async FillMemberDetails() {
+    try {
+      console.log(this.janaadharMemberDetails, "hhh")
+      this.model.StudentName = this.janaadharMemberDetails.nameEng;
+      this.model.FatherName = this.janaadharMemberDetails.fnameEng;
+      this.model.MotherName = this.janaadharMemberDetails.mnameEng;
+      this.model.Gender = this.janaadharMemberDetails?.gender == 'Male' ? '97' : this.janaadharMemberDetails?.gender == 'Female' ? '98' : '99';
+      this.model.MobileNumber = this.janaadharMemberDetails.mobile;
+      this.model.Email = this.janaadharMemberDetails.email;
+      this.model.JanAadharMemberID = this.janaadharMemberDetails.janmemid;
+      this.model.JanAadharNo = this.janaadharMemberDetails.janaadhaarId;
+
+      var result = this.CategoryAlist.find((f: any) => f.CasteCategoryName == this.janaadharMemberDetails.category)
+      if (result != null || result != undefined) {
+        this.model.CategoryA = result.CasteCategoryID;
+      }
+      const dateStr = this.janaadharMemberDetails.dob;   
+      const [day = '', month = '', year = ''] = dateStr?.split('/') ?? [];
+      const formattedDate = new Date(`${year}-${month}-${day}`).toISOString().split('T')[0]; 
+      this.model.DOB = formattedDate;
+    }
+    catch (ex) {
+      console.log(ex);
+
+    }
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      debugger;
+      this.file = event.target.files[0];
+      if (this.file) {
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "EducationType") {
+                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
+                this.educationRequest.QualificationDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "TechType") {
+                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
+                this.techRequest.TechQualificationDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "EmpType") {
+                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
+                this.employeeRequest.EmploymentDocument = data['Data'][0]["FileName"];
+              }
+
+              //item.FilePath = data['Data'][0]["FilePath"];
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+
+
 }
+
+
+

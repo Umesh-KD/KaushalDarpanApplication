@@ -23,7 +23,7 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Nodal Officer Exminer Report List</b>
-      <!--<a routerLink="/nodal-officer-exminer-report" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add Nodal Officer Exminer</a>-->
+      <a routerLink="/nodal-officer-exminer-report" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
       <div class="">
@@ -49,10 +49,11 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="50px" align="left">Sr. No.</th>
-            <th width="100px" align="left">Exam date.</th>
+            <!--<th width="100px" align="left">Exam date.</th>-->
             <!--<th align="left">Exam Center Under Your Area</th>
             <th align="left">Medium Question Paper Sent</th>-->
-            <th align="left">Date</th>
+            <th align="left">From Date</th>
+            <th align="left">To Date</th>
             <th align="left">Reason</th>
             <th align="left">Additional Details</th>
             <th align="left">Exam Smooth</th>
@@ -68,10 +69,12 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.ExamDateTime}}</td>
+            <!--<td>{{row.ExamDateTime}}</td>-->
             <!--<td>{{row.ExamCenterUnderYourArea}}</td>
-            <td>{{row.MediumQuestionPaperSent}}</td>-->
+  <td>{{row.MediumQuestionPaperSent}}</td>-->
+
             <td>{{row.Date}}</td>
+            <td>{{row.ToDate}}</td>
             <td>{{row.Reason}}</td>
             <td>{{row.AdditionalDetails}}</td>
             <td>{{row.ExamSmooth}}</td>
@@ -80,11 +83,11 @@
             <td>{{row.ExamRemarks}}</td>
             <td>{{row.FutureCentreRemarks}}</td>
             <td>{{row.FutureExamSuggestions}}</td>
-           
+
             <td>
               <div class="flex align-center justify-center actionBtns">
                 <a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ID)"><i class="ti ti-eye"></i></a>
-                <a [routerLink]="['/nodal-officer-exminer-report']" [queryParams]="{ ExamDateTime: row.ExamDateTime }" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a [routerLink]="['/nodal-officer-exminer-report']" [queryParams]="{ ExamDateTime: row.ID }" title="Edit"><i class="ti ti-pencil"></i></a>
                 <a title="download PDF" (click)="downloadPDF(row.ID,row.ExamDateTime)"><i class="ti ti-download"></i></a>
               </div>
             </td>
