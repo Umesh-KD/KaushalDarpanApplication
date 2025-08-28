@@ -2,6 +2,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { BTERCollegeTradeSearchModel, BTERSeatIntakeDataModel } from '../../../Models/BTER/BTERSeatIntakeDataModel';
@@ -230,6 +233,100 @@ export class AllotmentReportComponent {
             const wb: XLSX.WorkBook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
             XLSX.writeFile(wb, 'AllotmentData.xlsx');
+
+            //this.searchRequest = new BterMeritSearchModel()
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async exportToPdf() {
+    if (this.totalRecord == 0) {
+      this.toastr.error("Please search data first.");
+      return
+    }
+    try {
+      this.searchRequestData.StreamTypeID = parseInt(this.searchRequest.StreamTypeId);
+      this.searchRequestData.AllotmentMasterId = this.searchRequest.AllotmentMasterId;
+      this.searchRequestData.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+
+      this.searchRequestData.CollegeId = this.searchRequest.CollegeID;
+      this.searchRequestData.StreamID = this.searchRequest.StreamID;
+      this.searchRequestData.FeePaid = this.searchRequest.FeePaid;
+      this.searchRequestData.ShiftId = this.searchRequest.ShiftID;
+      this.searchRequestData.CollegeCode = this.searchRequest.CollegeCode;
+      this.searchRequestData.StreamCode = this.searchRequest.StreamCode;
+      this.searchRequestData.AllotmentStatus = this.searchRequest.AllotmentStatus;
+
+      this.searchRequestData.PageNumber = 1
+      this.searchRequestData.PageSize = this.totalRecord
+
+      this.loaderService.requestStarted();
+      await this.AllotmentService.ShowAlGetAllotmentReport(this.searchRequestData)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.transactionData = data.Data;
+
+            const unwantedColumns = [
+              'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+              'Id', 'Status', 'RemarkForStatus', 'FeePdf', 'RTS', 'TotalRecords', 'MeritMasterId', 'AcademicYearID',
+              'DepartmentId', 'PublishBy', 'PublishIP', 'Class'
+            ];
+            const filteredData = this.transactionData.map((item: { [x: string]: any; }) => {
+              const filteredItem: any = {};
+              Object.keys(item).forEach(key => {
+                if (!unwantedColumns.includes(key)) {
+                  filteredItem[key] = item[key];
+                }
+              });
+              return filteredItem;
+            });
+            //const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+            //const wb: XLSX.WorkBook = XLSX.utils.book_new();
+            //XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+            //XLSX.writeFile(wb, 'AllotmentData.xlsx');
+
+            const doc = new jsPDF({
+              orientation: 'landscape',
+              unit: 'pt',
+              format: 'a4'
+            });
+
+            doc.setFontSize(18);
+            doc.text('Allotment Report', 20, 20);
+
+            const tableHeaders = [Object.keys(filteredData[0])];
+            const tableData = filteredData.map((item: any) => Object.values(item));
+
+            autoTable(doc, {
+              head: tableHeaders,
+              body: tableData,
+              startY: 30,
+              theme: 'grid',
+              margin: { top: 30 },
+              styles: {
+                fontSize: 8,
+                cellWidth: 'wrap'
+              },
+              columnStyles: {
+                0: { cellWidth: 50 },
+                1: { cellWidth: 80 }
+                // add more or remove based on your data
+              }
+            });
+
+            doc.save('AllotmentData.pdf');
 
             //this.searchRequest = new BterMeritSearchModel()
           } else {
