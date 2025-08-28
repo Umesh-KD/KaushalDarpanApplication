@@ -1321,7 +1321,24 @@ const routes: Routes = [
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
 
-      { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+      { path: 'NcvtDataBulkUpload', loadChildren: () => import('./Views/ITI/ncvt-data-bulk-upload/ncvt-data-bulk-upload.module').then(m => m.NcvtDataBulkUploadModule) },
+
+      { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
+
+      { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+      { path: 'IMCAllotmentReport/:id', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+      { path: 'iti-allotment-report/:id/:iid', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+     
+       { path: 'iti-allotment-report/:id/:iid/:idd', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+
+      { path: 'iti-allotment-report', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+
+      { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+  { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+      
     ]
   },
   
