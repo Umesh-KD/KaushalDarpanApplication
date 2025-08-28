@@ -68,7 +68,7 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला मे दिये गये प्रजेंटेशन / जानक ारी का संक्षिप्त विवरण :<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला मे दिये गये प्रजेंटेशन / जानकारी का संक्षिप्त विवरण :<span class="StarMarking">*</span> </label>
             <input class="form-input" type="text" placeholder="Enter Workshop summary" formControlName="WorkshopDetail" [(ngModel)]="request.WorkshopDetail" />
             <div *ngIf="isSubmitted && _ScholarshipFormGroup.WorkshopDetail.errors" class="text-danger">
               <p *ngIf="_ScholarshipFormGroup.WorkshopDetail.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
