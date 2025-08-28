@@ -47,7 +47,11 @@ export class ITIInspectExaminationCenters {
 export class ITINodalOfficerExminerSearch {
   ID: number = 0;
   FinancialYearID: number = 0;
-  Date:string=''
+  Date: string = ''
+  RoleID: number = 0
+  UserID:number=0
+  DistrictID: number = 0
+  EndTermID:number=0
 }
        
 

@@ -62,7 +62,8 @@
 
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="AllotedSeatByCollegeExportToExcel()"><i class="ti ti-download"></i> Export Excel</a>
+        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="AllotedSeatByCollegeExportToExcel()"><i class="ti ti-download"></i> Export Excel</a>-->
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadAllotedCollegePDF()"><i class="ti ti-download"></i> Download PDF</a>
       </div>
 
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
@@ -92,13 +93,16 @@
               <th class="text-left" rowspan="2">Application No</th>
               <th class="text-left" rowspan="2">Name</th>
               <th class="text-left" rowspan="2">Father Name</th>
-              <th class="text-left" rowspan="2">DOB</th>
-              <th class="text-left" rowspan="2">Branch Name</th>
-              <th class="text-left" rowspan="2">Mobile No</th>
-              <th class="text-left" rowspan="2">Gender</th>
+              <!--<th class="text-left" rowspan="2">DOB</th>-->
+              <th class="text-left" rowspan="2">Trade Code</th>
+              <th class="text-left" rowspan="2">Trade Name</th>
+              <!--<th class="text-left" rowspan="2">Branch Name</th>-->
+              <!--<th class="text-left" rowspan="2">Mobile No</th>-->
+              <!--<th class="text-left" rowspan="2">Gender</th>-->
               <th class="text-left" rowspan="2">Alloted Category</th>
-              <th class="text-left" rowspan="2">Alloted Status</th>
-              <th class="text-left" rowspan="2">Priority</th>
+              <!--<th class="text-left" rowspan="2">Alloted Status</th>-->
+              <!--<th class="text-left" rowspan="2">Priority</th>-->
+              <th class="text-left" rowspan="2">Reporting Date and Time</th>
             </tr>
 
           </thead>
@@ -108,13 +112,16 @@
               <td>{{ item.ApplicationNo }}</td>
               <td>{{ item.Name }}</td>
               <td>{{ item.FatherName }}</td>
-              <td>{{ item.DOB }}</td>
-              <td>{{ item.BranchName }}</td>
-              <td>{{ item.MobileNo }}</td>
-              <td>{{ item.Gender }}</td>
+              <!--<td>{{ item.DOB }}</td>-->
+              <td>{{ item.TradeCode }}</td>
+              <td>{{ item.TradeName }}</td>
+              <!--<td>{{ item.BranchName }}</td>-->
+              <!--<td>{{ item.MobileNo }}</td>-->
+              <!--<td>{{ item.Gender }}</td>-->
               <td>{{ item.AllotedCategory }}</td>
-              <td>{{ item.AllotmentStatus }}</td>
-              <td>{{ item.Priority }}</td>
+              <!--<td>{{ item.AllotmentStatus }}</td>-->
+              <!--<td>{{ item.Priority }}</td>-->
+              <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
             </tr>
           </tbody>
         </table>
