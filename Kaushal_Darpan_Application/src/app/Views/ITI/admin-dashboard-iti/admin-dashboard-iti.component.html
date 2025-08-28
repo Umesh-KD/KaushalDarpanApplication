@@ -293,21 +293,19 @@
 </div>
 
 
-<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
-  <b class="text-1xl-5"><i class="ti ti-list"></i> Allotment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7"><i class="ti ti-chevron-down"></i></button>
+<div *ngIf="Allotment1List.length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>1st Allotment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7"><i class="ti ti-chevron-down"></i></button>
 </div>
 
-
-<div class="collapse multi-collapse show" id="OptionFormDtls">
+<div *ngIf="Allotment1List.length>0" class="collapse multi-collapse show" id="OptionFormDtls">
   <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
-
     <div class="p-12">
       <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1">
         <div class="flex justify-between flex-wrap items-center pb-3 w-full">
           <b class="text-1xl-5"><i class="ti ti-list"></i> 8th level Alotment</b>
         </div>
         <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 gap-6 allStatics  mt-5">
-          @for (stat of AllotmentList; track stat; let idx = $index;) {
+          @for (stat of Allotment1List; track stat; let idx = $index;) {
 
           <div class="card" *ngIf="stat.Type1==8">
             <div class="p-5">
@@ -324,7 +322,7 @@
               <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
         View All <i class="ti ti-chevron-right"></i>
       </button>-->
-              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/8" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/8/2" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
                 View All <i class="ti ti-chevron-right"></i>
               </a>
             </div>
@@ -332,15 +330,14 @@
 
           }
         </div>
-
       </div>
-   
+
       <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 mt-5">
         <div class="flex justify-between flex-wrap items-center pb-3 w-full">
           <b class="text-1xl-5"><i class="ti ti-list"></i> 10th level Alotment</b>
         </div>
         <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 gap-6 allStatics">
-          @for (stat of AllotmentList; track stat; let idx = $index;) {
+          @for (stat of Allotment1List; track stat; let idx = $index;) {
           <!--<div *ngFor="let stat of viewOptionFormCount; let i = index">-->
 
           <div class="card" *ngIf="stat.Type1==10">
@@ -358,7 +355,7 @@
               <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
         View All <i class="ti ti-chevron-right"></i>
       </button>-->
-              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/10" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/10/2" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
                 View All <i class="ti ti-chevron-right"></i>
               </a>
             </div>
@@ -367,13 +364,13 @@
         </div>
 
       </div>
-   
-      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 mt-5">
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 mt-5" style="display:none;">
         <div class="flex justify-between flex-wrap items-center pb-3 w-full">
           <b class="text-1xl-5"><i class="ti ti-list"></i> 12th level Alotment</b>
         </div>
         <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-6 gap-6 allStatics">
-          @for (stat of AllotmentList; track stat; let idx = $index;) {
+          @for (stat of Allotment1List; track stat; let idx = $index;) {
 
 
           <div class="card" *ngIf="stat.Type1==12">
@@ -390,7 +387,7 @@
               <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
         View All <i class="ti ti-chevron-right"></i>
       </button>-->
-              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/12" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/12/2" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
                 View All <i class="ti ti-chevron-right"></i>
               </a>
             </div>
@@ -399,44 +396,138 @@
         </div>
       </div>
     </div>
-   </div>
+  </div>
 </div>
 
 
+<div *ngIf="Allotment2List.length>0" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>2nd Allotment</b>  <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample7" aria-expanded="true" aria-controls="multiCollapseExample7"><i class="ti ti-chevron-down"></i></button>
+</div>
 
+<div *ngIf="Allotment2List.length>0" class="collapse multi-collapse show" id="OptionFormDtls">
+  <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+    <div class="p-12">
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1">
+        <div class="flex justify-between flex-wrap items-center pb-3 w-full">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> 8th level Alotment</b>
+        </div>
+        <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 gap-6 allStatics  mt-5">
+          @for (stat of Allotment2List; track stat; let idx = $index;) {
+
+          <div class="card" *ngIf="stat.Type1==8">
+            <div class="p-5">
+              <!-- Icon -->
+              <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+
+              <!-- Title -->
+              <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+
+              <!-- Count -->
+              <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+
+              <!-- View All Link -->
+              <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+        View All <i class="ti ti-chevron-right"></i>
+      </button>-->
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/8/4" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+                View All <i class="ti ti-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+
+          }
+        </div>
+      </div>
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 mt-5">
+        <div class="flex justify-between flex-wrap items-center pb-3 w-full">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> 10th level Alotment</b>
+        </div>
+        <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-4 gap-6 allStatics">
+          @for (stat of Allotment2List; track stat; let idx = $index;) {
+          <!--<div *ngFor="let stat of viewOptionFormCount; let i = index">-->
+
+          <div class="card" *ngIf="stat.Type1==10">
+            <div class="p-5">
+              <!-- Icon -->
+              <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+
+              <!-- Title -->
+              <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+
+              <!-- Count -->
+              <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+
+              <!-- View All Link -->
+              <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+        View All <i class="ti ti-chevron-right"></i>
+      </button>-->
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/10/4" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+                View All <i class="ti ti-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          }
+        </div>
+
+      </div>
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 mt-5" style="display:none;">
+        <div class="flex justify-between flex-wrap items-center pb-3 w-full">
+          <b class="text-1xl-5"><i class="ti ti-list"></i> 12th level Alotment</b>
+        </div>
+        <div class="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-3 md:grid-cols-6 gap-6 allStatics">
+          @for (stat of Allotment2List; track stat; let idx = $index;) {
+
+
+          <div class="card" *ngIf="stat.Type1==12">
+            <div class="p-5">
+              <!-- Icon -->
+              <span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>
+
+              <!-- Title -->
+              <h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>
+
+              <!-- Count -->
+              <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>
+              <!-- View All Link -->
+              <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+        View All <i class="ti ti-chevron-right"></i>
+      </button>-->
+              <a routerLink="/{{[stat.URL + '/' + stat.Status]}}/12/4" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+                View All <i class="ti ti-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
   <div *ngFor="let stat of AllotmentList; let i = index">
     <div class="card" *ngIf="stat.ListType=='AllotmentType'">
       <div class="p-5">-->
-        <!-- Icon -->
-        <!--<span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>-->
-
-        <!-- Title -->
-        <!--<h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>-->
-
-        <!-- Count -->
-        <!--<h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>-->
-
-        <!-- View All Link -->
-        <!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
-          View All <i class="ti ti-chevron-right"></i>
-        </button>-->
-        <!--<a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+<!-- Icon -->
+<!--<span class="material-symbols-rounded float-end text-3xl text-default-400">{{ stat.SRC }}</span>-->
+<!-- Title -->
+<!--<h6 class="text-muted text-sm uppercase">{{ stat.TotalText }}</h6>-->
+<!-- Count -->
+<!--<h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.TotalCount }}</h3>-->
+<!-- View All Link -->
+<!--<button (click)="openDialog(stat)" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+  View All <i class="ti ti-chevron-right"></i>
+</button>-->
+<!--<a routerLink="/{{[stat.URL + '/' + stat.Status]}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
           View All <i class="ti ti-chevron-right"></i>
         </a>
       </div>
     </div>
   </div>
 </div>-->
-
-
-
-
-
-
-
 <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
   <div *ngFor="let stat of DashBoardITIDispatchList; let i = index">
     <div class="card" *ngIf="stat.ListType=='ITIDispatch'">

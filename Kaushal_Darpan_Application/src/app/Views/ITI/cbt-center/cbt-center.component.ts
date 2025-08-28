@@ -214,8 +214,8 @@ export class cbtcenterComponent {
   }
   async GetITITimeTableList() {
     debugger
-    
-    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+
+    this.AllCBTData.EndTermID = this.sSOLoginDataModel.EndTermID
    
 
     try {
@@ -671,7 +671,7 @@ export class cbtcenterComponent {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.searchRequest.Action = 'GetdataYearly'
       this.loaderService.requestStarted();
-      await this.ITITimeTableService.GetSampleTimeTableITI(this.searchRequest)
+      await this.ITITimeTableService.GetSampleCBTCenterITI(this.searchRequest)
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data));

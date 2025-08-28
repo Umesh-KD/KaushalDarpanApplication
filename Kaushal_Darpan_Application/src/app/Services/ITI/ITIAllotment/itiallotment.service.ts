@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { AllotmentdataModel, DirectAllocationDataModel, DirectAllocationSearchModel, SearchModel } from '../../../Models/ITIAllotmentDataModel';
 import { AllotmentStatusSearchModel } from '../../../Models/BTER/BTERAllotmentStatusDataModel';
 import { IMCAllocationSearchModel } from '../../../Models/ITIIMCAllocationDataModel';
-import { StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
+import { ReportCollegeForAdminModel, ReportCollegeModel, StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
 
 @Injectable({
   providedIn: 'root'
@@ -221,6 +221,23 @@ export class ITIAllotmentService {
   public async DownloadCollegeAllotmentData(searchRequest: StudentsJoiningStatusMarksSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/DownloadCollegeAllotmentData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadCollegeAdminData(searchRequest: ReportCollegeForAdminModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadCollegeAdminData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async DownloadForCollegeData(searchRequest: ReportCollegeModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadForCollegeData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

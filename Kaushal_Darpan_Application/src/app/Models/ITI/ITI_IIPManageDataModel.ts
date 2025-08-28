@@ -6,6 +6,7 @@ export class ITI_IIPManageDataModel extends RequestBaseModel{
     public RegNumber: string = ''
     public RegDate: string = ''
     public RegLink: string = ''
+    public RegDisLink: string = ''
     public IMCMemberDetails: IIPManageMemberDetailsDataModel[] = []
     public UserID: number = 0
   

@@ -258,12 +258,12 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
 
   downloadPDF(id: number, ExamDateTime:string) {
 
-    debugger;
+
     //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     //this.searchRequest.Eng_NonEng = this.CourseType;
     try {
-      this.ITINodalOfficerExminerReportService.Generate_ITINodalOfficerExminerReport_ByID(id, this.sSOLoginDataModel.InstituteID, ExamDateTime)
+      this.ITINodalOfficerExminerReportService.Generate_ITINodalOfficerExminerReport_ByID(id, this.sSOLoginDataModel.DistrictID, ExamDateTime)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {

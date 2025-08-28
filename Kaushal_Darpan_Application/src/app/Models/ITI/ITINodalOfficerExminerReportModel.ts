@@ -5,6 +5,7 @@ export class ITINodalOfficerExminerForm {
   ExamCenterUnderYourAreaID: number = 0; 
   MediumQuestionPaperSent: string = '';
   Date: string = '';
+  ToDate: string = '';
   Reason: string = '';
   SupportingDocument_file: string = '';
   UploadDocument_file: string = '';
