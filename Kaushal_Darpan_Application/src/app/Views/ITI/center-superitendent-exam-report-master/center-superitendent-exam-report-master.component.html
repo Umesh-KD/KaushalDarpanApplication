@@ -2,74 +2,23 @@
 <!--<div class="card mb-3">
 </div>-->
 
-<div class="card">
-  <div class="card-body p-5">
-    <!-- <div class="flex align-right justify-center actionBtns w-auto" style="width:auto !important">     -->
-      <!-- <a routerLink="/center-superitendent-exam-report" class="inline-flex items-right btn bg-dark text-white btn-sm"><i class="ti ti-chevron-right"></i> ADD</a>  -->
-    <!-- </div> -->
-    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-map"></i> Enter Search Criteria</b>
-         <a routerLink="/center-superitendent-exam-report" class="inline-flex items-right btn bg-info text-white btn-sm"><i class="ti ti-chevron-right"></i> ADD</a> 
-      </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Center Superitendent Exam Report</h4>
 
-
-         <!-- Search By college code -->
-           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By college code</label>
-            <input class="form-input" type="text" id="CollegeCode" [(ngModel)]="MarksheetSearch.CollegeCode" placeholder="Enter college code" formControlName="collegeCode">
-            <div *ngIf="isSubmitted && _searchForm.collegeCode.errors" class="text-danger">
-              <p *ngIf="_searchForm.collegeCode.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-         </div> -->
-        
-
-        <!-- Search By college name -->
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By college name</label>
-          <select formControlName="collegeID" id="InstituteID" [(ngModel)]="MarksheetSearch.InstituteID" class="form-input">
-            <option value="0">Select college</option>
-            <option *ngFor="let item of collegeDropDown" value="{{item.Id}}">{{item.Name}}</option>
-          </select>
-
-          <div *ngIf="isSubmitted&&_searchForm.collegeID.errors" class="text-danger">
-            <p *ngIf="!_searchForm.collegeID.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This
-              field is required .!
-            </p>
-          </div>
-        </div> -->
-
-
-          <!-- Search By distict name -->
-         <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District</label>
-          <select formControlName="districtID" id="DistrictID" [(ngModel)]="MarksheetSearch.DistrictID" class="form-input">
-            <option value="0">Select District</option>
-            <option value="1">1st Year</option>
-            <option value="2">2nd Year</option>
-          </select>
-
-          <div *ngIf="isSubmitted&&_searchForm.districtID.errors" class="text-danger">
-            <p *ngIf="!_searchForm.districtID.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This
-              field is required .!
-            </p>
-          </div>
-        </div> -->
-    
-        <!-- <div>
-          <button class="btn bg-info text-white mt-6 me-1" type="submit" (click)="searchbtn_click()"><i class="ti ti-search"></i>Search</button>
-        </div> -->
-      </div>
-    </form>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/nodal-officer-exminer-report" class="text-sm font-medium text-slate-700" aria-current="page">Center Superitendent Exam Report</a>
+    </div>
   </div>
+  <!--<a routerLink="/CenterSuperitendentExamReport" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>-->
+</div>
 
 
+<div class="card">
   <div class="card-body p-5" style="min-height:400px;" *ngIf="GetCenterSuperitendentReportList.length > 0">
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -98,7 +47,6 @@
     </div>
     <div class="overflow-x-auto mt-3">
 
-      <!--{{GetStudentITI_MarksheetList|json}}-->
       <table class="table table-border w-full table-auto" cellpadding="5" *ngIf="GetCenterSuperitendentReportList.length > 0">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
