@@ -1,0 +1,93 @@
+<!-- src/app/excel-upload/excel-upload.component.html -->
+<div class="">
+
+  <mat-card>
+    <mat-card-title>Excel Upload </mat-card-title>
+    <mat-card-content>
+      <input type="file" (change)="onFilechange1($event)" accept=".xlsx,.xls" />
+      <mat-spinner *ngIf="isUploading" diameter="50" strokeWidth="5" color="accent"></mat-spinner>
+      <div class="actions" style="margin-top:10px;">
+        <button *ngIf="FileName!=''" mat-raised-button color="primary" (click)="OnExcelUpload()">Upload File</button>
+        <button mat-raised-button color="primary" (click)="startUpload()" [disabled]="!excelData.length || isUploading">Start Upload Data</button>
+      </div>
+
+      <div *ngIf="chunkGroups.length" style="margin-top:20px;">
+        <h4>Chunks</h4>
+        <table mat-table [dataSource]="chunkGroups" class="mat-elevation-z8 w-100">
+
+          <ng-container matColumnDef="chunk">
+            <th mat-header-cell *matHeaderCellDef>Rows</th>
+            <td mat-cell *matCellDef="let row">{{row.chunkIndex}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="range">
+            <th mat-header-cell *matHeaderCellDef>Row Range</th>
+            <td mat-cell *matCellDef="let row">{{row.range}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef>Records</th>
+            <td mat-cell *matCellDef="let row">{{row.count}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="progress">
+            <th mat-header-cell *matHeaderCellDef>Progress</th>
+            <td mat-cell *matCellDef="let row">
+              <div style="width:240px;">
+                <mat-progress-bar *ngIf="row.progress === -1" mode="indeterminate"></mat-progress-bar>
+                <mat-progress-bar *ngIf="row.progress >= 0" mode="determinate" [value]="row.progress"></mat-progress-bar>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+                  <small>{{progressLabel(row.progress)}}</small>
+                  <div>
+                    <button mat-icon-button color="primary" (click)="retryChunk(row.chunkIndex)" *ngIf="row.progress === -2" matTooltip="Retry chunk">
+                      <mat-icon>refresh</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <!--<div style="margin-top:24px;">
+    <h4>Preview (first 100 rows)</h4>
+    <mat-form-field class="w-100">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="dataSource.filter = $any($event.target).value.trim().toLowerCase()" placeholder="Type to filter preview" />
+    </mat-form-field>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+
+      <ng-container matColumnDef="EmpCode">
+        <th mat-header-cell *matHeaderCellDef>EmpCode</th>
+        <td mat-cell *matCellDef="let row">{{ row.EmpCode }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.Name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let row">{{ row.Email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="Salary">
+        <th mat-header-cell *matHeaderCellDef>Salary</th>
+        <td mat-cell *matCellDef="let row">{{ row.Salary }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['EmpCode','Name','Email','Salary']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['EmpCode','Name','Email','Salary'];"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+  </div>-->
+    </mat-card-content>
+  </mat-card>
+</div>

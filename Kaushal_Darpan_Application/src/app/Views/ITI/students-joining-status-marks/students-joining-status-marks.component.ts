@@ -704,7 +704,7 @@ export class StudentsJoiningStatusMarksComponent {
     } else {
 
     }
-
+    this.getStudentsJoiningStatusMarksList(1);
   }
 
   async CheckAllot(id: number) {

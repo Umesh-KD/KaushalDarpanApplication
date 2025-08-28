@@ -10,7 +10,7 @@
   </div>
   <a [routerLink]="['/IDFFundDetailList']" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
 </div>
-{{formData | json}}
+
 <div class="card">
   <div class="card-body p-5">
     <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
@@ -24,7 +24,7 @@
           <!-- FinYearList Name -->
           <!-- Financial Year -->
           <div>
-            <label>Financial Year<span class="StarMarking">*</span></label>
+            <label>वित्तीय वर्ष<span class="StarMarking">*</span></label>
             <select [(ngModel)]="formData.FinancialYearID"
                     name="FinancialYearID"
                     required
@@ -44,7 +44,7 @@
 
           <!-- Financial Quarter -->
           <div>
-            <label>Financial Quarter<span class="StarMarking">*</span></label>
+            <label>वित्तीय वर्ष<span class="StarMarking">*</span></label>
             <select [(ngModel)]="formData.FinYearQuaterID"
                     name="FinYearQuaterID"
                     required
@@ -52,7 +52,7 @@
                     #FinYearQuaterID="ngModel">
               <option [ngValue]="0">--All--</option>
               @for (item of FinancialYear_QTR; track item.FinYearQuaterID) {
-              <option [ngValue]="item.QuarterID">{{item.QuarterName}}</option>
+              <option [ngValue]="item.FinYearQuaterID">{{item.QuarterName}}</option>
               }
             </select>
 

@@ -32,7 +32,7 @@
               </label>
             </div>
           </div>
-          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format Yearly</a>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="SampleexportExcelDataYearly()"><i class="ti ti-download"></i> Sample Format</a>
         </div>
 
       </div>
@@ -85,12 +85,12 @@
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDqropDown">
+        <!--<select id="ddlConter" class="form-select  couterDqropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
-        </select>
+        </select>-->
       </div>
       <div class=""></div>
       <div class=""></div>
@@ -103,12 +103,13 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <!--CenterCode	CenterName	SSOID	MobileNumber	EndTermID	CCCode-->
-            <th width="80px" align="left">Sr. No.</th>
-            <th class="text-left">Center Code</th>
-            <th class="text-left">Center Name</th>
-            <th class="text-left">SSOID </th>
-            <th class="text-left">Mobile Number</th>
-            <th class="text-left">End Term</th>
+            <th class="text-left">Sr No</th>
+            <!--<th class="text-left">CenterCode</th>-->
+            <th class="text-left">CenterName</th>
+            <th class="text-left">Address</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">MobileNumber</th>
+            <th class="text-left">Email</th>
             <!--<th class="text-left">Action</th>-->
           </tr>
         </thead>
@@ -116,19 +117,19 @@
 
           <tr *ngFor="let row of ITITimeTableList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td>{{idx+1}}</td>
-            <td align="left">{{row.CenterCode}}</td>
             <td align="left">{{row.CenterName}}</td>
+            <td align="left">{{row.Address}}</td>
             <td align="left">{{row.SSOID}}</td>
             <td align="left">{{row.MobileNumber}}</td>
-            <td align="left">{{row.EndTermID}}</td>
+            <td align="left">{{row.Email}}</td>
             <!--<td align="left">
-              <div *ngIf="Status!=14" class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="['/AddITITimeTable']" [queryParams]="{ id: row.TimeTableID }" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0)" title="Delete" (click)=" btnDelete_OnClick(row.TimeTableID)">
-                  <i class="ti ti-trash"></i>
-                </a>
-              </div>
-            </td>-->
+    <div *ngIf="Status!=14" class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+      <a [routerLink]="['/AddITITimeTable']" [queryParams]="{ id: row.TimeTableID }" title="Edit"><i class="ti ti-pencil"></i></a>
+      <a href="javascript:void(0)" title="Delete" (click)=" btnDelete_OnClick(row.TimeTableID)">
+        <i class="ti ti-trash"></i>
+      </a>
+    </div>
+  </td>-->
 
           </tr>
         </tbody>
@@ -156,25 +157,28 @@
             <table class="table table-border w-full table-auto" cellpadding="5">
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
-                  <th class="text-left">#</th>
-                  <th class="text-left">CenterCode</th>
+                  <th class="text-left">Sr No</th>
+                  <!--<th class="text-left">CenterCode</th>-->
                   <th class="text-left">CenterName</th>
+                  <th class="text-left">Address</th>
                   <th class="text-left">SSOID</th>
                   <th class="text-left">MobileNumber</th>
-                  <th class="text-left">EndTermID</th>
-                  <th class="text-left"> CCCode</th>
+                  <th class="text-left">Email</th>
+                  <!--<th class="text-left">EndTermID</th>
+                  <th class="text-left"> CCCode</th>-->
 
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let row of ImportExcelList; let idx = index;">
                   <td class="text-left">{{idx+1}}</td>
-                  <td align="left">{{row.CenterCode}}</td>
+   
                   <td align="left">{{row.CenterName}}</td>
+                  <td align="left">{{row.Address}}</td>
                   <td align="left">{{row.SSOID}}</td>
                   <td align="left">{{row.MobileNumber}}</td>
-                  <td align="left">{{row.EndTermID}}</td>
-                  <td align="left">{{row.CCCode}}</td>
+                  <td align="left">{{row.Email}}</td>
+            
 
                 </tr>
               </tbody>
