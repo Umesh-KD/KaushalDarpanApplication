@@ -227,7 +227,9 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP))
       {
         try {
+          
           this.searchRequest.studentId = this.studentDetailsModel.StudentID;
+          this.searchRequest.StudentID = this.studentDetailsModel.StudentID;
           this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
       /*    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;*/
           this.loaderService.requestStarted();
