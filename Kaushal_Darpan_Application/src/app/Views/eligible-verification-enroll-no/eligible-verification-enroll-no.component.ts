@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../Models/GenerateEnrollDataModel';
 import { EligibleStudentButPendingForVerification, StudentMarkedModel } from '../../Models/StudentMasterModels';
 import { GetEnrollService } from '../../Services/GenerateEnroll/generateEnroll.service';
+import { StudentDetailsViewModalComponent } from '../Student/student-details-view-modal/student-details-view-modal.component';
 @Component({
   selector: 'app-eligible-verification-enroll-no',
   standalone: false,
@@ -71,6 +72,7 @@ export class EligibleVerificationEnrollNoComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
 
+  @ViewChild('MyModel_ViewStudent') childComponent!: StudentDetailsViewModalComponent;
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -852,5 +854,11 @@ export class EligibleVerificationEnrollNoComponent {
     else {
       this.PageNameTitile = 'EnrollMent Number List'
     }
+  }
+
+  openViewStudentDetailsPopup(StudentID: number) {
+    //debugger
+    this.childComponent.StudentID = StudentID;
+    this.childComponent.OpenViewStudentDetailsPopup();
   }
 }
