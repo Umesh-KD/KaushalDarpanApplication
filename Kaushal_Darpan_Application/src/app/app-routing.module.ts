@@ -656,6 +656,12 @@ const routes: Routes = [
       { path: 'AllotmentReportLateral/:id', loadChildren: () => import('./Views/BTER/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
       { path: 'AllotmentReportLateral/:id/:AllotmentStatus', loadChildren: () => import('./Views/BTER/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
 
+      { path: 'allotment-report-download-ENG/:id', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
+      { path: 'allotment-report-download-ENG/:id/:AllotmentStatus', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
+      { path: 'allotment-report-download-NonENG/:id', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
+      { path: 'allotment-report-download-NonENG/:id/:AllotmentStatus', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
+      { path: 'allotment-report-download-Lateral/:id', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
+      { path: 'allotment-report-download-Lateral/:id/:AllotmentStatus', loadChildren: () => import('./Views/BTER/allotment-report-download/allotment-report-download.module').then(m => m.AllotmentReportDownloadModule), title: 'Allotment Report' },
 
       { path: 'ITIAllotmentReport', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
 
