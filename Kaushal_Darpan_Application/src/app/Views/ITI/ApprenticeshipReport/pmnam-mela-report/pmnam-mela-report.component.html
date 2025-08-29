@@ -52,13 +52,17 @@
         <b *ngIf="ssoLoginDataModel.RoleID != 97" class="text-1xl-5">
           <i class="ti ti-list"></i> Search Results
         </b>
+        <div *ngIf="ssoLoginDataModel.RoleID == 212" class="inline-flex items-center text-white btn-sm">
+          <a *ngIf="ssoLoginDataModel.RoleID == 212" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+        </div>
+
         <b *ngIf="ssoLoginDataModel.RoleID == 97" class="text-1xl-5">
           <i class="ti ti-list"></i> PMNUM Mela Report
         </b>
         <div *ngIf="ssoLoginDataModel.RoleID == 97" class="inline-flex items-center text-white btn-sm">
 
           <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
-          <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+          <a *ngIf="ssoLoginDataModel.RoleID == 97 ||ssoLoginDataModel.RoleID == 212" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
         </div>
       </div>
       <div class="overflow-x-auto mt-3">
@@ -69,6 +73,7 @@
             <tr>
               <th rowspan="2" class="text-left">क्र.सं</th>
               <th rowspan="2" class="text-left">नोडल अधिकारी का नाम</th>
+              <th rowspan="2" class="text-left">जिला</th>
               <th colspan="2" class="text-left">मेलें में सम्मलित हुए प्रतिष्ठानों की संख्या</th>
               <th colspan="2" class="text-left">संस्थान द्वारा संपर्क किए गये प्रतिष्ठानों की संख्या</th>
               <th colspan="2" class="text-left">मेलें में उपस्थिति अभ्यार्थीयों की संख्या</th>
@@ -93,6 +98,7 @@
             <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index;">
               <td>{{idx+1}}</td>
               <td>{{row.Nodal}}</td>
+              <td>{{row.District}}</td>
               <td>{{row.PoliticalEstablishmentspartNo}}</td>
               <td>{{row.PrivateEstablishmentspartNo}}</td>
               <td>{{row.PoliticalEstablishmentscontactedNo}}</td>

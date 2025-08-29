@@ -279,21 +279,24 @@ export class PmnamMelaReportComponent {
     try {
       debugger;
       var UserID: number = 0
-      if (this.ssoLoginDataModel.RoleID != 97) {
-        UserID = 0
+      
+      if (this.ssoLoginDataModel.RoleID === 97) {
+        UserID = this.ssoLoginDataModel.UserID;   
+      } else if (this.ssoLoginDataModel.RoleID === 212) {
+        UserID = 0;   
       } else {
-        UserID = this.ssoLoginDataModel.UserID
+        UserID = 0;   
       }
 
       let obj = {
         EndTermID: this.ssoLoginDataModel.EndTermID,
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
-        Createdby: UserID,
+        UserID: UserID,
       };
 
       this.loaderService.requestStarted();
-      await this.reportService.GetPmnam(obj)
+      await this.reportService.PmnamMelaReportnodelOfficer(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log("DownloadPMNAMReport", data)
@@ -314,6 +317,9 @@ export class PmnamMelaReportComponent {
       }, 200);
     }
   }
+
+  
+
 
   DownloadFile(FileName: string): void {
 

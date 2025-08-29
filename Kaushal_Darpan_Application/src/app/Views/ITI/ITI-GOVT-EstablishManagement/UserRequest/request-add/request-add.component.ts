@@ -17,7 +17,7 @@ import { ItiSeatIntakeService } from '../../../../../Services/ITI/ItiSeatIntake/
 import { ITIsService } from '../../../../../Services/ITIs/itis.service';
 import { ITICollegeTradeSearchModel, SeatIntakeDataModel } from '../../../../../Models/ITI/SeatIntakeDataModel';
 import { ItiTradeSearchModel } from '../../../../../Models/CommonMasterDataModel';
-import { RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
+import { ITI_EM_UnlockProfileDataModel, RequestSearchModel } from '../../../../../Models/ITI/UserRequestModel';
 import { UserRequestService } from '../../../../../Services/UserRequest/user-request.service';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 @Component({
@@ -57,6 +57,8 @@ export class RequestUserAddComponent implements OnInit {
   public isSSOVisible: boolean = false;
   public StaffTypeList: any[] = [];
   public searchRequestITi = new ITICollegeTradeSearchModel();
+  public getUserSerivecRequest=new ITI_EM_UnlockProfileDataModel();
+  public GetStaffDetailsVRS: any[]=[];
   public searchRequest = new RequestSearchModel();
   public DistrictList: any = [];
   public DivisionMasterList: any[] = [];
@@ -66,6 +68,7 @@ export class RequestUserAddComponent implements OnInit {
   public OldNodalDistrictID: number = 0
   public OldOfficeID: number = 0
  
+  public getstatuId:number=0;
 
   constructor(
     private fb: FormBuilder,
@@ -102,14 +105,16 @@ export class RequestUserAddComponent implements OnInit {
       Upload: [''],
       ddlDistrictID: [''],
       divisionID: [''],
-      ddlStaffType: ['']
-
+      ddlStaffType: ['', [DropdownValidators]],
+      txtEmployeeName: [{ value: '', disabled: true }],
+      txtEmployeeNumber: [{ value: '', disabled: true }],
+      txtEmployeeDesignation:[{value:'',disabled:true}],
 
       /*chkIsHod: [false]*/
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    this.request.LevelID = 1;
 
 
     //
@@ -136,12 +141,11 @@ export class RequestUserAddComponent implements OnInit {
     this.GetStaffTypeData();
     this.GetPostList();
     this.Id = Number(this.routers.snapshot.paramMap.get('id')?.toString());
-
+    this.getstatuId=0;
     if (this.Id) {
-
-      await this.Get_ITIsData_ByID(this.Id)
-
-
+      await this.Get_ITIsData_ByID(this.Id);
+      this.getstatuId=this.request.RequestType;
+      await this.FunctionRequestType();
     }
 
 
@@ -351,11 +355,11 @@ export class RequestUserAddComponent implements OnInit {
   }
 
   async SaveData() {
-   
+   debugger
     this.isSubmitted = true;
-    if (this.groupForm.invalid) {
-      return;
-    }
+    // if (this.groupForm.invalid) {
+    //   return;
+    // }
 
     //this.request.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     console.log()
@@ -365,6 +369,8 @@ export class RequestUserAddComponent implements OnInit {
 
     try {
       this.request.Action = this.request.ServiceRequestId > 0 ? "UpdateRequest" : "AddRequest";
+     
+      console.log( "request",this.request)
       await this.userRequestService.UserRequest(this.request).then((data: any) => {
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
@@ -768,4 +774,100 @@ export class RequestUserAddComponent implements OnInit {
 
   }
 
+
+
+
+    async FunctionRequestType(): Promise<void> {
+    debugger
+    await this.FunctionRequestTypeShowSomePropety();
+  
+    if (this.request.RequestType == 2) {
+      this.getstatuId = Number(this.request.RequestType);
+      try {
+        this.isLoading = true;
+        
+        this.loaderService.requestStarted();
+
+        this.getUserSerivecRequest.SSOID = this.sSOLoginDataModel.SSOID;
+
+        debugger
+        await this.userRequestService.GetITI_GetStaffDetailsVRS(this.getUserSerivecRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          let staffData = data?.Data?.[0]; // Assuming it's an array — update if it's an object
+          if (staffData) {
+            this.GetStaffDetailsVRS = data.Data;
+            this.request.UserName = staffData.DisplayName;
+            this.request.EmployeeNumber = staffData.EmployeeNumber;
+            this.request.EmployeeDesignation = staffData.DesignationNameEnglish;
+            this.request.OfficeID = staffData.OfficeID;
+            this.request.ReqRoleID = staffData.RoleID;
+            this.request.StaffTypeID = staffData.StaffTypeID;
+            this.request.PostID = staffData.DesignationID;
+          }
+        }, error => console.error(error));
+
+        // const data: any = await this.userRequestService.GetITI_GetStaffDetailsVRS(this.getUserSerivecRequest);
+
+        // const staffData = data?.Data?.[0]; // Assuming it's an array — update if it's an object
+
+        // if (staffData) {
+        //   this.GetStaffDetailsVRS = data.Data;
+        //   this.request.UserName = staffData.DisplayName;
+        //   this.request.EmployeeNumber = staffData.EmployeeNumber;
+        //   this.request.EmployeeDesignation = staffData.DesignationNameEnglish;
+        //   this.request.OfficeID = staffData.OfficeID;
+        //   this.request.ReqRoleID = staffData.RoleID;
+        //   this.request.StaffTypeID = staffData.StaffTypeID;
+        //   this.request.PostID = staffData.DesignationID;
+        // }
+
+      } catch (error) {
+        console.error("Error fetching staff details:", error);
+        this.toastr.error("An error occurred while getting the data.");
+      } finally {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }
+    } 
+    else {
+      this.getstatuId = Number(this.request.RequestType);
+    }
+   
+
+    
+  }
+
+
+  
+  async FunctionRequestTypeShowSomePropety() {
+    if (this.request.RequestType == 2) {
+
+      this.groupForm.controls['ddlOffice'].clearValidators();
+      this.groupForm.controls['ddlLevelID'].clearValidators();
+      this.groupForm.controls['ddlDistrictID'].clearValidators();
+      this.groupForm.controls['ddlITICollegeTrade'].clearValidators();
+      this.groupForm.controls['ddlStaffType'].clearValidators();
+      this.groupForm.controls['ddlPost'].clearValidators();
+      this.groupForm.controls['txtOrderNo'].clearValidators();
+      this.groupForm.controls['txtOrderDate'].clearValidators();
+      this.groupForm.controls['ddlLevelID'].clearValidators();
+      this.groupForm.controls['txtOrderNo'].clearValidators();
+      this.groupForm.controls['txtOrderDate'].clearValidators();
+      
+    } else {
+      this.groupForm.controls['ddlOffice'].setValidators([DropdownValidators]);
+      // this.groupForm.controls['DDlReqRoleID'].setValidators([DropdownValidators]);
+      this.groupForm.controls['ddlDistrictID'].setValidators([DropdownValidators]);
+      this.groupForm.controls['ddlITICollegeTrade'].setValidators([DropdownValidators]);
+      this.groupForm.controls['ddlStaffType'].setValidators([DropdownValidators]);
+      this.groupForm.controls['ddlPost'].setValidators([DropdownValidators]);
+    }
+    this.groupForm.controls['ddlOffice'].updateValueAndValidity();
+    // this.groupForm.controls['DDlReqRoleID'].updateValueAndValidity();
+    this.groupForm.controls['ddlDistrictID'].updateValueAndValidity();
+    this.groupForm.controls['ddlITICollegeTrade'].updateValueAndValidity();
+    // this.groupForm.controls['ddlStaffType'].updateValueAndValidity();
+    // this.groupForm.controls['ddlPost'].updateValueAndValidity();
+  }
 }

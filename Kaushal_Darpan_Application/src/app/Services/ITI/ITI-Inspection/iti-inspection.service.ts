@@ -154,4 +154,12 @@ export class ITIInspectionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetDistrictMaster(request: ITI_InspectionSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetDistrictMaster`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

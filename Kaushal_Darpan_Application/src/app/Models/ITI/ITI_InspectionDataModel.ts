@@ -108,6 +108,7 @@ export class ITI_InspectionSearchModel extends RequestBaseModel {
     public StaffID?: number = 0
   public UserID?: number = 0
   public LevelId?: number = 0
+  public DistrictID?: number = 0
 
   public DeploymentDateFrom: string = ''
   public DeploymentDateTo: string = ''

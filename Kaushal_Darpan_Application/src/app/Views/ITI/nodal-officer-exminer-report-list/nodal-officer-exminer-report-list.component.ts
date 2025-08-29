@@ -132,12 +132,14 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
   async GetZonalList() {
     
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
-    this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+
     this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     if (this.sSOLoginDataModel.RoleID == 224) {
       this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
     }
+
     //this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     try {
       this.loaderService.requestStarted();

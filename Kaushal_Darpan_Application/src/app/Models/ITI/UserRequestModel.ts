@@ -33,7 +33,10 @@ export class RequestSearchModel {
   public DivisionID: number = 0;
   public StaffTypeID: number = 0;
   public ReqRoleID: number = 0;
-   
+  
+  public EmployeeNumber: string = '';
+  public EmployeeDesignation: string = '';
+
 
 }
 
@@ -103,4 +106,12 @@ export class SanctionOrderModel {
   public CreatedBy: number = 0;
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
+}
+
+
+export class ITI_EM_UnlockProfileDataModel {
+  public StaffUserID: number = 0
+  public StaffID: number = 0
+  public SSOID: string = ''
+  public ModifyBy: number = 0
 }
