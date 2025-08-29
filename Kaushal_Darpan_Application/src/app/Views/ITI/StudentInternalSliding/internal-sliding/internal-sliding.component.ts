@@ -252,6 +252,8 @@ export class InternalSlidingComponent implements OnInit {
       this.Request.InsID = ID
       this.Request.AllotedCategory = AllotedCategory
       this.Request.SeatMetrixId = SeatMetrixId
+      this.Request.action = "List"
+      this.InternalSlidingUnitList = [];
       await this.internalSlidingService.GetDDLInternalSlidingUnitList(this.Request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
