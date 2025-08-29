@@ -85,7 +85,7 @@ export class ITI_InstructorEducationalQualification {
   public Education_Year?: string = '';
   public Education_Subjects?: string = '';
   public Education_Percentage?: number;
-  public QualificationDocument?: string = '';
+  public EducationDocument?: string = '';
 }
 
 export class ITI_InstructorEmploymentDetails {
@@ -109,7 +109,7 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_Subjects?: string;
   public Tech_Year?: string;
   public Tech_Percentage?: number;
-  public TechQualificationDocument?: string = '';
+  public TechDocument?: string = '';
 }
 
 

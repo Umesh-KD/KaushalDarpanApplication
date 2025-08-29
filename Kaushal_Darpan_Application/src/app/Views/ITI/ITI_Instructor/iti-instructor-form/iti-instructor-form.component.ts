@@ -197,8 +197,8 @@ export class ItiInstructorFormComponent {
         Gender: ['', [DropdownValidators]],
         MaritalStatus: ['', [DropdownValidators]],
         Category: ['', [DropdownValidators]],
-        Mobile: ['', Validators.pattern(GlobalConstants.MobileNumberPattern)],
-        Email: ['', Validators.pattern(GlobalConstants.EmailPattern)],
+        Mobile: ['', Validators.required],
+        Email: ['', Validators.required],
 
         // Permanent Address
         PlotHouseBuildingNo: ['', Validators.required],
@@ -207,24 +207,24 @@ export class ItiInstructorFormComponent {
         LandMark: ['', Validators.required],
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
-        PropTehsilID: ['', [DropdownValidators]],
+        PropTehsilID: [''],
         PropUrbanRural: [''],
-        City: ['', Validators.required],
-        villageID: ['', Validators.required],
+        City: [''],
+        villageID: [''],
         pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
         //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Correspondence Address
         Correspondence_PlotHouseBuildingNo: ['', Validators.required],
-        Correspondence_StreetRoadLane: ['', Validators.required],
-        Correspondence_AreaLocalitySector: ['', Validators.required],
-        Correspondence_LandMark: ['', Validators.required],
+        Correspondence_StreetRoadLane: [''],
+        Correspondence_AreaLocalitySector: [''],
+        Correspondence_LandMark: [''],
         Correspondence_ddlState: ['', [DropdownValidators]],
-        Correspondence_ddlDistrict: ['', [DropdownValidators]],
+        Correspondence_ddlDistrict: ['', [DropdownValidators] ],
         Correspondence_PropTehsilID: ['', [DropdownValidators]],
         Correspondence_PropUrbanRural: [''],
         Correspondence_City: ['', Validators.required],
-        Correspondence_villageID: ['', Validators.required],
+        Correspondence_villageID: [''],
         Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
 
         // Educational Qualification
@@ -244,7 +244,7 @@ export class ItiInstructorFormComponent {
         TechQualificationDocument: [''],
 
         // Employment Details
-        Pan_No: [''],
+        Pan_No: ['',],
         Employee_Type: [''],
         Employer_Name: [''],
         Employer_Address: [''],
@@ -253,7 +253,7 @@ export class ItiInstructorFormComponent {
         JanAadhar: [''],
         Employment_From: [''],
         Employment_To: [''],
-        Basic_Pay: ['', [Validators.min(0)]],
+        Basic_Pay: [''],
         EmploymentDocument: [''],
         TehsilName: ['', Validators.required]
       });
@@ -265,7 +265,7 @@ export class ItiInstructorFormComponent {
       Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
       Education_Subjects: ['', Validators.required],
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      QualificationDocument: ['', Validators.required]
+      EducationDocument: ['', Validators.required]
     });
 
 
@@ -275,7 +275,7 @@ export class ItiInstructorFormComponent {
       Tech_Subjects: ['', Validators.required],
       Tech_Year: ['', Validators.pattern('^[0-9]{4}$')],
       Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      TechQualificationDocument: ['', Validators.required]
+      TechDocument: ['', Validators.required]
     });
 
 
@@ -287,9 +287,9 @@ export class ItiInstructorFormComponent {
       Tan_No: ['', Validators.required],
       //Aadhar: [''],
       //JanAadhar: [''],
-      Employment_From: [''],
-      Employment_To: [''],
-      Basic_Pay: ['', [Validators.min(0)]],
+      Employment_From: ['', Validators.required],
+      Employment_To: ['', Validators.required],
+      Basic_Pay: ['', Validators.required],
       EmploymentDocument: ['', Validators.required]
     });
 
@@ -593,6 +593,8 @@ export class ItiInstructorFormComponent {
 
   async GetById(ID: string) {
 
+    debugger
+
     try {
       if (ID == "") {
         this.toastr.error("Please Enter SSOID");
@@ -670,7 +672,7 @@ export class ItiInstructorFormComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
-
+    debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -972,11 +974,11 @@ export class ItiInstructorFormComponent {
             if (this.State == EnumStatus.Success) {
               if (Type == "EducationType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.educationRequest.QualificationDocument = data['Data'][0]["FileName"];
+                this.educationRequest.EducationDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "TechType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.techRequest.TechQualificationDocument = data['Data'][0]["FileName"];
+                this.techRequest.TechDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "EmpType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
@@ -1004,6 +1006,15 @@ export class ItiInstructorFormComponent {
       /*  }, 200);*/
     }
   }
+
+  Back() {
+    this.isSSOVisible = false;
+    this.EducationForm.reset();
+    this.TechnicalForm.reset();
+    this.InstructorForm.reset();
+    this.EmploymentForm.reset();
+  }
+
 
 
 }
