@@ -108,7 +108,7 @@ export class CollegeWiseSeatMetrixComponent {
 
 
 
-  async ngOnInit() {
+  async ngOnInit() {  
     
    
     if (this.route.snapshot.paramMap.get('id')==null ||this.route.snapshot.paramMap.get('id') == '' || this.route.snapshot.paramMap.get('id') == undefined) {
@@ -121,7 +121,9 @@ export class CollegeWiseSeatMetrixComponent {
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
+
     await this.GetdateConfigSetting();
+    this.searchRequest.SeatStatus = 2;
     await this.GetTradeAndColleges(1)
     await this.MasterFilterList();
     //this.getITICollege();
@@ -130,7 +132,7 @@ export class CollegeWiseSeatMetrixComponent {
     this.imcRequest.AllotmentId = 0;
 
     this.searchRequest.AllotmentMasterId=0
-    this.searchRequest.SeatStatus = 2;
+
   }
   async GetdateConfigSetting() {
     this.loaderService.requestStarted();

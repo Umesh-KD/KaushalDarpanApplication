@@ -121,5 +121,23 @@ export class ITI_NCVTService {
   }
 
 
+  public async SaveExamDataBulk(DataExcel1: any) {
+    const body = JSON.stringify(DataExcel1)
+    return this.http.post(`${this.APIUrl}/SaveExamDataBulk`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async SaveImportFileName(DataExcel1: any) {
+    const body = JSON.stringify(DataExcel1)
+    return this.http.post(`${this.APIUrl}/NCVTExcelImportDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 

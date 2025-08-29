@@ -160,6 +160,7 @@ export class EnrollmentCancelationVerifyComponent {
 
   async CertificateDownload(row: any): Promise<void> {
     try {
+      debugger;
       this.loaderService.requestStarted();
       this.searchRequest.Action = this.ActionDynamic;
       this.searchRequest.StudentID = row.StudentID;

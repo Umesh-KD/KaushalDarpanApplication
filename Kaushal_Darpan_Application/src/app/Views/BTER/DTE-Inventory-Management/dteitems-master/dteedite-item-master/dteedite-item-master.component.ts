@@ -12,7 +12,7 @@ import { EnumRole, EnumStatus } from '../../../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { uniqueEquipmentCodeValidator } from '../../../../../Pipes/uniqueEquipmentCodeValidator';
 import { debounceTime } from 'rxjs';
-import { EquipmentCodeDuplicateSearch } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { CheckItemAuctionSearch, EquipmentCodeDuplicateSearch } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 
 @Component({
   selector: 'app-dteedite-item-master',
@@ -41,6 +41,7 @@ export class DteEditeItemMasterComponent {
   public ItemDetailsList: any[] = [];
   public _EnumRole = EnumRole;
   public errorLList: any = [];
+  public CheckAuctionSearch = new CheckItemAuctionSearch();
   constructor(
     private dteItemsMasterService: DteItemsMasterService,
     private toastr: ToastrService,
@@ -70,9 +71,16 @@ export class DteEditeItemMasterComponent {
     this.addItemsControls();
 
     // ✅ Disable status where needed
+
+
+    debugger
     this.itemsFormArray.controls.forEach((group, index) => {
       const equipmentWorking = this.ItemDetailsList[index]?.EquipmentWorking;
-      if (equipmentWorking === 2) {
+      const AuctionStatus = this.ItemDetailsList[index]?.AuctionStatus;
+
+      
+
+      if (AuctionStatus == 1) {
         // Disable the status control
         group.get('equipmentStatus')?.disable();
         //if (group.get('equipmentStatus')?.disabled) {
@@ -109,6 +117,8 @@ this.itemsFormArray.get('items')?.valueChanges
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
         this.ItemDetailsList = data.Data;
+
+
         this.addItemsControls();
       }
     });
@@ -125,6 +135,7 @@ addItemsControls() {
         EquipmentCode: [item.EquipmentsCode],
       }));
     });
+
   }
 }
   get _EditeItemsRequestFormGroup() { return this.EditeItemsRequestFormGroup.controls; }
@@ -334,22 +345,67 @@ getRange(quantity: string | number): number[] {
     }
   }
 
-  equipmentCodeDuplicate(currentValue: string, index: number) {
+  async equipmentCodeDuplicate(currentValue: string, index: number, categoryName:string) {
     if (!currentValue) return;
 
     const normalized = currentValue.trim().toUpperCase(); // normalize for comparison
     if (!normalized) return;
+    
+    try {
+      this.loaderService.requestStarted();
+
+      debugger
+
+      this.searchdata.ItemCategoryName = categoryName;
+      this.searchdata.EquipmentsCode = currentValue;
+      const data: any = await this.dteItemsMasterService.EquipmentCodeDuplicate(this.searchdata);
+
+      // If API returns an array from SQL
+      if (data && data.State === 3) {
+        this.Message = data.Message;
+        this.IsDuplicate = data.IsDuplicate;
+
+        this.toastr.warning(`Duplicate Equipment Code: ${normalized}`)
+        this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
+
+       
+      }
+      // If API returns a single object
+      else if (data && data.State === 1) {
+        this.Message = data.Message;
+        this.IsDuplicate = data.IsDuplicate;
+
+        const otherValues = this.itemsFormArray.controls
+          .map((ctrl, i) => i !== index ? (ctrl.get('txtEquipmentCode')?.value || '').trim().toUpperCase() : null)
+          .filter(v => !!v); // remove null/empty
+
+        if (otherValues.includes(normalized)) {
+          /*alert();*/
+          this.toastr.warning(`Duplicate Equipment Code: ${normalized}`)
+          this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
+
+
+        }
+
+      }
+    }
+    catch (ex) {
+      console.error('Error checking duplicate code:', ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
 
     // Collect all values excluding the current index
-    const otherValues = this.itemsFormArray.controls
-      .map((ctrl, i) => i !== index ? (ctrl.get('txtEquipmentCode')?.value || '').trim().toUpperCase() : null)
-      .filter(v => !!v); // remove null/empty
+   
 
-    if (otherValues.includes(normalized)) {
-      alert(`Duplicate Equipment Code: ${normalized}`);
-      this.itemsFormArray.at(index).get('txtEquipmentCode')?.setValue('0');
-    }
+
+    
   }
+
+
 
 
 //  equipmentCodeDuplicate(currentValue: string, categoryId: number) {

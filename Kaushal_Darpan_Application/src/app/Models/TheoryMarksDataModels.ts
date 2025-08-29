@@ -147,6 +147,7 @@ export class AllotmentReportCollegeRequestModel {
  public TradeLevelID: number = 0;
  public TradeTypeID: number = 0;
  public TradeId: number = 0;
+ public CollegeId: number = 0;
 }
 
 

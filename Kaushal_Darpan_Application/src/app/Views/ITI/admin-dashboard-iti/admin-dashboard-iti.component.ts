@@ -46,7 +46,8 @@ export class AdminDashboardITIComponent implements OnInit
   public isprofile: number = 0;
   public DistrictMasterList: any = [];
   public DashBoardITIDispatchList: any[] = [];
-  public AllotmentList: any[] = [];
+  public Allotment1List: any[] = [];
+  public Allotment2List: any[] = [];
 
   constructor(private ITIAdminDashboardServiceService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
@@ -118,7 +119,8 @@ export class AdminDashboardITIComponent implements OnInit
             this.viewAdminDashboardListOther = this.viewAdminDashboardList.filter(s => s.ListType === 'OtherType');
 
             this.DashBoardITIDispatchList = this.viewAdminDashboardList.filter(s => s.ListType == 'ITIDispatch');
-            this.AllotmentList = this.viewAdminDashboardList.filter(s => s.ListType == 'AllotmentType');
+            this.Allotment1List = this.viewAdminDashboardList.filter(s => s.ListType == 'Allotment1Type');
+            this.Allotment2List = this.viewAdminDashboardList.filter(s => s.ListType == 'Allotment2Type');
 
             //console.log(this.viewAdminDashboardList, "DashBoo");
             //console.log(this.viewAdminDashboardListEnrollment, "EnrollmentType");

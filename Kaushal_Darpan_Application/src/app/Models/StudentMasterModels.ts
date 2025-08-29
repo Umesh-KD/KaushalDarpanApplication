@@ -100,6 +100,7 @@ export class StudentMasterModel {
   public AllotmentId:number=0
   public His_StatusId?: number = 0;
   public IsVerified?: boolean = false;
+  public RoleID?: number = 0;
 }
 
 export class M_StudentMaster_QualificationDetailsModel {
@@ -150,8 +151,9 @@ export interface StudentMarkedModel extends RequestBaseModel {
   Status: number;
   StudentFilterStatusId: number;
   ModifyBy: number;
-  RoleId: number;
+  RoleId?: number;
   StudentExamID?: number;  
+  SemesterID?: number
 }
 export class StudentMarkedModelForJoined {
   public Marked: boolean = false;
@@ -190,10 +192,16 @@ export class RevertDataModel {
 
 
 export interface EligibleStudentButPendingForVerification {
- 
+  RoleId?: number;
+  ModifyBy?: number;
   StudentId: number;
- 
+  Remark?: String;
+
+  EndTermID?: number;
+  DepartmentID?: number;
+  Eng_NonEng?: number;
 }
+
 export interface ForSMSEnrollmentStudentMarkedModel extends RequestBaseModel {
   StudentId: number;
   Status: number;

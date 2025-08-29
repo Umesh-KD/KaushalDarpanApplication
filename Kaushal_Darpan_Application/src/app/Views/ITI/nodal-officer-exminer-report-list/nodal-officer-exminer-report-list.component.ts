@@ -39,7 +39,7 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-
+  public DistrictMasterList1:any[]=[]
 
 
   
@@ -98,6 +98,7 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
 
 
     await this.GetZonalList()
+    await this.ddlDivision_Change()
    
 
   }
@@ -106,7 +107,24 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
 
   
 
- 
+  async ddlDivision_Change() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_StateIDWise(6)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictMasterList1 = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 2000);
+    }
+  }
 
  
 
@@ -114,6 +132,14 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
   async GetZonalList() {
     
     this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
+
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+    if (this.sSOLoginDataModel.RoleID == 224) {
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+    }
+
     //this.searchRequest.CreatedBy = this.sSOLoginDataModel.UserID
     try {
       this.loaderService.requestStarted();
@@ -138,6 +164,10 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
     }
   }
 
+  async ResetControl1() {
+    this.searchRequest.DistrictID = 0
+    this.GetZonalList()
+  }
 
 
 
@@ -258,12 +288,12 @@ export class NodalOfficerExminerReportListComponent implements OnInit {
 
   downloadPDF(id: number, ExamDateTime:string) {
 
-    debugger;
+
     //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     //this.searchRequest.Eng_NonEng = this.CourseType;
     try {
-      this.ITINodalOfficerExminerReportService.Generate_ITINodalOfficerExminerReport_ByID(id, this.sSOLoginDataModel.InstituteID, ExamDateTime)
+      this.ITINodalOfficerExminerReportService.Generate_ITINodalOfficerExminerReport_ByID(id, this.sSOLoginDataModel.DistrictID, ExamDateTime)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {

@@ -112,7 +112,7 @@ export class AddITITimeTableComponent {
       // this.settingsMultiselector = {
       //   singleSelection: false,
       //   idField: 'ID',
-      //   textField: 'Name',
+      //   textField: 'Name', 
       //   enableCheckAll: true,
       //   selectAllText: 'Select All',
       //   unSelectAllText: 'Unselect All',

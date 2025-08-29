@@ -6,6 +6,8 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { RouterModule, Routes } from '@angular/router';
 import { StudentEnrollmentAdmittedComponent } from './student-enrollment-admitted.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 const routes: Routes = [{ path: '', component: StudentEnrollmentAdmittedComponent }];
 @NgModule({
@@ -19,7 +21,8 @@ const routes: Routes = [{ path: '', component: StudentEnrollmentAdmittedComponen
     CommonModule,
     LoaderModule,
     TableSearchFilterModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    MatTooltipModule
   ]
 })
 export class StudentEnrollmentAdmittedModule { }

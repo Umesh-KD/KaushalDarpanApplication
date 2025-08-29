@@ -1,6 +1,4 @@
 
-
-
 import { Title } from '@angular/platform-browser';
 import { RouterModule, Routes, TitleStrategy, RouterStateSnapshot } from '@angular/router';
 import { MasterLayoutComponent } from './Views/Shared/master-layout/master-layout.component';
@@ -809,6 +807,7 @@ const routes: Routes = [
       { path: 'team-flying-reports', loadChildren: () => import('./Views/Reports/flying-squad-reports/flying-squad-reports.module').then(m => m.FlyingSquadReportsModule) },
 
       { path: 'PublishedEnrollNo', loadChildren: () => import('./Views/published-enroll-no/published-enroll-no.module').then(m => m.PublishedEnrollNoModule) },
+      { path: 'verify-enroll-no', loadChildren: () => import('./Views/verify-enroll-no/verify-enroll-no.module').then(m => m.VerifyEnrollNoModule), title: 'Verify Enroll No' },
       { path: 'eligible-verification-enroll-no', loadChildren: () => import('./Views/eligible-verification-enroll-no/eligible-verification-enroll-no.module').then(m => m.EligibleVerificationEnrollNoModule) },
       { path: 'paper', loadChildren: () => import('./Views/paper/set-paper.module').then(m => m.SetPaperModule) },
       { path: 'bter-cerifications', loadChildren: () => import('./Views/BTER/bter-certificate/bter-certificate.module').then(m => m.BterCertificateModule) },
@@ -1219,7 +1218,7 @@ const routes: Routes = [
 
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
-      { path: 'CenterSuperitendentExamReport', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report-master/center-superitendent-exam-report-master.module').then(m => m.CenterSuperitendentExamReportMasterModule) },
+      { path: 'CenterSuperitendentExamReport', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report-master/center-superitendent-exam-report-master.module').then(m => m. CenterSuperitendentExamReportMasterModule) },
       { path: 'ItiBGTHeadmaster', loadChildren: () => import('./Views/ITI/iti-bgt-headmaster/iti-bgt-headmaster.module').then(m => m.ItiBGTHeadMasterModule) },
 
         { path: 'iti-remunerationInvigilatorApproved-list', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-list/iti-admin-remunerationInvigilator-list.module').then(m => m.ItiAdminRemunerationInvigilatorlistModule), title: 'Invigilation Remuneration Approved list' },
@@ -1321,6 +1320,25 @@ const routes: Routes = [
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
+
+      { path: 'NcvtDataBulkUpload', loadChildren: () => import('./Views/ITI/ncvt-data-bulk-upload/ncvt-data-bulk-upload.module').then(m => m.NcvtDataBulkUploadModule) },
+
+      { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
+
+      { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+      { path: 'IMCAllotmentReport/:id', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+      { path: 'iti-allotment-report/:id/:iid', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+     
+       { path: 'iti-allotment-report/:id/:iid/:idd', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+
+      { path: 'iti-allotment-report', loadChildren: () => import('./Views/ITI/allotment-report/allotment-report.module').then(m => m.AllotmentReportModule) },
+
+      { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
+
+  { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+      
     ]
   },
   
@@ -1383,8 +1401,6 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-
-
     ]
   },
 
@@ -1415,8 +1431,7 @@ const routes: Routes = [
       { path: 'DTEdocumentationscrutiny', loadChildren: () => import('./Views/BTER/application-form/documentation-scrutiny/documentation-scrutiny.module').then(m => m.DocumentationScrutinyModule), title: 'Documentation Scrutiny' },
       { path: 'DTEStudentVerificationList', loadChildren: () => import('./Views/BTER/application-form/student-verification-list/student-verification-list.module').then(m => m.StudentVerificationListModule), title: 'Student Verification List' },
       { path: 'DirectDTEApplicationform', loadChildren: () => import('./Views/BTER/direct-application-form/direct-application-form/direct-application-form.module').then(m => m.DirectApplicationFormModule), title: 'BTER-DirectApplication Form' },
-      
-
+          
 
     ]
   },

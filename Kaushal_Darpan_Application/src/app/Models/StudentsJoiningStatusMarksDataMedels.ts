@@ -28,3 +28,21 @@ export class StudentsJoiningStatusMarksSearchModel {
   public ReportingStatus:string=''
   public TradeCode:string=''
 }
+
+
+export class ReportCollegeForAdminModel {
+  public  AcademicYearID: number = 0; 
+  public TradeLevelID: number = 0;
+  public TradeTypeID: number = 0;
+  public TradeId: number = 0;
+  public CollegeId: number = 0;
+}
+
+export class ReportCollegeModel {
+  public AcademicYearID: number = 0;
+  public TradeLevelID: number = 0;
+  public TradeTypeID: number = 0;
+  public TradeId: number = 0;
+}
+
+

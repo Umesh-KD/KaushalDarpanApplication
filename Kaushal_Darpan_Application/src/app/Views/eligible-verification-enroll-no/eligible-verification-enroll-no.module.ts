@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
+import { StudentDetailsViewModalModule } from '../Student/student-details-view-modal/student-details-view-modal.module';
 
 
 @NgModule({
@@ -30,6 +31,7 @@ import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
     MatButtonModule,
     MatIconModule,
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent  ,
+    StudentDetailsViewModalModule
 
   ]
 })

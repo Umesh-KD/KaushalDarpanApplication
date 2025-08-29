@@ -232,6 +232,8 @@ export class StudentEnrollmentCancelationComponent implements OnInit, OnDestroy 
     this.Request.DepartmentID = row.DepartmentID;
     this.Request.InstituteID = row.InstituteID;
     this.Request.CourseType = row.CourseType;
+    this.Request.EndTermType = row.EndTermType;
+    this.Request.EndTermName = row.EndTermName;
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
 

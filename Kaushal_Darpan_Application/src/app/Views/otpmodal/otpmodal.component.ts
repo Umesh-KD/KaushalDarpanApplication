@@ -5,6 +5,7 @@ import { GlobalConstants, EnumStatus } from '../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-otpmodal',
@@ -191,4 +192,10 @@ export class OTPModalComponent {
         this.toastr.error('Invalid OTP');
       }
   }
+
+  waitForVerification(): Promise<void> {
+  return new Promise(resolve => {
+    this.onVerified.pipe(take(1)).subscribe(() => resolve());
+  });
+}
 }

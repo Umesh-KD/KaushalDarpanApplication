@@ -129,7 +129,7 @@
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <!--<a href="DteEquipmentsMaster?id={{item.EquipmentsId}}" title="Edit"><i class="ti ti-pencil"></i></a>-->
                 <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.EquipmentsId)" title="Edit"><i class="ti ti-pencil"></i></a>
-               <!-- <a href="javascript:void(0)" (click)="btnDelete_OnClick(item.EquipmentsId)" title="Delete"><i class="ti ti-trash"></i> </a>-->
+                <a *ngIf="_EnumRole.DTE == getRoleID || _EnumRole.DTENON == getRoleID"  href="javascript:void(0)" (click)="btnDelete_OnClick(item.EquipmentsId)" title="Delete"><i class="ti ti-trash"></i> </a>
               </div>
             </td>
           </tr>

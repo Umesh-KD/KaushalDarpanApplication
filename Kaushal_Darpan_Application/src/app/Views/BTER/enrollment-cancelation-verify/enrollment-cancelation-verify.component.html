@@ -138,6 +138,7 @@
               <option value="0">Select Status</option>
               <option *ngIf="currentStatus == 40 && RoleID == 206" [value]="_RollListStatus.Verified">Dropout</option>
               <option *ngIf="!(currentStatus == 40 && RoleID == 206)" [value]="_RollListStatus.Verified">Verified</option>
+              <option *ngIf="!(currentStatus == 40 && RoleID == 206)" [value]="_RollListStatus.Return">Return</option>
             </select>
             <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()">
               <i class="ti ti-save"></i>Save
@@ -145,7 +146,7 @@
           </div>
 
           <div class="flex" *ngIf="currentStatus == 7 && RoleID == 7 || currentStatus == 38 && RoleID == 38 ||
-               currentStatus == 40 && RoleID == 40 || currentStatus == 2 && RoleID == 2">
+               currentStatus == 40 && RoleID == 40 || currentStatus == 2 && RoleID == 2 || currentStatus == 205 && RoleID == 205">
             <select class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
               <option value="0">Select Status</option>
               <option [value]="_RollListStatus.Return">Return</option>
@@ -178,6 +179,8 @@
               <th class="text-left">Branch Name   </th>
               <!--<th class="text-left">Semester Name</th>-->
               <th class="text-left">Enrollment No</th>
+              <th class="text-left">EndTerm Type</th>
+              <th class="text-left">EndTerm Name</th>
               <th class="text-left">Document</th>
               <th class="text-left">Status</th>
               <th *ngIf="currentStatus == 206 && RoleID == 2 || currentStatus == 206 && RoleID == 206" class="text-left">Action</th>
@@ -192,6 +195,8 @@
               <td class="text-left">{{ row.InstituteName }}</td>
               <td class="text-left">{{ row.StreamName }}</td>
               <td class="text-left">{{ row.EnrollmentNo }}</td>
+              <td class="text-left">{{row.EndTermType}}</td>
+              <td class="text-left">{{row.EndTermName }}</td>
               <td class="text-left">
                 <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.ENRCancelDoc}}">
                   <i class="ti ti-eye"></i>

@@ -259,3 +259,13 @@ export class StudentEnrCancelReqModel extends RequestBaseModel {
   public CourstType: number = 0
   public ActionType: string = '';
 }
+export class AssignTeacherForSubjectReqModel  {
+  public StreamID: number = 0;
+  public SectionID: number = 0
+  public NextRoleId: number = 0
+  public IsApproveOrReject: number = 0
+  public Remarks: string = '';
+  public CourstType: number = 0
+  public ActionType: string = '';
+}
+

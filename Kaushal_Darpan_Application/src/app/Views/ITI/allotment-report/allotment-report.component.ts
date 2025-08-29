@@ -98,13 +98,14 @@ export class AllotmentReportComponent {
 
     this.searchRequest.ReportingStatus = Number(this.activatedRoute.snapshot.paramMap.get('id') ?? 0)
     this.searchRequest.TradeLevelId = this.activatedRoute.snapshot.paramMap.get('iid') ?? "0";
+    this.searchRequest.AllotmentMasterId = Number(this.activatedRoute.snapshot.paramMap.get('idd') ?? 0);
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.EndTermId = this.SSOLoginDataModel.EndTermID;
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
     //await this.GetdateConfigSetting();
     //await this.GetTradeAndColleges(1)
-    this.searchRequest.AllotmentMasterId = 0;
+    //this.searchRequest.AllotmentMasterId = 0;
     await this.MasterFilterList();
     this.getITICollege();
     this.getITITrade();

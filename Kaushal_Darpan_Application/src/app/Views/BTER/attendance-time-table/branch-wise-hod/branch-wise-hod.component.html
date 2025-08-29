@@ -12,7 +12,7 @@
 
 <div class="card">
   <div class="card-body p-5">
-    @if(sSOLoginDataModel.RoleID == 7 || sSOLoginDataModel.RoleID == 2 || sSOLoginDataModel.DepartmentID == 2){
+    @if(sSOLoginDataModel.RoleID == 7  ||sSOLoginDataModel.RoleID == 13 || sSOLoginDataModel.RoleID == 2  ){
     <form [formGroup]="SSOIDFormGroup" class="mb-3" (ngSubmit)="PostUserExists()" *ngIf="SSOIDFormGroup">
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
         <div class="mb-3">
@@ -139,19 +139,18 @@
 
 
         <!--<ng-container matColumnDef="Action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td mat-cell *matCellDef="let row">-->
-            <!--<button mat-icon-button color="warn"
-                  *ngIf="row.StatusID === 215"
-                  (click)="btnDeleteOnClick(row.GuestReqID)">
-            <mat-icon>delete</mat-icon>
-          </button>-->
-            <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
-            </div>-->
-          <!--</td>
-        </ng-container>-->
-
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+      <td mat-cell *matCellDef="let row">-->
+        <!--<button mat-icon-button color="warn"
+              *ngIf="row.StatusID === 215"
+              (click)="btnDeleteOnClick(row.GuestReqID)">
+        <mat-icon>delete</mat-icon>
+      </button>-->
+        <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+        <a href="javascript:void(0)" (click)="btnDeleteOnClick(row)" title="Delete"><i class="ti ti-trash"></i> </a>
+      </div>-->
+        <!--</td>
+      </ng-container>-->
         <!-- Header and row definitions -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

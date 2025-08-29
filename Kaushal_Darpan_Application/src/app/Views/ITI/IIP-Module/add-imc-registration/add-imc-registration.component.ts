@@ -12,7 +12,8 @@ import { ITI_InspectionDropdownModel } from '../../../../Models/ITI/ITI_Inspecti
 import { ITIIIPManageService } from '../../../../Services/ITI/ITI-IIPModule/iti-iipmodule.service';
 import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadFileModel';
 @Component({
   selector: 'add-imc-registration',
   standalone: false,
@@ -27,7 +28,7 @@ export class AddItiIMCRegistrationComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   RegistrationID: number = 0
   isFormReadOnly = false;
-
+  model = new UploadFileModel()
 
   selectedFileUrl: string | null = null;
 
@@ -35,15 +36,15 @@ export class AddItiIMCRegistrationComponent {
   defaultMemberTypes: string[] = [
     'Chairman',
     'Principal',
-    'Zonal Officer',
-    'District Employment Officer',
+    'Zonal officer',
+    'District employment officer',
     'Instructor',
-    'Local Expert',
+    'Local expert',
     'Trainee',
-    'Industry Representative'
+    'Industry representative'
   ];
 
-  constructor(private toastr: ToastrService, private loaderService: LoaderService, private IIPManageService: ITIIIPManageService, private router: Router, private activatedRoute: ActivatedRoute) {
+  constructor(private toastr: ToastrService, private loaderService: LoaderService, private IIPManageService: ITIIIPManageService, private router: Router, private activatedRoute: ActivatedRoute, private commonMasterService: CommonFunctionService, private appsettingConfig: AppsettingService) {
     // initialize 7 fixed rows + 1 representative
     let i = 1;
     this.formData.IMCMemberDetails = this.defaultMemberTypes.map(type => {
@@ -78,7 +79,7 @@ export class AddItiIMCRegistrationComponent {
 
   addRepresentive() {
     const member = new IIPManageMemberDetailsDataModel();
-    member.MemberTypeName = 'Industry Representative';
+    member.MemberTypeName = 'Industry representative';
     member.MemberTypeID = 8;
     this.formData.IMCMemberDetails.push(member);
   }
@@ -94,6 +95,73 @@ export class AddItiIMCRegistrationComponent {
   //removeRepresentive(index: number) {
   //  this.formData.IMCMemberDetails.splice(index, 1);
   //}
+
+
+  public file!: File;
+
+  async onFileSelected(event: any, Type: string) {
+    try {
+      debugger;
+      this.file = event.target.files[0];
+      if (this.file) {
+
+        //if (['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'].includes(this.file.type)) {
+        //  // Size validation
+        //  if (this.file.size > 2000000) {
+        //    this.toastr.error('Select less than 2MB File');
+        //    return;
+        //  }
+        //}
+        //else {
+        //  this.toastr.error('Select Only jpeg/jpg/png file');
+        //  return;
+        //}
+
+        //if (this.file.name.split('.').length > 2)
+        //{
+        //  this.toastr.error('Invalid file name. Please remove extra . from file');
+        //  return ;
+        //}
+
+
+
+        // Upload to server folder
+        this.loaderService.requestStarted();
+        this.model.FolderName = 'ITIUpload';
+        await this.commonMasterService.UploadDocument(this.file, this.model)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log("photo data", data);
+            if (data.State === EnumStatus.Success) {
+
+              switch (Type) {
+                case "RegLink":
+
+                  this.formData.RegLink = data['Data'][0]["FileName"];
+                  this.formData.RegDisLink = data['Data'][0]["Dis_FileName"];
+                  this.selectedFileUrl =  this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink;
+                  break;
+                default:
+                  break;
+              }
+            }
+            event.target.value = null;
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
 
   async onSubmit(form: any)
   {
@@ -158,7 +226,7 @@ export class AddItiIMCRegistrationComponent {
         debugger;
         if (data.State === EnumStatus.Success) {
           this.formData = data.Data
-          this.selectedFileUrl = this.formData.RegLink; // Set the selected file URL for preview
+          this.selectedFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink; // Set the selected file URL for preview
           // In ngOnInit or wherever request is populated
           //this.formData.RegDate =  this.formatDateToInput(this.formData.RegDate);
           this.isFormReadOnly = true;
@@ -184,14 +252,15 @@ export class AddItiIMCRegistrationComponent {
 
  
 
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.selectedFileUrl = URL.createObjectURL(file); // create temporary URL
-    }
-  }
+  //onFileSelected(event: any) {
+  //  const file = event.target.files[0];
+  //  if (file) {
+  //    this.selectedFileUrl = URL.createObjectURL(file); // create temporary URL
+  //  }
+  //}
 
   previewFile() {
+
     if (this.selectedFileUrl) {
       window.open(this.selectedFileUrl, '_blank'); // open file in new tab
     }

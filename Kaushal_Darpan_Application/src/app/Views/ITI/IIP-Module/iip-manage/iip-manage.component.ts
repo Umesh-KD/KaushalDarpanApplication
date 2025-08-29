@@ -29,6 +29,7 @@ export class ITIIIPManageComponent {
   IIPManageData: any = [];
   IIPMembersData: any = [];
   IIPFundData: any = [];
+  IIPQuaterReportData: any = [];
   IIPFundTradeData: any = [];
   IIPCurrentMembersData: any = [];
   IIPPreviousMembersData: any = [];
@@ -37,7 +38,7 @@ export class ITIIIPManageComponent {
   public requestMember = new IIPManageMemberDetailsDataModel();
   NewRegistrationDisable = false;
   FinancialYearID: number = 0;
-  toggleButtonText: string = "Previous Members History";
+  toggleButtonText: string = "View previous members history";
   showingPrevious: boolean = false;
   FinancialYearMasterDDL: any;
 
@@ -155,12 +156,12 @@ export class ITIIIPManageComponent {
     if (!this.showingPrevious) {
       // Show previous members
       this.IIPCurrentMembersData = this.IIPMembersData.filter((x: any) => x.ActiveFlag == 0);
-      this.toggleButtonText = "Current Members";
+      this.toggleButtonText = "Go back to current member list";
       this.showingPrevious = true;
     } else {
       // Show current members
       this.IIPCurrentMembersData = this.IIPMembersData.filter((x: any) => x.ActiveFlag == 1);
-      this.toggleButtonText = "Previous Members History";
+      this.toggleButtonText = "View previous members history";
       this.showingPrevious = false;
     }
   }
@@ -201,6 +202,112 @@ export class ITIIIPManageComponent {
     this.loaderService.requestStarted();
     this.formData.FinancialYearID = selectedId;
     await this.GetAllIMCFundData();
+
+  }
+
+
+
+  async ShowQuaterDetails(content: any, id: number) {
+ 
+    try {
+      this.loaderService.requestStarted();
+     
+
+      await this.itiIIPManageService.GetQuaterlyProgressData(id).then((data: any) => {
+        debugger;
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.IIPQuaterReportData = data.Data;
+
+          console.log("this.IIPQuaterReportData", this.IIPQuaterReportData);
+          this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+
+  }
+
+  async FinalSubmitUpdate(id: number) {
+    this.Swal2.Confirmation("Are you sure you want to Submit this Report?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+
+          try {
+
+            await this.itiIIPManageService.FinalSubmitUpdate(id).then((data: any) => {
+
+              data = JSON.parse(JSON.stringify(data));
+              console.log("data", data)
+              var id = data.Data
+              if (data.State === EnumStatus.Success) {
+                this.toastr.success("Fund Report Update Successfully");
+                this.CloseModalPopup();
+                this.GetAllData();
+              } else if (data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.log(error);
+          } finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200)
+          }
+        }
+      });
+  }
+
+  async DownloadIIPQuaterlyFundReportPDF(id: number) {
+
+      try {
+        await this.itiIIPManageService.GetIIPQuaterlyFundReport(id).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'IIPQuaterlyFundReport.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error("FIle Not Found!!")
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200)
+      }
 
   }
 

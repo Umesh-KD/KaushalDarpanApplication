@@ -82,7 +82,6 @@ export class StudentDashboardComponent implements OnInit {
 
     //}, 'OK');
     //return;
-
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.sSOLoginDataModel.UserType == EnumUserType.STUDENT || this.sSOLoginDataModel.UserType == EnumUserType.CITIZEN)
     {
@@ -174,6 +173,7 @@ export class StudentDashboardComponent implements OnInit {
     this.StudantDashboardList = [];
     try {
 
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
       this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -201,6 +201,7 @@ export class StudentDashboardComponent implements OnInit {
   async GetProfileDashboard() {
     try {
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
       this.loaderService.requestStarted();

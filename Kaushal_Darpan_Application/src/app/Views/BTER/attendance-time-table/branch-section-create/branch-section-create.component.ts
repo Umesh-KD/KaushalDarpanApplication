@@ -174,16 +174,26 @@ export class BranchSectionCreateComponent {
 
     // Clear previous sections if any
     this.sections.clear();
-
-    this.generateSections();
+    if (this.totalStudents)
+    this.generateSections(this.sectionSize, this.totalStudents);
   }
+  generateSections(sectionCount: number, totalStudents: number): void {
+    if (sectionCount <= 0 || totalStudents <= 0) {
+      return;
+    }
 
-  generateSections(): void {
-    const totalSections = Math.ceil(this.totalStudents / this.sectionSize);
+    
+    if (sectionCount > totalStudents) {
+      this.toastr.error("Section count cannot be greater than total students");
+      return;
+    }
 
-    for (let i = 0; i < totalSections; i++) {
-      const studentsInSection =
-        i === totalSections - 1 ? this.totalStudents - this.sectionSize * i : this.sectionSize;
+    const baseSize = Math.floor(totalStudents / sectionCount);
+    let remaining = totalStudents % sectionCount;
+
+    for (let i = 0; i < sectionCount; i++) {
+      const studentsInSection = baseSize + (remaining > 0 ? 1 : 0);
+      if (remaining > 0) remaining--;
 
       this.sections.push(
         this.formBuilder.group({
@@ -193,6 +203,22 @@ export class BranchSectionCreateComponent {
       );
     }
   }
+
+  //generateSections(): void {
+  //  const totalSections = Math.ceil(this.totalStudents / this.sectionSize);
+
+  //  for (let i = 0; i < totalSections; i++) {
+  //    const studentsInSection =
+  //      i === totalSections - 1 ? this.totalStudents - this.sectionSize * i : this.sectionSize;
+
+  //    this.sections.push(
+  //      this.formBuilder.group({
+  //        sectionName: [`Section ${i + 1}`, Validators.required],
+  //        studentCount: [studentsInSection, [Validators.required, Validators.min(1)]]
+  //      })
+  //    );
+  //  }
+  //}
 
   addSection(): void {
     let sectionCount = (this.sectionForm.get('sections') as FormArray).controls.length;

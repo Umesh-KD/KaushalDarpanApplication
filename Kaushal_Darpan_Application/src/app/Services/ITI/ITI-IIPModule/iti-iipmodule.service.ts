@@ -67,7 +67,9 @@ export class ITIIIPManageService {
   }
 
   public async SaveFundDetails(request: IDfFundDetailsModel)
+  
   {
+    debugger
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/SaveFundDetails`, body, this.headersOptions1)
@@ -94,6 +96,7 @@ export class ITIIIPManageService {
   }
 
   public async SaveIMCFund(request: IIPManageFundSearchModel) {
+    debugger
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/SaveIMCFund`, body, this.headersOptions1)
@@ -122,6 +125,41 @@ export class ITIIIPManageService {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/SaveQuaterlyProgressData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async GetById_FundDetails(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetById_FundDetails/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetQuterlyData_ByID(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetQuterlyData_ByID/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async FinalSubmitUpdate(id: number) {
+
+    return await this.http.post(`${this.APIUrl}/FinalSubmitUpdate/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetIIPQuaterlyFundReport(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetIIPQuaterlyFundReport/${id}`, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

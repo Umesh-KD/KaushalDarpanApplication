@@ -1,0 +1,156 @@
+<ng-template #MyModel_ViewStudent let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;View Student Details </b>
+        <button class="btn bg-info text-white" (click)="CloseViewStudentDetails()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body" *ngIf="StudentProfileDetailsData && StudentProfileDetailsData[0]?.InstituteName">
+        <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <tr>
+                <td>College Name</td>
+                <td>{{StudentProfileDetailsData[0]['InstituteName']}}</td>
+              </tr>
+              <tr>
+                <td>Branch</td>
+                <td>{{StudentProfileDetailsData[0]['StreamName']}}</td>
+              </tr>
+              <tr>
+                <td>Semester</td>
+                <td>
+                  {{StudentProfileDetailsData[0]['SemesterName']}} <br /> {{StudentProfileDetailsData[0]['StudentType']}}
+                </td>
+              </tr>
+              <tr>
+                <td>Papers</td>
+                <td>
+                  Theory &amp; Practical Papers<br><span style="word-break: break-all;">{{StudentProfileDetailsData[0]['Papers']}} </span>
+                </td>
+              </tr>
+              <tr>
+                <td>Student's Name</td>
+                <td>{{StudentProfileDetailsData[0]['StudentName']}}</td>
+              </tr>
+              <tr>
+                <td>Father's Name</td>
+                <td>{{StudentProfileDetailsData[0]['FatherName']}}</td>
+              </tr>
+              <tr>
+                <td>Mother's Name</td>
+                <td>{{StudentProfileDetailsData[0]['MotherName']}}</td>
+              </tr>
+              <tr>
+                <td>Category</td>
+                <td>{{StudentProfileDetailsData[0]['CasteCategoryName']}}</td>
+              </tr>
+              <tr>
+                <td>Sub Category</td>
+                <td>{{StudentProfileDetailsData[0]['SubCasteCategoryName']}}</td>
+              </tr>
+              <tr>
+                <td>Gender</td>
+                <td>{{StudentProfileDetailsData[0]['GenderName']}}</td>
+              </tr>
+              <tr>
+                <td>Date Of Birth</td>
+                <td>{{StudentProfileDetailsData[0]['Dis_DOB']}}</td>
+              </tr>
+              <tr>
+                <td>Mobile</td>
+                <td>{{StudentProfileDetailsData[0]['Dis_MobileNo']}}</td>
+              </tr>
+              <tr>
+                <td>Address</td>
+                <td>{{StudentProfileDetailsData[0]['Full_Address']}}</td>
+              </tr>
+              <tr>
+                <td>Aadhar No.</td>
+                <td>{{StudentProfileDetailsData[0]['Dis_AadharNo']}}</td>
+              </tr>
+              <tr>
+                <td>Bhamashah No.</td>
+                <td>{{StudentProfileDetailsData[0]['JanAadharNo']}}</td>
+              </tr>
+              <tr>
+                <td>Bank A/c No.</td>
+                <td>{{StudentProfileDetailsData[0]['BankAccountNo']}}</td>
+              </tr>
+              <tr>
+                <td>Bank Name</td>
+                <td>{{StudentProfileDetailsData[0]['BankName']}}</td>
+              </tr>
+              <tr>
+                <td>IFSC Code</td>
+                <td>{{StudentProfileDetailsData[0]['IFSCCode']}}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <tr>
+                <td>Enrollment No.:</td>
+                <td>{{StudentProfileDetailsData[0]['EnrollmentNo']}}</td>
+              </tr>
+
+              <!--document-->
+              <tr *ngFor="let item of documentDetails;">
+                <td>{{item.DisplayColumnNameEn}}</td>
+                <td>
+                  <img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
+                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                       class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
+                </td>
+              </tr>
+              <!--/document-->
+
+            </table>
+          </div>
+
+        </div>
+        <div class="py-4 overflow-y-auto">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5"><i class="ti ti-list"></i> Qualification Details</b>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="table table-border w-full table-auto" cellpadding="5">
+
+                <thead>
+                  <tr>
+                    <th class="text-left">Qualification</th>
+                    <th class="text-left">Board/University</th>
+                    <th class="text-left">Stream/ Subject</th>
+                    <th class="text-left">Passing Year</th>
+                    <th class="text-left">Percentage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of this.Student_QualificationDetailsData; let idx=index;">
+                    <td class="text-left">{{row.Qualification}}</td>
+                    <td class="text-left">{{row.ClassBoard}}</td>
+                    <td class="text-left">{{row.ClassSubject}}</td>
+                    <td class="text-left">{{row.PasssingYear}}</td>
+                    <td class="text-left">{{row.ClassPercentage}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="text-center flex items-center justify-center">
+              <!-- <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.SelectedForEnrollment && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.VerifiedForEnrollment" class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">Download Enrollment Form<i class="ti ti-download"></i></button> -->
+
+              <!-- <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0]['EnrollTransactionId']>0" class="btn bg-success text-white" (click)="GetStudentFeeReceipt(StudentProfileDetailsData[0]['EnrollTransactionId'])">Download Fee Receipt<i class="ti ti-download"></i></button> -->
+
+              <button type="button" (click)="CloseViewStudentDetails()" class="btn bg-danger text-white">Cancel<i class="ti ti-x"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

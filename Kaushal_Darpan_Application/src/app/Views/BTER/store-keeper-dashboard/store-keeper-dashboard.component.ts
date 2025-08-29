@@ -95,11 +95,14 @@ export class StoreKeeperDashboardComponent {
 
   }
   async GetAllData() {
+    debugger
     this.StoreKeeperRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.StoreKeeperRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.StoreKeeperRequest.RoleID = this.sSOLoginDataModel.RoleID;
     this.StoreKeeperRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this.StoreKeeperRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.StoreKeeperRequest.UserID = this.sSOLoginDataModel.UserID;
+
     try {
       this.loaderService.requestStarted();
       await this.examinerService.StoreKeeperDashboard(this.StoreKeeperRequest)

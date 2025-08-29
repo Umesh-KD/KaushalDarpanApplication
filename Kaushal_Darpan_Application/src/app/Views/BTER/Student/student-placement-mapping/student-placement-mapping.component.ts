@@ -68,9 +68,9 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.searchssoform = this.formBuilder.group({
       txtApplicationNo: ['', Validators.required],
-      txtMobileNo: ['', Validators.required],
+      /*txtMobileNo: ['', Validators.required],*/
       DOB: ['', Validators.required],
-      ddlDepartment: ['', [DropdownValidators]]
+      /*ddlDepartment: ['', [DropdownValidators]]*/
     })
     this.BTER = this.encryptParameter(this._EnumDepartment.BTER);
     this.ITI = this.encryptParameter(this._EnumDepartment.ITI)
@@ -170,8 +170,8 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
     }
     this.isShowGrid = true;
 
-    this.searchRequest.action =
-      this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForPlacementMapping_ITI" : "_GetStudentForPlacementMapping";
+    this.searchRequest.action = "_GetStudentForPlacementMapping"
+      /*this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForPlacementMapping_ITI" : "_GetStudentForPlacementMapping";*/
 
     this.searchRequest.DepartmentID = this.searchRequest.DepartmentID;
 
@@ -199,17 +199,26 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
     }
   }
 
+  validateNumber(event: KeyboardEvent) {
+    const pattern = /[0-9]/;
+    const inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
   async PayFees(item: any) { }
 
   async VerifyOTP() {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
-          this.searchRequest.studentId = this.studentDetailsModel.StudentID;
-          this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
+          //this.searchRequest.studentId = this.studentDetailsModel.StudentID;
+          //this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
           /*    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;*/
           this.loaderService.requestStarted();
-          await this.studentService.UpdateStudentSsoMapping(this.searchRequest)
+          await this.studentService.StudentPlacementMapping(this.searchRequest)
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
               if (data.State == EnumStatus.Success) {
@@ -281,18 +290,46 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
 
 
   //Start Section Model
+  //async openModalGenerateOTP(content: any, item: StudentDetailsModel) {
+  //  this.OTP = '';
+  //  this.MobileNo = '';
+  //  this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+  //    this.closeResult = `Closed with: ${result}`;
+  //  }, (reason) => {
+  //    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //  });
+  //  this.MobileNo = item.MobileNo;
+  //  this.studentDetailsModel = item;
+  //  this.SendOTP();
+  //}
+
+
   async openModalGenerateOTP(content: any, item: StudentDetailsModel) {
     this.OTP = '';
-    this.MobileNo = '';
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+    this.MobileNo = item.MobileNo;  // Set mobile number from item
+    this.studentDetailsModel = item;
+
+    // Validation: check if MobileNo is present and valid (10 digits)
+    if (!this.MobileNo || this.MobileNo.toString().trim().length !== 10) {
+      this.toastrService.warning('Please enter a valid 10-digit mobile number.');
+      return; // Stop here, don't open modal or send OTP
+    }
+    this.searchRequest.MobileNumber = this.MobileNo;
+    this.searchRequest.StudentID = item.StudentID; 
+    // Open modal only if validation passed
+    this.modalService.open(content, {
+      size: 'sm',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.MobileNo = item.MobileNo;
-    this.studentDetailsModel = item;
-    this.SendOTP();
+
+    this.SendOTP(); // Send OTP after modal opens
   }
+
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {

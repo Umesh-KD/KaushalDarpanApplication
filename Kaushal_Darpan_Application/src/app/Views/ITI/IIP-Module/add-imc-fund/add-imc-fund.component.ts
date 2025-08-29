@@ -28,6 +28,7 @@ export class AddItiIMCFundComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   FundID: number = 0
   FinancialYearID: number = 0
+  InstituteID: number = 0
   IMCRegID: number = 0
   isFormReadOnly = false;
   FinancialYearMasterDDL: any;
@@ -65,6 +66,7 @@ export class AddItiIMCFundComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    this.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.formData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
 
     await this.commonMasterService.GetFinancialYear().then((data: any) => {
@@ -74,7 +76,7 @@ export class AddItiIMCFundComponent {
       this.FinancialYearMasterDDL = data.Data;
     })
 
-    await this.commonMasterService.ItiTrade().then((data: any) => {
+    await this.commonMasterService.ItiTrade(0,0,0, this.InstituteID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
 
       
@@ -240,6 +242,7 @@ export class AddItiIMCFundComponent {
     await this.GetAllIMCFundData();
 
   }
+
 
 
   async onItemSelect() {

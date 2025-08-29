@@ -195,10 +195,10 @@ export class BranchWiseHodComponent {
       const isSSOID = this.ApplyList.some((x: { SSOID: string }) =>
         x.SSOID === this.SSOIDFormGroup.value.SSOID
       );
-      if (this.IIPMasterFormGroup.invalid || isSSOID) {
-        this.toastr.warning("Not Exists SSOID");
-        return
-      }
+      //if (this.IIPMasterFormGroup.invalid || isSSOID) {
+      //  this.toastr.warning("Not Exists SSOID");
+      //  return
+      //}
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.SSOID = this.SSOIDFormGroup.value.SSOID;
