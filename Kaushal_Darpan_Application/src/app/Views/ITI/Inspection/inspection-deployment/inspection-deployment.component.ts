@@ -85,7 +85,7 @@ export class InspectionDeploymentComponent {
     }));
   }
 
-  get _InspectionDeploymentFromGroup() { return this.InspectionDeploymentFromGroup.controls; }
+  get _InspectionDeploymentFromGroup() {return this.InspectionDeploymentFromGroup.controls;}
 
   async getMasterData() {
     try {
@@ -116,7 +116,6 @@ export class InspectionDeploymentComponent {
       console.error(error);
     }
   }
-
 
   GetInstituteMaster_ByDistrictWise(ID: any) {
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'

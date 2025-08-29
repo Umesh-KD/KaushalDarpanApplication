@@ -41,7 +41,7 @@ export class ItiCenterObserverDeploymentComponent {
   public TimeTableList: any = [];
 
 allowedDates: string[] = [];
-
+  public CourseTypeID = 0;
   constructor(
     private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -54,20 +54,44 @@ allowedDates: string[] = [];
   ) { }
 
   async ngOnInit() { 
-    this.CenterObserverDeployForm = this.fb.group({
-      DistrictID: ['', [DropdownValidators]],
-      InstituteID: ['', [DropdownValidators]],
-      DeploymentDate: ['', Validators.required],
-      //ShiftID: ['', [DropdownValidators]],
-    })
+  
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CenterObserverTeamID = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
     this.searchRequest.TeamID = this.CenterObserverTeamID
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.CourseTypeID = this.searchRequest.Eng_NonEng;
+
+    this.CenterObserverDeployForm = this.fb.group({
+      DistrictID: ['', [DropdownValidators]],
+      InstituteID: ['', [DropdownValidators]],
+      DeploymentDate: ['', Validators.required]
+    });
+
+
     if(this.CenterObserverTeamID) {
       await this.GetDeploymentDetailsByID();
     }
+    if (this.CourseTypeID == 1) {
+      await this.GetInstituteMaster_ByDistrictWise(1);
+    }
+
+    debugger;
+
+  
+    //if (this.CourseTypeID == 1) {
+    //  this.CenterObserverDeployForm = this.fb.group({
+    //    InstituteID: ['', [DropdownValidators]],
+    //    DeploymentDate: ['', [DropdownValidators]]
+    //  });
+    //} else {
+    //  this.CenterObserverDeployForm = this.fb.group({
+    //    DistrictID: ['', [DropdownValidators]],
+    //    InstituteID: ['', [DropdownValidators]],
+    //    DeploymentDate: ['', [DropdownValidators]]
+    //  });
+    //}
+
     this.getMasterData();
     await this.GetAllTimeTableData();
     await this.GetTimeTableDates();
@@ -146,7 +170,9 @@ checkValidDate(event: Event): void {
 
   async AddDeployment() {
     this.isSubmitted = true;
+    debugger;
 
+    this.RefereshValoidators();
     if (this.CenterObserverDeployForm.invalid) {
       return;
     }
@@ -185,7 +211,9 @@ checkValidDate(event: Event): void {
       return;
     } else {
       this.requestDeploy.InstituteName = this.InstituteMasterDDL.find((x: any) => x.CenterID == this.requestDeploy.InstituteID).CenterName;
-      this.requestDeploy.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.requestDeploy.DistrictID).Name;
+      if (this.CourseTypeID != 1) {
+        this.requestDeploy.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.requestDeploy.DistrictID).Name;
+      }
       //this.requestDeploy.ShiftName = this.ExamShiftDDL.find((x: any) => x.ShiftID == this.requestDeploy.ShiftID).ExamShift;
       this.AddedDeploymentList.push(this.requestDeploy);
       this.requestDeploy = new DeploymentDataModel();
@@ -301,5 +329,15 @@ checkValidDate(event: Event): void {
         this.loaderService.requestEnded();
       }, 200)
     }
+  }
+
+  async RefereshValoidators() {
+    if (this.CourseTypeID == 1) {
+      this.CenterObserverDeployForm.controls['DistrictID'].clearValidators()
+    } else {
+      
+      this.CenterObserverDeployForm.controls['DistrictID'].setValidators([DropdownValidators])
+    }
+    this.CenterObserverDeployForm.controls['DistrictID'].updateValueAndValidity()
   }
 }
