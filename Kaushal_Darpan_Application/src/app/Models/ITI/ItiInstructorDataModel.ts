@@ -63,7 +63,7 @@ export class ITI_InstructorDataModel {
   public Tan_No?:  string = '';
   public Employment_From?:  string = '';
   public Employment_To?:  string = '';
-  public Basic_Pay?: number = 0;
+  public Basic_Pay?: number ;
   public IsDomicile: boolean = false;
   public Aadhar: string = '';
   public JanAadhar: string = '';
@@ -96,7 +96,7 @@ export class ITI_InstructorEmploymentDetails {
   public Tan_No?: string = '';
   public Employment_From?: string = '';
   public Employment_To?: string = '';
-  public Basic_Pay?: number = 0;
+  public Basic_Pay?: number ;
   public EmploymentDocument?: string = '';
   //public IsDomicile: boolean = false;
   //public Aadhar: string = '';

@@ -209,23 +209,23 @@ export class ItiInstructorFormComponent {
         ddlDistrict: ['', [DropdownValidators]],
         PropTehsilID: [''],
         PropUrbanRural: [''],
-        City: [''],
-        villageID: [''],
-        pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        City: ['', Validators.required],
+        villageID: ['', Validators.required],
+        pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
         //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Correspondence Address
         Correspondence_PlotHouseBuildingNo: ['', Validators.required],
-        Correspondence_StreetRoadLane: [''],
-        Correspondence_AreaLocalitySector: [''],
-        Correspondence_LandMark: [''],
+        Correspondence_StreetRoadLane: ['', Validators.required],
+        Correspondence_AreaLocalitySector: ['', Validators.required],
+        Correspondence_LandMark: ['', Validators.required],
         Correspondence_ddlState: ['', [DropdownValidators]],
         Correspondence_ddlDistrict: ['', [DropdownValidators] ],
         Correspondence_PropTehsilID: ['', [DropdownValidators]],
         Correspondence_PropUrbanRural: [''],
         Correspondence_City: ['', Validators.required],
-        Correspondence_villageID: [''],
-        Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        Correspondence_villageID: ['', Validators.required],
+        Correspondence_pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Educational Qualification
         Education_Exam: [''],
@@ -249,7 +249,7 @@ export class ItiInstructorFormComponent {
         Employer_Name: [''],
         Employer_Address: [''],
         Tan_No: [''],
-        Aadhar: ['', Validators.pattern(GlobalConstants.AadhaarPattern)],
+        Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
         JanAadhar: [''],
         Employment_From: [''],
         Employment_To: [''],
@@ -262,9 +262,9 @@ export class ItiInstructorFormComponent {
     this.EducationForm = this.formBuilder.group({
       Education_Exam: ['', Validators.required],
       Education_Board: ['', Validators.required],
-      Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
+      Education_Year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
       Education_Subjects: ['', Validators.required],
-      Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
+      Education_Percentage: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       EducationDocument: ['', Validators.required]
     });
 
@@ -273,8 +273,8 @@ export class ItiInstructorFormComponent {
       Tech_Exam: ['', Validators.required],
       Tech_Board: ['', Validators.required],
       Tech_Subjects: ['', Validators.required],
-      Tech_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
+      Tech_Year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
+      Tech_Percentage: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
       TechDocument: ['', Validators.required]
     });
 
@@ -1013,6 +1013,7 @@ export class ItiInstructorFormComponent {
     this.TechnicalForm.reset();
     this.InstructorForm.reset();
     this.EmploymentForm.reset();
+    this.InstructorForm.controls['Uid'].enable();
   }
 
 
