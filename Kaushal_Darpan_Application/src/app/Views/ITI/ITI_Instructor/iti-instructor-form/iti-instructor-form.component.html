@@ -53,7 +53,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">
-                  Is Domicile of Rajasthan :<span class="StarMarking">*</span>
+                  Is Domicile of Rajasthan :
                 </label>
 
                 <div class="flex items-center gap-4">
@@ -152,7 +152,7 @@
                   <option value="Female">Female</option>
                   <option value="Other">Other</option>
                 </select>
-                <div *ngIf="isSubmitted && InstructorForm.controls.Gender.errors" class="text-danger">
+                <div *ngIf="isSubmitted && _InstructorForm.Gender.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
 
@@ -166,7 +166,7 @@
                   <option value="Unmarried">Unmarried</option>
                 </select>
 
-                <div *ngIf="isSubmitted && InstructorForm.controls.MaritalStatus.errors" class="text-danger">
+                <div *ngIf="isSubmitted && _InstructorForm.MaritalStatus.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
 
@@ -183,7 +183,7 @@
                   <option value="EWS">EWS</option>
                 </select>
 
-                <div *ngIf="isSubmitted && InstructorForm.controls.Category.errors" class="text-danger">
+                <div *ngIf="isSubmitted && _InstructorForm.Category.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
 
