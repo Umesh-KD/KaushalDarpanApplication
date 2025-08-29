@@ -29,6 +29,7 @@ export class DepartmentWiseRequestlistComponent implements OnInit {
   public formData = new ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel();
   public isSubmitted: boolean = false;
   groupForm!: FormGroup;
+  groupFormVRS!: FormGroup;
   public searchRequest = new RequestSearchModel();
   public searchRequestUpdateSSOIDByPricipleModel = new UpdateSSOIDByPricipleModel();
   staffDetailsFormData = new ITIGovtEMStaffMasterDataModel();
@@ -121,6 +122,16 @@ export class DepartmentWiseRequestlistComponent implements OnInit {
       txtLastworkingDate: [''],
       txtJoiningDate: [''],
     });
+
+    this.groupFormVRS = this.fb.group({
+      ddlStatus: [0, [DropdownValidators]],
+      txtRemark: [''],
+      txtIsEOL:[false],
+      txtIsEnquiries: [false],
+      txtEOLFromDate: [''],
+      txtEOLToDate: ['']
+    });
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
@@ -449,6 +460,39 @@ export class DepartmentWiseRequestlistComponent implements OnInit {
     }
   }
 
+  async onSubmitModel_VRS(model: any, userSubmitData: any) {
+     debugger
+     try {
+       this.RowlistData = { ...userSubmitData };
+       console.log(this.RequestUpdateStatus, "modal");
+       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+ 
+       //const lastWorkingDateControl = this.groupForm.get('txtLastworkingDate');
+ 
+       //if (!lastWorkingDateControl) {
+       //  return;
+       //}
+ 
+ 
+       //if (this.searchRequest.RequestType == 1) 
+       //  {
+       //  if (this.RequestUpdateStatus.StatusIDs === 247) {
+       //    lastWorkingDateControl.setValidators(Validators.required);
+       //  } else {
+       //    lastWorkingDateControl.clearValidators();
+       //  }
+ 
+       //  lastWorkingDateControl.updateValueAndValidity();
+       //}
+ 
+ 
+ 
+ 
+     } catch (error) {
+       console.error('Error fetching data:', error);
+     }
+   }
+
   async onUserRequestHistorylist(model: any, ServiceRequestId: number) {
     debugger
     try {
@@ -526,6 +570,62 @@ export class DepartmentWiseRequestlistComponent implements OnInit {
     }
   }
 
+
+  async updateReqStatusVRS() {
+    debugger
+    this.isSubmitted = true;
+    if (this.groupFormVRS.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.RequestUpdateStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.RequestUpdateStatus.ServiceRequestId = this.RowlistData.ServiceRequestId;
+      this.RequestUpdateStatus.RequestType = this.RowlistData.RequestTypeID;
+      this.RequestUpdateStatus.UserID = this.RowlistData.UserID;
+
+      if (this.searchRequest.RequestType == 1) {
+        await this.userRequestService.UserRequestUpdateStatus(this.RequestUpdateStatus)
+          .then(async (data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(this.Message)
+              this.CloseModal();
+              this.getlist();
+              this.RequestUpdateStatus = new RequestUpdateStatus();
+              //this.RequestUpdateStatus = new BTERRequestUpdateStatus();
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.Message)
+            }
+            else {
+              this.toastr.error(this.ErrorMessage)
+            }
+          })
+
+      } 
+
+
+
+
+
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  
 
   async RelievingLetter(UserID: number) {
     debugger

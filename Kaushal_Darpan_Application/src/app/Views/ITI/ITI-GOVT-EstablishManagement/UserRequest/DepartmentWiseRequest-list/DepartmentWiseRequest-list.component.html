@@ -126,6 +126,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">S No</th>
+            <th class="text-left">Staff Request Type</th>
             <th class="text-left">Request Type</th>
             <th class="text-left">User</th>
             <th class="text-left">Level</th>
@@ -149,6 +150,7 @@
         <tbody>
           <tr *ngFor="let row of UserRequestList; let idx=index;  ">
             <td align="left">{{idx+1}}</td>
+            <td align="left">{{ row.StaffRequestType }}</td>
             <td align="left">{{ row.RequestType }}</td>
             <td align="left">{{ row.UserName }}</td>
             <td align="left">{{ row.LevelName }}</td>
@@ -175,9 +177,11 @@
             <td align="left">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
-                <a *ngIf="RequestTypeSHowID == 2 &&  row.JoiningStatusId !=247" href="javascript:void(0);" title="Joining Request" (click)="onSubmitJoiningRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
-                <a *ngIf="row.RequestTypeID==1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
+                  <!-- Principal Approval -->
+                <a *ngIf="row.StaffRequestType != 'Transfer'  && row.RelievingStatusId != 247 && row.RequestTypeID == 2"  href="javascript:void(0);" title="VRS Approve By Principal" (click)="onSubmitModel_VRS(MyModel_VRS, row)"><i class="ti ti-check"></i></a>
+                <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 1  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Staff Request" (click)="onSubmitStaffRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
+                <a *ngIf="row.RequestTypeID === 1 && RequestTypeSHowID == 2 &&  row.JoiningStatusId !=247" href="javascript:void(0);" title="Joining Request" (click)="onSubmitJoiningRequest(MyModel_ReplayQuery, row)"><i class="ti ti-check"></i></a>
+                <a *ngIf="RequestTypeSHowID === 1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
                 <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.UserId)"><i class="ti ti-download"></i></a>
                 <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.UserId)"><i class="ti ti-download"></i></a>
               </div>
@@ -302,6 +306,7 @@
     </div>
   </div>
 </ng-template>
+
 <ng-template #MyModel_UserRequestHistory let-modal>
   <div class="modal-content">
     <div class="card">
@@ -374,4 +379,102 @@
 </ng-template>
 
 
+<ng-template #MyModel_VRS let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Uper level <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupFormVRS">
+        <div class="card-body">
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Status
+                <!--{{filteredStatusList|json}}-->
+                <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.StatusIDs" formControlName="ddlStatus" (change)="StatusWiseCondition()">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of filteredStatusList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupFormVRS.controls.ddlStatus.errors" class="text-danger">
+                <p *ngIf="!groupFormVRS.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+
+            <!-- <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+              <label class="inline-flex items-center">
+                <input type="checkbox"
+                       class="form-checkbox"
+                       [(ngModel)]="RequestUpdateStatus.IsEOL"
+                       formControlName="txtIsEOL"
+                       (change)="IsEOLValidation()"
+                       name="IsEOL" />
+                <span class="ml-2 text-gray-800 text-sm">Is Extra Ordinary Leave </span>
+              </label>
+            </div> -->
+
+            <!-- <div *ngIf="RequestUpdateStatus.StatusIDs==247 && groupFormVRS.get('txtIsEOL')?.value">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                From Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.EOLFromDate" formControlName="txtEOLFromDate">
+              <div *ngIf="isSubmitted && groupFormVRS.controls.txtEOLFromDate.errors" class="text-danger">
+                <p *ngIf="groupFormVRS.controls.txtEOLFromDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div> -->
+
+            <!-- <div *ngIf="RequestUpdateStatus.StatusIDs==247 && groupFormVRS.get('txtIsEOL')?.value">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                To Date: <span class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.EOLToDate" formControlName="txtEOLToDate">
+              <div *ngIf="isSubmitted && groupFormVRS.controls.txtEOLToDate.errors" class="text-danger">
+                <p *ngIf="groupFormVRS.controls.txtEOLToDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div> -->
+
+
+            <!-- <div *ngIf="RequestUpdateStatus.StatusIDs==247">
+              <label class="inline-flex items-center">
+                <input type="checkbox"
+                       class="form-checkbox"
+                       [(ngModel)]="RequestUpdateStatus.IsEnquiries"
+                       formControlName="txtIsEnquiries"
+                       (change)="IsEnquiriesValidation()"
+                       name="IsEnquiries" />
+                <span class="ml-2 text-gray-800 text-sm">Is Enquiries </span>
+              </label>
+            </div> -->
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Comments <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input w-full resize-none"
+                        rows="4"
+                        [(ngModel)]="RequestUpdateStatus.Remark"
+                        formControlName="txtRemark"
+                        placeholder="Enter your remarks here..."></textarea>
+              <div *ngIf="isSubmitted && groupFormVRS.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupFormVRS.controls.txtRemark.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
+
+
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatusVRS()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>
 

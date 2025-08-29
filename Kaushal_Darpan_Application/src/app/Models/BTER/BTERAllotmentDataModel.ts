@@ -51,6 +51,7 @@ export class BTERSearchModel {
   public DistrictID: number = 0
   public ManagementTypeID: number = 0
   public RoleID: number = 0
+  public IsDownload?: boolean = false
 }
 
 export class BTERAllotmentCounterDataModel {

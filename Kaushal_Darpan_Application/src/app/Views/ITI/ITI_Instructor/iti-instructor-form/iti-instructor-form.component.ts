@@ -189,16 +189,16 @@ export class ItiInstructorFormComponent {
       {
         // Personal Details
         Uid: ['', Validators.required],
-        IsDomicile: [false, Validators.required] ,
+        IsDomicile: [false] ,
         Name: ['', Validators.required],
         FatherOrHusbandName: ['', Validators.required],
         MotherName: ['', Validators.required],
         Dob: ['', Validators.required],
-        Gender: ['', [DropdownValidators]],
-        MaritalStatus: ['', [DropdownValidators]],
-        Category: ['', [DropdownValidators]],
-        Mobile: ['', Validators.pattern(GlobalConstants.MobileNumberPattern)],
-        Email: ['', Validators.pattern(GlobalConstants.EmailPattern)],
+        Gender: ['', Validators.required],
+        MaritalStatus: ['', Validators.required],
+        Category: ['', Validators.required],
+        Mobile: ['', Validators.required],
+        Email: ['', Validators.required],
 
         // Permanent Address
         PlotHouseBuildingNo: ['', Validators.required],
@@ -207,11 +207,11 @@ export class ItiInstructorFormComponent {
         LandMark: ['', Validators.required],
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
-        PropTehsilID: ['', [DropdownValidators]],
+        PropTehsilID: [''],
         PropUrbanRural: [''],
         City: ['', Validators.required],
-        villageID: ['', Validators.required],
-        pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        villageID: [''],
+        pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
         //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Correspondence Address
@@ -220,14 +220,14 @@ export class ItiInstructorFormComponent {
         Correspondence_AreaLocalitySector: ['', Validators.required],
         Correspondence_LandMark: ['', Validators.required],
         Correspondence_ddlState: ['', [DropdownValidators]],
-        Correspondence_ddlDistrict: ['', [DropdownValidators]],
+        Correspondence_ddlDistrict: ['', [DropdownValidators] ],
         Correspondence_PropTehsilID: ['', [DropdownValidators]],
         Correspondence_PropUrbanRural: [''],
         Correspondence_City: ['', Validators.required],
-        Correspondence_villageID: ['', Validators.required],
-        Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        Correspondence_villageID: [''],
+        Correspondence_pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
-        // Educational Qualification
+        //// Educational Qualification
         Education_Exam: [''],
         Education_Board: [''],
         Education_Year: [''],
@@ -235,7 +235,7 @@ export class ItiInstructorFormComponent {
         Education_Percentage: [''],
         QualificationDocument: [''],
 
-        // Technical Qualification
+        //// Technical Qualification
         Tech_Exam: [''],
         Tech_Board: [''],
         Tech_Subjects: [''],
@@ -244,53 +244,53 @@ export class ItiInstructorFormComponent {
         TechQualificationDocument: [''],
 
         // Employment Details
-        Pan_No: [''],
+        Pan_No: ['',],
         Employee_Type: [''],
         Employer_Name: [''],
         Employer_Address: [''],
         Tan_No: [''],
-        Aadhar: ['', Validators.pattern(GlobalConstants.AadhaarPattern)],
+        Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
         JanAadhar: [''],
         Employment_From: [''],
         Employment_To: [''],
-        Basic_Pay: ['', [Validators.min(0)]],
+        Basic_Pay: [''],
         EmploymentDocument: [''],
         TehsilName: ['', Validators.required]
       });
 
 
     this.EducationForm = this.formBuilder.group({
-      Education_Exam: ['', Validators.required],
-      Education_Board: ['', Validators.required],
+      Education_Exam: [''],
+      Education_Board: [''],
       Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Education_Subjects: ['', Validators.required],
+      Education_Subjects: [''],
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      QualificationDocument: ['', Validators.required]
+      EducationDocument: ['']
     });
 
 
     this.TechnicalForm = this.formBuilder.group({
-      Tech_Exam: ['', Validators.required],
-      Tech_Board: ['', Validators.required],
-      Tech_Subjects: ['', Validators.required],
-      Tech_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      TechQualificationDocument: ['', Validators.required]
+      Tech_Exam: [''],
+      Tech_Board: [''],
+      Tech_Subjects: [''],
+      Tech_Year: ['', [Validators.pattern('^[0-9]{4}$')]],
+      Tech_Percentage: ['', [ Validators.min(0), Validators.max(100)]],
+      TechDocument: ['']
     });
 
 
     this.EmploymentForm = this.formBuilder.group({
-      Pan_No: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
-      Employee_Type: ['', Validators.required],
-      Employer_Name: ['', Validators.required],
-      Employer_Address: ['', Validators.required],
-      Tan_No: ['', Validators.required],
+      Pan_No: ['', [ Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      Employee_Type: [''],
+      Employer_Name: [''],
+      Employer_Address: [''],
+      Tan_No: [''],
       //Aadhar: [''],
       //JanAadhar: [''],
       Employment_From: [''],
       Employment_To: [''],
-      Basic_Pay: ['', [Validators.min(0)]],
-      EmploymentDocument: ['', Validators.required]
+      Basic_Pay: [''],
+      EmploymentDocument: ['']
     });
 
 
@@ -448,8 +448,6 @@ export class ItiInstructorFormComponent {
     this.educationList.splice(index, 1);
   }
 
-
-
   addTechQualification() {
     if (!this.techRequest.Tech_Exam || !this.techRequest.Tech_Board) {
       alert("Please fill required fields before adding");
@@ -545,15 +543,36 @@ export class ItiInstructorFormComponent {
     this.isSubmitted = true;
     this.loaderService.requestStarted();
 
+
+    Object.keys(this.InstructorForm.controls).forEach(key => {
+
+      const control = this.InstructorForm.get(key);
+
+      if (control && control.invalid) {
+
+        this.toastr.error(`Control ${key} is invalid`);
+
+        Object.keys(control.errors!).forEach(errorKey => {
+
+          this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+
+        });
+
+      }
+
+    });
+
     try {
+
+   
+
+
       if (this.InstructorForm.valid) {
 
         var ssoid = this.request.Uid
         this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-
         this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
         this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-
         this.request.Uid = ssoid
         this.request.EmploymentDetails = this.employeeRequestList;
         this.request.TechnicalQualifications = this.techRequestList;
@@ -577,6 +596,10 @@ export class ItiInstructorFormComponent {
         console.log('Request Data:', this.request);
       } else {
         console.log('Form is invalid');
+        console.log(this.InstructorForm.errors);
+        Object.keys(this.InstructorForm.controls).forEach(key => {
+          console.log(key, this.InstructorForm.get(key)?.errors);
+        });
         this.InstructorForm.markAllAsTouched();
       }
     }
@@ -592,6 +615,8 @@ export class ItiInstructorFormComponent {
 
 
   async GetById(ID: string) {
+
+    debugger
 
     try {
       if (ID == "") {
@@ -623,7 +648,6 @@ export class ItiInstructorFormComponent {
             }
             if (data['Data']['Table3'] && data['Data']['Table3'].length > 0) {
               this.techRequestList = data['Data']['Table3']
-
             }
 
             this.EducationForm.disable()
@@ -649,9 +673,9 @@ export class ItiInstructorFormComponent {
     }
   }
 
-  async changeUrbanRural() {
-    // this.GetGramPanchayatSamiti()
-  }
+  //async changeUrbanRural() {
+  //  // this.GetGramPanchayatSamiti()
+  //}
 
 
   numberOnly(event: KeyboardEvent): boolean {
@@ -670,7 +694,7 @@ export class ItiInstructorFormComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
-
+    debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -821,7 +845,6 @@ export class ItiInstructorFormComponent {
           this.toastr.success('OTP sent Successfully')
           this.ResposeOTPModel = data['Data'];
           this.openModalGenerateOTP(this.modal_GenrateOTP, row);
-
         }
         else {
           this.toastr.error(this.ErrorMessage)
@@ -857,7 +880,6 @@ export class ItiInstructorFormComponent {
               this.IsShowDropdown = false;
               this.Address = data.Data.Address;
               await this.FillMemberDetails();
-
               this.toastr.success("Succesfully Verified")
             }
             else {
@@ -884,7 +906,6 @@ export class ItiInstructorFormComponent {
   startTimer(): void {
     this.showResendButton = false;
     this.timeLeft = GlobalConstants.DefaultTimerOTP * 60;
-
 
     this.interval = setInterval(() => {
       if (this.timeLeft > 0) {
@@ -972,11 +993,11 @@ export class ItiInstructorFormComponent {
             if (this.State == EnumStatus.Success) {
               if (Type == "EducationType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.educationRequest.QualificationDocument = data['Data'][0]["FileName"];
+                this.educationRequest.EducationDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "TechType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.techRequest.TechQualificationDocument = data['Data'][0]["FileName"];
+                this.techRequest.TechDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "EmpType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
@@ -1004,6 +1025,16 @@ export class ItiInstructorFormComponent {
       /*  }, 200);*/
     }
   }
+
+  Back() {
+    this.isSSOVisible = false;
+    this.EducationForm.reset();
+    this.TechnicalForm.reset();
+    this.InstructorForm.reset();
+    this.EmploymentForm.reset();
+    this.InstructorForm.controls['Uid'].enable();
+  }
+
 
 
 }
