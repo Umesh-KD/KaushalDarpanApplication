@@ -3,7 +3,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { UserRequestModel } from '../../Models/UserRequestDataModel';
-import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
+import { BterRequestSearchModel, RequestSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_EM_UnlockProfileDataModel } from '../../Models/ITI/UserRequestModel';
 import { Bter_Govt_EM_SanctionedPostBasedInstituteSearchDataModel,  BTERRequestUpdateStatus, BterStaffUserRequestReportSearchModel, RequestUpdateStatus, } from '../../Models/ITIGovtEMStaffMasterDataModel';
 import { BTER_EM_UnlockProfileDataModel } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
@@ -79,6 +79,7 @@ export class UserRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  
   public async UserRequestUpdateStatus(searchRequest: RequestUpdateStatus) {
     var body = JSON.stringify(searchRequest);
 
@@ -188,6 +189,15 @@ export class UserRequestService {
     var body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/GetBter_GetStaffDetailsVRS`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+    public async GetITI_GetStaffDetailsVRS(searchRequest: ITI_EM_UnlockProfileDataModel) {
+    var body = JSON.stringify(searchRequest);
+      debugger  
+    return await this.http.post(`${this.APIUrl}/GetITI_GetStaffDetailsVRS`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
