@@ -34,7 +34,12 @@ export class CenterSuperitendentExamReportModel {
     otherFutureExamSuggestions: string = '';
     ExamCenterCommentDocument: string = '';
 
-    flyingSquadDetails: string = '';
+  flyingSquadDetails: string = '';
+  InstituteID: number = 0
+  UserID: number = 0
+  ExamDate: string = ''
+  EndTermID:number=0
+  CourseType:number=0
 }
 
 // export class ExamScheduleGroup {
