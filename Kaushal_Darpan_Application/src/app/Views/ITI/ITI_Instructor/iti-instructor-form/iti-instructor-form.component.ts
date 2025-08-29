@@ -197,8 +197,8 @@ export class ItiInstructorFormComponent {
         Gender: ['', [DropdownValidators]],
         MaritalStatus: ['', [DropdownValidators]],
         Category: ['', [DropdownValidators]],
-        Mobile: ['', Validators.pattern(GlobalConstants.MobileNumberPattern)],
-        Email: ['', Validators.pattern(GlobalConstants.EmailPattern)],
+        Mobile: ['', Validators.required],
+        Email: ['', Validators.required],
 
         // Permanent Address
         PlotHouseBuildingNo: ['', Validators.required],
@@ -207,11 +207,11 @@ export class ItiInstructorFormComponent {
         LandMark: ['', Validators.required],
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
-        PropTehsilID: ['', [DropdownValidators]],
+        PropTehsilID: [''],
         PropUrbanRural: [''],
         City: ['', Validators.required],
         villageID: ['', Validators.required],
-        pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
         //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Correspondence Address
@@ -220,12 +220,12 @@ export class ItiInstructorFormComponent {
         Correspondence_AreaLocalitySector: ['', Validators.required],
         Correspondence_LandMark: ['', Validators.required],
         Correspondence_ddlState: ['', [DropdownValidators]],
-        Correspondence_ddlDistrict: ['', [DropdownValidators]],
+        Correspondence_ddlDistrict: ['', [DropdownValidators] ],
         Correspondence_PropTehsilID: ['', [DropdownValidators]],
         Correspondence_PropUrbanRural: [''],
         Correspondence_City: ['', Validators.required],
         Correspondence_villageID: ['', Validators.required],
-        Correspondence_pincode: ['', [Validators.pattern('^[0-9]{6}$')]],
+        Correspondence_pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
 
         // Educational Qualification
         Education_Exam: [''],
@@ -244,16 +244,16 @@ export class ItiInstructorFormComponent {
         TechQualificationDocument: [''],
 
         // Employment Details
-        Pan_No: [''],
+        Pan_No: ['',],
         Employee_Type: [''],
         Employer_Name: [''],
         Employer_Address: [''],
         Tan_No: [''],
-        Aadhar: ['', Validators.pattern(GlobalConstants.AadhaarPattern)],
+        Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
         JanAadhar: [''],
         Employment_From: [''],
         Employment_To: [''],
-        Basic_Pay: ['', [Validators.min(0)]],
+        Basic_Pay: [''],
         EmploymentDocument: [''],
         TehsilName: ['', Validators.required]
       });
@@ -262,10 +262,10 @@ export class ItiInstructorFormComponent {
     this.EducationForm = this.formBuilder.group({
       Education_Exam: ['', Validators.required],
       Education_Board: ['', Validators.required],
-      Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
+      Education_Year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
       Education_Subjects: ['', Validators.required],
-      Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      QualificationDocument: ['', Validators.required]
+      Education_Percentage: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      EducationDocument: ['', Validators.required]
     });
 
 
@@ -273,9 +273,9 @@ export class ItiInstructorFormComponent {
       Tech_Exam: ['', Validators.required],
       Tech_Board: ['', Validators.required],
       Tech_Subjects: ['', Validators.required],
-      Tech_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      TechQualificationDocument: ['', Validators.required]
+      Tech_Year: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
+      Tech_Percentage: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      TechDocument: ['', Validators.required]
     });
 
 
@@ -287,9 +287,9 @@ export class ItiInstructorFormComponent {
       Tan_No: ['', Validators.required],
       //Aadhar: [''],
       //JanAadhar: [''],
-      Employment_From: [''],
-      Employment_To: [''],
-      Basic_Pay: ['', [Validators.min(0)]],
+      Employment_From: ['', Validators.required],
+      Employment_To: ['', Validators.required],
+      Basic_Pay: ['', Validators.required],
       EmploymentDocument: ['', Validators.required]
     });
 
@@ -593,6 +593,8 @@ export class ItiInstructorFormComponent {
 
   async GetById(ID: string) {
 
+    debugger
+
     try {
       if (ID == "") {
         this.toastr.error("Please Enter SSOID");
@@ -670,7 +672,7 @@ export class ItiInstructorFormComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
-
+    debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -972,11 +974,11 @@ export class ItiInstructorFormComponent {
             if (this.State == EnumStatus.Success) {
               if (Type == "EducationType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.educationRequest.QualificationDocument = data['Data'][0]["FileName"];
+                this.educationRequest.EducationDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "TechType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
-                this.techRequest.TechQualificationDocument = data['Data'][0]["FileName"];
+                this.techRequest.TechDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "EmpType") {
                 //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
@@ -1004,6 +1006,16 @@ export class ItiInstructorFormComponent {
       /*  }, 200);*/
     }
   }
+
+  Back() {
+    this.isSSOVisible = false;
+    this.EducationForm.reset();
+    this.TechnicalForm.reset();
+    this.InstructorForm.reset();
+    this.EmploymentForm.reset();
+    this.InstructorForm.controls['Uid'].enable();
+  }
+
 
 
 }

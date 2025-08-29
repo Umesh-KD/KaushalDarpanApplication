@@ -63,7 +63,7 @@ export class ITI_InstructorDataModel {
   public Tan_No?:  string = '';
   public Employment_From?:  string = '';
   public Employment_To?:  string = '';
-  public Basic_Pay?: number = 0;
+  public Basic_Pay?: number ;
   public IsDomicile: boolean = false;
   public Aadhar: string = '';
   public JanAadhar: string = '';
@@ -85,7 +85,7 @@ export class ITI_InstructorEducationalQualification {
   public Education_Year?: string = '';
   public Education_Subjects?: string = '';
   public Education_Percentage?: number;
-  public QualificationDocument?: string = '';
+  public EducationDocument?: string = '';
 }
 
 export class ITI_InstructorEmploymentDetails {
@@ -96,7 +96,7 @@ export class ITI_InstructorEmploymentDetails {
   public Tan_No?: string = '';
   public Employment_From?: string = '';
   public Employment_To?: string = '';
-  public Basic_Pay?: number = 0;
+  public Basic_Pay?: number ;
   public EmploymentDocument?: string = '';
   //public IsDomicile: boolean = false;
   //public Aadhar: string = '';
@@ -109,7 +109,7 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_Subjects?: string;
   public Tech_Year?: string;
   public Tech_Percentage?: number;
-  public TechQualificationDocument?: string = '';
+  public TechDocument?: string = '';
 }
 
 

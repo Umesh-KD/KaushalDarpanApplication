@@ -31,10 +31,10 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Request Type: <span class="StarMarking">*</span></label>
-              <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType">
+              <select class="form-select" id="ddlRequestType" [(ngModel)]="request.RequestType" formControlName="ddlRequestType" (change)="FunctionRequestType()">
                 <option value="0">--Select--</option>
                 <option value="1">Transfer</option>
-                <option value="2">Resignation</option>
+                <option value="2">VRS</option>
               </select>
               <div *ngIf="isSubmitted && _groupForm.ddlRequestType.errors" class="text-danger">
                 <p *ngIf="!_groupForm.ddlRequestType.errors.DropdownValidators">
@@ -44,8 +44,20 @@
               </div>
             </div>
 
+             <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Name </label>
+              <input type="text" class="form-input" id="txtEmployeeName" name="txtEmployeeName" formControlName="txtEmployeeName" [(ngModel)]="request.UserName" />
+            </div>
+            <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Designation </label>
+              <input type="text" class="form-input" id="txtEmployeeDesignation" name="txtEmployeeDesignation" formControlName="txtEmployeeDesignation" [(ngModel)]="request.EmployeeDesignation" />
+            </div>
+            <div *ngIf="getstatuId==2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Number </label>
+              <input type="text" class="form-input" id="txtEmployeeNumber" name="txtEmployeeNumber" formControlName="txtEmployeeNumber" [(ngModel)]="request.EmployeeNumber" />
+            </div>
 
-            <div>
+            <div  *ngIf="getstatuId!=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.LevelID" formControlName="ddlLevelID" (change)="GetOfficeList()">
                 <option value="0">--Select--</option>
@@ -60,7 +72,7 @@
             </div>
 
 
-            <div>
+            <div  *ngIf="getstatuId!=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="ddlOffice" (change)="OfficeITIWiseCollege()">
                 <option value="0">--Select--</option>
@@ -74,7 +86,7 @@
               </div>
             </div>
 
-            <div *ngIf="request.LevelID==2 && request.OfficeID== 11 ||  request.OfficeID== 15">
+            <div *ngIf="request.LevelID==2 && getstatuId!=2 &&  request.OfficeID== 11 ||  request.OfficeID== 15">
               <label>Division<span class="StarMarking">*</span></label>
               <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()"
                       [(ngModel)]="request.DivisionID">
@@ -91,7 +103,7 @@
             </div>
 
 
-            <div *ngIf="request.LevelID==2 && request.OfficeID== 11">
+            <div *ngIf="request.LevelID==2 && getstatuId!=2 && request.OfficeID== 11">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.InstituteID" formControlName="ddlITICollegeTrade">
                 <option value="0">Choose Option</option>
@@ -105,7 +117,7 @@
               </div>
             </div>
 
-            <div *ngIf="request.LevelID==2 && request.OfficeID== 15">
+            <div *ngIf="request.LevelID==2 && request.OfficeID== 15 && getstatuId!=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 District:<span class="StarMarking">*</span>
               </label>
@@ -125,7 +137,7 @@
             </div>
 
 
-            <div>
+            <div *ngIf="getstatuId !=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
               <select class="form-select" name="StaffType" id="ddlStaffType" formControlName="ddlStaffType"
                       [(ngModel)]="request.StaffTypeID">
@@ -141,7 +153,7 @@
             </div>
 
 
-            <div>
+            <div *ngIf="getstatuId !=2">
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
               <select class="form-select" [(ngModel)]="request.PostID" formControlName="ddlPost">
                 <option value="0">--Select--</option>
@@ -157,8 +169,12 @@
 
 
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                     for="AttachDocument_file">File</label>
+                <label *ngIf="getstatuId === 1 || getstatuId === 2"
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                     [attr.for]="getstatuId === 1 ? 'AttachDocument_signature' : 'AttachDocument_file'">
+                {{ getstatuId === 1 ? 'File' : 'Signature' }}
+              </label>
+              
               <div class="flex fileUploader">
                 <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                        id="AttachDocument_file" type="file" formControlName="Upload" (change)="onFilechange($event,'Photo')">
@@ -176,7 +192,7 @@
 
 
 
-            <div>
+            <div *ngIf="getstatuId !=2">
               <label for="txtOrderNo" class="text-gray-800 text-sm font-medium inline-block mb-2">Order No<span class="StarMarking">*</span></label>
               <input type="text" class="form-input" id="txtOrderNo" name="txtOrderNo" formControlName="txtOrderNo" [(ngModel)]="request.OrderNo" placeholder="Enter Order No">
               <div *ngIf="isSubmitted&&_groupForm.txtOrderNo.errors" class="text-danger">
@@ -184,7 +200,7 @@
               </div>
             </div>
 
-            <div>
+            <div *ngIf="getstatuId !=2">
               <label for="txtOrderDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
               <input type="date" class="form-input" id="txtOrderDate" name="txtOrderDate" formControlName="txtOrderDate" [(ngModel)]="request.OrderDate">
               <div *ngIf="isSubmitted&&_groupForm.txtOrderDate.errors" class="text-danger">
@@ -199,7 +215,13 @@
     </div>
   </div>-->
             <div>
-              <label for="txtRequestDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Date <span class="StarMarking">*</span></label>
+              <!-- <label for="txtRequestDate" class="text-gray-800 text-sm font-medium inline-block mb-2">Request Date <span class="StarMarking">*</span></label> -->
+              <label *ngIf="getstatuId === 1 || getstatuId === 2"
+                     [attr.for]="'txtRequestDate'"
+                     class="text-gray-800 text-sm font-medium inline-block mb-2">
+                {{ getstatuId === 1 ? 'Request Date' : 'Date of VRS application' }}
+                <span class="StarMarking">*</span>
+              </label>
               <input type="date" class="form-input" id="txtRequestDate" name="txtRequestDate" formControlName="txtRequestDate" [(ngModel)]="request.RequestDate">
               <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
@@ -223,6 +245,7 @@
           </div>
         </form>
         <div class="text-center">
+          <!-- <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button> -->
           <button type="button" (click)="SaveData()" class="btn bg-info text-white mt-6">Submit</button>
           <button type="button" (click)="ResetControl()" class="btn bg-danger text-white mt-6">Cancel</button>
         </div>
