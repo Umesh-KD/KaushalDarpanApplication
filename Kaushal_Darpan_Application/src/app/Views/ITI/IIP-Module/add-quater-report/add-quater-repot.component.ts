@@ -79,7 +79,7 @@ export class AddITIQuarterReportComponent {
       (this.formData.OtherRevenueAmt ?? 0);
 
 
-    this.formData.FundAvailableAmt = 250 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
+    this.formData.FundAvailableAmt = 25000000 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
   }
 
   ClcExpenditure() {
@@ -92,7 +92,7 @@ export class AddITIQuarterReportComponent {
       (this.formData.MaintenanceAmt ?? 0) +
       (this.formData.MiscellaneousAmt ?? 0);
 
-    this.formData.FundAvailableAmt = 250 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
+    this.formData.FundAvailableAmt = 25000000 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
   }
 
 
