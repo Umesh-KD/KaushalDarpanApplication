@@ -152,7 +152,7 @@
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    for="fileStudentPhoto">Supporting Document</label>
             <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              <input [disabled]="sSOLoginDataModel.RoleID != 224" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="fileStudentPhoto" type="file"  (change)="onFilechange($event)">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
@@ -367,7 +367,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Upload Document: <span class="StarMarking">*</span></label>
             </label>
             <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              <input [disabled]="sSOLoginDataModel.RoleID != 224" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="fileStudentPhoto1" type="file" (change)="onFilechangeUpload($event)" >
               <label for="fileStudentPhoto1">
                 <span>Choose File</span>
@@ -467,7 +467,7 @@
           </div>
 
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">
-            <div class="text-center">
+            <div *ngIf="sSOLoginDataModel.RoleID == 224" class="text-center">
               <button id="btnSave" class="btn btn-sm bg-info text-white" (click)="SaveData()" type="button">Submit</button>
               <button class="btn btn-sm bg-danger text-white" (click)="ResetControl()" type="button">Cancel</button>
             </div>

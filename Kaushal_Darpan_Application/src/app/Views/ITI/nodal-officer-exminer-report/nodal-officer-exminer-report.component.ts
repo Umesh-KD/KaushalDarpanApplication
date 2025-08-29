@@ -105,6 +105,9 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     this.isDetailsOfCoordinator = false;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    if (this.sSOLoginDataModel.RoleID != 224) {
+      this.AddNodalOfficerExminerFromGroup.disable()
+    }
     this.GetExamCenterList();
     this.GetDateTimeTable()
 
@@ -186,7 +189,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
       await this.commonMasterService.GetCommonMasterData('TimeTableDate', this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
+          debugger
           const ExamDate = new Date(data['Data'][0]['MaxDate']);
           const year = ExamDate.getFullYear();
           const month = String(ExamDate.getMonth() + 1).padStart(2, '0');
@@ -604,6 +607,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     this.formData.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.formData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
     this.formData.CreatedBy = this.sSOLoginDataModel.UserID;
+    this.formData.ExamCenterUnderYourAreaID = this.sSOLoginDataModel.DistrictID;
 /*    this.formData.Date = this.CheckDate*/
 
     //if (this.InspectExaminationCentersList.length == 0) {
