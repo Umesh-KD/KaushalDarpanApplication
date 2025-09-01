@@ -18,13 +18,95 @@
 
 <div class="card">
   <div class="card-body p-5">
+
+
+
+    <div  class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            वित्तीय वर्ष <span class="StarMarking">*</span>
+          </label>
+          <select [(ngModel)]="request.FinancialYearID"
+                  class="form-select" >
+
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                    [ngValue]="item.FinancialYearID">
+              {{ item.FinancialYearName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            महीना <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"
+                  id="MonthID"
+                  name="MonthID"
+                  [(ngModel)]="request.BeforeMonth">
+            <option value="0">Choose Option</option>
+            <option value="1">जनवरी</option>
+            <option value="2">फ़रवरी</option>
+            <option value="3">मार्च</option>
+            <option value="4">अप्रैल</option>
+            <option value="5">मई</option>
+            <option value="6">जून</option>
+            <option value="7">जुलाई</option>
+            <option value="8">अगस्त</option>
+            <option value="9">सितंबर</option>
+            <option value="10">अक्टूबर</option>
+            <option value="11">नवंबर</option>
+            <option value="12">दिसंबर</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            जिला <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"
+                  id="PlacementCompanyID"
+                  name="PlacementCompanyID"
+                  [(ngModel)]="request.DistrictID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DistrictList" [value]="item.ID">
+              {{ item.Name }}
+            </option>
+          </select>
+        </div>
+        <div>
+
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>PMNAM Mela Report List </b>
-      <div class="flex justify-end flex-wrap items-center">
-        <a (click)="GoToReportEntryPage()" *ngIf="SSOLoginDataModel.RoleID == 97" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
-        <a (click)="DownloadPmnamMelaReport()" *ngIf="SSOLoginDataModel.RoleID == 97" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+
+      <div>
+        <div class="flex justify-end flex-wrap items-center">
+          <a (click)="GoToReportEntryPage()" *ngIf="SSOLoginDataModel.RoleID == 97" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+          <a (click)="DownloadPmnamMelaReport()" *ngIf="SSOLoginDataModel.RoleID == 97" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+        </div>
+
+        <div class="flex justify-end flex-wrap items-end">
+          <a (click)="DownloadPmnamMelaReport()" *ngIf="SSOLoginDataModel.RoleID != 97" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
+        </div>
       </div>
+
     </div>
+
+
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize">
@@ -39,7 +121,7 @@
       <div class="">
       </div>
       <div class="">
-        <input class="form-input" placeholder="Search..."  [(ngModel)]="Table_SearchText" />
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
@@ -57,7 +139,7 @@
             <!--<th class="text-left">#</th>-->
             <th class="text-left">दिनांक</th>
             <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों की संख्या</th>
- 
+
             <th class="text-left">पोर्टल पर पंजीकृत प्रतिष्ठानों में सीटों की संख्या</th>
             <th class="text-left">पोर्टल पर नियोंजित शिक्षुओं की संख्या</th>
             <th class="text-left">दिनांक</th>
@@ -99,7 +181,7 @@
 
 
       <!--pagination-->
-      <div class="p-3 paginationBox flex items-center justify-end w-full" >
+      <div class="p-3 paginationBox flex items-center justify-end w-full">
         <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
         <div class="paginationBoxItems flex items-center">
           <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
