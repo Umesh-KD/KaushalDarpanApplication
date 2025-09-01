@@ -13,6 +13,9 @@ import { ITIIIPManageService } from '../../../../Services/ITI/ITI-IIPModule/iti-
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { EnumDepartment, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+
 
 @Component({
   selector: 'add-imc-fund',
@@ -23,23 +26,24 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 
 export class AddITIQuarterReportComponent {
-  public formData = new IMCFundRevenue()
+  public formData: IMCFundRevenue  = new IMCFundRevenue()
   isFormSubmitted: boolean = false
   sSOLoginDataModel = new SSOLoginDataModel();
   FundID: number = 0
   InstalmentPaidAmt: number = 0
   FinancialYearID: number = 0
   IMCRegID: number = 0
+  QuaterlyProgressID: number = 0
   isFormReadOnly = false;
   FinancialYearMasterDDL: any;
   TradeMasterDDL: any[] = [];
   IIPFundData: any = [];
   public settingsMultiselector: object = {};
   public SelectedTradeMasterList: any = []
+  modalReference: NgbModalRef | undefined;
 
 
-
-  constructor(private toastr: ToastrService, private loaderService: LoaderService, private IIPManageService: ITIIIPManageService, private router: Router, private activatedRoute: ActivatedRoute, private commonMasterService: CommonFunctionService,) { }
+  constructor(private toastr: ToastrService, private loaderService: LoaderService, private IIPManageService: ITIIIPManageService, private router: Router, private activatedRoute: ActivatedRoute, private commonMasterService: CommonFunctionService, private modalService: NgbModal, private Swal2: SweetAlert2) { }
 
   async ngOnInit() {
 
@@ -53,7 +57,17 @@ export class AddITIQuarterReportComponent {
 
       this.FundID = params['IMCFundID'];
       console.log("this.IMCFundID:", this.FundID);
+
+      this.QuaterlyProgressID = params['QuaterlyProgressID'];
+      debugger;
+      if (this.QuaterlyProgressID > 0) {
+
+        this.CloseModalPopup();
+        this.GetQuaterlyProgressData(this.QuaterlyProgressID);
+      }
     });
+
+
 
  
   }
@@ -65,7 +79,7 @@ export class AddITIQuarterReportComponent {
       (this.formData.OtherRevenueAmt ?? 0);
 
 
-    this.formData.FundAvailableAmt = 250 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
+    this.formData.FundAvailableAmt = 25000000 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
   }
 
   ClcExpenditure() {
@@ -78,7 +92,7 @@ export class AddITIQuarterReportComponent {
       (this.formData.MaintenanceAmt ?? 0) +
       (this.formData.MiscellaneousAmt ?? 0);
 
-    this.formData.FundAvailableAmt = 250 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
+    this.formData.FundAvailableAmt = 25000000 + (this.formData.TotalRevenueAmt ?? 0) - (this.formData.TotalExpenditureAmt ?? 0) - this.InstalmentPaidAmt;
   }
 
 
@@ -127,11 +141,6 @@ export class AddITIQuarterReportComponent {
     }
   }
 
-
-  isQuarterDisabled(quarterId: number): boolean {
-    return this.IIPFundData?.some((x: any) => x.QuarterID === quarterId);
-  }
-
   async GetQuaterlyProgressData(id: number) {
 
     try {
@@ -140,9 +149,12 @@ export class AddITIQuarterReportComponent {
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
         debugger;
-        if (data.State === EnumStatus.Success) {
-          this.formData = data.Data
-
+        if (data.State === EnumStatus.Success)
+        {
+          this.formData = data.Data[0];
+          console.log("formData", this.formData)
+          console.log("formData", this.formData.InterestReceivedAmt)
+          console.log("formData", typeof this.formData.InterestReceivedAmt)
           // In ngOnInit or wherever request is populated
           //this.formData.RegDate =  this.formatDateToInput(this.formData.RegDate);
           this.isFormReadOnly = true;
@@ -166,8 +178,9 @@ export class AddITIQuarterReportComponent {
     }
   }
 
-
-
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
 
 
 }

@@ -474,3 +474,9 @@ export class Bter_Govt_EM_UserRequestHistoryListSearchDataModel {
   StaffID: number = 0;
 
 }
+
+export class StaffHostelSearchModel extends RequestBaseModel {
+  public StaffID?: number = 0
+  public StaffUserID?: number = 0
+  public StaffHostelIDs?: string = ''
+}

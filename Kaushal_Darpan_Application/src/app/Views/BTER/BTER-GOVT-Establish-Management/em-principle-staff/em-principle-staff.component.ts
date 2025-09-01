@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus } from '../../../../Common/GlobalConstants';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -37,6 +37,7 @@ export class EMPrincipleStaffComponent {
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
+
   public UserProfileStatusHistoryList: any = [];
   public settingsMultiselect: object = {};
   public isSubmitted: boolean = false;
@@ -49,6 +50,7 @@ export class EMPrincipleStaffComponent {
   IsView: boolean = false
   public IsHideShow: boolean = false
   public GuestHouseNameList: any = [];
+  _EnumRole = EnumRole;
 
   PostList: any[] = [];
   public StaffLevelList: any = [];
@@ -70,6 +72,11 @@ export class EMPrincipleStaffComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  
+  public hostelSearchReq = new StaffHostelSearchModel();
+  public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
+  public staffHostelIDs: string = ''
+  public StaffIDforHostel: number = 0
 
 
   constructor(
@@ -979,6 +986,12 @@ async GetTechnicianDll() {
     this.isSubmitted = false;
   }
 
+  CloseModal_EditHostel() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.isSubmitted = false;
+  }
+
   async AddValidationStaffLevelNon() {
     if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
       this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
@@ -991,5 +1004,71 @@ async GetTechnicianDll() {
 
     }
     this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].updateValueAndValidity();
+  }
+
+  async GetStaff_HostelIDs(StaffID: number, StaffUserID: number) {
+    try {
+      this.loaderService.requestStarted();
+
+      this.hostelSearchReq.StaffID = StaffID;
+      this.hostelSearchReq.StaffUserID = StaffUserID;
+      this.hostelSearchReq.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.hostelSearchReq.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.hostelSearchReq.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.hostelSearchReq.RoleID = this.sSOLoginDataModel.RoleID
+
+      await this.bterEstablishManagementService.GetStaff_HostelIDs(this.hostelSearchReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          // this.StaffHostelDetails = data.Data;
+
+          this.StaffHostelDetails = this.HostelList.filter((hostel: any) =>
+            data.Data.some((selected: any) => selected.ID === hostel.ID)
+          );
+        }, (error: any) => console.error(error))
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async onEditHostel(model: any, row: any) {
+    try {
+      await this.GetHostelData();
+      await this.GetStaff_HostelIDs(row.StaffID, row.StaffUserID);
+      this.StaffIDforHostel = row.StaffID
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static',});
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async SaveHostelList() {
+    try {
+      if (this.StaffHostelDetails.length > 0) {
+        this.staffHostelIDs = this.StaffHostelDetails.map((item: any) => item.ID).join(',');
+      } else {
+        this.toastr.error("Please select at least one hostel")
+      }
+      this.hostelSearchReq.StaffID = this.StaffIDforHostel;
+      this.hostelSearchReq.StaffHostelIDs = this.staffHostelIDs;
+
+      await this.bterEstablishManagementService.SaveStaff_HostelIDs(this.hostelSearchReq)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            await this.CloseModal_EditHostel();
+          } else if (data.state === EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error))
+    } catch (error) {
+      console.error(error)
+    }
   }
 }

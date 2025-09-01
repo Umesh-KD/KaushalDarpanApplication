@@ -107,6 +107,15 @@ export class ITITimeTableService {
       ).toPromise();
   }
 
+  public async GetSampleCBTCenterITI(searchRequest: ITITimeTableSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetSampleCBTCenterITI`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async SaveImportExcelData(ImportExcelList: any) {
     const body = JSON.stringify(ImportExcelList);
     return await this.http.post(this.APIUrl + '/SaveImportExcelData', body, this.headersOptions)

@@ -89,9 +89,9 @@ export class ITINodalOfficerExminerReportService {
       ).toPromise();
   }
 
-  public async Generate_ITINodalOfficerExminerReport_ByID(id: number, InstituteID: number = 0, ExamDateTime:string) {
+  public async Generate_ITINodalOfficerExminerReport_ByID(id: number, DistrictID: number = 0, ExamDateTime:string) {
 
-    return await this.http.post(`${this.APIUrl}/Generate_ITINodalOfficerExminerReport_ByID/${id}/${InstituteID}/${ExamDateTime}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/Generate_ITINodalOfficerExminerReport_ByID/${id}/${DistrictID}/${ExamDateTime}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1,0 +1,21 @@
+/* src/app/excel-upload/excel-upload.component.css */
+.container {
+  padding: 16px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.actions button {
+  margin-right: 8px;
+}
+
+table {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+mat-card {
+  padding: 12px;
+}

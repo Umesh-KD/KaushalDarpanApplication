@@ -40,6 +40,9 @@ export class NodalOfficerExminerReportComponent implements OnInit {
   public NameOfExaminationCentreList: any = [];
   public InspectExaminationCentersList: ITIInspectExaminationCenters[] = [];
   public CheckDate: string = '';
+  public MaxDate: string = '';
+  public MinDate: string = '';
+ 
   public State: number = -1;
   public Message: any = [];
   public ErrorMessage: any = [];
@@ -66,8 +69,9 @@ export class NodalOfficerExminerReportComponent implements OnInit {
       //ddlStateID: ['', [DropdownValidators]],
 
   /*    ddlExamCenterUnderYourAreaID: [''],*/
-   /*   txtMediumQuestionPaperSent: [''],*/
-  /*    txtDate: [''],*/
+      /*   txtMediumQuestionPaperSent: [''],*/
+      txtDate: ['', Validators.required],
+      txtToDate: ['', Validators.required],
       RadioInspectTheExaminationCenters: [''],
       RadioCoordinatorReachOnTime: [''],
       RadioDetailsOfCoordinator: [''],
@@ -91,8 +95,8 @@ export class NodalOfficerExminerReportComponent implements OnInit {
       txtFutureExamSuggestions: ['', Validators.required ],
       SUpload: [''],
 
-      SDfile: new FormControl('', [ Validators.required]) ,
-      UploadDocumentfile: new FormControl('', [ Validators.required])
+      //SDfile: new FormControl('', [ ]) ,
+      //UploadDocumentfile: new FormControl('', [ ])
 
 
     })
@@ -101,16 +105,24 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     this.isDetailsOfCoordinator = false;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    if (this.sSOLoginDataModel.RoleID != 224) {
+      this.AddNodalOfficerExminerFromGroup.disable()
+    }
     this.GetExamCenterList();
+    this.GetDateTimeTable()
 
 
 
     this.CheckDate = this.activatedRoute.snapshot.queryParamMap.get('ExamDateTime') ?? '';
-    debugger
+    this.searchRequest.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('ExamDateTime') ?? 0);
+
     //if (this.CheckDate !='')
     //{
     await this.GetNodalCenter();
-    this.GetNodalReport(this.CheckDate)
+    if (this.searchRequest.ID > 0) {
+      this.GetNodalReport(this.searchRequest.ID)
+    }
+ 
 
 /*    }*/
 
@@ -169,7 +181,42 @@ export class NodalOfficerExminerReportComponent implements OnInit {
   //    }, 200);
   //  }
   //}
+  async GetDateTimeTable() {
 
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.GetCommonMasterData('TimeTableDate', this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          const ExamDate = new Date(data['Data'][0]['MaxDate']);
+          const year = ExamDate.getFullYear();
+          const month = String(ExamDate.getMonth() + 1).padStart(2, '0');
+          const day = String(ExamDate.getDate()).padStart(2, '0');
+          this.MaxDate = `${year}-${month}-${day}`;
+
+
+          const MinDate = new Date(data['Data'][0]['MinDate']);
+          const year1 = MinDate.getFullYear();
+          const month1 = String(MinDate.getMonth() + 1).padStart(2, '0');
+          const day1 = String(MinDate.getDate()).padStart(2, '0');
+          this.MinDate = `${year1}-${month1}-${day1}`;
+
+   
+       
+          console.log(this.MaxDate)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   async GetNodalCenter() {
@@ -177,11 +224,11 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
 
-      await this.commonMasterService.GetNodalCenter(this.sSOLoginDataModel.InstituteID)
+      await this.commonMasterService.GetNodalExamCenterDistrict(this.sSOLoginDataModel.DistrictID, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.NameOfExaminationCentreList = data['Data'];
-          
+          console.log(this.NameOfExaminationCentreList)
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -196,7 +243,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
 
 
 
-  async GetNodalReport(date:string) {
+  async GetNodalReport(Id:number) {
 
 
     this.isSubmitted = false;
@@ -204,7 +251,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
       this.loaderService.requestStarted();  
 
       //this.searchRequest.ID = ID;
-      this.searchRequest.Date = date
+      this.searchRequest.ID = Id
 
       await this.ITINodalOfficerExminerReportService.ITINodalOfficerExminerReport_GetDataByID(this.searchRequest)
         .then((data: any) => {
@@ -226,6 +273,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
           this.formData.FutureCentreRemarks = data['Data']['ITINodalOfficerExminerReports']['FutureCentreRemarks'];
           this.formData.FutureExamSuggestions = data['Data']['ITINodalOfficerExminerReports']['FutureExamSuggestions'];
           this.formData.InspectTheExaminationCenters = data['Data']['ITINodalOfficerExminerReports']['InspectTheExaminationCenters'];
+          this.formData.ToDate = data['Data']['ITINodalOfficerExminerReports']['ToDate'];
 
           if (this.formData.InspectTheExaminationCenters)
           {
@@ -243,9 +291,12 @@ export class NodalOfficerExminerReportComponent implements OnInit {
           this.formData.SupportingDocument_file = data['Data']['ITINodalOfficerExminerReports']['SupportingDocument_file'];
           this.formData.UploadDocument_file = data['Data']['ITINodalOfficerExminerReports']['UploadDocument_fileName'];
           this.InspectExaminationCentersList = data['Data']['InspectExaminationCentersList'];
+          this.formData.SupportingDocument_file = data['Data']['ITINodalOfficerExminerReports']['SupportingDocument_file'];
+          this.formData.UploadDocument_fileName = data['Data']['ITINodalOfficerExminerReports']['UploadDocument_fileName'];
         
 
-          this.GetNodalCenter()
+      /*    this.GetNodalCenter()*/
+          this.CoordinatorReachOnTimeCondition()
           //this.formData.DateofPostingEmp = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateofPostingEmp'])
              
 
@@ -265,6 +316,46 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     }
 
   }
+
+  async GetNodalReport1(Id: number) {
+
+
+    this.isSubmitted = false;
+    try {
+      this.loaderService.requestStarted();
+
+      //this.searchRequest.ID = ID;
+      this.searchRequest.ID = Id
+
+      await this.ITINodalOfficerExminerReportService.ITINodalOfficerExminerReport_GetDataByID(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          debugger
+
+
+          this.InspectExaminationCentersList = data['Data']['InspectExaminationCentersList'];
+
+          //this.formData.DateofPostingEmp = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateofPostingEmp'])
+
+
+
+          const btnSave = document.getElementById('btnSave')
+          if (btnSave) btnSave.innerHTML = "Update";
+          const btnReset = document.getElementById('btnReset')
+          if (btnReset) btnReset.innerHTML = "Cancel";
+
+        }, error => console.error(error));
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
 
 
   async GetNodalReportDetails(ID: number) {
@@ -290,6 +381,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
           this.InspectExaminationCentersData.TotalNumberOfCandidatesEnrolled = data['Data']['TotalNumberOfCandidatesEnrolled'];
           this.InspectExaminationCentersData.VivaConducted = data['Data']['VivaConducted'];   
           this.InspectExaminationCentersData.ID = data['Data']['ID'];  
+       
           //this.formData.DateofPostingEmp = this.dateSetter(data['Data']['iTIGovtEMStaffPersonalDetails']['DateofPostingEmp'])
 
 
@@ -449,7 +541,7 @@ export class NodalOfficerExminerReportComponent implements OnInit {
                 if (data.State === EnumStatus.Success) {
                   this.toastr.success(data.Message);
                   this.InspectExaminationCentersData = new ITIInspectExaminationCenters();
-                  this.GetNodalReport(this.CheckDate);
+                  this.GetNodalReport(this.searchRequest.ID);
                   }
                   else {
                     this.toastr.error(this.ErrorMessage)
@@ -515,7 +607,8 @@ export class NodalOfficerExminerReportComponent implements OnInit {
     this.formData.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.formData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
     this.formData.CreatedBy = this.sSOLoginDataModel.UserID;
-    this.formData.Date = this.CheckDate
+    this.formData.ExamCenterUnderYourAreaID = this.sSOLoginDataModel.DistrictID;
+/*    this.formData.Date = this.CheckDate*/
 
     //if (this.InspectExaminationCentersList.length == 0) {
     //  this.toastr.error("कृपया परीक्षा केन्द्र का नाम चुनें.");
@@ -580,6 +673,9 @@ export class NodalOfficerExminerReportComponent implements OnInit {
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);         
           this.InspectExaminationCentersData = new ITIInspectExaminationCenters();
+
+          this.GetNodalReport1(this.searchRequest.ID)
+
  /*         this.GetNodalReport(this.CheckID);*/
           const btnSave = document.getElementById('btnAdd')
           if (btnSave) btnSave.innerHTML = "Add";
@@ -729,16 +825,16 @@ export class NodalOfficerExminerReportComponent implements OnInit {
       this.AddNodalOfficerExminerFromGroup.controls['txtReason'].setValidators(Validators.required)
     }
 
-    if (this.formData.AdditionalDetails == false) {
-      this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].clearValidators()
-    } else {
-      this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].setValidators(Validators.required)
-    }
+    //if (this.formData.AdditionalDetails == false) {
+    //  this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].clearValidators()
+    //} else {
+    //  this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].setValidators(Validators.required)
+    //}
 
 
     this.AddNodalOfficerExminerFromGroup.controls['txtCoordinatorNotReached'].updateValueAndValidity();
     this.AddNodalOfficerExminerFromGroup.controls['txtReason'].updateValueAndValidity();
-    this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].updateValueAndValidity();
+/*    this.AddNodalOfficerExminerFromGroup.controls['UploadDocumentfile'].updateValueAndValidity();*/
 
     //if (this.request.UrbanRural == 76) {
     //  this.instituteForm.controls['Administrative'].clearValidators();

@@ -30,7 +30,7 @@
           <select class="form-select" id="ddlRequestType" [(ngModel)]="searchRequest.RequestType">
             <option value="0">--Select--</option>
             <option value="1">Transfer</option>
-            <option value="2">Resignation</option>
+            <option value="2">VRS</option>
           </select>
         </div>
         <div>
@@ -171,7 +171,7 @@
             <td align="left">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="row.RequestTypeID==1" href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
+                <a  href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-history"></i></a>
                 <a *ngIf="row.RequestStatusId==0  && row.RelievingStatusId !=247" href="javascript:void(0);" title="Edit" (click)="EditInfo(row.ServiceRequestId)"><i class="ti ti-pencil"></i></a>
                 <a *ngIf="row.RelievingStatusId==247 && row.JoiningStatusId ==247 && row.RequestTypeID==1" href="javascript:void(0);" title="Joining Letter" (click)="JoiningLetter(row.UserId)"><i class="ti ti-download"></i></a>
                 <a *ngIf="row.RequestTypeID==1 && row.RelievingStatusId==247" href="javascript:void(0);" title="Relieving Letter" (click)="RelievingLetter(row.UserId)"><i class="ti ti-download"></i></a>

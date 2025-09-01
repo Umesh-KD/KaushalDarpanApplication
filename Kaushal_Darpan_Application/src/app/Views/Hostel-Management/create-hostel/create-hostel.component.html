@@ -10,9 +10,7 @@
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Create Hostel</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
-        {{
- isUpdate ? 'Update Hostel' : 'Add Hostel'
-        }}
+        {{ isUpdate ? 'Update Hostel' : 'Add Hostel' }}
       </a>
     </div>
   </div>
@@ -35,15 +33,10 @@
           <label for="HostelName">Hostel Name: <span class="StarMarking">*</span></label>
           <input formControlName="txtHostelName" class="form-input" type="text" id="HostelName"
                  placeholder="Enter Hostel Name" [(ngModel)]="request.HostelName">
-
-
-
           <div *ngIf="isSubmitted && groupForm.controls.txtHostelName.errors" class="text-danger">
             <p *ngIf="groupForm.controls.txtHostelName.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
-
         </div>
-
         <div>
           <label>Hostel Type(For Gender)<span class="StarMarking">*</span></label>
           <select formControlName="ddlHostelType" class="form-select" id="HostelType" [(ngModel)]="request.HostelType">
@@ -54,8 +47,6 @@
             <p *ngIf="!groupForm.controls.ddlHostelType.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
           </div>
         </div>
-
-
         <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Phone Number: <span class="StarMarking">*</span> </label>
           <input type="text" class="form-input  form-control" id="PhoneNumber" value="XXXXXX3866"
@@ -67,7 +58,7 @@
         </div>-->
 
         <div>
-          <label for="Phone Number">Phone Number: <span class="StarMarking">*</span></label>
+          <label for="Phone Number">Hostel Contact Number: <span class="StarMarking">*</span></label>
           <input formControlName="txtPhoneNumber" class="form-input" type="tel" id="PhoneNumber"
                  placeholder="Enter Phone Number" [(ngModel)]="request.PhoneNumber" maxlength="10"
                  pattern="^[0-9]{10}$" required (input)="validatePhoneNumber($event)">
@@ -76,8 +67,6 @@
             <p *ngIf="groupForm.controls.txtPhoneNumber.errors.pattern"><i aria-hidden="true"></i>Contact No. must be digits only.!.</p>
           </div>
         </div>
-
-
         <div>
           <label for="Address">Address: <span class="StarMarking">*</span></label>
           <input formControlName="txtAddress" class="form-input" type="text" id="Address" placeholder="Enter Address"
@@ -99,46 +88,38 @@
 
       </div>
     </form>
-
-
-
-
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Hostel List</b>
-
     </div>
-
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-
           <tr>
-
             <th class="text-left">#</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Hostel Name</th>
             <th class="text-left">Hostel Type (For Gender)</th>
+            <!-- <th class="text-left">Total Capacity</th> -->
             <th class="text-left">Address</th>
             <th class="text-left">Phone Number</th>
-
-
             <th style="width:125px;">Action</th>
           </tr>
         </thead>
         <tbody>
-
-
           <tr *ngFor="let item of HostelList;let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{item.InstituteNameEnglish}}</td>
             <td>{{item.HostelName}}</td>
             <td>{{item.HostelTypeName}}</td>
+            <!-- <td>{{item.TotalCapacity}}</td> -->
             <td>{{item.Address}}</td>
             <td>{{item.PhoneNumber}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" (click)=" GetByID(item.HostelID)"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" (click)=" btnDeleteOnClick(item.HostelID)" title="Delete"><i class="ti ti-trash"></i></a>
+                <a href="javascript:void(0);" *ngIf="item.TotalCapacity > 0"
+                   (click)=" openSeatIntakeModal(Model_HostelSeatIntake, item)" title="Delete"><i class="ti ti-eye"></i></a>
               </div>
             </td>
           </tr>
@@ -147,3 +128,56 @@
     </div>
   </div>
 </div>
+
+<ng-template #Model_HostelSeatIntake let-modal>
+  <div class="modal-content " >
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Hostel Seat Inatke List</b>
+        <button class="btn bg-info text-white" (click)="CloseModal_SeatIntake()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body">
+        <b class="text-1xl-5"> {{HostelName}}</b>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S.No</th>
+                <th class="text-left">Room Type</th>
+                <th class="text-left">Total Room</th>
+                <th class="text-left">Total Seats</th>
+                <th class="text-left">Alloted Seats</th>
+                <th class="text-left">Available Seats</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of RoomAvailabiltiesList  | tableSearchFilter:Table_SearchText;let idx=index;">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{item.RoomType}}</td>
+                <td align="left">{{item.RoomCount}}</td>
+                <td align="left">{{item.TotalSeats}}</td> 
+                <td align="left">{{item.AllocatedSeats}}</td>
+                <td align="left">{{item.AvailableSeats}}</td>
+              </tr>
+            </tbody>
+            <tfoot style="font-weight:600;background:#000;color:#fff">
+              <tr>
+                <td colspan="2" align="right">Total</td>
+                <td align="left">{{SumofRoomCount}}</td>
+                <td align="left">{{SumofTotalSeats}}</td>
+                <td align="left">{{SumofAllocatedSeats}}</td>
+                <td align="left">{{SumofAvailableSeats}}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      
+      </div>
+      <!-- <div class="card-footer text-center">
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="SaveHostelList()">Update</button>
+      </div> -->
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>

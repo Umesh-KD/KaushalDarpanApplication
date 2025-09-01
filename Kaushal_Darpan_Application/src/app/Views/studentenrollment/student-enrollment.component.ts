@@ -726,6 +726,9 @@ export class StudentEnrollmentComponent {
           //
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
+            if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+              await this.VerifiedSendForSMSEnrollmentStudent();
+            }
             await this.GetPreExamStudent();
             await this.ResetControls();
             await this.CloseViewStudentDetails();
@@ -924,7 +927,7 @@ export class StudentEnrollmentComponent {
               this.State = data['State'];
               this.Message = data['Message'];
               this.ErrorMessage = data['ErrorMessage'];
-              //
+              debugger
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
                 this.SendForSMSEnrollmentStudent();
@@ -986,7 +989,7 @@ export class StudentEnrollmentComponent {
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
 
-                /*this.SendForSMSEnrollmentStudent();*/
+                this.SendForSMSEnrollmentStudent();
                 await this.GetPreExamStudent();
               }
               else if (this.State == EnumStatus.Warning) {
@@ -1585,7 +1588,7 @@ export class StudentEnrollmentComponent {
 
   async SendForSMSEnrollmentStudent() {
     // confirm
-   
+      debugger
         try {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
@@ -1631,6 +1634,73 @@ export class StudentEnrollmentComponent {
      
   }
 
+  async VerifiedSendForSMSEnrollmentStudent() {
+    try {
+
+      this.isSubmitted = true;
+
+      this.loaderService.requestStarted();
+
+      // Prepare SMS request for a single student
+
+      const SMSrequest: ForSMSEnrollmentStudentMarkedModel[] = [{
+
+        StudentId: this.requestStudent.StudentID,
+
+        Status: 0,
+
+        RoleId: this.sSOLoginDataModel.RoleID,
+
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+
+        RoleID: this.sSOLoginDataModel.RoleID,
+
+        ApplicationNo: this.requestStudent.ApplicationID?.toString() || "",
+
+        MobileNo: "9785353399", // You can replace this with student.MobileNo if available
+
+        MessageType: "Bter_EnrollmentForStudent"
+
+      }];
+
+      // Call service to send SMS
+
+      this.sMSMailService.SendSMSForStudentEnrollmentData(SMSrequest)
+
+        .then(async (data: any) => {
+
+          this.State = data['State'];
+
+          this.Message = data['Message'];
+
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+
+            this.toastr.success(this.Message);
+
+          } else if (this.State == EnumStatus.Warning) {
+
+            this.toastr.warning(this.Message);
+
+          } else {
+
+            this.toastr.error(this.ErrorMessage);
+
+          }
+
+        });
+
+    } catch (ex) {
+
+      console.log(ex);
+
+    }
+  }
 
 
 }

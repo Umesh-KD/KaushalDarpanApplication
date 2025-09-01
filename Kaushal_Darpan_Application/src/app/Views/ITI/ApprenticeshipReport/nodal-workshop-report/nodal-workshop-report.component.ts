@@ -164,7 +164,7 @@ export class NodalWorkshopReportComponent {
 
       this.loaderService.requestStarted();
       if (this.sSOLoginDataModel.RoleID == 97) {
-        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.sSOLoginDataModel.InstituteID)
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.sSOLoginDataModel.DepartmentID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictLisrt = data['Data'];
@@ -172,7 +172,7 @@ export class NodalWorkshopReportComponent {
           }, (error: any) => console.error(error)
           );
       } else {
-        await this.commonMasterService.GetCommonMasterData('DistrictHindi')
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.sSOLoginDataModel.DepartmentID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictLisrt = data['Data'];
@@ -513,13 +513,24 @@ export class NodalWorkshopReportComponent {
     this.request.QuaterIncreaseSeat = (diff < 0 ? 0 : diff).toString();
   }
 
+  //async OnCalculate2() {
+  //  if (this.request.BeforeStudentCount === '' || this.request.AfterStudentCount === '') {
+  //    this.request.QuaterIncreaseStudent = '';
+  //    return;
+  //  }
+
+  //  const diff = Number(this.request.BeforeStudentCount) - Number(this.request.AfterStudentCount);
+  //  this.request.QuaterIncreaseStudent = (diff < 0 ? 0 : diff).toString();
+  //}
+
+
   async OnCalculate2() {
     if (this.request.BeforeStudentCount === '' || this.request.AfterStudentCount === '') {
       this.request.QuaterIncreaseStudent = '';
       return;
     }
 
-    const diff = Number(this.request.BeforeStudentCount) - Number(this.request.AfterStudentCount);
+    const diff = Number(this.request.AfterStudentCount) - Number(this.request.BeforeStudentCount);
     this.request.QuaterIncreaseStudent = (diff < 0 ? 0 : diff).toString();
   }
 

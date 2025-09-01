@@ -30,7 +30,8 @@ export class ITI_InstructorService {
   }
 
  public async SaveInstructorData(request: ITI_InstructorDataModel) {
-    const body = JSON.stringify(request);
+   const body = JSON.stringify(request);
+
     return await this.http.post(this.APIUrl + "/SaveInstructorData", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -76,6 +77,11 @@ export class ITI_InstructorService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  public async GetInstructorDataBySsoid(SSOID: string) {
+    return await this.http.post(`${this.APIUrl}/GetInstructorDataBySsoid/${SSOID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

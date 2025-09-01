@@ -22,7 +22,7 @@ readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
     return res;
   }
   handleErrorObservable(error: Response | any) {
-    return throwError(error);
+    return throwError(error); 
   }
 
   public async GetCenterExamCoordinatorData(searchRequest: CenterExamAllocationSearchModel) {

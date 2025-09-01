@@ -24,7 +24,7 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
           <input type="hidden" [(ngModel)]="formData.FundID" name="FundID"/>
           <div>
-            <label for="InstituteSsoid" class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Years<span class="StarMarking">*</span></label>
+            <label for="InstituteSsoid" class="text-gray-800 text-sm font-medium inline-block mb-1">Financial years<span class="StarMarking">*</span></label>
             <select class="form-input" name="FinancialYearID" [(ngModel)]="formData.FinancialYearID" required #FinancialYearID="ngModel" (change)="GetFinancialData($event)" [disabled]="isFormReadOnly">
               <option [ngValue]="null">--Select--</option>
               <option *ngFor="let item of FinancialYearMasterDDL"
@@ -53,39 +53,39 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
           <div>
-            <label for="InstalmentPaid" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Instalment Paid(12.5 Lac)<span class="StarMarking">*</span></label>
+            <label for="InstalmentPaid" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of instalment paid(12.5 Lac)<span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Instalment Piad" type="number" [(ngModel)]="formData.InstalmentPaid" required #InstalmentPaid="ngModel" name="InstalmentPaid" (ngModelChange)="ClcAmt(1)">
             <div class="text-red-500 text-sm" *ngIf="InstalmentPaid.invalid && (InstalmentPaid.dirty || InstalmentPaid.touched)">
               <div *ngIf="InstalmentPaid.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="InstalmentPaidAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of Instalment Paid</label>
+            <label for="InstalmentPaidAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of instalment paid</label>
             <input class="form-input" type="text" [(ngModel)]="formData.InstalmentPaidAmt" name="InstalmentPaidAmt" placeholder="Paid Amount" disabled>
 
           </div>
           <div>
-            <label for="InstalmentPending" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Instalment Pending(12.5 Lac)<span class="StarMarking">*</span></label>
+            <label for="InstalmentPending" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of instalment pending(12.5 Lac)<span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Instalment Pending" type="number" [(ngModel)]="formData.InstalmentPending" required #InstalmentPending="ngModel" name="InstalmentPending" (ngModelChange)="ClcAmt(2)">
             <div class="text-red-500 text-sm" *ngIf="InstalmentPending.invalid && (InstalmentPending.dirty || InstalmentPending.touched)">
               <div *ngIf="InstalmentPending.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="InstalmentPendingAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of Instalment Pending</label>
+            <label for="InstalmentPendingAmt" class="text-gray-800 text-sm font-medium inline-block mb-1">Amount of instalment pending</label>
             <input class="form-input" type="text" [(ngModel)]="formData.InstalmentPendingAmt" name="InstalmentPendingAmt" placeholder="Pending Amount" disabled>
 
           </div>
 
           <div>
-            <label for="SchemeSanctioned" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Sanctioned under the Scheme <span class="StarMarking">*</span></label>
+            <label for="SchemeSanctioned" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade sanctioned under the scheme <span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Sanctioned Scheme" type="number" [(ngModel)]="formData.SchemeSanctioned" required #SchemeSanctioned="ngModel" name="SchemeSanctioned">
             <div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
               <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="SchemeSanctionedTrade" class="text-gray-800 text-sm font-medium inline-block mb-1">Sanctioned Trade<span class="StarMarking">*</span></label>
+            <label for="SchemeSanctionedTrade" class="text-gray-800 text-sm font-medium inline-block mb-1">Sanctioned trade<span class="StarMarking">*</span></label>
             <!--<select formControlName="SchemeSanctionedTrade" class="form-input">
             <option [value]="">--Select--</option>
             <option *ngFor="let item of TradeMasterDDL"
@@ -104,14 +104,14 @@
           </div>-->
           </div>
           <div>
-            <label for="TradeAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Affiliated <span class="StarMarking">*</span></label>
+            <label for="TradeAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade affiliated <span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Affiliated Trade" type="number" [(ngModel)]="formData.TradeAffiliated" required #TradeAffiliated="ngModel" name="TradeAffiliated">
             <div class="text-red-500 text-sm" *ngIf="TradeAffiliated.invalid && (TradeAffiliated.dirty || TradeAffiliated.touched)">
               <div *ngIf="TradeAffiliated.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="TradeAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Affiliated Trade<span class="StarMarking">*</span></label>
+            <label for="TradeAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Affiliated trade<span class="StarMarking">*</span></label>
             <ng-multiselect-dropdown #AffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
                                      [(ngModel)]="formData.AffilateTradeList" [settings]="settingsMultiselector"
                                      [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
@@ -121,14 +121,14 @@
           </div>
 
           <div>
-            <label for="TradeNotAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Trade Not Affiliated <span class="StarMarking">*</span></label>
+            <label for="TradeNotAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade not affiliated <span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Not Affiliated Trade" type="number" [(ngModel)]="formData.TradeNotAffiliated" required #TradeNotAffiliated="ngModel" name="TradeNotAffiliated">
             <div class="text-red-500 text-sm" *ngIf="TradeNotAffiliated.invalid && (TradeNotAffiliated.dirty || TradeNotAffiliated.touched)">
               <div *ngIf="TradeNotAffiliated.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
-            <label for="TradeNotAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Not Affiliated Trade<span class="StarMarking">*</span></label>
+            <label for="TradeNotAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Not affiliated trade<span class="StarMarking">*</span></label>
             <ng-multiselect-dropdown #NotAffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
                                      [(ngModel)]="formData.NotAffilateTradeList" [settings]="settingsMultiselector"
                                      [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
@@ -137,11 +137,11 @@
             </ng-multiselect-dropdown>
           </div>
           <div>
-            <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Reason of Trade Not Affiliated <span class="StarMarking">*</span></label>
+            <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Reason of trade not affiliated <span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Not Affiliated Trade" type="text" [(ngModel)]="formData.Remarks" #Remarks="ngModel" name="Remarks" />
           </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Last IDP Revision Order Date<span class="StarMarking">*</span></label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Last IDP revision order date<span class="StarMarking">*</span></label>
             <input type="date" [(ngModel)]="formData.OrderDate" #OrderDate="ngModel" class="form-input" name="OrderDate" min="1900-01-01" max="2099-12-31" required />
 
             <div class="text-red-500 text-sm" *ngIf="OrderDate.invalid && (OrderDate.dirty || OrderDate.touched)">
@@ -163,7 +163,7 @@
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="!isFormReadOnly">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Quarterly Fund List</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Quarterly fund list</b>
     </div>
 
     <!--<div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -186,14 +186,14 @@
           <tr>
             <th>Sr. No.</th>
             <th>Quarter</th>
-            <th>Instalment Paid</th>
-            <th>Instalment Paid Amount</th>
-            <th>Instalment Pending</th>
-            <th>Instalment Pending Amount</th>
-            <th>Scheme Sanctioned</th>
-            <th>Trade Affiliated</th>
-            <th>Trade Not Affiliated</th>
-            <th>Order Date</th>
+            <th>Instalment paid</th>
+            <th>Instalment paid Amount</th>
+            <th>Instalment pending</th>
+            <th>Instalment pending Amount</th>
+            <th>Scheme sanctioned</th>
+            <th>Trade affiliated</th>
+            <th>Trade not affiliated</th>
+            <th>Order date</th>
             <th>Action</th>
           </tr>
         </thead>

@@ -41,6 +41,7 @@ export class ITIAddItemsMasterComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
+  public ItemtypeList:any[]=[]
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -64,6 +65,9 @@ export class ITIAddItemsMasterComponent {
       //TradeId: ['', [DropdownValidators]],
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['0', [DropdownValidators]],
+      ItemType: ['0', [DropdownValidators]],
+      TradeId: ['-1', [DropdownValidators]],
+      IsConsume:['']
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -75,6 +79,8 @@ export class ITIAddItemsMasterComponent {
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
     }
+    this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}]
+
   }
 
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -96,6 +102,19 @@ export class ITIAddItemsMasterComponent {
     this.request.TotalPrice = quantity * pricePerUnit;
   }
 
+  async OnItemTypeChange() {
+
+  }
+
+  async RefereshValoidators() {
+    if (this.request.ItemType == 2) {
+      this.AddItemsRequestFormGroup.controls['TradeId'].setValidators([DropdownValidators])
+    } else {
+      this.AddItemsRequestFormGroup.controls['TradeId'].clearValidators()
+    }
+    this.AddItemsRequestFormGroup.controls['TradeId'].updateValueAndValidity()
+  }
+
   async saveData() {
     debugger
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -103,20 +122,27 @@ export class ITIAddItemsMasterComponent {
     this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
     this.request.RoleID = this.sSOLoginDataModel.RoleID;
     this.isSubmitted = true;
+
+    this.RefereshValoidators()
+   
     if (this.AddItemsRequestFormGroup.invalid) {
       /*return console.log("Form is invalid, cannot submit")*/
-      this.toastr.warning("Form is invalid, cannot submit")
-      Object.keys(this.AddItemsRequestFormGroup.controls).forEach(key => {
-          const control = this.AddItemsRequestFormGroup.get(key);
+      //this.toastr.warning("Form is invalid, cannot submit")
+      //Object.keys(this.AddItemsRequestFormGroup.controls).forEach(key => {
+      //    const control = this.AddItemsRequestFormGroup.get(key);
  
-          if (control && control.invalid) {
-            this.toastr.error(`Control ${key} is invalid`);
-            Object.keys(control.errors!).forEach(errorKey => {
-              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-            });
-          }
-        });
-      return;
+      //    if (control && control.invalid) {
+      //      this.toastr.error(`Control ${key} is invalid`);
+      //      Object.keys(control.errors!).forEach(errorKey => {
+      //        this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+      //      });
+      //    }
+      //  });
+      //return;
+    }
+    if (this.request.ItemType == 1) {
+      this.request.TradeId = 0
+      this.request.IsConsume=0
     }
     //Show Loading
     this.loaderService.requestStarted();
@@ -243,14 +269,16 @@ export class ITIAddItemsMasterComponent {
       this.loaderService.requestStarted();
       //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
       //await this.commonFunctionService.StreamMaster()
-      await this.commonFunctionService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      await this.commonFunctionService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
           //this.TradeDDLList = data['Data'];
           //console.log(this.TradeDDLList)
-          const selectOption = { StreamID: 0, StreamName: '--Select--' };
+          const selectOption = { ID: -1, Name: '--Select--' };
           this.TradeDDLList = [selectOption, ...data['Data']];
+          this.request.TradeId=-1
+          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(-1);  
         }, error => console.error(error));
     }
     catch (Ex) {

@@ -3,6 +3,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { CenterSuperitendentExamReportModel } from '../../../Models/ITI/CenterSuperitendentExamReportModel';
+import { ITINodalOfficerExminerSearch } from '../../../Models/ITI/ITINodalOfficerExminerReportModel';
 
 
 @Injectable({
@@ -50,10 +51,12 @@ export class CenterSuperitendentExamReportService {
 //             .pipe(
 //                 catchError(this.handleErrorObservable)
 //             ).toPromise();
-//     }
- public async GetCenterSuperitendentReportData() {
-        // var body = JSON.stringify();
-        return await this.http.post(`${this.APIUrl}/GetCenterSuperitendentReportData`, this.headersOptions)
+  //     }
+
+  public async GetCenterSuperitendentReportData(searchrequest: ITINodalOfficerExminerSearch) {
+    // var body = JSON.stringify();
+    const body = JSON.stringify(searchrequest);
+    return await this.http.post(`${this.APIUrl}/GetCenterSuperitendentReportData`, body, this.headersOptions)
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();

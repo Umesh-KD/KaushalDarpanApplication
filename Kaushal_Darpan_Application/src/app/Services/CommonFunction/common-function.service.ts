@@ -211,9 +211,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0) {
+  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0,DivisionID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/ItiTrade/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/ItiTrade/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -1717,6 +1717,16 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetNodalExamCenterDistrict(District: number,EndTermID:number=0) {
+
+    return await this.http.post(this.APIUrl + '/GetNodalExamCenterDistrict/' + District + '/' + EndTermID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
   public async DC2ndYear_BranchesDDL(CourseType: number, CoreBranch: number = 0) {
     return await this.http.get(this.APIUrl + '/DC2ndYear_BranchesDDL/' + CourseType + '/' + CoreBranch, this.headersOptions)
