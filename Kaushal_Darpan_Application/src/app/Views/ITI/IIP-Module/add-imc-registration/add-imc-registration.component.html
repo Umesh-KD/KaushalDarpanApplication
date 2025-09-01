@@ -25,7 +25,7 @@
 
           <div>
             <label for="InstituteSsoid">IMC registration office<span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="IMC Registration Office" type="text" [(ngModel)]="formData.RegOfficeName" required #regOfficeName="ngModel" name="RegOfficeName" [disabled]="isFormReadOnly">
+            <input class="form-input" placeholder="IMC Registration Office" type="text" [(ngModel)]="formData.RegOfficeName" required #regOfficeName="ngModel" name="RegOfficeName">
             <input type="hidden" [(ngModel)]="formData.regOfficeID" name="regOfficeID">
             <div class="text-red-500 text-sm" *ngIf="regOfficeName.invalid && (regOfficeName.dirty || regOfficeName.touched)">
               <div *ngIf="regOfficeName.errors?.['required']"> This field is required .!</div>
@@ -33,14 +33,14 @@
           </div>
           <div>
             <label for="RegNumber">IMC registration number<span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="IMC Registration Number" type="number" [(ngModel)]="formData.RegNumber" required #RegNumber="ngModel" name="RegNumber" [disabled]="isFormReadOnly">
+            <input class="form-input" placeholder="IMC Registration Number" type="number" [(ngModel)]="formData.RegNumber" required #RegNumber="ngModel" name="RegNumber">
             <div class="text-red-500 text-sm" *ngIf="RegNumber.invalid && (RegNumber.dirty || RegNumber.touched)">
               <div *ngIf="RegNumber.errors?.['required']"> This field is required .!</div>
             </div>
           </div>
           <div>
             <label for="RegDate">IMC registration date<span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="IMC Registration Date" type="date" [(ngModel)]="formData.RegDate" required #RegDate="ngModel" name="RegDate" [disabled]="isFormReadOnly">
+            <input class="form-input" placeholder="IMC Registration Date" type="date" [(ngModel)]="formData.RegDate" required #RegDate="ngModel" name="RegDate">
             <div class="text-red-500 text-sm" *ngIf="RegDate.invalid && (RegDate.dirty || RegDate.touched)">
               <div *ngIf="RegDate.errors?.['required']"> This field is required .!</div>
             </div>
@@ -63,7 +63,7 @@
           <div class="flex">
 
             <div>
-              <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event, 'RegLink')" required #RegLink="ngModel" name="RegLink" [disabled]="isFormReadOnly">
+              <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event, 'RegLink')" required #RegLink="ngModel" name="RegLink">
               <div class="text-red-500 text-sm" *ngIf="RegLink.invalid && (RegLink.dirty || RegLink.touched)">
                 <div *ngIf="RegLink.errors?.['required']"> This field is required .!</div>
               </div>

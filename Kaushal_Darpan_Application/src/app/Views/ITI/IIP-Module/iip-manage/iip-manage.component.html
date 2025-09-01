@@ -104,6 +104,9 @@
             </td>
             <td align="left">
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a  (click)="ShowIMCDetails(MyModel_ViewIMCDetails, row.RegistrationID)">
+                  <i class="ti ti-eye"></i>
+                </a>
                 <a [routerLink]="'/add-imc-registration'" [queryParams]="{id:row.RegistrationID}">
                   <i class="ti ti-pencil"></i>
                 </a>
@@ -220,6 +223,58 @@
                   <td align="left">{{row.Address}}</td>
                   <td align="left">{{row.Email}}</td>
                   <td align="left">{{row.Contact}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ViewIMCDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> IMC History </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <!--<a href="javascript:void(0);" title="View Details"
+             (click)="toggleMemberDetails()" class="btn bg-success btn-sm text-white">
+            {{ toggleButtonText }}
+          </a>-->
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+
+                  <th class="text-left">Registration office</th>
+                  <th class="text-left">Registration number</th>
+                  <th class="text-left">Registration date</th>
+                  <th class="text-left">Registration link</th>
+                  <th class="text-left">Created by</th>
+                  <th class="text-left">Updated by</th>
+                  <th class="text-left">From - To</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of IIPIMCHistoryData; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.RegOffice}}</td>
+                  <td align="left">{{row.RegNumber}}</td>
+                  <td align="left">{{row.RegDate}}</td>
+                  <td align="left">{{row.RegLink}}</td>
+                  <td align="left">{{row.CreatedName}}</td>
+                  <td align="left">{{row.ModifyName}}</td>
+                  <td align="left">{{row.RTS}} </td>
                 </tr>
               </tbody>
             </table>
