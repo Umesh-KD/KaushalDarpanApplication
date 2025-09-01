@@ -21,6 +21,8 @@ import { UserMasterService } from '../../../../Services/UserMaster/user-master.s
 import { VacantSeatRequestModel, AllotmentReportCollegeRequestModel } from '../../../../Models/TheoryMarksDataModels';
 import * as XLSX from 'xlsx';
 import { ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
+import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMarksDataMedels';
+import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 
 @Component({
   selector: 'app-allotment-report-college',
@@ -72,7 +74,8 @@ export class AllotmentReportCollegeComponent {
     private allotmentConfigurationService: AllotmentConfigurationService,
     private Swal2: SweetAlert2,
     private sMSMailService: SMSMailService,
-    private userMasterService: UserMasterService
+    private userMasterService: UserMasterService,
+    private itiallotmentStatusService: ITIAllotmentService
   ) { }
 
 
@@ -87,6 +90,7 @@ export class AllotmentReportCollegeComponent {
   async GetAllotedSeatByCollegeList() {
 
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+    this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
 
     try {
       this.loaderService.requestStarted();
@@ -132,6 +136,59 @@ export class AllotmentReportCollegeComponent {
     const fileName = `AllotedSeatByCollegeList_Class.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
+
+
+
+  async downloadAllotedCollegePDF() {
+
+    try {
+
+      var _searchRequest = new ReportCollegeModel();
+      this.loaderService.requestStarted();
+      _searchRequest = this.searchRequest;
+
+      this.loaderService.requestStarted();
+      await this.itiallotmentStatusService.DownloadForCollegeData(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'AllotmentCollege.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error(this.Message)
+          }
+        }, (error: any) => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
+
+
 
 
   Reset() {

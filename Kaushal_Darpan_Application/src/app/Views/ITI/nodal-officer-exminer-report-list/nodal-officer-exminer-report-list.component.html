@@ -16,97 +16,145 @@
 <!-- Page Title End -->
 <div class="card">
   <div class="card-body p-5">
+    <div *ngIf="sSOLoginDataModel.RoleID !=224" class="mb-8">
+      <div *ngIf="sSOLoginDataModel.RoleID !=224" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div *ngIf="sSOLoginDataModel.RoleID !=224" class="flex justify-end flex-wrap items-center">
+
+          <!--<a routerLink="/ChangeExaminer" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-refresh"></i>Change Examiner
+      </a>-->
 
 
 
+        </div>
+
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+          
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">District</label>
+          <select class="form-select" id="SemesterID" [(ngModel)]="searchRequest.DistrictID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of DistrictMasterList1" [value]="item.ID">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetZonalList()">Search</button>
+          <button type="button" id="btnReset" (click)="ResetControl1()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+
+
+      </div>
+
+
+    </div>
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Nodal Officer Exminer Report List</b>
-      <!--<a routerLink="/nodal-officer-exminer-report" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add Nodal Officer Exminer</a>-->
+      <a *ngIf="sSOLoginDataModel.RoleID ==224" routerLink="/nodal-officer-exminer-report" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
     </div>
-    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        </div>
       </div>
-      <div class="">
-      </div>
-      <div class="">
-      </div>
-      <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
-      </div>
-    </div>
 
-    <!--{{ZonalList|json}}-->
-    <div class="overflow-auto mt-3">
-      <table class="table table-border w-full" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th width="50px" align="left">Sr. No.</th>
-            <th width="100px" align="left">Exam date.</th>
-            <!--<th align="left">Exam Center Under Your Area</th>
+      <!--{{ZonalList|json}}-->
+
+      <div class="overflow-auto mt-3">
+        <table class="table table-border w-full" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th width="50px" align="left">Sr. No.</th>
+              <!--<th width="100px" align="left">Exam date.</th>-->
+              <!--<th align="left">Exam Center Under Your Area</th>
             <th align="left">Medium Question Paper Sent</th>-->
-            <th align="left">Date</th>
-            <th align="left">Reason</th>
-            <th align="left">Additional Details</th>
-            <th align="left">Exam Smooth</th>
-            <th align="left">Documents Submitted</th>
-            <th align="left">Exam Incident</th>
-            <th class="left">Exam Remarks</th>
-            <th class="left">Future Centre Remarks</th>
-            <th align="left">FutureExamSuggestions</th>          
-
-            <th align="center" width="200">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td>{{idx+1}}</td>
-            <td>{{row.ExamDateTime}}</td>
-            <!--<td>{{row.ExamCenterUnderYourArea}}</td>
+              <th align="left">Exam Nodal</th>
+              <th align="left">From Date</th>
+              <th align="left">To Date</th>
+              <th align="left">Reason</th>
+              <th align="left">Additional Details</th>
+              <th align="left">Exam Smooth</th>
+              <th align="left">Documents Submitted</th>
+              <th align="left">Exam Incident</th>
+              <th class="left">Exam Remarks</th>
+              <th class="left">Future Centre Remarks</th>
+              <th align="left">FutureExamSuggestions</th>
+                
+              <th align="center" width="200">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+              <td>{{idx+1}}</td>
+              <!--<td>{{row.ExamDateTime}}</td>-->
+              <!--<td>{{row.ExamCenterUnderYourArea}}</td>
             <td>{{row.MediumQuestionPaperSent}}</td>-->
-            <td>{{row.Date}}</td>
-            <td>{{row.Reason}}</td>
-            <td>{{row.AdditionalDetails}}</td>
-            <td>{{row.ExamSmooth}}</td>
-            <td>{{row.DocumentsSubmitted}}</td>
-            <td>{{row.ExamIncident}}</td>
-            <td>{{row.ExamRemarks}}</td>
-            <td>{{row.FutureCentreRemarks}}</td>
-            <td>{{row.FutureExamSuggestions}}</td>
-           
-            <td>
-              <div class="flex align-center justify-center actionBtns">
-                <a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ID)"><i class="ti ti-eye"></i></a>
-                <a [routerLink]="['/nodal-officer-exminer-report']" [queryParams]="{ ExamDateTime: row.ExamDateTime }" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a title="download PDF" (click)="downloadPDF(row.ID,row.ExamDateTime)"><i class="ti ti-download"></i></a>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="p-3 paginationBox flex items-center justify-end w-full">
-    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-    <div class="paginationBoxItems flex items-center">
-      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-    </div>
-  </div>
 
-</div>
+              <td>{{row.NodalName}}</td>
+              <td>{{row.Date}}</td>
+              <td>{{row.ToDate}}</td>
+              <td>{{row.Reason}}</td>
+              <td>{{row.AdditionalDetails}}</td>
+              <td>{{row.ExamSmooth}}</td>
+              <td>{{row.DocumentsSubmitted}}</td>
+              <td>{{row.ExamIncident}}</td>
+              <td>{{row.ExamRemarks}}</td>
+              <td>{{row.FutureCentreRemarks}}</td>
+              <td>{{row.FutureExamSuggestions}}</td>
+
+              <td>
+                <div class="flex align-center justify-center actionBtns">
+                  <a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ID)"><i class="ti ti-eye"></i></a>
+                  <a [routerLink]="['/nodal-officer-exminer-report']" [queryParams]="{ ExamDateTime: row.ID }" title="Edit"><i class="ti ti-pencil"></i></a>
+                  <a title="download PDF" (click)="downloadPDF(row.ID,row.ExamDateTime)"><i class="ti ti-download"></i></a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+
+  </div>
 
 <ng-template #MyModel_UserRequestHistory let-modal>
   <div class="modal-content">

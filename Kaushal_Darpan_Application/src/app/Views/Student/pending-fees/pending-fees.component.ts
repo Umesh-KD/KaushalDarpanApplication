@@ -106,6 +106,7 @@ export class PendingFeesComponent implements OnInit {
 
       this.loaderService.requestStarted();
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
       this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
       await this.studentService.GetAllData(this.searchRequest)
@@ -214,7 +215,6 @@ export class PendingFeesComponent implements OnInit {
     this.emitraRequest.DepartmentID = EnumDepartment.BTER;
     this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
     this.emitraRequest.ID = item.ID;
-    debugger
     //student details
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
 

@@ -549,7 +549,7 @@ export class PreExamStudentVerificationComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.GetPreExamStudentForVerify();
+          await this.GetPreExamStudentForVerify();
         }
         else {
           this.toastr.error(data.Message);
@@ -557,11 +557,7 @@ export class PreExamStudentVerificationComponent {
       })
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+    } 
     
   }
 
@@ -590,7 +586,7 @@ export class PreExamStudentVerificationComponent {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.GetPreExamStudentForVerify();
+          await this.GetPreExamStudentForVerify();
         }
         else {
           this.toastr.error(data.Message);
@@ -598,11 +594,7 @@ export class PreExamStudentVerificationComponent {
       })
     } catch (error) {
       console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+    } 
     
   }
 
@@ -681,7 +673,7 @@ export class PreExamStudentVerificationComponent {
 
   }
 
-  openOTPModal() {
+    async openOTPModal() {
     const isAnySelected = this.PreExamStudentData.some((x: any) => x.Selected);
     if (!isAnySelected) {
       this.toastr.error('Please select at least one Student!');
@@ -692,18 +684,22 @@ export class PreExamStudentVerificationComponent {
       async (result: any) => {
         if (result.isConfirmed) {
           this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-          this.childComponent.OpenOTPPopup();
 
-          if(this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng){
-            this.childComponent.onVerified.subscribe(() => {
-              this.VerifyStudent_ExaminationIncharge();
-            })
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
+            await this.VerifyStudent_ExaminationIncharge();
           }
-          
-          if(this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng){
-            this.childComponent.onVerified.subscribe(() => {
-              this.VerifyStudent_Registrar();
-            })
+
+          if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
+            this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
+            await this.VerifyStudent_Registrar();
           }
         }
       });

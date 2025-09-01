@@ -201,7 +201,7 @@
                         <th width="80px" align="left">Sr. No.</th>
                         <th align="left">Trade Name</th>
                         <th align="left">GEN</th>
-                        <th align="left" *ngIf="Gender!='M'">GEN F</th>
+                        <!--<th align="left" *ngIf="Gender!='M'">GEN F</th>
                         <th align="left" *ngIf="CategoryId==4">OBC</th>
                         <th align="left" *ngIf="CategoryId==4 && Gender!='M'">OBC F</th>
                         <th align="left" *ngIf="CategoryId==2">SC</th>
@@ -219,7 +219,7 @@
                         <th align="left" *ngIf="IsDevnarayan==true">DEV</th>
                         <th align="left" *ngIf="IsDevnarayan==true && Gender!='M'">DEV F</th>
                         <th align="left" *ngIf="IsMinority==true">MIN</th>
-                        <th align="left" *ngIf="IsMinority==true && Gender!='M'">MIN F</th>
+                        <th align="left" *ngIf="IsMinority==true && Gender!='M'">MIN F</th>-->
                       </tr>
                     </thead>
                     <tbody>
@@ -231,7 +231,7 @@
                           <label *ngIf="row.GEN > 0">Vacant Seats- {{ row.GEN }}</label>
                           <label *ngIf="row.GEN == 0" style="color:red">Seat Not Available</label>
                         </td>
-                        <td class="text-left" *ngIf="row.Gender!='M'">
+                        <!--<td class="text-left" *ngIf="row.Gender!='M'">
                           <input *ngIf="row.GEN_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'GEN_F',row.SeatMetrixId)">
                           <label *ngIf="row.GEN_F > 0">Vacant Seats-{{ row.GEN_F }}</label>
                           <label *ngIf="row.GEN_F == 0" style="color:red">Seat Not Available</label>
@@ -327,7 +327,7 @@
                           <input *ngIf="row.MIN_F > 0" type="radio" name="TradeID" [value]="row.ID" (change)="GetDDLInternalSlidingUnitList(row.ID,'MIN_F',row.SeatMetrixId)">
                           <label *ngIf="row.MIN_F > 0">Vacant Seats-{{ row.MIN_F }}</label>
                           <label *ngIf="row.MIN_F == 0" style="color:red">Seat Not Available</label>
-                        </td>
+                        </td>-->
                       </tr>
                     </tbody>
                   </table>

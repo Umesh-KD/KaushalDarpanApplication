@@ -18,7 +18,7 @@
     <div class="mb-8">
       <form #instituteForm="ngForm" (ngSubmit)="onSubmit(instituteForm)" novalidate>
         <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-          <b class="text-1xl-5">SRS Point 5.10 (F)</b>
+          <b class="text-1xl-5">SRS</b>
         </div>
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
           <input type="hidden" name="ID"  [(ngModel)]="formData.ID"/>
@@ -55,7 +55,7 @@
 
         <div class="flex justify-between items-center mt-5 mb-4 p-3 py-2 bg-light ms-5">
           <b class="text-1xl-5">
-            <i class="ti ti-plus"></i>Expenditure Details (excluding loan
+            <i class="ti ti-plus"></i>Expenditure details (excluding loan
             repayment amount)
           </b>
         </div>
@@ -71,7 +71,7 @@
           </div>
 
           <div>
-            <label for="">Tools, Equipments</label>
+            <label for="">Tools, equipments</label>
           </div>
           <div>
             <input class="form-input" placeholder="Expenditure" type="number" name="ToolsAmt" [(ngModel)]="formData.ToolsAmt" required #ToolsAmt="ngModel" (ngModelChange)="ClcExpenditure()">
@@ -85,21 +85,21 @@
           </div>
 
           <div>
-            <label for="">Books & Learning Resources</label>
+            <label for="">Books & learning resources</label>
           </div>
           <div>
             <input class="form-input" placeholder="Expenditure" type="number" name="BooksAmt" [(ngModel)]="formData.BooksAmt" required #BooksAmt="ngModel" (ngModelChange)="ClcExpenditure()">
           </div>
 
           <div>
-            <label for="">Additional Manpower</label>
+            <label for="">Additional manpower</label>
           </div>
           <div>
             <input class="form-input" placeholder="Expenditure" type="number" name="AdditionalAmt" [(ngModel)]="formData.AdditionalAmt" required #AdditionalAmt="ngModel" (ngModelChange)="ClcExpenditure()">
           </div>
 
           <div>
-            <label for="">Consumable, Maintenance etc</label>
+            <label for="">Consumable, maintenance etc</label>
           </div>
           <div>
             <input class="form-input" placeholder="Expenditure" type="number" name="MaintenanceAmt" [(ngModel)]="formData.MaintenanceAmt" required #MaintenanceAmt="ngModel" (ngModelChange)="ClcExpenditure()">
@@ -116,7 +116,7 @@
 
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-12 gap-3 mt-3">
           <div>
-            <label for="InstituteSsoid">Total Expenditure</label>
+            <label for="InstituteSsoid">Total expenditure</label>
           </div>
           <div>
             <input class="form-input" placeholder="Total Expenditure" type="number" name="TotalExpenditureAmt" [(ngModel)]="formData.TotalExpenditureAmt" required #TotalExpenditureAmt="ngModel" disabled>

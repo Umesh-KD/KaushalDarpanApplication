@@ -5,6 +5,7 @@ export class ITINodalOfficerExminerForm {
   ExamCenterUnderYourAreaID: number = 0; 
   MediumQuestionPaperSent: string = '';
   Date: string = '';
+  ToDate: string = '';
   Reason: string = '';
   SupportingDocument_file: string = '';
   UploadDocument_file: string = '';
@@ -46,7 +47,13 @@ export class ITIInspectExaminationCenters {
 export class ITINodalOfficerExminerSearch {
   ID: number = 0;
   FinancialYearID: number = 0;
-  Date:string=''
+  Date: string = ''
+  RoleID: number = 0
+  UserID:number=0
+  DistrictID: number = 0
+  EndTermID:number=0
+  InstituteID:number=0
+  CourseType:number=0
 }
        
 

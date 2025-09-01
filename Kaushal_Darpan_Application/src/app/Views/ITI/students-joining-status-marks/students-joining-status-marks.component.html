@@ -169,7 +169,7 @@
 
                 <a href="javascript:void(0);" (click)="DownloadAllotmentLetter(item.AllotmentId)" title="Download Allotment Letter"><i class="ti ti-download"></i></a>
 
-                <a href="javascript:void(0);" *ngIf="item.AllotmentStatus!=1" (click)="DownloadAllotmentReportingReceipt(item.AllotmentId)" title="Download Allotment Reporting Receipt"><i class="ti ti-download"></i></a>
+                <a href="javascript:void(0);" *ngIf="item.AllotmentStatus==4" (click)="DownloadAllotmentReportingReceipt(item.AllotmentId)" title="Download Allotment Reporting Receipt"><i class="ti ti-download"></i></a>
 
 
                 <!--<button type="button" class="btn bg-success text-white mt-6" (click)="openModalGenerateOTP(modal_GenrateOTP,item.AllotmentId)">Allotment</button>-->

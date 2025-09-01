@@ -1,6 +1,7 @@
 export class AllotmentReportingModel {
   public ReportingId: number = 0;
   public AllotmentId: number = 0;
+  public AllotmentMasterId: number = 0;
   public ShiftUnitID: number = 0;
   public ApplicationID: number = 0;
   public CollegeTradeId: number = 0;

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ITI_InspectionDataModel, InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, CenterMasterDDLDataModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
+import { ITI_InspectionDataModel, InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, CenterMasterDDLDataModel, ITI_InspectionSearchModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
@@ -31,7 +31,7 @@ export class InspectionDeploymentComponent {
   public request = new ITI_InspectionDataModel();
   public requestDeploy = new InspectionDeploymentDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
-
+  searchRequest = new ITI_InspectionSearchModel();
   InspectionDeploymentFromGroup!: FormGroup;
   isSubmitted: boolean = false;
   isFormSubmitted: boolean = false;
@@ -85,7 +85,7 @@ export class InspectionDeploymentComponent {
     }));
   }
 
-  get _InspectionDeploymentFromGroup() { return this.InspectionDeploymentFromGroup.controls; }
+  get _InspectionDeploymentFromGroup() {return this.InspectionDeploymentFromGroup.controls;}
 
   async getMasterData() {
     try {
@@ -98,7 +98,10 @@ export class InspectionDeploymentComponent {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
       })
-      await this.commonMasterService.GetDistrictMaster().then((data: any) => {
+      this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DistrictMasterDDL = data.Data;
       })
@@ -113,7 +116,6 @@ export class InspectionDeploymentComponent {
       console.error(error);
     }
   }
-
 
   GetInstituteMaster_ByDistrictWise(ID: any) {
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'

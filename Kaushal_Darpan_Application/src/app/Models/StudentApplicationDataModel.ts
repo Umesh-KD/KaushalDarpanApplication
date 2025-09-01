@@ -12,5 +12,6 @@ export class StudentApplicationModel extends RequestBaseModel {
   Selected: boolean = false;
 }
 export class StudentApplicationSaveModel extends ResponseBaseModel {
-  ApplicationID: number = 0;  
+  ApplicationID: number = 0;
+  Remark?: string = '';
 }

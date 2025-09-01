@@ -194,7 +194,11 @@
               <td class="text-left">{{row.StreamName}}</td>
               <td class="text-left">{{row.SemesterName}}</td>
               <td class="text-left">{{row.DOB}}</td>
-              <td class="text-left">{{row.temp_Enrollment}}</td>
+              <!-- <td class="text-left">{{row.temp_Enrollment}}</td> -->
+              <td align="left">
+                <!-- {{row.EnrollmentNo}} -->
+                {{ (row.temp_Enrollment == 0 || row.temp_Enrollment == null) ? '' : row.temp_Enrollment }}
+              </td>
               <td class="text-left">
                 {{row.VerifyerStatusName}}
               </td>

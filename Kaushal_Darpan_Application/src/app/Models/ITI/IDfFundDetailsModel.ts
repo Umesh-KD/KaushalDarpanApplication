@@ -2,8 +2,9 @@ export class DepositList {
   public HeadName: string = ''
   public ReceivedAmount: string = ''
 }
-export class IDfFundDetailsModel {
-
+export class IDfFundDetailsModel
+{
+  public FundID: number = 0;
   public FinYearQuaterID: number = 0;
   public FinancialYearID: number = 0;
   public PrincipalName: string = '';
@@ -12,6 +13,7 @@ export class IDfFundDetailsModel {
   public Expense: number = 0;
   public ClosingBalance: number = 0;
   public Remark: string = '';
+  public InsituteID: number = 0;
   // public OtherDepositList: DepositList[] = [];
   public OtherDepositList: DepositList[] = [new DepositList()];
 }
@@ -22,6 +24,9 @@ export class IDfFundSearchDetailsModel {
   public FundID: number = 0;
   public FinYearQuaterID: number = 0;
   public Action: string = '';
+  public InstituteId: number = 0;
+
+
 
 }
 

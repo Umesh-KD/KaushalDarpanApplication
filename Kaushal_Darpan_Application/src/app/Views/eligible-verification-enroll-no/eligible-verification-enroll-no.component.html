@@ -140,7 +140,7 @@
 
               </th>
               <th class="text-left">Sr. No.</th>
-
+              <th class="text-left">Action</th>
               <th class="text-left">Student Name </th>
               <th class="text-left">Father's Name</th>
               <th class="text-left">DOB</th>
@@ -156,6 +156,12 @@
               <td *ngIf="pageTab == 1">
                 <input type="checkbox" name="MarkCheck"
                        [(ngModel)]="row.Selected" (change)="checkIfAllSelected()" />
+              </td>
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a href="javascript:void(0);" title="View Details" (click)="openViewStudentDetailsPopup(row.StudentID)"><i class="ti ti-eye"></i></a>
+                </div>
+
               </td>
               <td>{{(startInTableIndex+1)+idx}}</td>
               <td class="text-left">{{row.StudentName}} </td>
@@ -225,3 +231,5 @@
     </div>
   </div>
 </ng-template>
+
+<app-student-details-view-modal #MyModel_ViewStudent></app-student-details-view-modal>

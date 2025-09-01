@@ -24,7 +24,7 @@ export class PaidFeesComponent implements OnInit
 
   public StatusFilter: number = 0;
   public PageTitle: string = '';
-
+  public enrollFee: boolean = false;
 
   public StudenetTranListItem: [] = [];
   searchRequest = new StudentSearchModel();
@@ -56,6 +56,7 @@ export class PaidFeesComponent implements OnInit
     {
      
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.TrasactionStatus = this.StatusFilter;
       this.searchRequest.action = this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER ? '_GetPaidTransactionList' : '_GetPaidTransactionListITI';
       await this.emitraPaymentService.GetTransactionDetailsActionWise(this.searchRequest)
