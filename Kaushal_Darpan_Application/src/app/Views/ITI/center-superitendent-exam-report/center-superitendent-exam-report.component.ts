@@ -9,6 +9,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 // import pdfmake from 'pdfmake/build/pdfmake';
 import { FontsService } from '../../../Services/FontService/fonts.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 
 
 
@@ -25,8 +26,9 @@ export class CenterSuperitendentExamReportComponent {
   public Message: any = [];
   public ErrorMessage: any = [];
   public isSubmitted: boolean = false;
-
+  public ExamDate:string=''
   //  pdfMakeVfs:any=pdfmake.vfs||{};
+  public sSOLoginDataModel = new SSOLoginDataModel()
   requestObj:CenterSuperitendentExamReportModel = new CenterSuperitendentExamReportModel();
   englishToHindiTranslation:any={
     satisfactory:'संतोषजनक',
@@ -86,7 +88,11 @@ export class CenterSuperitendentExamReportComponent {
     // this.pdfMakeVfs['Roboto-Bold.ttf'] = await this.fontsService.getHindiFontBold();
     // pdfmake.vfs = this.pdfMakeVfs;
     this.Id = Number(this.routers.snapshot.paramMap.get('id')?.toString());
-    if(this.Id > 0){
+   
+
+    this.ExamDate = this.routers.snapshot.queryParamMap.get('ExamDate') || '';
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+     if(this.Id > 0){
       this.fillFormById(this.Id);
     }
     else{
@@ -211,11 +217,24 @@ validateSchedule(index: number) {
   onSubmit(): void {
     console.log(this.examReportForm.value);
     this.isSubmitted=true;
-     debugger
+    debugger
+
+    Object.keys(this.examReportForm.controls).forEach(key => {
+      const control = this.examReportForm.get(key);
+
+        if (control && control.invalid) {
+          this.toastr.error(`Control ${key} is invalid`);
+          Object.keys(control.errors!).forEach(errorKey => {
+            this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+          });
+        }
+      });
+
     if (this.examReportForm.invalid) {
       this.examReportForm.markAllAsTouched();
       return;
     }
+
     this.requestObj.id = this.Id;
     this.requestObj.confidentialityLevel = this.examReportForm.value.confidentialityLevel.toString();
     this.requestObj.examOnTime = this.examReportForm.value.examOnTime.toString().toLowerCase() === 'yes'? true : false;
@@ -247,6 +266,12 @@ validateSchedule(index: number) {
     this.requestObj.otherFutureExamSuggestions = this.examReportForm.value.otherFutureExamSuggestions;
 
     this.requestObj.flyingSquadDetails = JSON.stringify(this.examReportForm.value.flyingSquadDetails);
+    this.requestObj.InstituteID = this.sSOLoginDataModel.InstituteID
+    this.requestObj.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.requestObj.CourseType = this.sSOLoginDataModel.Eng_NonEng
+    this.requestObj.UserID = this.sSOLoginDataModel.UserID
+    this.requestObj.ExamDate = this.ExamDate
+
     
     this.CenterSuperitendentService.SaveData_CenterSuperitendentExamReport(this.requestObj).then(
       (response: any) => {
@@ -554,7 +579,7 @@ validateSchedule(index: number) {
 
   handleRadioChange(controlName: string)
   {
-    debugger
+ 
   const control = this.examReportForm.get(controlName);
   if (control) {
     if (control.value === 'no') {

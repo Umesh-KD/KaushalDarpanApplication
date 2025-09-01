@@ -23,46 +23,63 @@
 </div>
 <!--Page Title End-->
 
-<div class="card">
+<div class="card" style=" overflow: visible;">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
     </div>
     <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
         <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Category: <span class="StarMarking">*</span>
+    </label>
+    <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
+               bindValue="ItemCategoryID" placeholder="--Select--" [searchable]="true" [clearable]="true"
+               [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
+    </ng-select>
+
+    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
+      <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required.
+      </p>
+    </div>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Equipment: <span class="StarMarking">*</span>
+    </label>
+    <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
+               bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true" [searchFn]="customSearch"
+               (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
+      <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
+    </ng-select>
+
+    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
+      <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required.
+      </p>
+    </div>
+  </div>-->
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Category: <span class="StarMarking">*</span>
+            Item Type: <span class="StarMarking">*</span>
           </label>
-          <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
-                     bindValue="ItemCategoryID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-                     [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
+          <ng-select formControlName="ItemType" [(ngModel)]="request.ItemType" [items]="ItemtypeList" bindLabel="Name"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
+                     [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemType.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.ItemType.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required.
             </p>
           </div>
         </div>
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Equipment: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true" [searchFn]="customSearch"
-                     (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-            <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -204,26 +221,61 @@
           </div>
         </div>
 
-        <!--<div>
-          <label for="Unit" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Unit: <span class="StarMarking">*</span>
+
+        <div *ngIf="request.ItemType==2" >
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Trade: <span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="txtUnit" name="Unit" formControlName="txtUnit"
-                 [(ngModel)]="request.Unit">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtUnit.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.pattern">
-              <i aria-hidden="true"></i>
-              Only positive numbers are allowed in the VoucherNumber field!
+          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
+                     [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
+          </ng-select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
             </p>
           </div>
-        </div>-->
+        </div>
+
+
+
+        <!--<div>
+    <label for="Unit" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      Unit: <span class="StarMarking">*</span>
+    </label>
+    <input type="text" class="form-input" id="txtUnit" name="Unit" formControlName="txtUnit"
+           [(ngModel)]="request.Unit">
+    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtUnit.errors" class="text-danger">
+      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.required">
+        <i aria-hidden="true"></i>
+        This field is required .!
+      </p>
+      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.pattern">
+        <i aria-hidden="true"></i>
+        Only positive numbers are allowed in the VoucherNumber field!
+      </p>
+    </div>
+  </div>-->
+
+
+        <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+          <label class="block">IsConsumable </label>
+          <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+            <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
+                   [(ngModel)]="request.IsConsume">
+            <span class="toggleIcon">
+              <span class="toggleTitle"></span>
+            </span>
+          </label>
+        </div>
+
+
+
+
       </div>
 
-      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
         <div class="text-center">
           <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">

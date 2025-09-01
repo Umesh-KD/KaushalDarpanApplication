@@ -404,6 +404,7 @@ export class VerifyItiCenterObserverDeploymentComponent {
       x.DeploymentStatus = EnumDeploymentStatus.OrderGenerated;
       x.ExamDate = this.searchRequest.ExamDate;
       x.EndTermID = this.sSOLoginDataModel.EndTermID
+      x.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     })
 
     try {
