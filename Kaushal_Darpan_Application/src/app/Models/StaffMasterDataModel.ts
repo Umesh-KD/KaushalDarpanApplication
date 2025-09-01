@@ -269,3 +269,55 @@ export class AssignTeacherForSubjectReqModel  {
   public ActionType: string = '';
 }
 
+export class AddStaffSubjectSectionModel {
+  public ID: number = 0;
+  public StreamID: number = 0;
+  public SemesterID: number = 0;
+  public SubjectID: number = 0;
+  public SSOID: string = '';
+  public UserID: number = 0;
+  public StaffID: number = 0;
+  public SectionIDs: string = '';
+  public DisplayName: string = '';
+  public DepartmentID: number = 0;
+  public ActiveStatus: boolean = false;
+  public DeleteStatus: boolean = false;
+  public CreatedBy: number = 0;
+  public ModifyBy: number = 0;
+  public EndTermID: number = 0;
+  public RoleID: number = 0;
+  public InstituteID: number = 0;
+
+  public StreamName: string = "";
+  public SemesterName: string = "";
+  public SubjectName: string = "";
+  public SatffName: string = '';
+  public SectionsName: string = '';
+ 
+}
+
+export class PostAttendanceTimeTable {
+  public ID: number = 0;
+  public EndTermID: number = 0;
+  public FinancialYearID: number = 0;
+  public CourseTypeID: number = 0;
+  public StreamID: number = 0;
+  public SectionID: number = 0;
+  public DepartmentID: number = 0;
+  public SubjectID: number = 0;
+  public SemesterID: number = 0;
+  public AssignToRoleID: number = 0;
+  public AssignByRoleID: number = 0;
+  public AssignbyStaffID: number = 0;
+  public DeleteStatus: number = 0;
+  public ActiveStatus: number = 1;
+  public ShiftId: number = 0;
+  public AssignBySSOID: string | null = null;
+  public AssignToSSOID: string | null = null;
+  public InstituteID: number = 0;
+  public RoleID: number = 0;
+  public StaffID: number = 0;
+  public SectionIDs: string = "";
+}
+
+
