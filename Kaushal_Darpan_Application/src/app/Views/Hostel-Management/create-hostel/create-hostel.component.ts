@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 //import { ActivatedRoute } from '@angular/router';
 import { EnumStatus } from '../../../Common/GlobalConstants';
@@ -13,6 +13,8 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CreateHostelDataModel, HostelSearchModel, StatusChangeHostelModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { RoomAllotmentDataModel, RoomAvailability } from '../../../Models/Hostel-Management/RoomAllotmentDataModel';
+import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 
 @Component({
   selector: 'app-create-hostel',
@@ -43,6 +45,15 @@ export class CreateHostelComponent   {
   @ViewChild('txtHostelName') hostelNameElement!: ElementRef;
   shouldFocusHostelName: boolean = false;
 
+  public RoomAvailabiltiesList: RoomAvailability[] = [];
+  RoomAvailRequest = new RoomAllotmentDataModel()
+  SumofRoomCount: number = 0;
+  SumofTotalSeats: number = 0;
+  SumofAllocatedSeats: number = 0;
+  SumofAvailableSeats: number = 0;
+  HostelName: string = '';
+  modalReference: NgbModalRef | undefined;
+
   constructor(
     private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
@@ -53,15 +64,12 @@ export class CreateHostelComponent   {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private studentRequestService: StudentRequestService,
   ) { }
 
 
   async ngOnInit() {
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-
-
     this.groupForm = this.fb.group({
       txtHostelName: ['', Validators.required],
       ddlHostelType: ['0', [DropdownValidators]],
@@ -70,17 +78,11 @@ export class CreateHostelComponent   {
       //txtPhoneNumber: [{ value: '' }, Validators.required],
       txtAddress: ['', Validators.required],
     });
-    //this.searchRequest.DepartmentID = 2;
-   
-   
-
+    
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.getHostelTypeList(); 
     await this.GetAllHostelList(); 
-
-
   }
-  
-
 
   async getHostelTypeList() {
     try {
@@ -399,13 +401,9 @@ export class CreateHostelComponent   {
       }
     }
 
-
-
   filterNumber(input: string): string {
     return input.replace(/[^0-9]/g, '');
   }
-
-
 
   onAddClick() {
     this.isUpdate = false;
@@ -417,9 +415,6 @@ export class CreateHostelComponent   {
     });
   }
 
-
-
-
   onEditClick(HRSMasterID: number) {
     this.isUpdate = true;
     this.isFormVisible = true;
@@ -430,6 +425,52 @@ export class CreateHostelComponent   {
     });
   }
 
-  
+  async openSeatIntakeModal(model: any, row: any) {
+    try {
+      this.HostelName = row.HostelName;
+      await this.getHostelSeatIntake(row.HostelID)
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static',});
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async getHostelSeatIntake(HostelID: number) {
+    try {
+      this.loaderService.requestStarted();
+      this.RoomAvailRequest.HostelID = HostelID;
+      this.RoomAvailRequest.EndTermId = this.sSOLoginDataModel.EndTermID;
+      await this.studentRequestService.GetAllRoomAvailabilties(this.RoomAvailRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.RoomAvailabiltiesList = data.Data.Table;
+
+          this.SumofRoomCount = data.Data.Table1[0].SumofRoomCount;
+          this.SumofTotalSeats = data.Data.Table1[0].SumofTotalSeats;
+          this.SumofAllocatedSeats = data.Data.Table1[0].SumofAllocatedSeats;
+          this.SumofAvailableSeats = data.Data.Table1[0].SumofAvailableSeats;
+
+          console.log(this.RoomAvailabiltiesList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModal_SeatIntake() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
 
 }
