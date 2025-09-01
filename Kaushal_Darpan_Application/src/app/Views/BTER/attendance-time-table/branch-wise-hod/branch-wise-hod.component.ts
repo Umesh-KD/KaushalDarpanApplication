@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { EnumStatus } from "../../../../Common/GlobalConstants";
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { GuestApplyForGuestRoomSearchModel, GuestStaffProfileSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -26,7 +27,8 @@ export class BranchWiseHodComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public isSubmit: boolean = false;
-  public SSOIDExists!: boolean;
+  SemesterMasterDDL: any[] = [];
+  public SSOIDExists: boolean | null = null;
   public State: number = 0;
   public key: number = 0;
   public totalRecord: number = 0;
@@ -36,10 +38,11 @@ export class BranchWiseHodComponent {
   public SSOIDFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApplyList: any[] = []
+  public BranchHideList: any[] = []
   public searchRequest = new GuestApplyForGuestRoomSearchModel();
   public searchRequestGuestStaffProfileSearchModel = new GuestStaffProfileSearchModel()
   displayedColumns: string[] = [
-    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName'
+    'SNo', 'FirstName', 'SSOID', 'MobileNo', 'MailPersonal', 'StreamName', 'InstituteName', 'SemesterName'
   ];
   dataSource!: MatTableDataSource<any>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -61,7 +64,8 @@ export class BranchWiseHodComponent {
     });
     this.IIPMasterFormGroup = this.formBuilder.group(
       {
-        StreamID: [0, []],
+        SemesterID: [0, []],
+        StreamIDs: [[]],
         DisplayName: ['', []],
         MailPersonal: ['', []],
         MobileNo: ['', []]
@@ -69,14 +73,19 @@ export class BranchWiseHodComponent {
 
     await this.GetBranchHODApplyList();
 
-    await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+    //await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+    //  data = JSON.parse(JSON.stringify(data));
+    //  this.StreamMasterDDL = data.Data;
+    //})
+
+    await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-      this.StreamMasterDDL = data.Data;
+      this.SemesterMasterDDL = data.Data;
     })
   }
 
   async loadData() {
-   
+
     await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -113,6 +122,7 @@ export class BranchWiseHodComponent {
           }
         }, error => console.error(error));
     }
+
   }
 
   async PostUserExists() {
@@ -128,7 +138,10 @@ export class BranchWiseHodComponent {
 
   async GetBranchHODApplyList() {
     try {
+      debugger
       this.request.Action = "GETALL";
+      this.request.StreamID = 0;
+      this.request.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -192,6 +205,27 @@ export class BranchWiseHodComponent {
     try {
       this.isSubmitted = true;
       debugger
+
+
+      const formValue = this.IIPMasterFormGroup.value;
+
+      if (!formValue.SemesterID || formValue.SemesterID === 0) {
+        this.toastr.warning('Please select Semester');
+        return;
+      }
+      if (!formValue.StreamIDs || formValue.StreamIDs.length === 0) {
+        this.toastr.warning('Please select at least one Branch');
+        return;
+      }
+
+      if (!formValue.DisplayName || formValue.DisplayName.trim() === '') {
+        this.toastr.warning('Please enter Name');
+        return;
+      }
+
+
+
+
       const isSSOID = this.ApplyList.some((x: { SSOID: string }) =>
         x.SSOID === this.SSOIDFormGroup.value.SSOID
       );
@@ -199,15 +233,18 @@ export class BranchWiseHodComponent {
       //  this.toastr.warning("Not Exists SSOID");
       //  return
       //}
-
+      this.request.StreamID = 0;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.SSOID = this.SSOIDFormGroup.value.SSOID;
-      this.request.StreamID = this.IIPMasterFormGroup.value.StreamID;
+      /*this.request.StreamID = this.IIPMasterFormGroup.value.StreamID;*/
+      this.request.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');
+      /*   this.request.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');*/
       this.request.Action = "Save";
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.SemesterID = this.IIPMasterFormGroup.value.SemesterID;
 
 
       await this.staffMasterService.AllBranchHOD(this.request)
@@ -218,8 +255,16 @@ export class BranchWiseHodComponent {
           this.ErrorMessage = data['ErrorMessage'];
           this.ApplyList = data['Data'];
           this.totalRecord = data['Data'].length;
+
           this.initTable();
           this.ResetControls();
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success('Data saved successfully!');
+          }
+          else if (data.State === EnumStatus.Success) {
+            this.toastr.error(this.ErrorMessage || 'Something went wrong!');
+          }
+
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -244,6 +289,16 @@ export class BranchWiseHodComponent {
     this.request.LastName = '';
     this.request.MailPersonal = '';
     this.request.MobileNo = '';
+    this.request.SSOID = '';
+    this.request.StreamIDs = [];
+    this.request.SemesterID = 0;
+    this.IIPMasterFormGroup.get('StreamIDs')?.setValue([]);
+    this.SSOIDFormGroup.get('SSOID')?.setValue('');
+    this.SSOIDExists = null;
+    this.StreamMasterDDL = [];
+    
+
+    
   }
 
   initTable() {
@@ -265,4 +320,102 @@ export class BranchWiseHodComponent {
     }
   }
 
+  //async GetBranchHideList() {
+  //  try {
+
+
+  //    let request = {
+  //      EndTermID: this.sSOLoginDataModel.EndTermID,
+  //      SemesterID: this.IIPMasterFormGroup.value.SemesterID,
+  //      InstituteID: this.sSOLoginDataModel.InstituteID
+  //    };
+
+  //    await this.staffMasterService.GetStreamIDBySemester(request)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+  //        this.BranchHideList = data['Data'];
+  //        debugger
+  //        const hideIDs = this.BranchHideList.map((b: any) => b.StreamID);
+
+  //        // Step 2: Filter StreamMasterDDL
+  //        this.StreamMasterDDL = this.StreamMasterDDL.filter(
+  //          (x: any) => !hideIDs.includes(x.StreamID)
+  //        );
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  async GetBranchHideList() {
+    try {
+      let request = {
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        SemesterID: this.IIPMasterFormGroup.value.SemesterID,
+        InstituteID: this.sSOLoginDataModel.InstituteID
+      };
+      
+      await this.staffMasterService.GetStreamIDBySemester(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.BranchHideList = data['Data'];
+
+          const hideIDs = this.BranchHideList.map((b: any) => b.StreamID);
+
+          // Filter StreamMasterDDL to hide existing branches
+          this.StreamMasterDDL = this.StreamMasterDDL.filter(
+            (x: any) => !hideIDs.includes(x.StreamID)
+          );
+
+       
+          const semester = this.IIPMasterFormGroup.value.SemesterID;
+          if (semester === 1 || semester === 2) {
+           
+            const allIDs = this.StreamMasterDDL.map((x: any) => x.StreamID);
+            this.IIPMasterFormGroup.get('StreamIDs')?.setValue(allIDs);
+          } else {
+        
+            this.IIPMasterFormGroup.get('StreamIDs')?.setValue([]);
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async onSemesterChange(event: any) {
+    if (this.request.SemesterID && this.request.SemesterID != 0) {
+      debugger
+      await this.commonMasterService.StreamMaster(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      ).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterDDL = data.Data;
+      });
+
+    
+      await this.GetBranchHideList();
+    }
+  }
 }
