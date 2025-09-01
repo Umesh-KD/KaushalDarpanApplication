@@ -9,15 +9,20 @@
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/Papers" class="text-sm font-medium text-slate-700" aria-current="page">Papers</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/papersmasterl" class="text-sm font-medium text-slate-700" aria-current="page">{{isUpdate ? 'Update
-        Paper' : 'Add Paper' }}</a>
+      <a routerLink="/papersmasterl" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{
+isUpdate ? 'Update
+        Paper' : 'Add Paper'
+        }}
+      </a>
     </div>
   </div>
-  <a routerLink="/papersmaster" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
-      class="ti ti-chevron-left"></i> Back</a>
+  <a routerLink="/papersmaster" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i> Back
+  </a>
 </div>
-Page Title End
-<form [formGroup]="PaperForm" (ngSubmit)="saveData()">
+
+<form [formGroup]="PaperForm">
   <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
     <div class="card">
       <div class="card-body p-5">
@@ -26,219 +31,64 @@ Page Title End
             <b class="text-1xl-5"><i class="ti ti-search"></i> {{isUpdate ? 'Update Paper' : 'Add Paper' }}</b>
           </div>
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch: <span
-                  class="StarMarking">*</span></label>
-              <select class="form-select" id="StreamStreamTypeId" formControlName="StreamID"
-                [(ngModel)]="request.StreamID">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Semester: <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="StreamStreamTypeId" (change)="BranchReset()" formControlName="SemesterID"
+                      [(ngModel)]="request.SemesterID">
                 <option value="0">Choose Option</option>
-                <option *ngFor="let item of BranchMasterList" [value]="item.StreamID">({{item.Code}}) {{item.Name }}</option>
-
+                <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
               </select>
-              <div *ngIf="isSubmitted&&form.StreamID.errors" class="text-danger">
-                <p *ngIf="!form.StreamID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!
+              <div *ngIf="isSubmitted&&form.SemesterID.errors" class="text-danger">
+                <p *ngIf="!form.SemesterID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required
+                  .!
                 </p>
               </div>
             </div>
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester: <span
-                  class="StarMarking">*</span></label>
-              <select class="form-select" id="StreamStreamTypeId" formControlName="SemesterID"
-                [(ngModel)]="request.SemesterID">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Branch: <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" id="StreamStreamTypeId" (change)="GetSubjectList()" formControlName="StreamID"
+                      [(ngModel)]="request.StreamID">
                 <option value="0">Choose Option</option>
-                <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
+                <option *ngFor="let item of BranchMasterList" [value]="item.StreamID">({{item.Code}}) {{item.Name }}</option>
+
               </select>
-              <div *ngIf="isSubmitted&&form.SemesterID.errors" class="text-danger">
-                <p *ngIf="!form.SemesterID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required
-                  .!</p>
+              <div *ngIf="isSubmitted&&form.StreamID.errors" class="text-danger">
+                <p *ngIf="!form.StreamID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
               </div>
             </div>
 
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Year: <span
-                  class="StarMarking">*</span></label>
+
+
+            <!--<div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Academic Year: <span class="StarMarking">*</span>
+              </label>
               <select class="form-select" id="StreamFinancialYear" formControlName="FinancialYearID"
-                [(ngModel)]="request.FinancialYearID">
+                      [(ngModel)]="request.FinancialYearID">
                 <option value="0">Choose Option</option>
-                <option *ngFor="let item of FinancialYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}
+                <option *ngFor="let item of FinancialYearList" [value]="item.FinancialYearID">
+                  {{item.FinancialYearName}}
                 </option>
               </select>
               <div *ngIf="isSubmitted&&form.FinancialYearID.errors" class="text-danger">
-                <p *ngIf="!form.FinancialYearID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is
-                  required .!</p>
+                <p *ngIf="!form.FinancialYearID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is
+                  required .!
+                </p>
               </div>
-            </div>
+            </div>-->
 
+            <div>
+              <button type="submit" (click)="SearchFilter()" class="btn bg-info text-white mt-6 me-1">Search</button>
 
-
-
-            <div class="col-span-4">
-
-              <div class="overflow-auto mt-3">
-                <table class="table table-border w-full" cellpadding="5">
-                  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-
-                    <tr>
-                      <th rowspan="3">#</th>
-                      <th rowspan="3">Subject Category</th>
-                      <th rowspan="3">Subject Code</th>
-                      <th rowspan="3">Subjects</th>
-                      <th colspan="4">Distribution Of Time</th>
-                      <th colspan="7">Distribution Of Max. Marks/Duration</th>
-                      <th rowspan="3">Total Marks</th>
-                      <th rowspan="3">Credits</th>
-                      <th rowspan="3">Common Subject</th>
-                      <th rowspan="3" style="width:10%;">Paper Type</th>
-                    </tr>
-
-                    <tr>
-                      <th colspan="4">Hours per week</th>
-                      <th colspan="4">End Semester Exam</th>
-                      <th colspan="3">Internal Assessment</th>
-                    </tr>
-
-                    <tr>
-                      <th>L</th>
-                      <th>T</th>
-                      <th>P</th>
-                      <th>Tot</th>
-
-                      <th>TH</th>
-                      <th>Hrs.</th>
-                      <th>PR</th>
-                      <th>Hrs.</th>
-
-                      <th>CT</th>
-                      <th>TU</th>
-                      <th>PR(S)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td></td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter Subject Category" type="text"
-                            id="StreamPaper0SubjectCat" formControlName="SubjectCat" [(ngModel)]="request.SubjectCat">
-
-
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-
-                          <input class="input-sm form-input" placeholder="Enter Subject Code" type="text"
-                            id="StreamPaper0SubjectCode" formControlName="SubjectCode"
-                            [(ngModel)]="request.SubjectCode">
-
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter Subject Name" type="text"
-                            id="StreamPaper0SubjectName" formControlName="SubjectName"
-                            [(ngModel)]="request.SubjectName">
-
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter L" type="text" id="StreamPaper0L"
-                            formControlName="Paper0L" [(ngModel)]="request.L">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter t" type="text" id="StreamPaper0T"
-                            formControlName="Paper0T" [(ngModel)]="request.T">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter p" type="text" id="StreamPaper0P"
-                            formControlName="Paper0P" [(ngModel)]="request.P">
-                        </div>
-                      </td>
-                      <td></td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter th" type="text" id="StreamPaper0Th"
-                            formControlName="Paper0Th" [(ngModel)]="request.Th">
-                        </div>
-                      </td>
-                      <td></td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter pr" type="text" id="StreamPaper0Pr"
-                            formControlName="Paper0Pr" [(ngModel)]="request.Pr">
-                        </div>
-                      </td>
-                      <td></td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter ct" type="text" id="StreamPaper0Ct"
-                            formControlName="Paper0Ct" [(ngModel)]="request.Ct">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter tu" type="text" id="StreamPaper0Tu"
-                            formControlName="Paper0Tu" [(ngModel)]="request.Tu">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter prs" type="text" id="StreamPaper0Prs"
-                            formControlName="Paper0Prs" [(ngModel)]="request.Prs">
-                        </div>
-                      </td>
-                      <td></td>
-                      <td>
-                        <div class="form-group ">
-                          <input class="input-sm form-input" placeholder="Enter Credit" type="text"
-                            id="StreamPaper0Credit" formControlName="Paper0Credit" [(ngModel)]="request.Credit">
-                        </div>
-                      </td>
-                      <td>
-                        <div class="form-group ">
-                          <select class="input-sm form-select" id="StreamPaper0CommonSubjectId"
-                            formControlName="Paper0CommonSubjectId" [(ngModel)]="request.SubjectID">
-                            <option value="0">Select Common Subject</option>
-                            <option *ngFor="let item of SubjectList" [value]="item.SubjectID">{{item.SubjectName}}
-                            </option>
-
-                          </select>
-                          <div *ngIf="isSubmitted&&form.Paper0CommonSubjectId.errors" class="text-danger">
-                            <p *ngIf="!form.Paper0CommonSubjectId.errors.DropdownValidators"><i
-                                aria-hidden="true"></i>This field is required .!</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td style="width:10%;">
-                        <select class="input-sm form-select" id="StreamPaper0PaperType"
-                          formControlName="Paper0PaperType" [(ngModel)]="request.Paper_ID">
-                          <option value="0">Select Paper Type</option>
-                          <option *ngFor="let item of PaperTypeList" [value]="item.Paper_ID">{{item.PaperType}}</option>
-                        </select>
-                        <div *ngIf="isSubmitted&&form.Paper0PaperType.errors" class="text-danger">
-                          <p *ngIf="!form.ddlLevel.errors.DropdownValidators"><i aria-hidden="true"></i>This field is
-                            required .!</p>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-
-            </div>
-
-            <div class="col-span-4 text-center">
-              <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
-              <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i
-                  class="ti ti-refresh"></i> Reset</button>
             </div>
 
           </div>
@@ -251,3 +101,364 @@ Page Title End
     </div>
   </div>
 </form>
+<!--grid-->
+
+<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Search Result</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <div class="col-span-4">
+            <div class="overflow-auto mt-3">
+              <table class="table table-border w-full" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+                  <tr>
+                    <th rowspan="3">#</th>
+                    <th rowspan="3">Subject Category</th>
+                    <th rowspan="3">Subject Code</th>
+                    <th rowspan="3">Subjects</th>
+                    <th colspan="4">Distribution Of Time</th>
+                    <th colspan="7">Distribution Of Max. Marks/Duration</th>
+                    <th rowspan="3">Total Marks</th>
+                    <th rowspan="3">Credits</th>
+                    <th rowspan="3">Common Subject</th>
+                    <th rowspan="3" style="width:10%;">Paper Type</th>
+                  </tr>
+
+                  <tr>
+                    <th colspan="4">Hours per week</th>
+                    <th colspan="4">End Semester Exam</th>
+                    <th colspan="3">Internal Assessment</th>
+                  </tr>
+
+                  <tr>
+                    <th>L</th>
+                    <th>T</th>
+                    <th>P</th>
+                    <th>Tot</th>
+
+                    <th>TH</th>
+                    <th>Hrs.</th>
+                    <th>PR</th>
+                    <th>Hrs.</th>
+
+                    <th>CT</th>
+                    <th>TU</th>
+                    <th>PR(S)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let subj of SubjectBranchWiseList; let i = index">
+                    <td>{{ i+1 }}</td>
+
+                    <td>
+                      <div class="form-group ">
+                        <input readonly class="input-sm form-input" placeholder="Enter Subject Category" type="text"
+                               name="StreamPaper0SubjectCat" [(ngModel)]="subj.SubjectCat">
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+
+                        <input readonly class="input-sm form-input" placeholder="Enter Subject Code" type="text"
+                               name="StreamPaper0SubjectCode" [title]="subj.SubjectCode" [(ngModel)]="subj.SubjectCode">
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input readonly class="input-sm form-input" placeholder="Enter Subject Name" type="text"
+                               name="StreamPaper0SubjectName" [title]="subj.SubjectName" [(ngModel)]="subj.SubjectName">
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter L" type="text" name="StreamPaper0L" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.L">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter t" type="text" name="StreamPaper0T" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.T">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter p" type="text" name="StreamPaper0P" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.P">
+                      </div>
+                    </td>
+                    <td>
+                      <input class="input-sm form-input" type="text"
+                             [value]="(+subj.L || 0) + (+subj.T || 0) + (+subj.P || 0)" readonly>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter th" type="text" name="StreamPaper0Th" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.Th">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter pr" type="text" name="StreamPaper0Pr" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.Pr">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter ct" type="text" name="StreamPaper0Ct" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.Ct">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter tu" type="text" name="StreamPaper0Tu" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.Tu">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter prs" type="text" name="StreamPaper0Prs" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                               [(ngModel)]="subj.Prs">
+                      </div>
+                    </td>
+                    <td>
+                      <input class="input-sm form-input" type="text"
+                             [value]="(+subj.Th || 0) + (+subj.Ct || 0) + (+subj.Tu || 0)" readonly>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" readonly placeholder="Enter Credit" type="text"
+                               name="StreamPaper0Credit" [(ngModel)]="subj.Credit">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <select class="input-sm form-select" name="StreamPaper0CommonSubjectId"
+                                [(ngModel)]="subj.CommonSubjectID">
+                          <option value="0">Select Common Subject</option>
+                          <option *ngFor="let item of SubjectList" [value]="item.SubjectID">
+                            {{item.StreamSubjectcode}}
+                          </option>
+
+                        </select>
+                        
+                      </div>
+                    </td>
+                    <td style="width:10%;">
+                      <!--<select class="input-sm form-select" id="StreamPaper0PaperType"
+                              [(ngModel)]="subj.Paper_ID">
+                        <option value="0">Select Paper Type</option>
+                        <option *ngFor="let item of PaperTypeList" [value]="item.Paper_ID">{{item.PaperType}}</option>
+                      </select>-->
+                      <ng-select [items]="PaperTypeList"
+                                 bindLabel="PaperType"
+                                 bindValue="Paper_ID"
+                                 [multiple]="true"
+                                 [closeOnSelect]="false"
+                                 [searchable]="true"
+                                 placeholder="--Select Paper--"
+                                 [(ngModel)]="subj.Paper_IDs">
+
+                        <ng-template ng-option-tmp let-item="item" let-item$="item$">
+                          <input type="checkbox" [checked]="item$.selected" /> {{ item.PaperType }}
+                        </ng-template>
+
+                      </ng-select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+            <!--<div class="overflow-auto mt-3">
+              <table class="table table-border w-full" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+                  <tr>
+                    <th rowspan="3">#</th>
+                    <th rowspan="3">Subject Category</th>
+                    <th rowspan="3">Subject Code</th>
+                    <th rowspan="3">Subjects</th>
+                    <th colspan="4">Distribution Of Time</th>
+                    <th colspan="7">Distribution Of Max. Marks/Duration</th>
+                    <th rowspan="3">Total Marks</th>
+                    <th rowspan="3">Credits</th>
+                    <th rowspan="3">Common Subject</th>
+                    <th rowspan="3" style="width:10%;">Paper Type</th>
+                  </tr>
+
+                  <tr>
+                    <th colspan="4">Hours per week</th>
+                    <th colspan="4">End Semester Exam</th>
+                    <th colspan="3">Internal Assessment</th>
+                  </tr>
+
+                  <tr>
+                    <th>L</th>
+                    <th>T</th>
+                    <th>P</th>
+                    <th>Tot</th>
+
+                    <th>TH</th>
+                    <th>Hrs.</th>
+                    <th>PR</th>
+                    <th>Hrs.</th>
+
+                    <th>CT</th>
+                    <th>TU</th>
+                    <th>PR(S)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter Subject Category" type="text"
+                               id="StreamPaper0SubjectCat" formControlName="SubjectCat" [(ngModel)]="request.SubjectCat">
+
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+
+                        <input class="input-sm form-input" placeholder="Enter Subject Code" type="text"
+                               id="StreamPaper0SubjectCode" formControlName="SubjectCode"
+                               [(ngModel)]="request.SubjectCode">
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter Subject Name" type="text"
+                               id="StreamPaper0SubjectName" formControlName="SubjectName"
+                               [(ngModel)]="request.SubjectName">
+
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter L" type="text" id="StreamPaper0L"
+                               formControlName="Paper0L" [(ngModel)]="request.L">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter t" type="text" id="StreamPaper0T"
+                               formControlName="Paper0T" [(ngModel)]="request.T">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter p" type="text" id="StreamPaper0P"
+                               formControlName="Paper0P" [(ngModel)]="request.P">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter th" type="text" id="StreamPaper0Th"
+                               formControlName="Paper0Th" [(ngModel)]="request.Th">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter pr" type="text" id="StreamPaper0Pr"
+                               formControlName="Paper0Pr" [(ngModel)]="request.Pr">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter ct" type="text" id="StreamPaper0Ct"
+                               formControlName="Paper0Ct" [(ngModel)]="request.Ct">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter tu" type="text" id="StreamPaper0Tu"
+                               formControlName="Paper0Tu" [(ngModel)]="request.Tu">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter prs" type="text" id="StreamPaper0Prs"
+                               formControlName="Paper0Prs" [(ngModel)]="request.Prs">
+                      </div>
+                    </td>
+                    <td></td>
+                    <td>
+                      <div class="form-group ">
+                        <input class="input-sm form-input" placeholder="Enter Credit" type="text"
+                               id="StreamPaper0Credit" formControlName="Paper0Credit" [(ngModel)]="request.Credit">
+                      </div>
+                    </td>
+                    <td>
+                      <div class="form-group ">
+                        <select class="input-sm form-select" id="StreamPaper0CommonSubjectId"
+                                formControlName="Paper0CommonSubjectId" [(ngModel)]="request.SubjectID">
+                          <option value="0">Select Common Subject</option>
+                          <option *ngFor="let item of SubjectList" [value]="item.SubjectID">
+                            {{item.SubjectName}}
+                          </option>
+
+                        </select>
+                        <div *ngIf="isSubmitted&&form.Paper0CommonSubjectId.errors" class="text-danger">
+                          <p *ngIf="!form.Paper0CommonSubjectId.errors.DropdownValidators">
+                            <i aria-hidden="true"></i>This field is required .!
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td style="width:10%;">
+                      <select class="input-sm form-select" id="StreamPaper0PaperType"
+                              formControlName="Paper0PaperType" [(ngModel)]="request.Paper_ID">
+                        <option value="0">Select Paper Type</option>
+                        <option *ngFor="let item of PaperTypeList" [value]="item.Paper_ID">{{item.PaperType}}</option>
+                      </select>
+                      <div *ngIf="isSubmitted&&form.Paper0PaperType.errors" class="text-danger">
+                        <p *ngIf="!form.ddlLevel.errors.DropdownValidators">
+                          <i aria-hidden="true"></i>This field is
+                          required .!
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>-->
+
+          </div>
+
+          <div class="col-span-4 text-center">
+            <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Submit</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div>
+  </div>
+</div>
