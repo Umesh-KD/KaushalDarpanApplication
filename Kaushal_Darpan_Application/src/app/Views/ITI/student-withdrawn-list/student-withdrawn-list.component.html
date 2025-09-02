@@ -1,0 +1,226 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Withdrawn List</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a [routerLink]="['/AllotmentReportCollege']" class="text-sm font-medium text-slate-700" aria-current="page">Student Withdrawn List</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Level:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeLevelID">
+            <option value="0">Choose Option</option>
+            <option value="8">8th</option>
+            <option value="10">10th</option>
+            <option value="12">12th</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeTypeID">
+            <option value="0">Choose Option</option>
+            <option value="1">Eng</option>
+            <option value="2">Non-Eng</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade:
+          </label>
+          <select class="form-select w-full" [(ngModel)]="searchRequest.TradeId">
+            <option value="0" disabled selected hidden>Choose Option</option>
+            <option *ngFor="let item of ItiTradeList" [value]="item.Id">{{item.TradeName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllotedSeatByCollegeList()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Reset</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="downloadAllotedCollegePDF()"><i class="ti ti-download"></i> Download PDF</a>
+    </div>
+
+    <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+      </div>
+    </div>
+    <!--{{paginatedInTableData | json}}-->
+    <!--Table-->
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" rowspan="2">#</th>
+            <th class="text-left" rowspan="2">Application No</th>
+            <th class="text-left" rowspan="2">Name</th>
+            <th class="text-left" rowspan="2">Father Name</th>
+            <th class="text-left" rowspan="2">Trade Code</th>
+            <th class="text-left" rowspan="2">Trade Name</th>
+            <th class="text-left" rowspan="2">Alloted Category</th>
+            <th class="text-left" rowspan="2">Alloted Status</th>
+            <th class="text-left" rowspan="2">Remark</th>
+            <th class="text-left" rowspan="2">Reporting Date and Time</th>
+            <th class="text-left" rowspan="2">Doucment</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td>{{ (startInTableIndex+1) + idx }}</td>
+            <td>{{ item.ApplicationNo }}</td>
+            <td>{{ item.Name }}</td>
+            <td>{{ item.FatherName }}</td>
+            <td>{{ item.TradeCode }}</td> 
+            <td>{{ item.TradeName }}</td>
+            <td>{{ item.AllotedCategory }}</td>
+            <td>{{ item.AllotmentStatus }}</td>
+            <td>{{ item.WithdrawRemarks}}</td>
+            <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/ITI/StudentWithdrawn/' + item.WithdrawSeatDocument}}"
+                   *ngIf="item.WithdrawSeatDocument !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+              
+
+            </td>
+
+</tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!--Pagination-->
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
+</div>
+
+
+<!--<ng-template #MyModel_ReplayQuery let-modal>-->
+  <ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto">
+
+    
+
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between items-center">
+            <b><i class="fa fa-plus"></i> Withdrawn</b>
+            <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+          </div>
+
+          <form [formGroup]="withdrawnFormGroup" id="withdrawnFormGroup">
+            <div class="card-body">
+              <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
+
+                <!-- Attachments -->
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                         for="fileStudentPhoto">Attachments <span class="StarMarking">*</span></label>
+                  <div class="flex fileUploader">
+                    <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                           id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                    <label for="fileStudentPhoto">
+                      <span>Choose File</span>
+                      {{studentWithdrawnRequest.DoucmentName === '' ? 'No File Choosen' : studentWithdrawnRequest.DoucmentName}}
+                    </label>
+                    <div class="flex">
+
+                      <a *ngIf="studentWithdrawnRequest.DoucmentName"
+                         [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/StudentWithdrawn/' + studentWithdrawnRequest.DoucmentName"
+                         class="btn bg-primary text-white m-0"
+                         target="_blank">
+                        <i class="ti ti-eye"></i>
+                      </a>
+
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Remark -->
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Remark <span class="StarMarking">*</span>
+                  </label>
+                  <textarea class="form-input"
+                            placeholder="Remark "
+                            formControlName="Remarks"></textarea>
+                  <div *ngIf="isSubmitted && withdrawnFormGroup.get('Remarks')?.errors" class="text-danger">
+                    <p *ngIf="withdrawnFormGroup.get('Remarks')?.hasError('required')">
+                      This field is required.!
+                    </p>
+                  </div>
+
+                </div>
+
+
+
+              </div>
+            </div>
+          </form>
+
+          <div class="card-footer text-center">
+            <button type="button"
+                    class="btn bg-info text-white mt-6 mr-3"
+                    (click)="SavestudentWithdrawnRequestData()">
+              Submit
+            </button>
+            <button type="button"
+                    class="btn bg-danger text-white mt-6"
+                    (click)="CloseModalPopup()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+   
+  </ng-template>
