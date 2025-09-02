@@ -374,7 +374,13 @@
             <td align="left">{{row.InstituteName}}</td>
             <td align="left">{{row.BranchName}}</td>
             <td align="left">{{row.SemesterName}}<br />{{row.StudentExamType}}</td>
-            <td align="left">{{row.StudentExamStatus}}</td>
+            <td align="left">
+              {{row.StudentExamStatus}}
+              <span *ngIf="row.status ==_enumExamStudentStatus.Enrolled && row.st_his_StatusId >0"
+                    style="color: green; font-size: 11px; position: relative; display: inline-block; ">
+                ({{ row.st_his_StatusName }})
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
