@@ -105,13 +105,23 @@ export class ItiExaminerService {
             ).toPromise();
     }
 
-    public async GetItiAppointExaminerDetails(request: ITI_AppointExaminerDetailsModel) {
+  public async GetItiExaminerBundleDetails(request: ITI_AppointExaminerDetailsModel) {
         var body = JSON.stringify(request);
-        return await this.http.post(`${this.APIUrl}/GetItiAppointExaminerDetails`, body, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/GetItiExaminerBundleDetails`, body, this.headersOptions)
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
-    }
+  }
+
+
+  public async GetItiAppointExaminerDetails(request: ITI_AppointExaminerDetailsModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetItiAppointExaminerDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetItiRemunerationExaminerDetails(request: ITI_AppointExaminerDetailsModel) {
     var body = JSON.stringify(request);
