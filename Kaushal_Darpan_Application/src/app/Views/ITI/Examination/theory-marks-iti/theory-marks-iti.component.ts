@@ -576,6 +576,18 @@ export class TheoryMarksItiComponent {
     }
 
 
+  ChangeStatus(item:any)
+  {
+    if (item.IsPresentTheory == 1)
+    {
+      item.Marked = true;
+    }
+    else {
+      item.ObtainedTheory=0
+      item.Marked = false;
+    }
+
+  }
   
 
 

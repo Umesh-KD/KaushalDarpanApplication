@@ -94,8 +94,8 @@
             <th class="text-left" rowspan="2">Father Name</th>
             <th class="text-left" rowspan="2">Trade Code</th>
             <th class="text-left" rowspan="2">Trade Name</th>
-            <th class="text-left" rowspan="2">Remark</th>
             <th class="text-left" rowspan="2">Alloted Category</th>
+            <th class="text-left" rowspan="2">Alloted Status</th>
             <th class="text-left" rowspan="2">Reporting Date and Time</th>
             <th class="text-left" rowspan="2">Action</th>
           </tr>
@@ -110,16 +110,23 @@
             <td>{{ item.FatherName }}</td>
             <td>{{ item.TradeCode }}</td>
             <td>{{ item.TradeName }}</td>
-            <td>Remark</td>
             <td>{{ item.AllotedCategory }}</td>
+            <td>{{ item.AllotmentStatus }}</td>
             <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
             <td>
+              <!--<button class="btn bg-info text-white" type="button"
+                  (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
+                Withdrawn
+              </button>-->
+
               <button class="btn bg-info text-white" type="button"
-                      (click)="ReplayQueryUpdate(MyModel_ReplayQuery, item.CollegeId)">
+                      *ngIf="item.AllotmentStatus != 9"
+                      (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
                 Withdrawn
               </button>
 
-          </tr>
+
+</tr>
         </tbody>
       </table>
     </div>
@@ -157,22 +164,10 @@
             <div class="card-body">
               <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-3">
 
-                <!-- Remark -->
-                <div>
-                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                    Remark <span class="StarMarking">*</span>
-                  </label>
-                  <textarea class="form-input"
-                            placeholder="Remark "
-                            formControlName="Remarks"></textarea>
-
-                 
-                </div>
-
                 <!-- Attachments -->
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                         for="fileStudentPhoto">Attachments</label>
+                         for="fileStudentPhoto">Attachments <span class="StarMarking">*</span></label>
                   <div class="flex fileUploader">
                     <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                            id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
@@ -181,11 +176,32 @@
                       {{studentWithdrawnRequest.DoucmentName === '' ? 'No File Choosen' : studentWithdrawnRequest.DoucmentName}}
                     </label>
                     <div class="flex">
-                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + studentWithdrawnRequest.DoucmentName}}" *ngIf="studentWithdrawnRequest.DoucmentName !=''"
-                         class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                      <a *ngIf="studentWithdrawnRequest.DoucmentName"
+                         [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/StudentWithdrawn/' + studentWithdrawnRequest.DoucmentName"
+                         class="btn bg-primary text-white m-0"
+                         target="_blank">
+                        <i class="ti ti-eye"></i>
+                      </a>
 
                     </div>
                   </div>
+                </div>
+
+                <!-- Remark -->
+                <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                    Remark <span class="StarMarking">*</span>
+                  </label>
+                  <textarea class="form-input"
+                            placeholder="Remark "
+                            formControlName="Remarks"></textarea>
+                  <div *ngIf="isSubmitted && withdrawnFormGroup.get('Remarks')?.errors" class="text-danger">
+                    <p *ngIf="withdrawnFormGroup.get('Remarks')?.hasError('required')">
+                      This field is required.!
+                    </p>
+                  </div>
+
                 </div>
 
 
