@@ -176,8 +176,13 @@
                       {{studentWithdrawnRequest.DoucmentName === '' ? 'No File Choosen' : studentWithdrawnRequest.DoucmentName}}
                     </label>
                     <div class="flex">
-                      <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + studentWithdrawnRequest.DoucmentName}}" *ngIf="studentWithdrawnRequest.DoucmentName !=''"
-                         class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+
+                      <a *ngIf="studentWithdrawnRequest.DoucmentName"
+                         [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/StudentWithdrawn/' + studentWithdrawnRequest.DoucmentName"
+                         class="btn bg-primary text-white m-0"
+                         target="_blank">
+                        <i class="ti ti-eye"></i>
+                      </a>
 
                     </div>
                   </div>

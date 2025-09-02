@@ -415,6 +415,7 @@ export class AllotmentReportDownloadComponent {
   async getBTERCollege() {
     try {
       this.searchRequest.Action = "_BTERCollegeByManagementType";
+      this.searchRequest.FinancialYearID =9;
       this.loaderService.requestStarted();
       await this.BTERCollegeTradeService.getBTERCollegeByManagement(this.searchRequest)
         .then((data: any) => {
