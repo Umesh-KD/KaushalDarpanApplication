@@ -690,11 +690,12 @@ export enum EnumBugetStatus
   
 }
 
-export enum EnumHostelStatus
-{
+export enum EnumHostelStatus {
   HostelApply = 1,
   HostelGenerateProvisionalMerit= 2,
-  HostelAllotted=4
+  HostelAllotted=4,
+  Deallocate = 6,
+  Reassign = 7
 }
 
 

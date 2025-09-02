@@ -1,38 +1,38 @@
 import { Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { ReportService } from '../../../../Services/Report/report.service';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { CenterAllocationService } from '../../../../Services/Center_Allocation/center-allocation.service';
-import { CenterExamAllocationSearchModel, CenterAllocationtDataModels, InstituteList, ITIAssignPracticaLExaminer } from '../../../../Models/CenterAllocationDataModels';
-import { EnumDepartment, EnumEnrollNoStatus, EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
-import { CenterAllotmentService } from '../../../../Services/CenterAllotment/CenterAllotment.service';
-import { AppsettingService } from '../../../../Common/appsetting.service';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { ReportService } from '../../../Services/Report/report.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { CenterAllocationService } from '../../../Services/Center_Allocation/center-allocation.service';
+import { CenterExamAllocationSearchModel, CenterAllocationtDataModels, InstituteList, ITIAssignPracticaLExaminer } from '../../../Models/CenterAllocationDataModels';
+import { EnumDepartment, EnumEnrollNoStatus, EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { CenterAllotmentService } from '../../../Services/CenterAllotment/CenterAllotment.service';
+import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { AllotmentConfigurationModel, ListAllotmentConfigurationModel } from '../../../../Models/AllotmentConfigurationDataModel';
-import { AllotmentConfigurationService } from '../../../../Services/Allotment-Configuration/allotment-configuration.service';
-import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
-import { UserMasterService } from '../../../../Services/UserMaster/user-master.service';
-import { VacantSeatRequestModel, AllotmentReportCollegeRequestModel } from '../../../../Models/TheoryMarksDataModels';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { AllotmentConfigurationModel, ListAllotmentConfigurationModel } from '../../../Models/AllotmentConfigurationDataModel';
+import { AllotmentConfigurationService } from '../../../Services/Allotment-Configuration/allotment-configuration.service';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
+import { UserMasterService } from '../../../Services/UserMaster/user-master.service';
+import { VacantSeatRequestModel, AllotmentReportCollegeRequestModel } from '../../../Models/TheoryMarksDataModels';
 import * as XLSX from 'xlsx';
-import { ItiTradeSearchModel, StudentthdranSeat1Model } from '../../../../Models/CommonMasterDataModel';
-import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMarksDataMedels';
-import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
-import { ITIPapperSetterDataModel } from '../../../../Models/ITIPapperSetterDataModel';
-import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { ItiTradeSearchModel, StudentthdranSeat1Model } from '../../../Models/CommonMasterDataModel';
+import { ReportCollegeModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
+import { ITIAllotmentService } from '../../../Services/ITI/ITIAllotment/itiallotment.service';
+import { ITIPapperSetterDataModel } from '../../../Models/ITIPapperSetterDataModel';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
 
 @Component({
-  selector: 'app-student-withdrawn-report',
+  selector: 'app-student-withdrawn-list',
   standalone: false,
-  templateUrl: './student-withdrawn-report.component.html',
-  styleUrl: './student-withdrawn-report.component.css'
+  templateUrl: './student-withdrawn-list.component.html',
+  styleUrl: './student-withdrawn-list.component.css'
 })
-export class studentwithdrawnreportComponent {
+export class studentwithdrawnlistComponent {
   public isFormSubmitted: boolean = false;
   public isLoading: boolean = false;
   public searchRequest = new AllotmentReportCollegeRequestModel();
@@ -109,7 +109,8 @@ export class studentwithdrawnreportComponent {
 
     try {
       this.loaderService.requestStarted();
-      const response = await this.ReportService.AllotmentReportCollege(this.searchRequest);
+      //const response = await this.ReportService.AllotmentReportCollege(this.searchRequest);
+      const response = await this.ReportService.studentWithdrawnList(this.searchRequest);
       const result = JSON.parse(JSON.stringify(response));
       this.AllotedSeatList = result?.Data?.Table || [];
       this.totalInTableRecord = this.AllotedSeatList.length;

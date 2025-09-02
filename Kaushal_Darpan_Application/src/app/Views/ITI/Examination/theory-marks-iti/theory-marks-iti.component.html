@@ -65,13 +65,7 @@
 
         <tbody>
           <tr *ngFor="let row of paginatedInTableData ;let idx=index;"
-
-             [ngClass]="{ 'text-danger': row.IsPresentTheory == 0 }"
-
-
-              >
-
-            
+             [ngClass]="{ 'text-danger': row.IsPresentTheory == 0 }" >
 
             <td align="center">
               <input [disabled]="isFinalsubmit ||row.IsPresentTheory == 0" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
@@ -103,13 +97,13 @@
               </div>
             </td>
             <td align="left">
-
-              <select class="form-select" id="IsPresentTheory" [disabled]="!row.Marked" [(ngModel)]="row.IsPresentTheory">
+              <!--[disabled]="!row.Marked"-->
+              <select class="form-select" id="IsPresentTheory" [(ngModel)]="row.IsPresentTheory" (change)="ChangeStatus(row)">
                 <option value="">Choose Option</option>
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
                 <!--<option value="3">Detained</option>
-      <option value="4">UFM</option>-->
+    <option value="4">UFM</option>-->
               </select>
             </td>
           </tr>
