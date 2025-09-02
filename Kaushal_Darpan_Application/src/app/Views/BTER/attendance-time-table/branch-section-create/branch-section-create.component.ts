@@ -105,6 +105,8 @@ export class BranchSectionCreateComponent {
   ) { }
 
   async ngOnInit() {
+    // this.IIPMasterFormGroup.value.streamID=0;
+    // this.IIPMasterFormGroup.value.SemesterID=0;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));   
     await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
@@ -148,6 +150,7 @@ this.IsBranch=false;
     this.GetBranchHODApplyList();
     this.getData();
     this.loadDropdownData();
+    
   }
 
     loadDropdownData(): void {
@@ -184,9 +187,9 @@ this.IsBranch=false;
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.resBranchHOD = data.Data
-          this.IIPMasterFormGroup.patchValue({
-            StreamID: this.resBranchHOD[0].StreamID
-          });
+          // this.IIPMasterFormGroup.patchValue({
+          //   StreamID: this.resBranchHOD[0].StreamID
+          // });
           this.iSHOD = this.resBranchHOD.some((x: { SSOID: string; }) => x.SSOID === this.sSOLoginDataModel.SSOID);
         }, error => console.error(error));
     }
@@ -439,7 +442,7 @@ this.IsBranch=false;
         EndTermID:this.sSOLoginDataModel.EndTermID,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
         StreamID: this.IIPMasterFormGroup.value.StreamID,
-        Section: this.sectionForm.value.sections,
+        Section: JSON.stringify(this.sectionForm.value.sections),
         ActiveStatus: 1,
         DeleteStatus: 0,
         CreatedBy: this.sSOLoginDataModel.UserID,
@@ -619,6 +622,7 @@ this.IsBranch=false;
     this.sectionForm.reset({ streamName: '' });
     this.sections.clear();
     this.isSubmitted = false;
+    
   }
 
   private getDismissReason(reason: any): string {
