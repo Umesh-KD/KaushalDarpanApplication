@@ -96,6 +96,19 @@ export class AddITIQuarterReportComponent {
   }
 
 
+  ClcSanctioned() {
+    this.formData.TotalSanctionedAmt =
+      (this.formData.CivilSanctionedAmt ?? 0) +
+      (this.formData.ToolsSanctionedAmt ?? 0) +
+      (this.formData.FurnitureSanctionedAmt ?? 0) +
+      (this.formData.BooksSanctionedAmt ?? 0) +
+      (this.formData.AdditionalSanctionedAmt ?? 0) +
+      (this.formData.MaintenanceSanctionedAmt ?? 0) +
+      (this.formData.MiscellaneousSanctionedAmt ?? 0);
+  }
+
+
+
   async onSubmit(form: any)
   {
     if (!form.valid)

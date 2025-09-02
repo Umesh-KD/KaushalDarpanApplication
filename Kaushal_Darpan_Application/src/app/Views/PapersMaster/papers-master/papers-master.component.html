@@ -21,29 +21,29 @@
         <a routerLink="/addpapersmaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Paper Name</label>
-          <input type="text" class="form-input" placeholder="Search By Paper Name" [(ngModel)]="searchByPaper" >
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch</label>
-          <select class="form-select" [(ngModel)]="searchByBranch" >
-            <option value="">Choose option</option>
-            <option *ngFor="let item of BranchList" [value]="item.StreamID"  >({{item.Code}}) {{item.Name}}</option>
-          </select>
-        </div>
-
+          <input type="text" class="form-input" placeholder="Search By Paper Name" [(ngModel)]="searchByPaper">
+        </div>-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Semester</label>
-          <select class="form-select" id="StreamStreamTypeId" [(ngModel)]="searchBySemester" >
+          <select class="form-select" id="StreamStreamTypeId" [(ngModel)]="searchBySemester">
             <option value="">Choose Option</option>
             <option *ngFor="let item of SemesterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
           </select>
         </div>
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch</label>
+          <select class="form-select" [(ngModel)]="searchByBranch">
+            <option value="">Choose option</option>
+            <option *ngFor="let item of BranchList" [value]="item.StreamID">({{item.Code}}) {{item.Name}}</option>
+          </select>
+        </div>
+
+   
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Code</label>
-          <input type="text" class="form-input" placeholder="Search By Subject Code" [(ngModel)]="searchBySubjectCode" >
+          <input type="text" class="form-input" placeholder="Search By Subject Code" [(ngModel)]="searchBySubjectCode">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Category</label>
@@ -51,10 +51,10 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Subject Name</label>
-          <input type="text" class="form-input" placeholder="Search By Subject Name" [(ngModel)]="searchBySubjectName" >
-        </div>
+          <input type="text" class="form-input" placeholder="Search By Subject Name" [(ngModel)]="searchBySubjectName">
+        </div>-->
         <div>
-          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchFilter()">Search</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
         </div>
 
@@ -86,7 +86,7 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            
+
             <th rowspan="3">Branch</th>
             <th rowspan="3">Semester</th>
             <th rowspan="3">Subject Category</th>
@@ -97,7 +97,8 @@
             <th rowspan="3">Total Marks</th>
             <th rowspan="3">Credits</th>
             <th rowspan="3">Common Subject</th>
-            <th rowspan="3" style="width:10%;">Action</th>
+            <th rowspan="3">Paper Type</th>
+            <!--<th rowspan="3" style="width:10%;">Action</th>-->
           </tr>
 
           <tr>
@@ -125,9 +126,9 @@
 
         <tbody> 
           <tr *ngFor="let paper of PaperMasterList | tableSearchFilter:Table_SearchText;let idx=index;   ">
-            
+
             <td>{{paper.BranchName}}</td>
-           
+
             <td align="center">{{ paper.SemesterID }}</td>
             <td>{{ paper.SubjectCat }}</td>
             <td>{{ paper.SubjectCode }}</td>
@@ -143,15 +144,16 @@
             <td>{{ paper.ct }}</td>
             <td>{{ paper.tu }}</td>
             <td>{{ paper.prs }}</td>
-            <td align="center">{{ paper.th + paper.pr + paper.ct + paper.tu + paper.prs }}</td> <!-- Total Marks -->
+            <td align="center">{{ paper.th + paper.pr + paper.ct + paper.tu  }}</td> <!-- Total Marks -->
             <td align="center">{{ paper.Credit }}</td>
-            <td align="center">{{ paper.SubjectName }}</td>
-            <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="Edit" (click)="onEdit(paper.PaperID)"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" (click)="btnDelete_OnClick(paper.PaperID)"><i class="ti ti-trash"></i></a>
-              </div>
-            </td>
+            <td align="center">{{ paper.CommonSubjectName }}</td>
+            <td align="center">{{ paper.PaperTypes }}</td>
+            <!--<td>
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0);" title="Edit" (click)="onEdit(paper.PaperID)"><i class="ti ti-pencil"></i></a>
+      <a href="javascript:void(0);" title="Delete" (click)="btnDelete_OnClick(paper.PaperID)"><i class="ti ti-trash"></i></a>
+    </div>
+  </td>-->
           </tr>
         </tbody>
       </table>

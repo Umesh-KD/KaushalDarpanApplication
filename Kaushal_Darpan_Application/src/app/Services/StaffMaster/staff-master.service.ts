@@ -249,6 +249,13 @@ export class StaffMasterService {
     ).toPromise();
   }
 
+  public async GetStreamIDBySemester(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStreamIDBySemester`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

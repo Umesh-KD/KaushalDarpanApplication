@@ -76,66 +76,74 @@
             <input class="form-input" type="text" [(ngModel)]="formData.InstalmentPendingAmt" name="InstalmentPendingAmt" placeholder="Pending Amount" disabled>
 
           </div>
-
-          <div>
-            <label for="SchemeSanctioned" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade sanctioned under the scheme <span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="No. of Sanctioned Scheme" type="number" [(ngModel)]="formData.SchemeSanctioned" required #SchemeSanctioned="ngModel" name="SchemeSanctioned">
-            <div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
-              <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
-            </div>
-          </div>
           <div>
             <label for="SchemeSanctionedTrade" class="text-gray-800 text-sm font-medium inline-block mb-1">Sanctioned trade<span class="StarMarking">*</span></label>
             <!--<select formControlName="SchemeSanctionedTrade" class="form-input">
-            <option [value]="">--Select--</option>
-            <option *ngFor="let item of TradeMasterDDL"
-                    [value]="item.ID">
-              {{ item.Name }}
-            </option>
-          </select>-->
+      <option [value]="">--Select--</option>
+      <option *ngFor="let item of TradeMasterDDL"
+              [value]="item.ID">
+        {{ item.Name }}
+      </option>
+    </select>-->
             <ng-multiselect-dropdown #SanctionedTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
-                                     [(ngModel)]="formData.SanctionedTradeList" [settings]="settingsMultiselector" (onchange)="onItemSelect()"
-                                     [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
-                                     (onSelects)="onItemSelect()" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
-                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+                                     [(ngModel)]="formData.SanctionedTradeList" [settings]="settingsMultiselector"
+                                     [disabled]="false" (onDropDownCloses)="onDropDownCloses($event)"
+                                     (onSelect)="updateSanctionedCount()"
+                                     (onDeSelect)="updateSanctionedCount()"
+                                     (onSelectAll)="updateSanctionedCount()"
+                                     (onDeSelectAll)="updateSanctionedCount()" [ngModelOptions]="{standalone: true}">
             </ng-multiselect-dropdown>
             <!--<div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
-            <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
-          </div>-->
+      <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
+    </div>-->
           </div>
           <div>
-            <label for="TradeAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade affiliated <span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="No. of Affiliated Trade" type="number" [(ngModel)]="formData.TradeAffiliated" required #TradeAffiliated="ngModel" name="TradeAffiliated">
-            <div class="text-red-500 text-sm" *ngIf="TradeAffiliated.invalid && (TradeAffiliated.dirty || TradeAffiliated.touched)">
-              <div *ngIf="TradeAffiliated.errors?.['required']"> This field is required .!</div>
-            </div>
+            <label for="SchemeSanctioned" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade sanctioned under the scheme <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Sanctioned Scheme" type="number" [(ngModel)]="formData.SchemeSanctioned" required #SchemeSanctioned="ngModel" name="SchemeSanctioned" disabled>
+            <!--<div class="text-red-500 text-sm" *ngIf="SchemeSanctioned.invalid && (SchemeSanctioned.dirty || SchemeSanctioned.touched)">
+      <div *ngIf="SchemeSanctioned.errors?.['required']"> This field is required .!</div>
+    </div>-->
           </div>
+
           <div>
             <label for="TradeAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Affiliated trade<span class="StarMarking">*</span></label>
-            <ng-multiselect-dropdown #AffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
+            <ng-multiselect-dropdown #AffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDLAffilate"
                                      [(ngModel)]="formData.AffilateTradeList" [settings]="settingsMultiselector"
                                      [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
-                                     (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
-                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+                                     (onSelect)="updateAffilateCount()"
+                                     (onDeSelect)="updateAffilateCount()"
+                                     (onSelectAll)="updateAffilateCount()"
+                                     (onDeSelectAll)="updateAffilateCount()" [ngModelOptions]="{standalone: true}">
             </ng-multiselect-dropdown>
           </div>
 
           <div>
-            <label for="TradeNotAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade not affiliated <span class="StarMarking">*</span></label>
-            <input class="form-input" placeholder="No. of Not Affiliated Trade" type="number" [(ngModel)]="formData.TradeNotAffiliated" required #TradeNotAffiliated="ngModel" name="TradeNotAffiliated">
-            <div class="text-red-500 text-sm" *ngIf="TradeNotAffiliated.invalid && (TradeNotAffiliated.dirty || TradeNotAffiliated.touched)">
-              <div *ngIf="TradeNotAffiliated.errors?.['required']"> This field is required .!</div>
-            </div>
+            <label for="TradeAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade affiliated <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Affiliated Trade" type="number" [(ngModel)]="formData.TradeAffiliated" required #TradeAffiliated="ngModel" name="TradeAffiliated" disabled>
+            <!--<div class="text-red-500 text-sm" *ngIf="TradeAffiliated.invalid && (TradeAffiliated.dirty || TradeAffiliated.touched)">
+              <div *ngIf="TradeAffiliated.errors?.['required']"> This field is required .!</div>
+            </div>-->
           </div>
+
           <div>
             <label for="TradeNotAffiliatedName" class="text-gray-800 text-sm font-medium inline-block mb-1">Not affiliated trade<span class="StarMarking">*</span></label>
-            <ng-multiselect-dropdown #NotAffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDL"
+            <ng-multiselect-dropdown #NotAffilateTradeList [placeholder]="'--Select--'" [data]="TradeMasterDDLNotAffilate"
                                      [(ngModel)]="formData.NotAffilateTradeList" [settings]="settingsMultiselector"
                                      [disabled]="false" (onFilterChanges)="onFilterChanges($event)" (onDropDownCloses)="onDropDownCloses($event)"
-                                     (onSelects)="onItemSelects($event)" (onDeSelects)="onDeSelects($event)" (onSelectAlls)="onSelectAlls($event)"
-                                     (onDeSelectAlls)="onDeSelectAlls($event)" [ngModelOptions]="{standalone: true}">
+                                     (onSelect)="updateNotAffilateCount()"
+                                     (onDeSelect)="updateNotAffilateCount()"
+                                     (onSelectAll)="updateNotAffilateCount()"
+                                     (onDeSelectAll)="updateNotAffilateCount()" [ngModelOptions]="{standalone: true}">
             </ng-multiselect-dropdown>
           </div>
+          <div>
+            <label for="TradeNotAffiliated" class="text-gray-800 text-sm font-medium inline-block mb-1">No. of trade not affiliated <span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="No. of Not Affiliated Trade" type="number" [(ngModel)]="formData.TradeNotAffiliated" required #TradeNotAffiliated="ngModel" name="TradeNotAffiliated" disabled>
+            <!--<div class="text-red-500 text-sm" *ngIf="TradeNotAffiliated.invalid && (TradeNotAffiliated.dirty || TradeNotAffiliated.touched)">
+              <div *ngIf="TradeNotAffiliated.errors?.['required']"> This field is required .!</div>
+            </div>-->
+          </div>
+
           <div>
             <label for="Remarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Reason of trade not affiliated <span class="StarMarking">*</span></label>
             <input class="form-input" placeholder="No. of Not Affiliated Trade" type="text" [(ngModel)]="formData.Remarks" #Remarks="ngModel" name="Remarks" />

@@ -5,6 +5,7 @@ import { AddPapersMasterRoutingModule } from './add-papers-master-routing.module
 import { AddPapersMasterComponent } from './add-papers-master.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../Shared/loader/loader.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { LoaderModule } from '../../Shared/loader/loader.module';
     AddPapersMasterRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    LoaderModule
+    LoaderModule,
+    NgSelectModule
 
     
   ]

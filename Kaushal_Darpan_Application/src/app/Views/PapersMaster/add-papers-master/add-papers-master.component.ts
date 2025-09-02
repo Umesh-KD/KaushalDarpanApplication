@@ -15,10 +15,10 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
-    selector: 'app-add-papers-master',
-    templateUrl: './add-papers-master.component.html',
-    styleUrls: ['./add-papers-master.component.css'],
-    standalone: false
+  selector: 'app-add-papers-master',
+  templateUrl: './add-papers-master.component.html',
+  styleUrls: ['./add-papers-master.component.css'],
+  standalone: false
 })
 export class AddPapersMasterComponent {
   PaperForm!: FormGroup;
@@ -33,8 +33,8 @@ export class AddPapersMasterComponent {
 
   public PaperTypeList: any = [];
   public SubjectList: any = [];
-
   public SemesterList: any = [];
+  public SubjectBranchWiseList: PapersMasterDataModels[] = [];
   public BranchMasterList: any = []
   public FinancialYearList: any = []
   public UserID: number = 0;
@@ -73,26 +73,21 @@ export class AddPapersMasterComponent {
       StreamID: ['', [DropdownValidators]],
       SemesterID: ['', [DropdownValidators]],
 
-      FinancialYearID: ['', [DropdownValidators]],
-      SubjectCat: ['', Validators.required],
-      SubjectCode: ['', Validators.required],
-      SubjectName: ['', Validators.required],
-      Paper0L: ['', Validators.required],
-      Paper0T: ['', Validators.required],
-      Paper0P: ['', Validators.required],
-      Paper0Th: ['', Validators.required],
-      Paper0Pr: ['', Validators.required],
-      Paper0Ct: ['', Validators.required],
-      Paper0Tu: ['', Validators.required],
-      Paper0Prs: ['', Validators.required],
-      Paper0Credit: ['', Validators.required],
-      Paper0CommonSubjectId: ['', [DropdownValidators]],
-      Paper0PaperType: ['', [DropdownValidators]]
-
-
-
-
-
+      /*FinancialYearID: ['', [DropdownValidators]],*/
+      //SubjectCat: ['', Validators.required],
+      //SubjectCode: ['', Validators.required],
+      //SubjectName: ['', Validators.required],
+      //Paper0L: ['', Validators.required],
+      //Paper0T: ['', Validators.required],
+      //Paper0P: ['', Validators.required],
+      //Paper0Th: ['', Validators.required],
+      //Paper0Pr: ['', Validators.required],
+      //Paper0Ct: ['', Validators.required],
+      //Paper0Tu: ['', Validators.required],
+      //Paper0Prs: ['', Validators.required],
+      //Paper0Credit: ['', Validators.required],
+      //Paper0CommonSubjectId: ['', [DropdownValidators]],
+      //Paper0PaperType: ['', [DropdownValidators]]
 
 
     });
@@ -101,11 +96,12 @@ export class AddPapersMasterComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.UserID = this.sSOLoginDataModel.UserID;
 
-    await this.GetStreamMasterList()
-    await this.GetPaperType()
-    await this.GetSubjectList()
-    await this.GetSemesterList()
-    await this.GetFinancialYear()
+    await this.GetStreamMasterList();
+    await this.GetPaperType();
+    
+    await this.GetSemesterList();
+    await this.GetFinancialYear();
+    
     if (this.PaperID) {
       await this.GetByID(this.PaperID)
     }
@@ -166,7 +162,7 @@ export class AddPapersMasterComponent {
   async GetStreamMasterList() {
     try {
       this.loaderService.requestStarted();
-      await this.streamService.GetAllData()
+      await this.streamService.GetAllData(this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -217,6 +213,7 @@ export class AddPapersMasterComponent {
 
   async GetSubjectList() {
     try {
+      this.SubjectBranchWiseList = [];
       this.loaderService.requestStarted();
       await this.commonMasterService.GetSubjectMaster(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
@@ -225,7 +222,7 @@ export class AddPapersMasterComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.SubjectList = data['Data'];
-
+          this.SubjectList = data['Data'].filter((x: any) => x.StreamId == this.request.StreamID && x.SemesterId == this.request.SemesterID);
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -240,6 +237,44 @@ export class AddPapersMasterComponent {
   }
 
 
+  BranchReset()
+  {
+
+    this.request.StreamID = 0;
+
+  }
+
+  async GetSubjectBranchWiseList() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      let request =
+      {
+        SemesterID: this.request.SemesterID,
+        StreamID: this.request.StreamID
+
+      };
+      await this.PaperMasterService.GetSubjectListBranchWise(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          this.SubjectBranchWiseList = data['Data'];//data
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
   get form() { return this.PaperForm.controls; }
 
   async GetByID(id: number) {
@@ -290,21 +325,33 @@ export class AddPapersMasterComponent {
   }
 
   async saveData() {
+    
     this.isSubmitted = true;
     if (this.PaperForm.invalid) {
       return console.log("error", this.PaperForm)
     }
 
-
     this.loaderService.requestStarted();
     this.isLoading = true;
 
-    try {
+    if (this.SubjectBranchWiseList.length == 0) {
+      this.toastr.warning('Please select at least one row');
+      return;
+    }
 
-      if (this.PaperID) {
-        this.request.PaperID = this.PaperID
-      }
-      await this.PaperMasterService.SaveData(this.request)
+    try {
+      this.SubjectBranchWiseList.forEach((element: any) => {
+
+        element.CreatedBy = this.sSOLoginDataModel.UserID;
+        element.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+        element.EndTermID = this.sSOLoginDataModel.EndTermID;
+        element.StreamID = this.request.StreamID;
+        element.SemesterID = this.request.SemesterID;
+        element.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+      })
+     
+      debugger
+      await this.PaperMasterService.PaperSaveData(this.SubjectBranchWiseList)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -312,7 +359,11 @@ export class AddPapersMasterComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.ResetControl();
-
+            this.router.navigate(['/papersmaster']);
+          }
+         else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning('Duplicate Data Found')
+           
 
           }
           else {
@@ -331,41 +382,25 @@ export class AddPapersMasterComponent {
   }
 
 
-
+  async SearchFilter() {
+    debugger
+    if (this.request.SemesterID == 0) {
+      this.toastr.warning('Please Select Semester');
+      return;
+    }
+    if (this.request.StreamID == 0) {
+      this.toastr.warning('Please Select Branch');
+      return;
+    }
+   
+    await this.GetSubjectBranchWiseList();
+    
+  }
 
   async ResetControl() {
     this.isSubmitted = false;
     this.request = new PapersMasterDataModels
-    this.PaperForm.reset();
-
-    // Reset form values if necessary
-    this.PaperForm.patchValue({
-      SemesterID: 0,
-      BranchID: 0,
-      FinancialYearID: 0,
-      SubjectID: '',
-      SubjectCat: '',
-      SubjectCode: '',
-      SubjectName: '',
-      Paper0L: '',
-      Paper0T: '',
-
-      Paper0P: '',
-      Paper0Th: '',
-
-      Paper0Pr: '',
-      Paper0Ct: '',
-      Paper0Tu: '',
-      Paper0Prs: '',
-      Paper0Credit: '',
-      Paper0CommonSubjectId: 0,
-      Paper0PaperType: 0,
-
-
-
-
-
-    });
+    this.SubjectBranchWiseList = [];
   }
 
   onCancel(): void {

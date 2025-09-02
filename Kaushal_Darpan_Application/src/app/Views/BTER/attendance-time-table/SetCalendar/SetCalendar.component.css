@@ -1,0 +1,78 @@
+table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  user-select: none;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  text-align: center;
+  padding: 10px;
+  vertical-align: top;
+  height: 60px;
+  width: 45px;
+  position: relative;
+  cursor: default;
+  transition: background-color 0.3s ease;
+}
+
+th {
+  background-color: #f7f7f7;
+  font-weight: bold;
+  color: #333;
+}
+
+td.empty {
+  background-color: #f0f0f0;
+  cursor: default;
+}
+
+td.holiday {
+  background-color: lightcoral;
+  color: white;
+  font-weight: 600;
+}
+
+td.exam {
+  background-color: lightblue;
+  font-weight: 600;
+}
+
+td:hover:not(.empty) {
+  background-color: #ffecb3;
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 4px 7px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%; /* Position above */
+  left: 50%;
+  margin-left: -60px;
+  width: 120px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+td:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+td:hover:not(.empty):not(.holiday):not(.exam) {
+  background-color: #ffecb3; /* light yellow */
+  cursor: pointer;
+}
+
+td.selected {
+  background-color: #ffd54f; /* darker yellow for selected day */
+  font-weight: bold;
+}

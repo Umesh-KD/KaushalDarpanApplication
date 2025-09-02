@@ -43,6 +43,7 @@ export class CenterExamAllocationSearchModel {
   UserID: number = 0
   DistrictID: number = 0
 
+
 }
 
 
@@ -65,6 +66,9 @@ export class ITIAssignPracticaLExaminer {
   public SSOID: string = ''
   public Email: string = ''
   public MobileNumber: string = ''
+
+
+
 
 
 }
