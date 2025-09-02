@@ -27,6 +27,7 @@ export class ITIIIPManageComponent {
   searchRequest = new ITI_IIPManageSearchModel();
   public formData = new IIPManageFundSearchModel()
   IIPManageData: any = [];
+  IIPIMCHistoryData: any = [];
   IIPMembersData: any = [];
   IIPFundData: any = [];
   IIPQuaterReportData: any = [];
@@ -133,6 +134,35 @@ export class ITIIIPManageComponent {
         this.loaderService.requestEnded();
       }, 200)
     }
+  }
+
+  async ShowIMCDetails(content: any, RegID: number) {
+    debugger;
+    try { 
+    //this.IIPManageTeamID = id
+      await this.itiIIPManageService.GetIMCHistory_ById(RegID).then((data: any) => {
+      debugger;
+      data = JSON.parse(JSON.stringify(data));
+      if (data.State === EnumStatus.Success) {
+
+        this.IIPIMCHistoryData = data.Data;
+
+        this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+
+      } else if (data.State === EnumStatus.Warning) {
+        this.toastr.warning(data.Message);
+      } else {
+        this.toastr.error(data.ErrorMessage);
+      }
+    })
+    } catch(error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+
   }
 
   async ShowMemberDetails(content: any) {

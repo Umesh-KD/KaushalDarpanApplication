@@ -702,7 +702,7 @@ export class StudentEnrollmentComponent {
     this.requestStudent.StudentExamStatus = this.requestStudent.StudentExamStatus || '0';
 
     if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) && this.requestStudent.status == enumExamStudentStatus.EnrolledFeePaid) {
+      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) && this.requestStudent.status == enumExamStudentStatus.SelectedForEnrollment) {
       this.requestStudent.status = enumExamStudentStatus.VerifiedForEnrollment// verified for enrollment(bter) 
     }
     else if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
@@ -710,7 +710,8 @@ export class StudentEnrollmentComponent {
       this.requestStudent.status = enumExamStudentStatus.VerifiedForExamination// verified for examination(principle)
     }
     else {
-      this.requestStudent.status = 0;
+      this.toastr.error("Invalid Action!");
+      return;
     }
     console.log(this.requestStudent.status, '4')
     // verified
@@ -726,6 +727,9 @@ export class StudentEnrollmentComponent {
           //
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
+            if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+              this.VerifiedSendForSMSEnrollmentStudent();
+            }
             await this.GetPreExamStudent();
             await this.ResetControls();
             await this.CloseViewStudentDetails();
@@ -812,15 +816,9 @@ export class StudentEnrollmentComponent {
       //verified for enrollment for each edit student
       if(this.sSOLoginDataModel.RoleID == EnumRole.ACP || this.sSOLoginDataModel.RoleID == EnumRole.ACP_NonEng){
         if(this.request.StudentFilterStatusId == enumExamStudentStatus.SelectedForEnrollment && this.status == enumExamStudentStatus.SelectedForEnrollment){
-          this.toastr.error(" 'Student Already Marked as Selected for Enrollment!");
+          this.toastr.error("Student Already Marked as 'Selected for Enrollment'!");
           return;
         }
-      }
-      
-      if (this.request.StudentFilterStatusId == enumExamStudentStatus.SelectedForEnrollment && this.status != enumExamStudentStatus.VerifiedForEnrollment && this.status != enumExamStudentStatus.EnrolledFeePaid) {
-
-        this.toastr.error(" 'pay enrollment fee and verify each student' then choose 'Eligible For Enrollment' student!");
-        return;
       }
     }
 
@@ -874,12 +872,12 @@ export class StudentEnrollmentComponent {
         return;
       }
       // eligible for enrollment
-      if (this.request.StudentFilterStatusId == enumExamStudentStatus.VerifiedForEnrollment) {
+      if (this.request.StudentFilterStatusId == enumExamStudentStatus.EnrolledFeePaid) {
         if (this.status == enumExamStudentStatus.EligibleForEnrollment && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
           await this.SaveEligibleForEnrollment();
         }
         else {
-          this.toastr.error("Please choose 'Eligible For Enrollment' Mark As with 'Verified for Enrollment' status!");
+          this.toastr.error("Please choose 'Eligible For Enrollment' Mark As with 'Enrolled Fee Paid' status!");
         }
         return;
       }
@@ -924,7 +922,7 @@ export class StudentEnrollmentComponent {
               this.State = data['State'];
               this.Message = data['Message'];
               this.ErrorMessage = data['ErrorMessage'];
-              //
+              debugger
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
                 this.SendForSMSEnrollmentStudent();
@@ -986,7 +984,7 @@ export class StudentEnrollmentComponent {
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
 
-                /*this.SendForSMSEnrollmentStudent();*/
+                this.SendForSMSEnrollmentStudent();
                 await this.GetPreExamStudent();
               }
               else if (this.State == EnumStatus.Warning) {
@@ -1585,7 +1583,7 @@ export class StudentEnrollmentComponent {
 
   async SendForSMSEnrollmentStudent() {
     // confirm
-   
+      debugger
         try {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
@@ -1615,14 +1613,14 @@ export class StudentEnrollmentComponent {
               this.ErrorMessage = data['ErrorMessage'];
               //
               if (this.State == EnumStatus.Success) {
-                this.toastr.success(this.Message)
+                //this.toastr.success(this.Message)
                 /*await this.GetPreExamStudent();*/
               }
               else if (this.State == EnumStatus.Warning) {
-                this.toastr.warning(this.Message)
+                //this.toastr.warning(this.Message)
               }
               else {
-                this.toastr.error(this.ErrorMessage)
+                console.log(this.ErrorMessage)
               }
             })
         } catch (ex) {
@@ -1631,6 +1629,44 @@ export class StudentEnrollmentComponent {
      
   }
 
+  async VerifiedSendForSMSEnrollmentStudent() {
+    try {
+
+      this.isSubmitted = true;
+      this.loaderService.requestStarted();
+      // Prepare SMS request for a single student
+      const SMSrequest: ForSMSEnrollmentStudentMarkedModel[] = [{
+        StudentId: this.requestStudent.StudentID,
+        Status: 0,
+        RoleId: this.sSOLoginDataModel.RoleID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        RoleID: this.sSOLoginDataModel.RoleID,
+        ApplicationNo: this.requestStudent.ApplicationID?.toString() || "",
+        MobileNo: "9785353399", // You can replace this with student.MobileNo if available
+        MessageType: "Bter_EnrollmentForStudent"
+      }];
+
+      // Call service to send SMS
+      this.sMSMailService.SendSMSForStudentEnrollmentData(SMSrequest)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            //this.toastr.success(this.Message);
+          } else if (this.State == EnumStatus.Warning) {
+            //this.toastr.warning(this.Message);
+          } else {
+            console.log(this.ErrorMessage);
+          }
+        });
+
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
 
 
 }

@@ -52,6 +52,7 @@ export class SMSMailService
 
   public async SendSMSForStudentEnrollmentData(request: ForSMSEnrollmentStudentMarkedModel[]) {
     const body = JSON.stringify(request);
+    debugger
     return this.http.post(`${this.APIUrl}/SendSMSForStudentEnrollmentData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

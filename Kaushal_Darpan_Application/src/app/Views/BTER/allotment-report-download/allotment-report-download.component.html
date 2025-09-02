@@ -51,48 +51,6 @@
             <option *ngFor="let item of ListBTERTrade" [value]="item.ID">{{item.Name}}</option>
           </select>
         </div>
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Trade Scheme:
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.StreamTypeId">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of ListBTERTradeScheme" [value]="item.ID">{{item.Name}}</option>
-          </select>
-        </div>-->
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Shift
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.ShiftID">
-            <option value=0>Choose Option</option>
-            <option value="1">GAS</option>
-            <option value="2">I Shift</option>
-            <option value="3">SFS(II Shift)</option>
-          </select>
-
-        </div>
-
-
-
-        <div>
-
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Alltmet Type
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.AllotmentMasterId">
-            <option value=0>Choose Option</option>
-            <option value="2">First Allotment</option>
-            <option value="-2">Horizonatl Allotment</option>
-            <option value="4">Second Allotment</option>
-            <option value="6">Internal Sliding</option>
-            <option value="3">Applied in Upward</option>
-            <option value="7">Direct Admission</option>
-            <option value="8">Institute Reported</option>
-          </select>
-
-        </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
@@ -101,50 +59,22 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Branch Code:</label>
           <input type="text" class="form-input" [(ngModel)]="searchRequest.StreamCode" placeholder="Search By Branch Code">
         </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Fee Status:
-          </label>
-          <select class="form-select" [(ngModel)]="searchRequest.FeePaid">
-            <option value="0">Choose Option</option>
-            <option value="1">Fee Paid</option>
-            <option value="2">Not Paid</option>
-          </select>
-        </div>
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status: </label>
           <select class="form-select" id="ddlClass" [(ngModel)]="searchRequest.AllotmentStatus">
             <option value="0">--Select--</option>
-            <option value="1">Allotted</option>
-            <option value="2">Choice Exhausted</option>
-            <option value="3">Cancelled</option>
-            <option value="4">Reported</option>
-            <option value="5">Not Reported</option>
-            <option value="6">Applied Upward</option>
-            <option value="7">Rejected</option>
-            <option value="8">Admitted</option>
-            <option value="9">Withdrawal</option>
-            <option value="10">Internal Sliding</option>
-            <option value="11"> Reject With Deficiency</option>
-            <option value="12"> Institute Reported</option>
-            <option value="13">Dropout</option>
+            <option value="1">Total Allotment</option>
+            <option value="2">Total Reported</option>
+            <option value="3">Total Applied Upward</option>
+            <option value="4">Total Internal Sliding</option>
+            <option value="5">Total Direct Admission</option>
+            <option value="6">Total Institute Reported</option>
           </select>
         </div>
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Search By Status:
-          </label>
-          <select class="form-select" [(ngModel)]="ActiveStatusModel">
-            <option value="0">--Choose Option--</option>
-            <option value="1">Active</option>
-            <option value="2">In-Active</option>
-          </select>
-        </div>-->
+        
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="ShowAllotmentDataList(1)">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onCancel()">Reset</button>
 
           
         </div>
@@ -178,53 +108,28 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>SR</th>
-            <!-- <th class="text-left">Merit No</th>
-            <th class="text-left">CollegeName                </th>
-            <th class="text-left">BranchName                 </th>
-            <th class="text-left">ShiftName                 </th>
-            <th class="text-left">Alloted Priority                   </th> -->
-            <th class="text-left">Alloted Category              </th>
+           
+
             <th class="text-left">Application No</th>
             <th class="text-left">Applicant Name</th>
             <th class="text-left">Father Name</th>
             <th class="text-left">Gender</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Category</th>
-            <!-- <th class="text-left">PH</th>
-            <th class="text-left">KM</th>
-            <th class="text-left">Ex Servicemen</th>
-            <th class="text-left">Widow/Divorcee</th>
-            <th class="text-left">Single Mother Dependent</th>
-            <th class="text-left">TSP</th>
-            <th class="text-left">RAJ DOMICILE</th>
-            <th class="text-left">Reporting Status</th>
-            <th class="text-left">Fee Status</th> -->
+            <th class="text-left">Alloted Category              </th>
+         
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of transactionData | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
-            <!-- <td class="text-left"> {{row.MeritNo }}</td>
-            <td class="text-left"> {{row.CollegeName }} </td>
-            <td class="text-left"> {{row.BranchName      }}  </td>
-            <td class="text-left"> {{row.ShiftName      }}  </td>
-            <td class="text-left"> {{row.AllotedPriority}}          </td> -->
-            <td class="text-left"> {{row.AllotedCategory}}     </td>
             <td class="text-left"> {{row.ApplicationID }}</td>
             <td class="text-left"> {{row.StudentName }}</td>
             <td class="text-left"> {{row.FatherName }}</td>
             <td class="text-left"> {{row.Gender }}</td>
             <td class="text-left"> {{row.DOB }}</td>
             <td class="text-left"> {{row.StudentCategory}} </td>
-            <!-- <td class="text-left"> {{row.IsPH }}</td>
-            <td class="text-left"> {{row.IsKM }}</td>
-            <td class="text-left"> {{row.IsExServicemen }}</td>
-            <td class="text-left"> {{row.IsWID}} </td>
-            <td class="text-left"> {{row.IsSingleMotherDependent }}</td>
-            <td class="text-left"> {{row.IsTSP }}</td>
-            <td class="text-left"> {{row.IsRajDOMICILE }}</td>
-            <td class="text-left"> {{row.ReportingStatus }}</td>
-            <td class="text-left"> {{row.FeeStatus }}</td> -->
+            <td class="text-left"> {{row.AllotedCategory}}     </td>            
           </tr>
 
         </tbody>

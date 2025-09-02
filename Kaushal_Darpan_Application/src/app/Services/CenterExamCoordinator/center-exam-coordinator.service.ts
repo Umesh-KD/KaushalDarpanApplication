@@ -8,7 +8,7 @@ import { CenterExamAllocationSearchModel, CenterAllocationtDataModels } from '..
   providedIn: 'root'
 })
 export class CenterExamCoordinatorService {
-readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
+  readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
   readonly headersOptions: any;
   constructor(private http: HttpClient, private appsettingConfig: AppsettingService) {
     this.headersOptions = {
@@ -22,7 +22,7 @@ readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
     return res;
   }
   handleErrorObservable(error: Response | any) {
-    return throwError(error); 
+    return throwError(error);
   }
 
   public async GetCenterExamCoordinatorData(searchRequest: CenterExamAllocationSearchModel) {
@@ -35,6 +35,17 @@ readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
   public async GetExamCoordinatorDataByUserId(searchRequest: CenterExamAllocationSearchModel) {
 
     return await this.http.post(this.APIUrl + "/GetExamCoordinatorDataByUserId", searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+
+
+
+  }
+
+  public async GetCollageReport(searchRequest: CenterExamAllocationSearchModel) {
+
+    return await this.http.post(this.APIUrl + "/GetCollageReport", searchRequest, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

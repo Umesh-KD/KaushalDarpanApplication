@@ -1043,6 +1043,7 @@ const routes: Routes = [
       { path: 'college-list/:type/:status', loadChildren: () => import('./Views/BTER/college-list/college-list.module').then(m => m.CollegeListModule), title: 'College List' },
 
       { path: 'CenterExamCoordinator', loadChildren: () => import('./Views/ITI/center-exam-coordinator/center-exam-coordinator.module').then(m => m.CenterExamCoordinatorModule), title: 'Center Exam Coordinator' },
+      { path: 'IIPCollageReport', loadChildren: () => import('./Views/ITI/IIPCollageReport/iipcollage-report/iipcollage-report.module').then(m => m.IIPCollageReportModule) },
 
 
       { path: 'examiner-relieving-form', loadChildren: () => import('./Views/ITI/relieving-practical-examiner/relieving-practical-examiner.module').then(m => m.RelievingPracticalExaminerModule) },
@@ -1186,6 +1187,7 @@ const routes: Routes = [
   { path: 'AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: '10AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: 'DirectAddmissionReport', loadChildren: () => import('./Views/ITI/reports/direct-admission-report/direct-admission-report.module').then(m => m.DirectAdmissionReportModule) },
+  { path: 'studentWithdrawn-report', loadChildren: () => import('./Views/ITI/reports/student-withdrawn-report/student-withdrawn-report.module').then(m => m.studentwithdrawnreportModule) },
   { path: 'AllotmentReportCollege', loadChildren: () => import('./Views/ITI/reports/allotment-report-college/allotment-report-college.module').then(m => m.AllotmentReportCollegeModule) },
       { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'IMCAllotmentReport/:id', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
@@ -1343,7 +1345,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
 
-  { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+      { path: 'SetCalendar', loadChildren: () => import('./Views/BTER/attendance-time-table/SetCalendar/SetCalendar.module').then(m => m.SetCalendarModule), title: 'Set-Calendar' },
       
     ]
   },
@@ -1406,7 +1408,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-
+     
     ]
   },
 
@@ -1445,6 +1447,7 @@ const routes: Routes = [
   { path: 'Views\BTER\Student-Section-Incharge', loadChildren: () => import('./Views/BTER/student-section-incharge/student-section-incharge.module').then(m => m.StudentSectionInchargeModule) },
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
+
  
   
   

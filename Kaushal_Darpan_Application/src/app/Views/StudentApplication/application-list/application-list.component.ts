@@ -177,9 +177,13 @@ export class ApplicationListComponent {
     localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
     //set cookie
 
-
-    //this.route.navigate(['/DTEApplicationform']);
-    this.route.navigate(['/DirectDTEApplicationform']);
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Student) {
+      this.route.navigate(['/DTEApplicationform']);
+    } else {
+      this.route.navigate(['/DirectDTEApplicationform']);
+    }
+    
+    //this.route.navigate(['/DirectDTEApplicationform']);
   }
 
 
