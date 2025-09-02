@@ -13,7 +13,7 @@
   <div class="card-body p-5">
 
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Staff Basic Info  Details</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Staff Basic Info Details</b>
     </div>
     <form [formGroup]="AddStaffBasicDetailFromGroup">
 
@@ -295,13 +295,13 @@
               {{row.ProfileStatus}}
             </td>
             <td>
-
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="row.ProfileStatusID == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="row.ProfileStatusID != 247 && row.ProfileStatusID != 0" href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
+                <a *ngIf="row.RoleID == _EnumRole.HostelWarden" href="javascript:void(0);" title="Edit Hostel" (click)="onEditHostel(Model_EditHostel, row)"><i class="ti ti-pencil"></i></a>
               </div>
             </td>
           </tr>
@@ -978,6 +978,42 @@
         <button type="button" (click)="CloseModalProfileStatuslist()" class="btn bg-success text-white btn-sm">
           Close
         </button>
+      </div>
+    </div> <!-- Close this div here for card-body -->
+  </div>
+
+</ng-template>
+
+
+<ng-template #Model_EditHostel let-modal>
+  <div class="modal-content " >
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Add/Remove Hostel</b>
+        <button class="btn bg-info text-white" (click)="CloseModal_EditHostel()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card-body" style="min-height: 300px; max-height: 90vh; overflow-y: auto;">
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+          <div >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel <span class="StarMarking">*</span></label>
+
+            <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                [settings]="settingsMultiselect"
+                [data]="HostelList"
+                [(ngModel)]="StaffHostelDetails"
+                [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
+                (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+            </ng-multiselect-dropdown>
+
+          </div>
+          
+        </div>
+      
+      </div>
+      <div class="card-footer text-center">
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="SaveHostelList()">Update</button>
       </div>
     </div> <!-- Close this div here for card-body -->
   </div>

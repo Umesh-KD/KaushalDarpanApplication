@@ -74,7 +74,7 @@ export class TheoryMarksItiComponent {
   public sortInTableDirection: string = 'asc';
   public startInTableIndex: number = 0;
   public endInTableIndex: number = 0;
-  public AllInTableSelect: boolean = false;
+  public AllInTableSelect: boolean = true;
   public totalInTableRecord: number = 0;
   //end table feature default
 
@@ -97,7 +97,8 @@ export class TheoryMarksItiComponent {
       console.log(this.id); 
     });
 
-    this.GetTheoryMarksDetailList();
+   await this.GetTheoryMarksDetailList();
+   this.selectInTableAllCheckbox();
   }
 
   get form() { return this.ExaminerCodeLoginForm.controls; }
@@ -165,10 +166,25 @@ export class TheoryMarksItiComponent {
 
           console.log("TheoryMarksDetailList", this.TheoryMarksDetailList);
 
-          this.TheoryMarksDetailList.forEach(x => {
-            if (x.IsChecked == false) {
-              x.IsPresentTheory = 1
+          this.TheoryMarksDetailList.forEach(x =>
+          {
+
+
+            //ravi codee
+            if (x.IsPresentTheory)
+            {
+              x.IsPresentTheory = 1;
             }
+            else {
+              x.IsPresentTheory = 0;
+            }
+
+            //shub code
+            //if (x.IsChecked == false)
+            //{
+            //  x.IsPresentTheory = 1
+            //}
+
           })
           //table feature load
           this.loadInTable();
@@ -453,6 +469,7 @@ export class TheoryMarksItiComponent {
     this.resetInTableValiable();
     this.calculateInTableTotalPage();
     this.updateInTablePaginatedData();
+    
   }
   // (replace org. list here)
   resetInTableValiable() {
@@ -474,8 +491,18 @@ export class TheoryMarksItiComponent {
   }
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
-    this.TheoryMarksDetailList.forEach(x => {
-      x.Marked = this.AllInTableSelect;
+    this.TheoryMarksDetailList.forEach(x =>
+    {
+      //ravi code
+      if (x.IsPresentTheory)
+      {
+        x.Marked = this.AllInTableSelect;
+      }
+   
+
+     
+
+
     });
   }
   //checked single (replace org. list here)

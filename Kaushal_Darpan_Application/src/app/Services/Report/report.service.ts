@@ -33,6 +33,7 @@ import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -1601,6 +1602,8 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable));
     return await lastValueFrom(api);
   }
+
+  
 }
 
 

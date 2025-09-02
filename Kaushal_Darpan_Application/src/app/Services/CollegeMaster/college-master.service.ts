@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { CollegeListSearchModel, CollegeMasterDataModels, CollegeMasterRequestModel, CollegeMasterSearchModel } from '../../Models/CollegeMasterDataModels';
 import { AppsettingService } from '../../Common/appsetting.service';
 //import { CollegeMasteDataModels } from '../../Models/CollegeMasterDataModels';
+import { firstValueFrom } from 'rxjs';
 
 
 @Injectable({
@@ -28,14 +29,29 @@ export class CollegeMasterService {
   handleErrorObservable(error: Response | any) {
     return throwError(error);
   }
-  //Get 
+  //Get
+  //public async GetAllData(searchRequest: CollegeMasterSearchModel) {
+  //  var body = JSON.stringify(searchRequest);
+  //  return await this.http.post(this.APIUrl + "/GetAllData", body, this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
+  //}
+
+
+
   public async GetAllData(searchRequest: CollegeMasterSearchModel) {
-    var body = JSON.stringify(searchRequest);
-    return await this.http.post(this.APIUrl + "/GetAllData", body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
+    const body = JSON.stringify(searchRequest);
+    return await firstValueFrom(
+      this.http.post(this.APIUrl + "/GetAllData", body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        )
+    );
   }
+
+
+
   public async GetByID(collegeMasterRequestModel: CollegeMasterRequestModel) {
     return await this.http.post(this.APIUrl + "/GetByID", collegeMasterRequestModel, this.headersOptions)
       .pipe(

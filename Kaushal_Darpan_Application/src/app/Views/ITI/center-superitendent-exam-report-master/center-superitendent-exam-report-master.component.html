@@ -52,8 +52,10 @@
           <tr>
 
             <th class="text-left">Sr No</th>
-            <th class="text-center">confidentiality Level</th>
-            <th class="text-center">Action</th>
+            <th class="text-left">Exam Date </th>
+            <th class="text-left">Center Name</th>
+            <th class="text-left">Center Superintendent</th>
+            <th class="text-left">Action</th>
             <!-- <th class="text-center">Marksheet</th> -->
             <!-- <th class="text-center">Consolidated Marksheet</th> -->
             <!-- <th class="text-center">SCVT Certificate</th> -->
@@ -64,32 +66,34 @@
           <tr *ngFor="let item of GetCenterSuperitendentReportList | tableSearchFilter:Table_SearchText ;let idx=index;">
 
             <td align="left">{{idx+1}}</td>
-            <td>{{item.confidentialityLevel}}</td>
-            <!-- <td>{{item.Name}}</td> -->
+            <td>{{ item.ExamDate | date:'dd-MM-yyyy' }}</td>
+
+            <td>{{item.CenterName}}</td>
+            <td>{{item.Name}}</td>
             <!--<td>
-                <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_Marksheet(item.Id)"><i class="ti ti-download"></i></a>
-            <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_PassList()"><i class="ti ti-download"></i></a>
-            </td>-->
+      <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_Marksheet(item.Id)"><i class="ti ti-download"></i></a>
+  <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_PassList()"><i class="ti ti-download"></i></a>
+  </td>-->
             <!-- <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_Marksheet(item.Id)"><i class="ti ti-download"></i></a>
-              </div>
-            </td>  -->
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0);" title="Student Marksheet" (click)="GetITIStudent_Marksheet(item.Id)"><i class="ti ti-download"></i></a>
+    </div>
+  </td>  -->
             <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">    
-                 <a [routerLink]="['/center-superitendent-exam-report', item.id]"   title="Edit"><i class="ti ti-pencil"></i></a>
-                 <a href="javascript:void(0);" title="Edit" (click)="generatePDF(item.id)"><i class="ti ti-download"></i></a>
+              <div class="flex  actionBtns w-auto" style="width:auto !important">
+                <a [routerLink]="['/center-superitendent-exam-report',item.id]" [queryParams]="{ExamDate:item.ExamDate}"  title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Edit" (click)="generatePDF(item.id)"><i class="ti ti-download"></i></a>
                 <!-- <a href="javascript:void(0);" title="Delete" (click)="TradeWiseResultDownload(item.StudentID)"><i class="ti ti-trash"></i></a> -->
                 <!-- <a [routerLink]="['/center-superitendent-exam-report', item.Id]" [queryParams]="{HRManagerID:row.HRManagerID,key:1}" *ngIf="GetRoleID ==_EnumRole.Admin" title="Edit"><i class="ti ti-pencil"></i></a> -->
-                 
+
               </div>
             </td>
-            
-             <!-- <td align="left">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">              
-                <a href="javascript:void(0);" title="SCVT Certificate" (click)="GetITIStudent_SCVTCertificate(item.Id)"><i class="ti ti-download"></i></a>
-              </div>
-            </td> -->
+
+            <!-- <td align="left">
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0);" title="SCVT Certificate" (click)="GetITIStudent_SCVTCertificate(item.Id)"><i class="ti ti-download"></i></a>
+    </div>
+  </td> -->
           </tr>
         </tbody>
       </table>

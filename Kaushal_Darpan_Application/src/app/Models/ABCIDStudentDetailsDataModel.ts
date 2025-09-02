@@ -6,4 +6,5 @@ export class ABCIDStudentDetailsDataModel {
   public FatherName: string = '';
   public DOB: string = '';
   public ABCID: number = 0;
+
 }

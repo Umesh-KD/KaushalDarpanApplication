@@ -1,6 +1,6 @@
 export class ITI_InstructorDataModel {
   // Personal Details
-  public InstituteID: number=0;
+  public InstituteID?: number=0;
   public id?:  number = 0;
   public Uid:  string = '';
   public Name?:  string = '';
@@ -21,9 +21,9 @@ export class ITI_InstructorDataModel {
   public ddlState?:  string = '';
   public ddlDistrict?:  string = '';
   public PropTehsilID?:  string = '';
-  // public PropUrbanRural?:  number = 0;
+  public PropUrbanRural?:  number = 0;
   public City?:  string = '';
-  // public villageID?:  string = '';
+  public villageID?:  string = '';
   public pincode?:  string = '';
 
   // Correspondence Address
@@ -34,9 +34,9 @@ export class ITI_InstructorDataModel {
   public Correspondence_ddlState?:  string = '';
   public Correspondence_ddlDistrict?:  string = '';
   public Correspondence_PropTehsilID?:  string = '';
-  // public Correspondence_PropUrbanRural?:  number = 0;
+  public Correspondence_PropUrbanRural?:  number = 0;
   public Correspondence_City?:  string = '';
-  // public Correspondence_villageID?:  string = '';
+  public Correspondence_villageID?:  string = '';
   public Correspondence_pincode?:  string = '';
 
   // Educational Qualification
@@ -44,15 +44,15 @@ export class ITI_InstructorDataModel {
   public Education_Board?:  string = '';
   public Education_Year?:  string = '';
   public Education_Subjects?:  string = '';
-  public Education_Percentage!: number;
+  public Education_Percentage?: number;
   public QualificationDocument?: string = '';
 
   // Technical Qualification
-  public Tech_Exam!: string;
-  public Tech_Board!: string;
-  public Tech_Subjects!: string;
-  public Tech_Year!: string;
-  public Tech_Percentage!: number;
+  public Tech_Exam?: string;
+  public Tech_Board?: string;
+  public Tech_Subjects?: string;
+  public Tech_Year?: string;
+  public Tech_Percentage?: number;
   public TechQualificationDocument?: string = '';
 
   // Employment Details
@@ -63,9 +63,9 @@ export class ITI_InstructorDataModel {
   public Tan_No?:  string = '';
   public Employment_From?:  string = '';
   public Employment_To?:  string = '';
-  public Basic_Pay?: number = 0;
-  public IsDomicile: boolean = false;
-  public Aadhar: string = '';
+  public Basic_Pay?: number ;
+  public IsDomicile?: boolean = false;
+  public Aadhar?: string = '';
   public JanAadhar: string = '';
   // Additional Fields
   public CreatedBy?: string = '';
@@ -74,9 +74,9 @@ export class ITI_InstructorDataModel {
   public TehsilName?: string = '';
 
   // Parent should hold child tables
-  public EducationalQualifications: ITI_InstructorEducationalQualification[] = [];
-  public TechnicalQualifications: ITI_InstructorTechnicalQualification[] = [];
-  public EmploymentDetails: ITI_InstructorEmploymentDetails[] = [];
+  public EducationalQualifications?: ITI_InstructorEducationalQualification[] = [];
+  public TechnicalQualifications?: ITI_InstructorTechnicalQualification[] = [];
+  public EmploymentDetails?: ITI_InstructorEmploymentDetails[] = [];
 }
 
 export class ITI_InstructorEducationalQualification {
@@ -96,7 +96,7 @@ export class ITI_InstructorEmploymentDetails {
   public Tan_No?: string = '';
   public Employment_From?: string = '';
   public Employment_To?: string = '';
-  public Basic_Pay?: number = 0;
+  public Basic_Pay?: number ;
   public EmploymentDocument?: string = '';
   //public IsDomicile: boolean = false;
   //public Aadhar: string = '';

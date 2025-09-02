@@ -23,6 +23,8 @@ import { ITICollegeMarksheetDownloadService } from "../../../Services/ITI/ITICol
 import { CenterSuperitendentExamReportService } from "../../../Services/ITI/CenterSuperitendentExamReport/CenterSuperitendentExamReport.Service";
 import pdfmake from 'pdfmake/build/pdfmake';
 import { FontsService } from "../../../Services/FontService/fonts.service";
+import { ITINodalOfficerExminerSearch } from "../../../Models/ITI/ITINodalOfficerExminerReportModel";
+import { SSOLoginDataModel } from "../../../Models/SSOLoginDataModel";
 @Component({
   selector: 'app-marksheet',
   standalone: false,
@@ -36,8 +38,8 @@ export class CenterSuperitendentExamReportMasterComponent{
   
   public searchrequest = new ItiApplicationSearchmodel();
   public searchRequestConsolidated = new ITIStateTradeCertificateSearchModel();
-
-  sSOLoginDataModel: any;
+  public searchRequest = new ITINodalOfficerExminerSearch();
+  sSOLoginDataModel = new SSOLoginDataModel()
   searchForm!: FormGroup;
   tooltipText = signal(''); 
   StudentExamsPapersList: any = [];
@@ -179,10 +181,16 @@ export class CenterSuperitendentExamReportMasterComponent{
     try {
 
       this.loaderService.requestStarted();
-   
+
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      if (this.sSOLoginDataModel.RoleID == 96 || this.sSOLoginDataModel.RoleID == 98) {
+        this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      }
+      this.searchRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
      
       // await this.CenterSuperitendentService.GetCenterSuperitendentReportData(this.MarksheetSearch)
-      await this.CenterSuperitendentService.GetCenterSuperitendentReportData()
+      await this.CenterSuperitendentService.GetCenterSuperitendentReportData(this.searchRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];

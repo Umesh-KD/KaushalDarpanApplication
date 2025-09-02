@@ -13,6 +13,8 @@ import { ApprenticeReportServiceService } from '../../../../Services/ITI/Apprent
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ReportService } from '../../../../Services/Report/report.service';
 import { HttpClient } from '@angular/common/http';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { ITIApprenticeshipWorkshopModel } from '../../../../Models/ITI/ITIApprenticeshipWorkshopDataModel';
 
 @Component({
   selector: 'app-pmnam-mela-report-before-after-list',
@@ -24,19 +26,23 @@ export class PMNAMMelaReportBeforeAfterListComponent {
 
   public DataList: any = []
   public Table_SearchText: string = '';
-
-  public paginatedInTableData: any[] = [];//copy of main data
+  public DistrictList: any = []
+  public paginatedInTableData: any[] = [];
   public currentInTablePage: number = 1;
   public totalInTablePage: number = 0;
   public sortInTableColumn: string = '';
   public sortInTableDirection: string = 'asc';
   public endInTableIndex: number = 0;
- // public searchRequest = new obj();
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   pageInTableSize: string = '50';
   startInTableIndex: number = 0;
   _Userid: number = 0;
+  public FinYearList: any = [];
+  formData: any = {
+    FinancialYearID: 0  
+  };
+  public request = new ITIApprenticeshipWorkshopModel()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,6 +56,7 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     private ApprenticeShipRPTService: ApprenticeReportServiceService,
     private Swal2: SweetAlert2,
     private reportService: ReportService,
+    private commonMasterService: CommonFunctionService,
     private http: HttpClient
 
 
@@ -66,24 +73,26 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     else {
       this._Userid = this.SSOLoginDataModel.UserID
     }
+    await this.GetDistrictMatserDDL()
+    await this.YearDropdownData('FinancialYear_IIP');
 
     this.GetReportAllData();
   }
 
 
   async GetReportAllData() {
-    //debugger;
+    debugger;
     try {
      // this.loaderService.requestStarted();
-
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
         RoleID: this.SSOLoginDataModel.RoleID,
         Createdby: this._Userid,
+        DistrictID: this.request.DistrictID,
+        FinancialYearID: this.request.FinancialYearID,
+        BeforeMonth: this.request.BeforeMonth || 0
       };
-
-
       await this.ApprenticeShipRPTService.GetPMNAM_BeforeAfterAllData(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -104,6 +113,28 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     } catch (error) {
       console.error(error);
     } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+    
+  async GetDistrictMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('DistrictHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictList = data['Data'];
+          console.log('District List',this.DistrictList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
@@ -281,6 +312,17 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+
+  // trackBy for better performance
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
 
 
 

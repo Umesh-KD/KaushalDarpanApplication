@@ -52,6 +52,8 @@ export class ITINodalOfficerExminerSearch {
   UserID:number=0
   DistrictID: number = 0
   EndTermID:number=0
+  InstituteID:number=0
+  CourseType:number=0
 }
        
 

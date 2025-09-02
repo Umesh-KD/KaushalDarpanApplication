@@ -69,7 +69,7 @@ export class PapersMasterComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.UserID = this.sSOLoginDataModel.UserID;
 
-    await this.GetPaperMasterList();
+   // await this.GetPaperMasterList();
     await this.GetSemesterList()
     await this.GetBranchList();
 
@@ -80,10 +80,24 @@ export class PapersMasterComponent implements OnInit {
 
 
   async GetPaperMasterList() {
-    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    
+    let request =
+    {
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      SemesterID: this.searchBySemester,
+      StreamID: this.searchByBranch,
+      FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      CourseTypeID: this.sSOLoginDataModel.Eng_NonEng
+    };
+    //this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    //this.searchRequest.SemesterID = this.request.SemesterID;
+    //this.searchRequest.StreamID = this.request.StreamID;
+    //this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+    //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     try {
       this.loaderService.requestStarted();
-      await this.PaperMasterService.GetAllData(this.searchRequest)
+      await this.PaperMasterService.GetAllDataBranchwithSem(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -130,7 +144,7 @@ export class PapersMasterComponent implements OnInit {
 
     try {
       this.loaderService.requestStarted();
-      await this.branchservice.GetAllData()
+      await this.branchservice.GetAllData(this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -159,14 +173,14 @@ export class PapersMasterComponent implements OnInit {
     this.searchBySubjectCode = '';
     this.searchBySubjectCategory = '';
     this.searchBySubjectName = '';
-
+    this.PaperMasterList = [];
 
 
 
 
     //    this.searchByDistrict = 0;
 
-    this.GetPaperMasterList()
+   // this.GetPaperMasterList()
   }
 
 
@@ -339,6 +353,29 @@ export class PapersMasterComponent implements OnInit {
     this.Router.navigate(['/updatepapersmaster', id]);
     console.log(id)
   }
+
+
+
+  onSearchFilter() {
+
+    if (this.searchBySemester == '' && this.searchByBranch=='')
+    {
+      this.toastr.warning('Please Select Filter Type');
+      return;
+    }
+
+    if (this.searchBySemester == '') {
+      this.searchBySemester = "0";
+    }
+    if (this.searchByBranch == '') {
+      this.searchByBranch = "0";
+    }
+
+
+    this.GetPaperMasterList();
+
+  }
+
 
 }
 
