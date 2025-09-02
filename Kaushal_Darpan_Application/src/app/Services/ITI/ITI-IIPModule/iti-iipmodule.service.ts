@@ -66,6 +66,14 @@ export class ITIIIPManageService {
       ).toPromise();
   }
 
+  public async GetIMCHistory_ById(RegID: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetIMCHistory_ById/${RegID}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SaveFundDetails(request: IDfFundDetailsModel)
   
   {

@@ -171,7 +171,6 @@ export class ApplyForHostelComponent {
 
 
   async EditData() {
-    debugger;
     try {
       let obj = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -208,7 +207,6 @@ export class ApplyForHostelComponent {
 
 
   async EditDataAtWarden() {
-    debugger;
     try {
       let obj = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -290,17 +288,20 @@ export class ApplyForHostelComponent {
       await this._HostelManagmentService.GetStudentDetailsForApply(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.StudentDetailsList = data['Data'];
-
-          //  Detect edit mode here based on ReqId
-          if (this.StudentDetailsList.length > 0 && this.StudentDetailsList[0].ReqId > 0) {
-            this.isEditMode = true;
-          } else {
-            this.isEditMode = false;
+          if(data.State == EnumStatus.Success) {
+            this.StudentDetailsList = data['Data'];
+            
+            //  Detect edit mode here based on ReqId
+            if (this.StudentDetailsList.length > 0 && this.StudentDetailsList[0].ReqId > 0) {
+              this.isEditMode = true;
+            } else {
+              this.isEditMode = false;
+            }
           }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+          
 
           console.log("StudentDetailsList =>", this.StudentDetailsList);
           console.log("isEditMode =>", this.isEditMode);
@@ -411,7 +412,6 @@ export class ApplyForHostelComponent {
 
 
   async updateData() {
-    debugger
     this.request.ReqId = this.StudentDetailsList[0].ReqId;
     this.request.StudentID = this.StudentDetailsList[0].StudentID
     this.request.HostelID = this.HostelID;
@@ -424,7 +424,7 @@ export class ApplyForHostelComponent {
     this.request.AllotedHostelInLastSessionFeeDetails = this.groupForm.value.txtAllotedHostelInLastSessionFeeDetails;
     this.request.AnyWorningForShortOfAttendance = this.groupForm.value.txtAnyWorningForShortOfAttendance;
     this.request.AnyWarningForInvovementAgainstDiscipline = this.groupForm.value.txtAnyWarningForInvovementAgainstDiscipline;
-    this.request.TotalAvg = this.StudentDetailsList[0].TotalAvg;
+    this.request.TotalAvg = this.StudentDetailsList[0]?.TotalAvg;
 
 
 
@@ -472,7 +472,6 @@ export class ApplyForHostelComponent {
       //alert(this.request.DepartmentID)
 
       console.log(this.request, "Data Insert");
-      debugger
       //return;
       await this._HostelManagmentService.EditStudentApplyHostel(this.request)
         .then(async (data: any) => {
@@ -504,7 +503,6 @@ export class ApplyForHostelComponent {
 
 
   async HostelWardenupdateData() {
-    debugger
     this.request.ReqId = this.StudentDetailsList[0].ReqId;
     this.request.StudentID = this.StudentDetailsList[0].StudentID
     this.request.HostelID = this.HostelID;
@@ -528,7 +526,6 @@ export class ApplyForHostelComponent {
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
       console.log(this.request, "Data Insert");
-      debugger
       //return;
       await this._HostelManagmentService.HostelWardenupdateData(this.request)
         .then(async (data: any) => {
@@ -560,7 +557,6 @@ export class ApplyForHostelComponent {
 
 
   async saveData() {
-    debugger
     this.request.StudentID = this.sSOLoginDataModel.StudentID;
     this.request.HostelID = this.HostelID;
     this.request.EndTermId = this.sSOLoginDataModel.EndTermID;
@@ -572,7 +568,7 @@ export class ApplyForHostelComponent {
     this.request.AllotedHostelInLastSessionFeeDetails = this.groupForm.value.txtAllotedHostelInLastSessionFeeDetails;
     this.request.AnyWorningForShortOfAttendance = this.groupForm.value.txtAnyWorningForShortOfAttendance;
     this.request.AnyWarningForInvovementAgainstDiscipline = this.groupForm.value.txtAnyWarningForInvovementAgainstDiscipline;
-    this.request.TotalAvg = this.MarksDetailsList[0].TotalAvg;
+    this.request.TotalAvg = this.MarksDetailsList[0]?.TotalAvg;
     
 
 
@@ -713,7 +709,6 @@ export class ApplyForHostelComponent {
 
   async onFilechange(event: any, Type: string) {
     try {
-      debugger
       this.file = event.target.files[0];
 
       if (this.file) {
@@ -928,9 +923,6 @@ export class ApplyForHostelComponent {
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.HostelDetailsList = data['Data'];
 
           console.log('Hostel Dstudent Details List',this.HostelDetailsList)

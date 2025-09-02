@@ -57,8 +57,8 @@
               <option [value]="0">Semester</option>
               <option [value]="1">Yearly</option>
               <!--<option *ngFor="let item of SemesterMasterDDLList" [value]="item.SemesterID">
-            {{item.SemesterName}}
-          </option>-->
+                {{item.SemesterName}}
+              </option>-->
             </select>
           </div>
 
@@ -108,7 +108,9 @@
           <div class="flex" *ngIf="![ _RollListStatus.Published, _RollListStatus.Reverted ].includes(this.currentStatus)">
             <select class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
               <option value="0">Select Status</option>
-              <option *ngIf="this.currentTab==1" value="{{_RollListStatus.Verified}}">Verified</option>
+              <option *ngIf="this.currentTab==1" value="{{_RollListStatus.Verified}}">
+                {{ sSOLoginDataModel.RoleID === _EnumRole.Registrar || sSOLoginDataModel.RoleID === _EnumRole.Registrar_NonEng ? 'Approve' : 'Verified' }}
+              </option>
               <option value="{{_RollListStatus.Reverted}}">Reverted</option>
             </select>
             <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>

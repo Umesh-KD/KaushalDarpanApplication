@@ -25,7 +25,7 @@
           <option value="0">Select Status</option>
           <option selected value="{{_RollListStatus.Generated}}">Generated</option>
           <option value="{{_RollListStatus.Forwarded}}">Forwarded</option>
-          <option value="{{_RollListStatus.Verified}}">Verified</option>
+          <option value="{{_RollListStatus.Verified}}"> {{ sSOLoginDataModel.RoleID === _enumRole.Registrar || sSOLoginDataModel.RoleID === _enumRole.Registrar_NonEng ? 'Approve' : 'Verified' }}</option>
           <option value="{{_RollListStatus.Published}}">Published</option>
           <option value="{{_RollListStatus.Reverted}}">Reverted</option>
         </select>
@@ -48,7 +48,7 @@
         <div class="flex" *ngIf="this.Status != 13  && this.Status != 15 && (this.sSOLoginDataModel.RoleID==_enumRole.Secretary_JD || this.sSOLoginDataModel.RoleID==_enumRole.Registrar || this.sSOLoginDataModel.RoleID==_enumRole.Registrar_NonEng  ||  this.sSOLoginDataModel.RoleID==_enumRole.Secretary_JD_NonEng   )">
           <select  class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
             <option value="0">Select Status</option>
-            <option *ngIf="Status!=13 && Status!=15" value="{{_RollListStatus.Verified}}">Verified</option>
+            <option *ngIf="Status!=13 && Status!=15" value="{{_RollListStatus.Verified}}">{{ sSOLoginDataModel.RoleID === _enumRole.Registrar || sSOLoginDataModel.RoleID === _enumRole.Registrar_NonEng ? 'Approve' : 'Verified' }}</option>
             <option *ngIf="Status!=14 && Status!=15" value="{{_RollListStatus.Reverted}}">Reverted</option>
           </select>
           <button type="button" class="btn bg-info text-white inline-block" (click)="VerifyRollNumber()"> <i class="ti ti-save"></i>Save</button>

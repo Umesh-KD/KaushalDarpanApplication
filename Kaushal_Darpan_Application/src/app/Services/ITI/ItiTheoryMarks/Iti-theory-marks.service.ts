@@ -69,5 +69,13 @@ export class ItiTheoryMarksService {
       ).toPromise();
   }
 
+  public async RevertBundle(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/RevertBundle`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

@@ -146,24 +146,27 @@ export class AttendanceTimeTableComponent implements OnInit {
   }
 
   async GetBranchHODApplyList() {
+    debugger
     try {
       this.requestBranchHOD.Action = "GETALL";
       this.requestBranchHOD.DepartmentID = this.sSOLoginDataModel.DepartmentID,
       this.requestBranchHOD.EndTermID = this.sSOLoginDataModel.EndTermID,
-      this.requestBranchHOD.SSOID = this.sSOLoginDataModel.SSOID
-      await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.resBranchHOD = data.Data
+        this.requestBranchHOD.SSOID = this.sSOLoginDataModel.SSOID,
+        this.requestBranchHOD.StreamIDs = [];
+      this.requestBranchHOD.SemesterID = 0;
+      //await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.resBranchHOD = data.Data
 
-          this.iSHOD = this.resBranchHOD.some(x => x.SSOID === this.sSOLoginDataModel.SSOID);
+      //    this.iSHOD = this.resBranchHOD.some(x => x.SSOID === this.sSOLoginDataModel.SSOID);
           
-          this.EditDataFormGroup.patchValue({
-            StreamName: this.resBranchHOD[0]?.StreamName
-          });
+      //    this.EditDataFormGroup.patchValue({
+      //      StreamName: this.resBranchHOD[0]?.StreamName
+      //    });
 
-          /*this.getBranchHodData();  */        
-        }, error => console.error(error));
+      //    /*this.getBranchHodData();  */        
+      //  }, error => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -262,6 +265,7 @@ export class AttendanceTimeTableComponent implements OnInit {
   //}
 
   async GetAttendanceTimeTable() {
+    debugger
     try {
       this.isSubmitted = true;
       debugger

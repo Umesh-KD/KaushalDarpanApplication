@@ -6,6 +6,7 @@ import { AllotmentdataModel, DirectAllocationDataModel, DirectAllocationSearchMo
 import { AllotmentStatusSearchModel } from '../../../Models/BTER/BTERAllotmentStatusDataModel';
 import { IMCAllocationSearchModel } from '../../../Models/ITIIMCAllocationDataModel';
 import { ReportCollegeForAdminModel, ReportCollegeModel, StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
+import { StudentthdranSeat1Model } from '../../../Models/CommonMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -243,5 +244,14 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+  public async StudentSeatWithdrawRequest(request: StudentthdranSeat1Model) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/StudentSeatWithdrawRequest`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
+
+

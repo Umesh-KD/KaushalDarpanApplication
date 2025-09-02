@@ -50,7 +50,9 @@
                 <th class="text-left"> Year Name</th>
                 <th class="text-left">Trade Name</th>
                 <th class="text-left">Subject Name</th>
-                <th class="text-left">Total</th>
+                <th class="text-left">Total Copy</th>
+                <th class="text-left">Total Student</th>
+
                 <th class="text-left">Assigned</th>
                 <th class="text-left">Action</th>
               </tr>
@@ -65,6 +67,7 @@
                 <td align="left">{{ item.StreamName }}</td>
                 <td align="left">{{ item.SubjectName }}</td>
                 <td align="left">{{ item.Total }}</td>
+                <td align="left">{{ item.TotalStudent }}</td>
                 <td align="left">{{ item.AssignedCount }}</td>
                 <td>
                   <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
@@ -162,7 +165,7 @@
 
           </div>
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Invigilator List</b>
+            <b class="text-1xl-5"><i class="ti ti-plus"></i> Trainee List</b>
           </div>
           <div class="overflow-x-auto mt-3">
             <table class="table table-border w-full table-auto" cellpadding="5">
@@ -175,6 +178,7 @@
                   <th class="text-left">Roll No </th>
                   <th class="text-left">Year</th>
                   <th class="text-left">Subject</th>
+                  <th class="text-left">Attendance</th>
                   <th class="text-left">Examiner Assigned</th>
                   <!--<th class="text-left">Examiner</th>-->
                   <!--<th class="text-left">Action</th>-->
@@ -182,13 +186,14 @@
               </thead>
               <tbody>
 
-                <tr *ngFor="let row of StudentList let idx=index;">
+                <tr *ngFor="let row of StudentList let idx=index;"   [ngClass]="{ 'text-danger': row.IsPresent == 0 }" >
                   <td>{{idx+1}}</td>
                   <td>{{row.CenterCode}}</td>
 
                   <td align="left">{{row.RollNo}}</td>
                   <td align="left">{{row.SemesterName }}</td>
                   <td align="left">{{row.SubjectName }}</td>
+                  <td align="left">{{row.Attendance }}</td>
                   <td align="left">{{row.Invigilators}}</td>
 
                   <!--<td align="left">
@@ -324,7 +329,7 @@
         </div>
 
         <div  *ngIf="IsEditData ==true" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i> Assign Invigilator List</b>
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Trainee List</b>
         </div>
         <div *ngIf="IsEditData ==true" class="overflow-x-auto mt-3">
           <table class="table table-border w-full table-auto" cellpadding="5">
@@ -337,6 +342,7 @@
                 <th class="text-left">Roll No </th>
                 <th class="text-left">Year</th>
                 <th class="text-left">Subject</th>
+                <th class="text-left">Attendance</th>
                 <th class="text-left">Examiner Assigned</th>
                 <!--<th class="text-left">Examiner</th>-->
                 <!--<th class="text-left">Action</th>-->
@@ -344,13 +350,14 @@
             </thead>
             <tbody>
 
-              <tr *ngFor="let row of StudentList let idx=index;">
+              <tr *ngFor="let row of StudentList let idx=index;"  [ngClass]="{ 'text-danger': row.IsPresent == 0 }" >
                 <td>{{idx+1}}</td>
                 <td>{{row.CenterCode}}</td>
 
                 <td align="left">{{row.RollNo}}</td>
                 <td align="left">{{row.SemesterName }}</td>
                 <td align="left">{{row.SubjectName }}</td>
+                <td align="left">{{row.Attendance }}</td>
                 <td align="left">{{row.Invigilators}}</td>
 
                 <!--<td align="left">

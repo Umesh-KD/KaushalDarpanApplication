@@ -19,16 +19,36 @@
     <div class="card-body p-5">
 
       <div class="mb-8">
+
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>PMNAM financial year</b>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              वित्तीय वर्ष <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" [(ngModel)]="SelectedFinancialYearID">
+              <option [ngValue]="0">--All--</option>
+              <option *ngFor="let item of FinYearList;"
+                      [ngValue]="item.FinancialYearID">
+                {{ item.FinancialYearName }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i>PMNAM Before Report</b>
         </div>
+
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3" id="HrMasterFormGroup">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               दिनांक: <span class="StarMarking">*</span>
             </label>
-            <input type="date" class="form-input"  [(ngModel)]="BeforeDate"
+            <input type="date" class="form-input" [(ngModel)]="BeforeDate"
                    [disabled]="IsDisable">
           </div>
           <div>
