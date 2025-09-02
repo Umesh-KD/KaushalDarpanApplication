@@ -1043,6 +1043,7 @@ const routes: Routes = [
       { path: 'college-list/:type/:status', loadChildren: () => import('./Views/BTER/college-list/college-list.module').then(m => m.CollegeListModule), title: 'College List' },
 
       { path: 'CenterExamCoordinator', loadChildren: () => import('./Views/ITI/center-exam-coordinator/center-exam-coordinator.module').then(m => m.CenterExamCoordinatorModule), title: 'Center Exam Coordinator' },
+      { path: 'IIPCollageReport', loadChildren: () => import('./Views/ITI/IIPCollageReport/iipcollage-report/iipcollage-report.module').then(m => m.IIPCollageReportModule) },
 
 
       { path: 'examiner-relieving-form', loadChildren: () => import('./Views/ITI/relieving-practical-examiner/relieving-practical-examiner.module').then(m => m.RelievingPracticalExaminerModule) },
@@ -1445,6 +1446,7 @@ const routes: Routes = [
   { path: 'Views\BTER\Student-Section-Incharge', loadChildren: () => import('./Views/BTER/student-section-incharge/student-section-incharge.module').then(m => m.StudentSectionInchargeModule) },
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
+
  
   
   
