@@ -322,4 +322,21 @@ export class PostAttendanceTimeTable {
   public SectionIDs: string = "";
 }
 
+export class CalendarEventModel {
+  public EventId: number = 0;
+  public EventDate: Date = new Date();
+  public EventType: string = "";
+  public Remark: string = "";
+  public Color: string = "";
+  public WeekDayName: string = "";
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public AcademicYearID: number = 0;
+  public CourseTypeID: number = 0;
+  public IsActive: boolean = true;
+  public IsDelete: boolean = false;
+  public Day: number = 0; // <-- add this for calendar matching
+}
+
+
 

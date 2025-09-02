@@ -1345,7 +1345,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
 
-  { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+      { path: 'SetCalendar', loadChildren: () => import('./Views/BTER/attendance-time-table/SetCalendar/SetCalendar.module').then(m => m.SetCalendarModule), title: 'Set-Calendar' },
       
     ]
   },
