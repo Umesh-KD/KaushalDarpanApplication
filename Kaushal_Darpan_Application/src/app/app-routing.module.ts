@@ -1187,6 +1187,7 @@ const routes: Routes = [
   { path: 'AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: '10AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: 'DirectAddmissionReport', loadChildren: () => import('./Views/ITI/reports/direct-admission-report/direct-admission-report.module').then(m => m.DirectAdmissionReportModule) },
+  { path: 'studentWithdrawn-report', loadChildren: () => import('./Views/ITI/reports/student-withdrawn-report/student-withdrawn-report.module').then(m => m.studentwithdrawnreportModule) },
   { path: 'AllotmentReportCollege', loadChildren: () => import('./Views/ITI/reports/allotment-report-college/allotment-report-college.module').then(m => m.AllotmentReportCollegeModule) },
       { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'IMCAllotmentReport/:id', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
@@ -1407,7 +1408,7 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-
+     
     ]
   },
 
