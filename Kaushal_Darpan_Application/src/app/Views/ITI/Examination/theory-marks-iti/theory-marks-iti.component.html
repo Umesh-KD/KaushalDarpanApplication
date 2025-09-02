@@ -45,9 +45,10 @@
               <input [disabled]="isFinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <!-- <th class="text-left" title="Click to sorting" (click)="sortInTableData('CenterCode')">
-              Center C-Code
-              <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th> -->
+    Center C-Code
+    <span class="shortingSpan" *ngIf="sortInTableColumn=='CenterCode'" [innerHTML]="sortInTableDirectionAero"></span>
+  </th> -->
+            <th>SR  No</th>
             <th class="text-left" title="Click to sorting" (click)="sortInTableData('SubjectName')">
               Subject Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SubjectCode'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -63,11 +64,14 @@
         </thead>
 
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData ;let idx=index;">
+          <tr *ngFor="let row of paginatedInTableData ;let idx=index;"
+             [ngClass]="{ 'text-danger': row.IsPresentTheory == 0 }" >
+
             <td align="center">
-              <input [disabled]="isFinalsubmit" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
+              <input [disabled]="isFinalsubmit ||row.IsPresentTheory == 0" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
+            <td align="left">{{idx+1}}</td>
             <!-- <td align="left">{{row.CenterCode}}</td> -->
             <td align="left">{{row.SubjectName}}</td>
             <td class="" align="left">{{row.RollNo}}</td>
@@ -76,7 +80,7 @@
             <td align="left">
               <div class="flex">
                 <!--<input (keypress)="numberOnly($event)" (keydown)="onTabPress($event, idx)" class="form-input"
-         style="width:100px" type="text" [disabled]="!row.Marked || row.IsPresentTheory==0 " id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
+      style="width:100px" type="text" [disabled]="!row.Marked || row.IsPresentTheory==0 " id="txtObtainedTheory" [(ngModel)]="row.ObtainedTheory">-->
 
                 <input #markInput
                        (keypress)="numberOnly($event)"
@@ -93,12 +97,13 @@
               </div>
             </td>
             <td align="left">
+
               <select class="form-select" id="IsPresentTheory" [disabled]="!row.Marked" [(ngModel)]="row.IsPresentTheory">
                 <option value="">Choose Option</option>
                 <option value="0">Absent</option>
                 <option value="1">Present</option>
                 <!--<option value="3">Detained</option>
-                <option value="4">UFM</option>-->
+      <option value="4">UFM</option>-->
               </select>
             </td>
           </tr>

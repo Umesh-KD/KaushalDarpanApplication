@@ -232,6 +232,8 @@ export class BranchHODModel {
   public MobileNo: string = '';
   public RoleID: number = 0;
   public EndTermID: number = 0;
+  public SemesterID: number = 0;
+  public StreamIDs: number[] = [];
 }
 
 export class BranchHODApplyModel {
@@ -319,5 +321,22 @@ export class PostAttendanceTimeTable {
   public StaffID: number = 0;
   public SectionIDs: string = "";
 }
+
+export class CalendarEventModel {
+  public EventId: number = 0;
+  public EventDate: Date = new Date();
+  public EventType: string = "";
+  public Remark: string = "";
+  public Color: string = "";
+  public WeekDayName: string = "";
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public AcademicYearID: number = 0;
+  public CourseTypeID: number = 0;
+  public IsActive: boolean = true;
+  public IsDelete: boolean = false;
+  public Day: number = 0; // <-- add this for calendar matching
+}
+
 
 
