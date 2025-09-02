@@ -72,7 +72,7 @@
       <div class="flex" *ngIf="this.Status!=14 && TimeTableList?.length>0">
         <select *ngIf="this.sSOLoginDataModel.RoleID==_enumRole.ExaminationIncharge ||this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng ||this.sSOLoginDataModel.RoleID ==_enumRole.ExaminationIncharge_NonEng"  class="form-select" id="ddlChangeStatus" [(ngModel)]="ddlRollListStatus" style="margin-left:10px;">
           <option value="0">Select Status</option>
-          <option *ngIf="Status!=13&&Status!=15 &&Status!=14" value="{{_RollListStatus.Verified}}">Verified</option>
+          <option *ngIf="Status!=13&&Status!=15 &&Status!=14" value="{{_RollListStatus.Verified}}">{{ sSOLoginDataModel.RoleID === _enumRole.Registrar || sSOLoginDataModel.RoleID === _enumRole.Registrar_NonEng ? 'Approve' : 'Verified' }}</option>
           <option *ngIf="Status!=14&&Status!=15" value="{{_RollListStatus.Reverted}}">Reverted</option>
         </select>
         <button *ngIf="this.sSOLoginDataModel.RoleID ==_enumRole.Registrar || this.sSOLoginDataModel.RoleID ==_enumRole.Registrar_NonEng " type="button" class="btn bg-info text-white inline-block" (click)="openOTP()"> <i class="ti ti-save"></i>Save</button>
