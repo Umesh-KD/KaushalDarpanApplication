@@ -25,8 +25,12 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 })
 export class StudentAttendanceComponent implements OnInit {
   displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
-  dynamicColumns: string[] = [];
+ /* dynamicColumns: string[] = [];*/
+
   filterData: any[] = [];
+  dynamicColumns: { name: string, locked: boolean }[] = [];
+ 
+ 
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
@@ -190,15 +194,34 @@ export class StudentAttendanceComponent implements OnInit {
         this.filterData = data;
         if (this.filterData.length > 0) {
          
+          //this.dynamicColumns = [];
+          //this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
           this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
 
          
+          //this.dynamicColumns = Object.keys(this.filterData[0])
+          //  .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
           this.dynamicColumns = Object.keys(this.filterData[0])
-            .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
+            .filter(key => ![
+              'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+              'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+              'EndTermID', 'CourseTypeID', 'StudentID'
+            ].includes(key))
+            .map(key => {
+              const isHoliday = key.toLowerCase().includes('holiday'); // Holiday detection
+              return { name: key, locked: isHoliday }; // Holidays locked, working days unlocked
+            });
 
-         
-          this.displayedColumns = [...this.displayedColumns, ...this.dynamicColumns];
+
+
+
+
+
+          this.displayedColumns = [
+            ...this.displayedColumns,
+            ...this.dynamicColumns.map(c => c.name)
+          ];
         }
 
         this.dataSource.data = this.filterData;
@@ -327,10 +350,75 @@ export class StudentAttendanceComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
+  //saveAttendance() {
+  //  debugger
+  //  console.log(this.dataSource.filteredData);
+  //  let saveAttendanceData: any[] = this.dataSource.filteredData;
+  //  const attendanceData = {
+  //    EndTermID: this.sSOLoginDataModel.EndTermID,
+  //    SemesterID: this.TableForm.value.SemesterID,
+  //    StreamID: this.TableForm.value.StreamID,
+  //    SectionID: this.sectionId,
+  //    SubjectID: this.TableForm.value.SubjectID,
+  //    DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //    CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+  //    InstituteID: this.sSOLoginDataModel.InstituteID,
+  //    AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID
+  //  };
+
+  //  saveAttendanceData.forEach(item => {
+  //    // Add new columns (data) to each item
+  //    item.EndTermID = attendanceData.EndTermID;
+  //    item.DepartmentID = attendanceData.DepartmentID;
+  //    item.SemesterID = attendanceData.SemesterID;
+  //    item.StreamID = attendanceData.StreamID;
+  //    item.SectionID = attendanceData.SectionID;
+  //    item.SubjectID = attendanceData.SubjectID;
+  //    item.InstituteID = attendanceData.InstituteID,
+  //    item.CourseTypeID = attendanceData.CourseTypeID;
+  //    item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
+  //  });
+  //  // Iterate over each student record to transform attendance dates into an "Attendance" column
+  //  saveAttendanceData.forEach(item => {
+  //    // Create an empty array to store attendance data
+  //    let attendanceArray:any[] = [];
+
+  //    // Loop through the object properties and extract attendance date columns
+  //    Object.keys(item).forEach(key => {
+  //      // If the key is a date (i.e., not part of the basic student info)
+  //      if (key.trim() !== "SectionID" && key.trim() !== 'SectionName' && key.trim() !== "DepartmentID" && key !== 'SemesterName' && key !== 'StreamName' &&  key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID" && key.trim() !== "StudentID") {
+
+  //        // Push the date and its status as an object into the attendance array
+  //        attendanceArray.push({ "Date": key.trim(), "Status": item[key] });
+
+  //        // Delete the attendance date key from the item object
+  //        delete item[key];
+  //      }
+  //    });
+
+  //    // Add the attendance array as a new column 'Attendance'
+  //    item.Attendance = attendanceArray;
+  //  });
+  //  // Optionally, log the updated data to verify the result
+  //  console.log(saveAttendanceData);
+
+  //  this.attendanceServiceService.saveAttendanceData(saveAttendanceData)
+  //    .then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      if (data.Data == 1) {
+  //        this.GetAttendanceTimeTable();
+  //        this.toastr.success(data.Message);
+  //        this.checkedAll = false;
+  //      }
+  //    }, error => console.error(error));
+  //}
+
+
   saveAttendance() {
-    debugger
-    console.log(this.dataSource.filteredData);
+    debugger;
+
     let saveAttendanceData: any[] = this.dataSource.filteredData;
+
     const attendanceData = {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       SemesterID: this.TableForm.value.SemesterID,
@@ -344,40 +432,36 @@ export class StudentAttendanceComponent implements OnInit {
     };
 
     saveAttendanceData.forEach(item => {
-      // Add new columns (data) to each item
-      item.EndTermID = attendanceData.EndTermID;
-      item.DepartmentID = attendanceData.DepartmentID;
-      item.SemesterID = attendanceData.SemesterID;
-      item.StreamID = attendanceData.StreamID;
-      item.SectionID = attendanceData.SectionID;
-      item.SubjectID = attendanceData.SubjectID;
-      item.InstituteID = attendanceData.InstituteID,
-      item.CourseTypeID = attendanceData.CourseTypeID;
-      item.AssignTeacherForSubjectID = attendanceData.AssignTeacherForSubjectID;
-    });
-    // Iterate over each student record to transform attendance dates into an "Attendance" column
-    saveAttendanceData.forEach(item => {
-      // Create an empty array to store attendance data
-      let attendanceArray:any[] = [];
+      // Assign common fields
+      Object.assign(item, attendanceData);
 
-      // Loop through the object properties and extract attendance date columns
+      const attendanceArray: any[] = [];
+
       Object.keys(item).forEach(key => {
-        // If the key is a date (i.e., not part of the basic student info)
-        if (key.trim() !== "SectionID" && key.trim() !== 'SectionName' && key.trim() !== "DepartmentID" && key !== 'SemesterName' && key !== 'StreamName' &&  key.trim() !== "EnrollmentNo" && key.trim() !== "StudentName" && key.trim() !== "SubjectName" && key.trim() !== "EndTermID" && key.trim() !== "SemesterID" && key.trim() !== "StreamID" && key.trim() !== "SubjectID" && key.trim() !== "CourseTypeID" && key.trim() !== "AssignTeacherForSubjectID" && key.trim() !== "SubjectID1" && key.trim() !== "AttendanceDate" && key.trim() !== "Attendance" && key.trim() !== "InstituteID" && key.trim() !== "StudentID") {
+        const skipKeys = [
+          'SectionID', 'SectionName', 'DepartmentID', 'SemesterName', 'StreamName', 'EnrollmentNo',
+          'StudentName', 'SubjectName', 'EndTermID', 'SemesterID', 'StreamID', 'SubjectID',
+          'CourseTypeID', 'AssignTeacherForSubjectID', 'SubjectID1', 'AttendanceDate', 'Attendance',
+          'InstituteID', 'StudentID'
+        ];
 
-          // Push the date and its status as an object into the attendance array
-          attendanceArray.push({ "Date": key.trim(), "Status": item[key] });
+        if (!skipKeys.includes(key)) {
+          // ✅ Remove (Working Day) / (Holiday) prefix → keep only yyyy-mm-dd
+          const cleanedDate = key.replace(/\(.*?\)\s*/g, '').trim();
 
-          // Delete the attendance date key from the item object
+          attendanceArray.push({
+            Date: cleanedDate,
+            Status: item[key] || null
+          });
+
           delete item[key];
         }
       });
 
-      // Add the attendance array as a new column 'Attendance'
       item.Attendance = attendanceArray;
     });
-    // Optionally, log the updated data to verify the result
-    console.log(saveAttendanceData);
+
+    console.log('Prepared data for saving:', saveAttendanceData);
 
     this.attendanceServiceService.saveAttendanceData(saveAttendanceData)
       .then((data: any) => {
@@ -389,6 +473,7 @@ export class StudentAttendanceComponent implements OnInit {
         }
       }, error => console.error(error));
   }
+
 
   // Method to toggle all attendance to present or absent
   toggleAllAttendance() {
@@ -425,6 +510,9 @@ export class StudentAttendanceComponent implements OnInit {
   
   }
 
-
+  unlockColumn(columnName: string) {
+    const col = this.dynamicColumns.find(c => c.name === columnName);
+    if (col) col.locked = false;
+  }
 }
 
