@@ -24,6 +24,7 @@ import { ItiTradeSearchModel, StudentthdranSeat1Model } from '../../../../Models
 import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMarksDataMedels';
 import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { ITIPapperSetterDataModel } from '../../../../Models/ITIPapperSetterDataModel';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-student-withdrawn-report',
@@ -95,9 +96,10 @@ export class studentwithdrawnreportComponent {
 
 
     this.withdrawnFormGroup = this.formBuilder.group({
-      Remarks: [''],
-      
+      Remarks: ['', Validators.required]
     });
+
+    this.studentWithdrawnRequest = new StudentthdranSeat1Model();
   }
 
   async GetAllotedSeatByCollegeList() {
@@ -274,15 +276,7 @@ export class studentwithdrawnreportComponent {
     this.totalInTableRecord = this.AllotedSeatList.length;
   }
 
-  async openModal(content: any, PKID: number) {
-    this.request.PKID = PKID;
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
+ 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -294,12 +288,7 @@ export class studentwithdrawnreportComponent {
   }
 
 
-  ReplayQueryUpdate(content: any, collegeId: number) {
-    this.withdrawnFormGroup.reset();  // reset form if needed
-    this.isSubmitted = false;
-    // You can also use the collegeId if needed
-    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', centered: true });
-  }
+  
 
   CloseModalPopup() {
     this.isSubmitted = false;
@@ -321,8 +310,16 @@ export class studentwithdrawnreportComponent {
           return;
         }
         this.loaderService.requestStarted();
+
+        let uploadModel = new UploadFileModel();
+      
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/StudentWithdrawn";
+
+
         await this.commonMasterService
-          .UploadDocument(this.file)
+          .UploadDocument(this.file, uploadModel)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
@@ -352,14 +349,35 @@ export class studentwithdrawnreportComponent {
     }
   }
 
+  SavestudentWithdrawnRequest(content: any, item:any) {
+    debugger
+    this.withdrawnFormGroup.reset();
+    this.isSubmitted = false;
+    // You can also use the collegeId if needed
+    this.studentWithdrawnRequest.CollegeID = item.CollegeId;
+    this.studentWithdrawnRequest.ApplicationID = item.ApplicationID;
+    this.studentWithdrawnRequest.AllotmentId = item.AllotmentId;
+    this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', centered: true });
+  }
 
   async SavestudentWithdrawnRequestData() {
+
     debugger
+    this.isSubmitted = true;
+        
+    //if (this.withdrawnFormGroup.invalid) {
+    //  this.toastr.error('Please fill all required fields.');
+    //  return;
+    //}
+
+    if (!this.studentWithdrawnRequest.DoucmentName || this.studentWithdrawnRequest.DoucmentName === '') {
+      this.toastr.error('Please upload the required document.');
+      return;
+    }
+
     this.studentWithdrawnRequest.UserID = this.sSOLoginDataModel.UserID;
-    this.studentWithdrawnRequest.CollegeID = this.studentWithdrawnRequest.CollegeID; // or however you set it
-    this.studentWithdrawnRequest.ApplicationID = this.studentWithdrawnRequest.ApplicationID;
-    this.studentWithdrawnRequest.Remarks = this.withdrawnFormGroup.get('Remarks')?.value;  // <-- get from form
-    this.studentWithdrawnRequest.DoucmentName = this.studentWithdrawnRequest.DoucmentName;
+    this.studentWithdrawnRequest.Remarks = this.withdrawnFormGroup.get('Remarks')?.value;
+
     try {
       this.isSubmitted = true;
       if (this.withdrawnFormGroup.invalid) {

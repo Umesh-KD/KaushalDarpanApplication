@@ -81,7 +81,8 @@ export class DDL_InvigilatorSSOID_DataModel extends RequestBaseModel {
 export class StudentthdranSeat1Model {
   public AllotmentId: number = 0;
   public CollegeID: number = 0;
-  public ApplicationID: number = 0;
+  //public ApplicationID: number = 0;
+  public ApplicationID: string = '';
   public DoucmentName: string = '';
   public Remarks: string = '';
   public UserID: number = 0;
