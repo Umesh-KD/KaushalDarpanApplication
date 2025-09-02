@@ -82,20 +82,17 @@ export class AttendanceServiceService {
   }
 
   public async PostAttendanceTimeTableList(model: PostAttendanceTimeTable[]) {
-    debugger
     return await this.http.post(this.APIUrl + '/PostAttendanceTimeTableList', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
 
   public async SetCalendarEventModel(model: CalendarEventModel[]) {
-    debugger
     return await this.http.post(this.APIUrl + '/SetCalendarEventModel', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
   public async getCalendarEventModel(model: CalendarEventModel) {
-    debugger
     return await this.http.post(this.APIUrl + '/getCalendarEventModel', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();

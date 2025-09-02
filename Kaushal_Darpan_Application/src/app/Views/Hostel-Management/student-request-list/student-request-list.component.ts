@@ -104,6 +104,7 @@ export class StudentRequestListComponent {
       //this.Searchrequest.HostelID = 2;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.loaderService.requestStarted();
       await this.studentRequestService.GetAllData(this.Searchrequest)
         .then((data: any) => {

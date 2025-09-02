@@ -171,7 +171,7 @@ const routes: Routes = [
       { path: 'addcommonsubjects', loadChildren: () => import('./Views/CommonSubjects/add-common-subjects/add-common-subjects.module').then(m => m.AddCommonSubjectsModule), title: 'Add Common Subject' },
       { path: 'commonsubjects', loadChildren: () => import('./Views/CommonSubjects/common-subjects/common-subjects.module').then(m => m.CommonSubjectsModule), title: 'Common Subject' },
       { path: 'roster-display', loadChildren: () => import('./Views/roste/roste.module').then(m => m.RosteModule), title: 'Roste Module' },
-
+      { path: 'roster-display-list', loadChildren: () => import('./Views/roste-list/roste-list.module').then(m => m.RosteListModule), title: 'Roste List Module' },
       { path: 'managetpo', loadChildren: () => import('./Views/TPOMaster/create-tpo/create-tpo.module').then(m => m.CreateTpoModule) },
       { path: 'tpo-details', loadChildren: () => import('./Views/TPOMaster/details-tpo/details-tpo.module').then(m => m.DetailsTpoModule) },
       { path: 'campusvalidation', loadChildren: () => import('./Views/campus-validation/campus-validation.module').then(m => m.CampusValidationModule) },
@@ -1187,6 +1187,7 @@ const routes: Routes = [
   { path: 'AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: '10AgeStudentData', loadChildren: () => import('./Views/ITI/reports/age-wise-student-data/age-wise-student-data.module').then(m => m.AgeStudentDataModule) },
   { path: 'DirectAddmissionReport', loadChildren: () => import('./Views/ITI/reports/direct-admission-report/direct-admission-report.module').then(m => m.DirectAdmissionReportModule) },
+  { path: 'studentWithdrawn-list', loadChildren: () => import('./Views/ITI/student-withdrawn-list/student-withdrawn-list.module').then(m => m.studentwithdrawnlistModule) },
   { path: 'studentWithdrawn-report', loadChildren: () => import('./Views/ITI/reports/student-withdrawn-report/student-withdrawn-report.module').then(m => m.studentwithdrawnreportModule) },
   { path: 'AllotmentReportCollege', loadChildren: () => import('./Views/ITI/reports/allotment-report-college/allotment-report-college.module').then(m => m.AllotmentReportCollegeModule) },
       { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
@@ -1346,7 +1347,13 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
 
       { path: 'SetCalendar', loadChildren: () => import('./Views/BTER/attendance-time-table/SetCalendar/SetCalendar.module').then(m => m.SetCalendarModule), title: 'Set-Calendar' },
+
+      { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
+
       
+      { path: 'ExaminerBundleList', loadChildren: () => import('./Views/ITI/Examination/examiner-bundle-list/examiner-bundle-list.module').then(m => m.ExaminerBundleListModule) },
+
+
     ]
   },
   
@@ -1448,7 +1455,6 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
 
- 
   
   
   

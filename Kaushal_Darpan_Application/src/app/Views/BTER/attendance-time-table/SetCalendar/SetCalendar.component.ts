@@ -60,10 +60,6 @@ export class SetCalendarComponent implements OnInit {
   public eventsList: CalendarEventModel[] = [];
   public eventsSearch = new  CalendarEventModel();
 
-
-  
-
-
   constructor(
     private commonFunctionService: CommonFunctionService,
     private formBuilder: FormBuilder,
@@ -90,11 +86,7 @@ export class SetCalendarComponent implements OnInit {
     this.request.AcademicYearId = this.SSOLoginDataModel.FinancialYearID;
     this.request.DepartmentId = this.SSOLoginDataModel.DepartmentID;
 
-
-
     try {
-     
-
       await this.attendanceServiceService.getCalendarEventModel(this.eventsSearch)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -107,6 +99,7 @@ export class SetCalendarComponent implements OnInit {
       console.log(Ex);  // Handle any error that occurs during the async call
     }
 
+    debugger
     const today = new Date();
     this.year = today.getFullYear();
     this.month = today.getMonth() + 1;
@@ -114,11 +107,10 @@ export class SetCalendarComponent implements OnInit {
     const daysInMonth = new Date(this.year, this.month, 0).getDate();
     let events: CalendarEventModel[] = [];
     
-
     for (let day = 1; day <= daysInMonth; day++) {
       const event = new CalendarEventModel();
       event.EventId = day;
-      event.EventDate = new Date(this.year, this.month, day);
+      event.EventDate = new Date(this.year, (this.month - 1), day);
 
       // Set the weekday name using the getDay() method
       const dayOfWeek = event.EventDate.getDay();
@@ -151,7 +143,7 @@ export class SetCalendarComponent implements OnInit {
     // Merge special events into the default events
     specialEvents.forEach(se => {
       const eventIndex = events.findIndex(e => e.Day === se.day &&
-        e.EventDate.getMonth() === this.month &&
+        e.EventDate.getMonth() === (this.month-1) &&
         e.EventDate.getFullYear() === this.year);
 
       if (eventIndex !== -1) {

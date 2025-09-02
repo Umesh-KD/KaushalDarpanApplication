@@ -674,11 +674,11 @@
     <div class="w-full text-center mt-4 flex align-center justify-center">
 
 
-      <button type="button" *ngIf="!ShowPaymentButton && sSOLoginDataModel.ApplicationFinalSubmit!=2" class="btn bg-primary text-white" (click)="SaveData(MyModel_PreviewDetails) "><i class="ti ti-device-floppy"></i>Final Submit & Make Payment</button>
+      <button type="button" *ngIf="!ShowPaymentButton && sSOLoginDataModel.ApplicationFinalSubmit!=2 && showFeeButton" class="btn bg-primary text-white" (click)="SaveData(MyModel_PreviewDetails) "><i class="ti ti-device-floppy"></i>Final Submit & Make Payment</button>
 
       <!--<button type="button" *ngIf="ShowfinalLButton" class="btn bg-primary text-white" (click)="SaveData() "><i class="ti ti-device-floppy"></i>Lock & Final Submit</button>-->
 
-      <button type="button" *ngIf="ShowPaymentButton" class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails,request.ApplicationID)">
+      <button type="button" *ngIf="ShowPaymentButton && showFeeButton" class="btn bg-primary text-white" (click)="SavePreview(MyModel_PreviewDetails,request.ApplicationID)">
         <i class="ti ti-inr">
         </i>Make Payment
 

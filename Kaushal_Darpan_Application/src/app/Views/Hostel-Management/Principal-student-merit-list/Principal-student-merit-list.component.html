@@ -92,7 +92,7 @@
             <th class="text-left">{{titleDDLBranchTrade}}</th>
             <th class="text-left">Year</th>
             <th class="text-left">Percentage</th>
-            <th class="text-center" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">Action</th>
+            <!-- <th class="text-center" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">Action</th> -->
           </tr>
         </thead>
         <tbody>
@@ -107,12 +107,12 @@
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.ClassPercentage}}</td>
-            <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+            <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
                 <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
-                <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
+                <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

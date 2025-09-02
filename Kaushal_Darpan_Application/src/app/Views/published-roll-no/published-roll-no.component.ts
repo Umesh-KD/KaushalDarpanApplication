@@ -66,6 +66,8 @@ export class PublishedRollNoComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
 
+  public _EnumRole = EnumRole;
+
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
   constructor(
     private commonMasterService: CommonFunctionService,

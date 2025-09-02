@@ -1,14 +1,14 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
 
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Withdrawn Report</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Student Withdrawn List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reports</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a [routerLink]="['/studentWithdrawn-report']" class="text-sm font-medium text-slate-700" aria-current="page">Student Withdrawn Report</a>
+      <a [routerLink]="['/studentWithdrawn-list']" class="text-sm font-medium text-slate-700" aria-current="page">Student Withdrawn List</a>
     </div>
 
   </div>
@@ -96,8 +96,9 @@
             <th class="text-left" rowspan="2">Trade Name</th>
             <th class="text-left" rowspan="2">Alloted Category</th>
             <th class="text-left" rowspan="2">Alloted Status</th>
+            <th class="text-left" rowspan="2">Remark</th>
             <th class="text-left" rowspan="2">Reporting Date and Time</th>
-            <th class="text-left" rowspan="2">Action</th>
+            <th class="text-left" rowspan="2">Doucment</th>
           </tr>
 
         </thead>
@@ -108,23 +109,20 @@
             <td>{{ item.ApplicationNo }}</td>
             <td>{{ item.Name }}</td>
             <td>{{ item.FatherName }}</td>
-            <td>{{ item.TradeCode }}</td>
+            <td>{{ item.TradeCode }}</td> 
             <td>{{ item.TradeName }}</td>
             <td>{{ item.AllotedCategory }}</td>
             <td>{{ item.AllotmentStatus }}</td>
+            <td>{{ item.WithdrawRemarks}}</td>
             <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
             <td>
-              <!--<button class="btn bg-info text-white" type="button"
-                  (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
-                Withdrawn
-              </button>-->
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/ITI/StudentWithdrawn/' + item.WithdrawSeatDocument}}"
+                   *ngIf="item.WithdrawSeatDocument !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+              
 
-              <button class="btn bg-info text-white" type="button"
-                      *ngIf="item.AllotmentStatus != 9"
-                      (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
-                Withdrawn
-              </button>
-
+            </td>
 
 </tr>
         </tbody>
