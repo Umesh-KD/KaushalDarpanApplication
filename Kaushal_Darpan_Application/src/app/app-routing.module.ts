@@ -171,7 +171,7 @@ const routes: Routes = [
       { path: 'addcommonsubjects', loadChildren: () => import('./Views/CommonSubjects/add-common-subjects/add-common-subjects.module').then(m => m.AddCommonSubjectsModule), title: 'Add Common Subject' },
       { path: 'commonsubjects', loadChildren: () => import('./Views/CommonSubjects/common-subjects/common-subjects.module').then(m => m.CommonSubjectsModule), title: 'Common Subject' },
       { path: 'roster-display', loadChildren: () => import('./Views/roste/roste.module').then(m => m.RosteModule), title: 'Roste Module' },
-
+      { path: 'roster-display-list', loadChildren: () => import('./Views/roste-list/roste-list.module').then(m => m.RosteListModule), title: 'Roste List Module' },
       { path: 'managetpo', loadChildren: () => import('./Views/TPOMaster/create-tpo/create-tpo.module').then(m => m.CreateTpoModule) },
       { path: 'tpo-details', loadChildren: () => import('./Views/TPOMaster/details-tpo/details-tpo.module').then(m => m.DetailsTpoModule) },
       { path: 'campusvalidation', loadChildren: () => import('./Views/campus-validation/campus-validation.module').then(m => m.CampusValidationModule) },
