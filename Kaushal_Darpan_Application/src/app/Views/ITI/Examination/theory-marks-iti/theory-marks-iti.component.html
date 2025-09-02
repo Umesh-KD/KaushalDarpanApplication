@@ -65,13 +65,7 @@
 
         <tbody>
           <tr *ngFor="let row of paginatedInTableData ;let idx=index;"
-
-             [ngClass]="{ 'text-danger': row.IsPresentTheory == 0 }"
-
-
-              >
-
-            
+             [ngClass]="{ 'text-danger': row.IsPresentTheory == 0 }" >
 
             <td align="center">
               <input [disabled]="isFinalsubmit ||row.IsPresentTheory == 0" type="checkbox" class="checkboxSize" [(ngModel)]="row.Marked"
