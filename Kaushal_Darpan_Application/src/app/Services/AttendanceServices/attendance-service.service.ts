@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { catchError, throwError } from 'rxjs';
 import { StreamMasterDataModelsTesting } from '../../Models/StreamMasterDataModelsTesting';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { PostAttendanceTimeTable } from '../../Models/StaffMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,13 @@ export class AttendanceServiceService {
 
   public async ITIGetAttendanceTimeTable(model: any) {
     return await this.http.post(this.APIUrl + '/ITI_GetAttendanceTimeTable', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async PostAttendanceTimeTableList(model: PostAttendanceTimeTable[]) {
+    debugger
+    return await this.http.post(this.APIUrl + '/PostAttendanceTimeTableList', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
   }

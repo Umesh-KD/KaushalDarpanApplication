@@ -78,7 +78,29 @@ export class PaperMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetSubjectListBranchWise(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetSubjectListBranchWise", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
+  public async PaperSaveData(request: PapersMasterDataModels[]) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/SavePaperData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAllDataBranchwithSem(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetAllData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 
