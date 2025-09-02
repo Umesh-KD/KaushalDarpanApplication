@@ -162,7 +162,7 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
   async GetAttendanceTimeTable() {
-    
+    debugger
     try {
       const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
       dateStart.setDate(dateStart.getDate() + 1);
@@ -189,19 +189,20 @@ export class StudentAttendanceComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
         if (this.filterData.length > 0) {
-          // ✅ Reset dynamic columns and static columns
+         
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
 
-          // ✅ Extract dynamic columns from the first row of data
+         
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
 
-          // ✅ Add dynamic columns to displayedColumns
+         
           this.displayedColumns = [...this.displayedColumns, ...this.dynamicColumns];
         }
 
         this.dataSource.data = this.filterData;
+        console.log('dateWiseData',this.dataSource.data);
         this.dataSource.sort = this.sort;
         this.totalRecords = this.filterData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -423,5 +424,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   
   }
+
+
 }
 

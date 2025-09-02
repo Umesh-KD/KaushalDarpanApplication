@@ -183,6 +183,7 @@ this.IsBranch=false;
       this.requestBranchHOD.DepartmentID = this.sSOLoginDataModel.DepartmentID,
         this.requestBranchHOD.EndTermID = this.sSOLoginDataModel.EndTermID,
         this.requestBranchHOD.SSOID = this.sSOLoginDataModel.SSOID
+      this.requestBranchHOD.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');
       await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -424,6 +425,7 @@ this.IsBranch=false;
   }
 
   async save() {
+    debugger
     const totalFromSections = this.sectionForm.value.sections.reduce((sum: any, section: { studentCount: any; }) => sum + section.studentCount, 0);
 
     const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
@@ -436,20 +438,35 @@ this.IsBranch=false;
     }
 
     
-      let obj = {
-        Action:"SAVE",
-        DepartmentID:this.sSOLoginDataModel.DepartmentID,
-        EndTermID:this.sSOLoginDataModel.EndTermID,
-        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.IIPMasterFormGroup.value.StreamID,
-        Section: JSON.stringify(this.sectionForm.value.sections),
-        ActiveStatus: 1,
-        DeleteStatus: 0,
-        CreatedBy: this.sSOLoginDataModel.UserID,
-        ModifyBy: this.sSOLoginDataModel.UserID,
-        CreatedDate: new Date(),
-        SemesterID: this.IIPMasterFormGroup.value.SemesterID
-      }      
+      //let obj = {
+      //  Action:"SAVE",
+      //  DepartmentID:this.sSOLoginDataModel.DepartmentID,
+      //  EndTermID:this.sSOLoginDataModel.EndTermID,
+      //  Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      //  StreamID: this.IIPMasterFormGroup.value.StreamID,
+      //  Section: JSON.stringify(this.sectionForm.value.sections),
+      //  ActiveStatus: 1,
+      //  DeleteStatus: 0,
+      //  CreatedBy: this.sSOLoginDataModel.UserID,
+      //  ModifyBy: this.sSOLoginDataModel.UserID,
+      //  CreatedDate: new Date(),
+      //  SemesterID: this.IIPMasterFormGroup.value.SemesterID
+    //}
+    let obj = {
+      Action: "SAVE",
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      StreamID: this.IIPMasterFormGroup.value.StreamID,
+      Section: this.sectionForm.value.sections,
+      ActiveStatus: 1,
+      DeleteStatus: 0,
+      CreatedBy: this.sSOLoginDataModel.UserID,
+      ModifyBy: this.sSOLoginDataModel.UserID,
+      CreatedDate: new Date(),
+      SemesterID: this.IIPMasterFormGroup.value.SemesterID
+    }   
+
       debugger
       await this.staffMasterService.SaveBranchSectionData(obj)
         .then((data: any) => {
@@ -858,11 +875,13 @@ CloseModal() {
           this.postItem.SectionID = 0,
           this.postItem.EndTermID = this.sSOLoginDataModel.EndTermID,
           this.postItem.DepartmentID = this.sSOLoginDataModel.DepartmentID,
+          this.postItem.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng,
           this.postItem.RoleID = this.sSOLoginDataModel.RoleID,
           this.postItem.SectionIDs = item.SectionIDs, 
           this.postItem.SectionIDs = item.SectionIDs, 
           this.postItem.AssignBySSOID = this.sSOLoginDataModel.SSOID, 
-          this.postItem.AssignToSSOID = this.ApprovedTeacherList.find((x: any) => x.StaffID == item.StaffID)?.Name,
+          this.postItem.AssignBySSOID = this.sSOLoginDataModel.SSOID, 
+          this.postItem.AssignToSSOID = this.ApprovedTeacherList.find((x: any) => x.StaffID == item.StaffID)?.SSOID,
          
         this.PostAttendanceTimeTableList.push(this.postItem);
          this.postItem = new PostAttendanceTimeTable();
