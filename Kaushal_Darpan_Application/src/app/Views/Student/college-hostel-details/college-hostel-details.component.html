@@ -8,13 +8,15 @@
     </div>
   </div>
 </div>
-<!--{{HostelTotalDetails|json}}-->
-<div class="w-full" *ngIf="CollegeHostelList.length > 0">
+<!-- {{HostelTotalDetails|json}} -->
+<div class="w-full" *ngIf="CollegeHostelList?.length > 0">
   <div class="card mb-3" *ngFor="let hostel of HostelTotalDetails">
     <div class="card-header p-3 py-1 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-home"></i> {{ hostel?.HostelName }} - {{ hostel?.HostelTypes }}</b>
+      <b class="text-1xl-5"><i class="ti ti-home"></i>
+         {{ hostel?.HostelName }} - {{ hostel?.HostelTypes }}
+      </b>
     </div>
-    <div class="card-body p-5">
+    <div class="card-body p-5" *ngIf="hostel?.Facilities?.length > 0 && hostel?.Fees?.length > 0; else noHostelDetails">
 
       <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 gap-6">
 
@@ -49,12 +51,14 @@
                 <tr>
                   <th class="text-left"><b>Room Type</b></th>
                   <th class="text-left"><b>Fee Per Bed</b></th>
+                  <th class="text-left"><b>Capacity</b></th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let fee of hostel?.Fees">
                   <td class="text-left">{{ fee?.Name}}</td>
                   <td class="text-left">{{ fee?.FeePerBad }}</td>
+                  <td class="text-left">{{ fee?.Capacity }}</td>
                 </tr>
               </tbody>
             </table>
@@ -73,3 +77,8 @@
 
 </div>
 
+<ng-template #noHostelDetails>
+  <div class="text-center text-red-600 p-5">
+    <b>Hostel details not completed yet</b>
+  </div>
+</ng-template>

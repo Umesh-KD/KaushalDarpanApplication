@@ -11,7 +11,7 @@
 <!-- Page Title End -->
 <!--{{StudentDetailsList|json}}-->
 <div class="card">
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 ">
 
     <div class="mb-8">
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
@@ -224,10 +224,10 @@
     </div>
 
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 1">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 1">
     <div class="mb-8">
       <h3>Hostel Application Status:</h3>
-      <p>Your application for the hostel has been successfully submitted. If you are eligible for the hostel, you will receive an affidavit form.</p>
+      <p>Your application for the hostel has been successfully submitted, Your Application Id is {{StudentDetailsList[0]?.HostelRequestNo}}. If you are eligible for the hostel, you will receive an affidavit form.</p>
 
       <h3>Next Steps:</h3>
       <ol>
@@ -262,7 +262,7 @@
                    id="fileStudentPhoto" type="file" formControlName="txtAffidavitDocument" (change)="onFilechange($event,'Document')">
             <label for="fileStudentPhoto">
               <span>Choose File</span>
-              {{request.AffidavitDocument === '' ? 'No File Choosen' : request.AffidavitDocument}}
+              {{request.AffidavitDocument == '' ? 'No File Choosen' : request.AffidavitDocument}}
             </label>
             <div class="flex" *ngIf="this.request.AffidavitDocument !=''">
               <a href="{{appsettingConfig.StaticFileRootPathURL  + request.dis_AffidavitDocument}}"
@@ -285,13 +285,13 @@
 
 
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 3">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 3">
     <div class="mb-8">
       <h3>Hostel Application Status:</h3>
       <p>Your supporting documents have been submitted. The college will verify them shortly.</p>
     </div>
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 4">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 4">
     <div class="mb-8">
       <h3>Hostel Details:</h3>
       <div class="overflow-x-auto mt-3">
@@ -340,7 +340,7 @@
       <p>You are not eligible for hostel</p>
     </div>
   </div>
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 6">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 6">
     <div class="mb-8" style="padding: 10px; background-color: #ffe5e5; border: 1px solid #cc0000; color: #990000;">
       <strong>Hostel Cancelled by Choice:</strong><br>
       We regret to inform you that your hostel request has been cancelled by the warden.
@@ -364,7 +364,7 @@
     </div>
   </div>-->
   <!--{{StudentDetailsList|json}}-->
-  <div class="card-body p-5" *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Student && StudentDetailsList[0]?.AllotmentStatus === 10">
+  <div class="card-body p-5" *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Student && StudentDetailsList[0]?.AllotmentStatus == 10">
     <div class="mb-8">
 
 
