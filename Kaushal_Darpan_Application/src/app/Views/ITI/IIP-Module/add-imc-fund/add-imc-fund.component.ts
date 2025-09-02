@@ -33,6 +33,8 @@ export class AddItiIMCFundComponent {
   isFormReadOnly = false;
   FinancialYearMasterDDL: any;
   TradeMasterDDL: any[] = [];
+  TradeMasterDDLAffilate: any[] = [];
+  TradeMasterDDLNotAffilate: any[] = [];
   IIPFundData: any = [];
   public settingsMultiselector: object = {};
   public SelectedTradeMasterList: any = []
@@ -303,5 +305,32 @@ export class AddItiIMCFundComponent {
     console.log(items);
   }
 
+  updateSanctionedCount() {
+    this.formData.SchemeSanctioned = this.formData.SanctionedTradeList?.length || 0;
+    this.formData.TradeAffiliated = 0;
+    this.formData.TradeNotAffiliated = 0;
+    this.TradeMasterDDLAffilate = [];
+    this.TradeMasterDDLNotAffilate = [];
+
+    // Reset affiliated & not affiliated selections
+    this.formData.AffilateTradeList = [];
+    this.formData.NotAffilateTradeList = [];
+
+    this.TradeMasterDDLAffilate = this.formData.SanctionedTradeList || [];
+    this.TradeMasterDDLNotAffilate = this.formData.SanctionedTradeList || [];
+  }
+
+  updateAffilateCount() {
+    this.formData.TradeAffiliated = this.formData.AffilateTradeList?.length || 0;
+
+    this.TradeMasterDDLNotAffilate = this.formData.SanctionedTradeList ?.filter((trade: any) => !this.formData.AffilateTradeList?.some((aff: any) => aff.ID === trade.ID)) || [];
+
+  }
+
+  updateNotAffilateCount() {
+    this.formData.TradeNotAffiliated = this.formData.NotAffilateTradeList?.length || 0;
+
+    this.TradeMasterDDLAffilate = this.formData.SanctionedTradeList?.filter((trade: any) => !this.formData.NotAffilateTradeList?.some((aff: any) => aff.ID === trade.ID)) || [];
+  }
 
 }

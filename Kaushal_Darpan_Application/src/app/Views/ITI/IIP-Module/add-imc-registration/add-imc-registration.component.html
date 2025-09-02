@@ -149,19 +149,38 @@
                          class="form-input w-full"
                          placeholder="Member Contact"
                          type="number"
-                         (input)="item.MemberContact = item.MemberContact.toString().slice(0,10)"
+                         (input)="item.MemberContact"
                          required>
                 </td>
 
                 <!-- Action -->
                 <td class="p-2 border text-center">
                   <!-- Show buttons only if MemberTypeName === Industry Representative -->
+                  <!--<ng-container *ngIf="item.MemberTypeName == 'Chairman'">
+                    <div class="flex">
+
+                      <div>
+                        <input class="form-input" type="file" [(ngModel)]="item.MemberFile" (change)="onFileSelected($event, 'MemberFile{{i}}')" required name="MemberFile{{i}}" placeholder="eeee">
+                        
+                      </div>
+                      <div>
+                        <button type="button"
+                                class="btn bg-primary btn-sm text-white"
+                                (click)="previewFile()"
+                                [disabled]="!selectedFileUrl">
+                          <i class="ti ti-eye"></i>
+                        </button>
+                      </div>
+
+                    </div>
+
+                  </ng-container>-->
                   <ng-container *ngIf="item.MemberTypeName == 'Industry representative'">
                     <button *ngIf="i==7" type="button" class="btn btn-sm bg-info text-white"
                             (click)="addRepresentive()">
                       <span class="fa fa-plus"></span> Add More
                     </button>
-                    <button  type="button" class="btn btn-sm bg-danger text-white ml-2"
+                    <button type="button" class="btn btn-sm bg-danger text-white ml-2"
                             *ngIf="formData.IMCMemberDetails.length > 8 && i!=7"
                             (click)="removeRepresentive(i)">
                       <span class="fa fa-remove"></span> Remove

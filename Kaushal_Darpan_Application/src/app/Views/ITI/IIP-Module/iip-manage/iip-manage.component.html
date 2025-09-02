@@ -213,6 +213,9 @@
                   <th class="text-left">Address</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Contact</th>
+                  <th class="text-left">Created by</th>
+                  <th class="text-left">Updated by</th>
+                  <th class="text-left">From - To</th>
                 </tr>
               </thead>
               <tbody>
@@ -220,9 +223,12 @@
                   <td align="left">{{ i + 1 }}</td>
                   <td align="left">{{row.MemberTypeName}}</td>
                   <td align="left">{{row.MemberName}}</td>
-                  <td align="left">{{row.Address}}</td>
-                  <td align="left">{{row.Email}}</td>
-                  <td align="left">{{row.Contact}}</td>
+                  <td align="left">{{row.MemberAddress}}</td>
+                  <td align="left">{{row.MemberEmail}}</td>
+                  <td align="left">{{row.MemberContact}}</td>
+                  <td align="left">{{row.CreatedName}}</td>
+                  <td align="left">{{row.ModifyName}}</td>
+                  <td align="left">{{ row.CreatedDate }} - {{ row.ModifyDate }} </td>
                 </tr>
               </tbody>
             </table>
@@ -271,10 +277,16 @@
                   <td align="left">{{row.RegOffice}}</td>
                   <td align="left">{{row.RegNumber}}</td>
                   <td align="left">{{row.RegDate}}</td>
-                  <td align="left">{{row.RegLink}}</td>
+                  <td align="left">
+                    <a [href]="appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + row.RegLink"
+                       title="View Details"
+                       class="btn bg-primary btn-sm text-white" [target]="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                  </td>
                   <td align="left">{{row.CreatedName}}</td>
                   <td align="left">{{row.ModifyName}}</td>
-                  <td align="left">{{row.RTS}} </td>
+                  <td align="left">{{ row.CreatedDate }} - {{ row.ModifyDate }} </td>
                 </tr>
               </tbody>
             </table>
