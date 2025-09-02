@@ -232,6 +232,8 @@ export class BranchHODModel {
   public MobileNo: string = '';
   public RoleID: number = 0;
   public EndTermID: number = 0;
+  public SemesterID: number = 0;
+  public StreamIDs: number[] = [];
 }
 
 export class BranchHODApplyModel {

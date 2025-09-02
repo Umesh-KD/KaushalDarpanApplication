@@ -19,6 +19,7 @@ export class IIPManageMemberDetailsDataModel extends RequestBaseModel {
     public MemberAddress: string = ''
     public MemberEmail: string = ''
     public MemberContact: string = ''
+    public MemberFile: string = ''
 
 }
 
@@ -52,6 +53,7 @@ export class TradeList extends RequestBaseModel {
 }
 
 
+
 export class IMCFundRevenue extends RequestBaseModel {
   public ID: number = 0;;
   public IMCFundID: number = 0;
@@ -70,7 +72,16 @@ export class IMCFundRevenue extends RequestBaseModel {
   public MaintenanceAmt?: number
   public MiscellaneousAmt?: number 
   public TotalExpenditureAmt?: number 
-  
+
+  public CivilSanctionedAmt?: number
+  public ToolsSanctionedAmt?: number
+  public FurnitureSanctionedAmt?: number
+  public BooksSanctionedAmt?: number
+  public AdditionalSanctionedAmt?: number
+  public MaintenanceSanctionedAmt?: number
+  public MiscellaneousSanctionedAmt?: number
+  public TotalSanctionedAmt?: number
+
   public FundAvailableAmt?: number 
    
   public FinancialYearId: number = 0;

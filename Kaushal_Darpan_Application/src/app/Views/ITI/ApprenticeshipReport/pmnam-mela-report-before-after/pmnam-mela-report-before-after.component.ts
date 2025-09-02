@@ -8,7 +8,8 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ReturnDteItemDataModel } from '../../../../Models/DTEInventory/DTEIssuedItemDataModel';
-import {ApprenticeReportServiceService} from '../../../../Services/ITI/ApprenticeReport/apprentice-report-service.service'
+import { ApprenticeReportServiceService } from '../../../../Services/ITI/ApprenticeReport/apprentice-report-service.service'
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 
 @Component({
@@ -29,6 +30,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
     private modalService: NgbModal,
     private appsettingConfig: AppsettingService,
     private routers: Router,
+    private commonMasterService: CommonFunctionService,
     private ApprenticeShipRPTService: ApprenticeReportServiceService,
 
 
@@ -42,7 +44,10 @@ export class PMNAMMelaReportBeforeAfterComponent {
   public NumberofEmployedStudentAfter: string = '';
   public BeforeDate: string = '';
   public AfterDate: string = '';
+  //public FinancialYearID: number = 0;
+  SelectedFinancialYearID: number = 0;
   id: number = 0;
+  public FinYearList: any = [];
 
   IsDisable: boolean = false;
   buttonLabel: string = 'Submit'
@@ -64,11 +69,13 @@ export class PMNAMMelaReportBeforeAfterComponent {
     else {
       this.IsDisable =false
     }
+    await this.YearDropdownData('FinancialYear_IIP');
 
   }
 
 
   async Submit() {
+    debugger
     if (this.EstablishmentsRegisterNoBefore == '' || this.NumberofSeatBefore == '' || this.NumberofEmployedStudentBefore == '' || this.EstablishmentsRegisterNoAfter == '' || this.NumberofSeatAfter == '' || this.NumberofEmployedStudentAfter == '')
     {
       this.toastr.warning("Please Enter All Required Fields !")
@@ -87,10 +94,12 @@ export class PMNAMMelaReportBeforeAfterComponent {
       Createdby: this.SSOLoginDataModel.UserID,
       PKID: this.id,
       BeforeDate: this.BeforeDate,
-      AfterDate : this.AfterDate
+      AfterDate : this.AfterDate,
+      FinancialYearID: this.SelectedFinancialYearID
     };
 
     try {
+      debugger
       this.loaderService.requestStarted();
       await this.ApprenticeShipRPTService.Save_PMNAM_melaReport_BeforeAfter(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -176,6 +185,12 @@ export class PMNAMMelaReportBeforeAfterComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
   }
 
 }

@@ -1,7 +1,7 @@
-export class PapersMasterDataModels {
+import { RequestBaseModel } from "./RequestBaseModel";
+
+export class PapersMasterDataModels extends RequestBaseModel {
   public PaperID: number = 0;
-  public FinancialYearID: number = 0;
-  public EndTermID: number = 0;
   // public CommonSubjectID: number = 0; // Uncomment if needed
   public SubjectCode: string = '';
   public SemesterID: number = 0;
@@ -20,11 +20,13 @@ export class PapersMasterDataModels {
   public Credit: number = 0;
   public Paper_ID: number = 0;
   public StreamID: number = 0;
-
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
-
   public UserID: number = 0;
+  public CreatedBy: number = 0;
+  public CommonSubjectID: number = 0;
+  public CourseTypeID: number = 0;
+  public Paper_IDs: number[] = [];
 
 }
 

@@ -21,7 +21,7 @@
           <b class="text-1xl-5">SRS</b>
         </div>
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-          <input type="hidden" name="ID"  [(ngModel)]="formData.ID"/>
+          <input type="hidden" name="ID" [(ngModel)]="formData.ID" />
           <div>
             <label for="InstituteSsoid">Interest received (saving & FDR)</label>
 
@@ -48,7 +48,7 @@
 
           </div>
           <div>
-            <input class="form-input"placeholder="Total revenues by IMC" type="number" name="TotalRevenueAmt" [(ngModel)]="formData.TotalRevenueAmt" required #TotalRevenueAmt="ngModel" disabled>
+            <input class="form-input" placeholder="Total revenues by IMC" type="number" name="TotalRevenueAmt" [(ngModel)]="formData.TotalRevenueAmt" required #TotalRevenueAmt="ngModel" disabled>
           </div>
 
         </div>
@@ -62,83 +62,279 @@
 
 
 
+        <!--<div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3 ms-5">
+    <div>
+      <label for="">Civil</label>
+    </div>
+    <div class="flex gap-2">
+
+      <div class="w-full">
+        <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number" required name="CivilSanctionedAmt" [(ngModel)]="formData.CivilSanctionedAmt" #CivilSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+        <div class="text-red-500 text-sm" *ngIf="CivilSanctionedAmt.invalid && (CivilSanctionedAmt.dirty || CivilSanctionedAmt.touched)">
+          <div *ngIf="CivilSanctionedAmt.errors?.['required']"> This field is required .!</div>
+        </div>
+      </div>
+
+      <div class="w-full">
+        <input class="form-input" placeholder="Expenditure" type="number" name="CivilAmt" [(ngModel)]="formData.CivilAmt" required #CivilAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+        <div class="text-red-500 text-sm" *ngIf="CivilAmt.invalid && (CivilAmt.dirty || CivilAmt.touched)">
+          <div *ngIf="CivilAmt.errors?.['required']"> This field is required .!</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label for="">Tools, equipments</label>
+    </div>
+    <div class="flex gap-2">
+
+      <div class="w-full">
+        <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number" required name="CivilSanctionedAmt" [(ngModel)]="formData.CivilSanctionedAmt" #CivilSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+        <div class="text-red-500 text-sm" *ngIf="CivilSanctionedAmt.invalid && (CivilSanctionedAmt.dirty || CivilSanctionedAmt.touched)">
+          <div *ngIf="CivilSanctionedAmt.errors?.['required']"> This field is required .!</div>
+        </div>
+      </div>
+      <div class="w-full">
+        <input class="form-input" placeholder="Expenditure" type="number" name="ToolsAmt" [(ngModel)]="formData.ToolsAmt" required #ToolsAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+        <div class="text-red-500 text-sm" *ngIf="CivilAmt.invalid && (CivilAmt.dirty || CivilAmt.touched)">
+          <div *ngIf="CivilAmt.errors?.['required']"> This field is required .!</div>
+        </div>
+      </div>
+      </div>
+
+      <div>
+        <label for="">Furniture</label>
+      </div>
+      <div>
+        <input class="form-input" placeholder="Expenditure" type="number" name="FurnitureAmt" [(ngModel)]="formData.FurnitureAmt" required #FurnitureAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+      </div>
+
+      <div>
+        <label for="">Books & learning resources</label>
+      </div>
+      <div>
+        <input class="form-input" placeholder="Expenditure" type="number" name="BooksAmt" [(ngModel)]="formData.BooksAmt" required #BooksAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+      </div>
+
+      <div>
+        <label for="">Additional manpower</label>
+      </div>
+      <div>
+        <input class="form-input" placeholder="Expenditure" type="number" name="AdditionalAmt" [(ngModel)]="formData.AdditionalAmt" required #AdditionalAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+      </div>
+
+      <div>
+        <label for="">Consumable, maintenance etc</label>
+      </div>
+      <div>
+        <input class="form-input" placeholder="Expenditure" type="number" name="MaintenanceAmt" [(ngModel)]="formData.MaintenanceAmt" required #MaintenanceAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+      </div>
+
+      <div>
+        <label for="">Miscellaneous</label>
+      </div>
+      <div>
+        <input class="form-input" placeholder="Expenditure" type="number" name="MiscellaneousAmt" [(ngModel)]="formData.MiscellaneousAmt" required #MiscellaneousAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+      </div>
+    </div>-->
+
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3 ms-5">
+
+          <!-- Civil -->
           <div>
             <label for="">Civil</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="CivilAmt" [(ngModel)]="formData.CivilAmt" required #CivilAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="CivilSanctionedAmt" [(ngModel)]="formData.CivilSanctionedAmt"
+                     #CivilSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="CivilSanctionedAmt.invalid && (CivilSanctionedAmt.dirty || CivilSanctionedAmt.touched)">
+                <div *ngIf="CivilSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="CivilAmt" [(ngModel)]="formData.CivilAmt"
+                     required #CivilAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="CivilAmt.invalid && (CivilAmt.dirty || CivilAmt.touched)">
+                <div *ngIf="CivilAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Tools -->
           <div>
             <label for="">Tools, equipments</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="ToolsAmt" [(ngModel)]="formData.ToolsAmt" required #ToolsAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="ToolsSanctionedAmt" [(ngModel)]="formData.ToolsSanctionedAmt"
+                     #ToolsSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="ToolsSanctionedAmt.invalid && (ToolsSanctionedAmt.dirty || ToolsSanctionedAmt.touched)">
+                <div *ngIf="ToolsSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="ToolsAmt" [(ngModel)]="formData.ToolsAmt"
+                     required #ToolsAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="ToolsAmt.invalid && (ToolsAmt.dirty || ToolsAmt.touched)">
+                <div *ngIf="ToolsAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Furniture -->
           <div>
             <label for="">Furniture</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="FurnitureAmt" [(ngModel)]="formData.FurnitureAmt" required #FurnitureAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="FurnitureSanctionedAmt" [(ngModel)]="formData.FurnitureSanctionedAmt"
+                     #FurnitureSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="FurnitureSanctionedAmt.invalid && (FurnitureSanctionedAmt.dirty || FurnitureSanctionedAmt.touched)">
+                <div *ngIf="FurnitureSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="FurnitureAmt" [(ngModel)]="formData.FurnitureAmt"
+                     required #FurnitureAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="FurnitureAmt.invalid && (FurnitureAmt.dirty || FurnitureAmt.touched)">
+                <div *ngIf="FurnitureAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Books -->
           <div>
             <label for="">Books & learning resources</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="BooksAmt" [(ngModel)]="formData.BooksAmt" required #BooksAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="BooksSanctionedAmt" [(ngModel)]="formData.BooksSanctionedAmt"
+                     #BooksSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="BooksSanctionedAmt.invalid && (BooksSanctionedAmt.dirty || BooksSanctionedAmt.touched)">
+                <div *ngIf="BooksSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="BooksAmt" [(ngModel)]="formData.BooksAmt"
+                     required #BooksAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="BooksAmt.invalid && (BooksAmt.dirty || BooksAmt.touched)">
+                <div *ngIf="BooksAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Additional manpower -->
           <div>
             <label for="">Additional manpower</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="AdditionalAmt" [(ngModel)]="formData.AdditionalAmt" required #AdditionalAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="AdditionalSanctionedAmt" [(ngModel)]="formData.AdditionalSanctionedAmt"
+                     #AdditionalSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="AdditionalSanctionedAmt.invalid && (AdditionalSanctionedAmt.dirty || AdditionalSanctionedAmt.touched)">
+                <div *ngIf="AdditionalSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="AdditionalAmt" [(ngModel)]="formData.AdditionalAmt"
+                     required #AdditionalAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="AdditionalAmt.invalid && (AdditionalAmt.dirty || AdditionalAmt.touched)">
+                <div *ngIf="AdditionalAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Maintenance -->
           <div>
             <label for="">Consumable, maintenance etc</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="MaintenanceAmt" [(ngModel)]="formData.MaintenanceAmt" required #MaintenanceAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="MaintenanceSanctionedAmt" [(ngModel)]="formData.MaintenanceSanctionedAmt"
+                     #MaintenanceSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="MaintenanceSanctionedAmt.invalid && (MaintenanceSanctionedAmt.dirty || MaintenanceSanctionedAmt.touched)">
+                <div *ngIf="MaintenanceSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="MaintenanceAmt" [(ngModel)]="formData.MaintenanceAmt"
+                     required #MaintenanceAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="MaintenanceAmt.invalid && (MaintenanceAmt.dirty || MaintenanceAmt.touched)">
+                <div *ngIf="MaintenanceAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
 
+          <!-- Miscellaneous -->
           <div>
             <label for="">Miscellaneous</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Expenditure" type="number" name="MiscellaneousAmt" [(ngModel)]="formData.MiscellaneousAmt" required #MiscellaneousAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Sanctioned Amount" type="number"
+                     required name="MiscellaneousSanctionedAmt" [(ngModel)]="formData.MiscellaneousSanctionedAmt"
+                     #MiscellaneousSanctionedAmt="ngModel" (ngModelChange)="ClcSanctioned()">
+              <div class="text-red-500 text-sm" *ngIf="MiscellaneousSanctionedAmt.invalid && (MiscellaneousSanctionedAmt.dirty || MiscellaneousSanctionedAmt.touched)">
+                <div *ngIf="MiscellaneousSanctionedAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Expenditure" type="number"
+                     name="MiscellaneousAmt" [(ngModel)]="formData.MiscellaneousAmt"
+                     required #MiscellaneousAmt="ngModel" (ngModelChange)="ClcExpenditure()">
+              <div class="text-red-500 text-sm" *ngIf="MiscellaneousAmt.invalid && (MiscellaneousAmt.dirty || MiscellaneousAmt.touched)">
+                <div *ngIf="MiscellaneousAmt.errors?.['required']">This field is required .!</div>
+              </div>
+            </div>
           </div>
+
         </div>
+
 
 
         <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-12 gap-3 mt-3">
+
           <div>
             <label for="InstituteSsoid">Total expenditure</label>
           </div>
-          <div>
-            <input class="form-input" placeholder="Total Expenditure" type="number" name="TotalExpenditureAmt" [(ngModel)]="formData.TotalExpenditureAmt" required #TotalExpenditureAmt="ngModel" disabled>
+          <div class="flex gap-2">
+            <div class="w-full">
+              <input class="form-input mr-1" placeholder="Total Sanctioned Amount" type="number" name="TotalSanctionedAmt" [(ngModel)]="formData.TotalSanctionedAmt" #TotalSanctionedAmt="ngModel" disabled>
+            </div>
+            <div class="w-full">
+              <input class="form-input" placeholder="Total Expenditure" type="number" name="TotalExpenditureAmt" [(ngModel)]="formData.TotalExpenditureAmt" required #TotalExpenditureAmt="ngModel" disabled>
+            </div>
+          </div>
+            <div>
+              <label for="InstituteSsoid">Fund avilable with IMC <br />(interest free loan given by central gov. + IMC income - Expenditure - amount of instalment paid on bharatkosh portal)</label>
+            </div>
+            <div>
+              <input class="form-input" placeholder="Fund avilable with IMC" type="number" name="FundAvailableAmt" [(ngModel)]="formData.FundAvailableAmt" required #FundAvailableAmt="ngModel" disabled>
+            </div>
+
           </div>
 
-          <div>
-            <label for="InstituteSsoid">Fund avilable with IMC <br />(interest free loan given by central gov. + IMC income - Expenditure - amount of instalment paid on bharatkosh portal)</label>
-          </div>
-          <div>
-            <input class="form-input" placeholder="Fund avilable with IMC" type="number" name="FundAvailableAmt" [(ngModel)]="formData.FundAvailableAmt" required #FundAvailableAmt="ngModel" disabled>
-          </div>
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+            <div class="text-center">
+              <button type="submit" class="btn bg-info text-white mt-6" [disabled]="instituteForm.invalid">Save</button>
+              <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+            </div>
 
-        </div>
-
-        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
-          <div class="text-center">
-            <button type="submit" class="btn bg-info text-white mt-6" [disabled]="instituteForm.invalid">Save</button>
-            <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
           </div>
-
-        </div>
-       </form>
+</form>
     </div>
   </div>
 </div>

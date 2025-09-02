@@ -7,8 +7,8 @@ import { CenterExamAllocationSearchModel, CenterAllocationtDataModels } from '..
 @Injectable({
   providedIn: 'root'
 })
-export class CenterExamCoordinatorService {
-  readonly APIUrl = this.appsettingConfig.apiURL + "ITICenterAllocation";
+export class IIPCollegeReportService {
+  readonly APIUrl = this.appsettingConfig.apiURL + "IIPCollageReport";
   readonly headersOptions: any;
   constructor(private http: HttpClient, private appsettingConfig: AppsettingService) {
     this.headersOptions = {
@@ -25,23 +25,23 @@ export class CenterExamCoordinatorService {
     return throwError(error);
   }
 
-  public async GetCenterExamCoordinatorData(searchRequest: CenterExamAllocationSearchModel) {
+  //public async GetCenterExamCoordinatorData(searchRequest: CenterExamAllocationSearchModel) {
 
-    return await this.http.post(this.APIUrl + "/GetExamCoordinatorDataByInstitute", searchRequest, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
-  public async GetExamCoordinatorDataByUserId(searchRequest: CenterExamAllocationSearchModel) {
+  //  return await this.http.post(this.APIUrl + "/GetExamCoordinatorDataByInstitute", searchRequest, this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
+  //}
+  //public async GetExamCoordinatorDataByUserId(searchRequest: CenterExamAllocationSearchModel) {
 
-    return await this.http.post(this.APIUrl + "/GetExamCoordinatorDataByUserId", searchRequest, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
+  //  return await this.http.post(this.APIUrl + "/GetExamCoordinatorDataByUserId", searchRequest, this.headersOptions)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
 
 
 
-  }
+  //}
 
   public async GetCollageReport(searchRequest: CenterExamAllocationSearchModel) {
 

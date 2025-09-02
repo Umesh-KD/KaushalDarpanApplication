@@ -138,8 +138,11 @@
 
 
         </div>
-        <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.EnrolledFeePaid">
-          <span><b>Note:</b> Please verify each student before 'Eligible'.</span>
+        <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.SelectedForEnrollment">
+          <span><b>Note:</b> Please Verify each student before 'Fee Pay'.</span>
+        </div>
+        <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.VerifiedForEnrollment">
+          <span><b>Note:</b> Please Pay Fee of each student before 'Eligible'.</span>
         </div>
 
       </form>
@@ -896,7 +899,7 @@
               </table>
 
             </div>
-            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon) && (requestStudent.status == _enumExamStudentStatus.EnrolledFeePaid)">
+            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon) && (requestStudent.status == _enumExamStudentStatus.SelectedForEnrollment)">
               <!-- Label for "Verified For Examination" -->
               <label class="text-gray-800 text-sm font-bold inline-block mb-1">Verified For Enrollment</label>
               <!-- Radio button options for Yes or No -->
