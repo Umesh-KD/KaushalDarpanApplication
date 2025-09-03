@@ -19,25 +19,40 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+       
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Trade:
-          </label>
-          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.StreamID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of TradeDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+                  (change)="GetTradeDDL()">
+            <option value="0">Choose Staff</option>
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
           </select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Category:
-          </label>
-          <select class="form-select" id="EquipmentsId" [(ngModel)]="Searchrequest.ItemCategoryID">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">{{item.Name}}</option>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option value="0">Choose Trade</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
+            <option value="0">Choose Category</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+
+
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -87,10 +102,10 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.ItemCode}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
-            <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{item.PricePerUnit}}</td>
-            <td align="left">{{item.Actioned}}</td>
+            <td align="left">{{item.TradeName}}</td>
             <!--<td align="left">{{item.Working}}</td>
             <td align="left">{{item.NotWorking}}</td>-->
           </tr>

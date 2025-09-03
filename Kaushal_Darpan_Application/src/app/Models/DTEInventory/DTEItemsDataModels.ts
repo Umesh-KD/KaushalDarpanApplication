@@ -58,14 +58,10 @@ export class CheckItemAuctionSearch {
 
 
 export class inventoryIssueHistorySearchModel {
-  public DepartmentID: number = 0;
-  public EndTermID: number = 0;
-  public Eng_NonEng: number = 0;
-  public RoleID: number = 0;
-  public EquipmentsId: number = 0;
-  public CollegeId: number = 0;
-  public OfficeID: number = 0;
-  public StatusID: number = 0;
-  public ItemCategoryID: number = 0;
-  public StreamID: number = 0;
+  public InstituteID: number = 0;
+  public TypeName: string = '';
+  public TradeId: number = 0;
+  public staffID: number = 0;
+  public ItemId: number = 0;
+  public collageTradeID: number = 0;
 }
