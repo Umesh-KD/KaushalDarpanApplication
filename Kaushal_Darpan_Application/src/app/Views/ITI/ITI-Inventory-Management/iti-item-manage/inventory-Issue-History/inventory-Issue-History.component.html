@@ -1,0 +1,120 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Issue History</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+       
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+                  (change)="GetTradeDDL()">
+            <option value="0">Choose Staff</option>
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option value="0">Choose Trade</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
+            <option value="0">Choose Category</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+        <i class="ti ti-excel"></i> Export Excel
+      </a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Item</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">User Id</th>  
+            <th class="text-left">Trade</th>
+            <!--<th class="text-left">Working</th>
+            <th class="text-left">Not Working</th>-->
+          </tr>
+        </thead>
+       
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.ItemCode}}</td>
+            <td align="left">{{item.ItemCategoryName}}</td>
+            <td align="left">{{item.PricePerUnit}}</td>
+            <td align="left">{{item.TradeName}}</td>
+            <!--<td align="left">{{item.Working}}</td>
+            <td align="left">{{item.NotWorking}}</td>-->
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- end row -->
