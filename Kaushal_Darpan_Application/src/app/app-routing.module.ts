@@ -514,6 +514,10 @@ const routes: Routes = [
       { path: 'iti-HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipment-verifications-mapping-list/iti-equipment-verifications-mapping-list.module').then(m => m.ITIEquipmentVerificationsMappingListModule) },
       { path: 'iti-auction-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-list/iti-auction-list.module').then(m => m.ITIAuctionListModule) },
 
+      { path: 'iti-issue-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-items/iti-issue-item.module').then(m => m.AddItiIssueItemModule) },
+      { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
+
+
       /*ITI-Inventory-Management-END*/
 
       /*BTER-DTE-Inventory-Management*/
