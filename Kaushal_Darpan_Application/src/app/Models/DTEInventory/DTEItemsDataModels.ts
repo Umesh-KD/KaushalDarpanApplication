@@ -55,3 +55,13 @@ export class CheckItemAuctionSearch {
   public EquipmentsCode: string = '';
   public ItemId: number = 0;
 }
+
+
+export class inventoryIssueHistorySearchModel {
+  public InstituteID: number = 0;
+  public TypeName: string = '';
+  public TradeId: number = 0;
+  public staffID: number = 0;
+  public ItemId: number = 0;
+  public collageTradeID: number = 0;
+}
