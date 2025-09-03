@@ -189,6 +189,7 @@ export class StudentAttendanceComponent implements OnInit {
 
       this.filterData = [];
 
+
       await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
