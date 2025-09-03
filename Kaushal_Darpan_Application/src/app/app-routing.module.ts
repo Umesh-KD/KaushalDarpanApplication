@@ -1306,6 +1306,7 @@ const routes: Routes = [
       //{ path: 'inspection-team', loadChildren: () => import('./Views/ITI/Inspection/inspection-team/inspection-team.module').then(m => m.InspectionTeamModule), title: 'ITI Inspection' },
       //{ path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-iip-manage', loadChildren: () => import('./Views/ITI/IIP-Module/iip-manage/iip-manage.module').then(m => m.ITIIIPManageModule), title: 'ITI IIP Manage' },
+      { path: 'iti-iip-admin-report', loadChildren: () => import('./Views/ITI/IIP-Module/iip-admin-report/iip-admin-report.module').then(m => m.ITIIIPAdminReportModule), title: 'ITI IIP Manage' },
       //{ path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
