@@ -22,6 +22,7 @@ export class ItemsDataModels {
   public Status: number = 0;
   public ItemType : number = 0;
   public IsConsume: number = 0;
+  public StaffID: number = 0;
   //public Unit: number = 0;
 }
 export class ItemsSearchModel {
