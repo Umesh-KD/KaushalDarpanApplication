@@ -38,6 +38,7 @@ export class inventoryIssueHistoryComponent {
   public CategoryDDLList: any = [];
   public TradeDDLList: any = [];
   public ItemId: number = 0;
+  public UserID: number = 0;
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
