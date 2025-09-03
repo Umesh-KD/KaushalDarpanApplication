@@ -438,7 +438,7 @@ export class HostelGenerateMeritlistComponent {
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
 
-            if (this.State === 1) {
+            if (this.State == EnumStatus.Success) {
               this.toastr.success("Provisional merit list generated successfully.");
               localStorage.setItem("isMeritPublished", "true");
 

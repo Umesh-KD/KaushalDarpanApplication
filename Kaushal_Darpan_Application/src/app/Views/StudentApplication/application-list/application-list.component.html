@@ -164,7 +164,7 @@
                    class="btn bg-info text-white btn-sm"> Complete Direct Admission Form</a>
 
 
-                <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true" (click)="redirectApplication(row,2)"
+                <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && !(row.IsPaymentSuccess == true && sSOLoginDataModel.RoleID == 3)" (click)="redirectApplication(row,2)"
                    class="btn bg-info text-white btn-sm"> View & Submit</a>
 
                 <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"

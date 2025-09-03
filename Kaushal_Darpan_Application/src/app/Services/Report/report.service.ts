@@ -33,6 +33,7 @@ import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -1601,6 +1602,16 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable));
     return await lastValueFrom(api);
   }
+
+
+  public async studentWithdrawnList(request: AllotmentReportCollegeRequestModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetstudentWithdrawnList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
 }
 
 

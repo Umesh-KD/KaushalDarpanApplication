@@ -399,16 +399,14 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
 
 
   async GetAllData() {
-    debugger
     try {
-
       this.EditHostelDetails.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.EditHostelDetails.HostelID = this.sSOLoginDataModel.HostelID;
       this.EditHostelDetails.RoleId = this.sSOLoginDataModel.RoleID;
       this.EditHostelDetails.ReqId = this.ReqId;
       this.EditHostelDetails.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.loaderService.requestStarted();
-
+      debugger
       await this._HostelManagmentService.EditAllotedHostelDetails(this.EditHostelDetails)
         .then((data: any) => {
 
