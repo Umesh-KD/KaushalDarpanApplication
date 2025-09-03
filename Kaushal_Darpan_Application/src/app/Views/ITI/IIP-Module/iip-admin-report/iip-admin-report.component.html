@@ -26,6 +26,7 @@
         <option *ngFor="let item of FinancialYearMasterDDL"
                 [ngValue]="item.FinancialYearID">
           {{ item.FinancialYearName }}
+
         </option>
       </select>
       <div class="text-red-500 text-sm" *ngIf="FinancialYearID.invalid && (FinancialYearID.dirty || FinancialYearID.touched)">
@@ -118,7 +119,6 @@
             </td>
           </tr>
 
-          <!-- ✅ Child Table for each parent row -->
          
           <tr *ngFor="let row of IIPManageData; let idx=index;">
             <td colspan="8" class="p-0">

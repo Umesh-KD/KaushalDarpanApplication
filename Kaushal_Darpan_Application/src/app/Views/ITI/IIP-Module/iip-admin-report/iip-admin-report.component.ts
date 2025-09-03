@@ -18,10 +18,10 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'iip-manage',
   standalone: false,
-  templateUrl: './iip-manage.component.html',
-  styleUrl: './iip-manage.component.css'
+  templateUrl: './iip-admin-report.component.html',
+  styleUrl: './iip-admin-report.component.css'
 })
-export class ITIIIPManageComponent {
+export class ITIIIPAdminReportComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   _EnumDeploymentStatus = EnumDeploymentStatus
   searchRequest = new ITI_IIPManageSearchModel();
@@ -60,7 +60,7 @@ export class ITIIIPManageComponent {
     private commonMasterService: CommonFunctionService,
     private menuService: MenuService,
     private fb: FormBuilder,
-    private itiIIPManageService: ITIIIPManageService,
+    private ITIIIPAdminReportService: ITIIIPManageService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
@@ -107,7 +107,7 @@ export class ITIIIPManageComponent {
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID;
 
-      await this.itiIIPManageService.GetAllData(this.searchRequest).then((data: any) => {
+      await this.ITIIIPAdminReportService.GetAllAdminReportData(this.searchRequest).then((data: any) => {
         debugger;
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){
@@ -142,7 +142,7 @@ export class ITIIIPManageComponent {
     debugger;
     try { 
     //this.IIPManageTeamID = id
-      await this.itiIIPManageService.GetIMCHistory_ById(RegID).then((data: any) => {
+      await this.ITIIIPAdminReportService.GetIMCHistory_ById(RegID).then((data: any) => {
       debugger;
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
@@ -207,7 +207,7 @@ export class ITIIIPManageComponent {
       this.formData.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.formData.IMCRegID = this.IIPManageData[0].RegistrationID;
 
-      await this.itiIIPManageService.GetAllIMCFundData(this.formData).then((data: any) => {
+      await this.ITIIIPAdminReportService.GetAllIMCFundData(this.formData).then((data: any) => {
         debugger;
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -245,7 +245,7 @@ export class ITIIIPManageComponent {
       this.loaderService.requestStarted();
      
 
-      await this.itiIIPManageService.GetQuaterlyProgressData(id).then((data: any) => {
+      await this.ITIIIPAdminReportService.GetQuaterlyProgressData(id).then((data: any) => {
         debugger;
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -277,7 +277,7 @@ export class ITIIIPManageComponent {
 
           try {
 
-            await this.itiIIPManageService.FinalSubmitUpdate(id).then((data: any) => {
+            await this.ITIIIPAdminReportService.FinalSubmitUpdate(id).then((data: any) => {
 
               data = JSON.parse(JSON.stringify(data));
               console.log("data", data)
@@ -306,7 +306,7 @@ export class ITIIIPManageComponent {
   async DownloadIIPQuaterlyFundReportPDF(id: number) {
 
       try {
-        await this.itiIIPManageService.GetIIPQuaterlyFundReport(id).then((data: any) => {
+        await this.ITIIIPAdminReportService.GetIIPQuaterlyFundReport(id).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           debugger
           if (data && data.Data) {

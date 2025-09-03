@@ -189,19 +189,15 @@ export class StudentAttendanceComponent implements OnInit {
 
       this.filterData = [];
 
+
       await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
+
         if (this.filterData.length > 0) {
-         
-          //this.dynamicColumns = [];
-          //this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
           this.dynamicColumns = [];
           this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
 
-         
-          //this.dynamicColumns = Object.keys(this.filterData[0])
-          //  .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
           this.dynamicColumns = Object.keys(this.filterData[0])
             .filter(key => ![
               'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
@@ -209,14 +205,18 @@ export class StudentAttendanceComponent implements OnInit {
               'EndTermID', 'CourseTypeID', 'StudentID'
             ].includes(key))
             .map(key => {
-              const isHoliday = key.toLowerCase().includes('holiday'); // Holiday detection
-              return { name: key, locked: isHoliday }; // Holidays locked, working days unlocked
+              const isHoliday = key.toLowerCase().includes('holiday');
+              return { name: key, locked: isHoliday };
             });
 
-
-
-
-
+          // ✅ Initialize default values for each student
+          this.filterData.forEach(student => {
+            this.dynamicColumns.forEach(col => {
+              if (!student[col.name]) {
+                student[col.name] = col.locked ? 'H' : 'A'; // Holiday=H, Working=A
+              }
+            });
+          });
 
           this.displayedColumns = [
             ...this.displayedColumns,
@@ -225,13 +225,56 @@ export class StudentAttendanceComponent implements OnInit {
         }
 
         this.dataSource.data = this.filterData;
-        console.log('dateWiseData',this.dataSource.data);
         this.dataSource.sort = this.sort;
         this.totalRecords = this.filterData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-
-        this.updateTable(); // ✅ Update table after loading data
+        this.updateTable();
       }, error => console.error(error));
+
+      //await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data['Data']));
+      //  this.filterData = data;
+      //  if (this.filterData.length > 0) {
+
+      //    //this.dynamicColumns = [];
+      //    //this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
+      //    this.dynamicColumns = [];
+      //    this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+
+      //    //this.dynamicColumns = Object.keys(this.filterData[0])
+      //    //  .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
+      //    this.dynamicColumns = Object.keys(this.filterData[0])
+      //      .filter(key => ![
+      //        'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+      //        'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+      //        'EndTermID', 'CourseTypeID', 'StudentID'
+      //      ].includes(key))
+      //      .map(key => {
+      //        const isHoliday = key.toLowerCase().includes('holiday'); // Holiday detection
+      //        return { name: key, locked: isHoliday }; // Holidays locked, working days unlocked
+      //      });
+
+
+
+
+
+
+      //    this.displayedColumns = [
+      //      ...this.displayedColumns,
+      //      ...this.dynamicColumns.map(c => c.name)
+      //    ];
+      //  }
+
+      //  this.dataSource.data = this.filterData;
+      //  console.log('dateWiseData',this.dataSource.data);
+      //  this.dataSource.sort = this.sort;
+      //  this.totalRecords = this.filterData.length;
+      //  this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+
+      //  this.updateTable(); // ✅ Update table after loading data
+      //}, error => console.error(error));
+
     } catch (Ex) {
       console.log(Ex);
     }
@@ -512,7 +555,14 @@ export class StudentAttendanceComponent implements OnInit {
 
   unlockColumn(columnName: string) {
     const col = this.dynamicColumns.find(c => c.name === columnName);
-    if (col) col.locked = false;
+    if (col) {
+      col.locked = false;
+      this.dataSource.data.forEach((row: any) => {
+        if (row[columnName] === 'H') {
+          row[columnName] = 'A'; // ✅ Change default from Holiday → Absent
+        }
+      });
+    }
   }
 }
 
