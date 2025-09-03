@@ -414,4 +414,12 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
+  public async GetAllinventoryIssueHistory(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistory`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
