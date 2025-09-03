@@ -335,7 +335,9 @@ export class CalendarEventModel {
   public CourseTypeID: number = 0;
   public IsActive: boolean = true;
   public IsDelete: boolean = false;
-  public Day: number = 0; // <-- add this for calendar matching
+  public Day: number = 0;
+  public CurrentMonth?: number = 0;
+  public CurrentYear?: number = 0;
 }
 
 
