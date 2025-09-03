@@ -22,76 +22,52 @@
 
 <div class="card" style=" overflow: visible;">
   <div class="card-body p-5">
-    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
-    </div>
-    <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Staff Members: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="StaffID" [(ngModel)]="request.StaffID" [items]="StaffDDLList" bindLabel="staffName"
-                     bindValue="staffID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                   [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemType.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.ItemType.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Trade List: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="TradeName"
-                     bindValue="TradeId" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                      (change)="ddlTrade_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Catogary List: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="CatogaryDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" 
-                     (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-            <ng-option *ngFor="let item of CatogaryDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-
-
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-      <!--<div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
-        <div class="text-center">
-          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
-          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-            <i class="ti ti-refresh"></i> Reset
-          </button>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequests.staffID"
+                  (change)="GetTradeDDL()">
+            <option value="0">Choose Staff</option>
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
         </div>
-      </div>-->
-    </form>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequests.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option value="0">Choose Trade</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId">
+            <option value="0">Choose Category</option>
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" >Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
@@ -111,33 +87,33 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th >
-              <input type="checkbox" class="checkboxSize"/>
+            <th>
+              <input type="checkbox" class="checkboxSize" />
             </th>
             <th class="text-left">Sr.No.</th>
             <th class="text-center">Action</th>
             <!--sorting column-->
-            <th class="text-left cursorHand" title="Click to sorting" >
+            <th class="text-left cursorHand" title="Click to sorting">
               Item Code
-            
+
             </th>
             <th class="text-left cursorHand" title="Click to sorting">
               Item Name
 
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
+            <th class="text-left cursorHand" title="Click to sorting">
               Equipment ID
-          
+
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
+            <th class="text-left cursorHand" title="Click to sorting">
               Catogary ID
-             
+
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
+            <th class="text-left cursorHand" title="Click to sorting">
               Company Name
-          
+
             </th>
-          
+
 
           </tr>
         </thead>
