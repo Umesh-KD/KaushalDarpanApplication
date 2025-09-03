@@ -1,0 +1,106 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>  Roster Display </b>
+      <a routerLink="/roster-display" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
+
+    <form #form="ngForm"  class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester </label>
+        <select class="form-select" [(ngModel)]="filterModel.SemesterID" name="SemesterID">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of SemesterMasterDDL" [value]="item.SemesterID">{{ item.SemesterName}}</option>
+        </select>
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch </label>
+        <select class="form-select" [(ngModel)]="filterModel.StreamID" name="StreamID">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">{{ item.StreamName}}</option>
+        </select>
+      </div>
+
+
+      <!--<div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Subject</label>
+        <select class="form-select" [(ngModel)]="filterModel.SubjectID" name="SubjectID">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers</label>
+        <select class="form-select" [(ngModel)]="filterModel.StaffID" name="Teachers">
+          <option [value]="0">--Select--</option>
+          <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
+        </select>
+      </div>-->
+      
+      <div>
+        <button type="submit" (click)="GetAllRosterDisplay()" class="btn bg-info text-white mt-6">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+
+    </form>
+
+  <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    <!--<div class="flex justify-end flex-wrap items-center">
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Export Execl
+      </a>
+    </div>-->
+  </div>
+     <!--Table--> 
+    <div class="mat-elevation-z8 table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" *ngIf="this.filterData.length > 0">
+     <!--Dynamic columns--> 
+      <ng-container *ngFor="let column of columnSchema; trackBy: trackByFn" [matColumnDef]="column.key">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ column.label }}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="column.key">
+            <!--Action Column-->
+
+            <ng-container *ngSwitchCase="'Action'">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(element.ID)">
+                <i class="ti ti-trash"></i>
+              </button>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AttendanceDate'">
+              {{ element[column.key] | date }}
+            </ng-container>
+            <ng-container *ngSwitchDefault>
+              {{ element[column.key] }}
+            </ng-container>
+
+          </ng-container>
+        </td>
+      </ng-container>
+     <!--Table Rows--> 
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>
+
+  <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+    No Record Found
+  </div>
+     <!--Pagination Controls--> 
+    <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                 [length]="totalRecords" (page)="onPaginationChange($event)">
+  </mat-paginator>
+   
+  </div>
+
+</div>
+

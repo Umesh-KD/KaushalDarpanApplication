@@ -256,6 +256,27 @@ export class StaffMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveRosterDisplayMultiple(model: any) {
+    return await this.http.post(this.APIUrl + '/SaveRosterDisplayMultiple', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async DeleteRosterDisplay(model: any) {
+    return await this.http.post(this.APIUrl + '/DeleteRosterDisplay', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async getdublicateCheckSection(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/getdublicateCheckSection`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 
