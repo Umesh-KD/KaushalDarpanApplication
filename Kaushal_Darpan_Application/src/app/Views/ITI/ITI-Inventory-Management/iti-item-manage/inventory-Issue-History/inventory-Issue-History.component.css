@@ -66,18 +66,39 @@ textarea.form-control {
   margin-bottom: 15px;
 }
 
-.InvStatus-issued {
-  background-color: #007bff; /* Blue */
-  color: white;
+/*.InvStatus-issued {
+  background-color: #007bff;*/ /* Blue */
+  /*color: white;
   padding: 0.25em 0.5em;
   border-radius: 0.25rem;
   font-size: 0.875rem;
 }
 
 .InvStatus-returned {
-  background-color: #28a745; /* Green */
-  color: white;
+  background-color: #28a745;*/ /* Green */
+  /*color: white;
   padding: 0.25em 0.5em;
   border-radius: 0.25rem;
   font-size: 0.875rem;
+}*/
+
+
+.InvStatus-issued {
+  background-color: #fbbc05; /* yellow */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+}
+
+InvStatus-returned {
+  background-color: #34a853; /* green */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
 }

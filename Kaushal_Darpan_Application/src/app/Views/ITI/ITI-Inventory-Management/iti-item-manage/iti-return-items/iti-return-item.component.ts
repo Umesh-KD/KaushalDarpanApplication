@@ -123,7 +123,7 @@ export class AddItiReturnItemComponent {
             this.Message = data.Message;
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
-            this.ItemMasterList1 = data.Data || [];
+           // this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }
@@ -234,7 +234,7 @@ export class AddItiReturnItemComponent {
 
 
   exportToExcel(): void {
-    this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
+    this.ItemMasterList = this.ItemMasterList.map((item: any) => {
       const updatedItem = {
         AvailableQuantity: item.AvailableQuantity,
         CampanyName: item.CampanyName,
@@ -253,7 +253,7 @@ export class AddItiReturnItemComponent {
       return updatedItem;
     });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
@@ -305,58 +305,6 @@ export class AddItiReturnItemComponent {
 
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
-
-  //async confirmReturn() {
-  //  debugger
-
-  //  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
-
-  //  const returnModel = selectedItems.map((x: any) => ({
-  //    StaffId: this.Searchrequest.staffID,
-  //    ItemDetailsId: x.ItemDetailsId,
-  //    Type: "Return",
-  //    TransactionID: x.TransactionID  ,
-  //    ItemList: x.ItemList
-  //  }));
-
-  //  try {
-  //    await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
-  //      .then((data: any) => {
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        if (this.State == EnumStatus.Success) {
-  //          if (!this.returnModel.staffID || this.returnModel.staffID == 0) {
-  //            // Save
-  //            this.toastr.success("Record saved successfully", "", {
-  //              toastClass: "ngx-toastr my-save-toast"
-  //            });
-  //          } else {
-  //            // Update
-  //            this.toastr.success("Record updated successfully", "", {
-  //              toastClass: "ngx-toastr my-update-toast"
-  //            });
-  //          }
-  //          //redirect
-  //          this.routers.navigate(['/iti-return-item']);
-
-
-  //        } else if (this.State == EnumStatus.Error) {
-  //          this.toastr.error("Something went wrong.");
-  //        }
-
-  //      });
-  //    this.modalService.dismissAll();
-  //  } catch (ex) {
-  //    console.error(ex);
-  //    this.toastr.error('Something went wrong. Please try again.');
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-  //    }, 200);
-  //  }
-  //}
 
   async confirmReturn() {
     debugger;

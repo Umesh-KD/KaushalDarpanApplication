@@ -1,19 +1,19 @@
-.status-issued {
+.InvStatus-issued {
   background-color: #fbbc05; /* yellow */
   color: #fff;
-  padding: 2px 10px;
+  padding: 0px 10px;
   border-radius: 6px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12px;
   display: inline-block;
 }
 
-.status-returned {
+.InvStatus-returned {
   background-color: #34a853; /* green */
   color: #fff;
-  padding: 2px 10px;
+  padding: 0px 10px;
   border-radius: 6px;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 12px;
   display: inline-block;
 }

@@ -29,7 +29,7 @@
       {{ item.staffName }}
     </option>
   </select>-->
-          <select [(ngModel)]="Searchrequest.staffID" name="staffID" class="form-control" (change)="GetAllData()">
+          <select  class="form-select"  [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
