@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SearchRequestRoomAllotment, StudentRequestDataModal } from '../../Models/Hostel-Management/StudentRequestDataModal';
+import { DeallocateRoomDataModel, SearchRequestRoomAllotment, StudentRequestDataModal } from '../../Models/Hostel-Management/StudentRequestDataModal';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -200,4 +200,11 @@ export class StudentRequestService {
       ).toPromise();
   }
 
+  public async DeallocateRoom(Request: DeallocateRoomDataModel) {
+    const body = JSON.stringify(Request);
+    return await this.http.post(this.APIUrl + '/DeallocateRoom', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

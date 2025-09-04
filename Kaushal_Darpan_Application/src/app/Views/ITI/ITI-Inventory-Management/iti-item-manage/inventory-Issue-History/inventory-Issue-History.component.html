@@ -14,17 +14,49 @@
 <!-- Page Title End -->
 <div class="card">
   <div class="card-body p-5">
+
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-       
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+    <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+            (change)="GetTradeDDL()">
+      <option value="0">Choose Staff</option>
+      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+        {{ item.staffName }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+    <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+            (change)="GetCategoryDDL()">
+      <option value="0">Choose Trade</option>
+      <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+        {{ item.TradeName }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+    <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
+      <option value="0">Choose Category</option>
+      <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+        {{ item.ItemCategoryName }}
+      </option>
+    </select>
+  </div>-->
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
                   (change)="GetTradeDDL()">
-            <option value="0">Choose Staff</option>
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
             </option>
@@ -32,10 +64,9 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
           <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
                   (change)="GetCategoryDDL()">
-            <option value="0">Choose Trade</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
               {{ item.TradeName }}
             </option>
@@ -43,25 +74,21 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-            <option value="0">Choose Category</option>
             <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
               {{ item.ItemCategoryName }}
             </option>
           </select>
         </div>
 
-
-
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>
       </div>
-
-
     </div>
+
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">

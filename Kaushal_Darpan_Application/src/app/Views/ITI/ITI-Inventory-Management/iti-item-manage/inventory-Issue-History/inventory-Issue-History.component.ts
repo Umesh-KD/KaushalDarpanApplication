@@ -173,25 +173,144 @@ export class inventoryIssueHistoryComponent {
   //  }
   //}
 
+  //async GetStaffDDL() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  //    this.Searchrequest.TypeName = 'staffList';
+
+  //    const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.staffDDLList = data.Data;
+  //      console.log('staff list ==>', this.staffDDLList);
+
+  //      // Auto-select first staff if available
+  //      if (this.staffDDLList.length > 0) {
+  //        this.Searchrequest.staffID = this.staffDDLList[0].staffID;
+  //        await this.GetTradeDDL(); // load trades for selected staff
+  //      }
+  //    } else {
+  //      this.staffDDLList = [];
+  //      this.toastr.error(data?.ErrorMessage || 'No staff found.');
+  //    }
+  //  } catch (Ex) {
+  //    console.error('Error in GetStaffDDL:', Ex);
+  //  } finally {
+  //    setTimeout(() => this.loaderService.requestEnded(), 200);
+  //  }
+  //}
+
+  //async GetStaffDDL() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  //    this.Searchrequest.TypeName = 'staffList';
+
+  //    const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.staffDDLList = [
+  //        { staffID: 0, staffName: '--Choose Staff--' },
+  //        ...data.Data
+  //      ];
+
+  //      // Set default selected value = 0
+  //      this.Searchrequest.staffID = 0;
+  //      console.log('staff list ==>', this.staffDDLList);
+  //    } else {
+  //      this.staffDDLList = [{ staffID: 0, staffName: '--Choose Staff--' }];
+  //      this.Searchrequest.staffID = 0;
+  //      this.toastr.error(data?.ErrorMessage || 'No staff found.');
+  //    }
+  //  } catch (Ex) {
+  //    console.error('Error in GetStaffDDL:', Ex);
+  //  } finally {
+  //    setTimeout(() => this.loaderService.requestEnded(), 200);
+  //  }
+  //}
+
+
+  //async GetTradeDDL() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+  //    this.Searchrequest.TypeName = 'TradeList';
+
+  //    const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.TradeDDLList = data.Data;
+  //      console.log('Trade list ==>', this.TradeDDLList);
+
+  //      // Auto-select first trade if available
+  //      if (this.TradeDDLList.length > 0) {
+  //        this.Searchrequest.collageTradeID = this.TradeDDLList[0].collageTradeID;
+  //        await this.GetCategoryDDL(); //  load categories for selected trade
+  //      }
+  //    } else {
+  //      this.TradeDDLList = [];
+  //      this.toastr.error(data?.ErrorMessage || 'No trade found.');
+  //    }
+  //  } catch (Ex) {
+  //    console.log('Error in GetTradeDDL:', Ex);
+  //  } finally {
+  //    setTimeout(() => this.loaderService.requestEnded(), 200);
+  //  }
+  //}
+
+  //async GetCategoryDDL() {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  //    this.Searchrequest.TradeId = this.Searchrequest.TradeId;
+  //    this.Searchrequest.TypeName = 'ItemList';
+
+  //    const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.CategoryDDLList = data.Data;
+  //      console.log('category List ==>', this.CategoryDDLList);
+
+  //      // Auto-select first category if available
+  //      if (this.CategoryDDLList.length > 0) {
+  //        this.Searchrequest.ItemId = this.CategoryDDLList[0].ItemId;
+  //      }
+  //    } else {
+  //      this.CategoryDDLList = [];
+  //      this.toastr.error(data?.ErrorMessage || 'No category found.');
+  //    }
+  //  } catch (Ex) {
+  //    console.log('Error in GetCategoryDDL:', Ex);
+  //  } finally {
+  //    setTimeout(() => this.loaderService.requestEnded(), 200);
+  //  }
+  //}
+
+
+
   async GetStaffDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'staffList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-      if (data && data.State === EnumStatus.Success) {
-        this.staffDDLList = data.Data;
-        console.log('staff list ==>', this.staffDDLList);
 
-        // Auto-select first staff if available
-        if (this.staffDDLList.length > 0) {
-          this.Searchrequest.staffID = this.staffDDLList[0].staffID;
-          await this.GetTradeDDL(); // load trades for selected staff
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.staffDDLList = [
+          { staffID: 0, staffName: 'Choose Staff' }, 
+          ...data.Data
+        ];
+
+        this.Searchrequest.staffID = 0; 
+        console.log('staff list ==>', this.staffDDLList);
       } else {
-        this.staffDDLList = [];
+        this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+        this.Searchrequest.staffID = 0;
         this.toastr.error(data?.ErrorMessage || 'No staff found.');
       }
     } catch (Ex) {
@@ -202,25 +321,25 @@ export class inventoryIssueHistoryComponent {
   }
 
   async GetTradeDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-
       this.Searchrequest.TypeName = 'TradeList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-      if (data && data.State === EnumStatus.Success) {
-        this.TradeDDLList = data.Data;
-        console.log('Trade list ==>', this.TradeDDLList);
 
-        // Auto-select first trade if available
-        if (this.TradeDDLList.length > 0) {
-          this.Searchrequest.collageTradeID = this.TradeDDLList[0].collageTradeID;
-          await this.GetCategoryDDL(); //  load categories for selected trade
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.TradeDDLList = [
+          { TradeId: 0, TradeName: 'Choose Trade' }, 
+          ...data.Data
+        ];
+
+        this.Searchrequest.TradeId = 0;
+        console.log('Trade list ==>', this.TradeDDLList);
       } else {
-        this.TradeDDLList = [];
+        this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
+        this.Searchrequest.TradeId = 0;
         this.toastr.error(data?.ErrorMessage || 'No trade found.');
       }
     } catch (Ex) {
@@ -231,24 +350,25 @@ export class inventoryIssueHistoryComponent {
   }
 
   async GetCategoryDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.TypeName = 'ItemList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-      if (data && data.State === EnumStatus.Success) {
-        this.CategoryDDLList = data.Data;
-        console.log('category List ==>', this.CategoryDDLList);
 
-        // Auto-select first category if available
-        if (this.CategoryDDLList.length > 0) {
-          this.Searchrequest.ItemId = this.CategoryDDLList[0].ItemId;
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.CategoryDDLList = [
+          { ItemId: 0, ItemCategoryName: 'Choose Category' }, 
+          ...data.Data
+        ];
+
+        this.Searchrequest.ItemId = 0;
+        console.log('category list ==>', this.CategoryDDLList);
       } else {
-        this.CategoryDDLList = [];
+        this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
+        this.Searchrequest.ItemId = 0;
         this.toastr.error(data?.ErrorMessage || 'No category found.');
       }
     } catch (Ex) {
@@ -257,7 +377,6 @@ export class inventoryIssueHistoryComponent {
       setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
-
 
 
 

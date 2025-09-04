@@ -187,7 +187,7 @@
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
-            <th class="text-center">Action</th>
+            <th class="text-center" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">Action</th>
             <!--sorting column-->
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
@@ -239,7 +239,7 @@
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
-            <td>
+            <td *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">
               <div class="flex actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="View Student Details"
                    (click)="ViewStudentDetails(MyModel_ViewStudent, row.StudentID)">
@@ -274,6 +274,13 @@
                 {{ row.StudentExamStatus }}
                 <span *ngIf="row.status ==_enumExamStudentStatus.Enrolled && row.st_his_StatusId >0"
                       style="color: green; font-size: 11px; position: relative; display: inline-block; ">
+                  ({{ row.st_his_StatusName }})
+                </span>
+                <span *ngIf="request.StudentFilterStatusId ==_enumExamStudentStatus.ReturnByAcp && row.st_his_StatusId > 0"
+                      style="color: #dc3545; cursor: pointer; font-size: 11px; position: relative; display: inline-block; "
+                      matTooltip="{{ row.st_his_Remark }}"
+                      matTooltipPosition="above"
+                      matTooltipClass="custom-tooltip">
                   ({{ row.st_his_StatusName }})
                 </span>
               </span>
