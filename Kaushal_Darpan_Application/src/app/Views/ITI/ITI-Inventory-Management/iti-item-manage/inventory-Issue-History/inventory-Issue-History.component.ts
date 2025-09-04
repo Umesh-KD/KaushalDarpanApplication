@@ -41,38 +41,7 @@ export class inventoryIssueHistoryComponent {
   public today: Date = new Date();
 
 
-  ItemMasterListt = [
-    {
-      Selected: false,
-      Name: 'Ramesh',
-      ItemCode: 'ITM001',
-      Quantity: 5,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Issued'
-    },
-    {
-      Selected: false,
-      Name: 'Ravi Kumar',
-      ItemCode: 'ITM002',
-      Quantity: 2,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Returned'
-    },
-    {
-      Selected: false,
-      Name: 'Naresh',
-      ItemCode: 'ITM003',
-      Quantity: 3,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Issued'
-    }
-  ];
+
 
 
 

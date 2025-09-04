@@ -29,7 +29,7 @@
       {{ item.staffName }}
     </option>
   </select>-->
-          <select [(ngModel)]="Searchrequest.staffID" name="staffID" class="form-control">
+          <select [(ngModel)]="Searchrequest.staffID" name="staffID" class="form-control" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
@@ -88,15 +88,13 @@
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
-    <div class="overflow-x-auto mt-3">
-
-      <!--{{ItemMasterList | json}}-->
+    <div class="overflow-x-auto mt-3"> 
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
-            <th class="text-left">Item</th>
+            <th class="text-left">Item Name</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
             <th class="text-left">Due Date</th>
@@ -110,7 +108,7 @@
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.Quantity}}</td>
-            <td align="left">{{ item.IssueDate1 | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
@@ -120,6 +118,11 @@
     }">
                 {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
               </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="10">
+              No Record Found
             </td>
           </tr>
         </tbody>
