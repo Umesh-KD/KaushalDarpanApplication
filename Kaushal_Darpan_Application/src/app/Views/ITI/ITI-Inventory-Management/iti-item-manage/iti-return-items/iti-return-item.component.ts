@@ -9,7 +9,7 @@ import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
 import { ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
@@ -44,7 +44,7 @@ export class AddItiReturnItemComponent {
   //public StudentReqListList: any = [];
   public returnItemTypeList: any = [];
   //public today: Date = new Date();
-
+  public submitRequest = new ItemsIssueReturnModels();
   
 
   //ItemMasterListt = [
@@ -116,9 +116,7 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-
-
-      await this.itiInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.itiInventoryService.GetInventoryIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
@@ -363,37 +361,38 @@ export class AddItiReturnItemComponent {
   async confirmReturn() {
     debugger;
 
-    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
+    this.loaderService.requestStarted();
+    this.isLoading = true;
 
-    if (selectedItems.length === 0) {
-      this.toastr.warning("Please select at least one item to return.");
-      return;
-    }
+    this.submitRequest.StaffId = this.Searchrequest.staffID,
+      this.submitRequest.Remarks = this.returnModel.Remarks,
+      this.submitRequest.ItemCategoryId = this.returnModel.ItemCondition,
+      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
+   // this.submitRequest.TransactionID = this.ItemMasterList[0].TransactionID,
 
-    // Prepare payload for API
-    const returnModel = {
-      StaffId: this.Searchrequest.staffID,
-      TransactionID: selectedItems[0].TransactionID, // assuming all items belong to same transaction
-      Type: "ReturnItemUpdate",
-      ItemList: JSON.stringify(
-        selectedItems.map((x: any) => ({ ItemDetailsId: x.ItemDetailsId }))
-      )
-    };
+   
+    //if (selectedItems.length === 0) {
+    //  this.toastr.warning("Please select at least one item to return.");
+    //  return;
+    //}
 
     try {
-      await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
+      await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
+          if (this.State == EnumStatus.Success)
+          {
             this.toastr.success("Items returned successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
 
-            this.routers.navigate(['/iti-return-item']); // redirect
-          } else if (this.State == EnumStatus.Error) {
+            //get All data
+            this.GetAllData();
+          } else if (this.State == EnumStatus.Error)
+          {
             this.toastr.error("Something went wrong.");
           }
         });
