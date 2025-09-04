@@ -22,6 +22,7 @@ export class ItemsDataModels {
   public Status: number = 0;
   public ItemType : number = 0;
   public IsConsume: number = 0;
+  public StaffID: number = 0;
   //public Unit: number = 0;
 }
 export class ItemsSearchModel {
@@ -80,3 +81,15 @@ export class AuctionDetailsModel {
   public RowsID: string = '';
 }
 
+export class inventoryIssueHistorySearchModel {
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public RoleID: number = 0;
+  public EquipmentsId: number = 0;
+  public CollegeId: number = 0;
+  public OfficeID: number = 0;
+  public StatusID: number = 0;
+  public ItemCategoryID: number = 0;
+  public StreamID: number = 0;
+}

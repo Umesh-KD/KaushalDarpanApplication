@@ -25,6 +25,7 @@ import { ReportCollegeModel } from '../../../../Models/StudentsJoiningStatusMark
 import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { ITIPapperSetterDataModel } from '../../../../Models/ITIPapperSetterDataModel';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-student-withdrawn-report',
@@ -33,6 +34,12 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
   styleUrl: './student-withdrawn-report.component.css'
 })
 export class studentwithdrawnreportComponent {
+
+ 
+
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
+
+
   public isFormSubmitted: boolean = false;
   public isLoading: boolean = false;
   public searchRequest = new AllotmentReportCollegeRequestModel();
@@ -357,6 +364,7 @@ export class studentwithdrawnreportComponent {
     this.studentWithdrawnRequest.CollegeID = item.CollegeId;
     this.studentWithdrawnRequest.ApplicationID = item.ApplicationID;
     this.studentWithdrawnRequest.AllotmentId = item.AllotmentId;
+    this.childComponent.MobileNo = item.MobileNo;
     this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', centered: true });
   }
 
@@ -378,15 +386,22 @@ export class studentwithdrawnreportComponent {
     this.studentWithdrawnRequest.UserID = this.sSOLoginDataModel.UserID;
     this.studentWithdrawnRequest.Remarks = this.withdrawnFormGroup.get('Remarks')?.value;
 
-    try {
+    try
+    {
       this.isSubmitted = true;
       if (this.withdrawnFormGroup.invalid) {
         console.log('Form is invalid');
         return;
       }
 
+      
+      this.childComponent.OpenOTPPopup();
+      var th = this;
+      this.childComponent.onVerified.subscribe(() =>
+      { 
+
       this.loaderService.requestStarted();
-      await this.itiallotmentStatusService.StudentSeatWithdrawRequest(this.studentWithdrawnRequest)
+       this.itiallotmentStatusService.StudentSeatWithdrawRequest(this.studentWithdrawnRequest)
         .then((data: any) => {
         /*data = JSON.parse(JSON.stringify(data));*/
         this.State = data['State'];
@@ -400,7 +415,9 @@ export class studentwithdrawnreportComponent {
         } else {
           this.toastr.error(this.ErrorMessage);
         }
+        });
       });
+
     } catch (error) {
       console.log(error);
     } finally {
@@ -408,6 +425,7 @@ export class studentwithdrawnreportComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+
   }
 
 

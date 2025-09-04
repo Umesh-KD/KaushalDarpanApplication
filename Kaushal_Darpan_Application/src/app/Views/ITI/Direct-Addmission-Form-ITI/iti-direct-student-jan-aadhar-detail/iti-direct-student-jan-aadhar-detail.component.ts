@@ -672,6 +672,9 @@ export class ITIDirectStudentJanAadharDetailComponent {
         this.model.adds_village = this.Address.village;
 
       }
+
+      this.model.InstituteID = this.sSOLoginDataModel.InstituteID
+
       // this.Address
 
       await this.StudentJanAadharDetailService.SavePersonalData(this.model)

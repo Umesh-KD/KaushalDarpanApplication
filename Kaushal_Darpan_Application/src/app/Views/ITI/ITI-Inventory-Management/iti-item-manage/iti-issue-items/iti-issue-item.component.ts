@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
 
@@ -22,10 +23,15 @@ import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/it
 export class AddItiIssueItemComponent {
   public request = new ItemsDataModels()
   public searchTradeRequest = new ITITradeSearchModel();
+  public searchRequest = new DTEItemsSearchModel();
+  public submitRequest = new ItemsIssueReturnModels();
+  public Searchrequests = new inventoryIssueHistorySearchModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public showColumn: boolean = false;
   public UserID: number = 0;
+  public InstituteID: number = 0;
+  public TradeId: number = 0;
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -34,14 +40,20 @@ export class AddItiIssueItemComponent {
   modalReference: NgbModalRef | undefined;
   public ItemId: number = 0;
   public Table_SearchText: string = "";
-  public EquipmentsDDLList: any = [];
+  public ItemsDDLList: any = [];
+  public CatogaryDDLList: any = [];
   public TradeDDLList: any = [];
+  public EquipmentDDLList: any = [];
   public CategoryDDLList: any = [];
+  public StaffDDLList: any = [];
+  public staffDDLList: any = [];
   selectedItems: Array<any> = [];
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
-  public ItemtypeList:any[]=[]
+  public ItemtypeList: any[] = []
+
+  public AllInTableSelect: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -49,62 +61,34 @@ export class AddItiIssueItemComponent {
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal,
     private routers: Router) { }
 
   async ngOnInit() {
 
     this.AddItemsRequestFormGroup = this.formBuilder.group({
-      txtTotalPrice: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
-      txtPricePerUnit: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
-      txtQuantity: ['', [Validators.required]],
-      txtVoucherNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
-      //txtUnit: [''],
 
-      IdentificationMark: ['', Validators.required],
-      CampanyName: ['', Validators.required],
-      //TradeId: ['', [DropdownValidators]],
-      ItemCategoryId: ['', [DropdownValidators]],
-      EquipmentsId: ['0', [DropdownValidators]],
+     
       ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
-      IsConsume:['']
+
     });
 
-    this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    /*this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());*/
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
-    //await this.GetEquipmentDDL();
-    await this.ddlCategory_Change();
-    await this.GetTradeDDL();
-    if (this.ItemId > 0) {
-      await this.GetByID(this.ItemId);
-    }
-    this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}]
+    this.InstituteID = this.sSOLoginDataModel.InstituteID;
+    //await this.ddlStaffMembers();
+    //await this.ddlTradeList();
+
+    this.GetStaffDDL()
+    this.GetTradeDDL()
+    //this.GetCategoryDDL()
+
+
 
   }
-
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
-
-  customSearch(term: string, item: any) {
-    if (!term) return true;  // If no search term is provided, show all items.
-    return item.Name.toLowerCase().includes(term.toLowerCase());  // Filter based on item Name
-  }
-
-  customSearch1(term: string, item: any) {
-    if (!term) return true;  // If no search term is provided, show all items.
-    return item.StreamName.toLowerCase().includes(term.toLowerCase());  // Filter based on item Name
-  }
-
-  calculateTotalPrice(): void {
-    const quantity = this.request.Quantity ?? 0;
-    const pricePerUnit = this.request.PricePerUnit ?? 0;
-    // Calculate total price
-    this.request.TotalPrice = quantity * pricePerUnit;
-  }
-
-  async OnItemTypeChange() {
-
-  }
 
   async RefereshValoidators() {
     if (this.request.ItemType == 2) {
@@ -117,51 +101,20 @@ export class AddItiIssueItemComponent {
 
   async saveData() {
     debugger
-    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
-    this.request.RoleID = this.sSOLoginDataModel.RoleID;
+    this.submitRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.submitRequest.UserId = this.sSOLoginDataModel.UserID;
     this.isSubmitted = true;
 
-    this.RefereshValoidators()
-   
-    if (this.AddItemsRequestFormGroup.invalid) {
-      /*return console.log("Form is invalid, cannot submit")*/
-      //this.toastr.warning("Form is invalid, cannot submit")
-      //Object.keys(this.AddItemsRequestFormGroup.controls).forEach(key => {
-      //    const control = this.AddItemsRequestFormGroup.get(key);
- 
-      //    if (control && control.invalid) {
-      //      this.toastr.error(`Control ${key} is invalid`);
-      //      Object.keys(control.errors!).forEach(errorKey => {
-      //        this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-      //      });
-      //    }
-      //  });
-      //return;
-    }
-    if (this.request.ItemType == 1) {
-      this.request.TradeId = 0
-      this.request.IsConsume=0
-    }
+    this.submitRequest.ItemList = this.ItemsDDLList.filter((x: any) => x.Selected);
+
     //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
 
     try {
 
-      if (this.ItemId) {
-        this.request.ItemId = this.ItemId
-        this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      } else {
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      }
-      if (this.sSOLoginDataModel.RoleID == this._EnumRole.Principal_SCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal_NCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.DTETrainingT3Purchase ) {
-        this.request.Status = 1
-      } else {
-        this.request.Status = 0
-      }
-      await this.itiInventoryService.SaveItemsMaster(this.request)
+      await this.itiInventoryService.SaveIssueItems(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -169,8 +122,8 @@ export class AddItiIssueItemComponent {
 
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.ResetControl();
-            this.routers.navigate(['/iti-items-master-list']);
+            this.modalService.dismissAll();
+            this.routers.navigate(['/inventory-Issue-History']);
           }
           else if (this.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage)
@@ -206,7 +159,6 @@ export class AddItiIssueItemComponent {
           this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(this.request?.ItemCategoryId);
         
 
-          this.ddlEquipment_Change1();
           this.request.EquipmentsId = data['Data']["EquipmentsId"];
           this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(this.request?.EquipmentsId);
           this.request.CampanyName = data['Data']["CampanyName"];
@@ -239,186 +191,41 @@ export class AddItiIssueItemComponent {
     }
   }
 
+
+
  
-
-  //async GetTradeDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
-  //    await this.commonFunctionService.StreamMaster()
-  //      .then((data: any) => {
-  //        console.log(data)
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.TradeDDLList = data['Data'];
-  //        console.log(this.TradeDDLList)
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-
-  async GetTradeDDL() {
-    try {
-      this.loaderService.requestStarted();
-      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
-      //await this.commonFunctionService.StreamMaster()
-      await this.commonFunctionService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
-        .then((data: any) => {
-          console.log(data)
-          data = JSON.parse(JSON.stringify(data));
-          //this.TradeDDLList = data['Data'];
-          //console.log(this.TradeDDLList)
-          const selectOption = { ID: -1, Name: '--Select--' };
-          this.TradeDDLList = [selectOption, ...data['Data']];
-          this.request.TradeId=-1
-          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(-1);  
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  //async ddlCategory_Change() {
-
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.itiInventoryService.GetAllCategoryMaster()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        const selectOption = { ID: 0, Name: '--Select--' };
-  //        this.CategoryDDLList = [selectOption, ...data['Data']];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-  //async ddlEquipment_Change() {
-
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.itiInventoryService.GetEquipment_Branch_Wise_CategoryWise(this.request.ItemCategoryId)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        const selectOption = { ID: 0, Name: '--Select--' };
-  //        this.EquipmentsDDLList = [selectOption, ...data['Data']];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-  async ddlCategory_Change()
-  {
-    try {
-      this.loaderService.requestStarted();
-      await this.itiInventoryService.GetAllCategoryMaster()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          const selectOption = { ItemCategoryID: 0, Name: '--Select--' }; 
-          this.CategoryDDLList = [selectOption, ...data['Data']];
-          this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(0);  
-        });
-    } finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-
-  async ddlEquipment_Change() {
-    try {
-      this.loaderService.requestStarted();
-      debugger
-      const categoryId = this.AddItemsRequestFormGroup.get('ItemCategoryId')?.value;
-
-      if (!categoryId || categoryId === 0) {
-        this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
-        this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
-        return;
-      }
-      await this.itiInventoryService.GetEquipment_Branch_Wise_CategoryWise(categoryId)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          
-          const selectOption = { EquipmentsId: 0, Name: '--Select--' };
-          this.EquipmentsDDLList = [selectOption, ...data['Data']];
-          this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0); 
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-  async ddlEquipment_Change1() {
-    try {
-      this.loaderService.requestStarted();
-      debugger
-      const categoryId = this.AddItemsRequestFormGroup.get('ItemCategoryId')?.value;
-
-      if (!categoryId || categoryId === 0) {
-        this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
-        this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
-        return;
-      }
-      await this.itiInventoryService.GetEquipment_Branch_Wise_CategoryWise(categoryId)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-
-          const selectOption = { EquipmentsId: 0, Name: '--Select--' };
-          this.EquipmentsDDLList = [selectOption, ...data['Data']];
- 
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-
   async DGET_Details() {
     
-    await this.updateTable();
-    this.showDetailsTable = true;
-    this.EquimentsWiseQty();
-  }
-  EquimentsWiseQty() {
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      //if (!TradeId || TradeId === 0) {
+      //  this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
+      //  this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
+      //  return;
+      //}
 
-    const selectedItem = this.EquipmentsDDLList.find((item: any) => item.ID == this.request.EquipmentsId);
-    const qty = selectedItem ? selectedItem.Quantity : null;
-    this.maxQty = qty
+      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
+
+      await this.itiInventoryService.GetConsumeItemList(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.ItemsDDLList = data.Data;
+
+
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
   }
+
 
   getTradeNameById(id: any): string {
     const selectedTrade = this.TradeDDLList.find((item: any) => item.TradeId === id);
@@ -431,35 +238,16 @@ export class AddItiIssueItemComponent {
     return selectedCategory ? selectedCategory.Name : '';
   }
 
-  getEquipmentNameById(id: any): string {
-    const selectedEquipment = this.EquipmentsDDLList.find((item: any) => item.ID === id);
-    return selectedEquipment ? selectedEquipment.Name : '';
-  }
-
-  getEquipmentUnitById(id: any): string {
-    const selectedUnit = this.EquipmentsDDLList.find((item: any) => item.ID === id);
-    return selectedUnit ? selectedUnit.Unit : '';
-  }
-
-  getEquipmentQuantityById(id: any): string {
-    const selectedQuantity = this.EquipmentsDDLList.find((item: any) => item.ID === id);
-    return selectedQuantity ? selectedQuantity.Quantity : '';
-  }
 
   updateTable() {
     const trade = this.getTradeNameById(this.request.TradeId);
     const category = this.getCategoryNameById(this.request.ItemCategoryId);
-    const equipment = this.getEquipmentNameById(this.request.EquipmentsId);
-    const quantity = this.getEquipmentQuantityById(this.request.EquipmentsId);
-    const unit = this.getEquipmentUnitById(this.request.EquipmentsId);
 
-    if (trade && category && equipment) {
+
+    if (trade && category) {
       const newItem = {
         trade: trade,
         category: category,
-        equipment: equipment,
-        quantity: quantity,
-        unit: unit,
       };
       this.selectedItems = [newItem];
 
@@ -469,78 +257,154 @@ export class AddItiIssueItemComponent {
   }
 
 
-  onQuantityInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
-
-    // Clamp the value to min and max if needed
-    const numericValue = Math.max(1, Math.min(Number(value), this.maxQty || Infinity));
-
-    // Update the input field and model
-    input.value = numericValue.toString();
-    this.request.Quantity = numericValue;
-    this.calculateTotalPrice();
+  selectInTableAllCheckbox(): void {
+    (this.ItemsDDLList ?? []).forEach((x: { Selected: boolean }) => {
+      x.Selected = this.AllInTableSelect;
+    });
   }
-  //onQuantityChange(newQuantity: number) {
-  //  debugger
-  //  // Check if the input quantity is greater than maxQty
-  //  if (newQuantity > this.maxQty) {
-  //    this.request.Quantity = this.maxQty; // Limit the quantity to maxQty
-  //    alert(`Quantity cannot exceed ${this.maxQty}`); // Optional alert
-  //  }
-  //}
-  //async GetEquipmentDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.equipmentsService.GetAllData()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        this.EquipmentsDDLList = data['Data'];
 
-  //        console.log(this.EquipmentsDDLList)
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+  selectInTableSingleCheckbox(isSelected: boolean, item: any): void {
+    const data = this.ItemsDDLList.find((x: any) => x.ItemDetailsId === item.ItemDetailsId);
+    if (data) {
+      data.Selected = isSelected;
+    }
 
-  //async GetCategoryDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.ItemCategoriesService.GetAllData()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.CategoryDDLList = data['Data'];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+    this.AllInTableSelect = this.ItemsDDLList.every((r: any) => r.Selected);
+  }
+
+
+  ShowSubmit(content: any): void {
+    debugger;
+
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if (!anyTeamSelected) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+    if (this.Searchrequests.staffID == 0) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+  
+
+    this.submitRequest.StaffName = this.staffDDLList.find((x: any) => x.staffID == this.Searchrequests.staffID)?.staffName || '';
+    this.submitRequest.StaffId = this.Searchrequests.staffID;
+    this.submitRequest.TradeId = this.Searchrequests.TradeId;
+    this.submitRequest.ItemId = this.Searchrequests.ItemId;
+    this.submitRequest.Quantity = this.ItemsDDLList.filter((x: any) => x.Selected).length;
+
+
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
+  }
 
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.request = new ItemsDataModels();
+    this.Searchrequests = new inventoryIssueHistorySearchModel();
     this.AddItemsRequestFormGroup.reset({
       EquipmentsId: 0,
       ItemCategoryId: 0
     });
   }
 
+  CloseModalPopup() {
+
+    this.modalService.dismissAll();
+  }
+
+
+
+  async GetStaffDDL() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.TypeName = 'staffList';
+
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.staffDDLList = [
+          { staffID: 0, staffName: 'Choose Staff' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.staffID = 0;
+        console.log('staff list ==>', this.staffDDLList);
+      } else {
+        this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+        this.Searchrequests.staffID = 0;
+        this.toastr.error(data?.ErrorMessage || 'No staff found.');
+      }
+    } catch (Ex) {
+      console.error('Error in GetStaffDDL:', Ex);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
+    }
+  }
+
+  async GetTradeDDL() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.TypeName = 'TradeList';
+
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.TradeDDLList = [
+          { TradeId: 0, TradeName: 'Choose Trade' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.TradeId = 0;
+        console.log('Trade list ==>', this.TradeDDLList);
+      } else {
+        this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
+        this.Searchrequests.TradeId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No trade found.');
+      }
+    } catch (Ex) {
+      console.log('Error in GetTradeDDL:', Ex);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
+    }
+  }
+
+  async GetCategoryDDL() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.TypeName = 'ItemList';
+
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.CategoryDDLList = [
+          { ItemId: 0, ItemCategoryName: 'Choose Category' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.ItemId = 0;
+        console.log('category list ==>', this.CategoryDDLList);
+        this.ItemsDDLList = [];
+      } else {
+        this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
+        this.Searchrequests.ItemId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No category found.');
+      }
+    } catch (Ex) {
+      console.log('Error in GetCategoryDDL:', Ex);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
+    }
+  }
 
 }

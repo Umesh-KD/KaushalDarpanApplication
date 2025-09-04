@@ -5,6 +5,7 @@ import { studentwithdrawnreportComponent } from './student-withdrawn-report.comp
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
+import { OTPModalModule } from '../../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { LoaderModule } from '../../../Shared/loader/loader.module';
     LoaderModule,
     FormsModule,
     ReactiveFormsModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    OTPModalModule
   ]
 })
 export class studentwithdrawnreportModule { }
