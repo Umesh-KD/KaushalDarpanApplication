@@ -24,7 +24,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                  (change)="GetTradeDDL()">
+                  (change)="GetAllData()">
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
             </option>
