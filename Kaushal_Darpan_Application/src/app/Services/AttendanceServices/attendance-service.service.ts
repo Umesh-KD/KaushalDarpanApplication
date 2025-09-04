@@ -87,7 +87,8 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
-  public async SetCalendarEventModel(model: CalendarEventModel[]) {
+  public async SetCalendarEventModel(model: any[]) {
+    debugger
     return await this.http.post(this.APIUrl + '/SetCalendarEventModel', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();

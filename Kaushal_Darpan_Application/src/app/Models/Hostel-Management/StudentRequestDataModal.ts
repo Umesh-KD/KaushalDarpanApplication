@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "../RequestBaseModel";
+
 export class StudentRequestDataModal {
   public InstituteID: number = 0;
   public SemesterId: number = 0;
@@ -7,6 +9,7 @@ export class StudentRequestDataModal {
   public DepartmentID: number = 0;
   public ReqId: any[] = [];
   public RoleID: number = 0;
+  public status?: number = 0;
   
   public Action: string = '';
   public AllotmentStatus: number = 0;
@@ -44,4 +47,9 @@ export class StudentRequestDataSearchModal {
   public SearchText: string = '';
 }
 
-
+export class DeallocateRoomDataModel extends RequestBaseModel {
+  public AllotSeatId?: number = 0
+  public ReqId?: number = 0
+  public UserID?: number = 0
+  public Action?: string = ''
+}

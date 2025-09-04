@@ -171,7 +171,7 @@ const routes: Routes = [
       { path: 'addcommonsubjects', loadChildren: () => import('./Views/CommonSubjects/add-common-subjects/add-common-subjects.module').then(m => m.AddCommonSubjectsModule), title: 'Add Common Subject' },
       { path: 'commonsubjects', loadChildren: () => import('./Views/CommonSubjects/common-subjects/common-subjects.module').then(m => m.CommonSubjectsModule), title: 'Common Subject' },
       { path: 'roster-display', loadChildren: () => import('./Views/roste/roste.module').then(m => m.RosteModule), title: 'Roste Module' },
-
+      { path: 'roster-display-list', loadChildren: () => import('./Views/roste-list/roste-list.module').then(m => m.RosteListModule), title: 'Roste List Module' },
       { path: 'managetpo', loadChildren: () => import('./Views/TPOMaster/create-tpo/create-tpo.module').then(m => m.CreateTpoModule) },
       { path: 'tpo-details', loadChildren: () => import('./Views/TPOMaster/details-tpo/details-tpo.module').then(m => m.DetailsTpoModule) },
       { path: 'campusvalidation', loadChildren: () => import('./Views/campus-validation/campus-validation.module').then(m => m.CampusValidationModule) },
@@ -513,6 +513,10 @@ const routes: Routes = [
       { path: 'iti-add-request-equipments', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-equipments-mapping/iti-add-request-equipments-mapping.module').then(m => m.ITIAddRequestEquipmentsMappingModule) },
       { path: 'iti-HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipment-verifications-mapping-list/iti-equipment-verifications-mapping-list.module').then(m => m.ITIEquipmentVerificationsMappingListModule) },
       { path: 'iti-auction-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-list/iti-auction-list.module').then(m => m.ITIAuctionListModule) },
+
+      { path: 'iti-issue-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-items/iti-issue-item.module').then(m => m.AddItiIssueItemModule) },
+      { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
+
 
       /*ITI-Inventory-Management-END*/
 
@@ -1308,6 +1312,7 @@ const routes: Routes = [
       //{ path: 'inspection-team', loadChildren: () => import('./Views/ITI/Inspection/inspection-team/inspection-team.module').then(m => m.InspectionTeamModule), title: 'ITI Inspection' },
       //{ path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-iip-manage', loadChildren: () => import('./Views/ITI/IIP-Module/iip-manage/iip-manage.module').then(m => m.ITIIIPManageModule), title: 'ITI IIP Manage' },
+      { path: 'iti-iip-admin-report', loadChildren: () => import('./Views/ITI/IIP-Module/iip-admin-report/iip-admin-report.module').then(m => m.ITIIIPAdminReportModule), title: 'ITI IIP Manage' },
       //{ path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
@@ -1328,6 +1333,7 @@ const routes: Routes = [
         { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
+      { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title:'Inventory Issue History'},
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
 
       { path: 'NcvtDataBulkUpload', loadChildren: () => import('./Views/ITI/ncvt-data-bulk-upload/ncvt-data-bulk-upload.module').then(m => m.NcvtDataBulkUploadModule) },

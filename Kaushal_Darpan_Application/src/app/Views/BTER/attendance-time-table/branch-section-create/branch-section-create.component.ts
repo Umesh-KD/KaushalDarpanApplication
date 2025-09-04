@@ -687,25 +687,7 @@ CloseModal() {
     this.isSubmitted = false;
   }
 
-  async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
-   debugger
-    const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
-    const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
-  /* await this.getupBranchHodData();*/
 
-    if (GetstreamId && GetSemesterID) {
-      this.commonMasterService
-        .SubjectMaster_StreamIDWise(GetstreamId, this.sSOLoginDataModel.DepartmentID, GetSemesterID)
-        .then((data: any) => {
-          this.SubjectMasterDDL = data?.Data || [];
-        })
-        .catch(error => {
-          console.error('Error fetching subject master:', error);
-        });
-    } else {
-      console.warn('StreamID or SemesterID is missing');
-    }
-  }
   async getupBranchHodData() {
     debugger
     const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
@@ -731,25 +713,46 @@ CloseModal() {
       );
   }
 
+    async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
+   debugger
+    const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
+    const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
+  /* await this.getupBranchHodData();*/
+
+    if (GetstreamId && GetSemesterID) {
+      this.commonMasterService
+        .SubjectMaster_StreamIDWise(GetstreamId, this.sSOLoginDataModel.DepartmentID, GetSemesterID)
+        .then((data: any) => {
+          this.SubjectMasterDDL = data?.Data || [];
+        })
+        .catch(error => {
+          console.error('Error fetching subject master:', error);
+        });
+    } else {
+      console.warn('StreamID or SemesterID is missing');
+    }
+  }
 
   async AddStaffData(content: any, rowData?: any) {
     debugger
     this.isSubmitted = true;
+   
     if (rowData != null && rowData != undefined) {
       if (rowData.StreamID != null) {
 
         //this.AddStaffSubjectSectionModel.SemesterID;
         //this.AddStaffSubjectSectionModel.StreamID;
-        await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
+        // await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
 
         this.SSOIDExists = true;
         this.AddStaffSubjectSectionModel.SemesterID = rowData.SemesterID;
         this.AddStaffSubjectSectionModel.StreamID = rowData.StreamID;
         this.oldSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
         this.oldStreamID = this.AddStaffSubjectSectionModel.StreamID;
-
-
+        this.refreshAvailableSections();
+        await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
         await this.getupBranchHodData();
+        
       }
       /*this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID,this.AddStaffSubjectSectionModel.SemesterID);*/
       this.EditDataFormGroup.patchValue({
@@ -848,11 +851,21 @@ CloseModal() {
   }
   refreshAvailableSections() {
     // collect all used section IDs
+    debugger
     const usedIds = this.AddStaffSubjectSectionModelList
       .flatMap(x => (x.SectionIDs ? x.SectionIDs.split(',').map(Number) : []));
 
     // filter sections
     this.GetSectionData = this.allSections.filter(sec => !usedIds.includes(sec.SectionID));
+  }
+
+  refreshAvailableSections1(){
+    debugger
+    const DepartmentID=this.sSOLoginDataModel.DepartmentID;
+    const EndTermID=this.sSOLoginDataModel.EndTermID;
+    const Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng;
+    const StreamID = this.AddStaffSubjectSectionModel.StreamID;
+    const SemesterID = this.AddStaffSubjectSectionModel.SemesterID;
   }
   SaveData_EditDetails() {
     debugger
