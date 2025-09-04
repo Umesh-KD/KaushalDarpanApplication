@@ -358,7 +358,7 @@ export class AddItiIssueItemComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.request = new ItemsDataModels();
+    this.Searchrequests = new inventoryIssueHistorySearchModel();
     this.AddItemsRequestFormGroup.reset({
       EquipmentsId: 0,
       ItemCategoryId: 0
