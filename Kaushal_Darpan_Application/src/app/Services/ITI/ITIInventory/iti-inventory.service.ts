@@ -9,6 +9,7 @@ import { DTEEquipmentsDataModel } from '../../../Models/DTEInventory/DTEEquipmen
 import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
 import { DTEInventoryDashboardDataModel } from '../../../Models/DTEInventory/DTEInventoryDashboardDataModel';
 import { DTEIssuedSearchModel, DTEReturnItemSearchModel, DTEIssuedItemDataModel, DTEStoksSearchModel, ReturnDteItemDataModel } from '../../../Models/DTEInventory/DTEIssuedItemDataModel';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
@@ -444,14 +445,6 @@ export class ITIInventoryService {
   public async GetAll_INV_GetCommonIssueDDL(searchRequest: inventoryIssueHistorySearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetAll_INV_GetCommonIssueDDL`, body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
-
-  public async SaveIssueItems(submitRequest: ItemsIssueReturnModels) {
-    const body = JSON.stringify(submitRequest);
-    return await this.http.post(this.APIUrl + '/SaveIssueItems', body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

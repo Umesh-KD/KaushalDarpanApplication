@@ -15,7 +15,6 @@ import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
-const secretKey = 'your-secret-key';
 
 
 @Component({
@@ -44,42 +43,42 @@ export class AddItiReturnItemComponent {
   public UserID: number = 0;
   //public StudentReqListList: any = [];
   public returnItemTypeList: any = [];
-  public today: Date = new Date();
+  //public today: Date = new Date();
 
   
 
-  ItemMasterListt = [
-    {
-      Selected: false,
-      Name: 'Ramesh',
-      ItemCode: 'ITM001',
-      Quantity: 5,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Issued'
-    },
-    {
-      Selected: false,
-      Name: 'Suresh',
-      ItemCode: 'ITM002',
-      Quantity: 2,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Returned'
-    },
-    {
-      Selected: false,
-      Name: 'Naresh',
-      ItemCode: 'ITM003',
-      Quantity: 3,
-      IssueDate: new Date(),
-      DueDate: new Date(),
-      ReturnDate: new Date(),
-      Status: 'Issued'
-    }
-  ];
+  //ItemMasterListt = [
+  //  {
+  //    Selected: false,
+  //    Name: 'Ramesh',
+  //    ItemCode: 'ITM001',
+  //    Quantity: 5,
+  //    IssueDate: new Date(),
+  //    DueDate: new Date(),
+  //    ReturnDate: new Date(),
+  //    Status: 'Issued'
+  //  },
+  //  {
+  //    Selected: false,
+  //    Name: 'Suresh',
+  //    ItemCode: 'ITM002',
+  //    Quantity: 2,
+  //    IssueDate: new Date(),
+  //    DueDate: new Date(),
+  //    ReturnDate: new Date(),
+  //    Status: 'Returned'
+  //  },
+  //  {
+  //    Selected: false,
+  //    Name: 'Naresh',
+  //    ItemCode: 'ITM003',
+  //    Quantity: 3,
+  //    IssueDate: new Date(),
+  //    DueDate: new Date(),
+  //    ReturnDate: new Date(),
+  //    Status: 'Issued'
+  //  }
+  //];
 
 
 
@@ -116,6 +115,7 @@ export class AddItiReturnItemComponent {
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
+      this.Searchrequest.staffID = this.Searchrequest.staffID;
 
 
       await this.itiInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
@@ -281,11 +281,11 @@ export class AddItiReturnItemComponent {
 
   toggleAll(event: any) {
     const checked = event.target.checked;
-    this.ItemMasterListt.forEach((item: any) => item.Selected = checked);
+    this.ItemMasterList.forEach((item: any) => item.Selected = checked);
   }
 
   openReturnModal(content: any) {
-    const selectedItems = this.ItemMasterListt.filter((x: any) => x.Selected);
+    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
       alert("Please select at least one item to return.");
@@ -296,25 +296,120 @@ export class AddItiReturnItemComponent {
     this.returnModel = {
       ItemCount: selectedItems.length,
       ItemCondition: 0,
+      staffID: 0,
       ReturnDate: '',
-      Remarks: ''
+      Remarks: '',
+      ItemList: '',
+      ItemDetailsId: 0,
+      TransactionID: 0,
+      Type: ''
     };
 
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
-  confirmReturn() {
-    const selectedIds = this.ItemMasterListt
-      .filter((x: any) => x.Selected)
-      .map((x: any) => x.ItemDetailsId);
+  //async confirmReturn() {
+  //  debugger
 
-    console.log("Returning IDs:", selectedIds);
+  //  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
-    // 🔹 API call can go here
-    // this.myService.returnItems(selectedIds).subscribe(...);
+  //  const returnModel = selectedItems.map((x: any) => ({
+  //    StaffId: this.Searchrequest.staffID,
+  //    ItemDetailsId: x.ItemDetailsId,
+  //    Type: "Return",
+  //    TransactionID: x.TransactionID  ,
+  //    ItemList: x.ItemList
+  //  }));
 
-    this.modalService.dismissAll();
+  //  try {
+  //    await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
+  //      .then((data: any) => {
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+  //        if (this.State == EnumStatus.Success) {
+  //          if (!this.returnModel.staffID || this.returnModel.staffID == 0) {
+  //            // Save
+  //            this.toastr.success("Record saved successfully", "", {
+  //              toastClass: "ngx-toastr my-save-toast"
+  //            });
+  //          } else {
+  //            // Update
+  //            this.toastr.success("Record updated successfully", "", {
+  //              toastClass: "ngx-toastr my-update-toast"
+  //            });
+  //          }
+  //          //redirect
+  //          this.routers.navigate(['/iti-return-item']);
+
+
+  //        } else if (this.State == EnumStatus.Error) {
+  //          this.toastr.error("Something went wrong.");
+  //        }
+
+  //      });
+  //    this.modalService.dismissAll();
+  //  } catch (ex) {
+  //    console.error(ex);
+  //    this.toastr.error('Something went wrong. Please try again.');
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+  //    }, 200);
+  //  }
+  //}
+
+  async confirmReturn() {
+    debugger;
+
+    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
+
+    if (selectedItems.length === 0) {
+      this.toastr.warning("Please select at least one item to return.");
+      return;
+    }
+
+    // Prepare payload for API
+    const returnModel = {
+      StaffId: this.Searchrequest.staffID,
+      TransactionID: selectedItems[0].TransactionID, // assuming all items belong to same transaction
+      Type: "ReturnItemUpdate",
+      ItemList: JSON.stringify(
+        selectedItems.map((x: any) => ({ ItemDetailsId: x.ItemDetailsId }))
+      )
+    };
+
+    try {
+      await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success("Items returned successfully", "", {
+              toastClass: "ngx-toastr my-update-toast"
+            });
+
+            this.routers.navigate(['/iti-return-item']); // redirect
+          } else if (this.State == EnumStatus.Error) {
+            this.toastr.error("Something went wrong.");
+          }
+        });
+
+      this.modalService.dismissAll();
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error('Something went wrong. Please try again.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
   }
+
 
   async GetAllItemTypeList() {
     try {

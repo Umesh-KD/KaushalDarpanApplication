@@ -107,7 +107,16 @@ export class ItemsDetails {
 }
 export class itemReturnModel {
   public ItemCount: number = 0;
+  public staffID: number = 0;
   public ItemCondition: number = 0;
+  public ItemDetailsId: number = 0;
+  public TransactionID: number = 0;
   public ReturnDate: string = '';
   public Remarks: string = '';
+  public ItemList: string = '';
+  public Type: string = '';
+
+
+
 }
+
