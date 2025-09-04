@@ -32,6 +32,7 @@ export class AllotmentReportingModel {
   public CheckStatus: number = 0;
   public AllotedPriority: number = 0;
   public AcademicYearID: number = 0;
+  public ReportingStatus: number = 0;
   public ApplyUpward: boolean = false;
 }
 

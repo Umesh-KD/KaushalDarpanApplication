@@ -20,23 +20,26 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-       
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
-          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                  (change)="GetTradeDDL()">
-            <option value="0">Choose Staff</option>
-            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-              {{ item.staffName }}
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+          (change)="GetTradeDDL()">
+    <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+      {{ item.staffName }}
+    </option>
+  </select>-->
+          <select  class="form-select"  [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
+            <option *ngFor="let s of staffDDLList" [value]="s.staffID">
+              {{s.staffName}}
             </option>
           </select>
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
           <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
                   (change)="GetCategoryDDL()">
-            <option value="0">Choose Trade</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
               {{ item.TradeName }}
             </option>
@@ -44,14 +47,14 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-            <option value="0">Choose Category</option>
             <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
               {{ item.ItemCategoryName }}
             </option>
           </select>
         </div>
+
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
@@ -61,9 +64,12 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
-        <i class="ti ti-excel"></i> Export Excel
-      </a>
+      <div class="flex gap-2">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+        
+      </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -82,29 +88,42 @@
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
-    <div class="overflow-x-auto mt-3">
+    <div class="overflow-x-auto mt-3"> 
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
-            <th class="text-left">Item</th>
-            <th class="text-left">Category</th>
-            <th class="text-left">User Id</th>  
-            <th class="text-left">Trade</th>
-            <!--<th class="text-left">Working</th>
-            <th class="text-left">Not Working</th>-->
+            <th class="text-left">Name</th>
+            <th class="text-left">Item Name</th>
+            <th class="text-left">Qty</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-left">Due Date</th>
+            <th class="text-left">Return Date</th>
+            <th class="text-left">Status</th>
           </tr>
         </thead>
-       
         <tbody>
-          <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
-            <td align="left">{{idx+1}}</td>
-            <td align="left">{{item.ItemCode}}</td>
-            <td align="left">{{item.ItemCategoryName}}</td>
-            <td align="left">{{item.PricePerUnit}}</td>
-            <td align="left">{{item.TradeName}}</td>
-            <!--<td align="left">{{item.Working}}</td>
-            <td align="left">{{item.NotWorking}}</td>-->
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">
+              <span [ngClass]="{
+      'InvStatus-issued': item.InvStatus === 1,
+      'InvStatus-returned': item.InvStatus === 2
+    }">
+                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="10">
+              No Record Found
+            </td>
           </tr>
         </tbody>
       </table>
@@ -113,5 +132,8 @@
 
   </div>
 </div>
+
+
+
 
 <!-- end row -->

@@ -74,6 +74,7 @@ export class RosteComponent implements OnInit {
     SemesterID: 0,
     SectionID: 0,
     DayID: 0,
+    RoomNo:''
     /*AttendanceDate: ''*/
   };
   constructor(
@@ -107,7 +108,8 @@ export class RosteComponent implements OnInit {
       SemesterID: [0, [Validators.required, DropdownValidators]],
       /* AttendanceDate: [new Date(), Validators.required],*/
       AttendanceStartTime: ['09:00 AM', Validators.required],
-      AttendanceEndTime: ['10:00 AM', Validators.required]
+      AttendanceEndTime: ['10:00 AM', Validators.required],
+      RoomNo: [''],
     });
     this.getMasterData();
     this.GetAllRosterDisplay();
@@ -386,6 +388,7 @@ export class RosteComponent implements OnInit {
   newSection.SectionID = Array.isArray(formValue.SectionID) ? formValue.SectionID : [formValue.SectionID];
    newSection.AttendanceStartTime = formValue.AttendanceStartTime;
    newSection.AttendanceEndTime = formValue.AttendanceEndTime;
+   newSection.RoomNo = formValue.RoomNo;
 
 
 
@@ -402,10 +405,10 @@ export class RosteComponent implements OnInit {
    }
 
    // 2. No classes after 5 PM
-   if (startNum >= 1700 || endNum > 1700) {
-     this.toastr.warning('Entries are not allowed after 5 PM.');
-     return;
-   }
+   //if (startNum >= 1700 || endNum > 1700) {
+   //  this.toastr.warning('Entries are not allowed after 5 PM.');
+   //  return;
+   //}
 
    // 3. End time cannot be before start time
    if (durationMinutes < 0) {
@@ -530,7 +533,8 @@ export class RosteComponent implements OnInit {
     StaffID: 0,
     SemesterID: 0,
     AttendanceStartTime: '09:00 AM',
-    AttendanceEndTime: '10:00 AM'
+    AttendanceEndTime: '10:00 AM',
+    RoomNo: ''
   });
 
   this.isSubmitted = false;
@@ -671,7 +675,8 @@ export class RosteComponent implements OnInit {
       SemesterID: 0,
       /* AttendanceDate: new Date(),*/
       AttendanceStartTime: '09:00 AM',
-      AttendanceEndTime: '10:00 AM'
+      AttendanceEndTime: '10:00 AM',
+      RoomNo: ''
     });
   }
 

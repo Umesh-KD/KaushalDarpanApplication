@@ -30,10 +30,9 @@
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff:</label>
-          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequests.staffID"
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID"
                   (change)="GetTradeDDL()">
-            <option value="0">Choose Staff</option>
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
             </option>
@@ -41,10 +40,9 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
           <select class="form-select" id="TradeID" [(ngModel)]="Searchrequests.TradeId"
                   (change)="GetCategoryDDL()">
-            <option value="0">Choose Trade</option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
               {{ item.TradeName }}
             </option>
@@ -52,16 +50,15 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId">
-            <option value="0">Choose Category</option>
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId" (change)="DGET_Details()">
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId" >
               {{ item.ItemCategoryName }}
             </option>
           </select>
         </div>
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" >Search</button>
+          <button type="button" class="btn bg-info text-white mt-6">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>
       </div>
@@ -69,29 +66,30 @@
 
 
 
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in Execl</a>
-        <select id="ddlConter" class="form-select couterDropDown me-2">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
-      </div>
 
-    </div>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ShowSubmit(Submit_Details)" >Issue Items</a>
+          <!--<select id="ddlConter" class="form-select couterDropDown me-2">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>-->
+        </div>
+
+      </div>
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>
-              <input type="checkbox" class="checkboxSize" />
+              <!--<input type="checkbox" class="checkboxSize" />-->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
-            <th class="text-center">Action</th>
             <!--sorting column-->
             <th class="text-left cursorHand" title="Click to sorting">
               Item Code
@@ -109,30 +107,36 @@
               Catogary ID
 
             </th>
-            <th class="text-left cursorHand" title="Click to sorting">
+            <!--<th class="text-left cursorHand" title="Click to sorting">
               Company Name
 
-            </th>
+            </th>-->
 
 
-          </tr>
-        </thead>
-        <tbody>
+            </tr>
+          </thead>
+          <tbody>
 
-          <tr *ngFor="let row of ItemsDDLList; let idx=index; ">
+            <tr *ngFor="let row of ItemsDDLList; let idx=index; ">
+              <td>
+                <!--<input type="checkbox" class="checkboxSize" />-->
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+              </td>
+              <td align="left">{{idx+1}}</td>
 
-            <td>{{row.ItemCode}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.EquipmentName}}</td>
-            <td>{{row.CatogaryId}}</td>
-            <td>{{row.CompanyName}}</td>
+              <td>{{row.ItemCode}}</td>
+              <td>{{row.ItemCategoryName}}</td>
+              <td>{{row.EquipmentsCode}}</td>
+              <td>{{row.Quantity}}</td>
+              <!--<td>{{row.CompanyName}}</td>-->
 
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-
+            </tr>
+            <tr *ngIf="ItemsDDLList?.length==0" class="text-center">
+              <td colspan="7">No Record Found!!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
   </div>
 </div>
@@ -140,6 +144,61 @@
 
 
 
+<ng-template #Submit_Details let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <form >
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.StaffId" name="StaffId">
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.TradeId" name="TradeId">
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.ItemId" name="ItemId">
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.StaffName" name="StaffName" disabled>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Quantity:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.Quantity" name="Quantity" disabled>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Due Date:</label>
+                <input type="date" class="form-input" [(ngModel)]="submitRequest.DueDate" name="DueDate" required>
+              </div>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remarks:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.Remarks" name="Remarks">
+              </div>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <button type="button" class="btn bg-info text-white mt-6" (click)="saveData()">Submit Issue</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="overflow-x-auto mt-3">
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 
 

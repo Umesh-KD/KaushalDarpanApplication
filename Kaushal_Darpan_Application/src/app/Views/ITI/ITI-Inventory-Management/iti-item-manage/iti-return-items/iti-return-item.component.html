@@ -1,297 +1,211 @@
-<!--Page Title Start-->
+<!-- Page Title Start -->
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">{{ItemId>0?'Edit':'Add'}} Item</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Return Item</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <!--<a href="/NodalOfficer" class="text-sm font-medium text-slate-700" aria-current="page">Item</a>-->
-      <a [routerLink]="['/']" class="text-sm font-medium text-slate-700" aria-current="page">Item</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
-        {{ItemId>0?'Edit':'Add'}}
-        Item
-      </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
     </div>
   </div>
-  <!--<a href="DteItemsMasterList" class="inline-flex items-center btn bg-dark text-white btn-sm">-->
-  <a [routerLink]="['/iti-items-master-list']" class="inline-flex items-center btn bg-dark text-white btn-sm">
-    <i class="ti ti-chevron-left"></i> Back
-  </a>
 </div>
-<!--Page Title End-->
-
-<div class="card" style=" overflow: visible;">
+<!-- Page Title End -->
+<div class="card">
   <div class="card-body p-5">
-    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
-    </div>
-    <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Category: <span class="StarMarking">*</span>
-    </label>
-    <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
-               bindValue="ItemCategoryID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-               [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-    </ng-select>
-
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
-      <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required.
-      </p>
-    </div>
-  </div>
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Equipment: <span class="StarMarking">*</span>
-    </label>
-    <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
-               bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true" [searchFn]="customSearch"
-               (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-      <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-    </ng-select>
-
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-      <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required.
-      </p>
-    </div>
-  </div>-->
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Item Type: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="ItemType" [(ngModel)]="request.ItemType" [items]="ItemtypeList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                     [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemType.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.ItemType.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Category: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
-                     bindValue="ItemCategoryID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                     [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Equipment: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" [searchFn]="customSearch"
-                     (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-            <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-
-        <div>
-          <label for="IdentificationMark" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Identification Mark: <span class="StarMarking">*</span>
-          </label>
-          <input type="text" class="form-input" id="IdentificationMark" name="IdentificationMark" formControlName="IdentificationMark"
-                 [(ngModel)]="request.IdentificationMark">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.IdentificationMark.errors?.required" class="text-danger">
-            <p>This field is required!</p>
-          </div>
-        </div>
-
-        <div>
-          <label for="CampanyName" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Company Name: <span class="StarMarking">*</span>
-          </label>
-          <input type="text" class="form-input" id="CampanyName" name="CampanyName" formControlName="CampanyName"
-                 [(ngModel)]="request.CampanyName" maxlength="50">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.CampanyName.errors?.required" class="text-danger">
-            <p>This field is required!</p>
-          </div>
-        </div>
-
-        <div>
-          <label for="VoucherNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Voucher Number: <span class="StarMarking">*</span>
-          </label>
-          <input type="text" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
-                 [(ngModel)]="request.VoucherNumber" maxlength="6">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.pattern">
-              <i aria-hidden="true"></i>
-              Only positive numbers are allowed in the VoucherNumber field!
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Quantity: <span class="StarMarking">*</span>
-          </label>
-
-          <input type="text"
-                 id="txtQuantity"
-                 class="form-input"
-                 formControlName="txtQuantity"
-                 [min]="1"
-                 [max]="maxQty"
-                 step="1"
-                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,3)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtQuantity.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtQuantity.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <p *ngIf="_AddItemsRequestFormGroup.txtQuantity.errors.pattern">
-              <i aria-hidden="true"></i>
-              Only positive numbers are allowed in the Quantity field!
-            </p>
-          </div>
-        </div>
-
-
-        <div>
-          <label for="PricePerUnit" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Price Per Unit: <span class="StarMarking">*</span>
-          </label>
-          <input type="text" class="form-input" id="txtPricePerUnit" name="PricePerUnit" formControlName="txtPricePerUnit"
-                 [(ngModel)]="request.PricePerUnit" min="0" step="1" (ngModelChange)="calculateTotalPrice() " oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,6)">
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtPricePerUnit.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtPricePerUnit.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <!-- Check for pattern error -->
-            <p *ngIf="_AddItemsRequestFormGroup.txtPricePerUnit.errors.pattern">
-              <i aria-hidden="true"></i>
-              Only positive numbers are allowed in the PricePerUnit field!
-            </p>
-          </div>
-        </div>
-
-
-        <div>
-          <label for="TotalPrice" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            Total Price: <span class="StarMarking">*</span>
-          </label>
-          <input type="text" class="form-input" id="txtTotalPrice" name="TotalPrice" formControlName="txtTotalPrice"
-                 [(ngModel)]="request.TotalPrice" readonly>
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtTotalPrice.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtTotalPrice.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <!-- Check for pattern error -->
-            <p *ngIf="_AddItemsRequestFormGroup.txtTotalPrice.errors.pattern">
-              <i aria-hidden="true"></i>
-              Only numbers are allowed in the TotalPrice field!
-            </p>
-          </div>
-        </div>
-
-
-        <div *ngIf="request.ItemType==2" >
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Trade: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                     [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
-
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>
-
-
-
-        <!--<div>
-    <label for="Unit" class="text-gray-800 text-sm font-medium inline-block mb-2">
-      Unit: <span class="StarMarking">*</span>
-    </label>
-    <input type="text" class="form-input" id="txtUnit" name="Unit" formControlName="txtUnit"
-           [(ngModel)]="request.Unit">
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtUnit.errors" class="text-danger">
-      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.required">
-        <i aria-hidden="true"></i>
-        This field is required .!
-      </p>
-      <p *ngIf="_AddItemsRequestFormGroup.txtUnit.errors.pattern">
-        <i aria-hidden="true"></i>
-        Only positive numbers are allowed in the VoucherNumber field!
-      </p>
-    </div>
-  </div>-->
-
-
-        <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
-          <label class="block">IsConsumable </label>
-          <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-            <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
-                   [(ngModel)]="request.IsConsume">
-            <span class="toggleIcon">
-              <span class="toggleTitle"></span>
-            </span>
-          </label>
-        </div>
-
-
-
-
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mt-4">
-        <div class="text-center">
-          <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
-          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
-            <i class="ti ti-refresh"></i> Reset
-          </button>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+                  (change)="GetAllData()">
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>
       </div>
-    </form>
-   
-   
+    </div>
 
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex gap-2">
+        <!--<a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>-->
+        <a href="javascript:void(0);"
+           (click)="openReturnModal(returnModal)"
+           class="btn bg-warning btn-sm text-white">
+          <i class="ti ti-rotate-ccw"></i> Return
+        </a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
 
+      <!--{{ItemMasterList | json}}-->
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">
+              <input type="checkbox" (change)="toggleAll($event)" />  select All
+            </th>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Item</th>
+            <th class="text-left">Qty</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-left">Due Date</th>
+            <th class="text-left">Return Date</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">
+              <input type="checkbox" [(ngModel)]="item.Selected" />
+            </td>
+            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">
+              <span [ngClass]="{
+  'InvStatus-issued': item.InvStatus === 1,
+  'InvStatus-returned': item.InvStatus === 2
+}">
+                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="10" class="text-center">
+              No Record Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
+    </div>
 
   </div>
 </div>
 
+<ng-template #returnModal let-modal>
+  <div class="modal-content bg-white rounded-xl shadow-xl p-6 w-full max-w-3xl mx-auto">
+
+    <div class="flex justify-between items-center border-b pb-3 mb-4">
+      <h5 class="text-lg font-semibold text-gray-700">Return Item</h5>
+      <button type="button" class="text-gray-500 hover:text-gray-700" (click)="modal.dismiss()">
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #returnForm="ngForm" class="space-y-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Item Count</label>
+            <input type="text"
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-sm"
+                   [(ngModel)]="returnModel.ItemCount"
+                   name="ItemCount"
+                   disabled />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Item Condition</label>
+            <select [(ngModel)]="returnModel.ItemCondition"
+                    name="ItemCondition"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              <option value="0" disabled selected>Select Item Condition</option>
+              <option *ngFor="let item of returnItemTypeList" [value]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Return Date</label>
+            <input type="date"
+                   [(ngModel)]="returnModel.ReturnDate"
+                   name="ReturnDate"
+                   required
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Remarks</label>
+          <textarea placeholder="Optional"
+                    [(ngModel)]="returnModel.Remarks"
+                    name="Remarks"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </textarea>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="modal-footer flex justify-end gap-3 pt-4 border-t mt-2">
+      <button class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 text-sm mt-3" (click)="modal.dismiss()">Cancel</button>
+      <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm mt-3" (click)="confirmReturn()">Return Item</button>
+    </div>
+  </div>
+</ng-template>
 
 
+
+
+<!-- end row -->

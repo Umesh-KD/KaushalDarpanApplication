@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
-import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
 
@@ -24,6 +24,7 @@ export class AddItiIssueItemComponent {
   public request = new ItemsDataModels()
   public searchTradeRequest = new ITITradeSearchModel();
   public searchRequest = new DTEItemsSearchModel();
+  public submitRequest = new ItemsIssueReturnModels();
   public Searchrequests = new inventoryIssueHistorySearchModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -50,7 +51,9 @@ export class AddItiIssueItemComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
-  public ItemtypeList:any[]=[]
+  public ItemtypeList: any[] = []
+
+  public AllInTableSelect: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -58,7 +61,9 @@ export class AddItiIssueItemComponent {
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal,
     private routers: Router) { }
+
 
   async ngOnInit() {
 
@@ -79,7 +84,7 @@ export class AddItiIssueItemComponent {
 
     this.GetStaffDDL()
     this.GetTradeDDL()
-    this.GetCategoryDDL()
+    //this.GetCategoryDDL()
 
 
 
@@ -97,36 +102,20 @@ export class AddItiIssueItemComponent {
 
   async saveData() {
     debugger
-    this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
-    this.request.RoleID = this.sSOLoginDataModel.RoleID;
+    this.submitRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.submitRequest.UserId = this.sSOLoginDataModel.UserID;
     this.isSubmitted = true;
 
+    this.submitRequest.ItemList = this.ItemsDDLList.filter((x: any) => x.Selected);
 
- 
-    if (this.request.ItemType == 1) {
-      this.request.TradeId = 0
-      this.request.IsConsume=0
-    }
     //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
 
     try {
 
-      if (this.ItemId) {
-        this.request.ItemId = this.ItemId
-        this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      } else {
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      }
-      if (this.sSOLoginDataModel.RoleID == this._EnumRole.Principal_SCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal_NCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.DTETrainingT3Purchase ) {
-        this.request.Status = 1
-      } else {
-        this.request.Status = 0
-      }
-      await this.itiInventoryService.SaveItemsMaster(this.request)
+      await this.itiInventoryService.SaveIssueItems(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -134,8 +123,8 @@ export class AddItiIssueItemComponent {
 
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.ResetControl();
-            this.routers.navigate(['/iti-items-master-list']);
+            this.modalService.dismissAll();
+            this.routers.navigate(['/inventory-Issue-History']);
           }
           else if (this.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage)
@@ -203,125 +192,40 @@ export class AddItiIssueItemComponent {
     }
   }
 
-  async StaffMembers(InstituteID: number)
-  {
-    try {
-      this.loaderService.requestStarted();
-      await this.itiInventoryService.GetAllCategoryMaster()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          const selectOption = { ItemCategoryID: 0, Name: '--Select--' }; 
-          this.CategoryDDLList = [selectOption, ...data['Data']];
-          this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(0);  
-        });
-    } finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-  async ddlStaffMembers() {
-    debugger;
-    try {
-      this.loaderService.requestStarted();
-
-      this.searchRequest.CollegeId = this.InstituteID;
-      this.searchRequest.StatusID = 1;
-
-      await this.itiInventoryService.GetAllDDL(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          const selectOption = { StaffID: 0, Name: '--Select--' };
-          this.StaffDDLList = [selectOption, ...data['Data']];
-          //this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(0);
-        });
-    } finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-
-  //async ddlTradeList() {
-  //  try {
-  //    this.loaderService.requestStarted();
-
-  //    this.searchRequest.CollegeId = this.InstituteID;
-  //    this.searchRequest.TradeId = this.TradeId;
-  //    this.searchRequest.StatusID = 2;
-
-  //    const data: any = await this.itiInventoryService.GetAllDDL(this.searchRequest);
-  //    if (data && data.Data) {
-  //      const selectOption = { TradeId: 0, TradeName: '--Select--' };
-  //      this.TradeDDLList = [selectOption, ...data.Data];
-  //    } else {
-  //      this.TradeDDLList = [];
-  //    }
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-  //async ddlTrade_Change() {
-  //  try {
-  //    this.loaderService.requestStarted();
-
-  //    const TradeId = this.AddItemsRequestFormGroup.get('TradeId')?.value;
-  //    if (!TradeId || TradeId === 0) {
-  //      this.CatogaryDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
-  //      this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
-  //      return;
-  //    }
-
-  //    this.searchRequest.CollegeId = this.InstituteID;
-  //    this.searchRequest.StatusID = 3;
-  //    this.searchRequest.EquipmentsId = TradeId;   
-
-  //    const data: any = await this.itiInventoryService.GetAllDDL(this.searchRequest);
-  //    if (data && data.Data) {
-  //      const selectOption = { EquipmentsId: 0, Name: '--Select--' };
-  //      this.CatogaryDDLList = [selectOption, ...data.Data];
-  //    } else {
-  //      this.CatogaryDDLList = [];
-  //    }
-
-  //    this.DGET_Details();
-  //  } catch (Ex) {
-  //    console.log(Ex);
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
 
 
  
-  //async DGET_Details() {
+  async DGET_Details() {
     
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    debugger
-  //    //if (!TradeId || TradeId === 0) {
-  //    //  this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
-  //    //  this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
-  //    //  return;
-  //    //}
+    try {
+      this.loaderService.requestStarted();
+      debugger
+      //if (!TradeId || TradeId === 0) {
+      //  this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
+      //  this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
+      //  return;
+      //}
 
-  //    this.searchRequest.CollegeId = this.InstituteID;
-  //    this.searchRequest.TradeId = this.TradeId;
+      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
 
-  //    await this.itiInventoryService.GetConsumeItemList(this.searchRequest)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
+      await this.itiInventoryService.GetConsumeItemList(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
 
-  //        this.ItemsDDLList = data.Data;
+          this.ItemsDDLList = data.Data;
 
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
+
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
+  }
 
 
   getTradeNameById(id: any): string {
@@ -354,37 +258,88 @@ export class AddItiIssueItemComponent {
   }
 
 
+  selectInTableAllCheckbox(): void {
+    (this.ItemsDDLList ?? []).forEach((x: { Selected: boolean }) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+
+  selectInTableSingleCheckbox(isSelected: boolean, item: any): void {
+    const data = this.ItemsDDLList.find((x: any) => x.ItemDetailsId === item.ItemDetailsId);
+    if (data) {
+      data.Selected = isSelected;
+    }
+
+    this.AllInTableSelect = this.ItemsDDLList.every((r: any) => r.Selected);
+  }
+
+
+  ShowSubmit(content: any): void {
+    debugger;
+
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if (!anyTeamSelected) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+    if (this.Searchrequests.staffID == 0) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+  
+
+    this.submitRequest.StaffName = this.staffDDLList.find((x: any) => x.staffID == this.Searchrequests.staffID)?.staffName || '';
+    this.submitRequest.StaffId = this.Searchrequests.staffID;
+    this.submitRequest.TradeId = this.Searchrequests.TradeId;
+    this.submitRequest.ItemId = this.Searchrequests.ItemId;
+    this.submitRequest.Quantity = this.ItemsDDLList.filter((x: any) => x.Selected).length;
+
+
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
+  }
 
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.request = new ItemsDataModels();
+    this.Searchrequests = new inventoryIssueHistorySearchModel();
     this.AddItemsRequestFormGroup.reset({
       EquipmentsId: 0,
       ItemCategoryId: 0
     });
   }
 
+  CloseModalPopup() {
+
+    this.modalService.dismissAll();
+  }
+
 
 
   async GetStaffDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequests.TypeName = 'staffList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.staffDDLList = data.Data;
-        console.log('staff list ==>', this.staffDDLList);
 
-        if (this.staffDDLList.length > 0) {
-          this.Searchrequests.staffID = this.staffDDLList[0].staffID;
-          await this.GetTradeDDL(); 
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.staffDDLList = [
+          { staffID: 0, staffName: 'Choose Staff' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.staffID = 0;
+        console.log('staff list ==>', this.staffDDLList);
       } else {
-        this.staffDDLList = [];
+        this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+        this.Searchrequests.staffID = 0;
         this.toastr.error(data?.ErrorMessage || 'No staff found.');
       }
     } catch (Ex) {
@@ -395,24 +350,25 @@ export class AddItiIssueItemComponent {
   }
 
   async GetTradeDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-
       this.Searchrequests.TypeName = 'TradeList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.TradeDDLList = data.Data;
-        console.log('Trade list ==>', this.TradeDDLList);
 
-        if (this.TradeDDLList.length > 0) {
-          this.Searchrequests.collageTradeID = this.TradeDDLList[0].collageTradeID;
-          await this.GetCategoryDDL(); 
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.TradeDDLList = [
+          { TradeId: 0, TradeName: 'Choose Trade' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.TradeId = 0;
+        console.log('Trade list ==>', this.TradeDDLList);
       } else {
-        this.TradeDDLList = [];
+        this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
+        this.Searchrequests.TradeId = 0;
         this.toastr.error(data?.ErrorMessage || 'No trade found.');
       }
     } catch (Ex) {
@@ -423,23 +379,26 @@ export class AddItiIssueItemComponent {
   }
 
   async GetCategoryDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequests.TradeId = this.Searchrequests.TradeId;
       this.Searchrequests.TypeName = 'ItemList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.CategoryDDLList = data.Data;
-        console.log('category List ==>', this.CategoryDDLList);
 
-        if (this.CategoryDDLList.length > 0) {
-          this.Searchrequests.ItemId = this.CategoryDDLList[0].ItemId;
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.CategoryDDLList = [
+          { ItemId: 0, ItemCategoryName: 'Choose Category' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.ItemId = 0;
+        console.log('category list ==>', this.CategoryDDLList);
+        this.ItemsDDLList = [];
       } else {
-        this.CategoryDDLList = [];
+        this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
+        this.Searchrequests.ItemId = 0;
         this.toastr.error(data?.ErrorMessage || 'No category found.');
       }
     } catch (Ex) {
@@ -448,6 +407,5 @@ export class AddItiIssueItemComponent {
       setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
-
 
 }

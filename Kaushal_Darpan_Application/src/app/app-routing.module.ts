@@ -1359,7 +1359,11 @@ const routes: Routes = [
 
       
       { path: 'ExaminerBundleList', loadChildren: () => import('./Views/ITI/Examination/examiner-bundle-list/examiner-bundle-list.module').then(m => m.ExaminerBundleListModule) },
-
+      { path: 'JailAdmissionApply', loadChildren: () => import('./Views/ITI/Examination/jail-admission-apply/jail-admission-apply.module').then(m => m.JailAdmissionApplyModule) },
+      { path: 'JailAdmissionAllotment/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionAllotment10/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionAllotment12/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionReporting/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/jail-admission-reporting/jail-admission-reporting.module').then(m => m.JailAdmissionReportingModule) },
 
     ]
   },
@@ -1461,6 +1465,7 @@ const routes: Routes = [
   { path: 'Views\BTER\Student-Section-Incharge', loadChildren: () => import('./Views/BTER/student-section-incharge/student-section-incharge.module').then(m => m.StudentSectionInchargeModule) },
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
+
 
   
   

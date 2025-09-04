@@ -1,42 +1,44 @@
-  import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
-import { EnumConfigurationType, EnumCourseType, EnumCourseType1, EnumDepartment, EnumDirectAdmissionType, EnumRole, EnumStatus, EnumVerificationAction, GlobalConstants, JailCollegeID } from '../../../Common/GlobalConstants';
-import { VerificationDocumentDetailList } from '../../../Models/StudentVerificationDataModel';
+import { ChangeDetectorRef, Component, ViewChild } from '@angular/core';
+import {
+  EnumConfigurationType, EnumCourseType, EnumCourseType1, EnumDepartment, EnumDirectAdmissionType, EnumRole, EnumStatus,
+  EnumVerificationAction, GlobalConstants, JailCollegeID
+} from '../../../../Common/GlobalConstants';
+import { VerificationDocumentDetailList } from '../../../../Models/StudentVerificationDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { StudentSearchModel } from '../../../Models/StudentSearchModel';
-import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { StudentSearchModel } from '../../../../Models/StudentSearchModel';
+import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { CookieService } from 'ngx-cookie-service';
-import { LoaderService } from '../../../Services/Loader/loader.service';
-import { ApplicationStatusService } from '../../../Services/ApplicationStatus/EmitraApplicationStatus.service';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { ApplicationStatusService } from '../../../../Services/ApplicationStatus/EmitraApplicationStatus.service';
 import { ToastrService } from 'ngx-toastr';
-import { EmitraApplicationstatusModel } from '../../../Models/EmitraApplicationstatusDataModel';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { EmitraApplicationstatusModel } from '../../../../Models/EmitraApplicationstatusDataModel';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
-import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
-import { DocumentDetailsService } from '../../../Common/document-details';
-import { UploadBTERFileModel, UploadFileModel } from '../../../Models/UploadFileModel';
-import { StudentStatusHistoryComponent } from '../../Student/student-status-history/student-status-history.component';
-import { ReportService } from '../../../Services/Report/report.service';
+import { DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
+import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadFileModel';
+import { StudentStatusHistoryComponent } from '../../../Student/student-status-history/student-status-history.component';
+import { ReportService } from '../../../../Services/Report/report.service';
 import { HttpClient } from '@angular/common/http';
-import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
-import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { FormGroup } from '@angular/forms';
-import { DateConfigurationModel } from '../../../Models/DateConfigurationDataModels';
-import { DateConfigService } from '../../../Services/DateConfiguration/date-configuration.service';
-import { ItiApplicationSearchmodel } from '../../../Models/ItiApplicationPreviewDataModel';
-import { ItiApplicationService } from '../../../Services/ItiApplication/iti-application.service';
-import { ItiApplicationFormService } from '../../../Services/ItiApplicationForm/iti-application-form.service';
-import { ITI_DirectAdmissionApplyDataModel } from '../../../Models/ITIFormDataModel';
-
+import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';
+import { DateConfigService } from '../../../../Services/DateConfiguration/date-configuration.service';
+import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
+import { ItiApplicationService } from '../../../../Services/ItiApplication/iti-application.service';
+import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
+import { ITI_DirectAdmissionApplyDataModel } from '../../../../Models/ITIFormDataModel';
 @Component({
-  selector: 'app-application-list',
-  templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.css'],
-  standalone: false
+  selector: 'app-jail-admission-apply',
+  standalone: false,
+  templateUrl: './jail-admission-apply.component.html',
+  styleUrl: './jail-admission-apply.component.css'
 })
-export class ApplicationListComponent {
+export class JailAdmissionApplyComponent {
   public StreamMasterList: [] = [];
   public SemesterList: [] = [];
   public StreamID: number = 0;
@@ -68,38 +70,38 @@ export class ApplicationListComponent {
   dateConfiguration = new DateConfigurationModel();
   public AdmissionDateList: any = []
   public courseTypeList: any = []
-  public FromDate:string=''
+  public FromDate: string = ''
   public isITIAddmissionOpen: boolean = true
-  public CommonRemark:string=''
+  public CommonRemark: string = ''
   //Modal Boostrap.
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-  public overallRemark:any = '';
+  public overallRemark: any = '';
   public applyRequest = new ITI_DirectAdmissionApplyDataModel();
   DirectAdmissionApplicationID: number = 0
   public DateConfigSetting_Direct: any = [];
   DirectAdmissionMapKey: number = 0;
 
   constructor(
-    private loaderService: LoaderService, 
-    private encryptionService: EncryptionService, 
-    private commonservice: CommonFunctionService, 
+    private loaderService: LoaderService,
+    private encryptionService: EncryptionService,
+    private commonservice: CommonFunctionService,
     public appsettingConfig: AppsettingService,
-    private studentService: ApplicationStatusService, 
+    private studentService: ApplicationStatusService,
     private modalService: NgbModal,
-    private sMSMailService: SMSMailService, 
-    private cookieService: CookieService, 
-    private cdRef: ChangeDetectorRef, 
+    private sMSMailService: SMSMailService,
+    private cookieService: CookieService,
+    private cdRef: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
-    private documentDetailsService: DocumentDetailsService, 
+    private documentDetailsService: DocumentDetailsService,
     private reportService: ReportService,
-    private http: HttpClient, 
+    private http: HttpClient,
     private Swal2: SweetAlert2,
     private dateMasterService: DateConfigService,
     private toastrService: ToastrService,
     private route: Router,
     private toastr: ToastrService,
-    private itiApplicationService: ItiApplicationFormService, 
+    private itiApplicationService: ItiApplicationFormService,
   ) { }
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
@@ -148,8 +150,8 @@ export class ApplicationListComponent {
   }
 
   redirectApplication(item: any, action: number) {
-    
-    
+
+
 
     this.sSOLoginDataModel.Eng_NonEng = item.CourseType;
     this.sSOLoginDataModel.Eng_NonEngName = item.CourseTypeName;
@@ -182,7 +184,7 @@ export class ApplicationListComponent {
     } else {
       this.route.navigate(['/DirectDTEApplicationform']);
     }
-    
+
     //this.route.navigate(['/DirectDTEApplicationform']);
   }
 
@@ -195,11 +197,10 @@ export class ApplicationListComponent {
   }
   async GetAllDataActionWise() {
     this.isShowGrid = true;
-    
+
 
     this.StudentDetailsModelList = [];
-    if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
-    {
+    if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER) {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
@@ -211,32 +212,27 @@ export class ApplicationListComponent {
         //this.searchRequest.action = "_GetApplicationListForPrinciple_BTER";
         this.searchRequest.action = "_GetDirectApplicationListForPrinciple_BTER";
       }
-      else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
-      {
+      else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra) {
         this.searchRequest.InstituteID = 0
         this.searchRequest.DepartmentID = EnumDepartment.BTER;
         this.searchRequest.action = "_GetApplicationList";
       }
-      else
-      {
+      else {
         this.searchRequest.InstituteID = 0
         this.searchRequest.action = "_GetApplicationList";
       }
     }
-    else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
-    {
+    else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI) {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
       this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal ||
-        this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT)
-      {
+        this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
         this.searchRequest.action = "_GetApplicationListForPrinciple_ITI";
       }
-      else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
-      {
+      else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra) {
         this.searchRequest.InstituteID = 0
         this.searchRequest.DepartmentID = EnumDepartment.ITI;
         this.searchRequest.action = "_GetApplicationList";
@@ -247,8 +243,7 @@ export class ApplicationListComponent {
         this.searchRequest.action = "_GetApplicationList";
       }
     }
-    else
-    {
+    else {
       this.searchRequest.InstituteID = 0
       this.searchRequest.action = "_GetApplicationList";
     }
@@ -261,7 +256,7 @@ export class ApplicationListComponent {
     // }
     try {
       this.loaderService.requestStarted();
-      await this.studentService.StudentApplicationStatus(this.searchRequest)
+      await this.studentService.StudentJailAdmission(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
@@ -372,7 +367,7 @@ export class ApplicationListComponent {
         MinFileSize: item.MinFileSize ?? "",
         MaxFileSize: item.MaxFileSize ?? "",
         FolderName: item.FolderName ?? "",
-        IsCopy: true 
+        IsCopy: true
       }
       //call
 
@@ -585,22 +580,22 @@ export class ApplicationListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AdmissionDateList = data['Data'];
-          
+
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-          var lnth= this.AdmissionDateList.filter(function(x:any){return new Date(x.To_Date) > today && new Date(x.From_Date) < today &&  x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID}).length
-          if (lnth <= 0)
-          {
-        /*    this.toastrService.warning("Date for ITI Admission is Closed or Not Open");*/
+          debugger
+          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID }).length
+          if (lnth <= 0) {
+            /*    this.toastrService.warning("Date for ITI Admission is Closed or Not Open");*/
             this.isITIAddmissionOpen = false;
           }
 
           const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
           this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
-          console.log(this.FromDate,"from date")
-          
-          
+          console.log(this.FromDate, "from date")
+
+
 
           this.courseTypeList = this.courseTypeList.filter((course: any) => activeCourseID.includes(course.value));
         }, error => console.error(error));
@@ -611,7 +606,7 @@ export class ApplicationListComponent {
   }
 
 
-  async DownloadApplicationForm(ApplicationID:number) {
+  async DownloadApplicationForm(ApplicationID: number) {
     try {
       this.loaderService.requestStarted();
       this.downloadRequest.DepartmentID = EnumDepartment.ITI;
@@ -669,9 +664,9 @@ export class ApplicationListComponent {
           if (data.State == EnumStatus.Success) {
             // this.toastr.success(data.Message)
             this.DirectAdmissionApplicationID = data.Data
-            this.route.navigate(['/direct-admission-application-form'],{
-                queryParams: { AppID: this.encryptionService.encryptData(this.DirectAdmissionApplicationID) }
-              });
+            this.route.navigate(['/direct-admission-application-form'], {
+              queryParams: { AppID: this.encryptionService.encryptData(this.DirectAdmissionApplicationID) }
+            });
 
           } else if (data.State == EnumStatus.Warning) {
             this.toastr.success(data.Message)
@@ -681,17 +676,17 @@ export class ApplicationListComponent {
         }, (error: any) => console.error(error)
         );
     } catch (error) {
-      
+
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
-      }, 200) 
+      }, 200)
     }
   }
 
   async redirectToDirectAdmissionApplicationForm(row: any) {
-    
-    this.route.navigate(['/direct-admission-application-form'],{
+
+    this.route.navigate(['/direct-admission-application-form'], {
       queryParams: { AppID: this.encryptionService.encryptData(row.ApplicationID) }
     });
   }
@@ -701,7 +696,7 @@ export class ApplicationListComponent {
     var data = {
       DepartmentID: EnumDepartment.ITI,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
-      AcademicYearID:9 ,
+      AcademicYearID: 9,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Key: "DIRECT ADDMISSSION",
       SSOID: this.sSOLoginDataModel.SSOID
@@ -711,7 +706,7 @@ export class ApplicationListComponent {
         data = JSON.parse(JSON.stringify(data));
         this.DateConfigSetting_Direct = data['Data'][0];
         // this.DirectAdmissionMapKey = 1
-        this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];        
+        this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];
 
       }, (error: any) => console.error(error)
       );
