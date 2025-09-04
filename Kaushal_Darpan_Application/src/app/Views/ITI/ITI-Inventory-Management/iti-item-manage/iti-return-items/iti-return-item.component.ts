@@ -9,7 +9,7 @@ import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
 import { ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
