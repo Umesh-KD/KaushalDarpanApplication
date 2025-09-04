@@ -262,7 +262,7 @@ export class DirectPreviewFormComponent {
           this.loaderService.requestStarted();
           this.updatePaymentRequest.ApplicationId = this.request.ApplicationID
           this.updatePaymentRequest.DepartmentID = this.request.DepartmentID
-          await this.ApplicationService.JailAdmissionFinalSubmit(this.updatePaymentRequest)
+          await this.ApplicationService.DirectAdmissionPaymentUpdate(this.updatePaymentRequest)
             .then(async (data: any) => {
               data = JSON.parse(JSON.stringify(data));
               
@@ -665,9 +665,7 @@ export class DirectPreviewFormComponent {
     }
   }
 
-  async LockSubmit() {
 
-  }
 
   async SavePreview(content: any, ApplicationID: number)
   {

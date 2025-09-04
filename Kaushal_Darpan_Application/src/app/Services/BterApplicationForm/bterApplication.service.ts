@@ -232,7 +232,7 @@ export class BterApplicationForm {
       ).toPromise();
   }
 
-  public async JailAdmissionFinalSubmit(request: DirectAdmissionUpdatePayment) {
+  public async JailAdmissionFinalSubmit(request: any) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/JailAdmissionFinalSubmit`, body, this.headersOptions)
       .pipe(
