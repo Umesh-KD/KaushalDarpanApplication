@@ -78,9 +78,10 @@ export class PromotedStudentComponent {
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID
+
     //load
-    await this.GetMasterData();
     await this.GetDateConfig();
+    await this.GetMasterData();
   }
 
   async GetMasterData() {
@@ -119,7 +120,7 @@ export class PromotedStudentComponent {
             this.AllInTableSelect = false;
             this.prometedStudentData = data['Data'];
 
-            console.log("this.prometedStudentData",this.prometedStudentData);
+            console.log("this.prometedStudentData", this.prometedStudentData);
             //table feature load
             this.loadInTable();
             //end table feature load
@@ -136,7 +137,11 @@ export class PromotedStudentComponent {
 
   async btn_SearchClick() {
     try {
-      await this.GetPromotedStudent();
+      if (parseInt(this.request.SemesterID || "0") <= 0) {
+        this.toastr.error("Please select Semester/Year!.");
+        return;
+      }
+        await this.GetPromotedStudent();
     }
     catch (Ex) {
       console.log(Ex);
@@ -145,7 +150,7 @@ export class PromotedStudentComponent {
 
   async btn_Clear() {
     this.request = new PromotedStudentSearchModel();
-    this.GetPromotedStudent();
+    await this.GetPromotedStudent();
   }
 
   async sortInTableData(field: string) {
@@ -246,7 +251,7 @@ export class PromotedStudentComponent {
 
   exportToExcel(): void {
     const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Selected', 'status', 'StudentID',
-      'EndTermID', 'StreamID', 'SemesterID', 
+      'EndTermID', 'StreamID', 'SemesterID',
     ];
     const filteredData = this.prometedStudentData.map((item: any) => {
       const filteredItem: any = {};
@@ -314,7 +319,7 @@ export class PromotedStudentComponent {
     });
   }
   async GetDateConfig() {
-    
+
     var data = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
@@ -334,6 +339,12 @@ export class PromotedStudentComponent {
       }, (error: any) => console.error(error)
       );
   }
+
+  getSemesterDisplay(semesterId: any): number {
+    const id = parseInt(semesterId || 0);
+    return id > 0 ? id - 1 : id;
+  }
+
 }
 
 
