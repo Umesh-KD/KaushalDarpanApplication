@@ -105,3 +105,9 @@ export class ItemsDetails {
   public EquipmentCode: number = 0;
   public ItemDetailsId: number = 0;
 }
+export class itemReturnModel {
+  public ItemCount: number = 0;
+  public ItemCondition: number = 0;
+  public ReturnDate: string = '';
+  public Remarks: string = '';
+}
