@@ -60,13 +60,12 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex gap-2">
-        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="ItemMasterList && ItemMasterList.length > 0">
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
         </a>
         <a href="javascript:void(0);"
            (click)="openReturnModal(returnModal)"
-           class="btn bg-warning btn-sm text-white"
-           *ngIf="ItemMasterList && ItemMasterList.length > 0">
+           class="btn bg-warning btn-sm text-white">
           <i class="ti ti-rotate-ccw"></i> Return
         </a>
       </div>
@@ -108,23 +107,23 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of ItemMasterListt | tableSearchFilter:Table_SearchText; let idx=index;">
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">
               <input type="checkbox" [(ngModel)]="item.Selected" />
             </td>
-            <td align="left">{{idx+1}}</td>
-            <td align="left">Ramesh</td>
-            <td align="left">{{item.ItemCode}}</td>
-            <td align="left">5</td>
-            <td align="left">{{ today | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{ today | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{ today | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.IssueDate1 | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
               <span [ngClass]="{
-                    'status-issued': item.Status === 'Issued',
-                    'status-returned': item.Status === 'Returned'
-                  }">
-                {{ item.Status }}
+  'InvStatus-issued': item.InvStatus === 1,
+  'InvStatus-returned': item.InvStatus === 2
+}">
+                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
               </span>
             </td>
           </tr>
