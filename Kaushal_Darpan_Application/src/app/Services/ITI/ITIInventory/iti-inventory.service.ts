@@ -456,4 +456,12 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
+  public async SaveIssueItems(submitRequest: ItemsIssueReturnModels) {
+    const body = JSON.stringify(submitRequest);
+    return await this.http.post(this.APIUrl + '/SaveIssueItems', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
