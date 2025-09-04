@@ -22,10 +22,11 @@
 
 <div class="card" style=" overflow: visible;">
   <div class="card-body p-5">
-    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
-    </div>
     <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
+      <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
+      </div>
+
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
         <div>
@@ -34,7 +35,7 @@
           </label>
           <ng-select formControlName="StaffID" [(ngModel)]="request.StaffID" [items]="StaffDDLList" bindLabel="staffName"
                      bindValue="staffID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                   [loading]="isLoading" [loadingText]="'Loading...'">
+                     [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemType.errors" class="text-danger">
@@ -51,7 +52,7 @@
           </label>
           <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="TradeName"
                      bindValue="TradeId" placeholder="--Select--" [searchable]="true" [clearable]="false"
-                      (change)="ddlTrade_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
+                     (change)="ddlTrade_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
@@ -66,7 +67,7 @@
             Catogary List: <span class="StarMarking">*</span>
           </label>
           <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="CatogaryDDLList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" 
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
                      (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
             <ng-option *ngFor="let item of CatogaryDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
           </ng-select>
@@ -91,72 +92,76 @@
           </button>
         </div>
       </div>-->
-    </form>
 
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in Execl</a>
-        <select id="ddlConter" class="form-select couterDropDown me-2">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
+
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        <div class="flex justify-end flex-wrap items-center">
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ShowSubmit(Submit_Details)" >Issue Items</a>
+          <!--<select id="ddlConter" class="form-select couterDropDown me-2">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>-->
+        </div>
+
       </div>
 
-    </div>
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th>
+                <!--<input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />-->
+                <input type="checkbox" class="checkboxSize" />
+              </th>
+              <th class="text-left">Sr.No.</th>
+              <!--sorting column-->
+              <th class="text-left cursorHand" title="Click to sorting">
+                Item Code
 
-    <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th >
-              <input type="checkbox" class="checkboxSize"/>
-            </th>
-            <th class="text-left">Sr.No.</th>
-            <th class="text-center">Action</th>
-            <!--sorting column-->
-            <th class="text-left cursorHand" title="Click to sorting" >
-              Item Code
-            
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting">
-              Item Name
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Item Name
 
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
-              Equipment ID
-          
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
-              Catogary ID
-             
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting" >
-              Company Name
-          
-            </th>
-          
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Equipment Code
 
-          </tr>
-        </thead>
-        <tbody>
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Quantity
+              </th>
+              <!--<th class="text-left cursorHand" title="Click to sorting" >
+                Company Name
 
-          <tr *ngFor="let row of ItemsDDLList; let idx=index; ">
-
-            <td>{{row.ItemCode}}</td>
-            <td>{{row.Name}}</td>
-            <td>{{row.EquipmentName}}</td>
-            <td>{{row.CatogaryId}}</td>
-            <td>{{row.CompanyName}}</td>
-
-          </tr>
-        </tbody>
-      </table>
-    </div>
+              </th>-->
 
 
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let row of ItemsDDLList; let idx=index; ">
+              <td>
+                <input type="checkbox" class="checkboxSize" />
+                <!--<input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">-->
+              </td>
+              <td align="left">{{idx+1}}</td>
+
+              <td>{{row.ItemCode}}</td>
+              <td>{{row.ItemCategoryName}}</td>
+              <td>{{row.EquipmentsCode}}</td>
+              <td>{{row.Quantity}}</td>
+              <!--<td>{{row.CompanyName}}</td>-->
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </form>
 
   </div>
 </div>
@@ -164,6 +169,27 @@
 
 
 
+<ng-template #Submit_Details let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          
+
+          <div class="overflow-x-auto mt-3">
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 
 

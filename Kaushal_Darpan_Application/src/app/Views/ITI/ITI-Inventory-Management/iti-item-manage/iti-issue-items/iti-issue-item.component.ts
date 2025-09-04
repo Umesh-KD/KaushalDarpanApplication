@@ -47,7 +47,9 @@ export class AddItiIssueItemComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
-  public ItemtypeList:any[]=[]
+  public ItemtypeList: any[] = []
+
+  public AllInTableSelect: boolean = false;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -55,6 +57,7 @@ export class AddItiIssueItemComponent {
     private loaderService: LoaderService,
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
+    private modalService: NgbModal,
     private routers: Router) { }
 
   async ngOnInit() {
@@ -74,7 +77,7 @@ export class AddItiIssueItemComponent {
     await this.ddlStaffMembers();
     await this.ddlTradeList();
 
-
+    await this.DGET_Details();
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -127,7 +130,7 @@ export class AddItiIssueItemComponent {
 
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.ResetControl();
+           
             this.routers.navigate(['/iti-items-master-list']);
           }
           else if (this.State == EnumStatus.Warning) {
@@ -349,16 +352,33 @@ export class AddItiIssueItemComponent {
   }
 
 
+  ////checked all (replace org. list here)
+  //selectInTableAllCheckbox() {
+  //  this.CenterObserverData.forEach(x => {
+  //    x.Selected = this.AllInTableSelect;
+  //  });
+  //}
+  ////checked single (replace org. list here)
+  //selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+  //  const data = this.CenterObserverData.filter(x => x.DeploymentID == item.DeploymentID);
+  //  data.forEach((x: any) => {
+  //    x.Selected = isSelected;
+  //  });
+  //  //select all(toggle)
+  //  this.AllInTableSelect = this.CenterObserverData.every(r => r.Selected);
+  //}
+
+  async ShowSubmit(content: any) {
+
+    debugger;
+    //this.IIPManageTeamID = id
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'l', keyboard: true, centered: true });
 
 
-  async ResetControl() {
-    this.isSubmitted = false;
-    this.request = new ItemsDataModels();
-    this.AddItemsRequestFormGroup.reset({
-      EquipmentsId: 0,
-      ItemCategoryId: 0
-    });
   }
-
+  CloseModalPopup() {
+    this.modalService.dismissAll();
+  }
 
 }
