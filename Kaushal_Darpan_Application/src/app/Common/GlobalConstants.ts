@@ -445,7 +445,16 @@ export enum EnumDispatchDDlValue {
   VerifyByExaminer=20
 }
 
-export const JailCollegeID = [44, 116, 157, 158, 234, 235, 236, 237, 239,36];
+export const JailCollegeID = [36,
+108,
+149,
+150,
+
+226,
+227,
+228,
+229,
+22196];
 
 export enum EnumRenumerationExaminer
 {

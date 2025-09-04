@@ -56,6 +56,9 @@
           </div>
         </div>
 
+
+
+
         <div>
           <label for="txtParentsincomefromallsources"
                  class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -81,7 +84,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="!IsJailAdmission">
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
             आईटीआई
             का नाम (Name of ITI): <span class="StarMarking">*</span>
@@ -100,6 +103,26 @@
           </div>
         </div>
 
+
+
+        <div *ngIf="IsJailAdmission" >
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            आईटीआई
+            का नाम (Name of ITI): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" name="ddlITI" id="ddlInstitute" formControlName="ddlInstitute"
+                  [(ngModel)]="formData.InstituteID" (change)="GetTradeListDDL()">
+            <option value="0">--Choose Option--</option>
+            <option *ngFor="let item of ItiCollegesList" value="{{item.InstituteID}}">
+              {{item.InstituteName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.ddlInstitute.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.ddlInstitute.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
 
 
         <div>
@@ -122,7 +145,14 @@
           </div>
         </div>
 
-        <div class="pt-30">
+        <div class="pt-30"
+             *ngIf="IsJailAdmission && !(
+             (AddedChoices8?.length>
+          0) ||
+          (AddedChoices10?.length > 0) ||
+          (AddedChoices12?.length > 0) ||
+          (AddedChoices?.length > 0)
+          )">
           <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
             <i class="ti ti-plus"></i> Add
             Choice
