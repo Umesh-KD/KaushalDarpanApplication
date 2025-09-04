@@ -15,51 +15,49 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
-                    >
-              <option value="0">--All--</option>
-              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
-                {{item.InstituteName}}
-              </option>
-            </select>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+              {{item.InstituteName}}
+            </option>
+          </select>
 
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
-            <select class="form-select" id="StudentExamStreamId" [(ngModel)]="request.StreamID"
-                   >
-              <option value="0">--All--</option>
-              <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-            <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bridge Course</label>
-            <select class="form-select" id="IsBridge" [(ngModel)]="request.IsBridge">
-              <option value="">--All--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
-
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
-          </div>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
+          <select class="form-select" id="StudentExamStreamId" [(ngModel)]="request.StreamID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester/Year</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bridge Course</label>
+          <select class="form-select" id="IsBridge" [(ngModel)]="request.IsBridge">
+            <option value="">--All--</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+        </div>
+      </div>
 
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -78,7 +76,7 @@
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
 
       <div>
-        <button type="button" class="btn bg-info text-white inline-block" (click)="SavePromoteStudent()">Promote to Next Sem.</button><!--*ngIf="MapKeyEng == 1"-->
+        <button type="button" *ngIf="MapKeyEng == 1 && (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" class="btn bg-info text-white inline-block" (click)="SavePromoteStudent()">Promote</button><!--*ngIf="MapKeyEng == 1"-->
         &nbsp;<span class="me-3" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
     </div>
@@ -100,10 +98,10 @@
               Father Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='FatherName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ApplicationNo')">
+            <!--<th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ApplicationNo')">
               Application No.
               <span class="shortingSpan" *ngIf="sortInTableColumn=='ApplicationNo'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EnrollmentNo')">
               Enrollment No.
               <span class="shortingSpan" *ngIf="sortInTableColumn=='EnrollmentNo'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -112,14 +110,14 @@
               DOB.
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Dis_DOB'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('RollNo')">
+            <!--<th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('RollNo')">
               Roll No.
               <span class="shortingSpan" *ngIf="sortInTableColumn=='RollNo'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('MobileNo')">
               Mobile No.
               <span class="shortingSpan" *ngIf="sortInTableColumn=='MobileNo'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('InstituteName')">
               Institute
               <span class="shortingSpan" *ngIf="sortInTableColumn=='InstituteName'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -136,6 +134,32 @@
               Bridge Course
               <span class="shortingSpan" *ngIf="sortInTableColumn=='IsBridge'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EarnedCreditsSem1')">
+              Earned Credits Sem. {{ getSemesterDisplay(request.SemesterID) }}
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EarnedCreditsSem1'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EarnedCreditsSem2')">
+              Earned Credits Sem. {{request.SemesterID}}
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EarnedCreditsSem2'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('TotalEarnedCredits')">
+              Total Earned Credits
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='TotalEarnedCredits'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Detain')">
+              Detain
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='Detain'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('UFM')">
+              UFM
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='UFM'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('UFMCategory')">
+              UFM Category
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='UFMCategory'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+
           </tr>
         </thead>
         <tbody>
@@ -147,15 +171,24 @@
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{row.StudentName}}</td>
             <td>{{row.FatherName}}</td>
-            <td>{{row.ApplicationNo}}</td>
+            <!--<td>{{row.ApplicationNo}}</td>-->
+
             <td>{{row.EnrollmentNo}}</td>
             <td>{{row.Dis_DOB}}</td>
-            <td>{{row.RollNo}}</td>
-            <td>{{row.MobileNo}}</td>
-            <td>{{row.InstituteName}}, {{row.DistrictName}}</td>
+            <!--<td>{{row.RollNo}}</td>
+            <td>{{row.MobileNo}}</td>-->
+            <td>{{row.InstituteName}}</td>
             <td>{{row.BranchName}}</td>
             <td>{{row.SemesterName}}</td>
             <td>{{row.IsBridge==true?'Yes':'No'}}</td>
+
+            <td>{{row.EarnedCreditsSem1}}</td>
+            <td>{{row.EarnedCreditsSem2}}</td>
+            <td>{{row.TotalEarnedCredits}}</td>
+            <td>{{row.Detain}}</td>
+            <td>{{row.UFM}}</td>
+            <td>{{row.UFMCategory}}</td>
+
           </tr>
         </tbody>
       </table>
