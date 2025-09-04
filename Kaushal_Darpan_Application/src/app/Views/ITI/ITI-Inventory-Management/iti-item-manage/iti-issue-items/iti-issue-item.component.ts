@@ -367,24 +367,31 @@ export class AddItiIssueItemComponent {
 
 
 
+  
+
+  
+
+
   async GetStaffDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequests.TypeName = 'staffList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.staffDDLList = data.Data;
-        console.log('staff list ==>', this.staffDDLList);
 
-        if (this.staffDDLList.length > 0) {
-          this.Searchrequests.staffID = this.staffDDLList[0].staffID;
-          await this.GetTradeDDL(); 
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.staffDDLList = [
+          { staffID: 0, staffName: 'Choose Staff' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.staffID = 0;
+        console.log('staff list ==>', this.staffDDLList);
       } else {
-        this.staffDDLList = [];
+        this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+        this.Searchrequests.staffID = 0;
         this.toastr.error(data?.ErrorMessage || 'No staff found.');
       }
     } catch (Ex) {
@@ -395,24 +402,25 @@ export class AddItiIssueItemComponent {
   }
 
   async GetTradeDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-
       this.Searchrequests.TypeName = 'TradeList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.TradeDDLList = data.Data;
-        console.log('Trade list ==>', this.TradeDDLList);
 
-        if (this.TradeDDLList.length > 0) {
-          this.Searchrequests.collageTradeID = this.TradeDDLList[0].collageTradeID;
-          await this.GetCategoryDDL(); 
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.TradeDDLList = [
+          { TradeId: 0, TradeName: 'Choose Trade' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.TradeId = 0;
+        console.log('Trade list ==>', this.TradeDDLList);
       } else {
-        this.TradeDDLList = [];
+        this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
+        this.Searchrequests.TradeId = 0;
         this.toastr.error(data?.ErrorMessage || 'No trade found.');
       }
     } catch (Ex) {
@@ -423,23 +431,25 @@ export class AddItiIssueItemComponent {
   }
 
   async GetCategoryDDL() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequests.TradeId = this.Searchrequests.TradeId;
       this.Searchrequests.TypeName = 'ItemList';
 
       const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-      if (data && data.State === EnumStatus.Success) {
-        this.CategoryDDLList = data.Data;
-        console.log('category List ==>', this.CategoryDDLList);
 
-        if (this.CategoryDDLList.length > 0) {
-          this.Searchrequests.ItemId = this.CategoryDDLList[0].ItemId;
-        }
+      if (data && data.State === EnumStatus.Success) {
+        this.CategoryDDLList = [
+          { ItemId: 0, ItemCategoryName: 'Choose Category' },
+          ...data.Data
+        ];
+
+        this.Searchrequests.ItemId = 0;
+        console.log('category list ==>', this.CategoryDDLList);
       } else {
-        this.CategoryDDLList = [];
+        this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
+        this.Searchrequests.ItemId = 0;
         this.toastr.error(data?.ErrorMessage || 'No category found.');
       }
     } catch (Ex) {
@@ -448,6 +458,8 @@ export class AddItiIssueItemComponent {
       setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
+
+
 
 
 }
