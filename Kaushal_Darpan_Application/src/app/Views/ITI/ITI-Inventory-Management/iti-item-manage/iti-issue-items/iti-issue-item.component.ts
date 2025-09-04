@@ -379,7 +379,7 @@ export class AddItiIssueItemComponent {
     //this.IIPManageTeamID = id
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'l', keyboard: true, centered: true });
-
+  }
   async ResetControl() {
     this.isSubmitted = false;
     this.Searchrequests = new inventoryIssueHistorySearchModel();
