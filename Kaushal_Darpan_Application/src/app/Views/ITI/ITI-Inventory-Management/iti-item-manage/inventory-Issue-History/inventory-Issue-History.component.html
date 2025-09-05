@@ -24,12 +24,12 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <!--<select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-          (change)="GetTradeDDL()">
-    <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-      {{ item.staffName }}
-    </option>
-  </select>-->
-          <select  class="form-select"  [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
+                (change)="GetTradeDDL()">
+          <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+            {{ item.staffName }}
+          </option>
+        </select>-->
+          <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
             <option *ngFor="let s of staffDDLList" [value]="s.staffID">
               {{s.staffName}}
             </option>
@@ -68,7 +68,7 @@
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
         </a>
-        
+
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -88,7 +88,8 @@
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div>
     </div>
-    <div class="overflow-x-auto mt-3"> 
+    <!--{{ItemMasterList | json}}-->
+    <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
@@ -113,9 +114,9 @@
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
               <span [ngClass]="{
-      'InvStatus-issued': item.InvStatus === 1,
-      'InvStatus-returned': item.InvStatus === 2
-    }">
+                                 'InvStatus-issued': item.InvStatus === 1,
+                                 'InvStatus-returned': item.InvStatus === 2
+                               }">
                 {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
               </span>
             </td>
