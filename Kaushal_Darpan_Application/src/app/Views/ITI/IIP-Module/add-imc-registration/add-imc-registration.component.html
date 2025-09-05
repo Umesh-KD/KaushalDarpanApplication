@@ -64,6 +64,10 @@
 
             <div>
               <input class="form-input" type="file" [(ngModel)]="formData.RegLink" (change)="onFileSelected($event, 'RegLink')" required #RegLink="ngModel" name="RegLink">
+              <!--<label for="FileName" (click)="fileInput.click()">
+                <ng-container *ngIf="documentDetails.length > 0">{{documentDetails[0].FileName}}</ng-container>
+                <span>Choose File</span>
+              </label>-->
               <div class="text-red-500 text-sm" *ngIf="RegLink.invalid && (RegLink.dirty || RegLink.touched)">
                 <div *ngIf="RegLink.errors?.['required']"> This field is required .!</div>
               </div>
@@ -155,29 +159,24 @@
 
                 <!-- Action -->
                 <td class="p-2 border text-center">
-                  <!-- Show buttons only if MemberTypeName === Industry Representative -->
-                  <!--<ng-container *ngIf="item.MemberTypeName == 'Chairman'">
+                  <ng-container *ngIf="item.MemberTypeName == 'Chairman'">
                     <div class="flex">
-
                       <div>
-                        <input class="form-input" type="file" [(ngModel)]="item.MemberFile" (change)="onFileSelected($event, 'MemberFile{{i}}')" required name="MemberFile{{i}}" placeholder="eeee">
-                        
+                        <input class="form-input" type="file" [(ngModel)]="item.MemberFile" (change)="onFileSelected($event, 'MemberFile',item)" required name="MemberFile{{i}}" placeholder="eeee">
                       </div>
                       <div>
                         <button type="button"
                                 class="btn bg-primary btn-sm text-white"
-                                (click)="previewFile()"
-                                [disabled]="!selectedFileUrl">
+                                (click)="previewMemberFile()"
+                                [disabled]="!selectedMemeberFileUrl">
                           <i class="ti ti-eye"></i>
                         </button>
                       </div>
-
                     </div>
 
-                  </ng-container>-->
+                  </ng-container>
                   <ng-container *ngIf="item.MemberTypeName == 'Industry representative'">
-                    <button *ngIf="i==7" type="button" class="btn btn-sm bg-info text-white"
-                            (click)="addRepresentive()">
+                    <button *ngIf="i==7" type="button" class="btn btn-sm bg-info text-white" (click)="addRepresentive()">
                       <span class="fa fa-plus"></span> Add More
                     </button>
                     <button type="button" class="btn btn-sm bg-danger text-white ml-2"

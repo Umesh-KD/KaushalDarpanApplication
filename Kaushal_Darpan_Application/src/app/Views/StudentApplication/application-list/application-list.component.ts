@@ -572,7 +572,7 @@ export class ApplicationListComponent {
       );
     } else if (key == EnumDirectAdmissionType.JailAdmission) {
       this.CloseModal()
-      this.route.navigate(['/StudentJanAadharDetail'],
+      this.route.navigate(['/iti-direct-admission-student-initial-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isJailAdmission: this.encryptionService.encryptData(true) } });
     }
   }

@@ -127,10 +127,7 @@ export class RosteListComponent implements OnInit {
       AttendanceStartTime: ['09:00', Validators.required],
       AttendanceEndTime: ['10:00', Validators.required]
     });
-     this.commonMasterService.SemesterMaster().then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.SemesterMasterDDL = data.Data;
-    })
+    
     this.getMasterData();
     this.GetAllRosterDisplay();
     
@@ -146,8 +143,13 @@ export class RosteListComponent implements OnInit {
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StreamMasterDDL = data.Data;
+        this.cd.detectChanges();
       })
-     
+      await this.commonMasterService.SemesterMaster().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SemesterMasterDDL = data.Data;
+        this.cd.detectChanges();
+      })
       //await this.commonMasterService.GetDistrictMaster().then((data: any) => {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.DistrictMasterDDL = data.Data;

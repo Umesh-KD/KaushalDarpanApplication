@@ -514,6 +514,10 @@ const routes: Routes = [
       { path: 'iti-HOD-DTEEquipmentVerifications', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipment-verifications-mapping-list/iti-equipment-verifications-mapping-list.module').then(m => m.ITIEquipmentVerificationsMappingListModule) },
       { path: 'iti-auction-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-list/iti-auction-list.module').then(m => m.ITIAuctionListModule) },
 
+      { path: 'iti-issue-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-items/iti-issue-item.module').then(m => m.AddItiIssueItemModule) },
+      { path: 'iti-return-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-return-items/iti-return-item.module').then(m => m.AddItiReturnItemModule) },
+
+
       /*ITI-Inventory-Management-END*/
 
       /*BTER-DTE-Inventory-Management*/
@@ -719,6 +723,7 @@ const routes: Routes = [
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
       { path: 'HostelReports', loadChildren: () => import('./Views/Hostel-Management/hostel-reports/hostel-reports.module').then(m => m.HostelReportsModule) },
       { path: 'HostelDashboard', loadChildren: () => import('./Views/Hostel-Management/hostel-dashboard/hostel-dashboard.module').then(m => m.HostelDashboardModule) },
+      { path: 'direct-hostel-allotment', loadChildren: () => import('./Views/Hostel-Management/direct-hostel-allotment/direct-hostel-allotment.module').then(m => m.DirectHostelAllotmentModule), title: 'Direct Hostel Allotment' },
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },
@@ -1308,6 +1313,7 @@ const routes: Routes = [
       //{ path: 'inspection-team', loadChildren: () => import('./Views/ITI/Inspection/inspection-team/inspection-team.module').then(m => m.InspectionTeamModule), title: 'ITI Inspection' },
       //{ path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-iip-manage', loadChildren: () => import('./Views/ITI/IIP-Module/iip-manage/iip-manage.module').then(m => m.ITIIIPManageModule), title: 'ITI IIP Manage' },
+      { path: 'iti-iip-admin-report', loadChildren: () => import('./Views/ITI/IIP-Module/iip-admin-report/iip-admin-report.module').then(m => m.ITIIIPAdminReportModule), title: 'ITI IIP Manage' },
       //{ path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
@@ -1328,6 +1334,7 @@ const routes: Routes = [
         { path: 'IDFFundDetailList', loadChildren: () => import('./Views/ITI/idffund-detail-list/idffund-detail-list.module').then(m => m.IDFFundDetailListModule) },
 
       { path: 'iti-dead-stock-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-dead-stock-report/iti-dead-stock-report.module').then(m => m.itideadstockreportModule) },
+      { path: 'inventory-Issue-History', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/inventory-Issue-History/inventory-Issue-History.module').then(m => m.inventoryIssueHistoryModule), title:'Inventory Issue History'},
       { path: 'iti-auction-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-auction-report/iti-auction-report.module').then(m => m.itiauctionreportModule) },
 
       { path: 'NcvtDataBulkUpload', loadChildren: () => import('./Views/ITI/ncvt-data-bulk-upload/ncvt-data-bulk-upload.module').then(m => m.NcvtDataBulkUploadModule) },
@@ -1352,7 +1359,11 @@ const routes: Routes = [
 
       
       { path: 'ExaminerBundleList', loadChildren: () => import('./Views/ITI/Examination/examiner-bundle-list/examiner-bundle-list.module').then(m => m.ExaminerBundleListModule) },
-
+      { path: 'JailAdmissionApply', loadChildren: () => import('./Views/ITI/Examination/jail-admission-apply/jail-admission-apply.module').then(m => m.JailAdmissionApplyModule) },
+      { path: 'JailAdmissionAllotment/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionAllotment10/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionAllotment12/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
+      { path: 'JailAdmissionReporting/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/jail-admission-reporting/jail-admission-reporting.module').then(m => m.JailAdmissionReportingModule) },
 
     ]
   },
@@ -1454,6 +1465,7 @@ const routes: Routes = [
   { path: 'Views\BTER\Student-Section-Incharge', loadChildren: () => import('./Views/BTER/student-section-incharge/student-section-incharge.module').then(m => m.StudentSectionInchargeModule) },
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
+
 
   
   

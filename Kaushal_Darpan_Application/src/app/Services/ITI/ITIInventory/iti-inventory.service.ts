@@ -9,7 +9,7 @@ import { DTEEquipmentsDataModel } from '../../../Models/DTEInventory/DTEEquipmen
 import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
 import { DTEInventoryDashboardDataModel } from '../../../Models/DTEInventory/DTEInventoryDashboardDataModel';
 import { DTEIssuedSearchModel, DTEReturnItemSearchModel, DTEIssuedItemDataModel, DTEStoksSearchModel, ReturnDteItemDataModel } from '../../../Models/DTEInventory/DTEIssuedItemDataModel';
-import { DTEItemsSearchModel, DTEItemsDataModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -413,5 +413,64 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAllDDL(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllDDL`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetConsumeItemList(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetConsumeItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAllinventoryIssueHistory(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistory`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAll_INV_GetCommonIssueDDL(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_GetCommonIssueDDL`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAll_INV_returnItem(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItem`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveIssueItems(submitRequest: ItemsIssueReturnModels) {
+    const body = JSON.stringify(submitRequest);
+    return await this.http.post(this.APIUrl + '/SaveIssueItems', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetInventoryIssueItemList(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInventoryIssueItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

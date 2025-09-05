@@ -7,12 +7,13 @@
       <span class="material-symbols-rounded float-end text-3xl text-default-400">{{row.DasbhoardIcon}}</span>
       <h6 class="text-muted text-sm uppercase">{{row.StatusText}}</h6>
       <h3 class="text-2xl mb-3" data-plugin="counterup">{{row.TotalCount}}</h3>
-      <a routerLink="/{{row.RedirectURL}}" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+      <a  [routerLink]="['/' + row.RedirectURL]" [queryParams]="{ status: row.Status }"
+        class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
     </div>
   </div>
 </div>
 
-
+<!-- routerLink="/{{row.RedirectURL}}" change from a tag by Ramesh on 03-09-2025  -->  
 
 <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">

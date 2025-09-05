@@ -45,7 +45,7 @@ export class ITIIIPManageComponent {
 
   modalReference: NgbModalRef | undefined;
   modalReference1: NgbModalRef | undefined;
-
+  selectedFileUrl: string | null = null;
   closeResult: string | undefined;
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
@@ -114,6 +114,8 @@ export class ITIIIPManageComponent {
           this.IIPManageData = data.Data.Table;
           this.IIPMembersData = data.Data.Table1;
           this.IIPFundData = data.Data.Table2;
+
+          this.selectedFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.IIPMembersData[0].MemberFile;
 
           if (this.IIPManageData.length > 0) {
             this.NewRegistrationDisable = true;
@@ -339,6 +341,13 @@ export class ITIIIPManageComponent {
         }, 200)
       }
 
+  }
+
+  previewFile() {
+
+    if (this.selectedFileUrl) {
+      window.open(this.selectedFileUrl, '_blank'); // open file in new tab
+    }
   }
 
 }

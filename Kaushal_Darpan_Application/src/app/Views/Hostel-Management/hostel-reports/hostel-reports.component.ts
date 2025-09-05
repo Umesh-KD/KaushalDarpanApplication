@@ -8,8 +8,10 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
+import { DeallocateRoomDataModel, StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
 import * as XLSX from 'xlsx';
+import { EnumStatus } from '../../../Common/GlobalConstants';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-hostel-reports',
@@ -37,8 +39,8 @@ export class HostelReportsComponent {
   public SemesterDDLList: any = [];
   public BrachDDLList: any = [];
   public titleDDLBranchTrade: string = ''
-
-
+  public status: number = 0
+  public deallocateRequest = new DeallocateRoomDataModel();
 
   constructor(
     private toastr: ToastrService,
@@ -54,6 +56,7 @@ export class HostelReportsComponent {
 
   async ngOnInit() {
     this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.status = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
 
@@ -64,15 +67,19 @@ export class HostelReportsComponent {
       this.titleDDLBranchTrade = 'Trade'
     }
 
+    if(this.status) {
+      this.Searchrequest.status = this.status
+    }
+
     //this.RequestFormGroup = this.formBuilder.group({
     //  StudentName: [''],
     //  ClassPercentage: [''],
     //  StreamName: ['']
     //});
-    await this.GetReportData();
+    
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
-
+    await this.GetReportData();
   }
 
   async GetReportData() {
@@ -204,4 +211,94 @@ export class HostelReportsComponent {
     XLSX.writeFile(wb, 'HostelAllotedRoomAndSeatReportData.xlsx');
   }
 
+  
+
+  async deallocationRoomRemark(item: any) {
+    this.Swal2.Confirmation("Are you sure you want to Deallocate this  ?",
+    async (result: any) => {
+      
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Deallocate Room ',
+          input: 'textarea',
+          inputLabel: 'Remark',
+          inputPlaceholder: 'Enter your remark here...',
+          inputAttributes: {
+            'aria-label': 'Type your remark here'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Save Remark',
+          cancelButtonText: 'Cancel'
+        }).then(async (result: any) => {
+          if (result.isConfirmed && result.value?.trim()) {
+            const remark = result.value.trim();
+            await this.DeallocateRoom(item, remark);
+          } else if (result.isConfirmed && !result.value?.trim()) {
+            this.toastr.warning('Remark is required.');
+          }
+        });
+      }
+    })
+    
+  }
+
+  async DeallocateRoom(item: any, remark: string = '') {
+    
+    this.deallocateRequest.AllotSeatId = item.AllotSeatId
+    this.deallocateRequest.ReqId = item.ReqId
+    this.deallocateRequest.Remark = remark
+    this.deallocateRequest.RoleID = this.sSOLoginDataModel.RoleID
+    this.deallocateRequest.UserID = this.sSOLoginDataModel.UserID
+    this.deallocateRequest.Action = 'DeallocateStudent'
+
+    try {
+      
+      await this.studentRequestService.DeallocateRoom(this.deallocateRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.GetReportData();
+        }
+        else {
+          this.toastr.error(data.ErrorMessage);
+        }
+        
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async DeallocateRoom_EnrollCancelStudent(item: any) {
+
+    this.Swal2.Confirmation("Are you sure you want to Deallocate this  ?",
+    async (result: any) => {
+      
+      if (result.isConfirmed) {
+        this.deallocateRequest.AllotSeatId = item.AllotSeatId
+        this.deallocateRequest.ReqId = item.ReqId
+        this.deallocateRequest.RoleID = this.sSOLoginDataModel.RoleID
+        this.deallocateRequest.UserID = this.sSOLoginDataModel.UserID
+        this.deallocateRequest.Action = 'EnrollCancelledDeallocate'
+
+        try {
+          
+          await this.studentRequestService.DeallocateRoom(this.deallocateRequest).then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if(data.State == EnumStatus.Success) {
+              this.toastr.success(data.Message);
+              this.GetReportData();
+            }
+            else {
+              this.toastr.error(data.ErrorMessage);
+            }
+            
+          })
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    })
+    
+  }
 }

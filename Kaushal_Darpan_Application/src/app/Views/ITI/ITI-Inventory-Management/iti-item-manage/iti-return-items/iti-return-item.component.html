@@ -1,0 +1,211 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Inventory Return Item</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
+                  (change)="GetAllData()">
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
+          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
+                  (change)="GetCategoryDDL()">
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
+              {{ item.TradeName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+              {{ item.ItemCategoryName }}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex gap-2">
+        <!--<a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>-->
+        <a href="javascript:void(0);"
+           (click)="openReturnModal(returnModal)"
+           class="btn bg-warning btn-sm text-white">
+          <i class="ti ti-rotate-ccw"></i> Return
+        </a>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+
+      <!--{{ItemMasterList | json}}-->
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">
+              <input type="checkbox" (change)="toggleAll($event)" />  select All
+            </th>
+            <th class="text-left">SNO</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Item</th>
+            <th class="text-left">Qty</th>
+            <th class="text-left">Issue Date</th>
+            <th class="text-left">Due Date</th>
+            <th class="text-left">Return Date</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+            <td align="left">
+              <input type="checkbox" [(ngModel)]="item.Selected" />
+            </td>
+            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ item.Name}}</td>
+            <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+            <td align="left">
+              <span [ngClass]="{
+  'InvStatus-issued': item.InvStatus === 1,
+  'InvStatus-returned': item.InvStatus === 2
+}">
+                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="10" class="text-center">
+              No Record Found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #returnModal let-modal>
+  <div class="modal-content bg-white rounded-xl shadow-xl p-6 w-full max-w-3xl mx-auto">
+
+    <div class="flex justify-between items-center border-b pb-3 mb-4">
+      <h5 class="text-lg font-semibold text-gray-700">Return Item</h5>
+      <button type="button" class="text-gray-500 hover:text-gray-700" (click)="modal.dismiss()">
+        ✕
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form #returnForm="ngForm" class="space-y-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Item Count</label>
+            <input type="text"
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-sm"
+                   [(ngModel)]="returnModel.ItemCount"
+                   name="ItemCount"
+                   disabled />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Item Condition</label>
+            <select [(ngModel)]="returnModel.ItemCondition"
+                    name="ItemCondition"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+              <option value="0" disabled selected>Select Item Condition</option>
+              <option *ngFor="let item of returnItemTypeList" [value]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Return Date</label>
+            <input type="date"
+                   [(ngModel)]="returnModel.ReturnDate"
+                   name="ReturnDate"
+                   required
+                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">Remarks</label>
+          <textarea placeholder="Optional"
+                    [(ngModel)]="returnModel.Remarks"
+                    name="Remarks"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+          </textarea>
+        </div>
+
+      </form>
+    </div>
+
+    <div class="modal-footer flex justify-end gap-3 pt-4 border-t mt-2">
+      <button class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 text-sm mt-3" (click)="modal.dismiss()">Cancel</button>
+      <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm mt-3" (click)="confirmReturn()">Return Item</button>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<!-- end row -->
