@@ -17,6 +17,9 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 import { BTERSectionAddDataModel } from '../../Models/BTER/BTERSectionAddDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { LoaderService } from '../../Services/Loader/loader.service';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { AttendanceServiceService } from '../../Services/AttendanceServices/attendance-service.service';
+import { RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
 
 @Component({
   selector: 'app-roste-list',
@@ -43,9 +46,14 @@ export class RosteListComponent implements OnInit {
   DistrictMasterDDL: any[] = [];
   ExaminerDDL: any[] = [];
   allSections: any[] = [];
+  timeColumns: string[] = [];
   InstituteName!: string;
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
+  _RosterDisplayTimeTableDataModel = new RosterDisplayTimeTableDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
   checkedAll: boolean = false;
   // Pagination related variables
@@ -64,6 +72,12 @@ export class RosteListComponent implements OnInit {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  modalRef1: NgbModalRef | null = null;
+  closeResult: string | undefined;
+  totalRecord1 = 0;
+  dataSource1!: MatTableDataSource<any>;
+  GetGenerateTimetableData: any = [];
+  @ViewChild('paginator1') paginator1!: MatPaginator;
   filterModel: any = {
     StaffID: 0,
     StreamID: 0,
@@ -86,7 +100,10 @@ export class RosteListComponent implements OnInit {
     private Swal2: SweetAlert2,
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService,
-    private cd: ChangeDetectorRef) {
+    private modalService: NgbModal,
+    private cd: ChangeDetectorRef,
+    private attendanceServiceService: AttendanceServiceService,
+  ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.InstituteName = this.sSOLoginDataModel.FirstName;
 
@@ -392,8 +409,148 @@ export class RosteListComponent implements OnInit {
 
 
 
+  async GenerateTimetableData(content: any) {
+    this.isSubmitted = true;
+    debugger
+    // Open only once, store reference
+    this.modalRef1 = this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    });
 
- 
+    // Handle result or dismissal
+    this.modalRef1.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+   
+       
+
+        this._RosterDisplayTimeTableDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+        this._RosterDisplayTimeTableDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+        this._RosterDisplayTimeTableDataModel.SemesterID = 0;
+        this._RosterDisplayTimeTableDataModel.StreamID = 0;
+        this._RosterDisplayTimeTableDataModel.SubjectID = 0;
+        await this.GetRosterDisplay_PDFTimeTablePDF();
+
+        await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.GetGenerateTimetableData = data.Data
+            this.totalRecord1 = data['Data'].length;
+            if (this.GetGenerateTimetableData && this.GetGenerateTimetableData.length > 0) {
+              // Extract all keys from the first object
+              const allKeys = Object.keys(this.GetGenerateTimetableData[0]);
+              // Filter keys that look like time slots (contain ":")
+              this.timeColumns = allKeys.filter(k => k.includes(':'));
+            }
+
+            console.log(this.GetGenerateTimetableData)
+            this.initTable1(this.GetGenerateTimetableData);
+          }, (error: any) => console.error(error)
+          );
+      
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  CloseModal1() {
+    if (this.modalRef1) {
+      this.modalRef1.dismiss();
+      this.modalRef1 = null;
+      this.isSubmitted = false;
+    }
+  }
+  initTable1(data: any) {
+    this.dataSource1 = new MatTableDataSource(data);
+    this.dataSource1.paginator = this.paginator1;
+    this.dataSource1.sort = this.sort;
+  }
+
+  async GetRosterDisplay_PDFTimeTablePDF() {
+
+    try {
+
+      this.loaderService.requestStarted();
+
+
+      await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GetGenerateTimetableData = data.Data
+          this.totalRecord1 = data['Data'].length;
+          if (this.GetGenerateTimetableData && this.GetGenerateTimetableData.length > 0) {
+            // Extract all keys from the first object
+            const allKeys = Object.keys(this.GetGenerateTimetableData[0]);
+            // Filter keys that look like time slots (contain ":")
+            this.timeColumns = allKeys.filter(k => k.includes(':'));
+          }
+
+          console.log(this.GetGenerateTimetableData)
+          this.initTable1(this.GetGenerateTimetableData);
+        }, (error: any) => console.error(error)
+        );
+
+
+     
+     
+      await this.attendanceServiceService.GetRosterDisplay_PDFTimeTableDownload(this._RosterDisplayTimeTableDataModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download =   'RosterDisplay_PDFTimeTable.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error(this.Message)
+          }
+        }, (error: any) => {
+          console.error(error);
+          this.toastr.error(this.ErrorMessage)
+        });
+
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }
 
 

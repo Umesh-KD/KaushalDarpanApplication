@@ -854,6 +854,7 @@ CloseModal() {
     // filter sections
     this.GetSectionData = this.allSections.filter(sec => !usedIds.includes(sec.SectionID));
   }
+
   SaveData_EditDetails() {
     debugger
     this.isSubmitted = true;
