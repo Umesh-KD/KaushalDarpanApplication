@@ -80,13 +80,14 @@
             <th class="text-left">SR NO</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Application ID</th>
-            <!-- <th class="text-left">Student ID</th> -->
             <th class="text-left">{{titleDDLBranchTrade}}</th>
+            <th class="text-left">Semester</th>
             <th class="text-left">Year</th>
             <th class="text-left">Room Type</th>
             <th class="text-left">Room No.</th>
             <th class="text-left">Emergency Contact no.</th>
-            <th class="text-left" *ngIf="status==4 || status==296">Action</th>
+            <th class="text-left">Status</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -94,15 +95,16 @@
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.ApplicationId}}</td>
-            <!-- <td align="left">{{item.StudentId}}</td> -->
             <td align="left">{{item.StreamName}}</td>
+            <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.RoomType}}</td>
             <td align="left">{{item.RoomNoId}}</td>
             <td align="left">{{item.MobileNo}}</td>
+            <td align="left">{{item.Status}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="item.AllotmentStatus == 4" href="javascript:void(0)" (click)="DeallocateRoom( item)" title="Deallocate"><i class="ti ti-x"></i></a>
+                <a *ngIf="item.AllotmentStatus == 4" href="javascript:void(0)" (click)="deallocationRoomRemark( item)" title="Deallocate"><i class="ti ti-x"></i></a>
                 <a *ngIf="item.AllotmentStatus == 296" href="javascript:void(0)" (click)="DeallocateRoom_EnrollCancelStudent( item)" title="Deallocate"><i class="ti ti-x"></i></a>
               </div>
             </td>

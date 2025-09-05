@@ -448,9 +448,9 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetAll_INV_returnItem(searchRequest: itemReturnModel) {
-    var body = JSON.stringify(searchRequest);
-    return await this.http.post(`${this.APIUrl}/GetAll_INV_GetCommonIssueDDL`, body, this.headersOptions)
+  public async GetAll_INV_returnItem(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItem`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -463,5 +463,14 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetInventoryIssueItemList(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInventoryIssueItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

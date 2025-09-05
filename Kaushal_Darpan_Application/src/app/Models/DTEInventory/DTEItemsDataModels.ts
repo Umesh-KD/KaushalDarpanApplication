@@ -85,6 +85,7 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public ModifyBy: number = 0;
   public InstituteID: number = 0;
   public UserId: number = 0;
+  public TransactionID: number = 0;
 
   public StaffName: string = '';
   public DueDate: string = '';
@@ -104,6 +105,7 @@ export class ItemsDetails {
   public ItemId: number = 0;
   public EquipmentCode: number = 0;
   public ItemDetailsId: number = 0;
+  public TransactionID: number = 0;
 }
 export class itemReturnModel {
   public ItemCount: number = 0;

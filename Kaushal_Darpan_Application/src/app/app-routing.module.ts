@@ -723,6 +723,7 @@ const routes: Routes = [
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
       { path: 'HostelReports', loadChildren: () => import('./Views/Hostel-Management/hostel-reports/hostel-reports.module').then(m => m.HostelReportsModule) },
       { path: 'HostelDashboard', loadChildren: () => import('./Views/Hostel-Management/hostel-dashboard/hostel-dashboard.module').then(m => m.HostelDashboardModule) },
+      { path: 'direct-hostel-allotment', loadChildren: () => import('./Views/Hostel-Management/direct-hostel-allotment/direct-hostel-allotment.module').then(m => m.DirectHostelAllotmentModule), title: 'Direct Hostel Allotment' },
 
       { path: 'ApplyForHostel', loadChildren: () => import('./Views/Student/apply-for-hostel/apply-for-hostel.module').then(m => m.ApplyForHostelModule) },
       { path: 'CreateHostel', loadChildren: () => import('./Views/Hostel-Management/create-hostel/create-hostel.module').then(m => m.CreateHostelModule), title: 'Create Hostel' },

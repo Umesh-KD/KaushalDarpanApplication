@@ -9,7 +9,7 @@ import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
 import { ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
@@ -44,7 +44,7 @@ export class AddItiReturnItemComponent {
   //public StudentReqListList: any = [];
   public returnItemTypeList: any = [];
   //public today: Date = new Date();
-
+  public submitRequest = new ItemsIssueReturnModels();
   
 
   //ItemMasterListt = [
@@ -116,16 +116,14 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-
-
-      await this.itiInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.itiInventoryService.GetInventoryIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
             this.Message = data.Message;
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
-            this.ItemMasterList1 = data.Data || [];
+           // this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }
@@ -235,30 +233,45 @@ export class AddItiReturnItemComponent {
   }
 
 
+  //exportToExcel(): void {
+  //  this.ItemMasterList = this.ItemMasterList.map((item: any) => {
+  //    const updatedItem = {
+  //      AvailableQuantity: item.AvailableQuantity,
+  //      CampanyName: item.CampanyName,
+  //      Code: item.Code,
+  //      CollegeName: item.CollegeName ?? "BTER",
+  //      EquipmentsName: item.EquipmentsName,
+  //      IdentificationMark: item.IdentificationMark,
+  //      InitialQuantity: item.InitialQuantity,
+  //      ItemCategoryName: item.ItemCategoryName,
+  //      PricePerUnit: item.PricePerUnit,
+  //      Status: item.Status == 1 ? "Approved" : "Pending",
+  //      TotalPrice: item.TotalPrice,
+  //      VoucherNumber: item.VoucherNumber
+  //    };
+
+  //    return updatedItem;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+  //}
+
   exportToExcel(): void {
-    this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
-      const updatedItem = {
-        AvailableQuantity: item.AvailableQuantity,
-        CampanyName: item.CampanyName,
-        Code: item.Code,
-        CollegeName: item.CollegeName ?? "BTER",
-        EquipmentsName: item.EquipmentsName,
-        IdentificationMark: item.IdentificationMark,
-        InitialQuantity: item.InitialQuantity,
-        ItemCategoryName: item.ItemCategoryName,
-        PricePerUnit: item.PricePerUnit,
-        Status: item.Status == 1 ? "Approved" : "Pending",
-        TotalPrice: item.TotalPrice,
-        VoucherNumber: item.VoucherNumber
-      };
+    debugger
+    if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
 
-      return updatedItem;
-    });
-
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
@@ -308,92 +321,41 @@ export class AddItiReturnItemComponent {
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
-  //async confirmReturn() {
-  //  debugger
-
-  //  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
-
-  //  const returnModel = selectedItems.map((x: any) => ({
-  //    StaffId: this.Searchrequest.staffID,
-  //    ItemDetailsId: x.ItemDetailsId,
-  //    Type: "Return",
-  //    TransactionID: x.TransactionID  ,
-  //    ItemList: x.ItemList
-  //  }));
-
-  //  try {
-  //    await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
-  //      .then((data: any) => {
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        if (this.State == EnumStatus.Success) {
-  //          if (!this.returnModel.staffID || this.returnModel.staffID == 0) {
-  //            // Save
-  //            this.toastr.success("Record saved successfully", "", {
-  //              toastClass: "ngx-toastr my-save-toast"
-  //            });
-  //          } else {
-  //            // Update
-  //            this.toastr.success("Record updated successfully", "", {
-  //              toastClass: "ngx-toastr my-update-toast"
-  //            });
-  //          }
-  //          //redirect
-  //          this.routers.navigate(['/iti-return-item']);
-
-
-  //        } else if (this.State == EnumStatus.Error) {
-  //          this.toastr.error("Something went wrong.");
-  //        }
-
-  //      });
-  //    this.modalService.dismissAll();
-  //  } catch (ex) {
-  //    console.error(ex);
-  //    this.toastr.error('Something went wrong. Please try again.');
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-  //    }, 200);
-  //  }
-  //}
-
   async confirmReturn() {
     debugger;
 
-    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
+    this.loaderService.requestStarted();
+    this.isLoading = true;
 
-    if (selectedItems.length === 0) {
-      this.toastr.warning("Please select at least one item to return.");
-      return;
-    }
+    this.submitRequest.StaffId = this.Searchrequest.staffID,
+      this.submitRequest.Remarks = this.returnModel.Remarks,
+      this.submitRequest.ItemCategoryId = this.returnModel.ItemCondition,
+      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
+   // this.submitRequest.TransactionID = this.ItemMasterList[0].TransactionID,
 
-    // Prepare payload for API
-    const returnModel = {
-      StaffId: this.Searchrequest.staffID,
-      TransactionID: selectedItems[0].TransactionID, // assuming all items belong to same transaction
-      Type: "ReturnItemUpdate",
-      ItemList: JSON.stringify(
-        selectedItems.map((x: any) => ({ ItemDetailsId: x.ItemDetailsId }))
-      )
-    };
+   
+    //if (selectedItems.length === 0) {
+    //  this.toastr.warning("Please select at least one item to return.");
+    //  return;
+    //}
 
     try {
-      await this.itiInventoryService.GetAll_INV_returnItem(this.returnModel)
+      await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success) {
+          if (this.State == EnumStatus.Success)
+          {
             this.toastr.success("Items returned successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
 
-            this.routers.navigate(['/iti-return-item']); // redirect
-          } else if (this.State == EnumStatus.Error) {
+            //get All data
+            this.GetAllData();
+          } else if (this.State == EnumStatus.Error)
+          {
             this.toastr.error("Something went wrong.");
           }
         });

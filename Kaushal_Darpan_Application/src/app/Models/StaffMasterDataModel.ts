@@ -340,5 +340,20 @@ export class CalendarEventModel {
   public CurrentYear?: number = 0;
 }
 
+export class RosterDisplayTimeTableDataModel {
+  public Action?: string = "";
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public StreamID: number = 0;
+  public SubjectID: number = 0;
+  public ActiveStatus: boolean = true;
+  public DeleteStatus: boolean = false;
+  public CreatedBy: number = 0;
+  public ModifyBy: number = 0;
+  public SemesterID: number = 0;
+  public CreatedDate?: Date;
+}
+
 
 

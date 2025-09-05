@@ -24,7 +24,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-                  (change)="GetTradeDDL()">
+                  (change)="GetAllData()">
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
             </option>
@@ -115,7 +115,7 @@
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.Quantity}}</td>
-            <td align="left">{{ item.IssueDate1 | date:'dd-MM-yyyy' }}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
@@ -125,6 +125,11 @@
 }">
                 {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
               </span>
+            </td>
+          </tr>
+          <tr *ngIf="ItemMasterList?.length==0">
+            <td colspan="10" class="text-center">
+              No Record Found
             </td>
           </tr>
         </tbody>
