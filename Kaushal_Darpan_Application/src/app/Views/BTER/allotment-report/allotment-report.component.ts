@@ -157,7 +157,7 @@ export class AllotmentReportComponent {
     this.searchRequestData.StreamCode = this.searchRequest.StreamCode;
     this.searchRequestData.AllotmentStatus = this.searchRequest.AllotmentStatus;
     this.searchRequestData.RoleID = this.sSOLoginDataModel.RoleID
-
+    this.searchRequestData.IsDownload = false;
 
     this.searchRequestData.PageNumber = this.pageNo
     this.searchRequestData.PageSize = this.pageSize
@@ -269,6 +269,7 @@ export class AllotmentReportComponent {
       this.searchRequestData.AllotmentStatus = this.searchRequest.AllotmentStatus;
 
       this.searchRequestData.PageNumber = 1
+      this.searchRequestData.IsDownload = true;
       this.searchRequestData.PageSize = this.totalRecord
 
       this.loaderService.requestStarted();
