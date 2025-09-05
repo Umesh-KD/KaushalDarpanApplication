@@ -7,7 +7,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { ToastrService } from 'ngx-toastr';
 import { ItiApplicationFormService } from '../../../Services/ItiApplicationForm/iti-application-form.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { EnumApplicationFromStatus, EnumConfigurationType, EnumDepartment, EnumEmitraService, EnumFeeFor, EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumApplicationFromStatus, EnumConfigurationType, EnumDepartment, JailCollegeID,EnumEmitraService, EnumFeeFor, EnumMessageType, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -51,6 +51,7 @@ export class PreviewFormTabComponent implements OnInit {
   public Options12thLevel: any = []
   public transactionStatusDataModel = new TransactionStatusDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public IsJailCollege: boolean=false
 
   emitraRequest = new EmitraRequestDetails();
 
@@ -115,6 +116,7 @@ export class PreviewFormTabComponent implements OnInit {
   {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchrequest.DepartmentID = EnumDepartment.ITI;
+    await this.checkJailCollege()
     this.GetITIDateDataList();
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     if (this.ApplicationID > 0)
@@ -667,13 +669,20 @@ export class PreviewFormTabComponent implements OnInit {
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-           
-          var lnth= this.AdmissionDateList.filter(function(x:any){return new Date(x.To_Date) > today && new Date(x.From_Date) < today &&  x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID}).length
-          if (lnth <= 0)
-          {
-            this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-            this.isITIAddmissionOpen = false;
+          if (this.IsJailCollege) {
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
+            if (lnth <= 0) {
+              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+              this.isITIAddmissionOpen = false;
+            }
+          } else {
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID }).length
+            if (lnth <= 0) {
+              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+              this.isITIAddmissionOpen = false;
+            }
           }
+          
           const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
           this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
           console.log(this.FromDate,"from date")
@@ -863,6 +872,13 @@ export class PreviewFormTabComponent implements OnInit {
 
   onImageError(event: any) {
     event.target.src = 'assets/images/dummyImg.jpg';
+  }
+  checkJailCollege() {
+    JailCollegeID.map((item: any) => {
+      if (item === this.sSOLoginDataModel.InstituteID) {
+        this.IsJailCollege = true
+      }
+    })
   }
 
 

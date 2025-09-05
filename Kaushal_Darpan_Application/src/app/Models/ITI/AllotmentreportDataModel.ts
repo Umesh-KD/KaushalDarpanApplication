@@ -10,6 +10,7 @@ export class AllotmentReportingModel {
   public GenderNm?: string='';
   public DOB?: string='';
   public TradeName?: string='';
+  public CollegeName?: string='';
   public AllotedGender?: string='';
   public AllotedCategory?: string='';
   public fullAddress?: string='';
