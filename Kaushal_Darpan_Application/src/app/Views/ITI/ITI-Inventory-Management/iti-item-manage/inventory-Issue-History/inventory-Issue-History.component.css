@@ -93,7 +93,7 @@ textarea.form-control {
   display: inline-block;
 }
 
-InvStatus-returned {
+.InvStatus-returned {
   background-color: #34a853; /* green */
   color: #fff;
   padding: 0px 10px;
