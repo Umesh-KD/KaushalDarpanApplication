@@ -6,7 +6,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
-import { EnumConfigurationType, EnumDepartment, EnumRole } from '../../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumDepartment, EnumRole, JailCollegeID } from '../../../../Common/GlobalConstants';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';
@@ -35,6 +35,9 @@ export class ITIDirectApplicationFormTabComponent {
   public PersonalDetailsData: any = []
   dateConfiguration = new DateConfigurationModel();
   public AdmissionDateList: any = []
+  public IsJailCollege: boolean = false
+
+
   completedTabs = [true, false, false, false, false, true]; // Keep track of completed tabs
   tabs =
     [
@@ -63,7 +66,7 @@ export class ITIDirectApplicationFormTabComponent {
   async ngOnInit()
   {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetITIDateDataList();
+    await this.GetITIJailDateList();
     console.log("SSOLoginDataModel",this.SSOLoginDataModel)
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
     if (!this.ApplicationID)
@@ -168,7 +171,7 @@ export class ITIDirectApplicationFormTabComponent {
     }
   }
 
-  async GetITIDateDataList()
+  async GetITIJailDateList()
   {
     try {
       
@@ -182,7 +185,9 @@ export class ITIDirectApplicationFormTabComponent {
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID }).length
+          debugger
+          var lnth =
+            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
           if (lnth <= 0)
           {
             this.toastr.warning("Addmission Date is not Open")
@@ -194,4 +199,14 @@ export class ITIDirectApplicationFormTabComponent {
       console.log(Ex);
     }
   }
+
+  checkJailCollege() {
+    JailCollegeID.map((item: any) => {
+      if (item === this.SSOLoginDataModel.InstituteID) {
+        this.IsJailCollege = true
+      }
+    })
+  }
+
+
 }
