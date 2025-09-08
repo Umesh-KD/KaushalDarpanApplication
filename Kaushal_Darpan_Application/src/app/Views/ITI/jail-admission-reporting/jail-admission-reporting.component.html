@@ -112,10 +112,10 @@
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
-                <th class="text-left">#</th>
+                <th class="text-left">Sr No</th>
                 <th class="text-left">Documents</th>
-                <th *ngIf="TradeBox==true && ApplicationAlloted==false" align="center" width="200px">Status</th>
-                <th *ngIf="remarkheader && TradeBox==true && ApplicationAlloted==false">Remarks</th>
+                <!--<th *ngIf="TradeBox==true && ApplicationAlloted==false" align="center" width="200px">Status</th>-->
+                <!--<th *ngIf="remarkheader && TradeBox==true && ApplicationAlloted==false">Remarks</th>-->
               </tr>
             </thead>
             <tbody>
@@ -128,7 +128,7 @@
                     {{ item.DisplayColumnNameEn }}
                   </a>
                 </td>
-                <td *ngIf="TradeBox==true && ApplicationAlloted==false">
+                <!--<td *ngIf="TradeBox==true && ApplicationAlloted==false">
                   <div class="flex">
                     <label class="me-3">
                       <input type="radio"
@@ -145,15 +145,15 @@
                              [value]="false" /> Incorrect
                     </label>
                   </div>
-                </td>
-                <td *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false">
+                </td>-->
+                <!--<td *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false">
                   <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="item.Remark"></textarea>
                   <div *ngIf="item.Remark==''&& isSubmitted" class="text-danger">
                     This field is required .!
                   </div>
 
 
-                </td>
+                </td>-->
               </tr>
 
             </tbody>
