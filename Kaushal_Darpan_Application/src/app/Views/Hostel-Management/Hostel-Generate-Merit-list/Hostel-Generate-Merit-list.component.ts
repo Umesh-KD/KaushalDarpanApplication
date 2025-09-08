@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
+import { GetMeritDataModel_Hostel, StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -49,7 +49,10 @@ export class HostelGenerateMeritlistComponent {
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
   decryptedIdsArray: any[] = [];
+  public GenderList: any = []
   isProcessing: boolean = false;
+
+  public meritSearchReq = new GetMeritDataModel_Hostel();
 
 
 
@@ -96,10 +99,6 @@ export class HostelGenerateMeritlistComponent {
     else if (this.sSOLoginDataModel.DepartmentID == 2) {
       this.titleDDLBranchTrade = 'Trade'
     }
-
-
-
-
     this.RequestFormGroup = this.formBuilder.group({
       StudentName: [''], 
       ClassPercentage: [''], 
@@ -110,18 +109,65 @@ export class HostelGenerateMeritlistComponent {
       remark: ['', Validators.required],
     });
 
-    await this.GetAllStudentMeritlist();
+    // await this.GetAllStudentMeritlist();
+    await this.GetGenderList();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
     await this.checkIfMeritAlreadySubmitted();
+    await this.GetMeritGeneratedStudent_Hostel();
     
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
   get _CancelRequestFormGroup() { return this.CancelRequestFormGroup.controls; }
 
+  async GetGenderList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetMeritGeneratedStudent_Hostel() {
+    try {
+      this.meritSearchReq.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.meritSearchReq.HostelID = this.sSOLoginDataModel.HostelID;
+      this.meritSearchReq.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.meritSearchReq.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+      this.loaderService.requestStarted();
+      await this.studentRequestService.GetMeritGeneratedStudent_Hostel(this.meritSearchReq)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State == EnumStatus.Success) {
+            this.StudentReqListList = data['Data'];
+          } else {
+            this.toastr.error(data.ErrorMessage);
+            this.toastr.warning(data.Message);
+          }
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   
   async GetAllStudentMeritlist() {
-    debugger
+    
     try {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;

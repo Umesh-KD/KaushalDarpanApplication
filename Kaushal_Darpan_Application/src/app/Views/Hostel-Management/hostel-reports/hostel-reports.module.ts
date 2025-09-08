@@ -6,6 +6,7 @@ import { HostelReportsComponent } from './hostel-reports.component';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     HostelReportsRoutingModule,
-    FormsModule, ReactiveFormsModule, LoaderModule, TableSearchFilterModule
+    FormsModule, ReactiveFormsModule, LoaderModule, TableSearchFilterModule,
+    OTPModalModule
   ]
 })
 export class HostelReportsModule { }

@@ -17,8 +17,9 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        
         <div>
-          <!--<a href="/AddItemMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+          <a class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-x"></i> Deallocate 6th Semester Student</a>
         </div>
       </div>
 
@@ -117,3 +118,5 @@
 </div>
 
 <!-- end row -->
+
+<app-otpmodal #otpModal></app-otpmodal>

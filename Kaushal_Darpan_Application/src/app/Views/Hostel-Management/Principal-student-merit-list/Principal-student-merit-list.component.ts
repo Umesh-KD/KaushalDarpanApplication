@@ -47,6 +47,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   public BrachDDLList: any = [];
   public MarksDetailsList: any = [];
   public EditHostelDetailsList: any = [];
+  public GenderList: any = []
   public Allotmentrequest = new RoomAllotmentDataModel();
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
@@ -72,7 +73,6 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
 
   async ngOnInit() {
     
-
     this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -84,36 +84,28 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     else if (this.sSOLoginDataModel.DepartmentID == 2) {
       this.titleDDLBranchTrade = 'Trade'
     }
-
-
-
-
     this.RequestFormGroup = this.formBuilder.group({
       StudentName: [''], 
       ClassPercentage: [''], 
       StreamName: [''] 
     });
-
     this.CancelRequestFormGroup = this.formBuilder.group({
       remark: ['', Validators.required],
     });
 
-    await this.GetAllPrincipalstudentmeritlist();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
+    await this.GetGenderList();
+    await this.GetAllPrincipalstudentmeritlist();
     //await this.GetMarksDetails();
    // await this.GetAllData();
-
-
-
-    
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
   get _CancelRequestFormGroup() { return this.CancelRequestFormGroup.controls; }
 
   
   async GetAllPrincipalstudentmeritlist() {
-    debugger
+     
     
     try {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -184,6 +176,26 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
     }
   }
 
+  async GetGenderList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+        }, (error: any) => console.error(error)
+      );
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async GetSemesterMaster() {
     try {
       this.loaderService.requestStarted();
@@ -234,7 +246,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
 
 
   async onView(model: any, studentData: any) {
-    debugger
+     
     this.ViewRequest = {}
     try {
       this.ViewRequest = { ...studentData };
@@ -406,7 +418,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       this.EditHostelDetails.ReqId = this.ReqId;
       this.EditHostelDetails.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.loaderService.requestStarted();
-      debugger
+      
       await this._HostelManagmentService.EditAllotedHostelDetails(this.EditHostelDetails)
         .then((data: any) => {
 
@@ -428,5 +440,43 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       }, 200);
 
     }
+  }
+
+  async GenerateProvisionalMerit_Hostel() {
+    if(this.Searchrequest.Gender == 0 || this.Searchrequest.Gender == undefined || this.Searchrequest.Gender == null){
+      this.toastr.warning("Please select gender.");
+      return;
+    }
+    let selected = this.getSelectedItems();
+    if (selected.length === 0) {
+      this.toastr.warning("Please select student.");
+      return;
+    }
+
+    selected.forEach(item => {
+      item.modifyby = this.sSOLoginDataModel.UserID;
+    });
+    
+    try {
+      await this.studentRequestService.GenerateProvisionalMerit_Hostel(this.Searchrequest.Gender, selected)
+      .then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State == EnumStatus.Success){
+          this.toastr.success(data.Message);
+          const selectedIds = selected.map(item => item.ReqId).join(',');
+          const encrypted = CryptoJS.AES.encrypt(selectedIds, secretKey).toString();
+          // this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'], {
+          //   queryParams: { ids: encodeURIComponent(encrypted) }
+          // });
+          this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'])
+        } else {
+          this.toastr.error(data.ErrorMessage);
+          this.toastr.warning(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    console.log(selected);
   }
 }
