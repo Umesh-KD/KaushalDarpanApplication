@@ -175,7 +175,7 @@ const routes: Routes = [
       { path: 'managetpo', loadChildren: () => import('./Views/TPOMaster/create-tpo/create-tpo.module').then(m => m.CreateTpoModule) },
       { path: 'tpo-details', loadChildren: () => import('./Views/TPOMaster/details-tpo/details-tpo.module').then(m => m.DetailsTpoModule) },
       { path: 'campusvalidation', loadChildren: () => import('./Views/campus-validation/campus-validation.module').then(m => m.CampusValidationModule) },
-
+      { path: 'campusvalidation/:flag', loadChildren: () => import('./Views/campus-validation/campus-validation.module').then(m => m.CampusValidationModule) },
       { path: 'placementstudent', loadChildren: () => import('./Views/PlacementStudent/placement-student/placement-student.module').then(m => m.PlacementStudentModule), title: 'Placement student' },
       { path: 'menumaster', loadChildren: () => import('./Views/menu-master/menu-master.module').then(m => m.MenuMasterModule), title: 'Menu Master' },
       { path: 'centerallocation', loadChildren: () => import('./Views/Center_Allocation/center-allocation/center-allocation.module').then(m => m.CenterAllocationModule), title: 'Center Allocation' },
