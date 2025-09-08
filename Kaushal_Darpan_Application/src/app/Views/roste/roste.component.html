@@ -100,9 +100,9 @@
             </ng-template>
           </ng-select>
           <!--<div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
-          <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          <p *ngIf="formTable.SectionID.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required .!</p>
-        </div>-->
+      <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+      <p *ngIf="formTable.SectionID.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>-->
         </div>
 
 
@@ -110,13 +110,13 @@
 
 
         <!--<div>
-      <mat-form-field appearance="fill" class="w-full">
-        <mat-label>Attendance Date</mat-label>
-        <input matInput [matDatepicker]="startDatePicker" formControlName="AttendanceDate">-->
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Attendance Date</mat-label>
+    <input matInput [matDatepicker]="startDatePicker" formControlName="AttendanceDate">-->
         <!--<mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>-->
         <!--<mat-datepicker #startDatePicker></mat-datepicker>
-        </mat-form-field>
-      </div>-->
+    </mat-form-field>
+  </div>-->
         <!-- Start Time Picker -->
         <div>
           <mat-form-field appearance="fill" class="w-full">
@@ -145,6 +145,21 @@
           </mat-form-field>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Room No 
+          </label>
+
+          <input type="text"
+                class="form-input"
+                 placeholder="Enter Room No"
+                 formControlName="RoomNo" />        
+        
+        </div>
+
+
+
+
       </div>
       <div class=" mb-6">
         <button type="submit" (click)="AddMore()" class="btn bg-info text-white mt-6 me-1">Add</button>
@@ -169,6 +184,7 @@
             <th class="text-left">Section(s)</th>
             <th class="text-left">Start Time</th>
             <th class="text-left">End Time</th>
+            <th class="text-left">Room No</th>
             <th class="text-center">Action</th>
 
           </tr>
@@ -186,6 +202,7 @@
             <td class="text-left">{{ row.SectionName }}</td>
             <td class="text-left">{{ row.AttendanceStartTime }}</td>
             <td class="text-left">{{ row.AttendanceEndTime }}</td>
+            <td class="text-left">{{ row.RoomNo }}</td>
             <td class="text-center">
               <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
                 <i class="ti ti-trash"></i>

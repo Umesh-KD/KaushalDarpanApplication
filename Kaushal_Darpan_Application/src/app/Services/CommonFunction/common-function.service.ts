@@ -1878,7 +1878,7 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+    
 
   public async ITI_DeirectAdmissionOptionFormData(tradeSearchRequest: ItiTradeSearchModel) {
     var body = JSON.stringify(tradeSearchRequest);

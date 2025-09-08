@@ -105,7 +105,8 @@ export class EMPrincipleStaffComponent {
       MobileNo: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
       Hostel: [''],
-      guestRoomID: [0,[]]
+      guestRoomID: [0, []],
+      ddlPost: ['', [DropdownValidators]]
     })
 
     this.settingsMultiselect = {
@@ -440,11 +441,34 @@ async GetTechnicianDll() {
       }, 200);
     }
   }
-  
+  async GetPostList() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDesignationAndPostMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PostList = data['Data'];
+          this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
+          console.log(this.PostList, "PostList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   async StaffLevelType() {
     this.formData.StaffLevelID = 0;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.StaffTypeID = this.formData.StaffTypeID;
+
+    await this.GetPostList();
+
     //Teaching=30
     if (this.searchRequest.StaffTypeID == 30) {
       this.formData.StaffLevelID = 4;
@@ -697,6 +721,7 @@ async GetTechnicianDll() {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffMasterList = data['Data'];
+          this.StaffMasterList = this.StaffMasterList.filter((item: any) => item.CourseType == this.sSOLoginDataModel.Eng_NonEng)
           console.log(this.StaffMasterList)
         }, (error: any) => console.error(error)
         );

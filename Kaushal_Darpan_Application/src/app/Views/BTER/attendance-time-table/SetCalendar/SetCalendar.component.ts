@@ -78,60 +78,60 @@ export class SetCalendarComponent implements OnInit {
   ) { this.populateMonthDays(); }
 
   async ngOnInit() {
-
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.request.CourseTypeId = this.SSOLoginDataModel.Eng_NonEng
-    this.request.CreatedBy = this.SSOLoginDataModel.UserID;
-    this.request.IPAddress = "";
-    this.request.AcademicYearId = this.SSOLoginDataModel.FinancialYearID;
-    this.request.DepartmentId = this.SSOLoginDataModel.DepartmentID;
+    await this.initializeToday();
+    let events = await  this.generateMonthDays(this.year, this.month);
+    this.events = events;
+    await this.getCalendarEventModel();
 
-    try {
-      await this.attendanceServiceService.getCalendarEventModel(this.eventsSearch)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.eventsList = data.Data
-         
-        }, error => console.error(error));
+    console.log('All events:', events);
 
-      // Storing the events data
-    } catch (Ex) {
-      console.log(Ex);  // Handle any error that occurs during the async call
-    }
+    this.updateCalendar();
+    
+  }
 
-    debugger
+  async initializeToday() {
     const today = new Date();
     this.year = today.getFullYear();
     this.month = today.getMonth() + 1;
     this.loadMonth(this.year, this.month);
-    const daysInMonth = new Date(this.year, this.month, 0).getDate();
-    let events: CalendarEventModel[] = [];
-    
+  }
+
+  formatDate(date: Date): string {
+    const yyyy = date.getFullYear();
+    const mm = (date.getMonth() + 1).toString().padStart(2, '0');
+    const dd = date.getDate().toString().padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  async generateMonthDays(year: number, month: number){
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const events: CalendarEventModel[] = [];
     for (let day = 1; day <= daysInMonth; day++) {
       const event = new CalendarEventModel();
       event.EventId = day;
-      event.EventDate = new Date(this.year, (this.month - 1), day);
-
-      // Set the weekday name using the getDay() method
+      event.EventDate = new Date(year, month - 1, day);
+      
       const dayOfWeek = event.EventDate.getDay();
-      event.WeekDayName = this.weekDays[dayOfWeek];  // Set the WeekDayName to the corresponding day
+      event.WeekDayName = this.weekDays[dayOfWeek];
 
-      // Always set Sunday as a Holiday
-      if (dayOfWeek === 0 || event.WeekDayName =='Sun') {  // Sunday is day 0
+      if (dayOfWeek === 0 || event.WeekDayName === 'Sun') {
         event.EventType = 'Holiday';
         event.Remark = 'Weekend - Sunday';
-        event.Color = 'red';  // Mark Sundays as red holidays
+        event.Color = 'blue';
       } else {
         event.EventType = 'Working Day';
         event.Remark = '';
-        event.Color = '';  // No color for working days
+        event.Color = '';
       }
 
       event.Day = day;
       events.push(event);
     }
+    return events;
+  }
 
-    // Define special events to override the default events
+  async applySpecialEvents(events: any) {
     const specialEvents = [
       { day: 1, type: 'Holiday', remark: 'School Closed' },
       { day: 10, type: 'Exam', remark: 'Midterm Exam' },
@@ -140,128 +140,94 @@ export class SetCalendarComponent implements OnInit {
       { day: 26, type: 'Holiday', remark: 'Foundation Day' }
     ];
 
-    // Merge special events into the default events
-    specialEvents.forEach(se => {
-      const eventIndex = events.findIndex(e => e.Day === se.day &&
-        e.EventDate.getMonth() === (this.month-1) &&
-        e.EventDate.getFullYear() === this.year);
-
-      if (eventIndex !== -1) {
-        // If event already exists, update it with the special event's details
-        events[eventIndex].EventType = se.type;
-        events[eventIndex].Remark = se.remark;
-
-        // If it's a Holiday, ensure it stays red
-        if (se.type === 'Holiday') {
-          events[eventIndex].Color = 'red'; // Ensure holidays stay red
-        }
-      } else {
-        // If no event found, create a new event for the special day
-        const newEvent = new CalendarEventModel();
-        newEvent.EventId = events.length + 1;
-        newEvent.Day = se.day;
-        newEvent.EventDate = new Date(this.year, this.month, se.day);
-        newEvent.EventType = se.type;
-        newEvent.Remark = se.remark;
-        newEvent.Color = (se.type === 'Holiday') ? 'red' : '';  // Ensure holidays are red
-        newEvent.DepartmentID = 0;
-        newEvent.EndTermID = 0;
-        newEvent.AcademicYearID = 0;
-        newEvent.CourseTypeID = 0;
-        newEvent.IsActive = true;
-        newEvent.IsDelete = false;
-        newEvent.WeekDayName = this.weekDays[newEvent.EventDate.getDay()];  // Set the WeekDayName for special events
-        events.push(newEvent);
+    specialEvents.forEach(special => {
+      const event = events.find((e: any) => e.Day === special.day);
+      if (event) {
+        event.EventType = special.type;
+        event.Remark = special.remark;
+        event.Color = special.type === 'Holiday' ? 'red' : '';
       }
     });
+  }
 
-    // Log all events for debugging purposes
-    console.log('All events:', events);
+  async mergeEvents(events: any[], overrideEvents: any[]) {
+    debugger
+    overrideEvents.forEach((se: any) => {
+        const seDate = new Date(se.EventDate);
+        if (isNaN(seDate.getTime())) {
+            console.warn('Invalid se.EventDate:', se.EventDate);
+            return;
+        }
 
-    // Optionally update your UI after processing the events
-    this.updateCalendar();
+        const seDateStr = this.getDateString(seDate);
 
-    // Store events in the component's state
-    this.events = events;
+        
+        const eventIndex = events.findIndex((e: any) => {
+            const eventDateStr = this.getDateString(new Date(e.EventDate));
+            return seDateStr === eventDateStr;
+        });
+        debugger
+        if (eventIndex !== -1) {
+            // Update existing event
+            events[eventIndex - 1].EventType = se.EventType;
+            events[eventIndex - 1].Remark = se.Remark;
+            if (se.EventType === 'Holiday') {
+              if(events[eventIndex - 1].WeekDayName === 'Sun') {
+                events[eventIndex - 1].Color = 'blue'; 
+              } else {
+                events[eventIndex - 1].Color = 'red'; 
+              }
+                
+            }
+        } else {
+            
+            const newEvent = new CalendarEventModel();
+            newEvent.EventId = events.length + 1;  
+            newEvent.EventDate = seDate;
+            newEvent.Day = seDate.getDate();
+            newEvent.EventType = se.EventType;
+            newEvent.Remark = se.Remark;
+            newEvent.Color = se.EventType === 'Holiday' ? 'red' : '';
+            newEvent.DepartmentID = 0;
+            newEvent.EndTermID = 0;
+            newEvent.AcademicYearID = 0;
+            newEvent.CourseTypeID = 0;
+            newEvent.IsActive = true;
+            newEvent.IsDelete = false;
+            newEvent.WeekDayName = this.weekDays[seDate.getDay()];
+            events.push(newEvent);
+        }
+    });
+  }
 
 
-    //for (let day = 1; day <= daysInMonth; day++) {
-    //  const event = new CalendarEventModel();
-    //  event.EventId = day;
-    //  event.EventDate = new Date(year, month, day);
+  private getDateString(date: Date): string {
+    return date.toISOString().substring(0, 10); 
+  }
 
-    //  // Check if it's a Sunday (0 is Sunday in JavaScript's Date object)
-    //  if (event.EventDate.getDay() === 0) {
-    //    event.EventType = 'Holiday';
-    //    event.Remark = 'Weekend - Sunday';
-    //  } else {
-    //    event.EventType = 'Working Day';
-    //    event.Remark = '';
-    //  }
+  async getCalendarEventModel() {
+    this.request.CourseTypeId = this.SSOLoginDataModel.Eng_NonEng
+    this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+    this.request.IPAddress = "";
+    this.request.AcademicYearId = this.SSOLoginDataModel.FinancialYearID;
+    this.request.DepartmentId = this.SSOLoginDataModel.DepartmentID;
 
-    //  event.Day = day;
-    //  events.push(event);
-    //}
+    this.eventsSearch.CurrentMonth = this.month
+    this.eventsSearch.CurrentYear = this.year
 
+    try {
+      await this.attendanceServiceService.getCalendarEventModel(this.eventsSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.eventsList = data.Data
+         
+          this.mergeEvents(this.events, this.eventsList); 
+        }, error => console.error(error));
 
-    //const specialEvents = [
-    //  { day: 1, type: 'Holiday', remark: 'School Closed' },
-    //  { day: 10, type: 'Exam', remark: 'Midterm Exam' },
-    //  { day: 15, type: 'Holiday', remark: 'Independence Day' },
-    //  { day: 20, type: 'Exam', remark: 'Math Exam' },
-    //  { day: 26, type: 'Holiday', remark: 'Foundation Day' }
-    //];
-
-
-    //specialEvents.forEach(se => {
-    //  const eventIndex = events.findIndex(e => e.Day === se.day &&
-    //    e.EventDate.getMonth() === month &&
-    //    e.EventDate.getFullYear() === year);
-
-    //  if (eventIndex !== -1) {
-    //    // Update existing event
-    //    events[eventIndex].EventType = se.type;
-    //    events[eventIndex].Remark = se.remark;
-    //  } else {
-    //    // Create new event if not found
-    //    events.push({
-    //      EventId: events.length + 1,
-    //      Day: se.day,
-    //      EventDate: new Date(year, month, se.day),
-    //      EventType: se.type,
-    //      Remark: se.remark,
-    //      DepartmentID: 0,
-    //      EndTermID: 0,
-    //      AcademicYearID: 0,
-    //      CourseTypeID: 0,
-    //      IsActive: true,
-    //      IsDelete: false,
-    //      Color:''
-    //    });
-    //  }
-    //});
-
-    //console.log('All day ', events);
-
-    //// Optionally display events in a format you prefer
-    //events.forEach(event => {
-    //  console.log(`${event.EventDate.toDateString()}: ${event.EventType} - ${event.Remark}`);
-    //});
-
-    //// Optionally update your UI here
-    //this.updateCalendar();
-    //console.log('All events:', events);
-
-    //// Optionally display events in a formatted way
-    //events.forEach(event => {
-    //  console.log(`${event.EventDate.toDateString()}: ${event.EventType} - ${event.Remark} ${event.Color ? '- Color: ' + event.Color : ''}`);
-    //});
-
-    //// Optionally update your UI here
-    //this.updateCalendar();
-    //this.events = events;
-  
-   
+      // Storing the events data
+    } catch (Ex) {
+      console.log(Ex);  // Handle any error that occurs during the async call
+    }
   }
   
   populateMonthDays() {
@@ -284,7 +250,7 @@ export class SetCalendarComponent implements OnInit {
     this.monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
   }
 
-  prevMonth() {
+  async prevMonth() {
     let newYear = this.year;
     let newMonth = this.month - 1;
     if (newMonth < 1) {
@@ -292,9 +258,13 @@ export class SetCalendarComponent implements OnInit {
       newYear--;
     }
     this.loadMonth(newYear, newMonth);
+
+    let events = await  this.generateMonthDays(newYear, newMonth);
+    this.events = events
+    await this.getCalendarEventModel();
   }
 
-  nextMonth() {
+  async nextMonth() {
     let newYear = this.year;
     let newMonth = this.month + 1;
     if (newMonth > 12) {
@@ -302,6 +272,9 @@ export class SetCalendarComponent implements OnInit {
       newYear++;
     }
     this.loadMonth(newYear, newMonth);
+    let events = await  this.generateMonthDays(newYear, newMonth);
+    this.events = events
+    await this.getCalendarEventModel();
   }
 
   onYearChange(event: any) {
@@ -377,10 +350,18 @@ updateCalendar() {
   }
 
   saveAllEvents() {
-    debugger
-   
     try {
-      this.attendanceServiceService.SetCalendarEventModel(this.events)
+
+      const formattedEvents = this.events.map(event => ({
+        ...event,
+        EventDate: this.formatDate(event.EventDate),
+        DepartmentID: this.SSOLoginDataModel.DepartmentID,
+        EndTermID: this.SSOLoginDataModel.EndTermID,
+        AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
+        CourseTypeID: this.SSOLoginDataModel.Eng_NonEng,
+      }));
+
+      this.attendanceServiceService.SetCalendarEventModel(formattedEvents)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data['Data']));
           this.toastr.success('Saved Successfully');
@@ -389,10 +370,6 @@ updateCalendar() {
     } catch (Ex) {
       console.log(Ex);
     }
-
-    
-    console.log('save all data', this.events)
-    
   }
   get _PublicInfoFormGroup() { return this.PublicInfoFormGroup.controls; }
 }

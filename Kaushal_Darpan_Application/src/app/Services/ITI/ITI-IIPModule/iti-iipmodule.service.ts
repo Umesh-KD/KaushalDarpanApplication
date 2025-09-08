@@ -48,6 +48,14 @@ export class ITIIIPManageService {
       ).toPromise();
   }
 
+  public async GetAllAdminReportData(request: ITI_IIPManageSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllAdminReportData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SaveIMCReg(request: ITI_IIPManageDataModel) {
     var body = JSON.stringify(request);
 

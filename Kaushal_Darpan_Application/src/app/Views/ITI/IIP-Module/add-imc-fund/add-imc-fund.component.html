@@ -202,7 +202,6 @@
             <th>Trade affiliated</th>
             <th>Trade not affiliated</th>
             <th>Order date</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -217,14 +216,14 @@
             <td>{{fund.TradeAffiliated}}</td>
             <td>{{fund.TradeNotAffiliated}}</td>
             <td>{{fund.OrderDate | date:'dd/MMM/yyyy'}}</td>
-            <td>
+            <!--<td>
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="'/add-imc-fund'" [queryParams]="{IMCFundID:fund.IMCFundID}">
                   <i class="ti ti-pencil"></i>
                 </a>
 
               </div>
-            </td>
+            </td>-->
           </tr>
           <tr *ngIf="!IIPFundData || IIPFundData.length === 0">
             <td colspan="7" class="text-center text-gray-400">No fund records found</td>

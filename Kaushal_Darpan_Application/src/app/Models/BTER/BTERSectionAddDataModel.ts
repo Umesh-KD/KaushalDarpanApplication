@@ -18,6 +18,7 @@ export class BTERSectionAddDataModel extends RequestBaseModel {
   public CreatedBy: number = 0;
   public AttendanceDate: Date = new Date();
   public ID: number = 0;
+  public RoomNo: string = '';
 }
 
 

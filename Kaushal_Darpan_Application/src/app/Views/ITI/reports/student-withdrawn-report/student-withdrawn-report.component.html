@@ -151,8 +151,6 @@
 <!--<ng-template #MyModel_ReplayQuery let-modal>-->
   <ng-template #MyModel_ReplayQuery let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto">
 
-    
-
       <div class="modal-content">
         <div class="card">
           <div class="card-header flex justify-between items-center">
@@ -167,7 +165,7 @@
                 <!-- Attachments -->
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                         for="fileStudentPhoto">Attachments <span class="StarMarking">*</span></label>
+                         for="fileStudentPhoto">Attachments <span class="StarMarking">*</span> ( Name struck order along with trainee application )</label>
                   <div class="flex fileUploader">
                     <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                            id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
@@ -226,3 +224,8 @@
       </div>
    
   </ng-template>
+
+
+  <app-otpmodal #otpModal></app-otpmodal>
+
+

@@ -6,7 +6,7 @@ import { OptionsDetailsDataModel } from '../../../../Models/ITIFormDataModel';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { ItiApplicationFormService } from '../../../../Services/ItiApplicationForm/iti-application-form.service';
-import { EnumDepartment, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumDepartment, EnumDirectAdmissionType, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { ItiApplicationSearchmodel } from '../../../../Models/ItiApplicationPreviewDataModel';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
@@ -25,7 +25,8 @@ export class ITIDirectOptionFormComponent {
   public DistrictMasterList: any = []
   public formData = new OptionsDetailsDataModel()
   public OptionsFormGroup!: FormGroup
-  
+  public DirectAdmissionType: number = 0
+  public IsJailAdmission: boolean=false
   public isSubmitted: boolean = false
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public InstituteMasterList: any = []
@@ -65,7 +66,7 @@ export class ITIDirectOptionFormComponent {
     private encryptionService: EncryptionService
   ) { }
 
-  ngOnInit(): void {
+ async ngOnInit() {
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     this.OptionsFormGroup = this.formBuilder.group(
@@ -79,21 +80,33 @@ export class ITIDirectOptionFormComponent {
 
 
 
+
     this.searchRequest.DepartmentID = EnumDepartment.ITI;
 
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
     if (this.ApplicationID > 0) {
       this.searchRequest.ApplicationID = this.ApplicationID;
       this.formData.ApplicationID = this.ApplicationID;
-      this.GetById()
-      this.GetPersonalDetailsById()
+     await this.GetById()
+    await  this.GetPersonalDetailsById()
     }
-
 
     this.GetManagmentType()
     this.GetDistrictMaster()
     this.GetTradeAndColleges()
     this.QualificationDataById()
+
+    if (this.IsJailAdmission) {
+     
+        this.OptionsFormGroup.controls['ddlManagementType'].disable();
+        this.OptionsFormGroup.controls['ddlDistrict'].disable();
+        this.OptionsFormGroup.controls['ddlInstitute'].disable();
+    
+
+    }
+   
+   
+
   }
 
   get _OptionsFormGroup() { return this.OptionsFormGroup.controls; }
@@ -116,6 +129,36 @@ export class ITIDirectOptionFormComponent {
       }, 200);
     }
   }
+
+  async GetInstituteDetails() {
+    try {
+      
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetCommonMasterData('JailCollege', this.SSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          this.formData.ManagementTypeID = data['Data'][0]['ManagementTypeId'];
+          this.formData.DistrictID = data['Data'][0]['DistrictId'];
+    
+          this.GetInstituteListDDL()
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  
+
+
+
 
   async GetDistrictMaster() {
     try {
@@ -144,6 +187,9 @@ export class ITIDirectOptionFormComponent {
       return false
     }
   }
+
+
+
 
   async AddChoice() {
     
@@ -174,7 +220,13 @@ export class ITIDirectOptionFormComponent {
     else {
       this.formData.ManagementTypeName = this.ManagmentTypeList.filter((x: any) => x.InstitutionManagementTypeID == this.formData.ManagementTypeID)[0]['InstitutionManagementType'];
       this.formData.DistrictName = this.DistrictMasterList.filter((x: any) => x.ID == this.formData.DistrictID)[0]['Name'];
-      this.formData.InstituteName = this.ItiCollegesListAll.filter((x: any) => x.Id == this.formData.InstituteID)[0]['CodeAndName'];
+      debugger
+      if (this.IsJailAdmission) {
+        this.formData.InstituteName = this.ItiCollegesList.filter((x: any) => x.InstituteID == this.formData.InstituteID)[0]['InstituteName'];
+      } else {
+        this.formData.InstituteName = this.ItiCollegesListAll.filter((x: any) => x.Id == this.formData.InstituteID)[0]['CodeAndName'];
+      }
+  
       this.formData.TradeName = this.ItiTradeList.filter((x: any) => x.Id == this.formData.TradeID)[0]['TradeName'];
       
       console.log("trade name", this.formData.TradeName)
@@ -508,32 +560,54 @@ export class ITIDirectOptionFormComponent {
 
   async GetInstituteListDDL() {
     try {
-      
-      this.tradeSearchRequest.DistrictID = this.formData.DistrictID
-      this.tradeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
-      this.tradeSearchRequest.action = '_getCollegebyDistrict'
-
-      this.ItiTradeList = [];
-      this.ItiCollegesList = [];
-      this.formData.TradeLevel = 0
-  
-      this.formData.InstituteID = 0;
-      this.formData.TradeID = 0;
-
-      this.tradeSearchRequest.CollegeID  = this.formData.InstituteID
-      this.tradeSearchRequest.TradeLevel = this.formData.TradeLevel 
-
-      this.tradeSearchRequest.Age = this.PersonalDetailsData.Age
 
 
-      
+      if (
+        this.IsJailAdmission == true
 
-      this.loaderService.requestStarted();
-      await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.ItiCollegesList = data.Data
-        this.GetInstituteListByTradeType()
-      })
+
+      ) {
+        await this.commonFunctionService.InstituteMaster(2,0,0).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          debugger
+          this.ItiCollegesList = data.Data
+          this.formData.InstituteID = this.SSOLoginDataModel.InstituteID
+
+          this.GetInstituteListByTradeType()
+        })
+      } else {
+
+
+
+        this.tradeSearchRequest.DistrictID = this.formData.DistrictID
+        this.tradeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
+        this.tradeSearchRequest.action = '_getCollegebyDistrict'
+
+        this.ItiTradeList = [];
+        this.ItiCollegesList = [];
+        this.formData.TradeLevel = 0
+
+        this.formData.InstituteID = 0;
+        this.formData.TradeID = 0;
+
+        this.tradeSearchRequest.CollegeID = this.formData.InstituteID
+        this.tradeSearchRequest.TradeLevel = this.formData.TradeLevel
+
+        this.tradeSearchRequest.Age = this.PersonalDetailsData.Age
+
+
+
+
+        this.loaderService.requestStarted();
+        await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ItiCollegesList = data.Data
+          this.GetInstituteListByTradeType()
+        })
+
+
+      }
+
     } catch (error) {
       console.error(error)
     } finally {
@@ -560,6 +634,11 @@ export class ITIDirectOptionFormComponent {
 
   async GetInstituteListByTradeType() {
     try {
+
+      if (this.IsJailAdmission) {
+        this.GetTradeListDDL()
+        return
+      }
 
       
       this.ItiTradeList = [];
@@ -598,7 +677,8 @@ export class ITIDirectOptionFormComponent {
 
 
   async GetTradeListDDL() {
-    
+
+
     try {
       this.tradeSearchRequest.CollegeID = this.formData.InstituteID
       this.tradeSearchRequest.TradeLevel = this.formData.TradeLevel
@@ -611,8 +691,13 @@ export class ITIDirectOptionFormComponent {
       this.tradeSearchRequest.Age = this.PersonalDetailsData.Age
       this.tradeSearchRequest.DistrictID = this.formData.DistrictID
       this.tradeSearchRequest.ManagementTypeID = this.formData.ManagementTypeID
+      if (this.IsJailAdmission) {
+    
+        this.tradeSearchRequest.action = 'JailAdmisiiontrade'
+      } else {
+        this.tradeSearchRequest.action = '_getTradebyCollege'
+      }
 
-      this.tradeSearchRequest.action = '_getTradebyCollege'
 
       this.loaderService.requestStarted();
       await this.commonFunctionService.ITI_DeirectAdmissionOptionFormData(this.tradeSearchRequest).then((data: any) => {
@@ -704,6 +789,16 @@ export class ITIDirectOptionFormComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data['Data'] != null){ 
             this.PersonalDetailsData = data['Data']
+            debugger
+            if (data['Data']['DirectAdmissionType'] == EnumDirectAdmissionType.JailAdmission) {
+              this.IsJailAdmission = true
+              if (this.IsJailAdmission) {
+                this.GetInstituteDetails()
+              }
+
+
+            }
+
             console.log("PersonalDetailsData",this.PersonalDetailsData);
           }
         }, error => console.error(error));

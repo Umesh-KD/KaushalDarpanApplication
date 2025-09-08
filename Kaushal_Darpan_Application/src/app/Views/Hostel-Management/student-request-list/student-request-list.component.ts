@@ -45,7 +45,7 @@ export class StudentRequestListComponent {
   public MarksDetailsList: any = [];
   public Allotmentrequest = new RoomAllotmentDataModel();
   public titleDDLBranchTrade: string =''
-
+  public status: number = 0
 
 
   constructor(
@@ -63,6 +63,7 @@ export class StudentRequestListComponent {
 
   async ngOnInit() {
     this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.status = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
 
@@ -73,7 +74,9 @@ export class StudentRequestListComponent {
       this.titleDDLBranchTrade = 'Trade'
     }
 
-
+    if(this.status) {
+      this.Searchrequest.status = this.status
+    }
 
 
     this.RequestFormGroup = this.formBuilder.group({
@@ -96,7 +99,6 @@ export class StudentRequestListComponent {
   get _CancelRequestFormGroup() { return this.CancelRequestFormGroup.controls; }
 
   async GetAllData() {
-    debugger
     try {
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -180,7 +182,8 @@ export class StudentRequestListComponent {
     try {
       let obj = {
         StudentID: 7,
-        Action: "_MarksDetails"
+        Action: "_MarksDetails",
+        DepartmentID: this.sSOLoginDataModel.DepartmentID
       }
       await this._HostelManagmentService.GetStudentDetailsForApply(obj)
         .then((data: any) => {

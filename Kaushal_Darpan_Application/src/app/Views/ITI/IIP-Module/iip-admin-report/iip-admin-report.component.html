@@ -1,0 +1,394 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">IMC</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/iti-iip-manage" class="text-sm font-medium text-slate-700" aria-current="page">IMC</a>
+    </div>
+  </div>
+
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+    <b class="text-1xl-5"><i class="ti ti-search"></i> Enter search criteria</b>
+  </div>
+  <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+    <div>
+      <label for="InstituteSsoid" class="text-gray-800 text-sm font-medium inline-block mb-1">Financial years<span class="StarMarking">*</span></label>
+      <select class="form-input" name="FinancialYearID" [(ngModel)]="formData.FinancialYearID" required #FinancialYearID="ngModel" (change)="GetFinancialData($event)">
+        <option [ngValue]="" >--Select--</option>
+        <option *ngFor="let item of FinancialYearMasterDDL"
+                [ngValue]="item.FinancialYearID">
+          {{ item.FinancialYearName }}
+
+        </option>
+      </select>
+      <div class="text-red-500 text-sm" *ngIf="FinancialYearID.invalid && (FinancialYearID.dirty || FinancialYearID.touched)">
+        <div *ngIf="FinancialYearID.errors?.['required']"> This field is required .!</div>
+      </div>
+    </div>
+  </div>
+    <!--<div class="flex justify-center">
+      <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetAllData()">Search</button>
+      <button type="button" class="btn bg-danger text-white mt-6 me-1" (click)="ResetControl()">Reset</button>
+    </div>-->
+  </div>
+    <!--[disabled]="NewRegistrationDisable"-->
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>IMC list</b>
+      <button [routerLink]="'/add-imc-registration'" class="btn bg-success btn-sm text-white" [disabled]="NewRegistrationDisable"><i class="ti ti-plus" ></i>Add new IMC registration</button>
+      <!-- <a routerLink="/add-center-observer" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Team</a> -->
+      <!-- <a *ngIf="searchRequest.SemesterID!=0" class="btn bg-info btn-sm text-white" (click)="DownloadTimeTable()"><i class="ti ti-download"></i>{{searchRequest.SemesterID==1 ?'DownloadSemester':'DownloadYearly'}}</a> -->
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+
+        <!-- <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin && isForwardToVerify"
+      class="btn bg-success btn-sm text-white" (click)="ForwardToVerify()"> Forward to Verification</a> -->
+      </div>
+      <div class=""></div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+      </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <!-- Parent Table -->
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th width="80px" align="left">Sr. No.</th>
+            <th class="text-left">Registration office</th>
+            <th class="text-left">Registration number</th>
+            <th class="text-left">Registration date</th>
+            <th class="text-left">Registration link</th>
+            <th class="text-left">Created date</th>
+            <th class="text-left">Members</th>
+            <th class="text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of IIPManageData; let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{row.RegOffice}}</td>
+            <td>{{row.RegNumber}}</td>
+            <td>{{row.RegDate | date:'dd/MMM/yyyy'}}</td>
+            <td class="text-center">
+              <a [href]="appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + row.RegLink"
+                 title="View Details"
+                 class="btn bg-primary btn-sm text-white" [target]="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+            <td>{{row.RTS | date:'dd/MMM/yyyy'}}</td>
+            <td>
+              <a href="javascript:void(0);" title="View Details"
+                 (click)="ShowMemberDetails(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white">
+                <i class="ti ti-eye"></i>{{row.MemberCount}}
+              </a>
+            </td>
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a  (click)="ShowIMCDetails(MyModel_ViewIMCDetails, row.RegistrationID)">
+                  <i class="ti ti-eye"></i>
+                </a>
+                <a [routerLink]="'/add-imc-registration'" [queryParams]="{id:row.RegistrationID}">
+                  <i class="ti ti-pencil"></i>
+                </a>
+                <button [routerLink]="'/add-imc-fund'" class="btn bg-success btn-sm text-white"
+                        [queryParams]="{RegistrationID:row.RegistrationID}">
+                  <i class="ti ti-plus"></i>Add quarter fund
+                </button>
+              </div>
+            </td>
+          </tr>
+
+         
+          <tr *ngFor="let row of IIPManageData; let idx=index;">
+            <td colspan="8" class="p-0">
+              <div class="overflow-x-auto bg-gray-50 dark:bg-gray-800 p-2 rounded">
+                <table class="table table-border w-full table-auto text-sm">
+                  <caption><h3><b>Quarter fund details</b></h3></caption>
+                  <thead class="bg-gray-200 dark:bg-gray-700">
+                    <tr>
+                      <th>Sr. no.</th>
+                      <th>Quarter</th>
+                      <th>Instalment paid</th>
+                      <th>Instalment paid Amount</th>
+                      <th>Instalment pending</th>
+                      <th>Instalment pending Amount</th>
+                      <th>Scheme sanctioned</th>
+                      <th>Trade affiliated</th>
+                      <th>Trade not affiliated</th>
+                      <th>Order date</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let fund of IIPFundData;  let idx=index;">
+                      <td>{{idx+1}}</td>
+                      <td>Quarter {{fund.QuarterID}}</td>
+                      <td>{{fund.InstalmentPaid}}</td>
+                      <td>{{fund.InstalmentPaidAmt}}</td>
+                      <td>{{fund.InstalmentPending}}</td>
+                      <td>{{fund.InstalmentPendingAmt}}</td>
+                      <td>{{fund.SchemeSanctioned}}</td>
+                      <td>{{fund.TradeAffiliated}}</td>
+                      <td>{{fund.TradeNotAffiliated}}</td>
+                      <td>{{fund.OrderDate | date:'dd/MMM/yyyy'}}</td>
+                      <td>
+                        <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important" *ngIf="fund.FinalSubmit == 0 || fund.FinalSubmit == null">
+                          <a [routerLink]="'/add-imc-fund'" [queryParams]="{IMCFundID:fund.IMCFundID}">
+                            <i class="ti ti-pencil"></i>
+                          </a>
+                          <button [routerLink]="'/add-quater-repot'" class="btn bg-success btn-sm text-white"
+                                  [queryParams]="{IMCFundID:fund.IMCFundID,  InstalmentPaidAmt: fund.InstalmentPaidAmt }" *ngIf="fund.QuaterlyProgressID == 0 || fund.QuaterlyProgressID == null">
+                            <i class="ti ti-plus"></i>Add quaterly progress report
+                          </button>
+                          <button class="btn bg-success btn-sm text-white" (click)="ShowQuaterDetails(MyModel_ViewQuaterDetails, fund.QuaterlyProgressID)" *ngIf="fund.QuaterlyProgressID != 0 && fund.QuaterlyProgressID != null">
+                            <i class="ti ti-eye"></i> View quater report
+                          </button>
+                        </div>
+                        <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important" *ngIf="fund.FinalSubmit == 1">
+                          <button class="btn bg-primary btn-sm text-white" (click)="DownloadIIPQuaterlyFundReportPDF(fund.IMCFundID)">
+                            <i class="ti ti-download"></i>Download PDF
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr *ngIf="!IIPFundData || IIPFundData.length === 0">
+                      <td colspan="11" class="text-center text-gray-400">No fund records found</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Member Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <a href="javascript:void(0);" title="View Details"
+             (click)="toggleMemberDetails()" class="btn bg-success btn-sm text-white">
+            {{ toggleButtonText }}
+          </a>
+         
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+
+                  <th class="text-left">Member type</th>
+                  <th class="text-left">Member name</th>
+                  <th class="text-left">Address</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-left">Contact</th>
+                  <th class="text-left">Created by</th>
+                  <th class="text-left">Updated by</th>
+                  <th class="text-left">From - To</th>
+                  <th class="text-left">Document</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of IIPCurrentMembersData; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.MemberTypeName}}</td>
+                  <td align="left">{{row.MemberName}}</td>
+                  <td align="left">{{row.MemberAddress}}</td>
+                  <td align="left">{{row.MemberEmail}}</td>
+                  <td align="left">{{row.MemberContact}}</td>
+                  <td align="left">{{row.CreatedName}}</td>
+                  <td align="left">{{row.ModifyName}}</td>
+                  <td align="left">{{ row.CreatedDate }} - {{ row.ModifyDate }} </td>
+                  <td align="left">
+                    <div *ngIf="row.MemberTypeName == 'Chairman'">
+                      <a [href]="appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + row.MemberFile" target="_blank" class="btn bg-primary btn-sm text-white">
+                        <i class="ti ti-eye"></i>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ViewIMCDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> IMC History </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <!--<a href="javascript:void(0);" title="View Details"
+             (click)="toggleMemberDetails()" class="btn bg-success btn-sm text-white">
+            {{ toggleButtonText }}
+          </a>-->
+
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">#</th>
+
+                  <th class="text-left">Registration office</th>
+                  <th class="text-left">Registration number</th>
+                  <th class="text-left">Registration date</th>
+                  <th class="text-left">Registration link</th>
+                  <th class="text-left">Created by</th>
+                  <th class="text-left">Updated by</th>
+                  <th class="text-left">From - To</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of IIPIMCHistoryData; let i = index">
+                  <td align="left">{{ i + 1 }}</td>
+                  <td align="left">{{row.RegOffice}}</td>
+                  <td align="left">{{row.RegNumber}}</td>
+                  <td align="left">{{row.RegDate}}</td>
+                  <td align="left">
+                    <a [href]="appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + row.RegLink"
+                       title="View Details"
+                       class="btn bg-primary btn-sm text-white" [target]="_blank">
+                      <i class="ti ti-eye"></i>
+                    </a>
+                  </td>
+                  <td align="left">{{row.CreatedName}}</td>
+                  <td align="left">{{row.ModifyName}}</td>
+                  <td align="left">{{ row.CreatedDate }} - {{ row.ModifyDate }} </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ViewQuaterDetails let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Quater Progress Report Details </b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <!--<thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">-->
+              <tr>
+                <th class="text-left bg-dark\/20">Interest received (saving & FDR):</th>
+                <td align="left">{{IIPQuaterReportData[0].InterestReceivedAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Admission Fees:</th>
+                <td align="left">{{IIPQuaterReportData[0].AdmissionFeesAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left bg-dark\/20">Other revenue (other than interest):</th>
+                <td align="left">{{IIPQuaterReportData[0].OtherRevenueAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Total revenues by IMC:</th>
+                <td align="left">{{IIPQuaterReportData[0].TotalRevenueAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Civil:</th>
+                <td align="left">{{IIPQuaterReportData[0].CivilAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Tools, Equipments:</th>
+                <td align="left">{{IIPQuaterReportData[0].ToolsAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Furniture:</th>
+                <td align="left">{{IIPQuaterReportData[0].FurnitureAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Books & Learning Resources:</th>
+                <td align="left">{{IIPQuaterReportData[0].BooksAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Additional Manpower:</th>
+                <td align="left">{{IIPQuaterReportData[0].AdditionalAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Consumable, Maintenance etc:</th>
+                <td align="left">{{IIPQuaterReportData[0].MaintenanceAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Miscellaneous:</th>
+                <td align="left">{{IIPQuaterReportData[0].MiscellaneousAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Total Expenditure<:</th>
+                <td align="left">{{IIPQuaterReportData[0].TotalExpenditureAmt}}</td>
+              </tr>
+              <tr>
+                <th class="text-left">Fund avilable with IMC <br />(interest free loan given by central gov. + IMC income - Expenditure - amount of instalment paid on bharatkosh portal):</th>
+                <td align="left">{{IIPQuaterReportData[0].FundAvailableAmt}}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="text-center mt-1">
+            <a class="btn bg-warning btn-sm text-white" [routerLink]="'/add-quater-repot'" [queryParams]="{QuaterlyProgressID:IIPQuaterReportData[0].ID, InstalmentPaidAmt: IIPQuaterReportData[0].InstalmentPaidAmt}">
+              <i class="ti ti-pencil"></i> Edit
+            </a>
+            <button class="btn bg-success btn-sm text-white" (click)="FinalSubmitUpdate(IIPQuaterReportData[0].ID)">
+              <i class="ti ti-pencil"></i> Final Submit
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+       
+      </div>
+    </div>
+  </div>
+</ng-template>
+

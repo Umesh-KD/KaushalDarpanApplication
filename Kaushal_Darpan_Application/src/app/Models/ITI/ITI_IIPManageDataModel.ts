@@ -20,6 +20,7 @@ export class IIPManageMemberDetailsDataModel extends RequestBaseModel {
     public MemberEmail: string = ''
     public MemberContact: string = ''
     public MemberFile: string = ''
+    public Member_DisFile: string = ''
 
 }
 

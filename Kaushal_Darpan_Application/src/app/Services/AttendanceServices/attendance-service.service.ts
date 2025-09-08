@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { catchError, throwError } from 'rxjs';
 import { StreamMasterDataModelsTesting } from '../../Models/StreamMasterDataModelsTesting';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CalendarEventModel, PostAttendanceTimeTable } from '../../Models/StaffMasterDataModel';
+import { CalendarEventModel, PostAttendanceTimeTable, RosterDisplayTimeTableDataModel } from '../../Models/StaffMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -87,7 +87,8 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
-  public async SetCalendarEventModel(model: CalendarEventModel[]) {
+  public async SetCalendarEventModel(model: any[]) {
+    debugger
     return await this.http.post(this.APIUrl + '/SetCalendarEventModel', model, this.headersOptions).pipe(
       catchError(this.handleErrorObservable)
     ).toPromise();
@@ -98,5 +99,15 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
+  public async GetRosterDisplay_PDFTimeTable(model: RosterDisplayTimeTableDataModel) {
+    return await this.http.post(`${this.APIUrl}/GetRosterDisplay_PDFTimeTable`, model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+  public async GetRosterDisplay_PDFTimeTableDownload(model: RosterDisplayTimeTableDataModel) {
+    return await this.http.post(`${this.APIUrl}/GetRosterDisplay_PDFTimeTableDownload`, model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
   
 }

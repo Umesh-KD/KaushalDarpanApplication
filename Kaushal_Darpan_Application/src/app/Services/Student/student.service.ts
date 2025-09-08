@@ -155,4 +155,11 @@ export class StudentService
   }
 
 
+   public async getdublicateCheckSection(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/getdublicateCheckSection`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

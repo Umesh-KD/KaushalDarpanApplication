@@ -31,6 +31,7 @@ export class AddItiIMCRegistrationComponent {
   model = new UploadFileModel()
 
   selectedFileUrl: string | null = null;
+  selectedMemeberFileUrl: string | null = null;
 
   // default members
   defaultMemberTypes: string[] = [
@@ -99,8 +100,10 @@ export class AddItiIMCRegistrationComponent {
 
   public file!: File;
 
-  async onFileSelected(event: any, Type: string) {
+  async onFileSelected(event: any, Type: string, item: any = {}) {
     try {
+
+      console.log(item);
       debugger;
       this.file = event.target.files[0];
       if (this.file) {
@@ -123,8 +126,6 @@ export class AddItiIMCRegistrationComponent {
         //  return ;
         //}
 
-
-
         // Upload to server folder
         this.loaderService.requestStarted();
         this.model.FolderName = 'ITIUpload';
@@ -136,17 +137,25 @@ export class AddItiIMCRegistrationComponent {
 
               switch (Type) {
                 case "RegLink":
-
                   this.formData.RegLink = data['Data'][0]["FileName"];
                   this.formData.RegDisLink = data['Data'][0]["Dis_FileName"];
                   this.selectedFileUrl =  this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink;
                   break;
-                default:
+
+                case "MemberFile":
+                  item.MemberFile = data['Data'][0]["FileName"];
+                  item.Member_DisFile = data['Data'][0]["Dis_FileName"];
+                  this.selectedMemeberFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + item.MemberFile;
+                  break;
+
+                  default:
                   break;
               }
             }
-            event.target.value = null;
-            if (data.State === EnumStatus.Error) {
+            //
+            if (data.State === EnumStatus.Error)
+            {
+              event.target.value = null;
               this.toastr.error(data.ErrorMessage);
 
             } else if (data.State === EnumStatus.Warning) {
@@ -226,13 +235,12 @@ export class AddItiIMCRegistrationComponent {
         debugger;
         if (data.State === EnumStatus.Success) {
           this.formData = data.Data
-          this.selectedFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink; // Set the selected file URL for preview
-          // In ngOnInit or wherever request is populated
-          //this.formData.RegDate =  this.formatDateToInput(this.formData.RegDate);
+          this.formData.RegLink = this.formData.RegLink
+          this.selectedFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink;
+          this.selectedMemeberFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.IMCMemberDetails[0].MemberFile; 
+        
           this.isFormReadOnly = true;
-          //this.InspectionFormGroup.get('TeamTypeID')?.disable();
-          //this.InspectionFormGroup.get('DeploymentDateFrom')?.disable();
-          //this.InspectionFormGroup.get('DeploymentDateTo')?.disable();
+      
 
 
         } else if (data.State === EnumStatus.Warning) {
@@ -265,7 +273,12 @@ export class AddItiIMCRegistrationComponent {
       window.open(this.selectedFileUrl, '_blank'); // open file in new tab
     }
   }
+  previewMemberFile() {
 
+    if (this.selectedMemeberFileUrl) {
+      window.open(this.selectedMemeberFileUrl, '_blank'); // open file in new tab
+    }
+  }
 
 
 }

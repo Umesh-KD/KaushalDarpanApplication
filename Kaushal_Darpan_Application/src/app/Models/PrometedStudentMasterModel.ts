@@ -17,6 +17,13 @@ export class PrometedStudentMasterModel  {
   public SemesterID: number = 0;  // default value is 0
   public Dis_DOB: string = '';  // default value is a Unix epoch date (could be an invalid date)
   public IsBridge: boolean = false;  
+
+  public EarnedCreditsSem1: number = 0;
+  public EarnedCreditsSem2: number = 0;
+  public TotalEarnedCredits: number = 0;
+  public Detain: string = '';
+  public UFM: string = '';
+  public UFMCategory: number = 0;  
 }
 
 export class PromotedStudentMarkedModel {
