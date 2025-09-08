@@ -231,9 +231,9 @@ export class JailAdmissionReportingComponent {
             if (this.searchRequest.TradeLevel == 8) {
               this.Router.navigate(['/JailAdmissionAllotment', 8]);
             } else if (this.searchRequest.TradeLevel == 10) {
-              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+              this.Router.navigate(['/JailAdmissionAllotment10', 10]);
             } else if (this.searchRequest.TradeLevel == 12) {
-              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+              this.Router.navigate(['/JailAdmissionAllotment12', 12]);
             }
 
             return
@@ -244,9 +244,9 @@ export class JailAdmissionReportingComponent {
             if (this.searchRequest.TradeLevel == 8) {
               this.Router.navigate(['/JailAdmissionAllotment', 8]);
             } else if (this.searchRequest.TradeLevel == 10) {
-              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+              this.Router.navigate(['/JailAdmissionAllotment10', 10]);
             } else if (this.searchRequest.TradeLevel == 12) {
-              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+              this.Router.navigate(['/JailAdmissionAllotment12', 12]);
             }
 
             return
