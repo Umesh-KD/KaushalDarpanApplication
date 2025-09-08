@@ -214,6 +214,8 @@ export class JailAdmissionReportingComponent {
         .then((data: any) => {
           debugger;
           data = JSON.parse(JSON.stringify(data));
+         
+
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
@@ -221,6 +223,23 @@ export class JailAdmissionReportingComponent {
           this.request.MobileNo = data['Data'].Table[0].MobileNo;
           this.request.ApplicationID = data['Data'].Table[0].ApplicationID;
           this.request.TradeLevel = data['Data'].Table[0].TradeLevel;
+          this.requestReporting.TradeName = data['Data'].Table[0].TradeName;
+          this.requestReporting.CollegeName = data['Data'].Table[0].CollegeName;
+          debugger
+          if (this.request.TradeLevel != this.searchRequest.TradeLevel) {
+            this.toastr.warning("This Application is Not belong to this Trade Level")
+            if (this.searchRequest.TradeLevel == 8) {
+              this.Router.navigate(['/JailAdmissionAllotment', 8]);
+            } else if (this.searchRequest.TradeLevel == 10) {
+              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+            } else if (this.searchRequest.TradeLevel == 12) {
+              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+            }
+
+            return
+          }
+       /*   this.request.CollegeName = data['Data'].Table[0].CollegeName*/
+    
           this.requestReporting = data['Data'].Table[0];
           this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
           this.requestReporting.ApplicationID = data['Data'].Table[0].ApplicationID;
@@ -235,11 +254,16 @@ export class JailAdmissionReportingComponent {
 
           if (this.StudentVerifyPhoneData[0].ApplicationAllotedDir == 1) {
             this.ApplicationAlloted = true;
+
             this.TradeBox = false;
           } else {
             this.ApplicationAlloted = false;
             this.TradeBox = true;
           }
+
+
+
+
           //if (this.requestReporting.AllotmentDocumentModel.length > 0)
           const photoDoc = this.requestReporting.AllotmentDocumentModel.find((x: any) => x.ColumnName === 'StudentPhoto');
           this.studentPhoto = photoDoc ? photoDoc.FileName : "";

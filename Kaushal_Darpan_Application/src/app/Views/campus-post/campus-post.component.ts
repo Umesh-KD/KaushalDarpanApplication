@@ -15,6 +15,7 @@ import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
 import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { CollegeMasterService } from '../../Services/CollegeMaster/college-master.service';
 
 
 @Component({
@@ -92,7 +93,8 @@ export class CampusPostComponent implements OnInit {
     public appsettingConfig: AppsettingService,
     private commonFunctionService: CommonFunctionService,
     private modalService: NgbModal,
-    private smsMailService: SMSMailService
+    private smsMailService: SMSMailService,
+    private instituteService: CollegeMasterService
   ) { }
 
   async ngOnInit() {
@@ -168,6 +170,7 @@ export class CampusPostComponent implements OnInit {
       txtSalaryRemark: [''],
       ddlGender: [''],
       txtOtherBenefit: [''],
+      txtOtherEligibility: [''],
       ddlCampusType: [''],
 
       ddlInterviewType: [''],
@@ -212,7 +215,9 @@ export class CampusPostComponent implements OnInit {
     if (this.request_EligibilityCriteriaModel.AgeAllowedTo != null && this.request_EligibilityCriteriaModel.AgeAllowedTo != '') {
       this.onAgeRangeChange();
     }
+    this.GetCollegeDetaisAndLoadDataFillValues();
 
+    
   }
   //onStartDateChange(): void {
   //  // Ensure the "minDate" is set to the "AgeAllowedFrom" date value
@@ -351,6 +356,47 @@ export class CampusPostComponent implements OnInit {
       .filter((item: any) => item.SemesterID == 5 || item.SemesterID == 6) // Filter by SemesterID 5 or 6
       .sort((a: any, b: any) => b.SemesterName.localeCompare(a.SemesterName)); // Sort in descending order by SemesterName
   }
+
+
+  async GetCollegeDetaisAndLoadDataFillValues() {
+    try {
+     
+      this.request_EligibilityCriteriaModel.HiringRoleID = 1;
+      this.request_EligibilityCriteriaModel.NoofPositions = 10;
+      this.request_EligibilityCriteriaModel.CTC = '15000';
+      this.request.CampusFromTime = '10:00';
+
+      const todays = new Date();
+      const formatDate = (date: Date): string => {
+        return date.toISOString().split('T')[0]; // Example output: "2025-09-04"
+      };
+
+      this.request.CampusFromDate = formatDate(todays);
+
+      const fiveDaysLater = new Date();
+      fiveDaysLater.setDate(todays.getDate() + 5);
+
+      this.request.CampusToDate = formatDate(fiveDaysLater);
+
+      let request = {
+        InstituteID: this.sSOLoginDataModel.InstituteID
+      }
+      await this.instituteService.GetCollegeAddress(request)
+        .then(async (data: any) =>
+        {
+          data = JSON.parse(JSON.stringify(data));        
+          this.request.CampusAddress = data['Data']["Address"];   
+          this.request.CampusVenue = data['Data']["InstituteNameEnglish"];   
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
+
 
 
   async ddlState_Change() {
@@ -512,6 +558,7 @@ export class CampusPostComponent implements OnInit {
           this.request_EligibilityCriteriaModel.SalaryRemark = data['Data']["EligibilityCriteriaModel"][0]["SalaryRemark"];
           this.request_EligibilityCriteriaModel.Gender = data['Data']["EligibilityCriteriaModel"][0]["Gender"];
           this.request_EligibilityCriteriaModel.OtherBenefit = data['Data']["EligibilityCriteriaModel"][0]["OtherBenefit"];
+          this.request_EligibilityCriteriaModel.OtherEligibility = data['Data']["EligibilityCriteriaModel"][0]["OtherEligibility"];
           this.request_EligibilityCriteriaModel.CampusType = data['Data']["EligibilityCriteriaModel"][0]["CampusType"];
           this.request_EligibilityCriteriaModel.InterviewType = data['Data']["EligibilityCriteriaModel"][0]["InterviewType"];
           this.request_EligibilityCriteriaModel.NoOfInterviewRound = data['Data']["EligibilityCriteriaModel"][0]["NoOfInterviewRound"];
@@ -710,6 +757,7 @@ export class CampusPostComponent implements OnInit {
             SalaryRemark: this.request_EligibilityCriteriaModel.SalaryRemark,
             Gender: this.request_EligibilityCriteriaModel.Gender,
             OtherBenefit: this.request_EligibilityCriteriaModel.OtherBenefit,
+            OtherEligibility: this.request_EligibilityCriteriaModel.OtherEligibility,
             CampusType: this.request_EligibilityCriteriaModel.CampusType,
             InterviewType: this.request_EligibilityCriteriaModel.InterviewType,
             NoOfInterviewRound: this.request_EligibilityCriteriaModel.NoOfInterviewRound,
@@ -759,6 +807,7 @@ export class CampusPostComponent implements OnInit {
     this.request_EligibilityCriteriaModel.SalaryRemark = '';
     this.request_EligibilityCriteriaModel.Gender = '';
     this.request_EligibilityCriteriaModel.OtherBenefit = '';
+    this.request_EligibilityCriteriaModel.OtherEligibility = '';
     this.request_EligibilityCriteriaModel.CampusType = '0';
     this.request_EligibilityCriteriaModel.InterviewType = 'Both';
     this.request_EligibilityCriteriaModel.NoOfInterviewRound = 0;

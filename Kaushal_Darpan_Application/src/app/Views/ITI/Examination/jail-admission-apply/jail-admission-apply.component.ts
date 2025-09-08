@@ -585,7 +585,7 @@ export class JailAdmissionApplyComponent {
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
           debugger
-          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID }).length
+          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
           if (lnth <= 0) {
             /*    this.toastrService.warning("Date for ITI Admission is Closed or Not Open");*/
             this.isITIAddmissionOpen = false;

@@ -53,6 +53,11 @@ export class PlacementDashboardComponent implements OnInit {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
+
+      if (this.sSOLoginDataModel.RoleID!=6)
+      {
+        this.request.CollegeID = 0;
+      }
       await this.PlacementDashService.GetAllData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

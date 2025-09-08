@@ -129,7 +129,7 @@ export class RosteListComponent implements OnInit {
     });
     
     this.getMasterData();
-    this.GetAllRosterDisplay();
+   /* this.GetAllRosterDisplay();*/
     
   }
   get formTable() { return this.TableForm.controls; }
@@ -436,7 +436,7 @@ export class RosteListComponent implements OnInit {
         this._RosterDisplayTimeTableDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
         this._RosterDisplayTimeTableDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
         this._RosterDisplayTimeTableDataModel.SemesterID = 0;
-        this._RosterDisplayTimeTableDataModel.StreamID = 0;
+    this._RosterDisplayTimeTableDataModel.StreamID = this.filterModel.StreamID;
         this._RosterDisplayTimeTableDataModel.SubjectID = 0;
         await this.GetRosterDisplay_PDFTimeTablePDF();
 
