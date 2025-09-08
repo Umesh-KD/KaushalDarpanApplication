@@ -228,6 +228,7 @@ export class RosteComponent implements OnInit {
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       StreamID: GetstreamId,
+      SemesterID: GetSemesterID
 
     }
     await this.staffMasterService.GetBranchSectionData(obj)

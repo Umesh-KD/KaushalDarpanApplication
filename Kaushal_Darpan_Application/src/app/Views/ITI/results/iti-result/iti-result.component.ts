@@ -97,10 +97,10 @@ export class ITIResultComponent {
     this.requestModel.UserID = Number(this.sSOLoginDataModel.UserID);
     this.requestModel.EndTermID = Number(this.sSOLoginDataModel.EndTermID);
     this.requestModel.FinancialYearID = Number(this.sSOLoginDataModel.FinancialYearID);
-    // this.requestModel.InstituteID = Number(this.sSOLoginDataModel.InstituteID);
-    this.requestModel.InstituteID = 1;
+     this.requestModel.InstituteID = Number(this.sSOLoginDataModel.InstituteID);
+   // this.requestModel.InstituteID = 1;
     // this.requestModel.SemesterID = 3; // Assuming SemesterID is 3 for the current context
-    this.getCurrentResultResult();
+    //this.getCurrentResultResult();
     // this.Status = Number(this.route.snapshot.paramMap.get('id')?.toString());
       // this.searchRequest.Status = 1
     // this.searchRequest.Status = this.Status

@@ -52,3 +52,15 @@ select.form-select {
   justify-content: center;
   border: 0px;
 }
+.StateLevelPoolCampus:hover {
+  background-color: #ffe7ec !important; 
+}
+.InstituteLevelCampus:hover {
+  /*  background-color: lightgreen;*/
+  background-color: #e1b5bf !important;
+}
+
+.DivisionLevelPoolCampus:hover {
+  /*  background-color: lightcoral;*/
+  background-color: #d38192 !important;
+}
