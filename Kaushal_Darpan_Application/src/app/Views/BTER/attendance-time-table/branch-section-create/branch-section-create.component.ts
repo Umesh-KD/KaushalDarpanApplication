@@ -777,6 +777,7 @@ export class BranchSectionCreateComponent {
 
   async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
     debugger
+    this.AddStaffSubjectSectionModel.SubjectID = 0;
     const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
     const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
     /* await this.getupBranchHodData();*/
