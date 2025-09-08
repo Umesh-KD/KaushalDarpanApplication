@@ -45,7 +45,7 @@ export class CampusValidationComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   formAction!: FormGroup;
-
+  public flagName: string = "TotalNoOfCampus";
   public TodayDate = new Date()
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: CampusPostService, private loaderService: LoaderService,
@@ -58,6 +58,9 @@ export class CampusValidationComponent {
         ddlAction: ['', Validators.required],
         txtActionRemarks: ['', Validators.required],
       })
+
+    this.flagName = this.route.snapshot.queryParamMap.get('flag') ?? 'TotalNoOfCampus';
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.currentStatus = Number(this.route.snapshot.queryParamMap.get("Status") ?? 0);
     await this.GetMasterData();
@@ -114,7 +117,13 @@ export class CampusValidationComponent {
   async btn_SearchClick() {
     try {
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
+      this.InstituteID = this.sSOLoginDataModel.InstituteID;
+      if (this.sSOLoginDataModel.RoleID != 6) {
+        this.InstituteID = 0;
+      }
+
+     
+      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID, this.flagName)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
