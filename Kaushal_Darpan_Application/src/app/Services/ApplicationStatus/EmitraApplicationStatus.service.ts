@@ -54,7 +54,13 @@ export class ApplicationStatusService {
       ).toPromise();
   }
 
-
+  public async StudentJailAdmission(searchRequest: StudentSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/StudentJailAdmission`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 }

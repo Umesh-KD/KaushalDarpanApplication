@@ -24,6 +24,7 @@ import { DateConfigService } from '../../../../Services/DateConfiguration/date-c
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ElementRef, Renderer2, AfterViewInit, ViewChild } from '@angular/core';
+import { BterApplicationForm } from '../../../../Services/BterApplicationForm/bterApplication.service';
 
 @Component({
   selector: 'app-iti-direct-preview-form',
@@ -109,6 +110,7 @@ export class ITIDirectPreviewFormComponent {
     private dateMasterService: DateConfigService,
     private sanitizer: DomSanitizer,
     private renderer: Renderer2,
+    private ApplicationService: BterApplicationForm,
   ) { }
 
   async ngOnInit()
@@ -203,7 +205,7 @@ export class ITIDirectPreviewFormComponent {
     }
   }
 
-  async SaveFinalSubmit(content: any)
+  async SaveFinalSubmit()
   {
     this.isSubmitted = true
     this.UserID = this.sSOLoginDataModel.UserID
@@ -223,7 +225,9 @@ export class ITIDirectPreviewFormComponent {
       return;
     }
 
-
+    let obj = {
+      ApplicationID: this.request.ApplicationID
+    }
 
     try
     {
@@ -231,7 +235,7 @@ export class ITIDirectPreviewFormComponent {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
 
-          await this.ItiApplicationFormService.FinalSubmit(this.request.ApplicationID, this.Status = EnumApplicationFromStatus.FinalSave)
+      await this.ApplicationService.JailAdmissionFinalSubmit(obj)
             .then((data: any) => {
               data = JSON.parse(JSON.stringify(data));
               this.State = data['State'];
@@ -243,7 +247,7 @@ export class ITIDirectPreviewFormComponent {
                /* this.GetById();*/
                 //this.toastr.success(this.Message)
 
-                this.SavePreview(content, this.request.ApplicationID)
+/*                this.SavePreview(content, this.request.ApplicationID)*/
 
 
                 //if (this.Status == EnumApplicationFromStatus.FinalSave) {
@@ -251,7 +255,8 @@ export class ITIDirectPreviewFormComponent {
                 //    queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 //  });
                 //}
-                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave);
+
+                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave, true);
                 // this.router.navigate(['/Itipreviewform'], {
                 //   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 // });
@@ -667,8 +672,8 @@ export class ITIDirectPreviewFormComponent {
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-           
-          var lnth= this.AdmissionDateList.filter(function(x:any){return new Date(x.To_Date) > today && new Date(x.From_Date) < today &&  x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID}).length
+
+          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
           if (lnth <= 0)
           {
             this.toastr.warning("Date for ITI Admission is Closed or Not Open");
@@ -845,7 +850,9 @@ export class ITIDirectPreviewFormComponent {
   //  this.showPdfModal = true;
   //}
 
+  async SaveFinalSubmit2() {
 
+  }
 
   ClosePopupAndGenerateAndViewPdf(): void {
     const el = document.getElementById('app-menu');

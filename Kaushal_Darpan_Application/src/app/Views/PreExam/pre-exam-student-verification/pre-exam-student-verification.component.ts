@@ -674,34 +674,34 @@ export class PreExamStudentVerificationComponent {
   }
 
     async openOTPModal() {
-    const isAnySelected = this.PreExamStudentData.some((x: any) => x.Selected);
-    if (!isAnySelected) {
-      this.toastr.error('Please select at least one Student!');
-      return;
-    }
+      const isAnySelected = this.PreExamStudentData.some((x: any) => x.Selected);
+      if (!isAnySelected) {
+        this.toastr.error('Please select at least one Student!');
+        return;
+      }
 
-    this.Swal2.Confirmation("Are you sure you want to Verify ?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+      this.Swal2.Confirmation("Are you sure you want to Verify ?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
+            // await for open model
+            await this.childComponent.OpenOTPPopup();
 
-          // await OTP verification
-          await this.childComponent.waitForVerification();
+            // await OTP verification
+            await this.childComponent.waitForVerification();
 
-          // do work
-          if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
-            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
-            await this.VerifyStudent_ExaminationIncharge();
+            // do work
+            if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
+              this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
+              await this.VerifyStudent_ExaminationIncharge();
+            }
+
+            if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
+              this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
+              await this.VerifyStudent_Registrar();
+            }
           }
-
-          if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
-            this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
-            await this.VerifyStudent_Registrar();
-          }
-        }
-      });
+        });
   }
 }

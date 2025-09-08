@@ -1,0 +1,208 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Hostel Allotment</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Hostel Allotment</a>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Student Details</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No / Enrollment No<span class="StarMarking">*</span></label>
+            <input class="form-input" placeholder="Enter Application No / Enrollment No" name="ApplicationNo" id="ApplicationNo"
+                     [(ngModel)]="studentRequest.ApplicationNo" />
+            
+        </div>
+        <div>
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="GetStudentDetails()">Get Details</button>
+        </div>
+    </div>
+
+    <div class="mt-8 mb-8" *ngIf="showStudentDetails">
+        <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
+            <div><b>Name of Student</b></div>
+            <div>{{StudentDetailsList[0]?.StudentName}}</div>
+            <div><b>Father's Name</b></div>
+            <div>{{StudentDetailsList[0]?.FatherName}}</div>
+            <div><b>Contact/Mobile No.</b></div>
+            <div>{{StudentDetailsList[0]?.MobileNo}}</div>
+            <div><b>Permanet Address</b></div>
+            <div>{{StudentDetailsList[0]?.Address1}}</div>
+            <div><b>Cast/Category</b></div>
+            <div>{{StudentDetailsList[0]?.CasteCategoryNameEnglish}}</div>
+            <div><b>Semester</b></div>
+            <div>{{StudentDetailsList[0]?.SemesterName}}</div>
+            <div><b>Branch Name</b></div>
+            <div>{{StudentDetailsList[0]?.StreamName}}</div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light  mt-3">
+            <b class="text-1xl-5"><i class="ti ti-upload"></i> Affidavit Form</b>
+            <button class="btn bg-success text-white btn-sm" type="button" (click)="DownloadHostelForm(StudentDetailsList[0]?.SemesterName)">Download Affidavit Form </button>
+        </div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="fileAffidavitPhoto">Upload Affidavit Form <span class="StarMarking">*</span> </label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="fileAffidavitPhoto" type="file" (change)="onFilechange($event,'affidavit')">
+                  <label for="fileAffidavitPhoto">
+                    <span>Choose File</span>
+                    {{studentRequest.Dis_AffidavitPhoto === '' ? 'No File Choosen' : studentRequest.Dis_AffidavitPhoto}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + studentRequest.AffidavitPhoto}}" *ngIf="studentRequest.AffidavitPhoto !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="openAllotmentModal(modal_SubmitReq)">Allocate Seat</button>
+        </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<ng-template #modal_SubmitReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <div>
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Seat/Room Allotment </b>
+          <span class="text-danger">(* fields are mandatory)</span>
+        </div>
+        <button class="btn bg-info text-white" (click)="CloseAllotmentModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="AllotRequestFormGroup">
+          <div class="mb-8">
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Room Type: <span class="StarMarking">*</span></label>
+                <select class="form-select" id="roomTypeId" formControlName="roomTypeId" [(ngModel)]="Allotmentrequest.RoomTypeId" (change)="GetRoomNoDDL()">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of RoomTypeDDLList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.roomTypeId.errors" class="text-danger">
+                  <p *ngIf="!_AllotRequestFormGroup.roomTypeId.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.!
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Room No. <span class="StarMarking">*</span></label>
+                <select class="form-select" id="roomNoId" formControlName="roomNoId" [(ngModel)]="Allotmentrequest.RoomNoId">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of RoomNoDDLList" [value]="item.HSRoomID">{{item.RoomNo}}: Available Bed({{item.AvailableSeats}})</option>
+                </select>
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.roomNoId.errors" class="text-danger">
+                  <p *ngIf="!_AllotRequestFormGroup.roomNoId.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.!
+
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="feesReceipt">Hostel Fee Pay Reciept</label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="feesReceipt" type="file" (change)="onFilechange($event,'feesReceipt')">
+                  <label for="feesReceipt">
+                    <span>Choose File</span>
+                    {{Allotmentrequest.Dis_HostelFeesReciept === '' ? 'No File Choosen' : Allotmentrequest.Dis_HostelFeesReciept}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + Allotmentrequest.HostelFeesReciept}}" *ngIf="Allotmentrequest.HostelFeesReciept !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Fee Amount<span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="Enter Fess Amount (Per Year) (₹)" class="form-input" id="fessAmount" name="FessAmount" formControlName="fessAmount" [(ngModel)]="Allotmentrequest.FessAmount">
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.fessAmount.errors" class="text-danger">
+                  <p *ngIf="_AllotRequestFormGroup.fessAmount.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required.!
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
+                <b class="text-1xl-5"><i class="ti ti-phone"></i> Emergency Contact Details</b>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Relation <span class="StarMarking">*</span></label>
+                <select class="form-select" id="relation" formControlName="relation" [(ngModel)]="Allotmentrequest.Relation">
+                  <option value="0">Choose Option</option>
+
+                  <option *ngFor="let item of RelationQueryDDL" [value]="item.ID">{{item.Name}}</option>
+                </select>
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.relation.errors" class="text-danger">
+                  <p *ngIf="!_AllotRequestFormGroup.relation.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required.!
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Name of Contact Person <span class="StarMarking">*</span>
+                </label>
+                <input type="text" placeholder="Enter Name of Contact Person" maxlength="30" class="form-input" id="contactPersonName" name="ContactPersonName"
+                       formControlName="contactPersonName" [(ngModel)]="Allotmentrequest.ContactPersonName" (keypress)="allowOnlyAlphabets($event)">
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.controls['contactPersonName'].errors" class="text-danger">
+                  <p *ngIf="_AllotRequestFormGroup.controls['contactPersonName'].errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                  <p *ngIf="_AllotRequestFormGroup.controls['contactPersonName'].errors.pattern">
+                    <i aria-hidden="true"></i>
+                    Only alphabets are allowed.!
+                  </p>
+                </div>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Enter Emergency Contact No. <span class="StarMarking">*</span>
+                </label>
+                <input placeholder="Enter ContactNo. of Contact Person" class="form-input" id="mobileNo" (keypress)="validateNumber($event)" name="MobileNo" formControlName="mobileNo" maxlength="10" [(ngModel)]="Allotmentrequest.MobileNo">
+                <div *ngIf="isSubmitted && _AllotRequestFormGroup.mobileNo.errors" class="text-danger">
+                  <p *ngIf="_AllotRequestFormGroup.mobileNo.errors.required">
+                    <i aria-hidden="true"></i>
+                    This field is required .!
+                  </p>
+                  <p *ngIf="_AllotRequestFormGroup.mobileNo.errors.pattern">
+                    <i aria-hidden="true"></i> Please enter a valid 10-digit mobile number.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t border-default-200">
+            <button type="button" (click)="openOTPModal()" class="py-2 px-5 inline-flex items-center justify-center font-medium tracking-wide border align-middle duration-500 text-sm text-center bg-primary/5 hover:bg-primary border-primary/10 hover:border-primary text-primary hover:text-white rounded-md">
+              Submit
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal>

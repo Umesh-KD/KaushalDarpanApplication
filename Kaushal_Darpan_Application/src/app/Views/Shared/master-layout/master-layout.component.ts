@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild, Renderer2, ElementRef, Inject, PLATFORM_ID, signal, inject } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { EnumDepartment, EnumEmitraService, EnumRole, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumDepartment, EnumEmitraService, EnumRole, GlobalConstants, JailCollegeID } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 /*import { MenuService } from '../../../Services/Menu/menu.service';*/
@@ -21,6 +21,7 @@ import { RequestBaseModel } from '../../../Models/RequestBaseModel';  // new add
 import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 declare var window: any;
 
+
 //declare function CommonFileUpload(_http: any): any;
 
 @Component({
@@ -31,6 +32,7 @@ declare var window: any;
 })
 export class MasterLayoutComponent implements OnInit {
   sSOLoginDataModel = new SSOLoginDataModel();
+  public IsJailCollege: boolean = false
   UserName: any = '';
   public MenuHTML: any = "";
   public lstUserRole: any = []
@@ -221,6 +223,9 @@ export class MasterLayoutComponent implements OnInit {
     }
     await this.ChangeCSS();
 
+
+
+    await this.checkJailCollege()
     // Subscribe to the sSOLoginDataModel$ observable
     //this.userDataSubscription = this.commonFunctionService.sSOLoginDataModel$.subscribe(
     //  (data) => {
@@ -824,5 +829,19 @@ export class MasterLayoutComponent implements OnInit {
 
     //}
   }
+
+
+  checkJailCollege() {
+    JailCollegeID.map((item: any) => {
+      if (item === this.sSOLoginDataModel.InstituteID) {
+        
+        if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+          this.IsJailCollege = true
+        }
+
+      }
+    })
+  }
+
 }
 

@@ -195,6 +195,15 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+  public async GetStudentOptionByApplicationNo(searchRequest: DirectAllocationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetStudentOptionByApplicationNo`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 
   public async RevertAllotments(request: DirectAllocationDataModel) {
@@ -204,6 +213,17 @@ export class ITIAllotmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async RevertJailAllotments(request: DirectAllocationDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/RevertJailAllotments`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetStudentDetails(searchRequest: DirectAllocationSearchModel) {
     var body = JSON.stringify(searchRequest);
@@ -252,6 +272,33 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+
+  public async GetJailStudentDetails(searchRequest: DirectAllocationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    debugger
+    return await this.http.post(`${this.APIUrl}/GetJailStudentDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async UpdateJailAllotments(request: DirectAllocationDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateJailAllotments`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetJailAllData(searchRequest: DirectAllocationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetJailAllData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 
 

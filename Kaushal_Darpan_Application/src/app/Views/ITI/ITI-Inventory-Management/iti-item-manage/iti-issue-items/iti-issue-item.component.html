@@ -31,7 +31,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-          <select class="form-select" id="StaffID" [(ngModel)]="Searchrequests.staffID"
+          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID"
                   (change)="GetTradeDDL()">
             <option *ngFor="let item of staffDDLList" [value]="item.staffID">
               {{ item.staffName }}
@@ -51,8 +51,8 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId">
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
+          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemId" (change)="DGET_Details()">
+            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId" >
               {{ item.ItemCategoryName }}
             </option>
           </select>
@@ -86,10 +86,10 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>
-              <input type="checkbox" class="checkboxSize" />
+              <!--<input type="checkbox" class="checkboxSize" />-->
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
-            <th class="text-center">Action</th>
             <!--sorting column-->
             <th class="text-left cursorHand" title="Click to sorting">
               Item Code
@@ -107,10 +107,10 @@
               Catogary ID
 
             </th>
-            <th class="text-left cursorHand" title="Click to sorting">
+            <!--<th class="text-left cursorHand" title="Click to sorting">
               Company Name
 
-            </th>
+            </th>-->
 
 
             </tr>
@@ -119,8 +119,8 @@
 
             <tr *ngFor="let row of ItemsDDLList; let idx=index; ">
               <td>
-                <input type="checkbox" class="checkboxSize" />
-                <!--<input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">-->
+                <!--<input type="checkbox" class="checkboxSize" />-->
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected" #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
               </td>
               <td align="left">{{idx+1}}</td>
 
@@ -130,6 +130,9 @@
               <td>{{row.Quantity}}</td>
               <!--<td>{{row.CompanyName}}</td>-->
 
+            </tr>
+            <tr *ngIf="ItemsDDLList?.length==0" class="text-center">
+              <td colspan="7">No Record Found!!</td>
             </tr>
           </tbody>
         </table>
@@ -151,7 +154,41 @@
       </div>
       <div class="card-body">
         <div class="mb-8">
-          
+          <form >
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.StaffId" name="StaffId">
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.TradeId" name="TradeId">
+              <input type="hidden" class="form-input" [(ngModel)]="submitRequest.ItemId" name="ItemId">
+
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.StaffName" name="StaffName" disabled>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Quantity:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.Quantity" name="Quantity" disabled>
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Due Date:</label>
+                <input type="date" class="form-input" [(ngModel)]="submitRequest.DueDate" name="DueDate" required>
+              </div>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remarks:</label>
+                <input type="text" class="form-input" [(ngModel)]="submitRequest.Remarks" name="Remarks">
+              </div>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+              <div>
+                <button type="button" class="btn bg-info text-white mt-6" (click)="saveData()">Submit Issue</button>
+              </div>
+            </div>
+          </form>
 
           <div class="overflow-x-auto mt-3">
           </div>

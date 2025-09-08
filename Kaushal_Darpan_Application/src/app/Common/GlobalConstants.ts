@@ -258,7 +258,8 @@ export enum EnumConfigurationType {
   Bter_CollegeFee = 155,
   Registrar=40,
   Registrar_NonEng=55,
-  Reval_GroupCode = 160
+  Reval_GroupCode = 160,
+  JailAdmission = 1162
 }
 
 export enum EnumDepartment {
@@ -445,7 +446,16 @@ export enum EnumDispatchDDlValue {
   VerifyByExaminer=20
 }
 
-export const JailCollegeID = [44, 116, 157, 158, 234, 235, 236, 237, 239,36];
+export const JailCollegeID = [36,
+108,
+149,
+150,
+
+226,
+227,
+228,
+229,
+22196];
 
 export enum EnumRenumerationExaminer
 {

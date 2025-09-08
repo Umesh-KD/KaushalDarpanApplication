@@ -52,4 +52,13 @@ export class DeallocateRoomDataModel extends RequestBaseModel {
   public ReqId?: number = 0
   public UserID?: number = 0
   public Action?: string = ''
+  public Remark?: string = ''
+}
+
+export class StudentDetailDataModel_Hostel extends RequestBaseModel {
+  public ApplicationNo: string = ''
+  public EnrollmentNo?: string = ''
+  public HostelID?: number = 0
+  public AffidavitPhoto?: string = ''
+  public Dis_AffidavitPhoto?: string = ''
 }

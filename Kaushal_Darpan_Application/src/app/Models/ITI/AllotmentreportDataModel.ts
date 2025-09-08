@@ -10,6 +10,7 @@ export class AllotmentReportingModel {
   public GenderNm?: string='';
   public DOB?: string='';
   public TradeName?: string='';
+  public CollegeName?: string='';
   public AllotedGender?: string='';
   public AllotedCategory?: string='';
   public fullAddress?: string='';
@@ -32,6 +33,7 @@ export class AllotmentReportingModel {
   public CheckStatus: number = 0;
   public AllotedPriority: number = 0;
   public AcademicYearID: number = 0;
+  public ReportingStatus: number = 0;
   public ApplyUpward: boolean = false;
 }
 

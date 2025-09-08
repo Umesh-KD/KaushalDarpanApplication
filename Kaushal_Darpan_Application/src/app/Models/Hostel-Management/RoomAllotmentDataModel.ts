@@ -19,6 +19,11 @@ export class RoomAllotmentDataModel {
   public InstituteId: number = 0;
   public FessAmount: number = 0;
   public AllotmentStatus: number = 0;
+
+  public AffidavitPhoto?: string = '';
+  public Dis_AffidavitPhoto?: string = '';
+  public StudentID?: number = 0;
+  public ApplicationNo?: string = '';
 }
 
 
