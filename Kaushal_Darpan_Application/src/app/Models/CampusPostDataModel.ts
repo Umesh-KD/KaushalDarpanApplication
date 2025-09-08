@@ -66,6 +66,7 @@ export class CampusPostMaster_EligibilityCriteriaModel {
   public SalaryRemark: string = 'Per Month';
   public Gender: string = 'Male and Female Both';
   public OtherBenefit: string = '';
+  public OtherEligibility: string = '';
   public CampusType: string = '0';
   public InterviewType: string = 'Written And Interview';
   public NoOfInterviewRound: number = 2;
