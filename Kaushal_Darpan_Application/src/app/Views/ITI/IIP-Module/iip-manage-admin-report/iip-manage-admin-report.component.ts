@@ -13,19 +13,24 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { ITIFeesPerYearListSearchModel } from '../../../../Models/ITI/ITIFeesPerYearList';
+import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'iip-manage',
+  selector: 'app-iip-manage-admin-report',
   standalone: false,
-  templateUrl: './iip-manage.component.html',
-  styleUrl: './iip-manage.component.css'
+  templateUrl: './iip-manage-admin-report.component.html',
+  styleUrl: './iip-manage-admin-report.component.css'
 })
-export class ITIIIPManageComponent {
+export class IIPManageAdminReportComponent {
+
   public sSOLoginDataModel = new SSOLoginDataModel();
   _EnumDeploymentStatus = EnumDeploymentStatus
   searchRequest = new ITI_IIPManageSearchModel();
   public formData = new IIPManageFundSearchModel()
+  public Message: string = '';
+   public CollegeMasterList: any = [];
   IIPManageData: any = [];
   IIPIMCHistoryData: any = [];
   IIPMembersData: any = [];
@@ -42,6 +47,17 @@ export class ITIIIPManageComponent {
   toggleButtonText: string = "View previous members history";
   showingPrevious: boolean = false;
   FinancialYearMasterDDL: any;
+  DivisionMasterList: any;
+  public Divisionlist: any = [];
+  public Districtlist: any = [];
+  public Institutelist: any = [];
+
+  public ddlDivison: number = 0;
+ 
+  public DivisionID: number = 0;
+  public DistrictID: number = 0;
+  public InstituteID: number = 0;
+
 
   modalReference: NgbModalRef | undefined;
   modalReference1: NgbModalRef | undefined;
@@ -55,7 +71,9 @@ export class ITIIIPManageComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
- // private modalService = inject(NgbModal);
+  //public searchRequest = new ITIFeesPerYearListSearchModel();
+  public IsShowGenerate: boolean = false
+  // private modalService = inject(NgbModal);
   constructor(
     private commonMasterService: CommonFunctionService,
     private menuService: MenuService,
@@ -69,8 +87,9 @@ export class ITIIIPManageComponent {
     private sMSMailService: SMSMailService,
     private http: HttpClient,
     private appsettingConfig: AppsettingService,
+    private itiallotmentStatusService: ITIAllotmentService,
     private router: Router, private activatedRoute: ActivatedRoute
-  ){}
+  ) { }
 
 
   async ngOnInit() {
@@ -87,7 +106,62 @@ export class ITIIIPManageComponent {
       this.FinancialYearMasterDDL = data.Data;
     })
 
-    this.GetAllData()
+    this.GetDivisionMaster()
+    this.GetDistrictMaster(0)
+    //this.GetAllIMCFundData()
+    this.GetAllIMCFundDataforReport()
+    this.ddlDivision_Change()
+  }
+
+  async GetDivisionMaster() {
+   
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDivisionMaster().then((data: any) => {
+        this.Divisionlist = data.Data;
+        console.log(this.Divisionlist);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+   GetDistrictMaster(DivisionID: number) {
+    try {
+      this.loaderService.requestStarted();
+      console.log("Selected DivisionID:", DivisionID);
+      this.commonMasterService.DistrictMaster_DivisionIDWise(DivisionID).then((data: any) => {
+        this.Districtlist = data.Data;
+        console.log(this.Districtlist);
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  
+  GetInstituteMaster(DistrictID: number) {
+    try {
+      this.loaderService.requestStarted();
+      this.commonMasterService.GetInstituteMaster_ByDistrictWise(DistrictID).then((data: any)=> {
+        this.Institutelist = data.Data;
+        console.log("Institutelist:", this.Institutelist);
+      });
+    } catch (error) {
+      console.error("Error fetching institute list:", error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   async ResetControl() {
@@ -99,18 +173,19 @@ export class ITIIIPManageComponent {
     this.GetAllData();
   }
 
-  async GetAllData () {
+  async GetAllData() {
+    
     try {
-      debugger;
       this.loaderService.requestStarted();
       this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
       this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID;
+      //this.searchRequest.DivisionID = this.sSOLoginDataModel.DivisionID;
 
       await this.itiIIPManageService.GetAllData(this.searchRequest).then((data: any) => {
-        debugger;
+        debugger
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success){
+        if (data.State === EnumStatus.Success) {
           this.IIPManageData = data.Data.Table;
           this.IIPMembersData = data.Data.Table1;
           this.IIPFundData = data.Data.Table2;
@@ -118,9 +193,7 @@ export class ITIIIPManageComponent {
           if (this.IIPManageData.length > 0) {
             this.NewRegistrationDisable = true;
           }
-
-
-          console.log("this.IIPManageData",this.IIPManageData)
+          console.log("this.IIPManageData ==>", this.IIPManageData)
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -137,25 +210,25 @@ export class ITIIIPManageComponent {
   }
 
   async ShowIMCDetails(content: any, RegID: number) {
-    debugger;
-    try { 
-    //this.IIPManageTeamID = id
+    
+    try {
+      //this.IIPManageTeamID = id
       await this.itiIIPManageService.GetIMCHistory_ById(RegID).then((data: any) => {
-      debugger;
-      data = JSON.parse(JSON.stringify(data));
-      if (data.State === EnumStatus.Success) {
+       
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
 
-        this.IIPIMCHistoryData = data.Data;
+          this.IIPIMCHistoryData = data.Data;
 
-        this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+          this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
 
-      } else if (data.State === EnumStatus.Warning) {
-        this.toastr.warning(data.Message);
-      } else {
-        this.toastr.error(data.ErrorMessage);
-      }
-    })
-    } catch(error) {
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
       console.log(error);
     } finally {
       setTimeout(() => {
@@ -166,7 +239,7 @@ export class ITIIIPManageComponent {
   }
 
   async ShowMemberDetails(content: any) {
-    debugger;
+   
     //this.IIPManageTeamID = id
     this.IIPCurrentMembersData = this.IIPMembersData.filter((x: any) => x.ActiveFlag == 1);
 
@@ -197,16 +270,17 @@ export class ITIIIPManageComponent {
   }
 
   async GetAllIMCFundData() {
+
     try {
-      debugger;
+     
       this.loaderService.requestStarted();
       //this.formData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.formData.UserID = this.sSOLoginDataModel.UserID;
       this.formData.InstituteId = this.sSOLoginDataModel.InstituteID;
-      this.formData.IMCRegID = this.IIPManageData[0].RegistrationID;
+      //this.formData.IMCRegID = this.IIPManageData[0].RegistrationID;
 
       await this.itiIIPManageService.GetAllIMCFundData(this.formData).then((data: any) => {
-        debugger;
+      
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.IIPFundData = data.Data.Table;
@@ -227,7 +301,7 @@ export class ITIIIPManageComponent {
   }
 
   async GetFinancialData(event: any) {
-    debugger;
+   
     const selectedId = this.formData.FinancialYearID; // this will give the selected FinancialYearID
     this.loaderService.requestStarted();
     this.formData.FinancialYearID = selectedId;
@@ -238,13 +312,13 @@ export class ITIIIPManageComponent {
 
 
   async ShowQuaterDetails(content: any, id: number) {
- 
+
     try {
       this.loaderService.requestStarted();
-     
+
 
       await this.itiIIPManageService.GetQuaterlyProgressData(id).then((data: any) => {
-        debugger;
+       
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.IIPQuaterReportData = data.Data;
@@ -303,10 +377,215 @@ export class ITIIIPManageComponent {
 
   async DownloadIIPQuaterlyFundReportPDF(id: number) {
 
-      try {
-        await this.itiIIPManageService.GetIIPQuaterlyFundReport(id).then((data: any) => {
+    try {
+      await this.itiIIPManageService.GetIIPQuaterlyFundReport(id).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+       
+        if (data && data.Data) {
+          const base64 = data.Data;
+
+          const byteCharacters = atob(base64);
+          const byteNumbers = new Array(byteCharacters.length);
+          for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+          }
+
+          const byteArray = new Uint8Array(byteNumbers);
+          const blob = new Blob([byteArray], { type: 'application/pdf' });
+          const blobUrl = URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = blobUrl;
+          link.download = 'IIPQuaterlyFundReport.pdf';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+        } else {
+          this.toastr.error("FIle Not Found!!")
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+
+  }
+
+  async DownloadIIPQuaterlyFundReportPDFData() {
+   
+    try {
+       //const data: any = await this.itiIIPManageService.GetIIPQuaterlyFundReportData();
+       const data: any = await this.itiIIPManageService.GetIIPQuaterlyFundReportData();
+
+      if (data && data.Data) {
+        const base64 = data.Data;
+
+        const byteCharacters = atob(base64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        const blobUrl = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = blobUrl;
+        link.download = 'IIPQuaterlyFundReport.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
+      } else {
+        this.toastr.error("File Not Found!!");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  // working
+  async GetAllIMCFundDataforReport() {
+    debugger
+    try {
+     
+      this.loaderService.requestStarted();
+      //this.formData.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+      this.formData.UserID = this.sSOLoginDataModel.UserID;
+
+      if (this.formData.InstituteID != 0 && this.formData.InstituteID != null) {
+        this.formData.InstituteId = this.formData.InstituteID;
+      }
+      else {
+        this.formData.InstituteId = this.sSOLoginDataModel.InstituteID;
+      }
+   
+      //this.formData.IMCRegID = this.IIPManageData[0].RegistrationID;
+
+      await this.itiIIPManageService.GetAllIMCFundDataforReport(this.formData).then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.IIPFundData = data.Data.Table;
+
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+        console.log('IIP Fund Data ==>',this.IIPFundData)
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
+
+
+  //exportToExcel(): void {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
+  //    this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
+  //    this.itiIIPManageService.IIPManageReportODFDownload(this.searchRequest)
+  //    //this.itiIIPManageService.IIPManageReportODFDownload(data:any)
+  //      .then((data: any) => {
+
+  //        //this.State = data['State'];
+  //        //this.Message = data['Message'];
+  //        //this.ErrorMessage = data['ErrorMessage'];
+  //        data = JSON.parse(JSON.stringify(data));
+  //        debugger
+  //        if (data && data.Data) {
+  //          const base64 = data.Data;
+
+  //          const byteCharacters = atob(base64);
+  //          const byteNumbers = new Array(byteCharacters.length);
+  //          for (let i = 0; i < byteCharacters.length; i++) {
+  //            byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //          }
+
+  //          const byteArray = new Uint8Array(byteNumbers);
+  //          const blob = new Blob([byteArray], { type: 'application/pdf' });
+  //          const blobUrl = URL.createObjectURL(blob);
+
+  //          const link = document.createElement('a');
+  //          link.href = blobUrl;
+  //          link.download = 'StudentMarksheet.pdf';
+  //          document.body.appendChild(link);
+  //          link.click();
+  //          document.body.removeChild(link);
+  //          URL.revokeObjectURL(blobUrl);
+  //        } else {
+  //         //this.toastr.error(this.Message)
+  //        }
+
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  async ddlDivision_Change() {
+    debugger
+    console.log("State changed - (", this.formData.DivisionID, ")");
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.formData.DivisionID,))
+        .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger
+          this.Districtlist = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+  onDivisionChange(divisionId: number) {
+    this.GetDistrictMaster(divisionId);
+    this.GetAllIMCFundDataforReport();
+  }
+
+  // PDF Download
+
+  async downloadIIPManageReportPDF() {
+
+    try {
+
+      var _searchRequest = new ITI_IIPManageSearchModel();
+      this.loaderService.requestStarted();
+      _searchRequest = this.searchRequest;
+
+      this.loaderService.requestStarted();
+      await this.itiallotmentStatusService.downloadIIPManageReportPDF(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
           if (data && data.Data) {
             const base64 = data.Data;
 
@@ -322,66 +601,25 @@ export class ITIIIPManageComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'IIPQuaterlyFundReport.pdf';
+            link.download = 'AllotmentCollege.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(blobUrl);
           } else {
-            this.toastr.error("FIle Not Found!!")
+            this.toastr.error(this.Message)
           }
-        })
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200)
-      }
+        }, (error: any) => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
 
   }
-
-
-  //async DownloadIIPQuaterlyFundReportPDFData(data:any) {
-
-  //  try {
-  //    await this.itiIIPManageService.GetIIPQuaterlyFundReport.then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      debugger
-  //      if (data && data.Data) {
-  //        const base64 = data.Data;
-
-  //        const byteCharacters = atob(base64);
-  //        const byteNumbers = new Array(byteCharacters.length);
-  //        for (let i = 0; i < byteCharacters.length; i++) {
-  //          byteNumbers[i] = byteCharacters.charCodeAt(i);
-  //        }
-
-  //        const byteArray = new Uint8Array(byteNumbers);
-  //        const blob = new Blob([byteArray], { type: 'application/pdf' });
-  //        const blobUrl = URL.createObjectURL(blob);
-
-  //        const link = document.createElement('a');
-  //        link.href = blobUrl;
-  //        link.download = 'IIPQuaterlyFundReport.pdf';
-  //        document.body.appendChild(link);
-  //        link.click();
-  //        document.body.removeChild(link);
-  //        URL.revokeObjectURL(blobUrl);
-  //      } else {
-  //        this.toastr.error("FIle Not Found!!")
-  //      }
-  //    })
-  //  } catch (error) {
-  //    console.log(error);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200)
-  //  }
-
-  //}
-
-  
 
 }
