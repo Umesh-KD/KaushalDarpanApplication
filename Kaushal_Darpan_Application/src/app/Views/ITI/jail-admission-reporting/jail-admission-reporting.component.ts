@@ -226,6 +226,19 @@ export class JailAdmissionReportingComponent {
           this.requestReporting.TradeName = data['Data'].Table[0].TradeName;
           this.requestReporting.CollegeName = data['Data'].Table[0].CollegeName;
           debugger
+          if (this.request.ApplicationID == null || this.request.ApplicationID == 0 || this.request.ApplicationID == undefined) {
+            this.toastr.warning("No Data Found")
+            if (this.searchRequest.TradeLevel == 8) {
+              this.Router.navigate(['/JailAdmissionAllotment', 8]);
+            } else if (this.searchRequest.TradeLevel == 10) {
+              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+            } else if (this.searchRequest.TradeLevel == 12) {
+              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+            }
+
+            return
+          }
+
           if (this.request.TradeLevel != this.searchRequest.TradeLevel) {
             this.toastr.warning("This Application is Not belong to this Trade Level")
             if (this.searchRequest.TradeLevel == 8) {
