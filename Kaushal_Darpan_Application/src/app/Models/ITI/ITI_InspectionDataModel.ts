@@ -156,3 +156,44 @@ export class SaveCheckSSODataModel extends RequestBaseModel {
   public DeploymentDateFrom?: string = ''
   public DeploymentDateTo?: string = ''
 }
+
+export class ConsentModel  {
+  public InspectionConsentID: number = 0
+  public ZoneID: number = 0
+  public DistrictID: number = 0
+  public InstituteID: number = 0
+  public TentativeDate: string = ''
+  public ZoneName: string = ''
+  public InstituteName: string = ''
+  public DistrictName: string = ''
+  public UserID: number = 0
+}
+
+
+export class ConsentSearchModel {
+  public InspectionConsentID: number = 0
+  public ZoneID: number = 0
+ 
+  public InstituteID: number = 0
+  public TentativeDate: string = ''
+  public ZoneName: string = ''
+  public InstituteName: string = ''
+  public DistrictName: string = ''
+  
+
+  public InspectionTeamID?: number = 0
+  public Status?: number = 0
+  public InspectionID?: number = 0
+  public TypeID?: number = 0
+  public DeploymentDate?: string = ''
+  public InspectionTeamName?: string = ''
+  public DeploymentStatus?: string = ""
+  public TeamName?: string = ''
+  public StaffID?: number = 0
+  public UserID?: number = 0
+  public LevelId?: number = 0
+  public DistrictID?: number = 0
+
+  public DeploymentDateFrom: string = ''
+  public DeploymentDateTo: string = ''
+}
