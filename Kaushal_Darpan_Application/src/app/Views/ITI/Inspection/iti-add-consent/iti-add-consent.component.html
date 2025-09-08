@@ -14,7 +14,7 @@
         <form *ngIf="consentFromGroup" [formGroup]="consentFromGroup">
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-            <div>
+            <!--<div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
               <select type="text" class="form-input" formControlName="ZoneID" [(ngModel)]="consentDeploy.ZoneID" >
                 <option value="0">--Select--</option>
@@ -27,7 +27,7 @@
               <div *ngIf="isSubmitted && _consentFromGroup.DistrictID.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
-            </div>
+            </div>-->
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
@@ -59,8 +59,7 @@
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
-              <input type="date" name="TentativeDate" required
-                     class="form-input" />
+              <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate"/>
             </div>
 
 
@@ -84,7 +83,6 @@
 
             <tr>
               <th>#</th>
-              <th class="text-left">Zone Name</th>
               <th class="text-left">District Name</th>
               <th class="text-left">Institute Name</th>
               <th class="text-left">Tentative Date</th>
@@ -95,10 +93,9 @@
           <tbody>
             <tr *ngFor="let row of consentDeployList; let idx = index;">
               <td class="text-left">{{idx+1}}</td>
-              <td class="text-left">Zone</td>
               <td class="text-left">{{row.DistrictName}}</td>
-              <td class="text-left">{{row.DistrictName}}</td>
-              <td class="text-left">{{ today | date:'dd-MM-yyyy' }}</td>
+              <td class="text-left">{{row.InstituteName}}</td>
+              <td class="text-left">{{row.TentativeDate | date:'dd-MM-yyyy' }}</td>
 
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">

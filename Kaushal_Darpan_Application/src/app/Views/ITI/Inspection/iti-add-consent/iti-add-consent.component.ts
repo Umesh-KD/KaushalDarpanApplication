@@ -36,7 +36,7 @@ export class ITIAddConsentComponent {
   //public requestDeploy = new InspectionDeploymentDataModel();
   public consentDeploy = new ConsentModel();
   //public requestMember = new InspectionMemberDetailsDataModel();
-  searchRequest = new ConsentSearchModel();
+  searchRequest = new ITI_InspectionSearchModel();
   InspectionDeploymentFromGroup!: FormGroup;
   consentFromGroup!: FormGroup;
   isSubmitted: boolean = false;
@@ -75,7 +75,6 @@ export class ITIAddConsentComponent {
     this.consentFromGroup = this.fb.group({
       DistrictID: ['', [DropdownValidators]],
       InstituteID: ['', [DropdownValidators]],
-      ZoneID: ['', [DropdownValidators]],
       TentativeDate: [''],
     })
 
@@ -88,12 +87,13 @@ export class ITIAddConsentComponent {
     debugger
     try {
       //this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
       this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-      await this.itiInspectionService.GetDistrictMasterconsent(this.searchRequest).then((data: any) => {
+      await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.ZoneMasterDDL = data.Data;
-        console.log('District ==>', this.ZoneMasterDDL)
+        this.DistrictMasterDDL = data.Data;
+        console.log('District ==>', this.DistrictMasterDDL)
       })
 
     } catch (error) {
@@ -122,10 +122,9 @@ export class ITIAddConsentComponent {
     })
   }
 
-  async SaveDate() { }
-
 
   async AddDeployment() {
+    debugger;
     this.isSubmitted = true;
     // If the form is invalid, return early
     if (this.consentFromGroup.invalid) {
@@ -142,12 +141,13 @@ export class ITIAddConsentComponent {
       }
    
     else {
-      this.consentDeploy.ZoneName = this.InstituteMasterDDL.find((x: any) => x.Id == this.consentDeploy.ZoneID)?.Name;
+      //this.consentDeploy.ZoneName = this.InstituteMasterDDL.find((x: any) => x.Id == this.consentDeploy.ZoneID)?.Name;
       this.consentDeploy.InstituteName = this.InstituteMasterDDL.find((x: any) => x.Id == this.consentDeploy.InstituteID)?.Name;
       this.consentDeploy.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.consentDeploy.DistrictID)?.Name;
+      this.consentDeploy.TentativeDate =  this.consentDeploy.TentativeDate;
       //this.consentDeploy.DeploymentTypeName = this.DeploymentTypeList.find((x: any) => x.id == this.consentDeploy.DeploymentType)?.name;
 
-      this.consentRequest.push({ ...this.consentDeploy });
+      this.consentDeployList.push({ ...this.consentDeploy });
 
       this.consentDeploy = new ConsentModel();
 
@@ -173,11 +173,11 @@ export class ITIAddConsentComponent {
 
   async SaveData() {
     debugger;
-    if (this.consentRequest.length == 0) {
+    if (this.consentDeployList.length == 0) {
       this.toastr.error("Please Add At Least One Institue");
     }
 
-    this.consentRequest.forEach((element: any) => {
+    this.consentDeployList.forEach((element: any) => {
       element.InspectionConsentID = this.InspectionConsentID;
       element.UserID = this.sSOLoginDataModel.UserID;
       element.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
@@ -188,7 +188,7 @@ export class ITIAddConsentComponent {
     try {
       this.loaderService.requestStarted();
        
-      await this.itiInspectionService.saveConsent(this.consentRequest).then((data: any) => {
+      await this.itiInspectionService.saveConsent(this.consentDeployList).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
