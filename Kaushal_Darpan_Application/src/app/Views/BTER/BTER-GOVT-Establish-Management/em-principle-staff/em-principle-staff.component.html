@@ -87,6 +87,23 @@
             </p>
           </div>
         </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
         <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.StaffLevelID" (change)="StaffLevelChild()" formControlName="StaffLevel" [ngModelOptions]="{standalone: true}">
@@ -124,7 +141,7 @@
           </div>
         </div>
 
-        
+
         <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
           <select formControlName="guestRoomID" class="form-select" [(ngModel)]="formData.guestRoomID">

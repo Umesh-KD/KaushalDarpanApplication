@@ -93,6 +93,7 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public multiHostelIDs: string = '';
   public EMTypeID: number = 0;
   public guestRoomID: number = 0;
+  public PostID: number = 0;
 }
 
 export class BTER_EM_StaffHostelListModel {
@@ -121,6 +122,7 @@ export class BTER_EM_StaffMasterSearchModel {
   public CreatedBy: number = 0
   public FilterName: string = '';
   public FilterStaffTypeID: number = 0;  
+  public PostID: number = 0;  
   public FilterSSOID: string = '';
 }
 

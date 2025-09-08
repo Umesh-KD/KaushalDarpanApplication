@@ -195,6 +195,8 @@ export class BTEREMStaffListComponent {
           data = JSON.parse(JSON.stringify(data));
         
           this.StaffList = data['Data'];
+          this.StaffList = this.StaffList.filter((item: any) => item.CourseType == this.sSOLoginDataModel.Eng_NonEng)
+
           this.loadInTable()
           console.log(this.StaffList, "ZonalList")
         }, error => console.error(error));
