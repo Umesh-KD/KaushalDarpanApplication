@@ -41,6 +41,14 @@
             <option *ngFor="let item of BrachDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
         </div>
+        
+        <!-- <div>
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label>
+          <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllPrincipalstudentmeritlist()">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div> -->
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllPrincipalstudentmeritlist()">Search</button>
@@ -55,17 +63,30 @@
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+      <div class="flex gap-3 items-center">
+        <!-- <select id="ddlConter" class="form-select flex-1 couterDropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
-        </select>
+        </select> -->
+
+        <div class="flex-1">
+          <!-- <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label> -->
+          <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllPrincipalstudentmeritlist()">
+            <option value="0" selected>--Select Gender--</option>
+            <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
+          </select>
+        </div>
       </div>
       <div class="">
        
-        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="onGenerateMeritList()"
+        <!-- <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="onGenerateMeritList()"
+          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon" >
+           Generate Merit List({{ getSelectedItems().length }} selected)
+        </a> -->
+
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="GenerateProvisionalMerit_Hostel()"
           *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon" >
            Generate Merit List({{ getSelectedItems().length }} selected)
         </a>
@@ -106,7 +127,7 @@
             <td align="left">{{item.StudentType}}</td>
             <td align="left">{{item.StreamName}}</td>
             <td align="left">{{item.EndTermName}}</td>
-            <td align="left">{{item.ClassPercentage}}</td>
+            <td align="left">{{item.TotalAvgPercentage}}</td>
             <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
                 <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
