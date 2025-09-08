@@ -16,6 +16,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -26,7 +27,7 @@ import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Managemen
 export class EMPrincipleStaffComponent {
   AddStaffBasicDetailFromGroup!: FormGroup;
   StaffMasterFormGroup!: FormGroup;
-
+  groupForm!: FormGroup;
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -51,7 +52,7 @@ export class EMPrincipleStaffComponent {
   public IsHideShow: boolean = false
   public GuestHouseNameList: any = [];
   _EnumRole = EnumRole;
-
+  public RequestUpdateStatus = new RequestUpdateStatus();
   PostList: any[] = [];
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
@@ -77,7 +78,7 @@ export class EMPrincipleStaffComponent {
   public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public staffHostelIDs: string = ''
   public StaffIDforHostel: number = 0
-
+  public isLoading: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -167,7 +168,10 @@ export class EMPrincipleStaffComponent {
       DateOfRetirement: [''],
       Remark: [''],
     });
-
+    this.groupForm = this.formBuilder.group({
+      ddlStatus: [0, [DropdownValidators]],
+      txtRemark: ['', Validators.required]
+    });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
@@ -601,6 +605,8 @@ async GetTechnicianDll() {
 
   async OnFormSubmit() {
     debugger
+    
+
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
@@ -834,7 +840,7 @@ async GetTechnicianDll() {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         // console.log("DesignationMasterList", this.DesignationMasterDDLList);
@@ -1095,5 +1101,75 @@ async GetTechnicianDll() {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  async RevertStaffProfile() {
+    //try {
+    //  this.RequestUpdateStatus = { ...userSubmitData };
+    //  this.RequestUpdateStatus.StatusIDs = 0;
+    //  this.RequestUpdateStatus.Remark = '';
+    //  console.log(this.RequestUpdateStatus, "modal");
+    //  this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    //} catch (error) {
+    //  console.error('Error fetching data:', error);
+    //}
+  }
+
+
+  async updateReqStatus() {
+
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+
+
+     
+      //249
+
+
+
+
+
+
+
+      //await this.Staffservice.ITI_GOVT_EM_ApproveRejectStaff(this.RequestUpdateStatus)
+      //  .then(async (data: any) => {
+      //    this.State = data['State'];
+      //    this.Message = data['Message'];
+      //    this.ErrorMessage = data['ErrorMessage'];
+      //    if (this.State == EnumStatus.Success) {
+      //      this.CloseModal();
+      //      this.GetAllData();
+      //    }
+      //    else if (this.State == EnumStatus.Warning) {
+      //      this.toastr.warning(this.Message)
+      //    }
+      //    else {
+      //      this.toastr.error(this.ErrorMessage)
+      //    }
+      //  })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RequestUpdateStatus.StatusIDs = 0;
+    this.RequestUpdateStatus.Remark = '';
+    this.isSubmitted = false;
   }
 }
