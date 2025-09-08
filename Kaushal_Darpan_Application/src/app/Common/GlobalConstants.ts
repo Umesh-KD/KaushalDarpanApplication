@@ -258,7 +258,8 @@ export enum EnumConfigurationType {
   Bter_CollegeFee = 155,
   Registrar=40,
   Registrar_NonEng=55,
-  Reval_GroupCode = 160
+  Reval_GroupCode = 160,
+  JailAdmission = 1162
 }
 
 export enum EnumDepartment {

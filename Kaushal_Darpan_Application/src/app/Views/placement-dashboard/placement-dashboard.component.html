@@ -70,7 +70,7 @@
         <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
         <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
         <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
-        <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/campusvalidation/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
+        <a *ngIf="item.SRC == 'checklist'" [routerLink]="['/campusvalidation']" [queryParams]="{ flag: item.TotalTextHi }" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
         <a *ngIf="item.SRC == 'group'" [routerLink]="['/PlacementDashReport/', item.URL]" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
         <a *ngIf="item.SRC == 'rule_folder'" [routerLink]="['/CompanyValidation/']" class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">View All <i class="ti ti-chevron-right"></i></a>
       </div>

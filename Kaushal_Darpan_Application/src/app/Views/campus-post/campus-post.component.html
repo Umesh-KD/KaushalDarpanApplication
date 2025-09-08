@@ -204,21 +204,21 @@
 
             <!--<div *ngIf="request_EligibilityCriteriaModel.ToPassingYear < request_EligibilityCriteriaModel.PassingYear">
 
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Semester<span class="StarMarking">*</span>
-            </label>
-            <select formControlName="ddlSemesterID" class="form-select" id="ddlSemesterID"
-                    [(ngModel)]="request_EligibilityCriteriaModel.SemesterID">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of filteredSortedSemesters" [value]="item.SemesterID">{{item.SemesterName}}</option>
-            </select>
-            <div *ngIf="isSubmittedItemDetails && form_Eligibility.ddlSemesterID.errors" class="text-danger">
-              <p *ngIf="!form_Eligibility.ddlSemesterID.errors.DropdownValidators">
-                <i aria-hidden="true"></i>This
-                field is required .!
-              </p>
-            </div>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Semester<span class="StarMarking">*</span>
+    </label>
+    <select formControlName="ddlSemesterID" class="form-select" id="ddlSemesterID"
+            [(ngModel)]="request_EligibilityCriteriaModel.SemesterID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of filteredSortedSemesters" [value]="item.SemesterID">{{item.SemesterName}}</option>
+    </select>
+    <div *ngIf="isSubmittedItemDetails && form_Eligibility.ddlSemesterID.errors" class="text-danger">
+      <p *ngIf="!form_Eligibility.ddlSemesterID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div>
+  </div>-->
 
 
 
@@ -251,8 +251,8 @@
                 <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
               </select>
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_12.errors" class="text-danger">
-              <p *ngIf="!form_Eligibility.ddlMinPre_12.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-            </div>-->
+      <p *ngIf="!form_Eligibility.ddlMinPre_12.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
             </div>
 
             <div>
@@ -286,8 +286,8 @@
                 <option value="6">6</option>
               </select>
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlNoofBackPapersAllowed.errors" class="text-danger">
-              <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-            </div>-->
+      <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
             </div>
             <div>
               <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
@@ -358,10 +358,10 @@
                      formControlName="txtNoofPositions" [(ngModel)]="request_EligibilityCriteriaModel.NoofPositions"
                      (input)="checkValue($event)">
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
-              <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
-                <i aria-hidden="true"></i> This field is required .!
-              </p>
-            </div>-->
+      <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
+        <i aria-hidden="true"></i> This field is required .!
+      </p>
+    </div>-->
 
               <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
                 <p *ngIf="!form_Eligibility.txtNoofPositions.errors.DropdownValidators">
@@ -435,7 +435,21 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Other Eligibility Criteria and other Benefit
+                Other Eligibility Criteria 
+              </label>
+              <input type="text" class="form-input" id="txtOtherEligibility"
+                     formControlName="txtOtherEligibility" [(ngModel)]="request_EligibilityCriteriaModel.OtherEligibility" (input)="checkValue($event)">
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtOtherEligibility.errors" class="text-danger">
+                <p *ngIf="form_Eligibility.txtOtherEligibility.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Other Benefit
               </label>
               <input type="text" class="form-input" id="txtOtherBenefit"
                      formControlName="txtOtherBenefit" [(ngModel)]="request_EligibilityCriteriaModel.OtherBenefit" (input)="checkValue($event)">
@@ -446,7 +460,6 @@
                 </p>
               </div>
             </div>
-
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Campus Level<span class="StarMarking">*</span>
@@ -590,6 +603,7 @@
                   <th class="text-center">Amount</th>
                   <th class="text-center">Salary Remark</th>
                   <th class="text-center">Gender</th>
+                  <th class="text-center">Other Eligibility</th>
                   <th class="text-center">Other Benefit</th>
                   <th class="text-center">Campus Type</th>
                   <th class="text-center">Interview Type</th>
@@ -622,6 +636,7 @@
                   <td>{{row.CTC}}</td>
                   <td>{{row.SalaryRemark}}</td>
                   <td>{{row.Gender}}</td>
+                  <td>{{row.OtherEligibility}}</td>
                   <td>{{row.OtherBenefit}}</td>
                   <td>{{row.CampusType}}</td>
                   <td>{{row.InterviewType}}</td>

@@ -233,30 +233,45 @@ export class AddItiReturnItemComponent {
   }
 
 
-  exportToExcel(): void {
-    this.ItemMasterList = this.ItemMasterList.map((item: any) => {
-      const updatedItem = {
-        AvailableQuantity: item.AvailableQuantity,
-        CampanyName: item.CampanyName,
-        Code: item.Code,
-        CollegeName: item.CollegeName ?? "BTER",
-        EquipmentsName: item.EquipmentsName,
-        IdentificationMark: item.IdentificationMark,
-        InitialQuantity: item.InitialQuantity,
-        ItemCategoryName: item.ItemCategoryName,
-        PricePerUnit: item.PricePerUnit,
-        Status: item.Status == 1 ? "Approved" : "Pending",
-        TotalPrice: item.TotalPrice,
-        VoucherNumber: item.VoucherNumber
-      };
+  //exportToExcel(): void {
+  //  this.ItemMasterList = this.ItemMasterList.map((item: any) => {
+  //    const updatedItem = {
+  //      AvailableQuantity: item.AvailableQuantity,
+  //      CampanyName: item.CampanyName,
+  //      Code: item.Code,
+  //      CollegeName: item.CollegeName ?? "BTER",
+  //      EquipmentsName: item.EquipmentsName,
+  //      IdentificationMark: item.IdentificationMark,
+  //      InitialQuantity: item.InitialQuantity,
+  //      ItemCategoryName: item.ItemCategoryName,
+  //      PricePerUnit: item.PricePerUnit,
+  //      Status: item.Status == 1 ? "Approved" : "Pending",
+  //      TotalPrice: item.TotalPrice,
+  //      VoucherNumber: item.VoucherNumber
+  //    };
 
-      return updatedItem;
-    });
+  //    return updatedItem;
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+  //}
+
+  exportToExcel(): void {
+    debugger
+    if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
+      this.toastr.warning("No data available to export.");
+      return;
+    }
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, 'Inventory Report');
+
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    XLSX.writeFile(wb, `Inventory_Items_Report_${timestamp}.xlsx`);
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {

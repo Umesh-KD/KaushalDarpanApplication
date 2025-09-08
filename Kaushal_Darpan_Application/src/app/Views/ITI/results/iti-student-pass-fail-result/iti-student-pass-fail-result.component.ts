@@ -454,7 +454,6 @@ export class itiStudentPassFailResultComponent {
     try {
       this.loaderService.requestStarted();
       this.ResultData = [];
-
       await this.itiResultService.GetStudentPassFailResultData(this.requestPassFailModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

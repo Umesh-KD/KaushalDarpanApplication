@@ -118,6 +118,13 @@ export class CollegeMasterService {
       ).toPromise();
   }
 
+  public async GetCollegeAddress(collegeMasterRequestModel: any) {
+    return await this.http.post(this.APIUrl + "/GetCollegeAddress", collegeMasterRequestModel, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 

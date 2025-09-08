@@ -87,7 +87,7 @@ export class JailAdmissionAllotmentComponent {
     //alert(this.searchRequest.TradeLevel);
     await this.getIMCAllotedList();
     await this.GetDateConfig();
-    this.AllotmentKey = 'DIRECT ADDMISSSION';
+    this.AllotmentKey = 'Jail Admission';
   }
 
   async GetDateConfig() {
@@ -96,7 +96,7 @@ export class JailAdmissionAllotmentComponent {
       //CourseTypeId: this.searchRequest.CourseTypeId,
       AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermId: this.sSOLoginDataModel.EndTermID,
-      Key: "DIRECT ADDMISSSION",
+      Key: "Jail Admission",
       SSOID: this.sSOLoginDataModel.SSOID
     }
 
@@ -105,7 +105,7 @@ export class JailAdmissionAllotmentComponent {
         data = JSON.parse(JSON.stringify(data));
         this.DateConfigSetting = data['Data'];
 
-        console.log(this.DateConfigSetting[0]['GENERATE MERIT']);
+        console.log(this.DateConfigSetting[0]['Jail Admission']);
 
       }, (error: any) => console.error(error)
       );

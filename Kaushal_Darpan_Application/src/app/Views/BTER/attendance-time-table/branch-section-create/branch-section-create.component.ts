@@ -223,10 +223,25 @@ export class BranchSectionCreateComponent {
       return;
     }
 
-    const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
-      x.StreamID === this.IIPMasterFormGroup.value.StreamID
+    // const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
+    //   x.StreamID === this.IIPMasterFormGroup.value.StreamID
+    // );
+    // if (streamID) {
+    //   this.toastr.warning("Branch Alredy Exists!");
+    //   return
+    // }
+
+    const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
+    const formSemesterID= Number(this.IIPMasterFormGroup.value.SemesterID);
+
+    // const streamID = this.GetBranchSectionData.some(
+    const exists = this.GetBranchSectionData.some(
+      // (x: { StreamID: string }) =>
+      // x.StreamID === this.IIPMasterFormGroup.value.StreamID
+      (x: { StreamID: number; SemesterID: number }) =>
+        x.StreamID === formStreamID && x.SemesterID === formSemesterID
     );
-    if (streamID) {
+    if (exists) {
       this.toastr.warning("Branch Alredy Exists!");
       return
     }
@@ -434,14 +449,32 @@ export class BranchSectionCreateComponent {
     debugger
     const totalFromSections = this.sectionForm.value.sections.reduce((sum: any, section: { studentCount: any; }) => sum + section.studentCount, 0);
 
-    const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
-      x.StreamID === this.IIPMasterFormGroup.value.StreamID
+    // const streamID = this.GetBranchSectionData.some((x: { StreamID: string }) =>
+    //   x.StreamID === this.IIPMasterFormGroup.value.StreamID
+    // );
+
+    // if (streamID) {
+    //   this.toastr.warning("Branch Alredy Exists!");
+    //   return
+    // }
+
+    const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
+    const formSemesterID= Number(this.IIPMasterFormGroup.value.SemesterID);
+
+
+    const exists = this.GetBranchSectionData.some(
+      // (x: { StreamID: string }) =>
+      // x.StreamID === this.IIPMasterFormGroup.value.StreamID
+      (x: { StreamID: number; SemesterID: number }) =>
+        x.StreamID === formStreamID && x.SemesterID === formSemesterID
     );
 
-    if (streamID) {
+    if (exists) {
       this.toastr.warning("Branch Alredy Exists!");
       return
     }
+	
+	
 
 
     //let obj = {
@@ -542,6 +575,8 @@ export class BranchSectionCreateComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetBranchSectionData = data.Data
+
+        this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
         this.totalRecord = data['Data'].length;
         console.log(this.GetBranchSectionData)
         this.initTable(this.GetBranchSectionData);
@@ -584,13 +619,17 @@ export class BranchSectionCreateComponent {
           DepartmentID: this.sSOLoginDataModel.DepartmentID,
           EndTermID: this.sSOLoginDataModel.EndTermID,
           Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-          StreamID: rowData.StreamID
+          StreamID: rowData.StreamID,
+          SemesterID: rowData.SemesterID
         }
 
         await this.staffMasterService.GetBranchSectionData(obj)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
-            this.GetBranchStreamData = data.Data
+            this.GetBranchStreamData=data.Data;
+            // this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
+            this.GetBranchStreamData = this.GetBranchStreamData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)
+            // this.GetBranchStreamData = data.Data
             this.totalRecord1 = data['Data'].length;
             console.log(this.GetBranchStreamData)
             this.initTable1(this.GetBranchStreamData);
@@ -704,14 +743,19 @@ export class BranchSectionCreateComponent {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      StreamID: GetstreamId
+      StreamID: GetstreamId,
+      SemesterID: GetSemesterID
     }
     await this.staffMasterService.GetBranchSectionData(obj)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
-        this.allSections = data.Data;   // all sections
-        this.GetSectionData = [...this.allSections];
+        this.GetSectionData = this.GetSectionData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)         
+        this.allSections = this.GetSectionData; 
+        // this.allSections = data.Data;   // all sections
+        // this.GetSectionData = [...this.allSections];
+      //  console.log(this.GetBranchSectionData)
+       // this.initTable(this.GetBranchSectionData);
       }, (error: any) => console.error(error)
       );
   }
@@ -742,6 +786,7 @@ export class BranchSectionCreateComponent {
 
   async getSubjectMasterDDL(StreamID: number, SemesterID: number | null) {
     debugger
+    this.AddStaffSubjectSectionModel.SubjectID = 0;
     const GetstreamId = this.AddStaffSubjectSectionModel.StreamID;
     const GetSemesterID = this.AddStaffSubjectSectionModel.SemesterID;
     /* await this.getupBranchHodData();*/

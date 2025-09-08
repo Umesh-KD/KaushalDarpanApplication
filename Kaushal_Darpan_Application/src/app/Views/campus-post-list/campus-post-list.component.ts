@@ -259,6 +259,14 @@ export class CampusPostListComponent {
     this.modalService.dismissAll();
   }
 
+  CloseModalPopupCampus() {
+    this.modalService.dismissAll();
+    this.request.CampusFromDate = '';
+    this.request.CampusFromTime = '';
+    this.request.CampusToDate = '';
+  }
+
+
   //async btnDelete_OnClick(RoleID: number) {
 
   //  this.isSubmitted = false;
@@ -365,6 +373,72 @@ export class CampusPostListComponent {
     });
     this.GetAllstudent(PostID)
   }
+
+  async openModalCampus(content: any, PostID: number) {
+    this.request.PostID = PostID;
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+   
+  }
+
+  async UpdateCampusData()
+  {
+
+    debugger   
+
+    if (!this.request.CampusFromDate || !this.request.CampusFromTime || !this.request.CampusToDate) {
+      this.toastr.warning("Please fill all mandatory (*) fields");
+      return;
+    }
+
+    //Show Loading
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+    try {
+
+      this.sSOLoginDataModel = JSON.parse(localStorage.getItem('SSOLoginUser') || '{}');
+
+   
+      let request = {
+        PostID: this.request.PostID, 
+        CreatedBy: this.sSOLoginDataModel.UserID, 
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CampusFromDate: this.request.CampusFromDate, 
+        CampusFromTime: this.request.CampusFromTime,         
+        CampusToDate: this.request.CampusToDate 
+      };
+   
+       await this.campusPostService.CampusPost_UpdateStatus(request)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {           
+            this.toastr.success(this.Message);
+            this.CloseModalPopupCampus();
+            this.request.CampusFromDate = '';
+            this.request.CampusFromTime = '';
+            this.request.CampusToDate = '';
+            this.btn_SearchClick();
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
 
   onUploadSignedCopyOfResult(id: number): void {
     
