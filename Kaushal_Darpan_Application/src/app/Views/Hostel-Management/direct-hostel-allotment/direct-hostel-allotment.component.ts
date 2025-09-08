@@ -301,7 +301,6 @@ export class DirectHostelAllotmentComponent {
         })
     }
     catch (ex) { console.error(ex) }
-    
   }
 
   async ResetControl() {

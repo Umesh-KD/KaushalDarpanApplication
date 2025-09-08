@@ -120,6 +120,7 @@ export class InspectionDeploymentComponent {
   GetInstituteMaster_ByDistrictWise(ID: any) {
     this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
     this.requestCenter.DistrictID = ID;
+    this.requestCenter.RoleID = this.InspectionTeamID;
     this.itiInspectionService.GetITIInspectionDropdown(this.requestCenter).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.InstituteMasterDDL = data.Data;
