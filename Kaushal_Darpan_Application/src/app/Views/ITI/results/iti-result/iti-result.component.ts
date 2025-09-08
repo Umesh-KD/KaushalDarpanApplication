@@ -725,10 +725,9 @@ export class ITIResultComponent {
             const byteArray = new Uint8Array(byteNumbers);
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
-
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'StudentMarksheet.pdf';
+            link.download = `StudentMarksheet_${rollNo}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
