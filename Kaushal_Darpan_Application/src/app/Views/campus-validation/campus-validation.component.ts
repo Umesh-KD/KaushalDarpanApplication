@@ -12,6 +12,8 @@ import { EnumStatus } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute } from '@angular/router';
+import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
+import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 
 @Component({
     selector: 'app-campus-validation',
@@ -33,6 +35,9 @@ export class CampusValidationComponent {
   public CheckStatus: string = "";
   public currentStatus: number = 0;
 
+  public messageModel = new ApplicationMessageDataModel()
+  
+
   request = new CampusPostMasterModel();
   requestAction = new CampusPostMaster_Action();
   requestEligibilityCriteria = new CampusPostMaster_EligibilityCriteriaModel();
@@ -48,7 +53,7 @@ export class CampusValidationComponent {
   public flagName: string = "TotalNoOfCampus";
   public TodayDate = new Date()
 
-  constructor(private commonMasterService: CommonFunctionService, private campusPostService: CampusPostService, private loaderService: LoaderService,
+  constructor(private commonMasterService: CommonFunctionService,private smsMailService: SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal, private route: ActivatedRoute, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService, private toastr: ToastrService) {
   }
 
@@ -188,6 +193,7 @@ export class CampusValidationComponent {
     this.modalService.dismissAll();
   }
   async SaveData_ApprovedCampus() {
+    debugger
     this.isSubmitted = true;
     if (this.formAction.invalid) {
       return
@@ -211,6 +217,7 @@ export class CampusValidationComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (this.State == EnumStatus.Success) {
+            this.SendApplicationMessage();
             this.toastr.success(this.Message);
             await this.CloseModalPopup();
             await this.btn_SearchClick();
@@ -277,6 +284,44 @@ export class CampusValidationComponent {
       /*  }, 200);*/
     }
   }
+
+
+    async SendApplicationMessage() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      //this.messageModel.MobileNo = '8955186821';
+      this.messageModel.MobileNo = '8334874706';
+      // department
+      //if (this.DepartmentID == EnumDepartment.BTER) {
+      //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
+      //}
+      //else if (this.DepartmentID == EnumDepartment.ITI) {
+      //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
+      //}
+      /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
+      this.messageModel.ApplicationNo = '21100634';
+      this.messageModel.MessageType='OTP';
+      await this.smsMailService.SendApplicationMessage(this.messageModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            console.log('Message sent successfully', data);
+          } else {
+            console.log('Something went wrong', data);
+          }
+        }, (error: any) => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 }
 
 
