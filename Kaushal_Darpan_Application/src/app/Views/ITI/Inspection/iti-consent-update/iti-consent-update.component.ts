@@ -1,9 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { EnumDeploymentStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ConsentModel, CenterMasterDDLDataModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ConsentModel, CenterMasterDDLDataModel, UpdateConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -14,27 +14,28 @@ import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { SearchRequest } from '../../../../Models/CitizenSuggestionDataModel';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
-  selector: 'app-iti-consent',
+  selector: 'app-iti-consent-update',
   standalone: false,
-  templateUrl: './iti-consent.component.html',
-  styleUrl: './iti-consent.component.css'
+  templateUrl: './iti-consent-update.component.html',
+  styleUrl: './iti-consent-update.component.css'
 })
-export class ITIConsentComponent {
+export class ITIConsentUpdateComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
-  _EnumDeploymentStatus = EnumDeploymentStatus
-  searchRequest = new ITI_InspectionSearchModel();
-  InspectionData: any = [];
-  InspectionTeamID: number = 0
+  public _EnumDeploymentStatus = EnumDeploymentStatus
+  public searchRequest = new ITI_InspectionSearchModel();
+  public InspectionData: any = [];
+  //public InspectionTeamID: number = 0
+  public InspectionConsentID: number = 0
   public request = new ITI_InspectionDataModel();
   public requestMember = new InspectionMemberDetailsDataModel();
-  modalReference: NgbModalRef | undefined;
-  modalReference1: NgbModalRef | undefined;
-  closeResult: string | undefined;
-  timeLeft: number = GlobalConstants.DefaultTimerOTP; 
-  showResendButton: boolean = false; 
-  private interval: any;
+  public modalReference: NgbModalRef | undefined;
+  public modalReference1: NgbModalRef | undefined;
+  public closeResult: string | undefined;
+  public timeLeft: number = GlobalConstants.DefaultTimerOTP;
+  public showResendButton: boolean = false;
   public OTP: string = '';
   public GeneratedOTP: string = '';
   public MobileNo: string = '';
@@ -43,9 +44,14 @@ export class ITIConsentComponent {
   public ConsentData: any = [];
   public InstituteMasterDDL: any = [];
   public DistrictMasterDDL: any = [];
-  requestCenter = new CenterMasterDDLDataModel();
+  public requestCenter = new CenterMasterDDLDataModel();
   public consentDeploy = new ConsentModel();
-
+  private interval: any;
+  public UpdateConsentRequest = new UpdateConsentModel()
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public isSubmitted: boolean = false;
 
 
   constructor(
@@ -58,11 +64,13 @@ export class ITIConsentComponent {
     private sMSMailService: SMSMailService,
     private http: HttpClient,
     private appsettingConfig: AppsettingService,
+    private commonMasterService: CommonFunctionService,
+
   ) {
 
-    this.consentForm = this.fb.group({
-      consents: this.fb.array([this.createConsent()])
-    });
+    //this.consentForm = this.fb.group({
+    //  consents: this.fb.array([this.createConsent()])
+    //});
   }
 
 
@@ -74,6 +82,15 @@ export class ITIConsentComponent {
     
     this.GetAllData()
     this.getMasterData()
+
+    this.consentForm = this.fb.group({
+      Remarks: ['', Validators.required],
+      TentativeDate: ['', Validators.required]
+
+    });
+
+    this.consentDeploy = new ConsentModel();
+
   }
 
   async ResetControl() {
@@ -85,7 +102,7 @@ export class ITIConsentComponent {
     this.GetAllData();
   }
   async GetAllData() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
      
@@ -170,10 +187,10 @@ export class ITIConsentComponent {
   }
 
 
-  async GetById_Team(id: number) {
+  async GetById_Consent(InspectionConsentID: number) {
     try {
       this.loaderService.requestStarted();
-      await this.itiInspectionService.GetById_Team(id).then((data: any) => {
+      await this.itiInspectionService.GetById_Consent(InspectionConsentID).then((data: any) => {
         
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
@@ -228,7 +245,7 @@ export class ITIConsentComponent {
     });
     this.MobileNo = this.MobileNo;
     await this.SendOTP();
-    this.InspectionTeamID = id; 
+    this.InspectionConsentID = id; 
   }
 
 
@@ -289,7 +306,7 @@ export class ITIConsentComponent {
   async VerifyOTP() {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
-        var id = this.InspectionTeamID;
+        var id = this.InspectionConsentID;
         try {
           this.toastr.success('Otp Verified');
           try {
@@ -382,7 +399,7 @@ export class ITIConsentComponent {
 
 
   async getMasterData() {
-    debugger
+    
     try {
 
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
@@ -442,47 +459,155 @@ export class ITIConsentComponent {
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
-  async onSubmit(modal: any) {
-    
+  
+  async ViewandUpdate(content: any, InspectionConsentID: number) {
+
+    debugger
+    try {
+      this.InspectionConsentID = InspectionConsentID;
+
+      const response: any = await this.GetById_Consent(InspectionConsentID);
+
+      if (response && response.State === EnumStatus.Success && response.Data) {
+        const row = response.Data;
+
+        this.UpdateConsentRequest = {
+          TentativeDate: row.TentativeDate ? row.TentativeDate.split('T')[0] : '', 
+          Remark: row.Remark || '',
+          DocConsent: null, 
+          UserID: row.UserID || 0, 
+          InspectionConsentID: row.InspectionConsentID || InspectionConsentID 
+        };
+      } else {
+        console.warn('No data found for the given ID:', InspectionConsentID);
+        this.UpdateConsentRequest = {
+          TentativeDate: '',
+          Remark: '',
+          DocConsent: null,
+          UserID: 0,
+          InspectionConsentID: InspectionConsentID
+        };
+      }
+
+      // Open modal after data is set
+      this.modalReference = this.modalService.open(content, {
+        backdrop: 'static',
+        size: 'xl',
+        keyboard: true,
+        centered: true
+      });
+    } catch (error) {
+      console.error('Error fetching consent details:', error);
+    }
   }
 
-  //async onSubmit() {
-  //  debugger;
-    
 
-  //  SearchRequest.InspectionTeamID = this.InspectionTeamID;
-  //    element.UserID = this.sSOLoginDataModel.UserID;
-  //    element.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-  //    element.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //    element.EndTermID = this.sSOLoginDataModel.EndTermID;
- 
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
 
-  //  try {
-  //    this.loaderService.requestStarted();
+        if (this.file.size > 2000000) {
+          this.toastr.error('Select less then 2MB File');
+          return;
+        }
+        this.loaderService.requestStarted();
 
-  //    await this.itiInspectionService.saveConsentData(this.AddedDeploymentList).then((data: any) => {
-  //      data = JSON.parse(JSON.stringify(data));
-  //      if (data.State == EnumStatus.Success) {
-  //        this.toastr.success(data.Message);
-  //        this.AddedDeploymentList = [];
-  //        this.InstituteMasterDDL = [];
-  //        //this.router.navigate(['/iti-center-observer']);
-  //        //this.GetById_Deployment(this.InspectionTeamID);
-  //        this.router.navigate(['/iti-inspection'], {
+        let uploadModel = new UploadFileModel();
 
-  //        });
-  //      } else {
-  //        this.toastr.error(data.ErrorMessage);
-  //      }
-  //    })
-  //  } catch (error) {
-  //    console.log(error);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200)
-  //  }
-  //}
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/Consent";
+
+
+        await this.commonMasterService
+          .UploadDocument(this.file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == 'Photo') {
+
+                this.consentDeploy.DocConsent =
+                  data['Data'][0]['FileName'];
+
+                this.UpdateConsentRequest.DocConsent = data['Data'][0]['FileName'];
+              }
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage);
+            } else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  async onSubmitConsent() {
+    debugger
+    this.isSubmitted = true;
+
+    if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
+      this.toastr.error('Please upload the required document.');
+      return;
+    }
+
+    this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
+    this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
+    this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
+
+
+
+    try {
+      this.isSubmitted = true;
+      //if (this.consentForm.invalid) {
+      //  console.log('Form is invalid');
+      //  return;
+      //}
+
+      this.loaderService.requestStarted();
+      this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
+        .then((data: any) => {
+          /*data = JSON.parse(JSON.stringify(data));*/
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.CloseModalPopup();
+            //this.GetAllotedSeatByCollegeList();
+          } else {
+            this.toastr.error(this.ErrorMessage);
+          }
+        });
+      
+
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
+
+
+
+
+
 
 
 }

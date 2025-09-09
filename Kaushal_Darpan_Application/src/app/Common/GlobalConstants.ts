@@ -707,7 +707,9 @@ export enum EnumHostelStatus {
   Reassign = 7
 }
 
-
+export enum EnumFileUpload {
+  FileNameWithDynamicPath = 1,
+}
 
 
 

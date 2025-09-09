@@ -959,6 +959,7 @@ const routes: Routes = [
       { path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       { path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
       { path: 'iti-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-consent/iti-consent.module').then(m => m.ITIConsentModule), title: 'ITI Consent' },
+      { path: 'iti-consent-update', loadChildren: () => import('./Views/ITI/Inspection/iti-consent-update/iti-consent-update.module').then(m => m.ITIConsentUpdateModule), title: 'ITI Consent Update' },
       { path: 'iti-add-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-add-consent/iti-add-consent.module').then(m => m.ITIAddConsentModule), title: 'Add Consent' },
 
       { path: 'add-apprenticeship', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/add-apprenticeship/add-apprenticeship.module').then(m => m.AddApprenticeshipModule), title: 'ITI Apprenticeship' },
