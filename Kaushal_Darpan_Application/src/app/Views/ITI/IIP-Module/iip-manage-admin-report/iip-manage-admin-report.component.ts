@@ -414,45 +414,7 @@ export class IIPManageAdminReportComponent {
     }
 
   }
-
-  async DownloadIIPQuaterlyFundReportPDFData() {
-   
-    try {
-       //const data: any = await this.itiIIPManageService.GetIIPQuaterlyFundReportData();
-       const data: any = await this.itiIIPManageService.GetIIPQuaterlyFundReportData();
-
-      if (data && data.Data) {
-        const base64 = data.Data;
-
-        const byteCharacters = atob(base64);
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-          byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        const blob = new Blob([byteArray], { type: 'application/pdf' });
-        const blobUrl = URL.createObjectURL(blob);
-
-        const link = document.createElement('a');
-        link.href = blobUrl;
-        link.download = 'IIPQuaterlyFundReport.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-      } else {
-        this.toastr.error("File Not Found!!");
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-  // working
+  
   async GetAllIMCFundDataforReport() {
     debugger
     try {
@@ -575,15 +537,22 @@ export class IIPManageAdminReportComponent {
   // PDF Download
 
   async downloadIIPManageReportPDF() {
-
+    debugger
     try {
 
       var _searchRequest = new ITI_IIPManageSearchModel();
       this.loaderService.requestStarted();
       _searchRequest = this.searchRequest;
 
+      let model: any[] = [];
+      this.IIPFundData.forEach((item: any) => {
+        model.push({ id: item.IMCFundID });
+      });
+
+
+
       this.loaderService.requestStarted();
-      await this.itiallotmentStatusService.downloadIIPManageReportPDF(this.searchRequest)
+      await this.itiIIPManageService.GetIIPQuaterlyFundReportData(model)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data && data.Data) {
