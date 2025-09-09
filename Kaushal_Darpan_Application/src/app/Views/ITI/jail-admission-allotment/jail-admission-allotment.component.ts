@@ -163,14 +163,14 @@ export class JailAdmissionAllotmentComponent {
     // this.request.AllotedCategory = AllotedCategory;
     //alert(this.request.ApplicationID);
     //alert(this.request.CollegeTradeID);
-
+   
     if (AllotedCategory.includes(' ')) {
       this.request.SeatMetrixColumn = AllotedCategory.replace(/ /g, '_');
     }
     else {
       this.request.SeatMetrixColumn = AllotedCategory;
     }
-
+    this.request.SeatMetrixColumn = 'GEN';
     //alert(this.request.AllotedCategory);
     const confirmationMessage = 'Are you sure you want to revert this application ?'
 

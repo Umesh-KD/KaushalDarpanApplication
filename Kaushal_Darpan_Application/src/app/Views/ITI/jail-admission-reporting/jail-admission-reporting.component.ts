@@ -225,6 +225,7 @@ export class JailAdmissionReportingComponent {
           this.request.TradeLevel = data['Data'].Table[0].TradeLevel;
           this.requestReporting.TradeName = data['Data'].Table[0].TradeName;
           this.requestReporting.CollegeName = data['Data'].Table[0].CollegeName;
+          //this.request.SeatMetrixId = data['Data'].Table[0].SeatMetrixId;
           debugger
           if (this.request.ApplicationID == null || this.request.ApplicationID == 0 || this.request.ApplicationID == undefined) {
             this.toastr.warning("No Data Found")
@@ -534,8 +535,8 @@ export class JailAdmissionReportingComponent {
     this.request.CollegeTradeID = CollegeTradeID;
     this.request.SeatMetrixId = SeatMetrixId;
     this.searchRequest.CollegeTradeID = CollegeTradeID;
-    this.request.AllotedCategory = AllotedCategory;
-    this.request.SeatMetrixColumn = SeatMetrixColumn;
+    this.request.AllotedCategory = 'GEN';
+    this.request.SeatMetrixColumn = 'GEN';
 
     try {
       this.loaderService.requestStarted();
@@ -615,6 +616,7 @@ export class JailAdmissionReportingComponent {
       this.request.ShiftUnit = this.requestReporting.ShiftUnitID
       this.request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
       this.request.AllotedCategory = 'GEN'
+      this.request.SeatMetrixColumn = 'GEN'
 
 
       await this.allotmentService.UpdateJailAllotments(this.request)
