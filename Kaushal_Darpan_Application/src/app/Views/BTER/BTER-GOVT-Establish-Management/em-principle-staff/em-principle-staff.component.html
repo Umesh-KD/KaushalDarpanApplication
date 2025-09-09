@@ -926,7 +926,7 @@
       <!-- Close Button -->
       <div class="flex justify-center my-2">
         <button *ngIf="!IsView" class="btn bg-info text-white" (click)="ApproveStaffProfile()">Submit and Approve Profile</button>
-        <!--<button *ngIf="!IsView" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>-->
+        <button *ngIf="!IsView" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>
         <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
       </div>
     </div>
