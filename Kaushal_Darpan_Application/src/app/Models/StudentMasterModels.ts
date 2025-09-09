@@ -101,6 +101,8 @@ export class StudentMasterModel {
   public His_StatusId?: number = 0;
   public IsVerified?: boolean = false;
   public RoleID?: number = 0;
+  public CourseTypeID?: number = 0;
+  public FinancialYearName?: string = '';
 }
 
 export class M_StudentMaster_QualificationDetailsModel {

@@ -4,6 +4,7 @@ export class UploadFileModel {
   public MinFileSize?: string = '';
   public MaxFileSize?: string = '';
   public Password?: string = '';
+  public FileName?: string = '';
 }
 
 export interface UploadBTERFileModel {
@@ -20,4 +21,6 @@ export interface UploadBTERFileModel {
   MaxFileSize?: string;
   Password?: string;
   IsCopy?: boolean;
+  FileNameWithDynamicPath?: number;
+  FilePrefix?: string;
 }
