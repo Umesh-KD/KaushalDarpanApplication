@@ -301,11 +301,11 @@ export class AddItiReturnItemComponent {
     const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
-      alert("Please select at least one item to return.");
+      this.toastr.warning("Please select at least one item to return.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
       return;
     }
-
-    // set item count
     this.returnModel = {
       ItemCount: selectedItems.length,
       ItemCondition: 0,
@@ -328,17 +328,10 @@ export class AddItiReturnItemComponent {
     this.isLoading = true;
 
     this.submitRequest.StaffId = this.Searchrequest.staffID,
-      this.submitRequest.Remarks = this.returnModel.Remarks,
-      this.submitRequest.ItemCategoryId = this.returnModel.ItemCondition,
-      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
-   // this.submitRequest.TransactionID = this.ItemMasterList[0].TransactionID,
-
+    this.submitRequest.Remarks = this.returnModel.Remarks,
+    this.submitRequest.ItemCategoryId = this.returnModel.ItemCondition,
+    this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
    
-    //if (selectedItems.length === 0) {
-    //  this.toastr.warning("Please select at least one item to return.");
-    //  return;
-    //}
-
     try {
       await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
         .then((data: any) => {
@@ -352,7 +345,6 @@ export class AddItiReturnItemComponent {
               toastClass: "ngx-toastr my-update-toast"
             });
 
-            //get All data
             this.GetAllData();
           } else if (this.State == EnumStatus.Error)
           {
