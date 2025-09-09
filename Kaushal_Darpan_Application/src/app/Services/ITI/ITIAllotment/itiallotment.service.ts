@@ -248,6 +248,16 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+  public async DownloadCollegeJailAllotmentData(searchRequest: StudentsJoiningStatusMarksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadCollegeJailAllotmentData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async DownloadCollegeAdminData(searchRequest: ReportCollegeForAdminModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/DownloadCollegeAdminData`, body, this.headersOptions)
