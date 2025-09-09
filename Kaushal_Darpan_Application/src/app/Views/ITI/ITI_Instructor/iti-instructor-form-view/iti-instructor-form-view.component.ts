@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DataServiceService } from '../../../../Services/DataService/data-service.service';
@@ -30,19 +30,19 @@ import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/
 import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
 
 @Component({
-  selector: 'app-iti-instructor',
+  selector: 'app-iti-instructor-view',
   standalone: false,
-  templateUrl: './iti-instructor-form.component.html',
-  styleUrl: './iti-instructor-form.component.css'
+  templateUrl: './iti-instructor-form-view.component.html',
+  styleUrl: './iti-instructor-form-view.component.css'
 })
-export class ItiInstructorFormComponent {
+export class ItiInstructorFormViewComponent {
 
-  public urlId: number = 0;
+  public urlId: int = '';
   public InstructorForm!: FormGroup
   public EducationForm!: FormGroup
   public TechnicalForm!: FormGroup
   public EmploymentForm!: FormGroup
-  public isSSOVisible: boolean = false;
+  public isSSOVisible: boolean = true;
   public showAadhaar: boolean = false;
   public showJanAadhaar: boolean = false;
   public ResidenceList: any = []
@@ -55,6 +55,7 @@ export class ItiInstructorFormComponent {
   closeResult: string | undefined;
 
   public request = new ITI_InstructorDataModel()
+/*  public submitRequest = [];*/
   public educationList: ITI_InstructorEducationalQualification[] = [];
   public educationRequest: ITI_InstructorEducationalQualification = new ITI_InstructorEducationalQualification();
   public techRequestList: ITI_InstructorTechnicalQualification[] = [];
@@ -177,7 +178,7 @@ export class ItiInstructorFormComponent {
         this.showJanAadhaar = true;
       } else {
         this.isViewMode = false;
-        this.isSSOVisible = false;
+        this.isSSOVisible = true;
         this.showGetDetailsButton = true;
         this.showAadhaar = true;
         this.showJanAadhaar = true;
@@ -286,7 +287,7 @@ export class ItiInstructorFormComponent {
 
 
     this.EmploymentForm = this.formBuilder.group({
-      Pan_No: ['', [ Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      Pan_No: ['', Validators.required ],
       Employee_Type: [''],
       Employer_Name: [''],
       Employer_Address: [''],
@@ -301,8 +302,11 @@ export class ItiInstructorFormComponent {
 
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    let idParam = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());
-    this.urlId = idParam;
+    let uidParam = this.activatedRoute.snapshot.queryParamMap.get('Uid');
+    this.urlId = uidParam;
+    //alert(this.urlId)
+
+    this.GetById(this.urlId);
 
     this.GetInstituteCategoryList();
     this.GetManagmentType();
@@ -395,6 +399,10 @@ export class ItiInstructorFormComponent {
     }
   }
 
+  //get employees(): FormArray {
+  //  return this.EmploymentForm.get('employees') as FormArray;
+  //}
+
   async GetStateMaterData() {
     try {
       this.loaderService.requestStarted();
@@ -443,11 +451,24 @@ export class ItiInstructorFormComponent {
       return;
     }
 
+    // Find if the education entry already exists (e.g., by Education_Exam or any unique field)
+    //const existingIndex = this.educationList.findIndex(
+    //  x => x.Education_Exam === this.educationRequest.Education_Exam
+    //);
+
+    //if (existingIndex !== -1) {
+    //  // Update existing record
+    //  this.educationList[existingIndex] = { ...this.educationRequest };
+    //} else {
+    //  // Add new record
+    //  this.educationList.push({ ...this.educationRequest });
+    //}
+
     this.educationList.push({ ...this.educationRequest });
 
     this.educationRequest = new ITI_InstructorEducationalQualification();
 
-    this.EducationForm.reset();
+   // this.EducationForm.reset();
   }
 
   removeEducation(index: number) {
@@ -464,7 +485,7 @@ export class ItiInstructorFormComponent {
 
     this.techRequest = new ITI_InstructorTechnicalQualification();
 
-    this.TechnicalForm.reset();
+    //this.TechnicalForm.reset();
   }
 
   removeTech(index: number) {
@@ -480,7 +501,7 @@ export class ItiInstructorFormComponent {
 
     this.employeeRequestList.push({ ...this.employeeRequest });
 
-    this.EmploymentForm.reset();
+    //this.EmploymentForm.reset();
   }
 
   removeEmployee(index: number) {
@@ -535,71 +556,138 @@ export class ItiInstructorFormComponent {
     }
   }
 
-  onReset() {
+  onReset(): void {
     this.InstructorForm.reset();
-    this.EmploymentForm.reset();
-    this.TechnicalForm.reset();
-    this.EducationForm.reset();
   }
 
 
-  async onSubmit() {
+  //async onSubmit() {
 
+  //  debugger;
+
+  //  console.log('Form submitted:iinstructor', this.InstructorForm.value);
+  //  this.isLoading = true;
+  //  this.isSubmitted = true;
+  //  this.loaderService.requestStarted();
+
+  //  try {
+
+
+  //    if (this.InstructorForm.valid) {
+
+  //      var ssoid = this.request.Uid
+  //      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+  //      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
+  //      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+  //      this.request.Uid = ssoid
+  //      this.request.EmploymentDetails = this.employeeRequestList;
+  //      this.request.TechnicalQualifications = this.techRequestList;
+  //      this.request.EducationalQualifications = this.educationList;
+
+
+  //      //let apiCall: Promise<any>;
+
+  //      //if (this.request?.Uid) {
+  //      //  // If UID exists → Update
+  //      //  apiCall = this.ItiInstructorService.UpdateInstructorData(this.request);
+  //      //} else {
+  //      //  // Otherwise → Insert
+  //      //  apiCall = this.ItiInstructorService.SaveInstructorData(this.request);
+  //      //}
+
+
+  //      await this.ItiInstructorService.SaveInstructorData(this.request)
+  //        .then((response: any) => {
+  //          this.State = response['State'];
+  //          this.Message = response['Message'];
+  //          this.ErrorMessage = response['ErrorMessage'];
+
+  //          if (this.State == EnumStatus.Success) {
+  //            this.toastr.success(this.Message);
+
+  //          }
+  //          else {
+  //            this.toastr.error(this.ErrorMessage)
+  //          }
+  //          console.log('Response from service:', response);
+  //        });
+  //      console.log('Request Data:', this.request);
+  //    } else {
+  //      console.log('Form is invalid');
+  //      console.log(this.InstructorForm.errors);
+  //      this.InstructorForm.markAllAsTouched();
+  //    }
+  //  }
+  //  catch (ex) { console.log(ex) }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+
+  //    }, 200);
+  //  }
+  //}
+
+
+
+  async onSubmit() {
     debugger;
 
-    console.log('Form submitted:iinstructor', this.InstructorForm.value);
+    console.log('Form submitted: iinstructor', this.InstructorForm.value);
     this.isLoading = true;
     this.isSubmitted = true;
     this.loaderService.requestStarted();
 
     try {
-
-
       if (this.InstructorForm.valid) {
+        const ssoid = this.request?.Uid;
 
-        var ssoid = this.request.Uid
         this.request = this.InstructorForm.value as ITI_InstructorDataModel;
         this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
         this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-        this.request.Uid = ssoid
+        this.request.Uid = ssoid; // keep old Uid if updating
         this.request.EmploymentDetails = this.employeeRequestList;
         this.request.TechnicalQualifications = this.techRequestList;
         this.request.EducationalQualifications = this.educationList;
 
-        await this.ItiInstructorService.SaveInstructorData(this.request)
-          .then((response: any) => {
-            this.State = response['State'];
-            this.Message = response['Message'];
-            this.ErrorMessage = response['ErrorMessage'];
+        await this.ItiInstructorService.UpdateInstructorData(this.request).then((response: any) => {
+          this.State = response['State'];
+          this.Message = response['Message'];
+          this.ErrorMessage = response['ErrorMessage'];
 
-            if (this.State == EnumStatus.Success) {
-              this.toastr.success(this.Message);
-            }
-            else {
-              this.toastr.error(this.ErrorMessage)
-            }
-            console.log('Response from service:', response);
-          });
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message);
+          } else {
+            this.toastr.error(this.ErrorMessage);
+          }
+          console.log('Response from service:', response);
+        });
+
         console.log('Request Data:', this.request);
+
       } else {
         console.log('Form is invalid');
         console.log(this.InstructorForm.errors);
         this.InstructorForm.markAllAsTouched();
       }
     }
-    catch (ex) { console.log(ex) }
+    catch (ex) {
+      console.log(ex);
+    }
     finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
         this.isLoading = false;
-
       }, 200);
     }
   }
 
 
+
+
+
   async GetById(ID: string) {
-    debugger;
+
     try {
       if (ID == "") {
         this.toastr.error("Please Enter SSOID");
@@ -618,7 +706,7 @@ export class ItiInstructorFormComponent {
           } else {
 
             this.toastr.error("Already Fill")
-            this.isSSOVisible = true;
+            //this.isSSOVisible = true;
             this.request = data['Data']['Table'][0]
             this.InstructorForm.patchValue(this.request);
             if (data['Data']['Table1'] && data['Data']['Table1'].length > 0) {
@@ -631,11 +719,11 @@ export class ItiInstructorFormComponent {
             if (data['Data']['Table3'] && data['Data']['Table3'].length > 0) {
               this.techRequestList = data['Data']['Table3']
             }
-
-            this.EducationForm.disable()
-            this.EmploymentForm.disable()
-            this.TechnicalForm.disable()
-            this.InstructorForm.disable()
+              
+            //this.EducationForm.disable()
+            //this.EmploymentForm.disable()
+            //this.TechnicalForm.disable()
+            //this.InstructorForm.disable()
 
             await this.ddlState_Change2();
             await this.ddlState_Change();
@@ -715,21 +803,21 @@ export class ItiInstructorFormComponent {
               this.request.JanAadhar = parsedData.JanaadhaarId,
               this.request.Uid = SSOID
 
-            //this.InstructorForm.get('Uid')?.disable();
-            //this.InstructorForm.patchValue({
-            //  Name: this.request.Name,
-            //  Mobile: this.request.Mobile,
-            //  Gender: this.request.Gender,
-            //  Dob: this.request.Dob,
-            //  Email: this.request.Email,
-            //  pincode: this.request.pincode,
-            //  Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
-            //  ddlState: this.request.ddlState,
-            //  Aadhar: this.request.Aadhar,
-            //  JanAadhar: this.request.JanAadhar,
-            //  Uid: this.request.Uid
+            this.InstructorForm.get('Uid')?.disable();
+            this.InstructorForm.patchValue({
+              Name: this.request.Name,
+              Mobile: this.request.Mobile,
+              Gender: this.request.Gender,
+              Dob: this.request.Dob,
+              Email: this.request.Email,
+              pincode: this.request.pincode,
+              Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
+              ddlState: this.request.ddlState,
+              Aadhar: this.request.Aadhar,
+              JanAadhar: this.request.JanAadhar,
+              Uid: this.request.Uid
 
-            //});
+            });
 
           }
           else {

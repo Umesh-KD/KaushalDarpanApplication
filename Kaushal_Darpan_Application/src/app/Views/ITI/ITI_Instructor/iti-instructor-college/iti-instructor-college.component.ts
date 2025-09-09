@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, Inject, Renderer2, signal, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, Renderer2, signal, ViewChild, TemplateRef } from "@angular/core";
 import { ToastrService } from "ngx-toastr";
 import { AppsettingService } from "../../../../Common/appsetting.service";
 import { EnumDepartment, EnumRole, EnumStatus, EnumStatusOfStaff, GlobalConstants, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType } from "../../../../Common/GlobalConstants";
@@ -22,22 +22,23 @@ import { StudentMarksheetSearchModel } from "../../../../Models/OnlineMarkingRep
 
 import { FontsService } from "../../../../Services/FontService/fonts.service";
 import { ITI_InstructorService } from "../../../../Services/ITI/ITI_Instructor/ITI_Instructor.Service";
-import { ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel } from "../../../../Models/ITI/ItiInstructorDataModel";
+import { ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel, ITI_InstructorDataAssignSearchModel } from "../../../../Models/ITI/ItiInstructorDataModel";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { ITIGovtEMAddStaffBasicDetailDataModel, ITIGovtEMStaffMasterSearchModel } from "../../../../Models/ITIGovtEMStaffMasterDataModel";
 import { ITIGovtEMStaffMaster } from "../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service";
 import { CommonVerifierApiDataModel } from "../../../../Models/PublicInfoDataModel";
 import { ITICollegeTradeSearchModel } from "../../../../Models/ITI/SeatIntakeDataModel";
 import { ItiSeatIntakeService } from "../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service";
+import { SweetAlert2 } from "../../../../Common/SweetAlert2";
 @Component({
-  selector: 'app-marksheet',
+  selector: 'app-marksheet-college',
   standalone: false,
-  templateUrl: './iti-instructor.component.html',
-  styleUrl: './iti-instructor.component.css'
+  templateUrl: './iti-instructor-college.component.html',
+  styleUrl: './iti-instructor-college.component.css'
 })
-export class ItiInstructorComponent{
+export class ItiInstructorCollegeComponent{
   
-
+  public instructorRequest = new ITI_InstructorDataAssignSearchModel();
   public searchrequest = new ItiApplicationSearchmodel();
   public searchRequestConsolidated = new ITIStateTradeCertificateSearchModel();
   public searchRequest = new ITIGovtEMStaffMasterSearchModel();
@@ -125,7 +126,8 @@ export class ItiInstructorComponent{
     private router: Router,
     private modalService: NgbModal,
     private Staffservice: ITIGovtEMStaffMaster,
-    private ITICollegeTradeService: ItiSeatIntakeService
+    private ITICollegeTradeService: ItiSeatIntakeService,
+    private Swal2: SweetAlert2
   ) 
   {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -144,27 +146,27 @@ export class ItiInstructorComponent{
     //this.InstructorBindSearch.ApplicationNo = '';
 
     this.AddStaffBasicDetailFromGroup = this.fb.group({
-      ddlStaffType: [{ value: 30, disabled: true }, [DropdownValidators]],
+      ddlStaffType: ['', [DropdownValidators]],
       ddlStaffLevel: [''],
       ddlStaffLevelChild: [''],
       ddlTrade: [''],
       ddlTechnician: [''],
-      ddlITICollegeTrade: [{ value: this.formData.InstituteID, disabled: true }, [DropdownValidators]],
-      txtSSOID: [{ value: this.formData.SSOID, disabled: true }, [Validators.required]],
+      ddlITICollegeTrade: ['', [DropdownValidators]],
+      txtSSOID: ['', [Validators.required]],
       txtName: [{ value: '', disabled: true }],
       txtMobileNo: [{ value: '', disabled: true }],
-      txtEmailID: [{ value :'', disabled: true } ],
+      txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
-      Shift: ['']
+      ddlShiftUnit: ['']
     })
   
-    await this.GetItiInstructorDatas();
-    await this.StaffLevelType();
-    await this.GetTechnicianDll();
-    await this.StaffLevelChild();
-    await this.getITICollege();
-    await this.GetStaffTypeData();
-    await this.GetBranchesMasterData();
+    await this.GetItiInstructorAssignData();
+    //await this.StaffLevelType();
+    //await this.GetTechnicianDll();
+    //await this.StaffLevelChild();
+    //await this.getITICollege();
+    //await this.GetStaffTypeData();
+    //await this.GetBranchesMasterData();
     //await this.ItiShiftUnitDDL(ID: number);
 
   }
@@ -185,7 +187,7 @@ export class ItiInstructorComponent{
       Uid: '',
       Name: ''
     };
-    this.GetItiInstructorDatas();
+    this.GetItiInstructorAssignData();
   }
 
   onViewDetail(Uid: any): void {
@@ -198,17 +200,17 @@ export class ItiInstructorComponent{
   }
 
   //using this function
-  async GetItiInstructorDatas() {
+  async GetItiInstructorAssignData() {
+    debugger;
 
     try {
       this.loaderService.requestStarted();
       const searchValues = this.searchForm.value;
 
-      this.InstructorBindSearch.Name = searchValues.Name;
-      this.InstructorBindSearch.Uid = searchValues.Uid;
-      this.InstructorBindSearch.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.instructorRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.instructorRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
 
-      await this.ItiInstructorService.GetGridBindInstructorData(this.InstructorBindSearch)
+      await this.ItiInstructorService.GetInstructorListIsAssign(this.instructorRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -233,6 +235,24 @@ export class ItiInstructorComponent{
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+
+  toggleAssign(item: any) {
+    // Flip the status locally
+    const newStatus = item.IsAssign === 1 ? 0 : 1;
+
+    //// Optionally call an API to persist this change
+    //this.yourService.updateAssignStatus(item.Uid, newStatus).subscribe({
+    //  next: (res) => {
+    //    // On success, update UI
+    //    item.IsAssign = newStatus;
+    //  },
+    //  error: (err) => {
+    //    console.error('Failed to update status', err);
+    //    // Optionally show a toast or revert change
+    //  }
+    //});
   }
 
 
@@ -353,7 +373,16 @@ export class ItiInstructorComponent{
   }
 
 
-  
+  async onAssign(content: any, ID: string) {
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+    this.SSOIDGetSomeDetails(ID); 
+  }
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -368,8 +397,6 @@ export class ItiInstructorComponent{
 
   async GetChange() {
     this.AddValidationStaffLevelNon();
-    this.ItiShiftUnitDDL();
-    //this.onTradeChange();
 
     try {
       this.formData
@@ -404,7 +431,7 @@ export class ItiInstructorComponent{
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffLevelChildList = data['Data'];
-          this.StaffLevelChildList = this.StaffLevelChildList.filter((item: any) => item.ID != 15 );
+          this.StaffLevelChildList = this.StaffLevelChildList.filter((item: any) => item.ID != 15);
           //if (this.formData.BranchID != 0) {
 
           //} 
@@ -451,7 +478,7 @@ export class ItiInstructorComponent{
     if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
       this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
     }
-    else if(this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
+    else if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
       this.AddStaffBasicDetailFromGroup.controls['ddlStaffLevelChild'].setValidators([DropdownValidators]);
     }
     else {
@@ -592,7 +619,6 @@ export class ItiInstructorComponent{
   }
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-    debugger;
 
     //if (SSOID == "") {
     //  this.toastr.error("Please Enter SSOID");
@@ -618,14 +644,13 @@ export class ItiInstructorComponent{
         if (response?.Data) {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
-          console.log("parsedData", parsedData);
           if (parsedData != null) {
-            /*this.DuplicateCheck(this.requestSSoApi.SSOID);*/
+            this.DuplicateCheck(this.requestSSoApi.SSOID);
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Displayname = parsedData.displayName;
             this.formData.MobileNo = parsedData.mobile;
-            this.formData.Mailpersonal = parsedData.Mailpersonal;
+            this.formData.Mailpersonal = parsedData.mailPersonal;
             this.formData.SSOID = parsedData.SSOID;
             //this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
             if (parsedData.designation != null) {
@@ -686,7 +711,7 @@ export class ItiInstructorComponent{
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.BranchesMasterList = data.Data;
         console.log("StreamMasterList", this.BranchesMasterList);
@@ -703,7 +728,6 @@ export class ItiInstructorComponent{
   async StaffLevelType() {
 
     this.formData.StaffLevelID = 0;
-    this.formData.StaffTypeID = 30;
     this.AddValidationStaffWiseNon();
     this.AddValidationStaffWise();
 
@@ -738,7 +762,7 @@ export class ItiInstructorComponent{
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "sss");
           this.StaffLevelList = data['Data'];
-          this.StaffLevelList = this.StaffLevelList.filter((item: any) => item.ID == 30 || item.ID == 30 || item.ID == 30);
+          this.StaffLevelList = this.StaffLevelList.filter((item: any) => item.ID == this._ITIGovtEM_EnumStaffLevel.Placement || item.ID == this._ITIGovtEM_EnumStaffLevel.Staff || item.ID == this._ITIGovtEM_EnumStaffLevel.StoreKeeper);
           console.log(this.StaffLevelList, "StaffLevelList")
         }, (error: any) => console.error(error)
         );
@@ -759,7 +783,6 @@ export class ItiInstructorComponent{
       this.loaderService.requestStarted();
       await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StaffTypeList = this.StaffTypeList.filter((x: any) => x.ID === 30);
         this.StaffTypeList = data.Data;
         console.log("StaffTypeList", this.StaffTypeList);
       })
@@ -788,77 +811,76 @@ export class ItiInstructorComponent{
     debugger;
 
     try {
-      this.loaderService.requestStarted();
       this.isSubmitted = true;
-      if (!this.AddStaffBasicDetailFromGroup.invalid) {
+      if (this.AddStaffBasicDetailFromGroup.invalid) {
         return
       }
 
       this.isLoading = true;
+
+      this.loaderService.requestStarted();
 
       this.formData.ModifyBy = this.sSOLoginDataModel.UserID;
       this.formData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.formData.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
+      if (this.formData.StaffLevelID != this._ITIGovtEM_EnumStaffLevel.HostelWarden) {
+        this.formData.HostelID = 0;
+      }
 
-      //if (this.formData.StaffLevelID != this._ITIGovtEM_EnumStaffLevel.HostelWarden) {
-      //  this.formData.HostelID = 0;
-      //}
-
-      //if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
-      //  this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
-      //}
+      if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.NonTeaching) {
+        this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
+      }
 
       if (this.formData.StaffID == 0 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching) {
         this.formData.StatusOfStaff = EnumStatusOfStaff.Draft;
       }
 
-      //if (this.formData.StaffLevelChildID != this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
-      //  this.formData.TechnicianID = 0;
-      //}
+      if (this.formData.StaffLevelChildID != this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
+        this.formData.TechnicianID = 0;
+      }
 
-      //if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.HostelWarden) {
-      //  if (this.sSOLoginDataModel.DepartmentID == 1) {
-      //    this.formData.RoleID = 0;
-      //  }
-      //  else {
-      //    if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 1) {
-      //      this.formData.RoleID = 0;
-      //    }
-      //    else if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 2) {
-      //      this.formData.RoleID = 0;
-      //    }
+      if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.HostelWarden) {
+        if (this.sSOLoginDataModel.DepartmentID == 1) {
+          this.formData.RoleID = 0;
+        }
+        else {
+          if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 1) {
+            this.formData.RoleID = 0;
+          }
+          else if (this.sSOLoginDataModel.DepartmentID == 2 && this.sSOLoginDataModel.Eng_NonEng == 2) {
+            this.formData.RoleID = 0;
+          }
 
-      //  }
+        }
 
-      //}
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.TPO) {
-      //  this.formData.RoleID = 0;
-      //}
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden) {
-      //  this.formData.RoleID = 0;
-      //}
+      }
+      else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.TPO) {
+        this.formData.RoleID = 0;
+      }
+      else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden) {
+        this.formData.RoleID = 0;
+      }
 
 
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
-      //  this.formData.RoleID = 0;
-      //}
+      else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.Lecturer) {
+        this.formData.RoleID = 0;
+      }
 
-      //else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
-      //  this.formData.RoleID = 0;
-      //}
-      //else {
-      //  this.formData.RoleID = 0;
-      //}
+      else if (this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
+        this.formData.RoleID = 0;
+      }
+      else {
+        this.formData.RoleID = 0;
+      }
       this.formData.EMTypeID = 1;
 
-      //if (this.formData.HostelIDs.length > 0) {
-      //  this.formData.multiHostelIDs = this.formData.HostelIDs.map((item: any) => item.ID).join(',');
-      //} else {
-      //  this.formData.multiHostelIDs = "";
-      //}
-      //this.formData.RoleID = 222;
+      if (this.formData.HostelIDs.length > 0) {
+        this.formData.multiHostelIDs = this.formData.HostelIDs.map((item: any) => item.ID).join(',');
+      } else {
+        this.formData.multiHostelIDs = "";
+      }
       this.formData.IsInstructor = true;
       this.formData.OfficeID = this.sSOLoginDataModel.OfficeID;
       //save
@@ -872,18 +894,16 @@ export class ItiInstructorComponent{
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.CloseModalPopup();
       
             this.ResetControls();
             //this.GetAllData();
 
-            //const btnSave = document.getElementById('btnSave');
-            //if (btnSave) btnSave.innerHTML = "Submit";
+            const btnSave = document.getElementById('btnSave');
+            if (btnSave) btnSave.innerHTML = "Submit";
           }
           else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage);
-            this.CloseModalPopup();
-            //this.ResetControls();
+            this.ResetControls();
           }
           else {
 
@@ -904,13 +924,13 @@ export class ItiInstructorComponent{
   }
 
 
-  async ItiShiftUnitDDL(ID: number=0) {
+  async ItiShiftUnitDDL(ID: number) {
 
     debugger;
 
     try {
       debugger
-      await this.commonMasterService.ItiShiftUnitDDL(this.formData.BranchID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
+      await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.shiftddl = data.Data;
       })
@@ -920,73 +940,54 @@ export class ItiInstructorComponent{
     }
   }
 
+  @ViewChild('ModalStatusActiveInactive') ModalStatusActiveInactive!: TemplateRef<any>;
 
+  async openModal(content: any, IsAssign: boolean) {
 
-  async onAssign(content: any, ID: string) {
-
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-
-    this.GetById(ID);
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
   }
 
+  async onToggleChange(event: MouseEvent, item: any) {
+    console.log("Toggle clicked item:", item);
 
-
-
-  async GetById(ID: string) {
     debugger;
-    try {
-      this.loaderService.requestStarted();
 
-      //if (!ID || ID.trim() === "") {
-      //  this.toastr.error("Please Enter SSOID");
-      //  return;
-      //}
+    event.preventDefault();
 
-      let data: any = await this.ItiInstructorService.GetInstructorDataBySsoid(ID);
-      data = JSON.parse(JSON.stringify(data));  
+    this.Swal2.Confirmation("Are you sure you want to change status?", async (result: any) => {
+      if (result.isConfirmed) {
+        await this.ItiInstructorService.GetInstructorAssignStatus(item.Uid)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));  
+            console.log(data);
 
-      if (data?.Data?.Table && data.Data.Table.length > 0) {
-        
-        const instructor = data.Data.Table[0];
-  
-        this.formData.SSOID = instructor.Uid;
-        this.formData.Displayname = instructor.Name;
-        this.formData.MobileNo = instructor.Mobile;
-        this.formData.Mailpersonal = instructor.Email;
-        this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
-        //this.formData.InstituteName = instructor.
-       // console.log(instructor);
-        //instructor.Email = this.formData.Mailpersonal
-        this.AddStaffBasicDetailFromGroup.patchValue({
-          txtSSOID: instructor.Uid,
-          txtName: instructor.Name,
-          txtMobileNo: instructor.Mobile,
-          txtEmailID: instructor.Email,  
-          ddlITICollegeTrade: instructor.InstituteID
-        });
-        this.getITICollege()
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
 
+            if (this.State == EnumStatus.Success) {
+              if (data['Data'] && data['Data'].length > 0) {
+                item.IsAssign = data['Data'][0].IsAssign; 
+              }
+
+              this.toastr.success(this.Message);
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage);
+            }
+            else {
+              this.toastr.error(this.ErrorMessage);
+            }
+          },
+            (error: any) => {
+              console.error(error);
+              this.toastr.error("Failed to update status.");
+            });
       } else {
-        await this.SSOIDGetSomeDetails(ID);
+        event.stopImmediatePropagation();
       }
-
-      console.log('Request Datas:', this.request);
-
-    } catch (ex) {
-      console.error('Error in GetById:', ex);
-      this.toastr.error("Something went wrong while fetching details.");
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
+    });
   }
-
-  
 
 }
 
