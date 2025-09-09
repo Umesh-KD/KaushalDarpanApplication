@@ -235,7 +235,8 @@ export class AddItiIMCRegistrationComponent {
         debugger;
         if (data.State === EnumStatus.Success) {
           this.formData = data.Data
-          this.formData.RegLink = this.formData.RegLink
+          this.formData.RegDisLink = this.formData.RegLink
+          //this.formData.IMCMemberDetails.Member_DisFile = this.formData.IMCMemberDetails[0].MemberFile
           this.selectedFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.RegLink;
           this.selectedMemeberFileUrl = this.appsettingConfig.StaticFileRootPathURL + '/ITIUpload/' + this.formData.IMCMemberDetails[0].MemberFile; 
         

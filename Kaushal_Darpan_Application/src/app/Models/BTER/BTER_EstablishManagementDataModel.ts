@@ -252,6 +252,7 @@ export class BTER_EM_UnlockProfileDataModel {
   public StaffUserID: number = 0
   public StaffID: number = 0
   public SSOID: string = ''
+  public Remark: string = ''
   public ModifyBy: number = 0
 }
 

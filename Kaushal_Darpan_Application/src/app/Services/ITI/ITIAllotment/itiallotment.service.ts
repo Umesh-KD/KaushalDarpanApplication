@@ -7,6 +7,7 @@ import { AllotmentStatusSearchModel } from '../../../Models/BTER/BTERAllotmentSt
 import { IMCAllocationSearchModel } from '../../../Models/ITIIMCAllocationDataModel';
 import { ReportCollegeForAdminModel, ReportCollegeModel, StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
 import { StudentthdranSeat1Model } from '../../../Models/CommonMasterDataModel';
+import { IIPManageMemberDetailsDataModel, ITI_IIPManageDataModel, ITI_IIPManageSearchModel, IIPManageFundSearchModel } from '../../../Models/ITI/ITI_IIPManageDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -272,6 +273,16 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+  //Download Report
+
+  public async downloadIIPManageReportPDF(searchRequest: ITI_IIPManageSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/downloadIIPManageReportPDF`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetJailStudentDetails(searchRequest: DirectAllocationSearchModel) {
     var body = JSON.stringify(searchRequest);
@@ -299,6 +310,7 @@ export class ITIAllotmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
 }
 
 

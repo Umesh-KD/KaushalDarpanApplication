@@ -65,6 +65,7 @@ export class SSOLoginDataModel {
   public SSOMenu: IMenu[] = [];
   public PrincipleSSOID?: string = '';
   public PrincipleMobile?: string = '';
+  public collageID: number = 0;
     //public MobileNo: number = 0;
 
     public ShowSessionSelection: number = 0;

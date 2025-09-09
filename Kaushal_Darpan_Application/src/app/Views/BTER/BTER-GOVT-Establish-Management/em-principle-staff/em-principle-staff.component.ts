@@ -16,6 +16,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -26,7 +27,7 @@ import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Managemen
 export class EMPrincipleStaffComponent {
   AddStaffBasicDetailFromGroup!: FormGroup;
   StaffMasterFormGroup!: FormGroup;
-
+  groupForm!: FormGroup;
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -37,7 +38,7 @@ export class EMPrincipleStaffComponent {
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
-
+  public type: string = ''
   public UserProfileStatusHistoryList: any = [];
   public settingsMultiselect: object = {};
   public isSubmitted: boolean = false;
@@ -51,7 +52,7 @@ export class EMPrincipleStaffComponent {
   public IsHideShow: boolean = false
   public GuestHouseNameList: any = [];
   _EnumRole = EnumRole;
-
+  public RequestUpdateStatus = new RequestUpdateStatus();
   PostList: any[] = [];
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
@@ -72,12 +73,12 @@ export class EMPrincipleStaffComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  
+  public filteredStatusList: any[] = [];
   public hostelSearchReq = new StaffHostelSearchModel();
   public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public staffHostelIDs: string = ''
   public StaffIDforHostel: number = 0
-
+  public isLoading: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -167,7 +168,10 @@ export class EMPrincipleStaffComponent {
       DateOfRetirement: [''],
       Remark: [''],
     });
-
+    this.groupForm = this.formBuilder.group({
+      ddlStatus: [0, [DropdownValidators]],
+      txtRemark: ['', Validators.required]
+    });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
@@ -178,7 +182,7 @@ export class EMPrincipleStaffComponent {
     await this.StaffLevelType();
     await this.GetAllData();
     await this.GetDesignationMasterData();
-   
+    
    
 
   }
@@ -601,6 +605,8 @@ async GetTechnicianDll() {
 
   async OnFormSubmit() {
     debugger
+    
+
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
@@ -834,7 +840,7 @@ async GetTechnicianDll() {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         // console.log("DesignationMasterList", this.DesignationMasterDDLList);
@@ -1094,6 +1100,108 @@ async GetTechnicianDll() {
         }, (error: any) => console.error(error))
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  async RevertStaffProfile(model: any, userSubmitData: any) {
+    debugger
+
+    try {
+      await this.GetStatusList()
+      this.RequestUpdateStatus.StatusIDs = 249;
+
+      this.RequestUpdateStatus = { ...userSubmitData };
+      this.RequestUpdateStatus.StatusIDs = 0;
+      this.RequestUpdateStatus.Remark = '';
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+
+
+
+
+  async updateReqStatus() {
+
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.RequestUpdateStatus.StatusIDs = 249;
+      this.unlockRequest.StaffUserID = 0;
+      this.unlockRequest.SSOID = "";
+      this.unlockRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.unlockRequest.StaffID = this.RequestUpdateStatus.StaffID;
+      this.unlockRequest.Remark = this.RequestUpdateStatus.Remark;
+      this.loaderService.requestStarted();
+      this.Swal2.Confirmation("Are you sure you want Revert ?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            try {
+              await this.bterEstablishManagementService.Bter_RevertStaffProfile(this.unlockRequest).then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  window.location.reload();
+                }
+              })
+            } catch (error) {
+              console.log(error);
+            } finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200)
+            }
+          }
+        });
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RequestUpdateStatus.StatusIDs = 0;
+    this.RequestUpdateStatus.Remark = '';
+    this.isSubmitted = false;
+  }
+
+  async GetStatusList() {
+
+    try {
+      this.loaderService.requestStarted();
+      this.type = 'ITIvtARRStauts';
+      await this.commonMasterService.AllDDlManageByTypeCommanMaster(this.type)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.filteredStatusList = data['Data'];
+          this.filteredStatusList = this.filteredStatusList.filter((item:any)=>item.ID==249)
+          console.log(this.filteredStatusList, "GetStatusList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 }
