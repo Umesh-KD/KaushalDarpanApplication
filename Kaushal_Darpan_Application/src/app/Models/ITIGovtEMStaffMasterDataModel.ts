@@ -530,6 +530,7 @@ export class RequestUpdateStatus {
   LastWorkingDate: string = '';
   JoiningDate: string = '';
   UserID: number = 0;
+  StaffID: number = 0;
   
 
   IsEOL: boolean = false;

@@ -38,7 +38,7 @@ export class EMPrincipleStaffComponent {
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
-
+  public type: string = ''
   public UserProfileStatusHistoryList: any = [];
   public settingsMultiselect: object = {};
   public isSubmitted: boolean = false;
@@ -73,7 +73,7 @@ export class EMPrincipleStaffComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  
+  public filteredStatusList: any[] = [];
   public hostelSearchReq = new StaffHostelSearchModel();
   public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public staffHostelIDs: string = ''
@@ -182,7 +182,7 @@ export class EMPrincipleStaffComponent {
     await this.StaffLevelType();
     await this.GetAllData();
     await this.GetDesignationMasterData();
-   
+    
    
 
   }
@@ -1103,17 +1103,26 @@ async GetTechnicianDll() {
     }
   }
 
-  async RevertStaffProfile() {
-    //try {
-    //  this.RequestUpdateStatus = { ...userSubmitData };
-    //  this.RequestUpdateStatus.StatusIDs = 0;
-    //  this.RequestUpdateStatus.Remark = '';
-    //  console.log(this.RequestUpdateStatus, "modal");
-    //  this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
-    //} catch (error) {
-    //  console.error('Error fetching data:', error);
-    //}
+  async RevertStaffProfile(model: any, userSubmitData: any) {
+    debugger
+
+    try {
+      await this.GetStatusList()
+      this.RequestUpdateStatus.StatusIDs = 249;
+
+      this.RequestUpdateStatus = { ...userSubmitData };
+      this.RequestUpdateStatus.StatusIDs = 0;
+      this.RequestUpdateStatus.Remark = '';
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   }
+
+
+
+
 
 
   async updateReqStatus() {
@@ -1127,33 +1136,33 @@ async GetTechnicianDll() {
 
     try {
       this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
-
-
-     
-      //249
-
-
-
-
-
-
-
-      //await this.Staffservice.ITI_GOVT_EM_ApproveRejectStaff(this.RequestUpdateStatus)
-      //  .then(async (data: any) => {
-      //    this.State = data['State'];
-      //    this.Message = data['Message'];
-      //    this.ErrorMessage = data['ErrorMessage'];
-      //    if (this.State == EnumStatus.Success) {
-      //      this.CloseModal();
-      //      this.GetAllData();
-      //    }
-      //    else if (this.State == EnumStatus.Warning) {
-      //      this.toastr.warning(this.Message)
-      //    }
-      //    else {
-      //      this.toastr.error(this.ErrorMessage)
-      //    }
-      //  })
+      this.RequestUpdateStatus.StatusIDs = 249;
+      this.unlockRequest.StaffUserID = 0;
+      this.unlockRequest.SSOID = "";
+      this.unlockRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.unlockRequest.StaffID = this.RequestUpdateStatus.StaffID;
+      this.unlockRequest.Remark = this.RequestUpdateStatus.Remark;
+      this.loaderService.requestStarted();
+      this.Swal2.Confirmation("Are you sure you want Revert ?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            try {
+              await this.bterEstablishManagementService.Bter_RevertStaffProfile(this.unlockRequest).then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  window.location.reload();
+                }
+              })
+            } catch (error) {
+              console.log(error);
+            } finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200)
+            }
+          }
+        });
     }
     catch (ex) { console.log(ex) }
     finally {
@@ -1171,5 +1180,28 @@ async GetTechnicianDll() {
     this.RequestUpdateStatus.StatusIDs = 0;
     this.RequestUpdateStatus.Remark = '';
     this.isSubmitted = false;
+  }
+
+  async GetStatusList() {
+
+    try {
+      this.loaderService.requestStarted();
+      this.type = 'ITIvtARRStauts';
+      await this.commonMasterService.AllDDlManageByTypeCommanMaster(this.type)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.filteredStatusList = data['Data'];
+          this.filteredStatusList = this.filteredStatusList.filter((item:any)=>item.ID==249)
+          console.log(this.filteredStatusList, "GetStatusList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }

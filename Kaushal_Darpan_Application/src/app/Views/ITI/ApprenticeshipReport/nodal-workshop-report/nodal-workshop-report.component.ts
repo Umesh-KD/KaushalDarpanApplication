@@ -164,7 +164,7 @@ export class NodalWorkshopReportComponent {
 
       this.loaderService.requestStarted();
       if (this.sSOLoginDataModel.RoleID == 97) {
-        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.sSOLoginDataModel.InstituteID)
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.sSOLoginDataModel.DistrictID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictLisrt = data['Data'];

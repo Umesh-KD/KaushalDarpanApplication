@@ -600,6 +600,15 @@ export class JailAdmissionReportingComponent {
 
   async SaveTradeWithAllot() {
     try {
+
+
+      if (this.requestReporting.ShiftUnitID == 0) {
+        this.toastr.error("Please select shift unit")
+        return
+      }
+
+
+
       this.loaderService.requestStarted();
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -619,9 +628,9 @@ export class JailAdmissionReportingComponent {
             if (this.searchRequest.TradeLevel == 8) {
               this.Router.navigate(['/JailAdmissionAllotment', 8]);
             } else if (this.searchRequest.TradeLevel == 10) {
-              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+              this.Router.navigate(['/JailAdmissionAllotment10', 10]);
             } else if (this.searchRequest.TradeLevel == 12) {
-              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+              this.Router.navigate(['/JailAdmissionAllotment12', 12]);
             }
           }
           else {
