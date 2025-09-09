@@ -233,12 +233,12 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge) {
-      this.isShowImageDeleteButton = false
-    } else if (this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+      this.isShowImageDeleteButton = true
+    } else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
       this.isShowImageDeleteButton = false
     } else {
-      this.isShowImageDeleteButton = true
+      this.isShowImageDeleteButton = false
     }
   }
 
@@ -1446,7 +1446,7 @@ export class StudentEnrollmentComponent {
         FileExtention: item.FileExtention ?? "",
         MinFileSize: item.MinFileSize ?? "",
         MaxFileSize: item.MaxFileSize ?? "",
-        FolderName: item.FolderName+"/BTER/" ,
+        FolderName: item.FolderName ?? "",
         FilePrefix: this.requestStudent.FinancialYearName+"/"+this.requestStudent.CourseTypeID+"/"+this.requestStudent.StudentID ,
         //IsCopy: true 
         FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
@@ -1617,7 +1617,7 @@ export class StudentEnrollmentComponent {
               Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
               RoleID: this.sSOLoginDataModel.RoleID,
               ApplicationNo: x.ApplicationID?.toString() || "",
-              MobileNo: "9785353399",
+              MobileNo: x.MobileNo,
               MessageType: "Bter_EnrollmentForStudent"
 
             })
@@ -1661,7 +1661,7 @@ export class StudentEnrollmentComponent {
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
         RoleID: this.sSOLoginDataModel.RoleID,
         ApplicationNo: this.requestStudent.ApplicationID?.toString() || "",
-        MobileNo: "9785353399", // You can replace this with student.MobileNo if available
+        MobileNo: this.requestStudent.MobileNo, 
         MessageType: "Bter_EnrollmentForStudent"
       }];
 
