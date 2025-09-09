@@ -121,7 +121,7 @@
                      for="fileStudentPhoto">Attachments <span class="StarMarking">*</span></label>
               <div class="flex fileUploader">
                 <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')" >
                 <label for="fileStudentPhoto">
                   <span>Choose File</span>
 
@@ -131,8 +131,7 @@
 
                   <a *ngIf="UpdateConsentRequest.DocConsent"
                  [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + UpdateConsentRequest.DocConsent"
-                 class="btn bg-primary text-white m-0"
-                 target="_blank">
+                 class="btn bg-primary text-white m-0" target="_blank">
                 <i class="ti ti-eye"></i>
               </a>
 
@@ -144,13 +143,15 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
               <input type="date"
                      name="TentativeDate"
+                     formControlName="TentativeDate" [(ngModel)]="consentForm.TentativeDate"
                      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
             </div>
 
           </div>
           <div class="mt-4">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
-            <textarea name="Remark"
+            <textarea name="Remarks"
+                      formControlName="Remarks" [(ngModel)]="consentForm.Remarks"
                       rows="3"
                       class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"></textarea>
           </div>

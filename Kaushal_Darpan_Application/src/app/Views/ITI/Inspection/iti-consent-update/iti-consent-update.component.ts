@@ -68,9 +68,9 @@ export class ITIConsentUpdateComponent {
 
   ) {
 
-    this.consentForm = this.fb.group({
-      consents: this.fb.array([this.createConsent()])
-    });
+    //this.consentForm = this.fb.group({
+    //  consents: this.fb.array([this.createConsent()])
+    //});
   }
 
 
@@ -564,17 +564,18 @@ export class ITIConsentUpdateComponent {
     }
 
     this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
-    //this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
-    //this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
+    this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
+    this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
+    this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
 
 
 
     try {
       this.isSubmitted = true;
-      if (this.consentForm.invalid) {
-        console.log('Form is invalid');
-        return;
-      }
+      //if (this.consentForm.invalid) {
+      //  console.log('Form is invalid');
+      //  return;
+      //}
 
       this.loaderService.requestStarted();
       this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
