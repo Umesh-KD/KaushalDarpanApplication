@@ -37,7 +37,7 @@ import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMem
 })
 export class ItiInstructorFormViewComponent {
 
-  public urlId: int = '';
+  public urlId: string = '';
   public InstructorForm!: FormGroup
   public EducationForm!: FormGroup
   public TechnicalForm!: FormGroup
