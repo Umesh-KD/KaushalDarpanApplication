@@ -15,33 +15,49 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <a routerLink="/iti-add-consent" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Consent</a>
-        <!--<button class="btn bg-success btn-sm text-white" (click)="openAddTeamModal(addTeamModal)">
-          <i class="ti ti-plus"></i> Add Consent
-        </button>-->
       </div>
 
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
+        <!--<div>
+    <label class="block text-sm font-medium text-gray-600 mb-1">Zone </label>
+    <select name="ItemCondition"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+      <option value="0" disabled selected>Select Zone</option>-->
+        <!--<option *ngFor="let item of " [value]="item.ID">
+    {{ item.Name }}
+  </option>-->
+        <!--</select>
+  </div>-->
+        <!--<div>
+    <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
+    <select name="ItemCondition"
+            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
+      <option value="0" disabled selected>Select District</option>-->
+        <!--<option *ngFor="let item of " [value]="item.ID">
+    {{ item.Name }}
+  </option>-->
+        <!--</select>
+  </div>-->
+
         <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">Zone </label>
-          <select name="ItemCondition"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-            <option value="0" disabled selected>Select Zone</option>
-            <!--<option *ngFor="let item of " [value]="item.ID">
-            {{ item.Name }}
-          </option>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
+          <select type="text" class="form-input"  [(ngModel)]="consentDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
+            <option value="0">--Select--</option>
+            @for (item of DistrictMasterDDL; track item.ID) {
+            <option [value]="item.ID">{{item.Name}}</option>
+            }
           </select>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
-          <select name="ItemCondition"
-                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-            <option value="0" disabled selected>Select District</option>
-            <!--<option *ngFor="let item of " [value]="item.ID">
-            {{ item.Name }}
-          </option>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
+          <select type="text" class="form-input" [(ngModel)]="consentDeploy.InstituteID">
+            <option value="0">--Select--</option>
+            @for (item of InstituteMasterDDL; track item.Id) {
+            <option [value]="item.Id">{{item.Name}}</option>
+            }
           </select>
         </div>
 
@@ -75,11 +91,12 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th width="80px" align="left">Sr. No.</th>
-            <th class="text-left">Zone</th>
+            <!--<th class="text-left">Zone</th>-->
             <th class="text-left">District</th>
            
             <th class="text-left">Institute Name</th>
             <th class="text-left">Tentative Date</th>
+            <th class="text-left">Updated Date</th>
             <th class="text-left">Status</th>
           </tr>
         </thead>
@@ -87,11 +104,12 @@
 
           <tr *ngFor="let row of ConsentData; let idx=index;">
             <td>{{idx+1}}</td>
-            <td>{{row.DivisionName}}</td>
+            <!--<td>{{row.DivisionName}}</td>-->
             <td>{{row.DistrictName}}</td>
             <td>{{row.InstituteName}}</td>
             <td align="left">{{row.TentativeDate | date:'dd/MM/yyyy' }}</td>
-            <td align="left">1  </td>
+            <td align="left">{{row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
+            <td align="left">1</td>
            
           </tr>
         </tbody>
@@ -100,246 +118,3 @@
   </div>
 </div>
 
-
-<!--Start Model Popup-->
-<ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-  <div class="modal-content">
-    <div class="card">
-      <div class="card-header flex justify-between  items-center">
-        <b>
-          <i class="fa fa-comment"></i>&nbsp; OTP verification for date configuration
-        </b>
-        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
-      </div>
-      <div class="card-body">
-        <p class="text-center">
-          <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo}}</b></span>
-        </p>
-        <div class="mt-4">
-          <label class="text-gray-800  text-sm font-medium inline-block mb-1">Enter OTP</label>
-          <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
-        </div>
-      </div>
-      <div class="text-center flex items-center justify-center mt-3">
-        <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
-        <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
-        <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
-      </div>
-      <br />
-    </div>
-  </div>
-</ng-template>
-<!--Start Model Popup-->
-
-
-<ng-template #addTeamModal let-modal>
-  <div class="modal-content bg-white rounded-xl shadow-xl p-6 w-full max-w-6xl mx-auto">
-  
-    <div class="flex justify-between items-center border-b pb-3 mb-4">
-      <h5 class="text-lg font-semibold text-gray-700">Add Consent</h5>
-      <button type="button" class="text-gray-500 hover:text-gray-700" (click)="modal.dismiss()">✕</button>
-    </div>
-
- 
-    <div class="modal-body">
-      <form class="space-y-4">
-        <div class="flex gap-4">
-         
-          <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-600 mb-1">Zone</label>
-            <select name="zone"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
-              <option value="0" disabled selected>Select Zone</option>
-              <option *ngFor="let item of zones" [value]="item.ID">{{ item.Name }}</option>
-            </select>
-          </div>
-
-          <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
-            <select name="district"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
-              <option value="0" disabled selected>Select District</option>
-              <option *ngFor="let item of districts" [value]="item.ID">{{ item.Name }}</option>
-            </select>
-          </div>
-
-          <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-600 mb-1">Institute</label>
-            <select name="institute"
-                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm">
-              <option value="0" disabled selected>Select Institute</option>
-              <option *ngFor="let item of institutes" [value]="item.ID">{{ item.Name }}</option>
-            </select>
-          </div>
-
-          <div class="flex-1">
-            <label class="block text-sm font-medium text-gray-600 mb-1">Tentative Date</label>
-            <input type="date" name="TentativeDate" required
-                   class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 text-sm" />
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <!-- Footer -->
-    <div class="modal-footer flex justify-end gap-3 pt-4 border-t mt-2">
-      <button class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 text-sm mt-2"
-              (click)="modal.dismiss()">
-        Cancel
-      </button>
-      <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm mt-2"
-              (click)="onSubmit(modal)">Add consent
-      </button>
-    </div>
-  </div>
-</ng-template>
-
-
-
-
-
-
-
-<!--<ng-template #addTeamModal let-modal>
-  <div class="modal-content bg-white rounded-xl shadow-xl p-6 w-full max-w-3xl mx-auto">
-    <div class="flex justify-between items-center border-b pb-3 mb-4">
-      <h5 class="text-lg font-semibold text-gray-700">Add Consent</h5>
-      <button type="button" class="text-gray-500 hover:text-gray-700" (click)="modal.dismiss()">✕</button>
-    </div>
-
-    <div class="modal-body">
-
-      <form [formGroup]="consentForm" class="space-y-4">
-
-        <div formArrayName="consents">
-          <div *ngFor="let group of consents.controls; let i = index" [formGroupName]="i"
-               class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end border p-3 rounded-lg mb-3">
-
-            <div class="flex flex-wrap gap-4 items-end border p-3 rounded-lg mb-3">-->
-<!-- Zone -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Zone</label>
-  <select formControlName="zone" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select Zone</option>
-    <option *ngFor="let z of ['North','South','East']" [value]="z">{{z}}</option>
-  </select>
-</div>-->
-<!-- District -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
-  <select formControlName="district" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select District</option>
-    <option *ngFor="let d of ['Jaipur','Pune','Delhi']" [value]="d">{{d}}</option>
-  </select>
-</div>-->
-<!-- Institute -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Institute</label>
-  <select formControlName="institute" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select Institute</option>
-    <option *ngFor="let ins of ['ABC ITI','XYZ ITI']" [value]="ins">{{ins}}</option>
-  </select>
-</div>-->
-<!-- Date -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Tentative Date</label>
-  <input type="date" formControlName="date" class="w-full border rounded-lg px-3 py-2 text-sm" />
-</div>-->
-<!-- Remove -->
-<!--<div class="flex-shrink-0">
-        <button type="button"
-                *ngIf="consents.length > 1"
-                class="bg-red-500 text-white px-3 py-2 rounded-md text-xs"
-                (click)="removeConsentRow(i)">
-          Remove
-        </button>
-      </div>
-    </div>
-
-
-  </div>
-</div>-->
-<!-- Add More -->
-<!--<button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm"
-                (click)="addConsentRow()">
-          + Add More
-        </button>
-      </form>
-    </div>
-
-    <div class="modal-footer flex justify-end gap-3 pt-4 border-t mt-2">
-      <button class="bg-gray-400 text-white px-4 py-2 rounded-lg text-sm" (click)="modal.dismiss()">Cancel</button>
-      <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm" (click)="saveAll()">Add consent</button>
-    </div>
-  </div>
-</ng-template>-->
-<!-- Button to open modal -->
-<!--<button class="btn bg-success text-white" (click)="openModal(addTeamModal)">Add Consent</button>-->
-<!--<ng-template #addTeamModal let-modal>
-  <div class="modal-content bg-white rounded-xl shadow-xl p-6 w-full max-w-5xl mx-auto">
-    <div class="flex justify-between items-center border-b pb-3 mb-4">
-      <h5 class="text-lg font-semibold text-gray-700">Add Consent</h5>
-      <button type="button" class="text-gray-500 hover:text-gray-700" (click)="modal.dismiss()">✕</button>
-    </div>
-
-    <div class="modal-body">
-      <form [formGroup]="consentForm" class="space-y-4">
-        <div formArrayName="consents">
-          <div *ngFor="let group of consents.controls; let i = index" [formGroupName]="i"
-               class="flex flex-wrap gap-4 items-end border p-3 rounded-lg mb-3">-->
-<!-- Zone -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Zone</label>
-  <select formControlName="zone" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select Zone</option>
-    <option *ngFor="let z of ['North','South','East']" [value]="z">{{z}}</option>
-  </select>
-</div>-->
-<!-- District -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
-  <select formControlName="district" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select District</option>
-    <option *ngFor="let d of ['Jaipur','Pune','Delhi']" [value]="d">{{d}}</option>
-  </select>
-</div>-->
-<!-- Institute -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Institute</label>
-  <select formControlName="institute" class="w-full border rounded-lg px-3 py-2 text-sm">
-    <option value="">Select Institute</option>
-    <option *ngFor="let ins of ['ABC ITI','XYZ ITI']" [value]="ins">{{ins}}</option>
-  </select>
-</div>-->
-<!-- Date -->
-<!--<div class="flex-1 min-w-[180px]">
-  <label class="block text-sm font-medium text-gray-600 mb-1">Tentative Date</label>
-  <input type="date" formControlName="date" class="w-full border rounded-lg px-3 py-2 text-sm" />
-</div>-->
-<!-- Remove -->
-<!--<div class="flex-shrink-0">
-      <button type="button"
-              *ngIf="consents.length > 1"
-              class="bg-red-500 text-white px-3 py-2 rounded-md text-xs"
-              (click)="removeConsentRow(i)">
-        Remove
-      </button>
-    </div>
-  </div>
-</div>-->
-<!-- Add More -->
-<!--<div class="flex justify-start">
-          <button type="button" class="bg-blue-500 text-white px-4 py-2 rounded-lg text-sm"
-                  (click)="addConsentRow()">
-            + Add More
-          </button>
-        </div>
-      </form>
-    </div>
-
-    <div class="modal-footer flex justify-end gap-3 pt-4 border-t mt-2">
-      <button class="bg-gray-400 text-white px-4 py-2 rounded-lg text-sm" (click)="modal.dismiss()">Cancel</button>
-      <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm" (click)="saveAll()">Add consent</button>
-    </div>
-  </div>
-</ng-template>-->

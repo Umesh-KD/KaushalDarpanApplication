@@ -1,5 +1,4 @@
 <main class="flex-grow p-6">
-
   <div class="card">
     <div class="card-body p-5">
       <div class="mb-8">
@@ -14,21 +13,6 @@
         <form *ngIf="consentFromGroup" [formGroup]="consentFromGroup">
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-            <!--<div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Zone</label>
-              <select type="text" class="form-input" formControlName="ZoneID" [(ngModel)]="consentDeploy.ZoneID" >
-                <option value="0">--Select--</option>
-                @for (item of ZoneMasterDDL; track item.ZoneID) {
-                <option [value]="item.ZoneID">{{item.DivisionName}}</option>
-                }
-              </select>
-
-
-              <div *ngIf="isSubmitted && _consentFromGroup.DistrictID.errors" class="text-danger">
-                <p *ngIf="!_consentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-              </div>
-            </div>-->
-
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
               <select type="text" class="form-input" formControlName="DistrictID" [(ngModel)]="consentDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
@@ -37,8 +21,6 @@
                 <option [value]="item.ID">{{item.Name}}</option>
                 }
               </select>
-
-
               <div *ngIf="isSubmitted && _consentFromGroup.DistrictID.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
@@ -51,18 +33,15 @@
                 <option [value]="item.Id">{{item.Name}}</option>
                 }
               </select>
-
-
               <div *ngIf="isSubmitted && _consentFromGroup.InstituteID.errors" class="text-danger">
                 <p *ngIf="!_consentFromGroup.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
             </div>
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
               <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate"/>
             </div>
-
-
 
             <div>
               <div class="text-left">
@@ -74,13 +53,11 @@
       </div>
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Added Consent List</b>
-
       </div>
 
       <div class="overflow-auto max-height500">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
             <tr>
               <th>#</th>
               <th class="text-left">District Name</th>
@@ -112,7 +89,6 @@
           <i class="ti ti-refresh"></i> Reset
         </button>
       </div>
-
     </div>
   </div>
 </main>
