@@ -135,11 +135,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
       await this.commonMasterService.ItiShiftUnitDDL(ID, this.sSOLoginDataModel.FinancialYearID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.InstituteID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.shiftddl = data.Data;
-      })
-
-     
-
-   
+      }) 
 
     } catch (error) {
       console.error(error);
@@ -150,12 +146,8 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
 
-
     this.EditDataFormGroup.patchValue({
-
       SubjectID: 0,
-
-
       ShiftId: 0
     })
 
@@ -184,8 +176,8 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
           SubjectID: this.TableForm.value.SubjectID??0,
           SemesterID: this.TableForm.value.SemesterID??0,
           SSOID: this.sSOLoginDataModel.SSOID,
-        RoleID: this.sSOLoginDataModel.RoleID,
-        InstituteID: this.sSOLoginDataModel.InstituteID
+          RoleID: this.sSOLoginDataModel.RoleID,
+          InstituteID: this.sSOLoginDataModel.InstituteID
         };
         await this.attendanceServiceService.ITIGetAttendanceTimeTable(obj)
           .then((data: any) => {
@@ -204,6 +196,7 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
   }
 
   async CheckUserExists(SSOID: any) {
+
     if (SSOID) {
       
       await this.commonMasterService.CheckSSOIDExists(SSOID, this.sSOLoginDataModel.RoleID, this.sSOLoginDataModel.InstituteID)
@@ -219,7 +212,9 @@ export class ITIAttendanceTimeTableComponent implements OnInit {
           }
         }, error => console.error(error));
     }
+
   }
+
   getData() {
     this.isSubmitted = true;
     if (this.TableForm.value.StreamID > 0 && this.TableForm.value.SemesterID > 0 && this.TableForm.value.SubjectID > 0) {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel } from '../../../Models/ITI/ItiInstructorDataModel';
+import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel, ITI_InstructorDataAssignSearchModel } from '../../../Models/ITI/ItiInstructorDataModel';
 
 
 
@@ -83,5 +83,37 @@ export class ITI_InstructorService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async UpdateInstructorData(request: ITI_InstructorDataModel) {
+
+    const body = JSON.stringify(request);
+    console.log(body);
+    return await this.http.post(this.APIUrl + "/UpdateInstructorData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
+
+
+  public async GetInstructorListIsAssign(searchRequest: ITI_InstructorDataAssignSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInstructorListIsAssign`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  public async GetInstructorAssignStatus(Uid: string) {
+    return await this.http.post(`${this.APIUrl}/GetInstructorListIsAssignStatus/${Uid}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 }
