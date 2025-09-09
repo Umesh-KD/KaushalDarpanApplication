@@ -587,8 +587,7 @@ export class CampusPostComponent implements OnInit {
   get form() { return this.CampusForm.controls; }
   get form_Eligibility() { return this.EligibilityCriteriaForm.controls; }
   async saveData() {
-    
-    ;
+    debugger
     this.isSubmitted = true;
     const mainRoleSelected = this.HRDetailsList.some((r: any) => r.IsMainRole == 1);
 
@@ -1138,9 +1137,11 @@ export class CampusPostComponent implements OnInit {
 
 
   async SendApplicationMessage() {
+    debugger
     try {
       this.loaderService.requestStarted();
-      this.messageModel.MobileNo = '8955186821';
+      //this.messageModel.MobileNo = '8955186821';
+      this.messageModel.MobileNo = '8334874706';
       // department
       //if (this.DepartmentID == EnumDepartment.BTER) {
       //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
@@ -1150,6 +1151,7 @@ export class CampusPostComponent implements OnInit {
       //}
       /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
       this.messageModel.ApplicationNo = '21100634';
+      // this.messageModel.MessageType='OTP';
       await this.smsMailService.SendApplicationMessage(this.messageModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

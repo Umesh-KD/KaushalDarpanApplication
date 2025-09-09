@@ -454,8 +454,7 @@ export const JailCollegeID = [36,
 226,
 227,
 228,
-229,
-22196];
+229];
 
 export enum EnumRenumerationExaminer
 {

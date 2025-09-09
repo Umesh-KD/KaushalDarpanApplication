@@ -110,7 +110,6 @@ export class BTEREstablishManagementService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
   public async BTER_EM_InstituteDDL(DepartmentID: number = 0, InsType: number = 0, DistrictId: number = 0) {
 
     return await this.http.get(this.APIUrl + '/BTER_EM_InstituteDDL/' + DepartmentID + '/' + InsType + '/' + DistrictId, this.headersOptions)
@@ -220,6 +219,14 @@ export class BTEREstablishManagementService {
   public async SaveStaff_HostelIDs(searchRequest: StaffHostelSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/SaveStaff_HostelIDs`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async Bter_RevertStaffProfile(searchRequest: BTER_EM_UnlockProfileDataModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/Bter_RevertStaffProfile`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

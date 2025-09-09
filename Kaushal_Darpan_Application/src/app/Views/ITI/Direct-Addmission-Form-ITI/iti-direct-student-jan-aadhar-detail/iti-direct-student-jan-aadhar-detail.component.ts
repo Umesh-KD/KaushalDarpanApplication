@@ -138,7 +138,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
         txtFather: ['', Validators.required],
         txtMotherEngname: ['', Validators.required],
         txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
-        email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        /*        email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],*/
+                email: ['',],
         /*  txtMobileNumber: ['', Validators.required],*/
         ddlCategoryA: ['', [DropdownValidators]],
         Gender: [0, [DropdownValidatorsString]],
@@ -147,6 +148,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
         DepartmentName: ['', Validators.required],
         ddlCourseType: ['', [DropdownValidators]],
         txtMobileNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.MobileNumberPattern)]],
+/*        txtMobileNumber: ['',],*/
         TradeLevel: [''],
         TradeID: [''],
         DirectAdmissionTypeID: [''],
@@ -585,10 +587,10 @@ export class ITIDirectStudentJanAadharDetailComponent {
     //saveF
 
     if (this.model.DepartmentID == EnumDepartment.ITI) {
-      if (this.model.Email == null || this.model.Email == "") {
-        this.toastr.error("Please Enter Email Address")
-        return
-      }
+      //if (this.model.Email == null || this.model.Email == "") {
+      //  this.toastr.error("Please Enter Email Address")
+      //  return
+      //}
     }
 
 
@@ -655,10 +657,10 @@ export class ITIDirectStudentJanAadharDetailComponent {
       //saveF
 
       if (this.model.DepartmentID == EnumDepartment.ITI) {
-        if (this.model.Email == null || this.model.Email == "") {
-          this.toastr.error("Please Enter Email Address")
-          return
-        }
+        //if (this.model.Email == null || this.model.Email == "") {
+        //  this.toastr.error("Please Enter Email Address")
+        //  return
+        //}
       }
 
 

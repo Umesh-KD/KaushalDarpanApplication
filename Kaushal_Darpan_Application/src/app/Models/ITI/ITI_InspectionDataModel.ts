@@ -166,9 +166,20 @@ export class ConsentModel  {
   public ZoneName: string = ''
   public InstituteName: string = ''
   public DistrictName: string = ''
+  public DocConsent: File | null = null;
+  public DoucmentName: string = '';
+  public Remark: string = ''
   public UserID: number = 0
 }
 
+
+export class UpdateConsentModel {
+  public InspectionConsentID: number = 0
+  public TentativeDate: string = ''
+  public DocConsent: File | string | null = null;
+  public Remark: string = ''
+  public UserID: number = 0
+}
 
 export class ConsentSearchModel {
   public InspectionConsentID: number = 0
