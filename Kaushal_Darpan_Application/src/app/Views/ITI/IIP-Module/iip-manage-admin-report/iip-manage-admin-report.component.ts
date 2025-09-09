@@ -51,6 +51,7 @@ export class IIPManageAdminReportComponent {
   public Divisionlist: any = [];
   public Districtlist: any = [];
   public Institutelist: any = [];
+  public Table_SearchText: string = "";
 
   public ddlDivison: number = 0;
  
@@ -131,14 +132,43 @@ export class IIPManageAdminReportComponent {
     }
   }
 
-   GetDistrictMaster(DivisionID: number) {
+  // GetDistrictMaster(DivisionID: number) {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    console.log("Selected DivisionID:", DivisionID);
+  //    this.commonMasterService.DistrictMaster_DivisionIDWise(DivisionID).then((data: any) => {
+  //      this.Districtlist = data.Data;
+  //      console.log(this.Districtlist);
+  //    });
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  GetDistrictMaster(DivisionID?: number) {
     try {
       this.loaderService.requestStarted();
       console.log("Selected DivisionID:", DivisionID);
-      this.commonMasterService.DistrictMaster_DivisionIDWise(DivisionID).then((data: any) => {
+
+      let apiCall: Promise<any>;
+
+      if (DivisionID && DivisionID > 0) {
+        // With Division filter
+        apiCall = this.commonMasterService.DistrictMaster_DivisionIDWise(DivisionID);
+      } else {
+        // Without Division filter (fetch all)
+        apiCall = this.commonMasterService.GetDivisionMaster();
+      }
+
+      apiCall.then((data: any) => {
         this.Districtlist = data.Data;
         console.log(this.Districtlist);
       });
+
     } catch (error) {
       console.error(error);
     } finally {
