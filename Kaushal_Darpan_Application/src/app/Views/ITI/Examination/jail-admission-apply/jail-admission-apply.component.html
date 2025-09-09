@@ -64,12 +64,12 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left">Sr. No.</th>
-              <th class="text-left">Department</th>
+           
               <th class="text-left">Student Name</th>
               <th class="text-left">Father Name</th>
               <th class="text-left">Mother Name</th>
               <th class="text-left">Mobile No</th>
-              <th style="width:8%;" class="text-left">Dob</th>
+              <th style="width:8%;" class="text-left">DOB</th>
               <th class="text-left">Email</th>
               <th class="text-left">Application No</th>
               <th class="text-left">Trade Name</th>
@@ -88,19 +88,7 @@
           <tbody>
             <tr *ngFor="let row of encryptedRows; let idx = index;">
               <td>{{ idx + 1 }}</td>
-              <td>
-
-                @if(row.DepartmentID==2){
-                {{ row.Department }}
-                }
-
-                @if(row.DepartmentID==1) {
-                {{ row.CourseTypeName }}
-                }
-
-
-
-              </td>
+            
               <td>{{ row.StudentName }}</td>
               <td>{{ row.FatherName }}</td>
               <td>{{ row.MotherName }}</td>
@@ -170,7 +158,7 @@
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> View & Make Payment</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.IsPaymentSuccess == true && isITIAddmissionOpen"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.IsPaymentSuccess == true"
                  [routerLink]="'/Itipreviewform'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> View</a>
