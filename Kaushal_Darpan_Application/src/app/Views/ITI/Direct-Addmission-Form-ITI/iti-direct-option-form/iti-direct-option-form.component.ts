@@ -363,7 +363,9 @@ export class ITIDirectOptionFormComponent {
     this.isSubmitted = false
     this.ItiCollegesList = []
     this.ItiTradeList = []
-    this.formData = new OptionsDetailsDataModel()
+    /*    this.formData = new OptionsDetailsDataModel()*/
+    this.formData.TradeLevel = 0
+    this.formData.TradeID = 0
     this.formData.ApplicationID = this.ApplicationID;
 
   }
