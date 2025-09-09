@@ -570,7 +570,7 @@ export class IIPManageAdminReportComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'AllotmentCollege.pdf';
+            link.download = 'IIPMergedReport.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
