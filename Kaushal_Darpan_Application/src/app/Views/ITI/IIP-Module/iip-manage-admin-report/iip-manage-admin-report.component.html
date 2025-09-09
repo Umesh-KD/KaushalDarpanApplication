@@ -200,6 +200,7 @@
       </div>
 
 
+
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div class="">
           <select id="ddlConter" class="form-select  couterDropDown">
@@ -213,6 +214,7 @@
         </div>
         <div class=""></div>
         <div class="">
+          <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
         </div>
       </div>
 
@@ -249,7 +251,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let fund of IIPFundData;  let idx=index;">
+                      <tr *ngFor="let fund of IIPFundData | tableSearchFilter:Table_SearchText; let idx=index;">
                         <td>{{idx+1}}</td>
 
                         <td>{{fund.FinancialYearName}}</td>
@@ -260,7 +262,8 @@
 
 
                         <td>{{fund.RegOffice}}</td>
-                        <td>Quarter {{fund.QuarterID}}</td>
+                       <!-- <td>Quarter {{fund.QuarterID}}</td>-->
+                        <td>{{fund.QuarterID}}</td>
                         <td>{{fund.InstalmentPaid}}</td>
                         <td>{{fund.InstalmentPaidAmt}}</td>
                         <td>{{fund.InstalmentPending}}</td>
