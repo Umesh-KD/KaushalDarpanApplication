@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -12,6 +12,7 @@ import { DeallocateRoomDataModel, StudentRequestDataModal } from '../../../Model
 import * as XLSX from 'xlsx';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-hostel-reports',
@@ -41,6 +42,8 @@ export class HostelReportsComponent {
   public titleDDLBranchTrade: string = ''
   public status: number = 0
   public deallocateRequest = new DeallocateRoomDataModel();
+
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
     private toastr: ToastrService,
@@ -232,7 +235,8 @@ export class HostelReportsComponent {
         }).then(async (result: any) => {
           if (result.isConfirmed && result.value?.trim()) {
             const remark = result.value.trim();
-            await this.DeallocateRoom(item, remark);
+            // await this.DeallocateRoom(item, remark);
+            await this.openOTPModal(item, remark);
           } else if (result.isConfirmed && !result.value?.trim()) {
             this.toastr.warning('Remark is required.');
           }
@@ -257,6 +261,7 @@ export class HostelReportsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
+          this.deallocateRequest = new DeallocateRoomDataModel();
           this.GetReportData();
         }
         else {
@@ -300,5 +305,61 @@ export class HostelReportsComponent {
       }
     })
     
+  }
+
+  async openOTPModal(item: any, remark: string) {
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
+
+    // await OTP verification
+    await this.childComponent.waitForVerification();
+
+    // do work
+    await this.DeallocateRoom(item, remark);
+  }
+
+  async DeallocateRoom_6thSemStudent(){
+    this.deallocateRequest.RoleID = this.sSOLoginDataModel.RoleID
+    this.deallocateRequest.UserID = this.sSOLoginDataModel.UserID
+    this.deallocateRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+    this.deallocateRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+    this.deallocateRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    this.deallocateRequest.Action = 'Deallocate6thSemStudent'
+    try {
+      await this.studentRequestService.DeallocateRoom(this.deallocateRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.deallocateRequest = new DeallocateRoomDataModel();
+          this.GetReportData();
+        }
+        else {
+          this.toastr.error(data.ErrorMessage);
+        }
+        
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async openOTPModal_6thSemDallocation() {
+    this.Swal2.Confirmation("Are you sure you want to Deallocate this  ?",
+    async (result: any) => {
+      if (result.isConfirmed) {
+        this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+        // await for open model
+        await this.childComponent.OpenOTPPopup();
+
+        // await OTP verification
+        await this.childComponent.waitForVerification();
+
+        // do work
+        await this.DeallocateRoom_6thSemStudent();
+      }
+    })
   }
 }

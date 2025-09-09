@@ -87,6 +87,23 @@
             </p>
           </div>
         </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
         <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.StaffLevelID" (change)="StaffLevelChild()" formControlName="StaffLevel" [ngModelOptions]="{standalone: true}">
@@ -124,7 +141,7 @@
           </div>
         </div>
 
-        
+
         <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
           <select formControlName="guestRoomID" class="form-select" [(ngModel)]="formData.guestRoomID">
@@ -908,8 +925,8 @@
       </div>
       <!-- Close Button -->
       <div class="flex justify-center my-2">
-        <button *ngIf="!IsView"
-           class="btn bg-info text-white" (click)="ApproveStaffProfile()">Submit and Approve Profile</button>
+        <button *ngIf="!IsView" class="btn bg-info text-white" (click)="ApproveStaffProfile()">Submit and Approve Profile</button>
+        <!--<button *ngIf="!IsView" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>-->
         <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
       </div>
     </div>
@@ -1018,4 +1035,52 @@
     </div> <!-- Close this div here for card-body -->
   </div>
 
+</ng-template>
+
+
+<ng-template #modal_SubmitReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Status <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.StatusIDs" formControlName="ddlStatus">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of filteredStatusList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlStatus.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="RequestUpdateStatus.Remark" formControlName="txtRemark"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </ng-template>

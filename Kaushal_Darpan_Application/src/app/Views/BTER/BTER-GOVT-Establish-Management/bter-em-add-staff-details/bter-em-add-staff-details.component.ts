@@ -236,7 +236,7 @@ export class BterEMAddStaffDetailsComponent {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         this.StaffMasterFormGroup.patchValue({

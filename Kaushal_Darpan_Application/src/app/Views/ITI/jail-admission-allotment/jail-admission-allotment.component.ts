@@ -229,7 +229,7 @@ export class JailAdmissionAllotmentComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'DirectAdmissionLetter' + AllotmentId + '.pdf';
+            link.download = 'JailAdmissionLetter' + AllotmentId + '.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

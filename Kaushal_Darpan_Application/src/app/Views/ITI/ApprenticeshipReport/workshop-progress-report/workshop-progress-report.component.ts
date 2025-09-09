@@ -280,7 +280,7 @@ export class WorkshopProgressReportComponent {
           }, (error: any) => console.error(error)
           );
       } else {
-        await this.CommonService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.InstituteID)
+        await this.CommonService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictMasterList = data['Data'];

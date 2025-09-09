@@ -68,10 +68,13 @@ export class QuaterWorkshopReportComponent {
     try {
       // this.loaderService.requestStarted();
       var UserID: number = 0
+      var DistrictID: number = 0
       if (this.SSOLoginDataModel.RoleID != 97) {
         UserID = 0
+        DistrictID = this.request.DistrictID
       } else {
         UserID = this.SSOLoginDataModel.UserID
+        DistrictID = this.SSOLoginDataModel.DistrictID
       }
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
@@ -79,7 +82,7 @@ export class QuaterWorkshopReportComponent {
         RoleID: this.SSOLoginDataModel.RoleID,
 
         Createdby: UserID,
-        DistrictID: this.request.DistrictID,
+        DistrictID: DistrictID,
         QuaterID: this.request.QuaterID
       };
 

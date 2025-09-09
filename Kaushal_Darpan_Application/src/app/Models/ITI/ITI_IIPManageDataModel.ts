@@ -44,6 +44,12 @@ export class IIPManageFundSearchModel extends RequestBaseModel {
   public SanctionedTradeList: TradeList[] = []
   public AffilateTradeList: TradeList[] = []
   public NotAffilateTradeList: TradeList[] = []
+
+  public DivisionID: number = 0;
+  public DistrictID: number = 0;
+  public InstituteID: number = 0;
+
+
 }
 
 export class TradeList extends RequestBaseModel {
@@ -113,7 +119,10 @@ export class ITI_IIPManageSearchModel extends RequestBaseModel {
     public TeamName?: string = ''
     public StaffID?: number = 0
     public UserID?: number = 0
-    public LevelId?: number = 0
+  public LevelId?: number = 0
+  public ITICollegeID: number = 0;
+  public DivisionID: number = 0;
+  public DistrictID: number = 0;
 
   public DeploymentDateFrom: string = ''
   public DeploymentDateTo: string = ''
