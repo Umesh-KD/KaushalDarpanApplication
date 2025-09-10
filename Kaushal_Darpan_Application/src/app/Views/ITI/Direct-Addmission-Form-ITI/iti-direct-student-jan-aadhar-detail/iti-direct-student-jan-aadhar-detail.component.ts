@@ -234,17 +234,21 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
 
   Showdropdown() {
-    if (this.request.ENR_ID == 5) {
-      this.IsShowDropdown = true
-    }
-    else {
+    if (this.request.ENR_ID == 5)
+    {
       this.IsShowDropdown = false
     }
-    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0) {
+    else
+    {
+      this.IsShowDropdown = false
+    }
+    if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0)
+    {
       this.IsShow = true
     }
-    else {
-      this.IsShow = false
+    else
+    {
+      this.IsShow = true
     }
 
     if (this.request.ENR_ID != 5) {
@@ -1100,7 +1104,8 @@ export class ITIDirectStudentJanAadharDetailComponent {
     this.StudentJanDetailFormGroup.get('DepartmentName')?.updateValueAndValidity();
   }
 
-  async changeDomicile (val: number) {
+  async changeDomicile(val: number)
+  {
     if(val == 1) {
       this.showPref = true
       this.model.IsRajasthani = true
@@ -1109,7 +1114,9 @@ export class ITIDirectStudentJanAadharDetailComponent {
       this.StudentJanDetailFormGroup.controls['ddlPreferentialCategory'].disable();
       
       this.Showdropdown()
-    } else if (val == 2) {
+    }
+    else if (val == 2)
+    {
       this.showPref = true
       this.AdharMemberList = [];
       this.request.ENR_ID = 0
