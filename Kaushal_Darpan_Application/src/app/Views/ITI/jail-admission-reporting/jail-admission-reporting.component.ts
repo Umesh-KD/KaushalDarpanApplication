@@ -225,6 +225,7 @@ export class JailAdmissionReportingComponent {
           this.request.TradeLevel = data['Data'].Table[0].TradeLevel;
           this.requestReporting.TradeName = data['Data'].Table[0].TradeName;
           this.requestReporting.CollegeName = data['Data'].Table[0].CollegeName;
+          //this.request.SeatMetrixId = data['Data'].Table[0].SeatMetrixId;
           debugger
           if (this.request.ApplicationID == null || this.request.ApplicationID == 0 || this.request.ApplicationID == undefined) {
             this.toastr.warning("No Data Found")
@@ -534,8 +535,8 @@ export class JailAdmissionReportingComponent {
     this.request.CollegeTradeID = CollegeTradeID;
     this.request.SeatMetrixId = SeatMetrixId;
     this.searchRequest.CollegeTradeID = CollegeTradeID;
-    this.request.AllotedCategory = AllotedCategory;
-    this.request.SeatMetrixColumn = SeatMetrixColumn;
+    this.request.AllotedCategory = 'GEN';
+    this.request.SeatMetrixColumn = 'GEN';
 
     try {
       this.loaderService.requestStarted();
@@ -600,12 +601,22 @@ export class JailAdmissionReportingComponent {
 
   async SaveTradeWithAllot() {
     try {
+
+
+      if (this.requestReporting.ShiftUnitID == 0) {
+        this.toastr.error("Please select shift unit")
+        return
+      }
+
+
+
       this.loaderService.requestStarted();
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.request.ShiftUnit = this.requestReporting.ShiftUnitID
       this.request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
       this.request.AllotedCategory = 'GEN'
+      this.request.SeatMetrixColumn = 'GEN'
 
 
       await this.allotmentService.UpdateJailAllotments(this.request)
@@ -619,9 +630,9 @@ export class JailAdmissionReportingComponent {
             if (this.searchRequest.TradeLevel == 8) {
               this.Router.navigate(['/JailAdmissionAllotment', 8]);
             } else if (this.searchRequest.TradeLevel == 10) {
-              this.Router.navigate(['/JailAdmissionAllotment', 10]);
+              this.Router.navigate(['/JailAdmissionAllotment10', 10]);
             } else if (this.searchRequest.TradeLevel == 12) {
-              this.Router.navigate(['/JailAdmissionAllotment', 12]);
+              this.Router.navigate(['/JailAdmissionAllotment12', 12]);
             }
           }
           else {

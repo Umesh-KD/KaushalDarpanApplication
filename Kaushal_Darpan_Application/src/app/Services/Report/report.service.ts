@@ -18,7 +18,7 @@ import { DownloadDispatchReceivedSearchModel } from '../../Models/DispatchFormDa
 import { OnlineMarkingSearchModel, StudentMarksheetSearchModel } from '../../Models/OnlineMarkingReportDataModel';
 import { RenumerationExaminerPDFModel, RenumerationExaminerRequestModel } from '../../Models/RenumerationExaminerModel';
 import { ITI_AppointExaminerDetailsModel } from '../../Models/ITI/ITI_ExaminerDashboard';
-import {  VacantSeatRequestModel, ReportingStatusRequestModel, StudentDataAgeBetween15And29RequestModel, AllotmentReportCollegeRequestModel, AllotmentReportCollegeByAdminRequestModel, StudentItiSearchmodel, SearchCenterSuperintendentAttendance } from '../../Models/TheoryMarksDataModels';
+import {  VacantSeatRequestModel, ReportingStatusRequestModel, StudentDataAgeBetween15And29RequestModel, AllotmentReportCollegeRequestModel, AllotmentReportCollegeByAdminRequestModel, StudentItiSearchmodel, SearchCenterSuperintendentAttendance, ApplicantReportForAdmin, ReportedStudentReport } from '../../Models/TheoryMarksDataModels';
 import {ITI_DispatchAdmin_ByExaminer_RptSearchModel, ITIAddmissionReportSearchModel, ITIStateTradeCertificateSearchModel, TheoryMarksSearchModel, FinalAdmissionListRequestModel,
   ZoneDistrictSeatUtilizationByGenderRequestModel, ZoneDistrictSeatUtilizationRequestModel, ITIAddmissionWomenReportSearchModel, DirectAdmissionReportRequestModel, IMCAllotmentReportRequestModel, InternalSlidingReportRequestModel, SwappingReportRequestModel
 } from '../../Models/TheoryMarksDataModels';
@@ -1602,6 +1602,24 @@ export class ReportService {
       .pipe(catchError(this.handleErrorObservable));
     return await lastValueFrom(api);
   }
+
+
+  public async GetApplicantReportForAdmin(request: ApplicantReportForAdmin) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetApplicantReportForAdmin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ReportedStudentReport(request: ReportedStudentReport) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/ReportedStudentReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 
   public async studentWithdrawnList(request: AllotmentReportCollegeRequestModel) {

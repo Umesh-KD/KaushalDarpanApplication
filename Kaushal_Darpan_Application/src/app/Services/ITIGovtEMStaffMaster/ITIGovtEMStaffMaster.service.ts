@@ -548,7 +548,14 @@ export class ITIGovtEMStaffMaster {
 
 
 
+  public async SaveStaffBasicInstructorDetails(request: ITIGovtEMAddStaffBasicDetailDataModel) {
+    var body = JSON.stringify(request);
 
+    return await this.http.post(`${this.APIUrl}/SaveBasicInstructorData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 

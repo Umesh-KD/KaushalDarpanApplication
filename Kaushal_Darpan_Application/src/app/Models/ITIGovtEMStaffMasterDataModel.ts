@@ -166,6 +166,12 @@ export class ITIGovtEMAddStaffBasicDetailDataModel extends RequestBaseModel {
   public EMTypeID: number = 0;
   public OfficeID: number = 0;
 
+  public IsInstructor: boolean = false; // default false
+  public Shift?: string = '';
+  public Unit?: string = '';
+
+  public SeatIntakeID?: number = 0;
+
 
 }
 
@@ -194,6 +200,8 @@ export class ITIGovtEMStaffMasterSearchModel {
   public FilterName: string = '';
   public FilterStaffTypeID: number = 0;  
   public FilterSSOID: string = '';
+
+
 }
 
 export class ITIGovtEMStaffSubjectList {
