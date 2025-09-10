@@ -21,8 +21,8 @@ export class PrometedStudentMasterModel extends ResponseBaseModel  {
   public EarnedCreditsSem1: number = 0;
   public EarnedCreditsSem2: number = 0;
   public TotalEarnedCredits: number = 0;
-  public Detain: string = '';
-  public UFM: string = '';
+  public Detain: boolean = false; 
+  public UFM: boolean = false; 
   public UFMCategory: number = 0;  
   public InstituteId: number = 0;  
   public StudentType: string = ''; 
