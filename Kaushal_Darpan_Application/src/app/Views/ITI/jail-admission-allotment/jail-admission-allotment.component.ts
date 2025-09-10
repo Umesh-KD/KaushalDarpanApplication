@@ -305,9 +305,11 @@ export class JailAdmissionAllotmentComponent {
       let columns: string[] = [];
 
       if (this.searchRequest.TradeLevel == 10) {
-        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName"];
+        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName"
+          ,"ReportedDateTime"];
       } else {
-        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName"];
+        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName",
+        "ReportedDateTime"];
       }
 
       // Filter the data based on required columns
