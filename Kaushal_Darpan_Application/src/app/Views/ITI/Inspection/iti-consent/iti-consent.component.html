@@ -16,31 +16,7 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <a routerLink="/iti-add-consent" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Consent</a>
       </div>
-
-
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
-        <!--<div>
-    <label class="block text-sm font-medium text-gray-600 mb-1">Zone </label>
-    <select name="ItemCondition"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-      <option value="0" disabled selected>Select Zone</option>-->
-        <!--<option *ngFor="let item of " [value]="item.ID">
-    {{ item.Name }}
-  </option>-->
-        <!--</select>
-  </div>-->
-        <!--<div>
-    <label class="block text-sm font-medium text-gray-600 mb-1">District</label>
-    <select name="ItemCondition"
-            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm">
-      <option value="0" disabled selected>Select District</option>-->
-        <!--<option *ngFor="let item of " [value]="item.ID">
-    {{ item.Name }}
-  </option>-->
-        <!--</select>
-  </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
           <select type="text" class="form-input"  [(ngModel)]="consentDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
@@ -69,7 +45,7 @@
     </div>
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <b class="text-1xl-5"><i class="ti ti-list" (click)="GetAllData()"></i> Search Results</b>
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -97,6 +73,7 @@
             <th class="text-left">Institute Name</th>
             <th class="text-left">Tentative Date</th>
             <th class="text-left">Updated Date</th>
+            <th class="text-left">Uploaded Document</th>
             <th class="text-left">Status</th>
           </tr>
         </thead>
@@ -109,8 +86,26 @@
             <td>{{row.InstituteName}}</td>
             <td align="left">{{row.TentativeDate | date:'dd/MM/yyyy' }}</td>
             <td align="left">{{row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
-            <td align="left">1</td>
-           
+            <td align="left">
+              <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="row.DocConsent"
+                   [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + row.DocConsent"
+                   target="_blank" class="text-success"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
+            
+            <td align="left">
+              <button *ngIf="row.status == 0"
+                      class="bg-yellow-500 text-white px-3 py-1 rounded text-sm">
+                Pending
+              </button>
+
+              <button *ngIf="row.status == 1"
+                      class="bg-green-600 text-white px-3 py-1 rounded text-sm">
+                Approved
+              </button>
+            </td>
+
           </tr>
         </tbody>
       </table>

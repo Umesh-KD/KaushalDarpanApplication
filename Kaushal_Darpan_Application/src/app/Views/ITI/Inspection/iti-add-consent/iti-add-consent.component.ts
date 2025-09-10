@@ -1,3 +1,4 @@
+/// <reference path="iti-add-consent.module.ts" />
 import { Component, Input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ITI_InspectionDataModel, InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, CenterMasterDDLDataModel, ITI_InspectionSearchModel, ConsentModel, ConsentSearchModel } from '../../../../Models/ITI/ITI_InspectionDataModel';

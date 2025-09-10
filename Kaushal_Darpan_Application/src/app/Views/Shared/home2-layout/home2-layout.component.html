@@ -62,175 +62,184 @@
                   </a>
                 </li>
 
-              <li class="nav-item dropdown show">
-                <a class="nav-link" href="javascript:void(0)">
-                  <span>Admission  </span>  <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <!--<a class="dropdown-item" href="/dtepublicinfo"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>-->
-                    <a class="dropdown-item" [routerLink]="['/dtepublicinfo']"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <!--<li><a class="dropdown-item" href="/dtepublicinfo?courseid=1"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
-                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=2"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
-                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=3"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
-                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=4"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
-                      <li><a class="dropdown-item" href="/dtepublicinfo?courseid=5"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>-->
+                <li class="nav-item dropdown show">
+                  <a class="nav-link" href="javascript:void(0)">
+                    <span>Admission  </span>  <i class="fa fa-angle-down"></i>
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                      <!--<a class="dropdown-item" href="/dtepublicinfo"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>-->
+                      <a class="dropdown-item" [routerLink]="['/dtepublicinfo']"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <!--<li><a class="dropdown-item" href="/dtepublicinfo?courseid=1"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
+          <li><a class="dropdown-item" href="/dtepublicinfo?courseid=2"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
+          <li><a class="dropdown-item" href="/dtepublicinfo?courseid=3"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
+          <li><a class="dropdown-item" href="/dtepublicinfo?courseid=4"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
+          <li><a class="dropdown-item" href="/dtepublicinfo?courseid=5"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>-->
 
-                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 1 }"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
-                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 2 }"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
-                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 3 }"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
-                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 4 }"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
-                      <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 5 }"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>
-                    </ul>
-                  </li>
-                  <li>
-                    <!--<a class="dropdown-item" href="/itipublicinfo"><span>ITI </span> <i class="fa fa-angle-right"></i></a>-->
-                    <a class="dropdown-item" [routerLink]="['/itipublicinfo']"><span>ITI </span> <i class="fa fa-angle-right"></i></a>
-                    <!--<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="iti_admission.html"><span><span>Online Admission </span><span>(राजकीय/निजी औधोगिक प्रशिक्षण संस्थानों में प्रवेश) </span></span></a></li>
-                      <li><a class="dropdown-item" href="#"><span><span>Direct Admission </span><span>(संस्थान स्तर प्रवेश) </span></span></a></li>
-                    </ul>-->
-                  </li>
-                  <!--<li>
-    <a class="dropdown-item" href="#"><span>DCE </span> <i class="fa fa-angle-right"></i></a>
+                        <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 1 }"><span><span>Diploma 1st Year Eng</span><span>(प्रथम वर्ष इंजीनियरिंग प्रवेश) </span></span></a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 2 }"><span><span>Diploma Non-Engineering 1st Year </span><span>(प्रथम वर्ष नॉन-इंजीनियरिंग प्रवेश)</span> </span></a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 3 }"><span><span>Diploma 2nd Year Eng Lateral Admission</span><span> (डिप्लोमा द्वितीय वर्ष इंजीनियरिंग लेटरल प्रवेश) </span></span></a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 4 }"><span><span>Degree Course 1st Year Non-Engg</span><span> (डिग्री कोर्स प्रथम वर्ष नॉन-इंजीनियरिंग) </span></span></a></li>
+                        <li><a class="dropdown-item" [routerLink]="['/dtepublicinfo']" [queryParams]="{ courseid: 5 }"><span><span>Degree Course 2nd Year Lateral</span><span> (डिग्री कोर्स द्वितीय वर्ष लेटरल) </span></span></a></li>
+                      </ul>
+                    </li>
+                    <li>
+                      <!--<a class="dropdown-item" href="/itipublicinfo"><span>ITI </span> <i class="fa fa-angle-right"></i></a>-->
+                      <a class="dropdown-item" [routerLink]="['/itipublicinfo']"><span>ITI </span> <i class="fa fa-angle-right"></i></a>
+                      <!--<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="iti_admission.html"><span><span>Online Admission </span><span>(राजकीय/निजी औधोगिक प्रशिक्षण संस्थानों में प्रवेश) </span></span></a></li>
+          <li><a class="dropdown-item" href="#"><span><span>Direct Admission </span><span>(संस्थान स्तर प्रवेश) </span></span></a></li>
+        </ul>-->
+                    </li>
+                    <!--<li>
+        <a class="dropdown-item" href="#"><span>DCE </span> <i class="fa fa-angle-right"></i></a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="#"><span><span>UG Courses</span><span> (स्रातक महाविद्यालयों में प्रवेश) </span></span></a></li>
+          <li><a class="dropdown-item" href="#"><span><span>PG Courses </span><span>(स्नातकोत्तर महाविद्यालयों में प्रवेश) </span></span></a></li>
+        </ul>
+      </li>-->
+                  </ul>
+                </li>
+                <!--   <!--<li class="nav-item dropdown show">
+    <a class="nav-link" href="#">
+      <span>Examinations  </span>  <i class="fa fa-angle-down"></i>
+    </a>
     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-      <li><a class="dropdown-item" href="#"><span><span>UG Courses</span><span> (स्रातक महाविद्यालयों में प्रवेश) </span></span></a></li>
-      <li><a class="dropdown-item" href="#"><span><span>PG Courses </span><span>(स्नातकोत्तर महाविद्यालयों में प्रवेश) </span></span></a></li>
+      <li>
+        <a class="dropdown-item" href="#"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item" href="#"><span>Eng Yearly Scheme </span> <i class="fa fa-angle-right"></i></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Reval</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#"><span>Non-Eng Yearly Scheme  </span> <i class="fa fa-angle-right"></i></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Reval</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#"><span>Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Reval</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#"><span>Non-Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Reval</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a class="dropdown-item" href="#"><span>ITI</span> <i class="fa fa-angle-right"></i></a>
+        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li>
+            <a class="dropdown-item" href="#"><span>SCVT</span> <i class="fa fa-angle-right"></i></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#"><span>NCVT</span> <i class="fa fa-angle-right"></i></a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="#">Examination</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">Results</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a class="dropdown-item" href="#">DCE</a>
+      </li>
+
     </ul>
   </li>-->
-                </ul>
-              </li>
-              <!--   <!--<li class="nav-item dropdown show">
-                <a class="nav-link" href="#">
-                  <span>Examinations  </span>  <i class="fa fa-angle-down"></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a class="dropdown-item" href="#"><span>Polytechnic</span> <i class="fa fa-angle-right"></i></a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li>
-                        <a class="dropdown-item" href="#"><span>Eng Yearly Scheme </span> <i class="fa fa-angle-right"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Reval</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"><span>Non-Eng Yearly Scheme  </span> <i class="fa fa-angle-right"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Reval</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"><span>Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Reval</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"><span>Non-Eng Semester Scheme </span> <i class="fa fa-angle-right"></i> </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Reval</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#"><span>ITI</span> <i class="fa fa-angle-right"></i></a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li>
-                        <a class="dropdown-item" href="#"><span>SCVT</span> <i class="fa fa-angle-right"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <a class="dropdown-item" href="#"><span>NCVT</span> <i class="fa fa-angle-right"></i></a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <li>
-                            <a class="dropdown-item" href="#">Examination</a>
-                          </li>
-                          <li>
-                            <a class="dropdown-item" href="#">Results</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">DCE</a>
-                  </li>
-
-                </ul>
-              </li>-->
-              <li class="nav-item dropdown show">
-                <a class="nav-link" href="#"> <span>Placement  </span>  <i class="fa fa-angle-down"></i></a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="/allpost" target="_blank">Polytechnic </a></li>
-                  <li><a class="dropdown-item" href="/ITIallpost" target="_blank">ITI </a></li>
-                  <!--<li><a class="dropdown-item" href="#">ITI </a></li>-->
-                </ul>
-              </li>
+                <li class="nav-item dropdown show">
+                  <a class="nav-link" href="#"> <span>Placement  </span>  <i class="fa fa-angle-down"></i></a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="/allpost" target="_blank">Polytechnic </a></li>
+                    <li><a class="dropdown-item" href="/ITIallpost" target="_blank">ITI </a></li>
+                    <!--<li><a class="dropdown-item" href="#">ITI </a></li>-->
+                  </ul>
+                </li>
 
 
-              <li class="nav-item"><a class="nav-link" routerLink="/citizensuggestion">Citizen Suggestion </a></li>
-              <!--<li class="nav-item"><a class="nav-link" href="#">Department </a></li>-->
-              <!--<li class="nav-item dropdown show">
-                <a class="nav-link" href="#"> <span>Information  </span>  <i class="fa fa-angle-down"></i></a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">About BTER </a></li>
-                  <li><a class="dropdown-item" href="#">T&C </a></li>
-                  <li><a class="dropdown-item" href="#">Privacy Policy </a></li>
-                </ul>
-              </li>-->
-              <!--<li class="nav-item dropdown show">
-                <a class="nav-link" href="#"> <span>Proceeding</span>  <i class="fa fa-angle-down ms-1 d-block"></i></a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Latest News </a></li>
-                  <li><a class="dropdown-item" href="#">Notifications </a></li>
-                  <li><a class="dropdown-item" href="#">Events </a></li>
-                  <li><a class="dropdown-item" href="#">Downloads </a></li>
-                </ul>
-              </li>-->
-              <!--<li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>-->
-            </ul>
+                <li class="nav-item"><a class="nav-link" routerLink="/citizensuggestion">Citizen Suggestion </a></li>
+                <li class="nav-item dropdown show">
+                  <a class="nav-link" href="#"> <span>Result</span>  <i class="fa fa-angle-down"></i></a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="/SearchResult" target="_blank">Main </a></li>
+                    <li><a class="dropdown-item" href="" target="_blank">Reval </a></li>
+                    <li><a class="dropdown-item" href="" target="_blank">UFM </a></li>
+                    <!--<li><a class="dropdown-item" href="#">ITI </a></li>-->
+                  </ul>
+                </li>
+                <!--<li class="nav-item"><a class="nav-link" href="#">Department </a></li>-->
+                <!--<li class="nav-item dropdown show">
+    <a class="nav-link" href="#"> <span>Information  </span>  <i class="fa fa-angle-down"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="#">About BTER </a></li>
+      <li><a class="dropdown-item" href="#">T&C </a></li>
+      <li><a class="dropdown-item" href="#">Privacy Policy </a></li>
+    </ul>
+  </li>-->
+                <!--<li class="nav-item dropdown show">
+    <a class="nav-link" href="#"> <span>Proceeding</span>  <i class="fa fa-angle-down ms-1 d-block"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+      <li><a class="dropdown-item" href="#">Latest News </a></li>
+      <li><a class="dropdown-item" href="#">Notifications </a></li>
+      <li><a class="dropdown-item" href="#">Events </a></li>
+      <li><a class="dropdown-item" href="#">Downloads </a></li>
+    </ul>
+  </li>-->
+                <!--<li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>-->
+              </ul>
           </div>
         </nav>
       </div>
