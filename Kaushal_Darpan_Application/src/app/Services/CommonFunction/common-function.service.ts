@@ -25,6 +25,7 @@ import { CommonVerifierApiDataModel, PublicInfoDataModel } from '../../Models/Pu
 import { NodalDataModel } from '../../Models/VerifierDataModel';
 import { BterAllotmentDocumentListModel } from '../../Models/BterAllotmentReportingDataModel';
 import { StudentAdmitCardDownloadModel } from '../../Models/GenerateRollDataModels';
+import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 
 
 @Injectable({
@@ -1888,5 +1889,16 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+   public async GetSSOIDDetailData(SSOIDDetailRequest: SSOIDDetailRequestModel) {
+    debugger
+    var body = JSON.stringify(SSOIDDetailRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + "/GetSSOIDDetailData/", body,{ 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }
