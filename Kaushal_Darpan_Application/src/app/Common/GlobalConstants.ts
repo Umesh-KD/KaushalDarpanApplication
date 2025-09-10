@@ -560,7 +560,9 @@ export enum EnumSemesterDDL
 
 export enum EnumInspectionDeploymentType {
   Planned = 1,
-  Unplanned = 2
+  Unplanned = 2,
+  GeneralInspPlanned = 3,
+  GeneralInspUnPlanned = 4
 }
 
 export enum EnumApprenticeshipDeploymentType {
