@@ -179,12 +179,40 @@ export class LeaveValidationComponent {
   }
 
   async CompanyOnAction(content: any, StaffLeaveID: number) {
+    debugger
     this.requestAction.StaffLeaveID = StaffLeaveID;
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      // Always close any previous modal before opening new
+    if (this.modalReference) {
+      this.modalReference.close();
+    }
+    
+  // this.modalReference = this.modalService.open(content, { 
+  //   size: 'sm', 
+  //   ariaLabelledBy: 'modal-basic-title', 
+  //   backdrop: 'static' 
+  // });
+
+  //  this.modalReference.result.then(
+  //   (result) => {
+  //     this.closeResult = `Closed with: ${result}`;
+  //     this.modalReference = undefined; // reset reference
+  //   },
+  //   (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //     this.modalReference = undefined; // reset reference
+  //   }
+  // );
+
+
+    this.modalReference = this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
+    
+    this.modalReference.result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    
+
     this.requestAction.Action = "0";
     this.requestAction.ActionRemark = "";
   }
@@ -215,6 +243,7 @@ export class LeaveValidationComponent {
   }
 
   async SaveData_ApprovedCampus() {
+    debugger
     this.isSubmitted = true;
 
     if (this.formAction.invalid) {
@@ -222,6 +251,7 @@ export class LeaveValidationComponent {
     }
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
+    this.requestAction.ActionRemark = this.formAction.controls['txtActionRemarks'].value;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     //Show Loading
     this.loaderService.requestStarted();
