@@ -12,42 +12,14 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<a routerLink="/iti-add-consent" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Consent</a>-->
-      </div>
+     
 
 
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District</label>
-          <select type="text" class="form-input" [(ngModel)]="consentDeploy.DistrictID" (change)="GetInstituteMaster_ByDistrictWise($event.target.value)">
-            <option value="0">--Select--</option>
-            @for (item of DistrictMasterDDL; track item.ID) {
-            <option [value]="item.ID">{{item.Name}}</option>
-            }
-          </select>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI College Name</label>
-          <select type="text" class="form-input" [(ngModel)]="consentDeploy.InstituteID">
-            <option value="0">--Select--</option>
-            @for (item of InstituteMasterDDL; track item.Id) {
-            <option [value]="item.Id">{{item.Name}}</option>
-            }
-          </select>
-        </div>
-
-        <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Reset</button>
-        </div>
-      </div>
-    </div>
+     
+    
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Consent List</b>
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -73,7 +45,7 @@
             <th class="text-left">Institute Name</th>
             <th class="text-left">Tentative Date</th>
             <th class="text-left">Updated Date</th>
-            <th class="text-left">Status</th>
+           
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -85,10 +57,10 @@
             <td>{{row.InstituteName}}</td>
             <td align="left">{{row.TentativeDate | date:'dd/MM/yyyy' }}</td>
             <td align="left">{{row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
-            <td align="left">1</td>
+           
             <td align="left">
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Details"
+                <a *ngIf="row.status != 1" href="javascript:void(0);" title="View Details"
                    (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
                   <i class="ti ti-pencil"></i>
                 </a>
@@ -102,6 +74,7 @@
     </div>
   </div>
 </div>
+  </div>
 
 
 <ng-template #MyModel_ViewDetails let-modal
@@ -130,8 +103,7 @@
                 <div class="flex">
 
                   <a *ngIf="UpdateConsentRequest.DocConsent"
-                 [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + UpdateConsentRequest.DocConsent"
-                 class="btn bg-primary text-white m-0" target="_blank">
+                 [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + UpdateConsentRequest.DocConsent" class="btn bg-primary text-white m-0" target="_blank">
                 <i class="ti ti-eye"></i>
               </a>
 

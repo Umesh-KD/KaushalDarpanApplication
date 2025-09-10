@@ -259,7 +259,7 @@ export enum EnumConfigurationType {
   Registrar=40,
   Registrar_NonEng=55,
   Reval_GroupCode = 160,
-  JailAdmission = 1162
+  JailAdmission = 164
 }
 
 export enum EnumDepartment {

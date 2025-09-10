@@ -90,6 +90,9 @@ export class ITIConsentComponent {
       this.loaderService.requestStarted();
      
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
+      this.consentRequest.DistrictID = this.consentDeploy.DistrictID;
+      this.consentRequest.InstituteID = this.consentDeploy.InstituteID;
+
       await this.itiInspectionService.GetAllConsentData(this.consentRequest).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));
