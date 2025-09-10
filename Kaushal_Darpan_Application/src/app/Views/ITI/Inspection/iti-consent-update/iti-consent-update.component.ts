@@ -459,7 +459,6 @@ export class ITIConsentUpdateComponent {
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
-  
   async ViewandUpdate(content: any, InspectionConsentID: number) {
 
     debugger
