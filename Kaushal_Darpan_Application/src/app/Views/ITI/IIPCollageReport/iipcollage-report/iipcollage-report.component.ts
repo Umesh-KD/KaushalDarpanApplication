@@ -133,15 +133,12 @@ export class IIPCollageReportComponent {
 
       };
 
-      debugger;
-
       await this.IIPCollegeReportService.GetCollageReport(this.searchRequest)
      
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
         
-          debugger;
 
           if (data.Data.length > 0) {
 

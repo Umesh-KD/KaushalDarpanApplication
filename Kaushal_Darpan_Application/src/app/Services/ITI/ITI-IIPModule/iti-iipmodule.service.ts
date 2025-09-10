@@ -189,9 +189,9 @@ export class ITIIIPManageService {
       ).toPromise();
   }
 
-  public async GetIIPQuaterlyFundReportData() {
+  public async GetIIPQuaterlyFundReportData(model: any[]) {
 
-    return await this.http.get(`${this.APIUrl}/GetIIPQuaterlyFundReportData`, this.headersOptions1)
+    return await this.http.post(`${this.APIUrl}/GetIIPQuaterlyFundReportData`, model, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -204,5 +204,8 @@ export class ITIIIPManageService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
 
 }

@@ -98,16 +98,22 @@
             <tr>
               <th class="text-left" rowspan="2">#</th>
               <th class="text-left" rowspan="2">Application No</th>
-              <th class="text-left" rowspan="2">College Name</th>
-              <th class="text-left" rowspan="2">Name</th>
+              <th class="text-left" rowspan="2">Institute Code</th>
+              <th class="text-left" rowspan="2">Institute Name</th>
+              <th class="text-left" rowspan="2">Trade Code</th>
+              <th class="text-left" rowspan="2">Trade Name</th>
+              <th class="text-left" rowspan="2">Trade Scheme</th>
+              <th class="text-left" rowspan="2">Applicant Name</th>
               <th class="text-left" rowspan="2">Father Name</th>
               <th class="text-left" rowspan="2">DOB</th>
-              <th class="text-left" rowspan="2">Branch Name</th>
+              <!--<th class="text-left" rowspan="2">Branch Name</th>-->
               <th class="text-left" rowspan="2">Mobile No</th>
-              <th class="text-left" rowspan="2">Gender</th>
+              <th class="text-left" rowspan="2">Alloted Gender</th>
               <th class="text-left" rowspan="2">Alloted Category</th>
               <th class="text-left" rowspan="2">Alloted Status</th>
               <th class="text-left" rowspan="2">Priority</th>
+              <th class="text-left" rowspan="2">Merit General</th>
+              <th class="text-left" rowspan="2">Merit Category</th>
             </tr>
 
           </thead>
@@ -115,16 +121,22 @@
             <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
               <td>{{ (startInTableIndex+1) + idx }}</td>
               <td>{{ item.ApplicationNo }}</td>
-              <td>{{ item.CollegeName }}</td>
-              <td>{{ item.Name }}</td>
+              <td>{{ item.InstituteCode }}</td>
+              <td>{{ item.InstituteName }}</td>
+              <td>{{ item.TradeCode }}</td>
+              <td>{{ item.TradeName }}</td>
+              <td>{{ item.TradeScheme }}</td>
+              <td>{{ item.ApplicantName }}</td>
               <td>{{ item.FatherName }}</td>
               <td>{{ item.DOB }}</td>
-              <td>{{ item.BranchName }}</td>
+              <!--<td>{{ item.BranchName }}</td>-->
               <td>{{ item.MobileNo }}</td>
-              <td>{{ item.Gender }}</td>
+              <td>{{ item.AllotedGender }}</td>
               <td>{{ item.AllotedCategory }}</td>
               <td>{{ item.AllotmentStatus }}</td>
-              <td>{{ item.Priority }}</td>
+              <td>{{ item.AllotedPriority }}</td>
+              <td>{{ item.MeritNo }}</td>
+              <td>{{ item.CategoryMeritNo }}</td>
             </tr>
           </tbody>
         </table>

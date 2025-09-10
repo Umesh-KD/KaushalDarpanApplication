@@ -86,11 +86,9 @@ export class SeatIntakesListComponent implements OnInit {
       });
 
     this.SeatIntakeSearchFormGroupPopUp = this.formBuilder.group(
-      {
-       
+      { 
         OrderDate: [''],
-        OrderNo: ['']
-       
+        OrderNo: ['']    
       });
 
 

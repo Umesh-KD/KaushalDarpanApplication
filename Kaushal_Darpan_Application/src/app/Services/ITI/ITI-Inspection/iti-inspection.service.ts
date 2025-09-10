@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel, ConsentModel, ConsentSearchModel } from '../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel, ConsentModel, ConsentSearchModel, UpdateConsentModel } from '../../../Models/ITI/ITI_InspectionDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -190,6 +190,23 @@ export class ITIInspectionService {
   public async GetDistrictMasterconsent(request: ConsentSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetDistrict`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetById_Consent(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetById_Consent/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async updateConsent(request: UpdateConsentModel) {
+
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/updateConsent`, body, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

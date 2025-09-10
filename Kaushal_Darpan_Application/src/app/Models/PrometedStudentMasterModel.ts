@@ -24,14 +24,30 @@ export class PrometedStudentMasterModel  {
   public Detain: string = '';
   public UFM: string = '';
   public UFMCategory: number = 0;  
+  public InstituteId: number = 0;  
+  public StudentType: string = ''; 
 }
 
-export class PromotedStudentMarkedModel {
+export class PromotedStudentMarkedModel extends RequestBaseModel {
   public Marked: boolean = false;
   public StudentId: number = 0;
-  public RoleId: number = 0;
+  public EnrollmentNo: string = '';
+  public StudentName: string = '';
+  public FatherName: string = '';
+  public MotherName: string = '';
+  public DOB: string = '';
+  public Gender: string = '';
+  public InstituteNameEnglish: string = '';
+  public StreamName: string = '';
+  public StudentType: string = '';
+  public SemesterId: number = 0;
+  public IsDetain: boolean = false;
+  public IsUFM: boolean = false;
+  public UFMCategory: number = 0;
+  public IsBridge: boolean = false;
+  public StreamId: number = 0;
   public ModifyBy: number = 0;
-  public EndTermID: number = 0;
+  public IPAddress: string = '';
 }
 
 export class PromotedStudentSearchModel extends RequestBaseModel {
