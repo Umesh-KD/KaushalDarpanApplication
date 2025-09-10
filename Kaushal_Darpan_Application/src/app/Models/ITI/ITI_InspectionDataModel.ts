@@ -159,7 +159,8 @@ export class SaveCheckSSODataModel extends RequestBaseModel {
 
 export class ConsentModel  {
   public InspectionConsentID: number = 0
-  public ZoneID: number = 0
+  //public ZoneID: number = 0
+  public ZoneID: number | null = null;
   public DistrictID: number = 0
   public InstituteID: number = 0
   public TentativeDate: string = ''

@@ -107,7 +107,8 @@ export class ITIConsentUpdateComponent {
       this.loaderService.requestStarted();
      
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
-      await this.itiInspectionService.GetAllConsentData(this.consentRequest).then((data: any) => {
+      this.consentRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      await this.itiInspectionService.GetAllConsentbyPrincipal(this.consentRequest).then((data: any) => {
      
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){
@@ -572,22 +573,17 @@ export class ITIConsentUpdateComponent {
 
     try {
       this.isSubmitted = true;
-      //if (this.consentForm.invalid) {
-      //  console.log('Form is invalid');
-      //  return;
-      //}
 
       this.loaderService.requestStarted();
       this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
         .then((data: any) => {
-          /*data = JSON.parse(JSON.stringify(data));*/
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (this.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.CloseModalPopup();
-            //this.GetAllotedSeatByCollegeList();
+            this.GetAllData();
           } else {
             this.toastr.error(this.ErrorMessage);
           }
