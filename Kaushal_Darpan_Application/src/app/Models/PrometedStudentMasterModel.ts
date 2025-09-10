@@ -1,6 +1,7 @@
 import { RequestBaseModel } from "./RequestBaseModel";
+import { ResponseBaseModel } from "./ResponseBaseModel";
 
-export class PrometedStudentMasterModel  {
+export class PrometedStudentMasterModel extends ResponseBaseModel  {
   public Selected: boolean = false;  // default value is false (from convert(bit, 0))
   public StudentID: number = 0;  // default value is 0
   public ApplicationNo: string = '';  // default value is empty string
@@ -12,7 +13,6 @@ export class PrometedStudentMasterModel  {
   public BranchName: string = '';  // default value is empty string
   public SemesterName: string = '';  // default value is empty string
   public DistrictName: string = '';  // default value is empty string
-  public EndTermID: number = 0;  // default value is 0
   public StreamID: number = 0;  // default value is 0
   public SemesterID: number = 0;  // default value is 0
   public Dis_DOB: string = '';  // default value is a Unix epoch date (could be an invalid date)
