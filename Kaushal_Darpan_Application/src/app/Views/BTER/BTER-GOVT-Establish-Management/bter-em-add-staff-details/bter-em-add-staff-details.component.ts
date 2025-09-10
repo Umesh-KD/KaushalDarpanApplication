@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_EM_AddStaffDetailsDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -48,7 +48,10 @@ export class BterEMAddStaffDetailsComponent {
   public _EnumRole = EnumRole;
   public isAddrequest: boolean = false;
   public AddedChoices: StaffSubjectList[] = [];
+  public DesignationWiseBranchListRole: any [] = [];
+  public DesignationWiseBranchList: any [] = [];
   staffDetailsFormData = new StaffDetailsDataModel();
+  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
   public IsOptional: boolean = false
   _enumDepartment = EnumDepartment
   public ExamTypeHeading = '';
@@ -111,22 +114,28 @@ export class BterEMAddStaffDetailsComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
-
-    if ([8, 60, 199, 200].includes(this.sSOLoginDataModel.RoleID)) {
-      this.IsHideShow = true;
-      this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
-      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].setValidators([DropdownValidators]);
-
-      
-
-    } else {
-      this.IsHideShow = false;
-      this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
-      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
-
+   
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DesignationWiseBranchListRole = data['Data'];
+          this.DesignationWiseBranchList = data['Data'];
+        }, error => console.error(error));
     }
-    this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
-    this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
+    
 
     await this.GetOfficeList();
     await this.GetInstituteMaster();
@@ -137,6 +146,31 @@ export class BterEMAddStaffDetailsComponent {
     if(this.sSOLoginDataModel.UserID > 0) {
       await this.GetPersonalDetailByUserID();
     }
+    debugger
+    const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
+    const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);
+
+    if (roleIDs.includes(this.sSOLoginDataModel.RoleID)) {
+      this.IsHideShow = true;
+      this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].setValidators([DropdownValidators]);
+    }
+    else if (DesignationIDs.includes(this.request.DesignationID)) {
+      this.IsHideShow = true;
+      
+      this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].setValidators([DropdownValidators]);
+    }
+
+    else {
+      this.IsHideShow = false;
+      this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
+      this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
+    }
+    this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
+    this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
+
+
     await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
   }
   get _AddsubjectFormGroup() { return this.AddsubjectFormGroup.controls; }
@@ -273,7 +307,7 @@ export class BterEMAddStaffDetailsComponent {
           this.request = data.Data[0];
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
           console.log("GetPersonalDetailByUserID", this.request);
-          debugger
+          
           //this.StaffMasterFormGroup.get('InstituteID')?.setValue(this.request.InstituteID);
         }
 
@@ -284,7 +318,7 @@ export class BterEMAddStaffDetailsComponent {
       await this.bterEstablishManagementService.BterStaffSubjectListModel(this.sSOLoginDataModel.StaffID, this.sSOLoginDataModel.DepartmentID).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
-          debugger
+          
           
           
           this.staffDetailsFormData.StaffSubjectListModel = data?.Data?.bterStaffSubjectListModel;

@@ -176,7 +176,7 @@ export class ITIInspectionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  
   public async saveConsent(request: ConsentModel[]) {
     var body = JSON.stringify(request);
     //return await this.http.post(`${this.APIUrl}/SaveInspectionDeploymentData`, body, this.headersOptions1)
@@ -207,6 +207,14 @@ export class ITIInspectionService {
 
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/updateConsent`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllConsentbyPrincipal(request: ConsentModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllConsentbyPrincipal`, body, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

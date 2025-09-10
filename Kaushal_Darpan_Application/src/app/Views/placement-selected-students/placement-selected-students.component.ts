@@ -11,6 +11,9 @@ import { PlacementSelectedStudentsService } from '../../Services/PlacementSelect
 import { async } from 'rxjs';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus } from '../../Common/GlobalConstants';
+import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
+import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
+import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 
 
 
@@ -32,6 +35,10 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public UserID: number = 0;
   public AllSelect: boolean = false;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  
+  public getSSOIDDetailData: any[]=[];
+  public messageModel= new ApplicationMessageDataModel();
+  
 
   public InstituteMasterList: any[] = [];
   public StreamMasterList: any[] = [];
@@ -46,7 +53,7 @@ export class PlacementSelectedStudentsComponent implements OnInit {
   public searchRequest = new PlacementStudentSelectedSearchModel();
   public StudentList: PlacementSelectedStudentResponseModel[] = [];
 
-  constructor(private commonMasterService: CommonFunctionService, private Router: Router, private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(private commonMasterService: CommonFunctionService,private smsMailService:SMSMailService, private Router: Router, private placementShortListStudentService: PlacementSelectedStudentsService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private fb: FormBuilder, private modalService: NgbModal) {
   }
 
   async ngOnInit() {
@@ -195,12 +202,14 @@ export class PlacementSelectedStudentsComponent implements OnInit {
         return; // Exit the method if no checkbox is selected
       }
       //save
+      debugger
       await this.placementShortListStudentService.SaveAllData(this.StudentList)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (this.State == EnumStatus.Success) {
+            this.SendApplicationMessage();
             this.toastr.success(this.Message)
             await this.GetAllData();
           }
@@ -236,4 +245,77 @@ export class PlacementSelectedStudentsComponent implements OnInit {
       item.Marked = this.AllSelect;
     }
   }
+
+
+  async SendApplicationMessage() {
+       debugger
+       try {
+         this.loaderService.requestStarted();
+        //  let SSOID = this.sSOLoginDataModel.SSOID;
+        //  let action = "GetStudentDetailBySSOID";
+        let request=new SSOIDDetailRequestModel();
+        request.SSOID=this.sSOLoginDataModel.SSOID;
+        request.Action="GetStudentDetailBySSOID";
+         await this.commonMasterService.GetSSOIDDetailData(request)
+           .then((data: any) => {
+             data = JSON.parse(JSON.stringify(data));
+             this.getSSOIDDetailData = data['Data'];
+             console.log(this.getSSOIDDetailData,"getSSOIDDetailData");
+   
+             if (data.State == EnumStatus.Success) {
+               console.log('Data load successfully', data);
+             } else {
+               console.log('Something went wrong', data);
+             }
+           }, (error: any) => console.error(error));
+   
+   
+         // const personalMail = this.getSSOIDDetailData[0].Mailpersonal;
+         // this.messageModel.Email = (personalMail && personalMail.trim() !== '') 
+         //   ? personalMail 
+         //   : this.getSSOIDDetailData[0].Officialmail;
+   
+           this.messageModel.MobileNo = (this.getSSOIDDetailData[0].MobileNo && this.getSSOIDDetailData[0].MobileNo.trim() !== '')
+           ?this.getSSOIDDetailData[0].MobileNo
+           :this.getSSOIDDetailData[0].TelephoneNumber;
+   
+         //this.messageModel.MobileNo = '8955186821';
+         // this.messageModel.MobileNo = this.getSSOIDDetailData[0].MobileNo;
+         // department
+         //if (this.DepartmentID == EnumDepartment.BTER) {
+         //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
+         //}
+         //else if (this.DepartmentID == EnumDepartment.ITI) {
+         //  this.messageModel.MessageType = EnumMessageType.FormFinalSubmitITI;
+         //}
+         /*this.messageModel.ApplicationNo = this.ApplicationNo.toString();*/
+        //  Consent_Recorded_Student
+         this.messageModel.ApplicationNo = '21100634';
+         this.messageModel.MessageType='OTP';
+         if(this.messageModel.MobileNo!='' || this.messageModel.MobileNo!=null){
+             await this.smsMailService.SendApplicationMessage(this.messageModel)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State == EnumStatus.Success) {
+                  console.log('Message sent successfully', data);
+                } else {
+                  console.log('Something went wrong', data);
+                }
+              }, (error: any) => console.error(error));
+         }
+         else{
+            this.toastr.error("Mobile number is not available for sending SMS");
+         }
+        
+       } catch (Ex) {
+         console.log(Ex);
+       }
+       finally {
+         setTimeout(() => {
+           this.loaderService.requestEnded();
+         }, 200);
+       }
+     }
+   
+   
 }

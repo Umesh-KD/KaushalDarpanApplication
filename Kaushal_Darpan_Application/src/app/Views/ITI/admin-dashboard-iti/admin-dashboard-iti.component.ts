@@ -41,6 +41,9 @@ export class AdminDashboardITIComponent implements OnInit
   public viewOptionFormCount: StudentExamDetails[] = [];
 
   public viewDirectApplicationCount: StudentExamDetails[] = [];
+  public viewJailApplicationCount: StudentExamDetails[] = [];
+
+
 
 
   public isprofile: number = 0;
@@ -106,7 +109,10 @@ export class AdminDashboardITIComponent implements OnInit
             this.viewAdminDashboardList = data['Data'];
            
             this.viewApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'ApplicationCount');
+
             this.viewDirectApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'DirectApplicationCount');
+
+
 
             this.viewOptionFormCount = this.viewAdminDashboardList.filter(s => s.ListType == 'OPTION FORM');
            
@@ -121,6 +127,9 @@ export class AdminDashboardITIComponent implements OnInit
             this.DashBoardITIDispatchList = this.viewAdminDashboardList.filter(s => s.ListType == 'ITIDispatch');
             this.Allotment1List = this.viewAdminDashboardList.filter(s => s.ListType == 'Allotment1Type');
             this.Allotment2List = this.viewAdminDashboardList.filter(s => s.ListType == 'Allotment2Type');
+
+
+            this.viewJailApplicationCount = this.viewAdminDashboardList.filter(s => s.ListType == 'JailApplicationCount');
 
             //console.log(this.viewAdminDashboardList, "DashBoo");
             //console.log(this.viewAdminDashboardListEnrollment, "EnrollmentType");

@@ -1,11 +1,11 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">{{this.searchRequest.TradeLevel}}th Jail Admission</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{this.searchRequest.TradeLevel}}th Jail Admission Reporting</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a [routerLink]="getIMCLink()" class="text-sm font-medium text-slate-700" aria-current="page"> Jail Admission</a>
+      <a [routerLink]="getIMCLink()" class="text-sm font-medium text-slate-700" aria-current="page"> Jail Admission Reporting</a>
     </div>
   </div>
 </div>
@@ -30,15 +30,19 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" *ngIf="IMCAllotedList.length>0" (click)="ExPortExcelData()"><i class="ti ti-download"></i> Download Excel</a>
+        <a href="javascript:void(0);" (click)="exportPDFData()" *ngIf="IMCAllotedList.length>0" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i>Download PDF</a>
+      </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+        <!--<select id="ddlConter" class="form-select  couterDropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
-        </select>
+        </select>-->
       </div>
       <div class="">
       </div>
@@ -52,7 +56,7 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">#</th>
+            <th class="text-left">SrNo</th>
 
             <th class="text-left">Application Number</th>
             <th class="text-left">Applicant Name</th>
@@ -62,6 +66,7 @@
             <th class="text-left">Trade Scheme</th>
             <th class="text-left">Shift Name</th>
             <th class="text-left">Unit Name</th>
+            <th class="text-left">Reported Date/Time</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -77,6 +82,7 @@
             <td>{{item.TradeScheme}}</td>
             <td>{{item.Shift}}</td>
             <td>{{item.UnitNo}}</td>
+            <td>{{item.ReportedDateTime}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <!--<a [routerLink]="'/ITIIMCVerifyStudentPhone/' + item.ApplicationID" title="Edit"><i class="ti ti-pencil"></i></a>-->

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_AddStaffDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffListSearchModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, BTERGovtEMStaffMasterDataModel, BTERGovtEMStaff_ServiceDetailsOfPersonalModel, Bter_RequestUpdateStatus, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, BTER_Govt_EM_ServiceDeleteModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel, BTER_DesignationWiseBranchDataModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { HODDashboardSearchModel, RequestUpdateStatus } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 
@@ -231,4 +231,14 @@ export class BTEREstablishManagementService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async BTER_EM_DesignationWiseBranch(searchRequest: BTER_DesignationWiseBranchDataModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/BTER_EM_DesignationWiseBranch`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

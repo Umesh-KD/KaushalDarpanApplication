@@ -117,3 +117,9 @@ export class CampusPostQRDetail {
   public TPOSSOID: string = '';
   public Website: string = '';
 }
+
+export class SSOIDDetailRequestModel
+{
+  public SSOID: string = '';
+  public Action: string = '';
+}

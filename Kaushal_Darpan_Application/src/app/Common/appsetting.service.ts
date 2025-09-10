@@ -16,6 +16,7 @@ export class AppsettingService {
   public BacktoSSOURL_Logout: string = "";
   public RootPathURL: string = "";
   public StaticFileRootPathURL: string = "";
+  public DepartmentBterFolder: string = "";
   public SSOURL: string = "";
   public RPPRequstURL: string = "";
   public IsLocal: boolean = false;
@@ -57,6 +58,7 @@ export class AppsettingService {
     this.RootPathURL_Bter = appsetting?.ApiUrls?.RootPathURL_Bter;
     this.StaticFileRootPathURL_Bter = appsetting?.ApiUrls?.StaticFileRootPathURL_Bter;
 
+    this.DepartmentBterFolder = "BTER"
 
     // *********do not uncomment below urls
     //local
