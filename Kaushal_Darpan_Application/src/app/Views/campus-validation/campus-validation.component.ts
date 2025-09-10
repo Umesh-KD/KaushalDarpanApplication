@@ -1,7 +1,7 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { CampusPostMasterModel, CampusPostMaster_Action, CampusPostMaster_EligibilityCriteriaModel } from '../../Models/CampusPostDataModel';
+import { CampusPostMasterModel, CampusPostMaster_Action, CampusPostMaster_EligibilityCriteriaModel, SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -49,6 +49,7 @@ export class CampusValidationComponent {
 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public getSSOIDDetailData: any[]=[];
   formAction!: FormGroup;
   public flagName: string = "TotalNoOfCampus";
   public TodayDate = new Date()
@@ -290,8 +291,36 @@ export class CampusValidationComponent {
     debugger
     try {
       this.loaderService.requestStarted();
+      let request=new SSOIDDetailRequestModel();
+      request.SSOID=this.sSOLoginDataModel.SSOID;
+      request.Action="GetTPODetailBySSOID";
+      // let SSOID = this.sSOLoginDataModel.SSOID;
+      // let action = "GetTPODetailBySSOID";
+      await this.commonMasterService.GetSSOIDDetailData(request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.getSSOIDDetailData = data['Data'];
+          console.log(this.getSSOIDDetailData,"getSSOIDDetailData");
+
+          if (data.State == EnumStatus.Success) {
+            console.log('Data load successfully', data);
+          } else {
+            console.log('Something went wrong', data);
+          }
+        }, (error: any) => console.error(error));
+
+
+      // const personalMail = this.getSSOIDDetailData[0].Mailpersonal;
+      // this.messageModel.Email = (personalMail && personalMail.trim() !== '') 
+      //   ? personalMail 
+      //   : this.getSSOIDDetailData[0].Officialmail;
+
+        this.messageModel.MobileNo = (this.getSSOIDDetailData[0].MobileNo && this.getSSOIDDetailData[0].MobileNo.trim() !== '')
+        ?this.getSSOIDDetailData[0].MobileNo
+        :this.getSSOIDDetailData[0].TelephoneNumber;
+
       //this.messageModel.MobileNo = '8955186821';
-      this.messageModel.MobileNo = '8334874706';
+      // this.messageModel.MobileNo = this.getSSOIDDetailData[0].MobileNo;
       // department
       //if (this.DepartmentID == EnumDepartment.BTER) {
       //  this.messageModel.MessageType = EnumMessageType.Bter_FormFinalSubmit;
