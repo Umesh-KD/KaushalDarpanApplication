@@ -242,3 +242,14 @@ export class ExaminerFeedbackDataModel extends RequestBaseModel {
   public UserID?: number = 0
 }
 
+
+export class ApplicantReportForAdmin {
+  public AcademicYearID: number = 0;
+  public DepartmentID: number = 0;
+ 
+}
+
+export class ReportedStudentReport {
+  public AcademicYearID: number = 0;
+
+}

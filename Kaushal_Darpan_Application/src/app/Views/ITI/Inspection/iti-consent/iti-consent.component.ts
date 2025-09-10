@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { EnumDeploymentStatus, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionSearchModel, ConsentModel, CenterMasterDDLDataModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -41,6 +41,12 @@ export class ITIConsentComponent {
   public consentForm!: FormGroup;
   public consentRequest = new ConsentModel();
   public ConsentData: any = [];
+  public InstituteMasterDDL: any = [];
+  public DistrictMasterDDL: any = [];
+  requestCenter = new CenterMasterDDLDataModel();
+  public consentDeploy = new ConsentModel();
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -65,7 +71,9 @@ export class ITIConsentComponent {
     
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+    
     this.GetAllData()
+    this.getMasterData()
   }
 
   async ResetControl() {
@@ -370,6 +378,35 @@ export class ITIConsentComponent {
           }
         }
       });
+  }
+
+
+  async getMasterData() {
+    debugger
+    try {
+
+      this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DistrictMasterDDL = data.Data;
+        console.log('District ==>', this.DistrictMasterDDL)
+      })
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  GetInstituteMaster_ByDistrictWise(ID: any) {
+    this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
+    this.requestCenter.DistrictID = ID;
+    this.itiInspectionService.GetITIInspectionDropdown(this.requestCenter).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.InstituteMasterDDL = data.Data;
+      console.log("this.InstituteMasterDDL", this.InstituteMasterDDL)
+    })
   }
 
 

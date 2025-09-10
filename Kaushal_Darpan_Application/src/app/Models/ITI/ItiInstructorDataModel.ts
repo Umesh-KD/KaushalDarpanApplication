@@ -2,7 +2,7 @@ export class ITI_InstructorDataModel {
   // Personal Details
   public InstituteID?: number=0;
   public id?:  number = 0;
-  public Uid:  string = '';
+  public Uid?:  string = '';
   public Name?:  string = '';
   public FatherOrHusbandName?:  string = '';
   public MotherName?:  string = '';
@@ -11,7 +11,15 @@ export class ITI_InstructorDataModel {
   public MaritalStatus?:  string = '';
   public Category?: string = '';
   public Mobile?:  string = '';
-  public Email?:  string = '';
+  public Email?: string = '';
+
+
+  //Bank Details
+  public BankAccountNumber: string = '';
+  public IFSCCode: string = '';
+  public BankName: string = '';
+
+  public ConsentToAssignAsExaminer: boolean = false;
 
   // Permanent Address
   public PlotHouseBuildingNo?:  string = '';
@@ -131,5 +139,12 @@ export class ITI_InstructorDataBindSearchModel {
 
 export class ITI_InstructorGridDataSearchModel {
   public ApplicationID?: string = '';
+}
+
+
+export class ITI_InstructorDataAssignSearchModel {
+  public DepartmentID?: string = '';
+  public CollegeId?: number = 0;
+
 }
 

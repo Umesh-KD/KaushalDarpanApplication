@@ -232,6 +232,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public SelectionCategory: string = ''
 
   public HigherEduPermission: boolean = false
+  public IsEmployeeWorking: boolean = false
   public HigherEduInstitute: string = ''
   public Remark: string = ''
 
@@ -252,6 +253,7 @@ export class BTER_EM_UnlockProfileDataModel {
   public StaffUserID: number = 0
   public StaffID: number = 0
   public SSOID: string = ''
+  public Remark: string = ''
   public ModifyBy: number = 0
 }
 
@@ -481,4 +483,12 @@ export class StaffHostelSearchModel extends RequestBaseModel {
   public StaffID?: number = 0
   public StaffUserID?: number = 0
   public StaffHostelIDs?: string = ''
+}
+export class BTER_DesignationWiseBranchDataModel {
+  public DepartmentID: number = 0;
+  public DesignationID: number = 0;
+  public OfficeID: number = 0;
+  public RoleID: number = 0;
+  public BranchID: number = 0;
+  public StaffID: number = 0;
 }

@@ -1,0 +1,121 @@
+<!-- Page Title Start -->
+<!--<div class="card mb-3">
+</div>-->
+
+  <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+      <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Instructor</h4>
+
+      <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+        <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
+        <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>   
+        <a [routerLink]="['/ItiInstructor']" class="text-sm font-medium text-slate-700" aria-current="page">ITI Instructor</a>
+        <div >
+        </div>
+      </div>   
+    </div>
+  </div>
+
+
+<div class="card">
+  <div class="card-body p-5">
+  </div>
+ 
+  <div class="card-body p-5" style="min-height:400px;">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> List</b>
+        <div class="flex justify-end flex-wrap items-center">
+
+        </div>
+      </div>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5" >
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr No</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Gender</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Mobile</th>
+            <th class="text-left">Email</th>
+            <th class="text-left">Status</th> 
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of paginatedInTableData; let idx = index">
+            <td>{{ idx + 1 }}</td>
+            <td>{{ item.Name }}</td>
+            <td>{{ item.Dob | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ item.Gender }}</td>
+            <td>{{ item.Category }}</td>
+            <td>{{ item.Mobile }}</td>
+            <td>{{ item.Email }}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+                <!--<label class="block">Status</label>-->
+                <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="item.IsAssign == 1" (click)="onToggleChange($event , item)">
+                  <span class="toggleIcon">
+                    <span class="toggleTitle">{{ item.IsAssign === 1 ? '' : '' }}</span>
+                  </span>
+                </label>
+              </div>
+            </td>
+            <!--<td>
+      <button (click)="toggleAssign(item)"
+              [ngClass]="item.IsAssign === 1 ? 'bg-green-500 text-white' : 'bg-gray-300 text-black'"
+              class="px-2 py-1 rounded">
+        {{ item.IsAssign == 1 ? 'Assigned' : 'Not Assigned' }}
+      </button>
+    </td>-->
+          </tr>
+          <tr *ngIf="paginatedInTableData.length == 0">
+            <td colspan="8" class="text-center text-gray-500 py-4">No records found.</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="p-3 paginationBox flex items-center justify-end w-full" *ngIf="GetInstructorDataList.length > 0">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+

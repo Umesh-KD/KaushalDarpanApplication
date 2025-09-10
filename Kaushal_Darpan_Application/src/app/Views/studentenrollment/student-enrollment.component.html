@@ -813,7 +813,7 @@
                   <span>Choose File</span>{{item.Dis_FileName == '' ? 'No File Choosen' : item.Dis_FileName}}
                 </label>
                 <div class="flex" *ngIf="item.FileName!=''">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>

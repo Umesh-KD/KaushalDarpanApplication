@@ -379,9 +379,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async PreExam_StudentMaster(StudentID: number, statusId: number, DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermID: number = 0, StudentExamID: number = 0) {
-
-    return await this.http.get(`${this.APIUrl}/PreExam_StudentMaster/${StudentID}/${statusId}/${DepartmentID}/${Eng_NonEng}/${EndTermID}/${StudentExamID}`, this.headersOptions)
+  public async PreExam_StudentMaster(StudentID: number, statusId: number, DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermID: number = 0, StudentExamID: number = 0, FileNameWithDynamicPath: number = 0) {
+    debugger
+    return await this.http.get(`${this.APIUrl}/PreExam_StudentMaster/${StudentID}/${statusId}/${DepartmentID}/${Eng_NonEng}/${EndTermID}/${StudentExamID}/${FileNameWithDynamicPath}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -593,6 +593,9 @@ export class CommonFunctionService {
     formData.append("EndTermID", model?.EndTermID ?? "0");
     formData.append("Eng_NonEng", model?.Eng_NonEng ?? "0");
     formData.append("IsCopy", model?.IsCopy?.toString() ?? "false");
+    formData.append("FileNameWithDynamicPath", model?.FileNameWithDynamicPath?.toString() ?? "");
+    formData.append("FilePrefix", model?.FilePrefix?.toString() ?? "");
+
     return await this.http.post(this.APIUrl + "/UploadBTERDocument", formData)
       .pipe(
         catchError(this.handleErrorObservable)
