@@ -68,18 +68,13 @@ export class ITIConsentUpdateComponent {
 
   ) {
 
-    //this.consentForm = this.fb.group({
-    //  consents: this.fb.array([this.createConsent()])
-    //});
   }
 
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    
     this.GetAllData()
     this.getMasterData()
 
@@ -94,11 +89,8 @@ export class ITIConsentUpdateComponent {
   }
 
   async ResetControl() {
-    this.searchRequest = new ITI_InspectionSearchModel();
-    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
-    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
-    this.searchRequest.UserID = this.sSOLoginDataModel.UserID
-    this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId
+    this.UpdateConsentRequest = new UpdateConsentModel();
+    
     this.GetAllData();
   }
   async GetAllData() {
@@ -130,47 +122,6 @@ export class ITIConsentUpdateComponent {
   }
 
   
-
-  async UpdateDeployment(id: number) {
-    this.Swal2.Confirmation("Are you sure you want to deploy this team ?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-         
-          try {
-            const institute_data = await this.GetInstitute_ById(id);
-            console.log("institute_data", institute_data); 
-            if (!institute_data?.Data?.InspectionDeploymentDetails) {
-              this.toastr.error("Please Enter Institute Details First!");
-              return; 
-            }
-            else {
-              await this.itiInspectionService.UpdateDeployment(id).then((data: any) => {
-
-                data = JSON.parse(JSON.stringify(data));
-                console.log("data", data)
-                var id = data.Data
-                if (data.State === EnumStatus.Success) {
-                  this.toastr.success("Deployment Updated Successfully");
-                  this.GetAllData();
-                } else if (data.State === EnumStatus.Warning) {
-                  this.toastr.warning(data.Message);
-                } else {
-                  this.toastr.error(data.ErrorMessage);
-                }
-              })
-            }
-
-     
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200)
-    }
-        }
-      });
-  }
 
 
   async GetInstitute_ById(id: number): Promise<any> {
@@ -235,120 +186,14 @@ export class ITIConsentUpdateComponent {
 
   @ViewChild('content') content: ElementRef | any;
 
-  async openModalGenerateOTP(content: any, id : number) {
-    
-    this.OTP = '';
-    this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : this.sSOLoginDataModel.Mobileno;
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    this.MobileNo = this.MobileNo;
-    await this.SendOTP();
-    this.InspectionConsentID = id; 
-  }
-
-
-  async SendOTP(isResend?: boolean) {
-    try {
-      this.GeneratedOTP = "";
-      await this.sMSMailService.SendMessage(this.MobileNo, "OTP")
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
-            this.startTimer();
-            this.GeneratedOTP = data['Data'];
-            if (isResend) {
-              this.toastr.success('OTP resent successfully');
-            }
-          }
-          else {
-            this.toastr.warning('Something went wrong');
-          }
-        }, error => console.error(error));
-
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-  }
-
-  startTimer(): void {
-    this.showResendButton = false;
-    this.timeLeft = GlobalConstants.DefaultTimerOTP * 60;
-
-    this.interval = setInterval(() => {
-      if (this.timeLeft > 0) {
-        this.timeLeft--;
-      } else {
-        clearInterval(this.interval);
-        this.showResendButton = true; 
-      }
-    }, 1000); 
-  }
-
+  
+ 
   CloseModal() {
     this.GetAllData();
     this.modalService.dismissAll();
     
   }
 
-  numberOnly(event: KeyboardEvent): boolean {
-    const charCode = (event.which) ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
-
-  }
-
-
-  async VerifyOTP() {
-    if (this.OTP.length > 0) {
-      if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
-        var id = this.InspectionConsentID;
-        try {
-          this.toastr.success('Otp Verified');
-          try {
-            await this.itiInspectionService.GenerateInspectionDeploymentOrder(id).then((data: any) => {
-             
-              data = JSON.parse(JSON.stringify(data));
-              if (data.State === EnumStatus.Success) {
-                debugger;
-                const pdfUrl = data.PDFURL; 
-                this.DownloadPdf(pdfUrl);
-
-                this.toastr.success("PDF Genetrated Successfully");
-                this.CloseModal()
-              } else if (data.State === EnumStatus.Warning) {
-                this.toastr.warning(data.Message);
-              } else {
-                this.toastr.error(data.ErrorMessage);
-              }
-            })
-          } catch (error) {
-            console.log(error);
-          } finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200)
-          }
-         
-        }
-        catch (ex) {
-          console.log(ex);
-        }
-      }
-      else {
-        this.toastr.warning('Invalid OTP Please Try Again');
-      }
-    }
-    else {
-      this.toastr.warning('Please En ter OTP');
-      
-    }
-  }
 
   async DownloadPdf(FileName: string) {
     debugger;
@@ -366,37 +211,7 @@ export class ITIConsentUpdateComponent {
 
   
 
-  async RequestApproveByAdmin(Req_Remark: string, DeplomentId: number) {
-    this.Swal2.Confirmation("Are you sure you want to Approve this ? <br><h2>User Remark</h2>" + Req_Remark + "",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          try {
-            this.loaderService.requestStarted();
-            await this.itiInspectionService.RequestApprove(DeplomentId)
-              .then((data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-
-                if (data.State === EnumStatus.Success) {
-                  this.toastr.success("Request Status Successfully Updated");
-
-                  this.GetAllData();
-
-                } else {
-                  this.toastr.error(data.ErrorMessage);
-                }
-              }, error => console.error(error));
-          }
-          catch (Ex) {
-            console.log(Ex);
-          }
-          finally {
-            setTimeout(() => {
-              this.loaderService.requestEnded();
-            }, 200);
-          }
-        }
-      });
-  }
+  
 
 
   async getMasterData() {

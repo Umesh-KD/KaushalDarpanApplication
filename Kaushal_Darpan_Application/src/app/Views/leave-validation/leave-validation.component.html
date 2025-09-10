@@ -101,7 +101,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Action}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="HR On Action" *ngIf="(row.Action=='Pending' || row.Action=='Hold')" (click)="CompanyOnAction(MyModel_Action,row.StaffLeaveID)"><i class="ti ti-check"></i></a>
+                <a title="HR On Action" *ngIf="(row.Action=='Pending' || row.Action=='Hold')" (click)="CompanyOnAction(MyModel_Action,row.StaffLeaveID)"><i class="ti ti-check"></i></a>
               </div>
             </td>
           </tr>
