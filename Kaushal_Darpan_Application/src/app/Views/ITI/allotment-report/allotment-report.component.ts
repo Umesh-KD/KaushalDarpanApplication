@@ -70,12 +70,9 @@ export class AllotmentReportComponent {
   isNext: boolean = false;
   totalRecord: any = 0;
   TotalPages: any = 0;
-
   MeritGenerateKey: string = "";
   MeritPublishKey: string = "";
-
   public importFile: any;
-
   public DateConfigSetting: any = [];
   public transactionData: any = [];
   constructor(
@@ -99,6 +96,7 @@ export class AllotmentReportComponent {
     this.searchRequest.ReportingStatus = Number(this.activatedRoute.snapshot.paramMap.get('id') ?? 0)
     this.searchRequest.TradeLevelId = this.activatedRoute.snapshot.paramMap.get('iid') ?? "0";
     this.searchRequest.AllotmentMasterId = Number(this.activatedRoute.snapshot.paramMap.get('idd') ?? 0);
+
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.EndTermId = this.SSOLoginDataModel.EndTermID;
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;

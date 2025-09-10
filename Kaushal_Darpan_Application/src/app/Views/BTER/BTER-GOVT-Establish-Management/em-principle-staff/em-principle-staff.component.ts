@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -66,6 +66,10 @@ export class EMPrincipleStaffComponent {
   public CourseMasterDDL: any[] = [];
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
+  public DesignationWiseBranchListRole: any[] = [];
+  public DesignationWiseBranchList: any[] = [];
+  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
+
   public searchRequest1 = new GuestRoomSeatSearchModel();
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -141,10 +145,11 @@ export class EMPrincipleStaffComponent {
       SalaryDrawnInstituteID: [0, [DropdownValidators]],
 
       Name: ['', [Validators.required]],
-      SanctionedPosts: ['', [Validators.required]],
-      IsWorking: ['', [Validators.required]],
-      IsVacant: ['', [Validators.required]],
+      //SanctionedPosts: ['', [Validators.required]],
+      //IsWorking: ['', [Validators.required]],
+      //IsVacant: ['', [Validators.required]],
       IsExtraWorking: ['', [Validators.required]],
+      IsEmployeeWorking: [''],
       IsEmpWorkingOnPost: ['', [Validators.required]],
       IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
       IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
@@ -879,10 +884,37 @@ async GetTechnicianDll() {
 
           await this.getStreamMasterData();
 
-          if ([8, 60, 199, 200].includes(this.approveRequest.RoleID)) {
+          try {
+            this.loaderService.requestStarted();
+            await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.DesignationWiseBranchListRole = data['Data'];
+                this.DesignationWiseBranchList = data['Data'];
+              }, error => console.error(error));
+          }
+          catch (Ex) {
+            console.log(Ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+          const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
+          const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);
+
+          if (roleIDs.includes(this.approveRequest.RoleID)) {
             this.IsHideShow = true;
             this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
-          } else {
+          }
+          else if (DesignationIDs.includes(this.approveRequest.DesignationID)) {
+           
+            this.IsHideShow = true;
+            this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
+
+          }
+          else {
             this.IsHideShow = false;
             this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
           }
@@ -1202,6 +1234,28 @@ async GetTechnicianDll() {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+
+  onEmpWorkingChange(value: boolean) {
+    this.approveRequest.IsEmpWorkingOnPost = value;
+
+    // Your logic here:
+    if (value === true) {
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+    } else {
+      // If working on post is false, show the second question only if salary drawn is false
+      this.approveRequest.IsSalaryDrawnFromSamePost = this.approveRequest.IsSalaryDrawnFromSamePost === false;
+    }
+  }
+
+  onSalaryDrawnChange(value: boolean) {
+    this.approveRequest.IsSalaryDrawnFromSamePost = value;
+
+    // Recalculate visibility in case working on post is false
+    if (this.approveRequest.IsEmpWorkingOnPost === false) {
+      this.approveRequest.IsSalaryDrawnFromSamePost = value === false;
     }
   }
 }
