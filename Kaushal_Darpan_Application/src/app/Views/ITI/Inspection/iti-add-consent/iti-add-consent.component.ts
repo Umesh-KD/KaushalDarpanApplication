@@ -73,6 +73,7 @@ export class ITIAddConsentComponent {
       DistrictID: ['', [DropdownValidators]],
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
+      consentTypeID: ['', [DropdownValidators]],
     })
     this.getMasterData();
   }
@@ -155,10 +156,12 @@ export class ITIAddConsentComponent {
       (x: any) => x.ID == this.consentDeploy.DistrictID
     )?.Name;
 
+    this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
     this.consentDeployList.push({ ...this.consentDeploy });
 
     this.consentDeploy = new ConsentModel(); 
     this.isSubmitted = false;
+    console.log('Bind List ==>',this.consentDeployList)
   }
 
   async SaveData() {
@@ -167,9 +170,6 @@ export class ITIAddConsentComponent {
       this.toastr.error("Please Add At Least One Institute");
       return;
     }
-    //this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-    //this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
-    //this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     
     try {
       this.loaderService.requestStarted();
