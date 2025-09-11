@@ -511,6 +511,7 @@ export class StudentEnrollmentComponent {
       model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
+      model.FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath;
       //
       await this.commonMasterService.ViewStudentDetails(model)
         .then((data: any) => {
