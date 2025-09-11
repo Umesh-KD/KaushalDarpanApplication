@@ -187,6 +187,7 @@ export class LeaveValidationComponent {
     this.requestAction.Action = "0";
     this.requestAction.ActionRemark = "";
     this.isSubmitted = false;
+    this.formAction.reset();
       // Always close any previous modal before opening new
     if (this.modalReference) {
       this.modalReference.close();
