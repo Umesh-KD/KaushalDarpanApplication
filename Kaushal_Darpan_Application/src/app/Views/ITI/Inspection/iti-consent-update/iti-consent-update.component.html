@@ -42,6 +42,7 @@
           <tr>
             <th width="80px" align="left">Sr. No.</th>
             <th class="text-left">District</th>
+            <th class="text-left">Consent Type</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Tentative Date</th>
             <th class="text-left">Updated Date</th>
@@ -54,6 +55,7 @@
           <tr *ngFor="let row of ConsentData; let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.DistrictName}}</td>
+            <td>{{row.consentTypeID === 1 ? 'Planned (Affiliation)' : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '') }}</td>
             <td>{{row.InstituteName}}</td>
             <td align="left">{{row.TentativeDate | date:'dd/MM/yyyy' }}</td>
             <td align="left">{{row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
@@ -64,10 +66,8 @@
                    (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
                   <i class="ti ti-pencil"></i>
                 </a>
-
               </div>
             </td>
-
           </tr>
         </tbody>
       </table>

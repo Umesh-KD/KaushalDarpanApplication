@@ -33,8 +33,8 @@
             </p>
           </div>
         </div>
-        <!--{{IsHideShow|json}}
-        {{request.DesignationID|json}}-->
+        <!--{{DesignationMasterDDLList|json}}
+        {{request.StaffTypeID|json}}-->
         <div *ngIf="IsHideShow">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch <span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
@@ -124,8 +124,22 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining in Department<span class="StarMarking">*</span></label>
+          <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate" id="DepartmentJoiningDate"
+                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" />
+
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DepartmentJoiningDate.errors" class="text-danger">
+            <p *ngIf="_StaffMasterFormGroup.DepartmentJoiningDate.errors.required">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>
-          <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining" 
+          <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining"
                  formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfAppointment.errors" class="text-danger">
@@ -137,7 +151,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
-          <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement" 
+          <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
                  formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
@@ -174,13 +188,13 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
-                 formControlName="EmployeeID" [(ngModel)]="request.EmployeeID"  />
+                 formControlName="EmployeeID" [(ngModel)]="request.EmployeeID" />
 
           <!--<div *ngIf="isSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
-            <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>-->
+      <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>-->
         </div>
 
       </div>

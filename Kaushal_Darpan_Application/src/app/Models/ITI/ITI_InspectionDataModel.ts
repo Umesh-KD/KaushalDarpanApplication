@@ -171,6 +171,7 @@ export class ConsentModel  {
   public DoucmentName: string = '';
   public Remark: string = ''
   public UserID: number = 0
+  public consentTypeID: number = 0
 }
 
 

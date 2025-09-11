@@ -299,8 +299,8 @@ export class PromotedStudentComponent {
               InstituteNameEnglish: x.InstituteName,
               IPAddress: '',
               IsBridge: x.IsBridge,
-              IsDetain: x.Detain == "Yes" ? true : false,
-              IsUFM: x.UFM == "Yes" ? true : false,
+              IsDetain: x.Detain,
+              IsUFM: x.UFM,
               MotherName: '',
               SemesterId: x.SemesterID,
               StreamId: x.StreamID,
@@ -309,7 +309,7 @@ export class PromotedStudentComponent {
               StudentType: x.StudentType,
               UFMCategory: x.UFMCategory,
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-              InstituteId: 0,
+              InstituteId: x.InstituteId,
               SessionTypeID: 0,
             })
           });

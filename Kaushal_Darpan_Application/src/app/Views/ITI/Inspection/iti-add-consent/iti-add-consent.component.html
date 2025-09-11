@@ -40,8 +40,23 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
-              <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate"/>
+              <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate" />
             </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Consent Type</label>
+              <select type="text" class="form-input" formControlName="consentTypeID" [(ngModel)]="consentDeploy.consentTypeID" [disabled]="isFormReadOnly">
+                <option [value]="0">--Select--</option>
+                <option [value]="_EnumInspectionDeploymentType.Planned">Planned (Affiliation)</option>
+                <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Planned)</option>
+              </select>
+
+              <div *ngIf="isSubmitted && _consentFromGroup.consentTypeID.errors" class="text-danger">
+                <p *ngIf="!_consentFromGroup.consentTypeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
 
             <div>
               <div class="text-left">
@@ -63,6 +78,7 @@
               <th class="text-left">District Name</th>
               <th class="text-left">Institute Name</th>
               <th class="text-left">Tentative Date</th>
+              <th class="text-left">Consent Type</th>
               <th>Action</th>
             </tr>
 
@@ -73,6 +89,9 @@
               <td class="text-left">{{row.DistrictName}}</td>
               <td class="text-left">{{row.InstituteName}}</td>
               <td class="text-left">{{row.TentativeDate | date:'dd-MM-yyyy' }}</td>
+              <td class="text-left">
+                {{ row.consentTypeID === 1 ? 'Planned (Affiliation)' : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '') }}
+              </td>
 
               <td class="text-center">
                 <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
