@@ -24,21 +24,10 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 })
 export class ITIConsentUpdateComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public _EnumDeploymentStatus = EnumDeploymentStatus
   public searchRequest = new ITI_InspectionSearchModel();
-  public InspectionData: any = [];
-  //public InspectionTeamID: number = 0
   public InspectionConsentID: number = 0
   public request = new ITI_InspectionDataModel();
-  public requestMember = new InspectionMemberDetailsDataModel();
   public modalReference: NgbModalRef | undefined;
-  public modalReference1: NgbModalRef | undefined;
-  public closeResult: string | undefined;
-  public timeLeft: number = GlobalConstants.DefaultTimerOTP;
-  public showResendButton: boolean = false;
-  public OTP: string = '';
-  public GeneratedOTP: string = '';
-  public MobileNo: string = '';
   public consentForm!: FormGroup;
   public consentRequest = new ConsentModel();
   public ConsentData: any = [];
@@ -46,13 +35,14 @@ export class ITIConsentUpdateComponent {
   public DistrictMasterDDL: any = [];
   public requestCenter = new CenterMasterDDLDataModel();
   public consentDeploy = new ConsentModel();
-  private interval: any;
   public UpdateConsentRequest = new UpdateConsentModel()
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
   public isSubmitted: boolean = false;
-
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  public Table_SearchText: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -60,48 +50,35 @@ export class ITIConsentUpdateComponent {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2,
-    private sMSMailService: SMSMailService,
-    private http: HttpClient,
     private appsettingConfig: AppsettingService,
     private commonMasterService: CommonFunctionService,
 
-  ) {
-
-  }
-
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.GetAllData()
-    this.getMasterData()
-
+    //this.getMasterData()
     this.consentForm = this.fb.group({
       Remarks: ['', Validators.required],
       TentativeDate: ['', Validators.required]
-
     });
-
     this.consentDeploy = new ConsentModel();
-
   }
 
   async ResetControl() {
     this.UpdateConsentRequest = new UpdateConsentModel();
-    
     this.GetAllData();
   }
+
   async GetAllData() {
-    
     try {
       this.loaderService.requestStarted();
-     
       this.consentRequest.UserID = this.sSOLoginDataModel.UserID
       this.consentRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       await this.itiInspectionService.GetAllConsentbyPrincipal(this.consentRequest).then((data: any) => {
-     
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success){
           this.ConsentData = data.Data
@@ -120,24 +97,6 @@ export class ITIConsentUpdateComponent {
       }, 200)
     }
   }
-
-  
-
-
-  async GetInstitute_ById(id: number): Promise<any> {
-    try {
-      const data = await this.itiInspectionService.GetById_Team(id);
-      return JSON.parse(JSON.stringify(data));
-    } catch (error) {
-      console.log(error);
-      return null;
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
 
   async GetById_Consent(InspectionConsentID: number) {
     try {
@@ -164,115 +123,8 @@ export class ITIConsentUpdateComponent {
     }
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
   CloseModalPopup() {
     this.modalService.dismissAll();
-  }
-
-  formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  }
-
-  @ViewChild('content') content: ElementRef | any;
-
-  
- 
-  CloseModal() {
-    this.GetAllData();
-    this.modalService.dismissAll();
-    
-  }
-
-
-  async DownloadPdf(FileName: string) {
-    debugger;
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; 
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = "InspectionDutyOrder.pdf"; 
-      downloadLink.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
-  
-
-  
-
-  
-
-
-  async getMasterData() {
-    
-    try {
-
-      this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
-      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
-      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
-      await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.DistrictMasterDDL = data.Data;
-        console.log('District ==>', this.DistrictMasterDDL)
-      })
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  GetInstituteMaster_ByDistrictWise(ID: any) {
-    this.requestCenter.action = 'GetInstituteMaster_ByDistrictWise'
-    this.requestCenter.DistrictID = ID;
-    this.itiInspectionService.GetITIInspectionDropdown(this.requestCenter).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.InstituteMasterDDL = data.Data;
-      console.log("this.InstituteMasterDDL", this.InstituteMasterDDL)
-    })
-  }
-
-
-
-  openAddTeamModal(content: any) {
-    this.modalService.open(content, { size: 'md', backdrop: 'static', centered: true });
-  }
-
-  createConsent(): FormGroup {
-    return this.fb.group({
-      zone: [''],
-      district: [''],
-      institute: [''],
-      date: ['']
-    });
-  }
-  get consents(): FormArray {
-    return this.consentForm.get('consents') as FormArray;
-  }
-
-  addConsentRow() {
-    this.consents.push(this.createConsent());
-  }
-
-  removeConsentRow(i: number) {
-    this.consents.removeAt(i);
-  }
-
-  saveAll() {
-    console.log(this.consentForm.value);
-  }
-  openModal(content: any) {
-    this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
   async ViewandUpdate(content: any, InspectionConsentID: number) {
@@ -304,7 +156,6 @@ export class ITIConsentUpdateComponent {
         };
       }
 
-      // Open modal after data is set
       this.modalReference = this.modalService.open(content, {
         backdrop: 'static',
         size: 'xl',
@@ -315,7 +166,6 @@ export class ITIConsentUpdateComponent {
       console.error('Error fetching consent details:', error);
     }
   }
-
 
   public file!: File;
   async onFilechange(event: any, Type: string) {
@@ -334,33 +184,31 @@ export class ITIConsentUpdateComponent {
         uploadModel.MinFileSize = "";
         uploadModel.MaxFileSize = "2000000";
         uploadModel.FolderName = "ITI/Consent";
-
-
         await this.commonMasterService
-          .UploadDocument(this.file, uploadModel)
-          .then((data: any) => {
-            data = JSON.parse(JSON.stringify(data));
+        .UploadDocument(this.file, uploadModel)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
 
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
 
-            if (this.State == EnumStatus.Success) {
-              if (Type == 'Photo') {
+          if (this.State == EnumStatus.Success) {
+            if (Type == 'Photo') {
 
-                this.consentDeploy.DocConsent =
-                  data['Data'][0]['FileName'];
+              this.consentDeploy.DocConsent =
+                data['Data'][0]['FileName'];
 
-                this.UpdateConsentRequest.DocConsent = data['Data'][0]['FileName'];
-              }
-              event.target.value = null;
+              this.UpdateConsentRequest.DocConsent = data['Data'][0]['FileName'];
             }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage);
-            } else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage);
-            }
-          });
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage);
+          } else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage);
+          }
+        });
       }
     } catch (Ex) {
       console.log(Ex);
@@ -370,24 +218,18 @@ export class ITIConsentUpdateComponent {
   }
 
   async onSubmitConsent() {
-    debugger
+    
     this.isSubmitted = true;
-
     if (!this.UpdateConsentRequest.DocConsent || this.UpdateConsentRequest.DocConsent === '') {
       this.toastr.error('Please upload the required document.');
       return;
     }
-
     this.UpdateConsentRequest.UserID = this.sSOLoginDataModel.UserID;
     this.UpdateConsentRequest.Remark = this.consentForm.get('Remarks')?.value;
     this.UpdateConsentRequest.TentativeDate = this.consentForm.get('TentativeDate')?.value;
     this.UpdateConsentRequest.InspectionConsentID = this.InspectionConsentID;
-
-
-
     try {
       this.isSubmitted = true;
-
       this.loaderService.requestStarted();
       this.itiInspectionService.updateConsent(this.UpdateConsentRequest)
         .then((data: any) => {
@@ -402,8 +244,6 @@ export class ITIConsentUpdateComponent {
             this.toastr.error(this.ErrorMessage);
           }
         });
-      
-
     } catch (error) {
       console.log(error);
     } finally {
@@ -411,13 +251,87 @@ export class ITIConsentUpdateComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
 
+  openDatePicker(event: any) {
+    event.target.showPicker();   
   }
 
 
+  trackById(index: number, item: any) {
+    return item?.InspectionConsentID ?? index;
+  }
 
+  onSort(column: string) {
+    // toggle direction
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
 
+    this.ConsentData.sort((a: any, b: any) => {
+      const aVal = this.toComparable(a, column);
+      const bVal = this.toComparable(b, column);
+      if (aVal === null || aVal === '') return (bVal === null || bVal === '') ? 0 : (this.sortDirection === 'asc' ? -1 : 1);
+      if (bVal === null || bVal === '') return (this.sortDirection === 'asc' ? 1 : -1);
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      const sa = String(aVal).toLowerCase();
+      const sb = String(bVal).toLowerCase();
+      return this.sortDirection === 'asc' ? sa.localeCompare(sb) : sb.localeCompare(sa);
+    });
+  }
 
+  private toComparable(row: any, column: string): string | number | null {
+    if (!row) return null;
+    if (column === 'consentTypeID') {
+      const label = this.getConsentTypeLabel(row.consentTypeID);
+      return label ? label.toLowerCase() : '';
+    }
 
+    const val = row[column];
+    if (val === null || val === undefined || val === '') return '';
+    if (column.toLowerCase().includes('date')) {
+      const ts = this.parseDateToTimestamp(val);
+      return ts !== null ? ts : String(val).toLowerCase();
+    }
+    if (!isNaN(Number(val))) {
+      return Number(val);
+    }
 
+    return String(val).toLowerCase();
+  }
+
+  private getConsentTypeLabel(id: any): string {
+    if (id === null || id === undefined) return '';
+    const s = String(id);
+    if (s === '1') return 'Planned (Affiliation)';
+    if (s === '3') return 'General Inspection (Planned)';
+    return '';
+  }
+
+  private parseDateToTimestamp(value: any): number | null {
+    if (value instanceof Date) return value.getTime();
+    if (typeof value === 'number' && !isNaN(value)) return value;
+
+    if (typeof value === 'string') {
+      const v = value.trim();
+      const ddmmyyyy = /^\d{2}\/\d{2}\/\d{4}$/.test(v);
+      if (ddmmyyyy) {
+        const [d, m, y] = v.split('/');
+        const t = Date.parse(`${y}-${m}-${d}`);
+        return isNaN(t) ? null : t;
+      }
+      const t2 = Date.parse(v);
+      return isNaN(t2) ? null : t2;
+    }
+
+    return null;
+  }
 }

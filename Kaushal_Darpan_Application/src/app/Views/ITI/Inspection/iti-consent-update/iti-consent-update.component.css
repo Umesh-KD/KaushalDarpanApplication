@@ -1,0 +1,38 @@
+.modal-content {
+  border-radius: 10px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+
+.date-input {
+  width: 200px; /* fixed width */
+  min-width: 150px; /* prevent shrinking too much */
+  max-width: 250px; /* prevent stretching too much */
+  box-sizing: border-box;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto; /* Enables horizontal scroll */
+}
+
+.table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 900px; /* force scroll if too many cols */
+}
+
+  .table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap; /* Prevent column wrapping */
+  }
+
+  .table th {
+    background: #f8f9fa;
+    cursor: pointer; /* show pointer for sorting */
+    position: sticky;
+    top: 0; /* keep headers visible on scroll */
+    z-index: 2;
+  }
