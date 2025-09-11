@@ -1,18 +1,14 @@
 /// <reference path="iti-add-consent.module.ts" />
-import { Component, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ITI_InspectionDataModel, InspectionMemberDetailsDataModel, InspectionDeploymentDataModel, CenterMasterDDLDataModel, ITI_InspectionSearchModel, ConsentModel, ConsentSearchModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
+import { Component } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { CenterMasterDDLDataModel, ITI_InspectionSearchModel, ConsentModel } from '../../../../Models/ITI/ITI_InspectionDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { MenuService } from '../../../../Services/Menu/menu.service';
-import { StaffMasterDDLDataModel } from '../../../../Models/CenterObserverDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
-import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../../Models/CommonMasterDataModel';
 import { ITIInspectionService } from '../../../../Services/ITI/ITI-Inspection/iti-inspection.service';
 import { EnumInspectionDeploymentType, EnumStatus } from '../../../../Common/GlobalConstants';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-iti-add-consent',
@@ -27,63 +23,42 @@ export class ITIAddConsentComponent {
   SemesterMasterDDL: any = [];
   DistrictMasterDDL: any = [];
   ZoneMasterDDL: any = [];
-  ExamShiftDDL: any = [];
   InstituteMasterDDL: any = [];
   ExaminerDDL: any = [];
   consentDeployList: ConsentModel[] = [];
   consentRequest: ConsentModel[] = [];
-  public request = new ITI_InspectionDataModel();
   public consentDeploy = new ConsentModel();
   searchRequest = new ITI_InspectionSearchModel();
-  InspectionDeploymentFromGroup!: FormGroup;
   consentFromGroup!: FormGroup;
   isSubmitted: boolean = false;
   isFormSubmitted: boolean = false;
-  showTeamInitials: boolean = true;
-  public requestStaff = new StaffMasterDDLDataModel();
-  requestTrade = new ItiTradeSearchModel()
-  requestIti = new ItiCollegesSearchModel()
-  CenterObserverTeamID: number = 0;
   requestCenter = new CenterMasterDDLDataModel();
-
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
   DeploymentTypeList: any = []
 
-
-  @Input() tabId: number = 0;
-  InspectionConsentID: number = 0;
-  today: Date = new Date();
   constructor(
-    private commonMasterService: CommonFunctionService,
-    private menuService: MenuService,
     private fb: FormBuilder,
     private loaderService: LoaderService,
     private toastr: ToastrService,
     private itiInspectionService: ITIInspectionService,
-    private activatedRoute: ActivatedRoute,
     private router: Router,
   ){}
 
   async ngOnInit() {
-    
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
-    
     this.consentFromGroup = this.fb.group({
       DistrictID: ['', [DropdownValidators]],
       InstituteID: ['', [DropdownValidators]],
       TentativeDate: [''],
-      consentTypeID: ['', [DropdownValidators]],
-    })
+      consentTypeID: ['', [DropdownValidators]]
+    });
     this.getMasterData();
   }
 
   get _consentFromGroup() { return this.consentFromGroup.controls;}
 
   async getMasterData() {
-    debugger
     try {
-     
       this.searchRequest.LevelId = this.sSOLoginDataModel.LevelId;
       this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
       this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
@@ -138,24 +113,19 @@ export class ITIAddConsentComponent {
     if (this.consentFromGroup.invalid) {
       return;
     }
-
     const isDuplicate = this.consentDeployList.some(
       (element: any) => this.consentDeploy.InstituteID === element.InstituteID
     );
-
     if (isDuplicate) {
       this.toastr.error('College Already Listed!');
       return;
     }
-
     this.consentDeploy.InstituteName = this.InstituteMasterDDL.find(
       (x: any) => x.Id == this.consentDeploy.InstituteID
     )?.Name;
-
     this.consentDeploy.DistrictName = this.DistrictMasterDDL.find(
       (x: any) => x.ID == this.consentDeploy.DistrictID
     )?.Name;
-
     this.consentDeploy.consentTypeID = Number(this.consentDeploy.consentTypeID);
     this.consentDeployList.push({ ...this.consentDeploy });
 
@@ -165,7 +135,6 @@ export class ITIAddConsentComponent {
   }
 
   async SaveData() {
-    debugger
     if (!this.consentDeployList || this.consentDeployList.length === 0) {
       this.toastr.error("Please Add At Least One Institute");
       return;
@@ -185,7 +154,7 @@ export class ITIAddConsentComponent {
 
       if (data.State === EnumStatus.Success) {
         this.toastr.success(data.Message || "Consent saved successfully!");
-        this.consentDeployList = [];  // clear after save
+        this.consentDeployList = [];
         this.InstituteMasterDDL = [];
         this.router.navigate(['/iti-consent']);
       } else {
