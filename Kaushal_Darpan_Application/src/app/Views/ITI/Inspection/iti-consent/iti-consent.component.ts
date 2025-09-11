@@ -149,10 +149,8 @@ export class ITIConsentComponent {
 
   onSort(column: string) {
     if (this.sortColumn === column) {
-      // toggle direction if clicking the same column
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      // new column, start with ascending
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
@@ -160,12 +158,9 @@ export class ITIConsentComponent {
     this.ConsentData = [...this.ConsentData.sort((a: any, b: any) => {
       let valA = a[column];
       let valB = b[column];
-
-      // handle null/undefined
       if (valA == null) valA = '';
       if (valB == null) valB = '';
 
-      // if date type
       if (column.toLowerCase().includes('date')) {
         valA = new Date(valA).getTime();
         valB = new Date(valB).getTime();

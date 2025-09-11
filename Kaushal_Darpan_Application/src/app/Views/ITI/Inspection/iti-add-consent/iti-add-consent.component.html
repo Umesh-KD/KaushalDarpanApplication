@@ -22,7 +22,7 @@
                 }
               </select>
               <div *ngIf="isSubmitted && _consentFromGroup.DistrictID.errors" class="text-danger">
-                <p *ngIf="!_consentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <p *ngIf="!_consentFromGroup.DistrictID.errors.required"><i aria-hidden="true"></i> District is required .!</p>
               </div>
             </div>
             <div>
@@ -34,13 +34,19 @@
                 }
               </select>
               <div *ngIf="isSubmitted && _consentFromGroup.InstituteID.errors" class="text-danger">
-                <p *ngIf="!_consentFromGroup.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <p *ngIf="!_consentFromGroup.InstituteID.errors.required"><i aria-hidden="true"></i> ITI College Name is required .!</p>
               </div>
             </div>
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
-              <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate" />
+              <input type="date" name="TentativeDate" required class="form-input" [(ngModel)]="consentDeploy.TentativeDate" formControlName="TentativeDate" (click)="openDatePicker($event)" />
+
+              <div *ngIf="isSubmitted && _consentFromGroup.TentativeDate.errors" class="text-danger">
+                <p *ngIf="_consentFromGroup.TentativeDate.errors?.['required']">
+                  Tentative Date is required .!
+                </p>
+              </div>
             </div>
 
 
@@ -53,7 +59,7 @@
               </select>
 
               <div *ngIf="isSubmitted && _consentFromGroup.consentTypeID.errors" class="text-danger">
-                <p *ngIf="!_consentFromGroup.consentTypeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                <p *ngIf="!_consentFromGroup.consentTypeID.errors.required"><i aria-hidden="true"></i> Consent Type is required .!</p>
               </div>
             </div>
 

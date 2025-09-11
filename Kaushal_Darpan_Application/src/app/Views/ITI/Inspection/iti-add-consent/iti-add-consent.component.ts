@@ -170,8 +170,9 @@ export class ITIAddConsentComponent {
     }
   }
 
-
-
+  openDatePicker(event: any) {
+    event.target.showPicker();
+  }
 
 
 }

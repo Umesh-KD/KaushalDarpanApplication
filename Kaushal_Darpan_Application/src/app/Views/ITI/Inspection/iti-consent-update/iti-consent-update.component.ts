@@ -41,12 +41,7 @@ export class ITIConsentUpdateComponent {
   public ErrorMessage: string = '';
   public isSubmitted: boolean = false;
   sortColumn: string = '';
-  //sortDirection: 'asc' | 'desc' = 'asc';
-  //sortDirection: { [key: number]: boolean } = {};
-  //sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
-  //ConsentData: any[] = [];
-
   public Table_SearchText: string = '';
 
   constructor(
@@ -262,57 +257,6 @@ export class ITIConsentUpdateComponent {
     event.target.showPicker();   
   }
 
-  //sortData(column: string) {
-  //  if (this.sortColumn === column) {
-  //    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  //  } else {
-  //    this.sortColumn = column;
-  //    this.sortDirection = 'asc';
-  //  }
-
-  //  this.ConsentData.sort((a: any, b: any) => {
-  //    let valueA = a[column];
-  //    let valueB = b[column];
-
-  //    if (column.toLowerCase().includes('date')) {
-  //      valueA = new Date(valueA);
-  //      valueB = new Date(valueB);
-  //    }
-
-  //    if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
-  //    if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
-  //    return 0;
-  //  });
-  //}
-
-  //sortTable(columnIndex: number) {
-  //  const table = document.getElementById("consentTable") as HTMLTableElement;
-  //  const rows = Array.from(table.rows).slice(1); // skip header
-  //  const isAsc = this.sortDirection[columnIndex] = !this.sortDirection[columnIndex];
-
-  //  rows.sort((a, b) => {
-  //    const cellA = a.cells[columnIndex].innerText.trim();
-  //    const cellB = b.cells[columnIndex].innerText.trim();
-
-  //    // Detect if value is date (dd/MM/yyyy)
-  //    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-  //    if (dateRegex.test(cellA) && dateRegex.test(cellB)) {
-  //      const dateA = new Date(cellA.split('/').reverse().join('-')).getTime();
-  //      const dateB = new Date(cellB.split('/').reverse().join('-')).getTime();
-  //      return isAsc ? dateA - dateB : dateB - dateA;
-  //    }
-
-  //    // Detect if numeric
-  //    if (!isNaN(Number(cellA)) && !isNaN(Number(cellB))) {
-  //      return isAsc ? Number(cellA) - Number(cellB) : Number(cellB) - Number(cellA);
-  //    }
-
-  //    // Default: string compare
-  //    return isAsc ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-  //  });
-
-  //  rows.forEach(row => table.tBodies[0].appendChild(row));
-  //}
 
   trackById(index: number, item: any) {
     return item?.InspectionConsentID ?? index;
