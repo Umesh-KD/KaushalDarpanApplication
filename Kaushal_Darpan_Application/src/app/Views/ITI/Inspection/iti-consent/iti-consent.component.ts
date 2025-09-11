@@ -31,7 +31,9 @@ export class ITIConsentComponent {
   public DistrictMasterDDL: any = [];
   requestCenter = new CenterMasterDDLDataModel();
   public consentDeploy = new ConsentModel();
-
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  public Table_SearchText: string = '';
   constructor(
     private itiInspectionService: ITIInspectionService,
     private toastr: ToastrService,
@@ -144,4 +146,38 @@ export class ITIConsentComponent {
     })
   }
 
+
+  onSort(column: string) {
+    if (this.sortColumn === column) {
+      // toggle direction if clicking the same column
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // new column, start with ascending
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.ConsentData = [...this.ConsentData.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      // handle null/undefined
+      if (valA == null) valA = '';
+      if (valB == null) valB = '';
+
+      // if date type
+      if (column.toLowerCase().includes('date')) {
+        valA = new Date(valA).getTime();
+        valB = new Date(valB).getTime();
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) return this.sortDirection === 'asc' ? -1 : 1;
+      if (valA > valB) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    })];
+  }
 }
+

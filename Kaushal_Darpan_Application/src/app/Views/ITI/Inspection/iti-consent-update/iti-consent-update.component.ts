@@ -40,6 +40,14 @@ export class ITIConsentUpdateComponent {
   public Message: string = '';
   public ErrorMessage: string = '';
   public isSubmitted: boolean = false;
+  sortColumn: string = '';
+  //sortDirection: 'asc' | 'desc' = 'asc';
+  //sortDirection: { [key: number]: boolean } = {};
+  //sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  //ConsentData: any[] = [];
+
+  public Table_SearchText: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -248,5 +256,138 @@ export class ITIConsentUpdateComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  openDatePicker(event: any) {
+    event.target.showPicker();   
+  }
+
+  //sortData(column: string) {
+  //  if (this.sortColumn === column) {
+  //    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  //  } else {
+  //    this.sortColumn = column;
+  //    this.sortDirection = 'asc';
+  //  }
+
+  //  this.ConsentData.sort((a: any, b: any) => {
+  //    let valueA = a[column];
+  //    let valueB = b[column];
+
+  //    if (column.toLowerCase().includes('date')) {
+  //      valueA = new Date(valueA);
+  //      valueB = new Date(valueB);
+  //    }
+
+  //    if (valueA < valueB) return this.sortDirection === 'asc' ? -1 : 1;
+  //    if (valueA > valueB) return this.sortDirection === 'asc' ? 1 : -1;
+  //    return 0;
+  //  });
+  //}
+
+  //sortTable(columnIndex: number) {
+  //  const table = document.getElementById("consentTable") as HTMLTableElement;
+  //  const rows = Array.from(table.rows).slice(1); // skip header
+  //  const isAsc = this.sortDirection[columnIndex] = !this.sortDirection[columnIndex];
+
+  //  rows.sort((a, b) => {
+  //    const cellA = a.cells[columnIndex].innerText.trim();
+  //    const cellB = b.cells[columnIndex].innerText.trim();
+
+  //    // Detect if value is date (dd/MM/yyyy)
+  //    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+  //    if (dateRegex.test(cellA) && dateRegex.test(cellB)) {
+  //      const dateA = new Date(cellA.split('/').reverse().join('-')).getTime();
+  //      const dateB = new Date(cellB.split('/').reverse().join('-')).getTime();
+  //      return isAsc ? dateA - dateB : dateB - dateA;
+  //    }
+
+  //    // Detect if numeric
+  //    if (!isNaN(Number(cellA)) && !isNaN(Number(cellB))) {
+  //      return isAsc ? Number(cellA) - Number(cellB) : Number(cellB) - Number(cellA);
+  //    }
+
+  //    // Default: string compare
+  //    return isAsc ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+  //  });
+
+  //  rows.forEach(row => table.tBodies[0].appendChild(row));
+  //}
+
+  trackById(index: number, item: any) {
+    return item?.InspectionConsentID ?? index;
+  }
+
+  onSort(column: string) {
+    // toggle direction
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.ConsentData.sort((a: any, b: any) => {
+      const aVal = this.toComparable(a, column);
+      const bVal = this.toComparable(b, column);
+      if (aVal === null || aVal === '') return (bVal === null || bVal === '') ? 0 : (this.sortDirection === 'asc' ? -1 : 1);
+      if (bVal === null || bVal === '') return (this.sortDirection === 'asc' ? 1 : -1);
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return this.sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
+      }
+      const sa = String(aVal).toLowerCase();
+      const sb = String(bVal).toLowerCase();
+      return this.sortDirection === 'asc' ? sa.localeCompare(sb) : sb.localeCompare(sa);
+    });
+  }
+
+  private toComparable(row: any, column: string): string | number | null {
+    if (!row) return null;
+    if (column === 'consentTypeID') {
+      const label = this.getConsentTypeLabel(row.consentTypeID);
+      return label ? label.toLowerCase() : '';
+    }
+
+    const val = row[column];
+    if (val === null || val === undefined || val === '') return '';
+    if (column.toLowerCase().includes('date')) {
+      const ts = this.parseDateToTimestamp(val);
+      return ts !== null ? ts : String(val).toLowerCase();
+    }
+    if (!isNaN(Number(val))) {
+      return Number(val);
+    }
+
+    return String(val).toLowerCase();
+  }
+
+  private getConsentTypeLabel(id: any): string {
+    if (id === null || id === undefined) return '';
+    const s = String(id);
+    if (s === '1') return 'Planned (Affiliation)';
+    if (s === '3') return 'General Inspection (Planned)';
+    return '';
+  }
+
+  private parseDateToTimestamp(value: any): number | null {
+    if (value instanceof Date) return value.getTime();
+    if (typeof value === 'number' && !isNaN(value)) return value;
+
+    if (typeof value === 'string') {
+      const v = value.trim();
+      const ddmmyyyy = /^\d{2}\/\d{2}\/\d{4}$/.test(v);
+      if (ddmmyyyy) {
+        const [d, m, y] = v.split('/');
+        const t = Date.parse(`${y}-${m}-${d}`);
+        return isNaN(t) ? null : t;
+      }
+      const t2 = Date.parse(v);
+      return isNaN(t2) ? null : t2;
+    }
+
+    return null;
   }
 }
