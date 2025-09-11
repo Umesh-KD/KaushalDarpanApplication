@@ -114,8 +114,10 @@ export class LeaveValidationComponent {
           console.log(data);
           this.HrMasterList = data['Data'];
           console.log(this.HrMasterList, "lisssssttt")
+          
         }, (error: any) => console.error(error)
         );
+       
     }
     catch (ex) {
       console.log(ex);
@@ -181,6 +183,10 @@ export class LeaveValidationComponent {
   async CompanyOnAction(content: any, StaffLeaveID: number) {
     debugger
     this.requestAction.StaffLeaveID = StaffLeaveID;
+        
+    this.requestAction.Action = "0";
+    this.requestAction.ActionRemark = "";
+    this.isSubmitted = false;
       // Always close any previous modal before opening new
     if (this.modalReference) {
       this.modalReference.close();
@@ -203,7 +209,6 @@ export class LeaveValidationComponent {
   //   }
   // );
 
-
     this.modalReference = this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' });
     
     this.modalReference.result.then((result) => {
@@ -213,8 +218,6 @@ export class LeaveValidationComponent {
     });
     
 
-    this.requestAction.Action = "0";
-    this.requestAction.ActionRemark = "";
   }
   //async ViewandUpdate(content: any, HRManagerID: number) {
 
@@ -251,7 +254,8 @@ export class LeaveValidationComponent {
     }
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.requestAction.ActionBy = this.sSOLoginDataModel.UserID;
-    this.requestAction.ActionRemark = this.formAction.controls['txtActionRemarks'].value;
+    this.requestAction.ActionRemark=this.formAction.get('txtActionRemarks')?.value
+    // this.requestAction.ActionRemark = this.formAction.controls['txtActionRemarks'].value;
     this.requestAction.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     //Show Loading
     this.loaderService.requestStarted();
