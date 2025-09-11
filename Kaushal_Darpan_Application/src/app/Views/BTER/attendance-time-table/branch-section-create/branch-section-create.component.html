@@ -38,7 +38,7 @@
               <p *ngIf="_IIPMasterFormGroup.SemesterID.errors.required">This field is required.</p>
             </div>
           </div>
-
+          <!--{{StreamMasterDDL|json}}-->
           <!-- Stream Dropdown -->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch</label>
@@ -62,7 +62,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Theory Section Count</label>
             <input type="number" class="form-input w-full" placeholder="Enter Section Count"
-              formControlName="SectionCount" />
+                   formControlName="SectionCount" />
             <div *ngIf="isSubmitted && _IIPMasterFormGroup.SectionCount.errors" class="text-danger text-sm mt-1">
               <p *ngIf="_IIPMasterFormGroup.SectionCount.errors.required">This field is required.</p>
             </div>
@@ -71,7 +71,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Practical Section Count</label>
             <input type="number" class="form-input w-full" placeholder="Enter Section Count"
-              formControlName="PracticalSectionCount" />
+                   formControlName="PracticalSectionCount" />
             <div *ngIf="isSubmitted && _IIPMasterFormGroup.SectionCount.errors" class="text-danger text-sm mt-1">
               <p *ngIf="_IIPMasterFormGroup.SectionCount.errors.required">This field is required.</p>
             </div>
@@ -80,7 +80,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tutorial Section Count</label>
             <input type="number" class="form-input w-full" placeholder="Enter Section Count"
-              formControlName="TutorialSectionCount" />
+                   formControlName="TutorialSectionCount" />
             <div *ngIf="isSubmitted && _IIPMasterFormGroup.SectionCount.errors" class="text-danger text-sm mt-1">
               <p *ngIf="_IIPMasterFormGroup.SectionCount.errors.required">This field is required.</p>
             </div>

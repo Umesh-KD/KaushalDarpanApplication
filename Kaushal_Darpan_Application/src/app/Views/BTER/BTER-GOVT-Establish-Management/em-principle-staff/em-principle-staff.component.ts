@@ -145,22 +145,29 @@ export class EMPrincipleStaffComponent {
       SalaryDrawnInstituteID: [0, [DropdownValidators]],
 
       Name: ['', [Validators.required]],
-      //SanctionedPosts: ['', [Validators.required]],
-      //IsWorking: ['', [Validators.required]],
-      //IsVacant: ['', [Validators.required]],
-      IsExtraWorking: ['', [Validators.required]],
+     
+      IsExtraWorking: [''],
       IsEmployeeWorking: [''],
-      IsEmpWorkingOnPost: ['', [Validators.required]],
+      
       IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
-      IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
-      IsSalaryDrawnFromSamePost: ['', [Validators.required]],
+      //IsEmpWorkingOnPost: ['', [Validators.required]],
+      //IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
+      //IsSalaryDrawnFromSamePost: ['', [Validators.required]],
+      //HigherEduInstitute: ['', [Validators.required]],
       IsSalaryDrawnFromOtherInstitute: ['', [Validators.required]],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
       ExtraOrdinaryLeave: ['', [Validators.required]],
       SelectionCategory: ['', [Validators.required]],
       HigherEduPermission: ['', [Validators.required]],
+      
+
+
       HigherEduInstitute: ['', [Validators.required]],
+      IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
+      IsEmpWorkingOnPost: [false, [Validators.required]],
+      IsSalaryDrawnFromSamePost: [false, [Validators.required]],
+
 
       DateOfBirth: ['', [Validators.required]],
 
@@ -186,6 +193,7 @@ export class EMPrincipleStaffComponent {
     await this.GetTechnicianDll();
     await this.StaffLevelType();
     await this.GetAllData();
+
     await this.GetDesignationMasterData();
     
    
@@ -848,6 +856,7 @@ async GetTechnicianDll() {
       await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
+        //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
         // console.log("DesignationMasterList", this.DesignationMasterDDLList);
       }, error => console.error(error))
 
@@ -877,6 +886,7 @@ async GetTechnicianDll() {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.approveRequest = data.Data[0];
+          this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
           if ( this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
             
             this.StaffMasterFormGroup.disable();
@@ -902,8 +912,8 @@ async GetTechnicianDll() {
             }, 200);
           }
           const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
-          const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);
-
+          /*const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);*/
+          const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.approveRequest.StaffTypeID && item.DesignationID);
           if (roleIDs.includes(this.approveRequest.RoleID)) {
             this.IsHideShow = true;
             this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
@@ -945,6 +955,7 @@ async GetTechnicianDll() {
   }
 
   async ApproveStaffProfile() {
+    debugger
     await this.refreshValidators();
     this.isApproveSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
@@ -1239,23 +1250,29 @@ async GetTechnicianDll() {
 
 
   onEmpWorkingChange(value: boolean) {
+    debugger;
     this.approveRequest.IsEmpWorkingOnPost = value;
 
-    // Your logic here:
     if (value === true) {
-      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      // If working on post is 'Yes', default salary drawn to 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
     } else {
-      // If working on post is false, show the second question only if salary drawn is false
-      this.approveRequest.IsSalaryDrawnFromSamePost = this.approveRequest.IsSalaryDrawnFromSamePost === false;
+      // If working on post is 'No', default salary drawn to 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
     }
   }
 
   onSalaryDrawnChange(value: boolean) {
+    debugger;
     this.approveRequest.IsSalaryDrawnFromSamePost = value;
 
-    // Recalculate visibility in case working on post is false
-    if (this.approveRequest.IsEmpWorkingOnPost === false) {
-      this.approveRequest.IsSalaryDrawnFromSamePost = value === false;
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsEmpWorkingOnPost = false;
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsEmpWorkingOnPost = true;
     }
   }
+
 }

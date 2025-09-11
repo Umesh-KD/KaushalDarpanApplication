@@ -80,6 +80,7 @@ export class BterEMAddStaffDetailsComponent {
       Name: ['', [Validators.required]],
       DateOfBirth: ['', [Validators.required]],
       DateOfAppointment: ['', [Validators.required]],
+      DepartmentJoiningDate: ['', [Validators.required]],
       DateOfJoining: ['', [Validators.required]],
 
       MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
@@ -135,7 +136,9 @@ export class BterEMAddStaffDetailsComponent {
     }
 
 
-    
+    if (this.sSOLoginDataModel.UserID > 0) {
+      await this.GetPersonalDetailByUserID();
+    }
 
     await this.GetOfficeList();
     await this.GetInstituteMaster();
@@ -143,13 +146,12 @@ export class BterEMAddStaffDetailsComponent {
     await this.GetDesignationMasterData();
     await this.GetManageDDl();
    
-    if(this.sSOLoginDataModel.UserID > 0) {
-      await this.GetPersonalDetailByUserID();
-    }
+    
+
     debugger
     const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
-    const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);
-
+    const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.request.StaffTypeID && item.DesignationID );
+    /*&& item.StaffTypeID == this.request.StaffTypeID*/
     if (roleIDs.includes(this.sSOLoginDataModel.RoleID)) {
       this.IsHideShow = true;
       this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
@@ -273,6 +275,7 @@ export class BterEMAddStaffDetailsComponent {
       await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
+        this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.request.StaffTypeID);
         this.StaffMasterFormGroup.patchValue({
           CurrentDesignationID: this.request.CurrentDesignationID || '0'
         });
