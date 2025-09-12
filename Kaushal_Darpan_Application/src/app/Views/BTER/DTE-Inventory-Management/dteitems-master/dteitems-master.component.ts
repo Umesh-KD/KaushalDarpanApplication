@@ -15,7 +15,7 @@ import { ItiTradeService } from '../../../../Services/iti-trade/iti-trade.servic
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
 import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { DTEEquipmentsMasterService } from '../../../../Services/DTEInventory/DTEEquipmentsMaster/dteequipments-master.service';
 import * as XLSX from 'xlsx';
@@ -31,6 +31,7 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 })
 export class DteItemsMasterComponent {
   public Searchrequest = new DTEItemsSearchModel()
+  public Revertrequest = new itemStatusRevertModel()
   public searchTradeRequest = new ITITradeSearchModel();
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -346,4 +347,82 @@ export class DteItemsMasterComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
+
+
+  async onSubmit(model: any,ItemId:number) {
+    debugger
+    try {
+     
+      this.ItemId = ItemId;
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+ async RevertStausUpdate()
+  {
+
+   try {
+    
+    
+     if (this.ItemId) {
+
+
+       if (this.Revertrequest.Remark =='')
+       {
+         this.toastr.warning('Please Fill Remark');
+         return;
+       }
+
+       let requests =
+       {
+         ItemId: this.ItemId,
+         Status: 2,
+         ModifyBy: this.sSOLoginDataModel.UserID,
+         Remark:this.Revertrequest.Remark
+       };
+
+       await this.itemService.UpdateStatusRevertData(requests)
+         .then((data: any) => {
+           this.State = data['State'];
+           this.Message = data['Message'];
+           this.ErrorMessage = data['ErrorMessage'];
+
+           if (this.State == EnumStatus.Success) {
+             this.toastr.success(this.Message)
+             this.CloseModal();
+             this.GetAllData();
+
+           }
+           else if (this.State == EnumStatus.Warning) {
+             this.toastr.warning(this.ErrorMessage)
+
+           }
+           else if (this.State == EnumStatus.Error) {
+             this.toastr.error(this.ErrorMessage);
+           }
+         })
+     }
+   }
+   catch (ex) { console.log(ex) }
+   finally {
+     setTimeout(() => {
+       this.loaderService.requestEnded();
+       this.isLoading = false;
+
+     }, 200);
+   }
+
+
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();    
+    this.Revertrequest.Remark = '';
+    this.isSubmitted = false;
+  }
+
+
 }

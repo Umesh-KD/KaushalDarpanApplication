@@ -57,6 +57,7 @@
           <select class="form-select" id="searchStatusID" [(ngModel)]="Searchrequest.StatusID">
             <option value="0">Pending</option>
             <option value="1">Approved</option>
+            <option value="2">Revert</option>
           </select>
         </div>
 
@@ -108,6 +109,7 @@
             <th class="text-left">Price Per Unit</th>
             <th class="text-left">Total Price</th>
             <th class="text-left">Entry Date</th>
+            <th class="text-left">Remark</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -120,26 +122,60 @@
             <td align="left">{{item.InitialQuantity}}</td>
             <td align="left">
               <span style="cursor: pointer; color: blue;"
-                    (click)="navigateToEdit(item.ItemId)" *ngIf="sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status > 0">
+                    (click)="navigateToEdit(item.ItemId)" *ngIf="sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 1">
                 {{item.AvailableQuantity}}
               </span>
-              <span *ngIf="this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.Principal || (this.sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 0)">
+              <span *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                    || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                    || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                    || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                    || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                    || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                    || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                    || sSOLoginDataModel.RoleID == EnumRole.DTELateral
+                    || sSOLoginDataModel.RoleID == EnumRole.Principal
+                    || (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper && item.Status == 0)">
                 {{item.AvailableQuantity}}
               </span>
             </td>
             <td align="left">{{item.PricePerUnit}}</td>
             <td align="left">{{item.TotalPrice}}</td>
             <td align="left">{{item.RTS | date}}</td>
+            <td align="left">{{item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.Principal"
+                <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                        || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                        || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTELateral
+                        || sSOLoginDataModel.RoleID == EnumRole.Principal"
                         class="btn btn-sm text-white"
-                        (click)="item.Status <= 0 && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
+                        (click)="(item.Status == 0 || item.Status == 2) && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
                         [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
                         [title]="item.Status == 1 ? 'Approved' : 'Accept'">
-                  {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : 'Pending' }}
+                  {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : item.Status == 2 ? 'Reverted'  : 'Pending' }}
                 </button>
-                @if(item.Status == 0 && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper){
+                <button *ngIf="(sSOLoginDataModel.RoleID == EnumRole.Admin
+                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                        || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                        || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                        || sSOLoginDataModel.RoleID == EnumRole.DTELateral
+                        || sSOLoginDataModel.RoleID == EnumRole.Principal)
+                  && (item.Status == '0' || item.Status == null)"
+                        class="btn btn-sm text-white"
+                        (click)="onSubmit(MyModel_ReplayQuery,item.ItemId)"
+                        [ngClass]="'bg-revert'"
+                        [title]="'Revert'">
+                  Revert
+                </button>
+                @if((item.Status == 0 || item.Status == 2) && sSOLoginDataModel.RoleID == EnumRole.StoreKeeper) {
                 <a [routerLink]="['/AddDteItemMaster']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
                 <!--<a href="javascript:void(0)" (click)="btnDelete_OnClick(item.ItemId)" title="Delete"><i class="ti ti-trash"></i> </a>-->
                 }
@@ -155,3 +191,38 @@
 </div>
 
 <!-- end row -->
+
+
+<ng-template #MyModel_ReplayQuery let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+       
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="Revertrequest.Remark"></textarea>
+              <!--<div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>-->
+            </div>
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="RevertStausUpdate()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+    
+    </div>
+  </div>
+</ng-template>
+

@@ -107,6 +107,7 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Quantity</th>
+            <th class="text-left">Remark</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -118,6 +119,7 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.Remark}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <!--<a href="AddDteTradeEquipmentsMapping?id={{item.TE_MappingId}}" title="Edit"><i class="ti ti-pencil"></i></a>-->
@@ -130,11 +132,19 @@
                       title="Accept">
                 {{item.EquipmentsStatus}}
               </button>
-              <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal && item.EquipmentsStatus == 'Accepted'"
+              <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal && (item.EquipmentsStatus == 'Accepted' || item.EquipmentsStatus == 'Reverted')"
                       class="btn btn-sm text-white"
-                      [ngClass]="{'bg-info': item.EquipmentsStatus == 'Accept', 'bg-success': item.EquipmentsStatus != 'Accept'}"
-                      title="Accept">
+                      [ngClass]="{'bg-info': item.EquipmentsStatus == 'Accept', 'bg-success': item.EquipmentsStatus == 'Accepted','bg-revert': item.EquipmentsStatus == 'Reverted'}"
+                      [title]="item.EquipmentsStatus == 'Accept' ? 'Accept' : (item.EquipmentsStatus == 'Accepted' ? 'Accepted' : (item.EquipmentsStatus == 'Reverted' ? 'Reverted' : ''))">
                 {{item.EquipmentsStatus}}
+              </button>
+
+              <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal && item.EquipmentsStatus == 'Accept'"
+                      class="btn btn-sm text-white"
+                      (click)="onSubmit(MyModel_ReplayQuery,item.TE_MappingId)"
+                      [ngClass]="'bg-revert'"
+                      [title]="'Revert'">
+                Revert
               </button>
             </td>
           </tr>
@@ -145,3 +155,35 @@
 </div>
 
 <!-- end row -->
+<ng-template #MyModel_ReplayQuery let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Remark <span class="StarMarking">*</span>
+            </label>
+            <textarea class="form-input" [(ngModel)]="Revertrequest.Remark"></textarea>
+            <!--<div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+              <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+            </div>-->
+          </div>
+        </div>
+      </div> <!-- Close this div here for card-body -->
+      <div class="card-footer text-right">
+        <button type="button" (click)="RevertStausUpdate()" class="btn bg-success text-white btn-sm">
+          Submit
+        </button>
+      </div>
+
+    </div>
+  </div>
+</ng-template>

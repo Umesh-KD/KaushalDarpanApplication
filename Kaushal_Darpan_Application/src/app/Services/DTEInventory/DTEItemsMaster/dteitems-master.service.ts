@@ -121,6 +121,15 @@ export class DteItemsMasterService {
   }
   
 
+  public async UpdateStatusRevertData(request: any) {
 
+
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/UpdateStatusRevertData', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

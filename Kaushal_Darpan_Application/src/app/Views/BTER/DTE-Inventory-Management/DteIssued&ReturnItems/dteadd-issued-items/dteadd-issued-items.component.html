@@ -54,7 +54,7 @@
           </label>
           <ng-select formControlName="ddlCategoryId" [(ngModel)]="request.CategoryId" [items]="CategoryddlList" bindLabel="Name"
                      bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-                     [searchFn]="customSearch" (change)="GetEquipmentDDL($event)" [loading]="isLoading" [loadingText]="'Loading...'">
+                     [searchFn]="customSearch" (change)="GetEquipmentDDL(request.CategoryId)" [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
           <div *ngIf="isSubmitted && _RequestFormGroup.ddlCategoryId.errors" class="text-danger">

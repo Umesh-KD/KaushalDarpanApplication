@@ -262,7 +262,8 @@ export class DteAddIssuedItemsComponent {
     }
   }
 
-  async GetEquipmentDDL(id:any) {
+  async GetEquipmentDDL(id: any) {
+    debugger
     try {
       await this.commonMasterService.GetDteEquipment_Branch_Wise_CategoryWise(id)
         .then((data: any) => {
