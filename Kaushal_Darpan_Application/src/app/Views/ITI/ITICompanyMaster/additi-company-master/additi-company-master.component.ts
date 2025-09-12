@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { ItiCompanyMasterService } from '../../../../Services/ITI/ItiCompanyMaster/iticompany-master.service.ts';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -57,7 +57,9 @@ export class AddItiCompanyMasterComponent implements OnInit {
         ddlDistrict: ['', [DropdownValidators]],
         ddlCompanyType: ['', [DropdownValidators]],
 
-
+        HRName: ['', Validators.required],
+        EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        MobileNo: ['', Validators.required],
       });
 
 
@@ -111,6 +113,13 @@ export class AddItiCompanyMasterComponent implements OnInit {
     }
   }
 
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+
   async Back() {
     if (this.key == 1) {
       this.routers.navigate(['/ItiCompanyMaster'])
@@ -145,6 +154,7 @@ export class AddItiCompanyMasterComponent implements OnInit {
 
   // get detail by id
   async GetById() {
+    debugger
     try {
 
       this.loaderService.requestStarted();
@@ -153,7 +163,7 @@ export class AddItiCompanyMasterComponent implements OnInit {
 
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log(data);
+          console.log(data,"company");
 
           this.request = data['Data'];
           this.request.Dis_CompanyName = data['Data']['Dis_Name'];

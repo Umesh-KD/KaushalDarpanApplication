@@ -18,7 +18,7 @@ import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory
 import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 import { DTESearchTradeEquipmentsMapping, DTETradeEquipmentsMappingData } from '../../../../../Models/DTEInventory/DTETradeEquipmentsMappingData';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, itemStatusRevertModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
@@ -44,6 +44,7 @@ export class DteTradeEquipmentsMappingListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   modalReference: NgbModalRef | undefined;
   public ItemId: number = 0;
+  public Ids: number = 0;
   public Table_SearchText: string = "";
   public MappingList: any = [];
   public MappingList1: any = [];
@@ -55,7 +56,7 @@ export class DteTradeEquipmentsMappingListComponent {
   EquipmentStatus = EquipmentStatus;
   public searchTradeRequest = new ITITradeSearchModel();
   public request = new DTETradeEquipmentsMappingData()
-
+  public Revertrequest = new itemStatusRevertModel();
   constructor(
     private toastr: ToastrService,
     public appsettingConfig: AppsettingService,
@@ -350,4 +351,79 @@ export class DteTradeEquipmentsMappingListComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
+
+
+  async onSubmit(model: any, Id: number) {
+    debugger
+    try {
+
+      this.Ids = Id;
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async RevertStausUpdate() {
+
+    try {
+
+
+      if (this.Ids) {
+
+
+        if (this.Revertrequest.Remark == '') {
+          this.toastr.warning('Please Fill Remark');
+          return;
+        }
+
+        let requests =
+        {
+          Id: this.Ids,
+          Status: 2,
+          ModifyBy: this.sSOLoginDataModel.UserID,
+          Remark: this.Revertrequest.Remark
+        };
+
+        await this.tradeEquipmentsMappingService.UpdateStatusRevertData(requests)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(this.Message)
+              this.CloseModal();
+              this.GetAllData();
+
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+
+            }
+            else if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage);
+            }
+          })
+      }
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+
+
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.Revertrequest.Remark = '';
+    this.isSubmitted = false;
+  }
+
 }

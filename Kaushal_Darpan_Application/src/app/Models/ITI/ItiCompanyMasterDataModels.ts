@@ -14,6 +14,10 @@ export class ItiCompanyMasterDataModels {
   public ModifyBy: number = 0
   public DepartmentID: number = 0
   public CreatedBy: number = 0
+
+  public HRName: string = '';
+  public EmailId: string = '';
+  public MobileNo: String = '';
 }
 
 export interface IItiCompanyMasterDataModel {

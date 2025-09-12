@@ -14,7 +14,7 @@ export class DTETradeEquipmentsMappingData {
   public TradeIdTypeId: number = 0;
   public InstituteID: number = 0;
   public Status: number = 0;
-
+  public MappingId: number = 0;
   public VoucherNumber: number | null = null;
   public PricePerUnit: number | null = null;
   public TotalPrice: number | null = null;
