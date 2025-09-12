@@ -165,9 +165,9 @@ export class ITIDirectStudentJanAadharDetailComponent {
       if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.ITI) {
         // this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
         this.model.DirectAdmissionTypeID = 1
-        if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
-          this.GetApplicationId('SearchBySSO')
-        }
+        // if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
+        //   this.GetApplicationId('SearchBySSO')
+        // }
       } else if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.BTER) {
         this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
       }
