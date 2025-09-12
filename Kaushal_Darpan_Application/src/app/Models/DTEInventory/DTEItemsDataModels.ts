@@ -122,3 +122,8 @@ export class itemReturnModel {
 
 }
 
+export class itemStatusRevertModel {  
+  public Remark: string = '';
+  
+  
+}

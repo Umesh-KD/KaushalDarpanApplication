@@ -26,7 +26,7 @@
 <div class="card"  *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Request Trade Equipment</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Request Branch Equipment</b>
     </div>
     <form [formGroup]="RequestFormGroup" (ngSubmit)="saveData()">
       <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-5 md:grid-cols-5 grid-cols-2 gap-3">
@@ -176,6 +176,24 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Quantity</th>
+            <th class="text-left">Remark</th>
+            <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal" class="text-left">Date Of Approval</th>
+            <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Date Of Request</th>
+            <th *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" class="text-left">Status</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -186,10 +204,34 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.Remark}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Principal" align="left">{{ item.DateOfApproval}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                || sSOLoginDataModel.RoleID == EnumRole.DTELateral" align="left">{{ item.DateOfRequest}}</td>
+            <td *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                     || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                     || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                     || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                     || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                     || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                     || sSOLoginDataModel.RoleID == EnumRole.DTELateral" align="left">{{ item.PrincipalStatus}}</td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin || sSOLoginDataModel.RoleID == EnumRole.DTE && item.EquipmentsStatus == 'Accept'"
-                   [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity]"
+                <a *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin
+                   || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse1stYear 
+                   || sSOLoginDataModel.RoleID == EnumRole.DTEDegreeCourse2ndYear 
+                   || sSOLoginDataModel.RoleID == EnumRole.DTE 
+                   || sSOLoginDataModel.RoleID == EnumRole.DTENON 
+                   || sSOLoginDataModel.RoleID == EnumRole.NodalVerifier
+                   || sSOLoginDataModel.RoleID == EnumRole.AdminNon 
+                   || sSOLoginDataModel.RoleID == EnumRole.DTELateral && item.EquipmentsStatus == 'Accept'"
+                   [routerLink]="['/RequestEquipmentsMapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity, item.TE_MappingId]"
                    title="Edit"> <i class="ti ti-pencil"></i></a>
               </div>
             </td>

@@ -750,7 +750,7 @@ export class BtereEMRequestAddComponent implements OnInit {
   async FunctionRequestType(): Promise<void> {
     debugger
     await this.FunctionRequestTypeShowSomePropety();
-    if (this.request.RequestType == 2) {
+    if (this.request.RequestType == 2 || this.request.RequestType == 1) {
       this.getstatuId = Number(this.request.RequestType);
       try {
         this.isLoading = true;
@@ -776,6 +776,7 @@ export class BtereEMRequestAddComponent implements OnInit {
           this.request.ReqRoleID = staffData.RoleID;
           this.request.StaffTypeID = staffData.StaffTypeID;
           this.request.PostID = staffData.DesignationID;
+          this.request.DateOfBirth = staffData.DateOfBirth
         }
 
       } catch (error) {

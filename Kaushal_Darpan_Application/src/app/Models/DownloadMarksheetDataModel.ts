@@ -13,6 +13,7 @@ export class DownloadMarksheetSearchModel {
   public Marksheet: string = ''
   public IPAddress: string = ''
   public ExamType: number = 0
+  public ReqId?: number = 0
 
   public IsReval?: boolean = false
   public IsRWHResult?: boolean = false
