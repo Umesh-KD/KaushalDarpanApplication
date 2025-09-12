@@ -70,15 +70,15 @@
 
         <!--{{EquipmentsDDLList|json}}-->
 
-      <div>
+        <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">
           Equipment: <span class="StarMarking">*</span>
         </label>
-        <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
+           <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
              bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" [searchFn]="customSearch"
              (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
-    <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-  </ng-select>
+            <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
+           </ng-select>
 
         <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
           <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">

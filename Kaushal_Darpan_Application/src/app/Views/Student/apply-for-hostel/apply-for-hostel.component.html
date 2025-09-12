@@ -295,6 +295,7 @@
     <div class="mb-8">
       <h3>Hostel Details:</h3>
       <div class="overflow-x-auto mt-3">
+        {{HostelDetailsList|json}}
         <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
@@ -324,6 +325,11 @@
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a *ngIf="item.HostelFeesReciept" [href]="appsettingConfig.StaticFileRootPathURL + item.HostelFeesReciept" class="text-success"
                      title="Download Hostel Fee Receipt">
+                    <i class="ti ti-download"></i>
+                  </a>
+
+                  <a *ngIf="item.HostelFeesReciept" (click)="DownloadHostelAllotmentLetter(item.ReqId)" class="text-success"
+                     title="Download Allotment Letter">
                     <i class="ti ti-download"></i>
                   </a>
                   </div>

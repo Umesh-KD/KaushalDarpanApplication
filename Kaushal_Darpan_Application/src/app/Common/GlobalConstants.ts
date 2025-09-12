@@ -172,7 +172,8 @@ export enum EnumRole {
 
   ITCell_Eng = 206,
   ITCell_NonEng = 210, 
-  
+  DTEDegreeCourse1stYear = 80,
+  DTEDegreeCourse2ndYear = 81,
 
 }
 

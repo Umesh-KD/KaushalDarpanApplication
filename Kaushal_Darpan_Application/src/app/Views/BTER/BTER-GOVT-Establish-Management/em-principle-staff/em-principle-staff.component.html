@@ -277,7 +277,7 @@
           <tr>
             <th class="text-left">Sr. No.</th>
             <th class="text-left">Staff Type</th>
-            <th class="text-left">Name</th>
+            <!--<th class="text-left">Name</th>-->
             <th class="text-left">SSO Id</th>
             <th class="text-left">StaffLevel Type</th>
             <th class="text-left">Staff Level Child Type</th>
@@ -293,13 +293,14 @@
           <tr *ngFor="let row of StaffMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.StaffType}}</td>
-            <td>{{row.Name}}</td>
+            <!--<td>{{row.Name}}</td>-->
             <td>{{row.SSOID}}</td>
             <td> {{row.StaffLevelTypeName}} </td>
             <td> {{row.StaffLevelChildName}}</td>
             <td>{{row.Stream}}</td>
             <td>{{row.Subject}}</td>
             <td>
+              <p *ngIf="row.Name?.length>0"><i class="ti ti-user"></i> {{row.Name}}</p>
               <p *ngIf="row.MobileNumber?.length>0"><i class="ti ti-phone"></i> {{row.MobileNumber}}</p>
               <p *ngIf="row.Email?.length>0"><i class="ti ti-mail"></i> {{row.Email}}</p>
             </td>

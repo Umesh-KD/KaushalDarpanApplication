@@ -943,7 +943,7 @@ export class BranchSectionCreateComponent {
       .flatMap(x => (x.SectionIDs ? x.SectionIDs.split(',').map(Number) : []));
 
     // filter sections
-    this.GetSectionData = this.allSections.filter(sec => !usedIds.includes(sec.SectionID));
+    this.GetSectionData = this.GetSectionData.filter(sec => !usedIds.includes(sec.SectionID));
   }
 
   refreshAvailableSections1(subjectId: number) {

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
 import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
-import { EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
+import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,7 +21,7 @@ import { HttpClient } from '@angular/common/http';
 import { ReportBasedModel } from '../../../Models/ReportBasedDataModel';
 import { ReportService } from '../../../Services/Report/report.service';
 import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
-import { UploadFileModel } from '../../../Models/UploadFileModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../../Models/UploadFileModel';
 import { ViewStudentDetailsRequestModel } from '../../../Models/ViewStudentDetailsRequestModel';
 import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
 import { DocumentDetailsService } from '../../../Common/document-details';
@@ -333,12 +333,10 @@ export class PreExamStudentExaminationComponent {
   }
 
   showImageDeleteButton() {
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
-      this.isShowImageDeleteButton = false
-    } else if (this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
-      this.isShowImageDeleteButton = false
-    } else {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       this.isShowImageDeleteButton = true
+    } else {
+      this.isShowImageDeleteButton = false
     }
   }
 
@@ -635,6 +633,7 @@ export class PreExamStudentExaminationComponent {
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
       model.StudentExamID = StudentExamID;
+      model.FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath;
       //
       await this.preExamStudentExaminationService.ViewStudentDetails(model)
         .then((data: any) => {
@@ -669,9 +668,10 @@ export class PreExamStudentExaminationComponent {
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
     var Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     var EndTermID = this.sSOLoginDataModel.EndTermID
+    var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
     try {
       this.loaderService.requestStarted();
-      await this.preExamStudentExaminationService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, StudentExamID)
+      await this.preExamStudentExaminationService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, StudentExamID, FileNameWithDynamicPath)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.requestStudent = data['Data'];
@@ -723,6 +723,8 @@ export class PreExamStudentExaminationComponent {
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.Papers = data['Data']['Papers'];
+          this.requestStudent.CourseTypeID = data['Data']['CourseTypeID'];
+          this.requestStudent.FinancialYearName = data['Data']['FinancialYearName'];
 
           if (data['Data']['Dis_StudentPhoto'] != null) {
 
@@ -2200,13 +2202,29 @@ export class PreExamStudentExaminationComponent {
   async UploadDocument(event: any, item: any) {
     try {
       //upload model
-      let uploadModel = new UploadFileModel();
-      uploadModel.FileExtention = item.FileExtention ?? "";
-      uploadModel.MinFileSize = item.MinFileSize ?? "";
-      uploadModel.MaxFileSize = item.MaxFileSize ?? "";
-      uploadModel.FolderName = item.FolderName ?? "";
+      // let uploadModel = new UploadFileModel();
+      // uploadModel.FileExtention = item.FileExtention ?? "";
+      // uploadModel.MinFileSize = item.MinFileSize ?? "";
+      // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+      // uploadModel.FolderName = item.FolderName ?? "";
+
+      let uploadModel: UploadBTERFileModel = {
+        ApplicationID: this.requestStudent.StudentID?.toString() ?? "0",
+        AcademicYear: item.AcademicYear?.toString() ?? "0",
+        DepartmentID: '1',
+        EndTermID: item.EndTermID?.toString() ?? "0",
+        Eng_NonEng: item.CourseType?.toString() ?? "0",
+        FileName: item.ColumnName ?? "",
+        FileExtention: item.FileExtention ?? "",
+        MinFileSize: item.MinFileSize ?? "",
+        MaxFileSize: item.MaxFileSize ?? "",
+        FolderName: item.FolderName ?? "",
+        FilePrefix: this.requestStudent.FinancialYearName+"/"+this.requestStudent.CourseTypeID+"/"+this.requestStudent.StudentID ,
+        //IsCopy: true 
+        FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
+      }
       //call
-      await this.documentDetailsService.UploadDocument(event, uploadModel)
+      await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];

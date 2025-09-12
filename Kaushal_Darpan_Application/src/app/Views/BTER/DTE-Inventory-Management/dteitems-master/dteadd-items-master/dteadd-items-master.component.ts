@@ -89,6 +89,8 @@ export class DteAddItemsMasterComponent {
     await this.GetTradeDDL();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
+      this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
+      
     }
   }
 
@@ -143,7 +145,16 @@ export class DteAddItemsMasterComponent {
       } else {
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       }
-      if (this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.Principal) {
+           if (this.sSOLoginDataModel.RoleID == this._EnumRole.Admin
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.Principal
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTE
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon
+          ||   this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral
+      ) {
         this.request.Status = 1
       } else {
         this.request.Status = 0
@@ -184,7 +195,7 @@ export class DteAddItemsMasterComponent {
       this.loaderService.requestStarted();
 
       await this.itemService.GetByID(id)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           /*this.request.TradeId = data['Data']["TradeId"];*/
 
@@ -193,7 +204,7 @@ export class DteAddItemsMasterComponent {
           this.AddItemsRequestFormGroup.patchValue({
             ItemCategoryId: data['Data']['ItemCategoryId']
           })
-          this.ddlEquipment_Change();
+          await this.ddlEquipment_Change();
           this.request.EquipmentsId = data['Data']['EquipmentsId'];
           this.request.CampanyName = data['Data']["CampanyName"];
 
@@ -272,6 +283,7 @@ export class DteAddItemsMasterComponent {
   }
 
   async ddlEquipment_Change() {
+    debugger
     try {
       this.loaderService.requestStarted();
       const selectedCategoryId = this.AddItemsRequestFormGroup.value.ItemCategoryId;
