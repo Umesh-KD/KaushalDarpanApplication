@@ -200,6 +200,12 @@ export class ItiInstructorFormComponent {
         Mobile: ['', Validators.required],
         Email: ['', Validators.required],
 
+        //Bank Details
+        BankAccountNumber: ['', Validators.required],
+        IFSCCode: ['', Validators.required],
+        BankName: ['', Validators.required],
+        ConsentToAssignAsExaminer : [false],
+
         // Permanent Address
         PlotHouseBuildingNo: ['', Validators.required],
         StreetRoadLane: ['', Validators.required],
@@ -529,8 +535,11 @@ export class ItiInstructorFormComponent {
     }
   }
 
-  onReset(): void {
+  onReset() {
     this.InstructorForm.reset();
+    this.EmploymentForm.reset();
+    this.TechnicalForm.reset();
+    this.EducationForm.reset();
   }
 
 
@@ -543,28 +552,7 @@ export class ItiInstructorFormComponent {
     this.isSubmitted = true;
     this.loaderService.requestStarted();
 
-
-    Object.keys(this.InstructorForm.controls).forEach(key => {
-
-      const control = this.InstructorForm.get(key);
-
-      if (control && control.invalid) {
-
-        this.toastr.error(`Control ${key} is invalid`);
-
-        Object.keys(control.errors!).forEach(errorKey => {
-
-          this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-
-        });
-
-      }
-
-    });
-
     try {
-
-   
 
 
       if (this.InstructorForm.valid) {
@@ -586,7 +574,6 @@ export class ItiInstructorFormComponent {
 
             if (this.State == EnumStatus.Success) {
               this.toastr.success(this.Message);
-
             }
             else {
               this.toastr.error(this.ErrorMessage)
@@ -597,9 +584,6 @@ export class ItiInstructorFormComponent {
       } else {
         console.log('Form is invalid');
         console.log(this.InstructorForm.errors);
-        Object.keys(this.InstructorForm.controls).forEach(key => {
-          console.log(key, this.InstructorForm.get(key)?.errors);
-        });
         this.InstructorForm.markAllAsTouched();
       }
     }
@@ -615,9 +599,7 @@ export class ItiInstructorFormComponent {
 
 
   async GetById(ID: string) {
-
-    debugger
-
+    debugger;
     try {
       if (ID == "") {
         this.toastr.error("Please Enter SSOID");
@@ -694,7 +676,6 @@ export class ItiInstructorFormComponent {
 
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
-    debugger
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -734,21 +715,21 @@ export class ItiInstructorFormComponent {
               this.request.JanAadhar = parsedData.JanaadhaarId,
               this.request.Uid = SSOID
 
-            this.InstructorForm.get('Uid')?.disable();
-            this.InstructorForm.patchValue({
-              Name: this.request.Name,
-              Mobile: this.request.Mobile,
-              Gender: this.request.Gender,
-              Dob: this.request.Dob,
-              Email: this.request.Email,
-              pincode: this.request.pincode,
-              Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
-              ddlState: this.request.ddlState,
-              Aadhar: this.request.Aadhar,
-              JanAadhar: this.request.JanAadhar,
-              Uid: this.request.Uid
+            //this.InstructorForm.get('Uid')?.disable();
+            //this.InstructorForm.patchValue({
+            //  Name: this.request.Name,
+            //  Mobile: this.request.Mobile,
+            //  Gender: this.request.Gender,
+            //  Dob: this.request.Dob,
+            //  Email: this.request.Email,
+            //  pincode: this.request.pincode,
+            //  Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
+            //  ddlState: this.request.ddlState,
+            //  Aadhar: this.request.Aadhar,
+            //  JanAadhar: this.request.JanAadhar,
+            //  Uid: this.request.Uid
 
-            });
+            //});
 
           }
           else {
@@ -1034,8 +1015,6 @@ export class ItiInstructorFormComponent {
     this.EmploymentForm.reset();
     this.InstructorForm.controls['Uid'].enable();
   }
-
-
 
 }
 

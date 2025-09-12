@@ -260,7 +260,7 @@ export enum EnumConfigurationType {
   Registrar=40,
   Registrar_NonEng=55,
   Reval_GroupCode = 160,
-  JailAdmission = 1162
+  JailAdmission = 164
 }
 
 export enum EnumDepartment {
@@ -455,8 +455,7 @@ export const JailCollegeID = [36,
 226,
 227,
 228,
-229,
-22196];
+229];
 
 export enum EnumRenumerationExaminer
 {
@@ -562,7 +561,9 @@ export enum EnumSemesterDDL
 
 export enum EnumInspectionDeploymentType {
   Planned = 1,
-  Unplanned = 2
+  Unplanned = 2,
+  GeneralInspPlanned = 3,
+  GeneralInspUnPlanned = 4
 }
 
 export enum EnumApprenticeshipDeploymentType {
@@ -709,7 +710,9 @@ export enum EnumHostelStatus {
   Reassign = 7
 }
 
-
+export enum EnumFileUpload {
+  FileNameWithDynamicPath = 1,
+}
 
 
 

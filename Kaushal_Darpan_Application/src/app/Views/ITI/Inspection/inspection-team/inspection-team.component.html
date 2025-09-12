@@ -30,8 +30,10 @@
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Team Type</label>
                 <select type="text" class="form-input" formControlName="TeamTypeID" [(ngModel)]="request.TeamTypeID" [disabled]="isFormReadOnly">
                   <option [value]="0">--Select--</option>
-                  <option [value]="_EnumInspectionDeploymentType.Planned">Planned</option>
-                  <option [value]="_EnumInspectionDeploymentType.Unplanned">Unplanned</option>
+                  <option [value]="_EnumInspectionDeploymentType.Planned">Affiliation (Planned)</option>
+                  <option [value]="_EnumInspectionDeploymentType.Unplanned">Complaint (Unplanned)</option>
+                  <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Planned)</option>
+                  <option [value]="_EnumInspectionDeploymentType.GeneralInspPlanned">General Inspection (Unplanned)</option>
                 </select>
 
                 <div *ngIf="isSubmitted && _inspectionForm.TeamTypeID.errors" class="text-danger">

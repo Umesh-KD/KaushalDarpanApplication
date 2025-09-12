@@ -5,4 +5,5 @@ export class ViewStudentDetailsRequestModel extends RequestBaseModel {
   public StudentFilterStatusId: number = 0;
   public ApplicationID: number = 0;
   public StudentExamID: number = 0;
+  public FileNameWithDynamicPath?: number = 0;
 }

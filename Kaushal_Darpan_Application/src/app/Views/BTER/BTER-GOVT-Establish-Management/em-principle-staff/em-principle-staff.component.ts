@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus, EnumStatusOfStaff, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild, ITIGovtEM_EnumStaffType, EnumEMProfileStatus, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffBasicDetailDataModel, BTER_EM_ApproveStaffDataModel, BTER_EM_DeleteModel, BTER_EM_GetPersonalDetailByUserID, BTER_EM_StaffHostelListModel, BTER_EM_StaffMasterSearchModel, BTER_EM_UnlockProfileDataModel, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, StaffHostelSearchModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -16,6 +16,7 @@ import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDat
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
 import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
+import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
   selector: 'app-em-principle-staff',
@@ -26,7 +27,7 @@ import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Managemen
 export class EMPrincipleStaffComponent {
   AddStaffBasicDetailFromGroup!: FormGroup;
   StaffMasterFormGroup!: FormGroup;
-
+  groupForm!: FormGroup;
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -37,7 +38,7 @@ export class EMPrincipleStaffComponent {
   public requestUser = new BTER_EM_GetPersonalDetailByUserID();
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
   public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
-
+  public type: string = ''
   public UserProfileStatusHistoryList: any = [];
   public settingsMultiselect: object = {};
   public isSubmitted: boolean = false;
@@ -51,7 +52,7 @@ export class EMPrincipleStaffComponent {
   public IsHideShow: boolean = false
   public GuestHouseNameList: any = [];
   _EnumRole = EnumRole;
-
+  public RequestUpdateStatus = new RequestUpdateStatus();
   PostList: any[] = [];
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
@@ -65,6 +66,10 @@ export class EMPrincipleStaffComponent {
   public CourseMasterDDL: any[] = [];
   public DesignationMasterDDLList: any = [];
   public GenderList: any = [];
+  public DesignationWiseBranchListRole: any[] = [];
+  public DesignationWiseBranchList: any[] = [];
+  _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
+
   public searchRequest1 = new GuestRoomSeatSearchModel();
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -72,12 +77,12 @@ export class EMPrincipleStaffComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  
+  public filteredStatusList: any[] = [];
   public hostelSearchReq = new StaffHostelSearchModel();
   public StaffHostelDetails: BTER_EM_StaffHostelListModel[] = []
   public staffHostelIDs: string = ''
   public StaffIDforHostel: number = 0
-
+  public isLoading: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -105,7 +110,8 @@ export class EMPrincipleStaffComponent {
       MobileNo: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
       Hostel: [''],
-      guestRoomID: [0,[]]
+      guestRoomID: [0, []],
+      ddlPost: ['', [DropdownValidators]]
     })
 
     this.settingsMultiselect = {
@@ -139,21 +145,29 @@ export class EMPrincipleStaffComponent {
       SalaryDrawnInstituteID: [0, [DropdownValidators]],
 
       Name: ['', [Validators.required]],
-      SanctionedPosts: ['', [Validators.required]],
-      IsWorking: ['', [Validators.required]],
-      IsVacant: ['', [Validators.required]],
-      IsExtraWorking: ['', [Validators.required]],
-      IsEmpWorkingOnPost: ['', [Validators.required]],
+     
+      IsExtraWorking: [''],
+      IsEmployeeWorking: [''],
+      
       IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
-      IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
-      IsSalaryDrawnFromSamePost: ['', [Validators.required]],
+      //IsEmpWorkingOnPost: ['', [Validators.required]],
+      //IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
+      //IsSalaryDrawnFromSamePost: ['', [Validators.required]],
+      //HigherEduInstitute: ['', [Validators.required]],
       IsSalaryDrawnFromOtherInstitute: ['', [Validators.required]],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
       ExtraOrdinaryLeave: ['', [Validators.required]],
       SelectionCategory: ['', [Validators.required]],
       HigherEduPermission: ['', [Validators.required]],
+      
+
+
       HigherEduInstitute: ['', [Validators.required]],
+      IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
+      IsEmpWorkingOnPost: [false, [Validators.required]],
+      IsSalaryDrawnFromSamePost: [false, [Validators.required]],
+
 
       DateOfBirth: ['', [Validators.required]],
 
@@ -166,7 +180,10 @@ export class EMPrincipleStaffComponent {
       DateOfRetirement: [''],
       Remark: [''],
     });
-
+    this.groupForm = this.formBuilder.group({
+      ddlStatus: [0, [DropdownValidators]],
+      txtRemark: ['', Validators.required]
+    });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
@@ -176,8 +193,9 @@ export class EMPrincipleStaffComponent {
     await this.GetTechnicianDll();
     await this.StaffLevelType();
     await this.GetAllData();
+
     await this.GetDesignationMasterData();
-   
+    
    
 
   }
@@ -440,11 +458,34 @@ async GetTechnicianDll() {
       }, 200);
     }
   }
-  
+  async GetPostList() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDesignationAndPostMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PostList = data['Data'];
+          this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
+          console.log(this.PostList, "PostList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   async StaffLevelType() {
     this.formData.StaffLevelID = 0;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.StaffTypeID = this.formData.StaffTypeID;
+
+    await this.GetPostList();
+
     //Teaching=30
     if (this.searchRequest.StaffTypeID == 30) {
       this.formData.StaffLevelID = 4;
@@ -577,6 +618,8 @@ async GetTechnicianDll() {
 
   async OnFormSubmit() {
     debugger
+    
+
     if(this.sSOLoginDataModel.RoleID != 7) {
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.removeValidators([DropdownValidators]);
       this.AddStaffBasicDetailFromGroup.get('InstituteID')?.updateValueAndValidity();
@@ -697,6 +740,7 @@ async GetTechnicianDll() {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           this.StaffMasterList = data['Data'];
+          this.StaffMasterList = this.StaffMasterList.filter((item: any) => item.CourseType == this.sSOLoginDataModel.Eng_NonEng)
           console.log(this.StaffMasterList)
         }, (error: any) => console.error(error)
         );
@@ -809,9 +853,10 @@ async GetTechnicianDll() {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
+        //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
         // console.log("DesignationMasterList", this.DesignationMasterDDLList);
       }, error => console.error(error))
 
@@ -841,6 +886,7 @@ async GetTechnicianDll() {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.approveRequest = data.Data[0];
+          this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
           if ( this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
             
             this.StaffMasterFormGroup.disable();
@@ -848,10 +894,37 @@ async GetTechnicianDll() {
 
           await this.getStreamMasterData();
 
-          if ([8, 60, 199, 200].includes(this.approveRequest.RoleID)) {
+          try {
+            this.loaderService.requestStarted();
+            await this.bterEstablishManagementService.BTER_EM_DesignationWiseBranch(this._DesignationWiseBranchDataModel)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.DesignationWiseBranchListRole = data['Data'];
+                this.DesignationWiseBranchList = data['Data'];
+              }, error => console.error(error));
+          }
+          catch (Ex) {
+            console.log(Ex);
+          }
+          finally {
+            setTimeout(() => {
+              this.loaderService.requestEnded();
+            }, 200);
+          }
+          const roleIDs = this.DesignationWiseBranchListRole.map((item: any) => item.RoleID);
+          /*const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.DesignationID);*/
+          const DesignationIDs = this.DesignationWiseBranchList.map((item: any) => item.StaffTypeID == this.approveRequest.StaffTypeID && item.DesignationID);
+          if (roleIDs.includes(this.approveRequest.RoleID)) {
             this.IsHideShow = true;
             this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
-          } else {
+          }
+          else if (DesignationIDs.includes(this.approveRequest.DesignationID)) {
+           
+            this.IsHideShow = true;
+            this.StaffMasterFormGroup.controls['BranchID'].setValidators([DropdownValidators]);
+
+          }
+          else {
             this.IsHideShow = false;
             this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
           }
@@ -882,6 +955,7 @@ async GetTechnicianDll() {
   }
 
   async ApproveStaffProfile() {
+    debugger
     await this.refreshValidators();
     this.isApproveSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
@@ -1071,4 +1145,134 @@ async GetTechnicianDll() {
       console.error(error)
     }
   }
+
+  async RevertStaffProfile(model: any, userSubmitData: any) {
+    debugger
+
+    try {
+      await this.GetStatusList()
+      this.RequestUpdateStatus.StatusIDs = 249;
+
+      this.RequestUpdateStatus = { ...userSubmitData };
+      this.RequestUpdateStatus.StatusIDs = 0;
+      this.RequestUpdateStatus.Remark = '';
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+
+
+
+
+  async updateReqStatus() {
+
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.RequestUpdateStatus.StatusIDs = 249;
+      this.unlockRequest.StaffUserID = 0;
+      this.unlockRequest.SSOID = "";
+      this.unlockRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.unlockRequest.StaffID = this.RequestUpdateStatus.StaffID;
+      this.unlockRequest.Remark = this.RequestUpdateStatus.Remark;
+      this.loaderService.requestStarted();
+      this.Swal2.Confirmation("Are you sure you want Revert ?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            try {
+              await this.bterEstablishManagementService.Bter_RevertStaffProfile(this.unlockRequest).then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  window.location.reload();
+                }
+              })
+            } catch (error) {
+              console.log(error);
+            } finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200)
+            }
+          }
+        });
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.RequestUpdateStatus.StatusIDs = 0;
+    this.RequestUpdateStatus.Remark = '';
+    this.isSubmitted = false;
+  }
+
+  async GetStatusList() {
+
+    try {
+      this.loaderService.requestStarted();
+      this.type = 'ITIvtARRStauts';
+      await this.commonMasterService.AllDDlManageByTypeCommanMaster(this.type)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.filteredStatusList = data['Data'];
+          this.filteredStatusList = this.filteredStatusList.filter((item:any)=>item.ID==249)
+          console.log(this.filteredStatusList, "GetStatusList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  onEmpWorkingChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsEmpWorkingOnPost = value;
+
+    if (value === true) {
+      // If working on post is 'Yes', default salary drawn to 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+    } else {
+      // If working on post is 'No', default salary drawn to 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+    }
+  }
+
+  onSalaryDrawnChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsSalaryDrawnFromSamePost = value;
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsEmpWorkingOnPost = false;
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsEmpWorkingOnPost = true;
+    }
+  }
+
 }

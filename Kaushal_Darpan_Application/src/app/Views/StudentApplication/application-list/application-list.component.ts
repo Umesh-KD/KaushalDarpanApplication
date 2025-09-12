@@ -565,15 +565,22 @@ export class ApplicationListComponent {
       await this.route.navigate(['/DirectStudentJanAadharDetail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.BTER), isDirectAdmission: this.encryptionService.encryptData(true) } }
       );
-    } else if (key == EnumDepartment.ITI) {
-      this.CloseModal()
-      await this.route.navigate(['/StudentJanAadharDetail'],
-        { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
-      );
-    } else if (key == EnumDirectAdmissionType.JailAdmission) {
+    } 
+    // else if (key == EnumDepartment.ITI) {
+    //   this.CloseModal()
+    //   await this.route.navigate(['/StudentJanAadharDetail'],
+    //     { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
+    //   );
+    // } 
+    else if (key == EnumDirectAdmissionType.JailAdmission) {
       this.CloseModal()
       this.route.navigate(['/iti-direct-admission-student-initial-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isJailAdmission: this.encryptionService.encryptData(true) } });
+    } else if (key == EnumDepartment.ITI) {
+      this.CloseModal()
+      await this.route.navigate(['/iti-direct-admission-student-initial-detail'],
+        { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
+      );
     }
   }
 

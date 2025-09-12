@@ -46,8 +46,6 @@
           <option *ngFor="let item of collegeDropDown" value="{{item.Id}}">{{item.Name}}</option>
         </select>
       </div>
-
-
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block ">Trade Name</label>
         <select id="InstituteID" [(ngModel)]="requestPassFailModel.TradeId" class="form-input">
@@ -55,7 +53,6 @@
           <option *ngFor="let item of ResultData" value="{{item.StudentID}}">{{item.trade_name}}</option>
         </select>
       </div>
-
       <div class="">
         <button class="btn py-2 bg-primary text-white d-flex align-items-center" type="button" (click)="searchData()">
           <i class="ti ti-search me-2"></i>

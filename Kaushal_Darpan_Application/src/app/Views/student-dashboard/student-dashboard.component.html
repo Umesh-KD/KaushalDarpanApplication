@@ -21,10 +21,10 @@
       <div class="card-body">
         <div class="Profilebox flex justify-between">
 
-          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{ProfileLists.FileName}}</p>
+          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
           <div class="profilePic">
             <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
-                 [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + ProfileLists.FileName" />
+                 [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
 
           </div>
           <div class="userInfos">

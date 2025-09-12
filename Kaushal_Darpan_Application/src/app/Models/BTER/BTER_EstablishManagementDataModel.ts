@@ -93,6 +93,7 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public multiHostelIDs: string = '';
   public EMTypeID: number = 0;
   public guestRoomID: number = 0;
+  public PostID: number = 0;
 }
 
 export class BTER_EM_StaffHostelListModel {
@@ -121,6 +122,7 @@ export class BTER_EM_StaffMasterSearchModel {
   public CreatedBy: number = 0
   public FilterName: string = '';
   public FilterStaffTypeID: number = 0;  
+  public PostID: number = 0;  
   public FilterSSOID: string = '';
 }
 
@@ -134,6 +136,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public DateOfBirth: string = ''
   public DateOfAppointment: string = ''
   public DateOfJoining: string = ''
+  public DepartmentJoiningDate: string = ''
   public DateOfRetirement: string = ''
   public MobileNumber: string = ''
   public SSOID: string = ''
@@ -151,6 +154,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public StaffID: number = 0
   public UserID: number = 0
   public OfficeID: number = 0
+  public StaffTypeID: number = 0
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public bterStaffSubjectListModel: BterStaffSubjectList[] = [];
 
@@ -230,6 +234,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public SelectionCategory: string = ''
 
   public HigherEduPermission: boolean = false
+  public IsEmployeeWorking: boolean = false
   public HigherEduInstitute: string = ''
   public Remark: string = ''
 
@@ -239,6 +244,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public ProfileStatusID: number = 0
 
   public ModifyBy: number = 0
+  public StaffTypeID: number = 0
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {
@@ -250,6 +256,7 @@ export class BTER_EM_UnlockProfileDataModel {
   public StaffUserID: number = 0
   public StaffID: number = 0
   public SSOID: string = ''
+  public Remark: string = ''
   public ModifyBy: number = 0
 }
 
@@ -479,4 +486,12 @@ export class StaffHostelSearchModel extends RequestBaseModel {
   public StaffID?: number = 0
   public StaffUserID?: number = 0
   public StaffHostelIDs?: string = ''
+}
+export class BTER_DesignationWiseBranchDataModel {
+  public DepartmentID: number = 0;
+  public DesignationID: number = 0;
+  public OfficeID: number = 0;
+  public RoleID: number = 0;
+  public BranchID: number = 0;
+  public StaffID: number = 0;
 }

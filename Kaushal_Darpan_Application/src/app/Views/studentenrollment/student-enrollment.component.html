@@ -410,7 +410,7 @@
                 <td>{{item.DisplayColumnNameEn}}</td>
                 <td>
                   <img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
-                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                        class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
                 </td>
               </tr>
@@ -813,7 +813,7 @@
                   <span>Choose File</span>{{item.Dis_FileName == '' ? 'No File Choosen' : item.Dis_FileName}}
                 </label>
                 <div class="flex" *ngIf="item.FileName!=''">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>

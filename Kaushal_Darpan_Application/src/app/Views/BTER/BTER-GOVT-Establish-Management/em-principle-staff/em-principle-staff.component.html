@@ -87,6 +87,23 @@
             </p>
           </div>
         </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.PostID" formControlName="ddlPost">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.ddlPost.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.ddlPost.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
         <div *ngIf="formData.StaffTypeID !=0 && formData.StaffTypeID != _ITIGovtEM_EnumStaffType.Teaching">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Level <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.StaffLevelID" (change)="StaffLevelChild()" formControlName="StaffLevel" [ngModelOptions]="{standalone: true}">
@@ -124,7 +141,7 @@
           </div>
         </div>
 
-        
+
         <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.GuestRoomWarden">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Guest House Name</label>
           <select formControlName="guestRoomID" class="form-select" [(ngModel)]="formData.guestRoomID">
@@ -299,7 +316,7 @@
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="row.ProfileStatusID == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="row.ProfileStatusID != 247 && row.ProfileStatusID != 0" href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
+                <a *ngIf="row.ProfileStatusID != 247 && row.ProfileStatusID != 249 && row.ProfileStatusID != 288 && row.ProfileStatusID != 0" href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
                 <a *ngIf="row.RoleID == _EnumRole.HostelWarden" href="javascript:void(0);" title="Edit Hostel" (click)="onEditHostel(Model_EditHostel, row)"><i class="ti ti-pencil"></i></a>
@@ -372,66 +389,66 @@
                 </div>
               </div>
 
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Posts Sanctioned<span class="StarMarking">*</span></label>
-                <input autocomplete="off" type="text" class="form-input" placeholder="No. of Posts Sanctioned" name="SanctionedPosts" id="SanctionedPosts"
-                      formControlName="SanctionedPosts" [(ngModel)]="approveRequest.SanctionedPosts" />
-                      
-                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SanctionedPosts.errors" class="text-danger">
-                  <p *ngIf="_StaffMasterFormGroup.SanctionedPosts.errors.required">
-                    <i aria-hidden="true"></i>This field is required .!
-                  </p>
-                </div>
-              </div>
+              <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Posts Sanctioned<span class="StarMarking">*</span></label>
+    <input autocomplete="off" type="text" class="form-input" placeholder="No. of Posts Sanctioned" name="SanctionedPosts" id="SanctionedPosts"
+          formControlName="SanctionedPosts" [(ngModel)]="approveRequest.SanctionedPosts" />
 
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Working <span class="StarMarking">*</span></label>
+    <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SanctionedPosts.errors" class="text-danger">
+      <p *ngIf="_StaffMasterFormGroup.SanctionedPosts.errors.required">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div>
 
-                <div class="flex gap-4">
-                  <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsWorking" [value]="true" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking"/>
-                    <span>Yes</span>
-                  </label>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-2">Working <span class="StarMarking">*</span></label>
 
-                  <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsWorking" [value]="false" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking"/>
-                    <span>No</span>
-                  </label>
-                </div>
+    <div class="flex gap-4">
+      <label class="flex items-center space-x-2">
+        <input type="radio" name="IsWorking" [value]="true" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking"/>
+        <span>Yes</span>
+      </label>
 
-                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsWorking.errors" class="text-danger">
-                  <p *ngIf="_StaffMasterFormGroup.IsWorking.errors.required">
-                    <i aria-hidden="true"></i> This field is required.!
-                  </p>
-                </div>
-              </div>
+      <label class="flex items-center space-x-2">
+        <input type="radio" name="IsWorking" [value]="false" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking"/>
+        <span>No</span>
+      </label>
+    </div>
 
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Vacant <span class="StarMarking">*</span></label>
+    <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsWorking.errors" class="text-danger">
+      <p *ngIf="_StaffMasterFormGroup.IsWorking.errors.required">
+        <i aria-hidden="true"></i> This field is required.!
+      </p>
+    </div>
+  </div>
 
-                <div class="flex gap-4">
-                  <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsVacant" [value]="true" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant"/>
-                    <span>Yes</span>
-                  </label>
+  <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-2">Vacant <span class="StarMarking">*</span></label>
 
-                  <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsVacant" [value]="false" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant"/>
-                    <span>No</span>
-                  </label>
-                </div>
+    <div class="flex gap-4">
+      <label class="flex items-center space-x-2">
+        <input type="radio" name="IsVacant" [value]="true" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant"/>
+        <span>Yes</span>
+      </label>
 
-                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsVacant.errors" class="text-danger">
-                  <p *ngIf="_StaffMasterFormGroup.IsVacant.errors.required">
-                    <i aria-hidden="true"></i> This field is required.!
-                  </p>
-                </div>
-              </div>
+      <label class="flex items-center space-x-2">
+        <input type="radio" name="IsVacant" [value]="false" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant"/>
+        <span>No</span>
+      </label>
+    </div>
+
+    <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsVacant.errors" class="text-danger">
+      <p *ngIf="_StaffMasterFormGroup.IsVacant.errors.required">
+        <i aria-hidden="true"></i> This field is required.!
+      </p>
+    </div>
+  </div>-->
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
                 <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID" id="SSOID"
-                      formControlName="SSOID" [(ngModel)]="approveRequest.SSOID" />
+                       formControlName="SSOID" [(ngModel)]="approveRequest.SSOID" />
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SSOID.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.SSOID.errors.required">
@@ -443,8 +460,8 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span class="StarMarking">*</span></label>
                 <input autocomplete="off" type="text" class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
-                      formControlName="Name" [(ngModel)]="approveRequest.Name" />
-                      
+                       formControlName="Name" [(ngModel)]="approveRequest.Name" />
+
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.Name.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.Name.errors.required">
                     <i aria-hidden="true"></i>This field is required .!
@@ -484,8 +501,8 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span class="StarMarking">*</span></label>
                 <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber" id="MobileNumber"
-                      formControlName="MobileNumber" [(ngModel)]="approveRequest.MobileNumber" maxlength="10"/>
-                
+                       formControlName="MobileNumber" [(ngModel)]="approveRequest.MobileNumber" maxlength="10" />
+
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.MobileNumber.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.MobileNumber.errors.required">
                     <i aria-hidden="true"></i>This field is required .!
@@ -496,7 +513,7 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span> </label>
                 <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
-                      formControlName="EmployeeID" [(ngModel)]="approveRequest.EmployeeID"/>
+                       formControlName="EmployeeID" [(ngModel)]="approveRequest.EmployeeID" />
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.EmployeeID.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.EmployeeID.errors.required">
@@ -508,8 +525,8 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
                 <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
-                      formControlName="DateOfBirth" [(ngModel)]="approveRequest.DateOfBirth" />
-                      
+                       formControlName="DateOfBirth" [(ngModel)]="approveRequest.DateOfBirth" />
+
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.DateOfBirth.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.DateOfBirth.errors.required">
                     <i aria-hidden="true"></i>This field is required .!
@@ -523,7 +540,7 @@
                   <span class="StarMarking">*</span>
                 </label>
                 <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
-                      formControlName="Experience" [(ngModel)]="approveRequest.Experience" maxlength="2" />
+                       formControlName="Experience" [(ngModel)]="approveRequest.Experience" maxlength="2" />
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
@@ -532,7 +549,23 @@
                 </div>
               </div>
 
-              
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Work Experience(In Years)
+                  <span class="StarMarking">*</span>
+                </label>
+                <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
+                       formControlName="Experience" [(ngModel)]="approveRequest.Experience" maxlength="2" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+
             </div>
 
             <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
@@ -546,13 +579,13 @@
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking"/>
-                    <span>Yes</span>
+                    <input type="radio" name="IsExtraWorking" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <span>Work Arrangement</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking"/>
-                    <span>No</span>
+                    <input type="radio" name="IsExtraWorking" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <span>Regular</span>
                   </label>
                 </div>
 
@@ -563,17 +596,34 @@
                 </div>
               </div>
 
-              <div>
+              <!--<div *ngIf="approveRequest.IsExtraWorking === true">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-2">
+      Employee Working <span class="StarMarking">*</span>
+    </label>
+
+    <label class="flex items-center space-x-2">
+      <input type="radio" name="IsEmployeeWorking" [value]="true" formControlName="IsEmployeeWorking" [(ngModel)]="approveRequest.IsEmployeeWorking" />
+      <span>Yes</span>
+    </label>
+
+    <label class="flex items-center space-x-2">
+      <input type="radio" name="IsEmployeeWorking" [value]="false" formControlName="IsEmployeeWorking" [(ngModel)]="approveRequest.IsEmployeeWorking" />
+      <span>No</span>
+    </label>
+  </div>-->
+
+
+              <div *ngIf="approveRequest.IsExtraWorking === true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on against post Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost"/>
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(true)" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost"/>
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(false)" />
                     <span>No</span>
                   </label>
                 </div>
@@ -591,13 +641,13 @@
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsEmpWorkingOnDeputationFromOther" [value]="true" formControlName="IsEmpWorkingOnDeputationFromOther"
-                     [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationFromOther"/>
+                           [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationFromOther" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsEmpWorkingOnDeputationFromOther" [value]="false" formControlName="IsEmpWorkingOnDeputationFromOther"
-                     [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationFromOther"/>
+                           [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationFromOther" />
                     <span>No</span>
                   </label>
                 </div>
@@ -625,19 +675,19 @@
                 </div>
               </div>
 
-              <div>
+              <div *ngIf="approveRequest.IsExtraWorking === true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation to other Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsEmpWorkingOnDeputationToOther" [value]="true" formControlName="IsEmpWorkingOnDeputationToOther"
-                     [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationToOther"/>
+                           [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationToOther" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsEmpWorkingOnDeputationToOther" [value]="false" formControlName="IsEmpWorkingOnDeputationToOther"
-                     [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationToOther"/>
+                           [(ngModel)]="approveRequest.IsEmpWorkingOnDeputationToOther" />
                     <span>No</span>
                   </label>
                 </div>
@@ -649,7 +699,7 @@
                 </div>
               </div>
 
-              <div *ngIf="approveRequest.IsEmpWorkingOnDeputationToOther">
+              <div *ngIf=" approveRequest.IsExtraWorking === true && approveRequest.IsEmpWorkingOnDeputationToOther">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Institute in which employee is deputed</label>
                 <select class="form-select " name="EmpDeputatedInstituteID" id="EmpDeputatedInstituteID" formControlName="EmpDeputatedInstituteID"
                         [(ngModel)]="approveRequest.EmpDeputatedInstituteID" (change)="getStreamMasterData()">
@@ -671,13 +721,13 @@
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromSamePost" [value]="true" formControlName="IsSalaryDrawnFromSamePost"
-                     [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost"/>
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" (change)="onSalaryDrawnChange(true)" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromSamePost" [value]="false" formControlName="IsSalaryDrawnFromSamePost"
-                     [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost"/>
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" (change)="onSalaryDrawnChange(false)" />
                     <span>No</span>
                   </label>
                 </div>
@@ -688,8 +738,8 @@
                   </p>
                 </div>
               </div>
-
-              <div *ngIf="approveRequest.IsSalaryDrawnFromSamePost">
+              <!--*ngIf="approveRequest.IsExtraWorking === true"-->
+              <div *ngIf="approveRequest.IsSalaryDrawnFromSamePost=== false">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of post from which salary is drawn <span class="StarMarking">*</span> </label>
                 <select class="form-select " name="SalaryDrawnPostID" id="SalaryDrawnPostID" formControlName="SalaryDrawnPostID"
                         [(ngModel)]="approveRequest.SalaryDrawnPostID">
@@ -704,19 +754,19 @@
                 </div>
               </div>
 
-              <div>
+              <div *ngIf=" approveRequest.IsExtraWorking === true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Salary drawn from other Institute Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromOtherInstitute" [value]="true" formControlName="IsSalaryDrawnFromOtherInstitute"
-                     [(ngModel)]="approveRequest.IsSalaryDrawnFromOtherInstitute"/>
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromOtherInstitute" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromOtherInstitute" [value]="false" formControlName="IsSalaryDrawnFromOtherInstitute"
-                     [(ngModel)]="approveRequest.IsSalaryDrawnFromOtherInstitute"/>
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromOtherInstitute" />
                     <span>No</span>
                   </label>
                 </div>
@@ -747,7 +797,7 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
                 <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"
-                      formControlName="DateOfRetirement" [(ngModel)]="approveRequest.DateOfRetirement"/>
+                       formControlName="DateOfRetirement" [(ngModel)]="approveRequest.DateOfRetirement" />
               </div>
 
               <div>
@@ -756,13 +806,13 @@
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="AnyCourtCasePending" [value]="true" formControlName="AnyCourtCasePending"
-                     [(ngModel)]="approveRequest.AnyCourtCasePending"/>
+                           [(ngModel)]="approveRequest.AnyCourtCasePending" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="AnyCourtCasePending" [value]="false" formControlName="AnyCourtCasePending"
-                     [(ngModel)]="approveRequest.AnyCourtCasePending"/>
+                           [(ngModel)]="approveRequest.AnyCourtCasePending" />
                     <span>No</span>
                   </label>
                 </div>
@@ -780,13 +830,13 @@
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="AnyDisciplinaryActionPending" [value]="true" formControlName="AnyDisciplinaryActionPending"
-                     [(ngModel)]="approveRequest.AnyDisciplinaryActionPending"/>
+                           [(ngModel)]="approveRequest.AnyDisciplinaryActionPending" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="AnyDisciplinaryActionPending" [value]="false" formControlName="AnyDisciplinaryActionPending"
-                     [(ngModel)]="approveRequest.AnyDisciplinaryActionPending"/>
+                           [(ngModel)]="approveRequest.AnyDisciplinaryActionPending" />
                     <span>No</span>
                   </label>
                 </div>
@@ -804,13 +854,13 @@
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="ExtraOrdinaryLeave" [value]="true" formControlName="ExtraOrdinaryLeave"
-                     [(ngModel)]="approveRequest.ExtraOrdinaryLeave"/>
+                           [(ngModel)]="approveRequest.ExtraOrdinaryLeave" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="ExtraOrdinaryLeave" [value]="false" formControlName="ExtraOrdinaryLeave"
-                     [(ngModel)]="approveRequest.ExtraOrdinaryLeave"/>
+                           [(ngModel)]="approveRequest.ExtraOrdinaryLeave" />
                     <span>No</span>
                   </label>
                 </div>
@@ -823,16 +873,15 @@
               </div>
 
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection</label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection <span class="StarMarking">*</span></label>
                 <!-- <select class="form-select " name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory"
-                        [(ngModel)]="approveRequest.SelectionCategory">
-                  <option value="0">Choose Option</option>
-                  <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-                </select> -->
+            [(ngModel)]="approveRequest.SelectionCategory">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+    </select> -->
 
                 <input class="form-input" placeholder="Higher Education Institute" name="SelectionCategory" id="SelectionCategory"
-                      formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" />
-
+                       formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" />
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SelectionCategory.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.SelectionCategory.errors.required">
                     <i aria-hidden="true"></i>This field is
@@ -909,8 +958,8 @@
       </div>
       <!-- Close Button -->
       <div class="flex justify-center my-2">
-        <button *ngIf="!IsView"
-           class="btn bg-info text-white" (click)="ApproveStaffProfile()">Submit and Approve Profile</button>
+        <button *ngIf="!IsView" class="btn bg-info text-white" (click)="ApproveStaffProfile()">Submit and Approve Profile</button>
+        <button *ngIf="!IsView" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>
         <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
       </div>
     </div>
@@ -1019,4 +1068,52 @@
     </div> <!-- Close this div here for card-body -->
   </div>
 
+</ng-template>
+
+
+<ng-template #modal_SubmitReq let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+
+
+        <div class="card-body">
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Status <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select" [(ngModel)]="RequestUpdateStatus.StatusIDs" formControlName="ddlStatus">
+                <option value="0" selected="">--Choose Option--</option>
+                <option *ngFor="let item of filteredStatusList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted && groupForm.controls.ddlStatus.errors" class="text-danger">
+                <p *ngIf="!groupForm.controls.ddlStatus.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Remark <span class="StarMarking">*</span>
+              </label>
+              <textarea class="form-input" [(ngModel)]="RequestUpdateStatus.Remark" formControlName="txtRemark"></textarea>
+              <div *ngIf="isSubmitted && groupForm.controls.txtRemark.errors" class="text-danger">
+                <p *ngIf="groupForm.controls.txtRemark.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Close this div here for card-body -->
+        <div class="card-footer text-right">
+          <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </ng-template>

@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Jail Admission</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Jail Admission </h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
@@ -112,10 +112,10 @@
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
-                <th class="text-left">#</th>
+                <th class="text-left">Sr No</th>
                 <th class="text-left">Documents</th>
-                <th *ngIf="TradeBox==true && ApplicationAlloted==false" align="center" width="200px">Status</th>
-                <th *ngIf="remarkheader && TradeBox==true && ApplicationAlloted==false">Remarks</th>
+                <!--<th *ngIf="TradeBox==true && ApplicationAlloted==false" align="center" width="200px">Status</th>-->
+                <!--<th *ngIf="remarkheader && TradeBox==true && ApplicationAlloted==false">Remarks</th>-->
               </tr>
             </thead>
             <tbody>
@@ -128,7 +128,7 @@
                     {{ item.DisplayColumnNameEn }}
                   </a>
                 </td>
-                <td *ngIf="TradeBox==true && ApplicationAlloted==false">
+                <!--<td *ngIf="TradeBox==true && ApplicationAlloted==false">
                   <div class="flex">
                     <label class="me-3">
                       <input type="radio"
@@ -145,15 +145,15 @@
                              [value]="false" /> Incorrect
                     </label>
                   </div>
-                </td>
-                <td *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false">
+                </td>-->
+                <!--<td *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false">
                   <textarea type="text" placeholder="Remarks" class="form-input" [(ngModel)]="item.Remark"></textarea>
                   <div *ngIf="item.Remark==''&& isSubmitted" class="text-danger">
                     This field is required .!
                   </div>
 
 
-                </td>
+                </td>-->
               </tr>
 
             </tbody>
@@ -194,7 +194,7 @@
         <div *ngIf="!ApplicationAlloted" class="flex justify-center flex-wrap items-center py-2 mt-3">
           <!--<button class="btn bg-info text-white" type="button"><i class="ti ti-download" (click)="DownloadAllotmentLetter(searchRequest.AllotmentId)"></i> Download Allotment Letter</button>
           <button class="btn bg-info text-white" type="button"><i class="ti ti-download"></i> Download Application</button>-->
-          <button class="btn bg-success text-white" type="button" (click)="OpenSaveReporting()"><i class="ti ti-device-floppy"></i> Submit</button>
+          <button class="btn bg-success text-white" type="button" (click)="SaveTradeWithAllot()"><i class="ti ti-device-floppy"></i> Submit</button>
         </div>
 
 

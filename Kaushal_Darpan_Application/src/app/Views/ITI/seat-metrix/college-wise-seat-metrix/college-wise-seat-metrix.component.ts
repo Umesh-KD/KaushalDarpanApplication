@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants, JailCollegeID } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -37,7 +37,7 @@ export class CollegeWiseSeatMetrixComponent {
   //sSOLoginDataModel = new SSOLoginDataModel();
   public ActiveStatusModel: number = 1;
   public IDS: number = 0;
-
+  public IsJailCollege: boolean=false
   public SSOLoginDataModel = new SSOLoginDataModel();
   public SeatIntakeSearchFormGroup!: FormGroup;
   public IsNull: boolean = false;
@@ -131,8 +131,8 @@ export class CollegeWiseSeatMetrixComponent {
     //this.AllotmentChange();
     this.imcRequest.AllotmentId = 0;
 
-    this.searchRequest.AllotmentMasterId=0
-
+    this.searchRequest.AllotmentMasterId = 0
+    this.checkJailCollege()
   }
   async GetdateConfigSetting() {
     this.loaderService.requestStarted();
@@ -1433,4 +1433,14 @@ export class CollegeWiseSeatMetrixComponent {
       }
     }
   }
+
+ async checkJailCollege() {
+   JailCollegeID.map((item: any) => {
+     if (item === this.SSOLoginDataModel.InstituteID) {
+        this.IsJailCollege = true
+      }
+    })
+  }
+
+
 }

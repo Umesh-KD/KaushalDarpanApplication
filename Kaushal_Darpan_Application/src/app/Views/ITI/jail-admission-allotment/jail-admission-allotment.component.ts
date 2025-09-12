@@ -17,6 +17,7 @@ import { HttpClient } from '@angular/common/http';
 import { IMCAllocationService } from '../../../Services/ITI/IMC-Allocation/imc-allocation.service';
 import { ITIAdminDashboardServiceService } from '../../../Services/ITI-Admin-Dashboard-Service/iti-admin-dashboard-service.service';
 import { ITIAllotmentService } from '../../../Services/ITI/ITIAllotment/itiallotment.service';
+import { StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
 
 @Component({
   selector: 'app-jail-admission-allotment',
@@ -163,14 +164,14 @@ export class JailAdmissionAllotmentComponent {
     // this.request.AllotedCategory = AllotedCategory;
     //alert(this.request.ApplicationID);
     //alert(this.request.CollegeTradeID);
-
+   
     if (AllotedCategory.includes(' ')) {
       this.request.SeatMetrixColumn = AllotedCategory.replace(/ /g, '_');
     }
     else {
       this.request.SeatMetrixColumn = AllotedCategory;
     }
-
+    this.request.SeatMetrixColumn = 'GEN';
     //alert(this.request.AllotedCategory);
     const confirmationMessage = 'Are you sure you want to revert this application ?'
 
@@ -229,7 +230,7 @@ export class JailAdmissionAllotmentComponent {
 
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download = 'DirectAdmissionLetter' + AllotmentId + '.pdf';
+            link.download = 'JailAdmissionLetter' + AllotmentId + '.pdf';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -297,5 +298,101 @@ export class JailAdmissionAllotmentComponent {
   getIMCLink() {
     return ['/ITIIMCAllocationList' + this.searchRequest.TradeLevel + 'th', this.searchRequest.TradeLevel];
   }
+
+  async ExPortExcelData() {
+    try {
+      // Define columns dynamically
+      let columns: string[] = [];
+
+      if (this.searchRequest.TradeLevel == 10) {
+        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName"
+          ,"ReportedDateTime"];
+      } else {
+        columns = ["SrNo", "ApplicationNo", "StudentName", "FatherName", "DOB", "Gender", "StudentCategory", "MobileNo", "AadharNo", "TradeCode", "TradeName", "Shift", "UnitNo", "AllotedCategory", "JoiningStatus", "TradeSchemeName",
+        "ReportedDateTime"];
+      }
+
+      // Filter the data based on required columns
+      const filteredData = this.IMCAllotedList.map((item: any) => {
+        const filteredItem: any = {};
+        columns.forEach(col => {
+          filteredItem[col] = item[col];
+        });
+        return filteredItem;
+      });
+
+      // Create Excel worksheet & workbook
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+
+      // Export file
+      XLSX.writeFile(wb, "StudentsJoiningStatusMarksList.xlsx");
+    } catch (Ex) {
+      console.error("Export Excel Error:", Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async exportPDFData() {
+
+    //if (this.totalRecord == 0) {
+    //  this.toastr.error("Please search data first.");
+    //  return
+    //}
+    try {
+
+
+      var _searchRequest : any;
+      this.loaderService.requestStarted();
+      _searchRequest = this.searchRequest;
+      _searchRequest.PageNumber = 1;
+      //_searchRequest.PageSize = this.totalRecord;
+      _searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      _searchRequest.FinancialYearID = this.searchRequest.AcademicYearID
+
+      this.loaderService.requestStarted();
+      await this.allotmentService.DownloadCollegeJailAllotmentData(_searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data && data.Data) {
+            const base64 = data.Data;
+
+            const byteCharacters = atob(base64);
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+              byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+
+            const byteArray = new Uint8Array(byteNumbers);
+            const blob = new Blob([byteArray], { type: 'application/pdf' });
+            const blobUrl = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'AllotmentList_' + this.sSOLoginDataModel.InstituteID + '.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          } else {
+            this.toastr.error(this.Message)
+          }
+        }, (error: any) => console.error(error))
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
 }

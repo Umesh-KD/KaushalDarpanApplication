@@ -350,4 +350,47 @@ export class ITIIIPManageComponent {
     }
   }
 
+
+  //async DownloadIIPQuaterlyFundReportPDFData(data:any) {
+
+  //  try {
+  //    await this.itiIIPManageService.GetIIPQuaterlyFundReport.then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      debugger
+  //      if (data && data.Data) {
+  //        const base64 = data.Data;
+
+  //        const byteCharacters = atob(base64);
+  //        const byteNumbers = new Array(byteCharacters.length);
+  //        for (let i = 0; i < byteCharacters.length; i++) {
+  //          byteNumbers[i] = byteCharacters.charCodeAt(i);
+  //        }
+
+  //        const byteArray = new Uint8Array(byteNumbers);
+  //        const blob = new Blob([byteArray], { type: 'application/pdf' });
+  //        const blobUrl = URL.createObjectURL(blob);
+
+  //        const link = document.createElement('a');
+  //        link.href = blobUrl;
+  //        link.download = 'IIPQuaterlyFundReport.pdf';
+  //        document.body.appendChild(link);
+  //        link.click();
+  //        document.body.removeChild(link);
+  //        URL.revokeObjectURL(blobUrl);
+  //      } else {
+  //        this.toastr.error("FIle Not Found!!")
+  //      }
+  //    })
+  //  } catch (error) {
+  //    console.log(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200)
+  //  }
+
+  //}
+
+  
+
 }

@@ -66,6 +66,7 @@ const routes: Routes = [
       {
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
+      { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result'},
 
 
       {
@@ -334,6 +335,8 @@ const routes: Routes = [
       { path: 'AddTspAreas', loadChildren: () => import('./Views/ITI/Tsp-Areas/add-tsp-areas/add-tsp-areas.module').then(m => m.AddTspAreasModule), title: 'AddItiApplication/3 TSP Areas' },
 
       { path: 'itifee', loadChildren: () => import('./Views/ITI/iti-fee/iti-fee.module').then(m => m.ItiFeeModule), title: 'ITI Fee' },
+      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
+      { path: 'ITIInstructorCollege', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-college/iti-instructor-college.module').then(m => m.ItiInstructorCollegeModule) },
 
       { path: 'verifiers', loadChildren: () => import('./Views/DTE_Verifier/verifier/verifier.module').then(m => m.VerifierModule), title: 'Verifiers' },
       { path: 'addverifier', loadChildren: () => import('./Views/DTE_Verifier/add-verifier/add-verifier.module').then(m => m.AddVerifierModule), title: 'Add Verifier' },
@@ -956,7 +959,9 @@ const routes: Routes = [
       { path: 'iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection/iti-inspection.module').then(m => m.ITIInspectionModule), title: 'ITI Inspection' },
       { path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       { path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
-
+      { path: 'iti-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-consent/iti-consent.module').then(m => m.ITIConsentModule), title: 'ITI Consent' },
+      { path: 'iti-consent-update', loadChildren: () => import('./Views/ITI/Inspection/iti-consent-update/iti-consent-update.module').then(m => m.ITIConsentUpdateModule), title: 'ITI Consent Update' },
+      { path: 'iti-add-consent', loadChildren: () => import('./Views/ITI/Inspection/iti-add-consent/iti-add-consent.module').then(m => m.ITIAddConsentModule), title: 'Add Consent' },
 
       { path: 'add-apprenticeship', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/add-apprenticeship/add-apprenticeship.module').then(m => m.AddApprenticeshipModule), title: 'ITI Apprenticeship' },
       { path: 'apprenticeship-team', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/apprenticeship-team/apprenticeship-team.module').then(m => m.ApprenticeshipTeamModule), title: 'ITI Apprenticeship' },
@@ -1195,6 +1200,8 @@ const routes: Routes = [
   { path: 'studentWithdrawn-list', loadChildren: () => import('./Views/ITI/student-withdrawn-list/student-withdrawn-list.module').then(m => m.studentwithdrawnlistModule) },
   { path: 'studentWithdrawn-report', loadChildren: () => import('./Views/ITI/reports/student-withdrawn-report/student-withdrawn-report.module').then(m => m.studentwithdrawnreportModule) },
   { path: 'AllotmentReportCollege', loadChildren: () => import('./Views/ITI/reports/allotment-report-college/allotment-report-college.module').then(m => m.AllotmentReportCollegeModule) },
+      { path: 'ApplicantStudentReport', loadChildren: () => import('./Views/ITI/reports/applicant-student-report/applicant-student-report.module').then(m => m.ApplicatntStudentReportModule) },
+      { path: 'ReportedStudentReport', loadChildren: () => import('./Views/ITI/reports/report-for-admin/report-for-admin.module').then(m => m.ReportedStudentReportModule) },
       { path: 'IMCAllotmentReport', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'IMCAllotmentReport/:id', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'view-verify-roll-list', loadChildren: () => import('./Views/view-verify-roll-list/view-verify-roll-list.module').then(m => m.ViewVerifyRollListModule) },
@@ -1210,7 +1217,9 @@ const routes: Routes = [
   
   {
     path: 'allotment-report-admin', loadChildren: () => import('./Views/ITI/reports/allotment-report-college-admin/allotment-report-college-admin.module').
-      then(m => m.AllotmentReportCollegeAdminModule)},
+          then(m => m.AllotmentReportCollegeAdminModule)
+      },
+
       { path: 'StudentEnrollmentCancelation', loadChildren: () => import('./Views/BTER/student-enrollment-cancelation/student-enrollment-cancelation.module').then(m => m.StudentEnrollmentCancelationModule) },
       { path: 'StudentJanaadharReport', loadChildren: () => import('./Views/ITI/studentjanaadhar-report/studentjanaadhar-report.module').then(m => m.StudentjanaadharReportModule) },
       { path: 'InstitutejanaadharReport', loadChildren: () => import('./Views/ITI/institutejanaadhar-report/institutejanaadhar-report.module').then(m => m.InstitutejanaadharReportModule) },
@@ -1314,6 +1323,7 @@ const routes: Routes = [
       //{ path: 'inspection-deployment', loadChildren: () => import('./Views/ITI/Inspection/inspection-deployment/inspection-deployment.module').then(m => m.InspectionDeploymentModule), title: 'ITI Inspection' },
       { path: 'iti-iip-manage', loadChildren: () => import('./Views/ITI/IIP-Module/iip-manage/iip-manage.module').then(m => m.ITIIIPManageModule), title: 'ITI IIP Manage' },
       { path: 'iti-iip-admin-report', loadChildren: () => import('./Views/ITI/IIP-Module/iip-admin-report/iip-admin-report.module').then(m => m.ITIIIPAdminReportModule), title: 'ITI IIP Manage' },
+      { path: 'IIP-ManageAdmin-report', loadChildren: () => import('./Views/ITI/IIP-Module/iip-manage-admin-report/iip-manage-admin-report.module').then(m => m.IIPManageAdminReportModule), title: 'ITI IIP Manage' },
       //{ path: 'verify-iti-inspection', loadChildren: () => import('./Views/ITI/Inspection/verify-iti-inspection/verify-iti-inspection.module').then(m => m.VerifyITIInspectionModule), title: 'ITI Inspection' },
       //{ path: 'iti-inspection-report', loadChildren: () => import('./Views/ITI/Inspection/iti-inspection-report/iti-inspection-report.module').then(m => m.ITIInspectionReportModule), title: 'ITI Inspection Report' },
 
@@ -1465,6 +1475,7 @@ const routes: Routes = [
   { path: 'Views\BTER\Student-Section-Incharge', loadChildren: () => import('./Views/BTER/student-section-incharge/student-section-incharge.module').then(m => m.StudentSectionInchargeModule) },
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
+  { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
 
 
   

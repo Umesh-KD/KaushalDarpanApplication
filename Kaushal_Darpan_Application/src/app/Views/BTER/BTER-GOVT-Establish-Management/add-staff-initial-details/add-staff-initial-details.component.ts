@@ -61,7 +61,7 @@ export class AddStaffInitialDetailsComponent {
       Name: [{ value: '', disabled: true }],
       Mobile: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
-      IsNodal: [false],
+      /*IsNodal: [false],*/
       ddlPost: ['', [DropdownValidators]]
 
     })

@@ -7,6 +7,7 @@ import { AllotmentStatusSearchModel } from '../../../Models/BTER/BTERAllotmentSt
 import { IMCAllocationSearchModel } from '../../../Models/ITIIMCAllocationDataModel';
 import { ReportCollegeForAdminModel, ReportCollegeModel, StudentsJoiningStatusMarksSearchModel } from '../../../Models/StudentsJoiningStatusMarksDataMedels';
 import { StudentthdranSeat1Model } from '../../../Models/CommonMasterDataModel';
+import { IIPManageMemberDetailsDataModel, ITI_IIPManageDataModel, ITI_IIPManageSearchModel, IIPManageFundSearchModel } from '../../../Models/ITI/ITI_IIPManageDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -247,6 +248,16 @@ export class ITIAllotmentService {
       ).toPromise();
   }
 
+  public async DownloadCollegeJailAllotmentData(searchRequest: StudentsJoiningStatusMarksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadCollegeJailAllotmentData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async DownloadCollegeAdminData(searchRequest: ReportCollegeForAdminModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/DownloadCollegeAdminData`, body, this.headersOptions)
@@ -267,6 +278,16 @@ export class ITIAllotmentService {
   public async StudentSeatWithdrawRequest(request: StudentthdranSeat1Model) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/StudentSeatWithdrawRequest`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  //Download Report
+
+  public async downloadIIPManageReportPDF(searchRequest: ITI_IIPManageSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/downloadIIPManageReportPDF`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -299,6 +320,7 @@ export class ITIAllotmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
 }
 
 

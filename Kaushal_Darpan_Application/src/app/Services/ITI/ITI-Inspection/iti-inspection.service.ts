@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel } from '../../../Models/ITI/ITI_InspectionDataModel';
+import { InspectionDeploymentDataModel, ITI_InspectionDataModel, ITI_InspectionDropdownModel, ITI_InspectionSearchModel, InspectionMemberDetailsDataModel, SaveCheckSSODataModel, ConsentModel, ConsentSearchModel, UpdateConsentModel } from '../../../Models/ITI/ITI_InspectionDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -157,6 +157,64 @@ export class ITIInspectionService {
   public async GetDistrictMaster(request: ITI_InspectionSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetDistrictMaster`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async saveConsentData(request: ConsentModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/saveConsentData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAllConsentData(request: ConsentModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllConsentData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async saveConsent(request: ConsentModel[]) {
+    var body = JSON.stringify(request);
+    //return await this.http.post(`${this.APIUrl}/SaveInspectionDeploymentData`, body, this.headersOptions1)
+    return await this.http.post(`${this.APIUrl}/saveConsent`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetDistrictMasterconsent(request: ConsentSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetDistrict`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetById_Consent(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetById_Consent/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async updateConsent(request: UpdateConsentModel) {
+
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/updateConsent`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllConsentbyPrincipal(request: ConsentModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllConsentbyPrincipal`, body, this.headersOptions1)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

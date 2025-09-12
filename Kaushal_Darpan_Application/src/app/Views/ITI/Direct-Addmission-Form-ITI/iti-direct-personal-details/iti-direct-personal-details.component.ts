@@ -1,3 +1,4 @@
+/// <reference path="../iti-direct-address-form/iti-direct-address-form.component.ts" />
 import { ChangeDetectorRef, Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -107,17 +108,18 @@ export class ITIDirectPersonalDetailsComponent {
       {
         txtName: [{ value: '', disabled: true }, Validators.required],
         txtnameHindi: [{ value: '' }, Validators.required],
-        txtEmail: [{ value: '', disabled: true }, Validators.pattern(GlobalConstants.EmailPattern)],
+        txtEmail: [{ value: '', disabled: true }],
         txtFather: [{ value: '', disabled: true }, Validators.required],
         txtFatherHindi: [{ value: '' }, Validators.required],
         txtDOB: [{ value: '', disabled: true }, Validators.required],
         txtMotherEngname: [{ value: '', disabled: true }, Validators.required],
         Gender: [{ value: '', disabled: true }],
-        MobileNumber: [{ value: '', disabled: true }, Validators.required],
+        MobileNumber: [{ value: '', disabled: true },],
         txtWhatsappMobileNumber: [''],
         txtMotherHindiname: [{ value: '' }, Validators.required],
         txtLandlineNumber: [''],
-        txtDetailsofIDProof: ['', Validators.required],
+       // txtDetailsofIDProof: [''],
+        txtDetailsofIDProof: ['',Validators.required],
         ddlIdentityProof: ['', [DropdownValidators]],
         ddlMaritial: ['', [DropdownValidators]],
         ddlReligion: ['', [DropdownValidators]],
@@ -401,8 +403,8 @@ export class ITIDirectPersonalDetailsComponent {
           this.PH10thTradeList = this.ItiPHTradeList.filter((item: any) => {
             return selectedIDs10.includes(item.Id);
           })
-                
 
+          this.ChangeMinority()
           // Fetch the Tehsils if not already loaded
            this.commonMasterService.GetCommonMasterData('DevnarayanAreaTehsil')
             .then((data: any) => {
@@ -416,9 +418,12 @@ export class ITIDirectPersonalDetailsComponent {
 
           if (this.request.IndentyProff)
 
+         
 
+            this.request.DevnarayanTehsilID;
 
-          this.request.DevnarayanTehsilID;
+         
+
           const btnSave = document.getElementById('btnSave')
           if (btnSave) btnSave.innerHTML = "Update";
           const btnReset = document.getElementById('btnReset')
@@ -777,6 +782,14 @@ export class ITIDirectPersonalDetailsComponent {
 
     return true;
 
+  }
+
+  async ChangeMinority() {
+    if (this.request.Religion != 1) {
+      this.request.IsMinority = true
+      this.PersonalDetailForm.get('ddlMinority')?.disable();
+
+    }
   }
 
 }

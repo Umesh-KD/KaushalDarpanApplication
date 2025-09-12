@@ -181,4 +181,31 @@ export class ITIIIPManageService {
       ).toPromise();
   }
 
+  public async IIPManageReportODFDownload(id: number) {
+
+    return await this.http.get(`${this.APIUrl}/IIPManageReportODFDownload/${id}`, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetIIPQuaterlyFundReportData(model: any[]) {
+
+    return await this.http.post(`${this.APIUrl}/GetIIPQuaterlyFundReportData`, model, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllIMCFundDataforReport(request: IIPManageFundSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllIMCFundDataforReport`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+
 }

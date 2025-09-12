@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { DeallocateRoomDataModel, SearchRequestRoomAllotment, StudentDetailDataModel_Hostel, StudentRequestDataModal } from '../../Models/Hostel-Management/StudentRequestDataModal';
+import { DeallocateRoomDataModel, GetMeritDataModel_Hostel, SearchRequestRoomAllotment, StudentDetailDataModel_Hostel, StudentRequestDataModal } from '../../Models/Hostel-Management/StudentRequestDataModal';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import {  RoomAllotmentDataModel } from '../../Models/Hostel-Management/RoomAllotmentDataModel';
 import { DTEApplicationDashboardDataModel } from '../../Models/DTEApplicationDashboardDataModel';
+import { DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -219,6 +220,30 @@ export class StudentRequestService {
   public async DirectHostelSeatAllotment(Allotmentrequest: RoomAllotmentDataModel) {
     const body = JSON.stringify(Allotmentrequest);
     return await this.http.post(this.APIUrl + '/DirectHostelSeatAllotment', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GenerateProvisionalMerit_Hostel(Gender: number = 0, searchRequest: StudentRequestDataModal[]) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GenerateProvisionalMerit_Hostel/${Gender}`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetMeritGeneratedStudent_Hostel( searchRequest: GetMeritDataModel_Hostel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetMeritGeneratedStudent_Hostel`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadStudentHostelAllotmentLetter( searchRequest: DownloadMarksheetSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadStudentHostelAllotmentLetter`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
