@@ -42,6 +42,23 @@ export class ITICenterAllocationService {
       ).toPromise();
   }
 
+  //Get
+  public async GetscvtInstituteByCenterID(searchRequest: ITIcenterAllocationSearchModel) {
+    return await this.http.post(this.APIUrl + "/GetscvtInstituteByCenterID", searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetscvtTradeByCenterID(searchRequest: ITIcenterAllocationSearchModel) {
+    return await this.http.post(this.APIUrl + "/GetscvtTradeByCenterID", searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async savedata(request: ITICenterAllocationtDataModels[]) {
     const body = JSON.stringify(request)
     return await this.http.post(this.APIUrl + '/SaveAllData', body, this.headersOptions)
@@ -49,6 +66,17 @@ export class ITICenterAllocationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async Savescvtdata(request: any) {
+    const body = JSON.stringify(request)
+    return await this.http.post(this.APIUrl + '/Savescvtdata', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   public async GetCenterSuperintendent(searchRequest: CenterAllocationSearchModel) {
    

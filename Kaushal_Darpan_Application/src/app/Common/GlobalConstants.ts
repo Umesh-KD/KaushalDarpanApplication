@@ -260,7 +260,8 @@ export enum EnumConfigurationType {
   Registrar=40,
   Registrar_NonEng=55,
   Reval_GroupCode = 160,
-  JailAdmission = 164
+  JailAdmission = 164,
+  DirectAdmission = 79,
 }
 
 export enum EnumDepartment {
@@ -365,6 +366,7 @@ export enum EnumDirectAdmissionType
   Management_Quota = 160,
   JailAdmission = 181,
   DirectAdmission = 182,
+  DirectAdmissionITI = 1,
 }
 
 export enum EnumConfigTypeTabs {

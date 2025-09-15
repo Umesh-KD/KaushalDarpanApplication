@@ -556,7 +556,7 @@ export class ApplicationListComponent {
     });
   }
 
-  async Redirect(key: number) {
+  async Redirect(key: number, AdmissionType: number = 0) {
     if (key == EnumDepartment.BTER) {
       this.CloseModal()
       //await this.route.navigate(['/StudentJanAadharDetail'],
@@ -576,7 +576,7 @@ export class ApplicationListComponent {
       this.CloseModal()
       this.route.navigate(['/iti-direct-admission-student-initial-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isJailAdmission: this.encryptionService.encryptData(true) } });
-    } else if (key == EnumDepartment.ITI) {
+    } else if (key == EnumDepartment.ITI && AdmissionType == EnumDirectAdmissionType.DirectAdmission) {
       this.CloseModal()
       await this.route.navigate(['/iti-direct-admission-student-initial-detail'],
         { queryParams: { deptid: this.encryptionService.encryptData(EnumDepartment.ITI), isDirectAdmission: this.encryptionService.encryptData(true) } }
