@@ -13,6 +13,7 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { DownloadMarksheetSearchModel, HostelWardenSomeDetailsModel } from '../../../Models/DownloadMarksheetDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 
 @Component({
   selector: 'app-apply-for-hostel',
@@ -72,6 +73,7 @@ export class ApplyForHostelComponent {
     private reportService: ReportService,
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private studentRequestService: StudentRequestService,
   ) { }
 
   async ngOnInit() {
@@ -589,7 +591,7 @@ export class ApplyForHostelComponent {
     }
 
 
-
+    debugger
     this.isSubmitted = true;
 
     if (this.groupForm.invalid) {
@@ -935,6 +937,31 @@ export class ApplyForHostelComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async DownloadHostelAllotmentLetter(ReqId: number) {
+    try {
+      this.searchrequest.StudentID = this.sSOLoginDataModel.StudentID;
+      this.searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchrequest.Eng_NonEngID = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchrequest.ReqId = ReqId;
+      
+      await this.studentRequestService.DownloadStudentHostelAllotmentLetter(this.searchrequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile(data.Data, 'file download');
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
     }
   }
 }

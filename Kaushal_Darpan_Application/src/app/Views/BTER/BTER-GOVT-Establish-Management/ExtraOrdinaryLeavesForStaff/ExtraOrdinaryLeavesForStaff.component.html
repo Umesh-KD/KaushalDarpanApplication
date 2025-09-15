@@ -1,0 +1,106 @@
+<app-loader> </app-loader>
+<!-- Page Title Start -->
+
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Extra Ordinary Leaves For Staff</h4>
+    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+    </div>-->
+  </div>
+</div>
+
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Extra Ordinary Leaves For Staff</b>
+      <!--<a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class="ti ti-chevron-left"></i> Back
+      </a>-->
+    </div>
+    <form [formGroup]="AddExtraOrdinaryLeaveForm" (ngSubmit)="addLeave()">
+      <div class="form-group">
+        <label for="FromDate">From Date:</label>
+        <input id="FromDate" type="date" formControlName="FromDate" class="form-control" [(ngModel)]="formData.FromDate" [max]="formData.ToDate" />
+        <div *ngIf="_AddExtraOrdinaryLeaveForm.FromDate.invalid && _AddExtraOrdinaryLeaveForm.FromDate.touched" class="text-danger">
+          From Date is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="ToDate">To Date:</label>
+        <input id="ToDate" type="date" formControlName="ToDate" class="form-control" [(ngModel)]="formData.ToDate" [min]="formData.FromDate" />
+        <div *ngIf="_AddExtraOrdinaryLeaveForm.ToDate.invalid && _AddExtraOrdinaryLeaveForm.ToDate.touched" class="text-danger">
+          To Date is required.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="Comments">Comments:</label>
+        <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="LeaveDayCount">Leave Day Count:</label>
+        <input id="LeaveDayCount" type="number" formControlName="LeaveDayCount" class="form-control" [(ngModel)]="formData.LeaveDayCount" />
+        <div *ngIf="_AddExtraOrdinaryLeaveForm.LeaveDayCount.invalid && _AddExtraOrdinaryLeaveForm.LeaveDayCount.touched" class="text-danger">
+          Leave Day Count is required.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Add Leave</button>
+      <button type="submit" class="btn btn-primary" (click)="SaveData()">Final Save</button>
+
+    </form>
+
+
+
+
+  </div>
+</div>
+<!--{{leaves|json}}-->
+<div class="card mt-3">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Extra Ordinary Leaves For Staff List</b>
+    </div>
+    <div class="overflow-x-auto mt-4">
+      <table class="table table-bordered" *ngIf="leaves.length > 0">
+        <thead>
+          <tr>
+            <th>S.No</th>
+            <th>From Date</th>
+            <th>To Date</th>
+            <th>Comments</th>
+            <th>Leave Day Count</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let leave of leaves;  let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td>{{ leave.FromDate }}</td>
+            <td>{{ leave.ToDate }}</td>
+            <td>{{ leave.Comments }}</td>
+            <td>{{ leave.LeaveDayCount }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<!-- end row -->

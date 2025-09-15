@@ -172,7 +172,8 @@ export enum EnumRole {
 
   ITCell_Eng = 206,
   ITCell_NonEng = 210, 
-  
+  DTEDegreeCourse1stYear = 80,
+  DTEDegreeCourse2ndYear = 81,
 
 }
 
@@ -259,7 +260,8 @@ export enum EnumConfigurationType {
   Registrar=40,
   Registrar_NonEng=55,
   Reval_GroupCode = 160,
-  JailAdmission = 164
+  JailAdmission = 164,
+  DirectAdmission = 79,
 }
 
 export enum EnumDepartment {
@@ -560,7 +562,9 @@ export enum EnumSemesterDDL
 
 export enum EnumInspectionDeploymentType {
   Planned = 1,
-  Unplanned = 2
+  Unplanned = 2,
+  GeneralInspPlanned = 3,
+  GeneralInspUnPlanned = 4
 }
 
 export enum EnumApprenticeshipDeploymentType {

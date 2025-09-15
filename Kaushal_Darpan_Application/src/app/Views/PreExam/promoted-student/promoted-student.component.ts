@@ -96,7 +96,8 @@ export class PromotedStudentComponent {
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.SemesterMaster()
+      let ShowAllSemester = 0, EndTermID = this.sSOLoginDataModel.EndTermID, IsWithNotYearly = 1, IsPromote = 1;
+      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote)
         .then((data: any) => {
           this.SemesterMasterList = data['Data'];
         }, (error: any) => console.error(error));
@@ -141,7 +142,7 @@ export class PromotedStudentComponent {
         this.toastr.error("Please select Semester/Year!.");
         return;
       }
-        await this.GetPromotedStudent();
+      await this.GetPromotedStudent();
     }
     catch (Ex) {
       console.log(Ex);
@@ -299,8 +300,8 @@ export class PromotedStudentComponent {
               InstituteNameEnglish: x.InstituteName,
               IPAddress: '',
               IsBridge: x.IsBridge,
-              IsDetain: x.Detain == "Yes" ? true : false,
-              IsUFM: x.UFM == "Yes" ? true : false,
+              IsDetain: x.Detain,
+              IsUFM: x.UFM,
               MotherName: '',
               SemesterId: x.SemesterID,
               StreamId: x.StreamID,
@@ -309,7 +310,7 @@ export class PromotedStudentComponent {
               StudentType: x.StudentType,
               UFMCategory: x.UFMCategory,
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-              InstituteId: 0,
+              InstituteId: x.InstituteId,
               SessionTypeID: 0,
             })
           });

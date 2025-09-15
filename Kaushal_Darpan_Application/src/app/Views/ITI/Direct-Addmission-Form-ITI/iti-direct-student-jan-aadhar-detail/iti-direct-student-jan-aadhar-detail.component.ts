@@ -165,9 +165,9 @@ export class ITIDirectStudentJanAadharDetailComponent {
       if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.ITI) {
         // this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
         this.model.DirectAdmissionTypeID = 1
-        if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
-          this.GetApplicationId('SearchBySSO')
-        }
+        // if (this.sSOLoginDataModel.RoleID != EnumRole.Emitra) {
+        //   this.GetApplicationId('SearchBySSO')
+        // }
       } else if (this.IsDirectAdmission && this.DepartmentID == EnumDepartment.BTER) {
         this.model.DirectAdmissionTypeID = EnumDirectAdmissionType.DirectAdmission
       }
@@ -943,19 +943,26 @@ export class ITIDirectStudentJanAadharDetailComponent {
           }
 
           if (this.DepartmentID == EnumDepartment.ITI) {
+            
+            if(this.IsDirectAdmission) {
+              var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+              if (lnth <= 0) {
+                this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+                this.routers.navigate(['/dashboard']);
 
-            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-            if (lnth <= 0) {
-              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-              this.routers.navigate(['/dashboard']);
-
+              }
+            } else if(this.IsJailAdmission) {
+              var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
+              if (lnth <= 0) {
+                this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+                this.routers.navigate(['/dashboard']);
+              }
             }
-
+            
             const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
             this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
             console.log(this.FromDate, "from date")
           }
-
 
           this.courseTypeList = this.courseTypeList.filter((course: any) => activeCourseID.includes(course.value));
         }, error => console.error(error));

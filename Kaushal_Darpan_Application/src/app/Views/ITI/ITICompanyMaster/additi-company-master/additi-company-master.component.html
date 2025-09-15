@@ -106,6 +106,35 @@
             </div>
           </div>
 
+          <!-- added hr details  -->
+           
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
+            <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+            </div>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
+            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+            <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
+              <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+
+          <!--end  added hr details  -->
+
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -136,10 +165,10 @@
                 <!-- "{{request.Dis_CompanyName}}"  -->
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}" *ngIf="this.request.CompanyPhoto !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                <!-- <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
                    (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
                   <i class="ti ti-trash"></i>
-                </a>
+                </a> -->
               </div>
             </div>
           </div>

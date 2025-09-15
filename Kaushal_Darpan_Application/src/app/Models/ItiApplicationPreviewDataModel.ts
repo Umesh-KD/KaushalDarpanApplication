@@ -61,6 +61,8 @@ export class PreviewApplicationModel
   public FormCommision: number = 0;
   public ApplicationNo: string = '';
 
+  public DirectAdmissionType?: number = 0;
+
 }
 
 export class QualificationViewDetails {

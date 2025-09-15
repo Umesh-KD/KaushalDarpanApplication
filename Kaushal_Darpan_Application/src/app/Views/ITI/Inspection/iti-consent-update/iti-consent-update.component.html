@@ -1,6 +1,6 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Consent</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Consent List</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
@@ -12,70 +12,83 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-     
-
-
-     
-    
-
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Consent List</b>
-    </div>
-
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
-          <option value="50">50</option>
-          <option value="100">100</option>
-          <option value="500">500</option>
-          <option value="1000">1000</option>
-        </select>
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i> Consent List</b>
       </div>
-      <div class=""> </div>
-      <div class=""></div>
-      <div class=""></div>
-    </div>
-    <!--{{ConsentData | json}}-->
+
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class=""></div>
+        <div class=""></div>
+        <div class="">
+          <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+        </div>
+      </div>
+      <!--{{ConsentData | json}}-->
     <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+      <table class="table" id="consentTable">
+        <thead>
           <tr>
-            <th width="80px" align="left">Sr. No.</th>
-            <th class="text-left">District</th>
-            <th class="text-left">Institute Name</th>
-            <th class="text-left">Tentative Date</th>
-            <th class="text-left">Updated Date</th>
-           
-            <th class="text-left">Action</th>
+            <th style="width:80px">Sr. No.</th>
+            <th class="sortable" (click)="onSort('DistrictName')">
+              District
+              <span class="sort-indicator" *ngIf="sortColumn === 'DistrictName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
+            <th class="sortable" (click)="onSort('consentTypeID')">
+              Consent Type
+              <span class="sort-indicator" *ngIf="sortColumn === 'consentTypeID'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
+            <th class="sortable" (click)="onSort('InstituteName')">
+              Institute Name
+              <span class="sort-indicator" *ngIf="sortColumn === 'InstituteName'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
+            <th class="sortable" (click)="onSort('TentativeDate')">
+              Tentative Date
+              <span class="sort-indicator" *ngIf="sortColumn === 'TentativeDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
+            <th class="sortable" (click)="onSort('UpdatedDate')">
+              Updated Date
+              <span class="sort-indicator" *ngIf="sortColumn === 'UpdatedDate'">{{ sortDirection === 'asc' ? '▲' : '▼' }}</span>
+            </th>
+            <th>Action</th>
           </tr>
         </thead>
-        <tbody>
 
-          <tr *ngFor="let row of ConsentData; let idx=index;">
-            <td>{{idx+1}}</td>
-            <td>{{row.DistrictName}}</td>
-            <td>{{row.InstituteName}}</td>
-            <td align="left">{{row.TentativeDate | date:'dd/MM/yyyy' }}</td>
-            <td align="left">{{row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
-           
-            <td align="left">
+        <tbody>
+          <tr *ngFor="let row of ConsentData | tableSearchFilter:Table_SearchText;let i=index;">
+            <td>{{ i + 1 }}</td>
+            <td>{{ row.DistrictName }}</td>
+            <td>
+              {{
+                row.consentTypeID === 1 ? 'Planned (Affiliation)'
+                : (row.consentTypeID === 3 ? 'General Inspection (Planned)' : '')
+              }}
+            </td>
+            <td>{{ row.InstituteName }}</td>
+            <td>{{ row.TentativeDate | date:'dd/MM/yyyy' }}</td>
+            <td>{{ row.UpdatedDate | date:'dd/MM/yyyy' }}</td>
+            <td>
               <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
-                <a *ngIf="row.status != 1" href="javascript:void(0);" title="View Details"
-                   (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
+                <a *ngIf="row.status != 1" href="javascript:void(0);" (click)="ViewandUpdate(MyModel_ViewDetails,row.InspectionConsentID)">
                   <i class="ti ti-pencil"></i>
                 </a>
-
               </div>
             </td>
-
           </tr>
         </tbody>
       </table>
+
+    </div>
     </div>
   </div>
 </div>
-  </div>
-
 
 <ng-template #MyModel_ViewDetails let-modal
              class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
@@ -87,54 +100,63 @@
       </div>
       <form [formGroup]="consentForm" id="consentForm">
         <div class="card-body">
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
             <div>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                     for="fileStudentPhoto">Attachments <span class="StarMarking">*</span></label>
-              <div class="flex fileUploader">
-                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')" >
-                <label for="fileStudentPhoto">
-                  <span>Choose File</span>
+              <label for="fileStudentPhoto"
+                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Attachments <span class="text-red-500">*</span>
+              </label>
 
-                  {{UpdateConsentRequest.DocConsent === '' ? 'No File Choosen' : UpdateConsentRequest.DocConsent}}
-                </label>
-                <div class="flex">
+              <div class="flex items-center space-x-3">
+                <input type="file"
+                       id="fileStudentPhoto"
+                       class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       (change)="onFilechange($event,'Photo')" />
+                <span class="text-sm text-gray-700 dark:text-gray-300 truncate max-w-[200px]">
+                  {{ UpdateConsentRequest.DocConsent === '' ? 'No File Chosen' : UpdateConsentRequest.DocConsent }}
+                </span>
 
-                  <a *ngIf="UpdateConsentRequest.DocConsent"
-                 [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + UpdateConsentRequest.DocConsent" class="btn bg-primary text-white m-0" target="_blank">
-                <i class="ti ti-eye"></i>
-              </a>
-
-                </div>
+                <a *ngIf="UpdateConsentRequest.DocConsent"
+                   [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/Consent/' + UpdateConsentRequest.DocConsent"
+                   class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md"
+                   target="_blank">
+                  <i class="ti ti-eye mr-1"></i> View
+                </a>
               </div>
             </div>
-
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Tentative Date</label>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Tentative Date
+              </label>
               <input type="date"
                      name="TentativeDate"
-                     formControlName="TentativeDate" [(ngModel)]="consentForm.TentativeDate"
-                     class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm" />
+                     formControlName="TentativeDate"
+                     [(ngModel)]="consentForm.TentativeDate"
+                     class="w-full border border-gray-300 dark:border-gray-600
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg
+                     px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"
+                     (click)="openDatePicker($event)"
+                     />
             </div>
-
           </div>
-          <div class="mt-4">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Remark</label>
+          <div class="mt-6">
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Remark
+            </label>
             <textarea name="Remarks"
-                      formControlName="Remarks" [(ngModel)]="consentForm.Remarks"
+                      formControlName="Remarks"
+                      [(ngModel)]="consentForm.Remarks"
                       rows="3"
-                      class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm"></textarea>
+                      class="w-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none text-sm resize-none"></textarea>
           </div>
         </div>
-        </form>
+
+      </form>
 
         <div class="card-footer flex justify-end gap-3 border-t p-3 bg-gray-50">
-          <button class="btn bg-gray-400 text-white" type="button" (click)="onReset()">Reset</button>
+          <button class="btn bg-gray-400 text-white" type="button" (click)="CloseModalPopup()">Cancel</button>
           <button class="btn bg-success text-white" type="button" (click)="onSubmitConsent()">Submit</button>
         </div>
-
     </div>
   </div>
 </ng-template>

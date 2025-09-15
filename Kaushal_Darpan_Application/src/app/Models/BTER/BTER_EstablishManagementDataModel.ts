@@ -136,6 +136,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public DateOfBirth: string = ''
   public DateOfAppointment: string = ''
   public DateOfJoining: string = ''
+  public DepartmentJoiningDate: string = ''
   public DateOfRetirement: string = ''
   public MobileNumber: string = ''
   public SSOID: string = ''
@@ -153,6 +154,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public StaffID: number = 0
   public UserID: number = 0
   public OfficeID: number = 0
+  public StaffTypeID: number = 0
   public EduQualificationDetailsModel: Staff_EduQualificationDetailsModel[] = [];
   public bterStaffSubjectListModel: BterStaffSubjectList[] = [];
 
@@ -242,6 +244,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
   public ProfileStatusID: number = 0
 
   public ModifyBy: number = 0
+  public StaffTypeID: number = 0
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {
@@ -491,4 +494,24 @@ export class BTER_DesignationWiseBranchDataModel {
   public RoleID: number = 0;
   public BranchID: number = 0;
   public StaffID: number = 0;
+}
+
+
+export class BTERExtraOrdinaryLeavesForStaffModel {
+  public ID: number = 0;
+  public StaffUserID: number = 0;
+  public Comments: string = '';
+  public LeaveDayCount: number = 0;
+  public DepartmentID: number = 0;
+  public EndTermId: number = 0;
+  public CourseTypeID: number = 0;
+  public ActiveStatus: boolean = false;
+  public DeleteStatus: boolean = false;
+  public RTS: string = '';
+  public FromDate: string = '';
+  public ToDate: string = '';
+  public CreatedBy: number = 0;
+  public ModifyBy: number = 0;
+  public ModifyDate: string = '';
+  public IPAddress: string = '';
 }

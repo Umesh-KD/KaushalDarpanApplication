@@ -212,7 +212,7 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0,DivisionID:number=0) {
+  public async ItiTrade(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, InstituteID: number = 0, DivisionID: number = 0) {
 
     return await this.http.get(this.APIUrl + '/ItiTrade/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + InstituteID + '/' + DivisionID, this.headersOptions)
       .pipe(
@@ -268,9 +268,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async SemesterMaster(ShowAllSemester: number = 0) {
-
-    return await this.http.get(this.APIUrl + '/SemesterMaster/' + ShowAllSemester, this.headersOptions)
+  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0) {
+    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -1197,6 +1196,8 @@ export class CommonFunctionService {
   }
 
 
+
+
   public async GetDateConfigSetting(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     const headers = { 'content-type': 'application/json' }
@@ -1722,7 +1723,7 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetNodalExamCenterDistrict(District: number,EndTermID:number=0) {
+  public async GetNodalExamCenterDistrict(District: number, EndTermID: number = 0) {
 
     return await this.http.post(this.APIUrl + '/GetNodalExamCenterDistrict/' + District + '/' + EndTermID, this.headersOptions)
       .pipe(
@@ -1882,7 +1883,7 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-    
+
 
   public async ITI_DeirectAdmissionOptionFormData(tradeSearchRequest: ItiTradeSearchModel) {
     var body = JSON.stringify(tradeSearchRequest);
@@ -1893,11 +1894,11 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-   public async GetSSOIDDetailData(SSOIDDetailRequest: SSOIDDetailRequestModel) {
+  public async GetSSOIDDetailData(SSOIDDetailRequest: SSOIDDetailRequestModel) {
     debugger
     var body = JSON.stringify(SSOIDDetailRequest);
     const headers = { 'content-type': 'application/json' }
-    return await this.http.post(this.APIUrl + "/GetSSOIDDetailData/", body,{ 'headers': headers })
+    return await this.http.post(this.APIUrl + "/GetSSOIDDetailData/", body, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

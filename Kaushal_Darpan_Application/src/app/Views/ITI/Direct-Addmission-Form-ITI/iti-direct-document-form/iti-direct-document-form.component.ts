@@ -116,7 +116,11 @@ export class ITIDirectDocumentFormComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.tabChange.emit(5)
+            if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+              this.tabChange.emit(4)
+            } else {
+              this.tabChange.emit(5);
+            }
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -277,7 +281,11 @@ export class ITIDirectDocumentFormComponent {
   }
 
   async Back() {
-    this.tabChange.emit(3)
+    if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+      this.tabChange.emit(2)
+    } else {
+      this.tabChange.emit(3)
+    }
   }
 
   async DeleteDocumentList(DocumentType: string) {
