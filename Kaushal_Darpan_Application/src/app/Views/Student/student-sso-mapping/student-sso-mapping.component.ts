@@ -469,11 +469,11 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
       DepartmentID: EnumDepartment.ITI,
       CourseTypeId: this.sSOLoginDataModel.Eng_NonEng,
       AcademicYearID:9 ,
-      EndTermID: this.sSOLoginDataModel.EndTermID,
+      EndTermID: 9,
       Key: "DIRECT ADDMISSSION",
       SSOID: this.sSOLoginDataModel.SSOID
     }
-
+    debugger
     await this.commonservice.GetDateConfigSetting(data)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
