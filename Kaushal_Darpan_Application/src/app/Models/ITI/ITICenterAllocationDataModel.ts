@@ -21,5 +21,7 @@ export class ITICenterAllocationtDataModels {
 export class ITIcenterAllocationSearchModel extends RequestBaseModel {
   public Name: string = ''
   public centerCode: String = ''
-  public CenterID:number=0
+  public CenterID: number = 0
+  public InstituteID:number=0
+  
 }
