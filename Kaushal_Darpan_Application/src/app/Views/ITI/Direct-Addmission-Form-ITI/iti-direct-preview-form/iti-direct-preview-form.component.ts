@@ -259,7 +259,7 @@ export class ITIDirectPreviewFormComponent {
                 //  });
                 //}
 
-                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave, true);
+                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave, true, this.request.DirectAdmissionType);
                 // this.router.navigate(['/Itipreviewform'], {
                 //   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 // });
@@ -329,12 +329,9 @@ export class ITIDirectPreviewFormComponent {
   } 
   async SavePreview(content: any, ApplicationID: number)
   {
-
-
-
     ////this.IsShowViewStudent = true;
     this.request.ApplicationID = ApplicationID
-    this.GetById();
+    await this.GetById();
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {

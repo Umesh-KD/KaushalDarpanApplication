@@ -116,17 +116,18 @@ export class PreviewFormTabComponent implements OnInit {
   {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchrequest.DepartmentID = EnumDepartment.ITI;
-    await this.checkJailCollege()
-    this.GetITIDateDataList();
+    
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     if (this.ApplicationID > 0)
     {
       this.searchrequest.ApplicationID = this.ApplicationID;
       this.request.ApplicationID = this.ApplicationID;
-      this.GetById()
+      await this.GetById()
     } else {
       window.open(`/StudentJanAadharDetail`, "_self");
     }
+    await this.checkJailCollege()
+    await this.GetITIDateDataList();
   }
 
   Changetab(index: number) {
@@ -669,10 +670,16 @@ export class PreviewFormTabComponent implements OnInit {
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-          if (this.IsJailCollege) {
+          if (this.request.DirectAdmissionType == 181) {
             var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
             if (lnth <= 0) {
-              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+              this.toastr.warning("Date for ITI Jail Admission is Closed or Not Open");
+              this.isITIAddmissionOpen = false;
+            }
+          } else if(this.request.DirectAdmissionType == 1) {
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+            if (lnth <= 0) {
+              this.toastr.warning("Date for ITI Direct Admission is Closed or Not Open");
               this.isITIAddmissionOpen = false;
             }
           } else {
