@@ -18,10 +18,10 @@ import { AppsettingService } from '../../Common/appsetting.service';
   providedIn: 'root'
 })
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    standalone: false
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
+  standalone: false
 })
 export class LoginComponent implements OnInit {
   LoginType: any = "1";
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder) { }
 
   init() {
-   
+
     this.loaderService.getSpinnerObserver().subscribe((status) => {
       this.cdRef.detectChanges();
     });
@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
   get _UserRequestFormGroup() { return this.UserRequestFormGroup.controls; }
   async ngOnInit() {
     //
-    
+
     this.LoginForm = this.formBuilder.group(
       {
         txtUserID: ['', Validators.required],
@@ -87,15 +87,12 @@ export class LoginComponent implements OnInit {
         districtID: ['', Validators.required],
         divisionID: ['', Validators.required],
         InstituteID: ['', [DropdownValidators]],
-
       })
     //await this.GetDivisionMasterList();
     //await this.GetMasterData();
     //await this.loadDropdownData('Institute');
     //test, replace this sso token with active
-    this.SSOToken =
-      "eTloQjczZGF5VVVRQ2pJV3R3NXczWklDMDVLR242TGd2dHVOazZlOFZNbjE0bE52UWtzcU1BaWlFbUZVdk5CWDBrTERFWHFEaHZPMjJCdmppd0N4K0twMmN5cTVwS1RXYk9Ta1EwNDhvV3EyTm1NYUJoQXBpYTBIbnlRMmhLTjBCd2JPQVJURXowcEo0Z1pYRHVUaXJySFRUQ09IVWZWYmZLYnNxZmN3UDNJdHVUS0pVd21jSXNRcUl1Q1RkSHlG";
-
+    this.SSOToken = "eTloQjczZGF5VVVRQ2pJV3R3NXczWklDMDVLR242TGd2dHVOazZlOFZNbjE0bE52UWtzcU1BaWlFbUZVdk5CWDBrTERFWHFEaHZPMjJCdmppd0N4K0twMmN5cTVwS1RXYk9Ta1EwNDhvV3EyTm1NYUJoQXBpYTBIbnlRMmhLTjBCd2JPQVJURXowcEo0Z1pYRHVUaXJySFRUQ09IVWZWYmZLYnNxZmN3UDNJdHVUS0pVd21jSXNRcUl1Q1RkSHlG";
   }
 
   loadDropdownData(MasterCode: string): void {
@@ -164,7 +161,7 @@ export class LoginComponent implements OnInit {
     /*this.modalReference.componentInstance.initialState = initialState;*/
 
   }
-  
+
   async GetDivisionMasterList() {
     try {
       this.loaderService.requestStarted();
@@ -275,7 +272,7 @@ export class LoginComponent implements OnInit {
 
 
   async Login() {
-    
+
 
     this.isSubmitted = true;
     if (this.LoginForm.invalid) {
@@ -292,19 +289,18 @@ export class LoginComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          
+
           if (this.State == EnumStatus.Success) {
             this.sSOLoginDataModel = data['Data'];
-            
 
-            if (this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITISCVT)
-            {
+
+            if (this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWarden || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITINCVT || this.sSOLoginDataModel.RoleID == this._EnumRole.HostelWardenITISCVT) {
               this.sSOLoginDataModel.IsMutiHostelWarden = true;
               const getHostelSID = data['Data']['HostelIDs'];
               if (getHostelSID != null && getHostelSID != '') {
                 const hostelIDArray = getHostelSID.split(",");
                 //alert(hostelIDArray);
-                this.sSOLoginDataModel.HostelID =  hostelIDArray[0];
+                this.sSOLoginDataModel.HostelID = hostelIDArray[0];
               }
               else {
                 this.sSOLoginDataModel.HostelID = 0;
@@ -312,7 +308,7 @@ export class LoginComponent implements OnInit {
 
             }
 
-           
+
 
             //set user session 
             localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
@@ -347,7 +343,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  
+
 
 
   async CheckUserExists() {
@@ -369,7 +365,7 @@ export class LoginComponent implements OnInit {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
-          
+
 
           if (this.State === EnumStatus.Success) {
             // Redirect to the dashboard
@@ -395,7 +391,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  
+
 
 
   SSOLogin_Dummy(apiUrl: string) {
@@ -413,8 +409,7 @@ export class LoginComponent implements OnInit {
   }
 
 
-  EmitraLOgin_Dummy(apiUrl: string)
-  {
+  EmitraLOgin_Dummy(apiUrl: string) {
     var form = document.createElement("form");
     form.method = "POST";
     form.action = apiUrl;
