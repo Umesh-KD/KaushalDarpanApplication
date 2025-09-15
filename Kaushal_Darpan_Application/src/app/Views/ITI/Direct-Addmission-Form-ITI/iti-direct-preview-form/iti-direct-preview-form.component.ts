@@ -362,7 +362,8 @@ export class ITIDirectPreviewFormComponent {
 
     this.Swal2.Confirmation("Are you sure you want to Submit & Make Payment?", async (result: any) =>
     {
-      if (result.isConfirmed) {
+      if (result.isConfirmed)
+      {
         
         this.isLoading = true;
         this.emitraRequest = new EmitraRequestDetails();
