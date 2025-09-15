@@ -46,7 +46,6 @@ export class ApplyNowComponent implements OnInit
       this.DepartmentData = this.DepartmentData.filter((f: any) => f.DepartmentID == this.SSOLoginDataModel.DepartmentID)
     }
   }
-
   encryptParameter(param: any)
   {
     return this.encryptionService.encryptData(param);

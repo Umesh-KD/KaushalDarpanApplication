@@ -94,7 +94,7 @@ export class BterEMAddStaffDetailsComponent {
       QualificationAtJoining: ['', [Validators.required]],
       QualificationAfterJoining: ['', [Validators.required]],
 
-      DateOfRetirement: [''],
+      DateOfRetirement: [{ value: '', disabled: true }],
       Remark: [''],
     });
 
@@ -622,10 +622,46 @@ export class BterEMAddStaffDetailsComponent {
             //this.formData.EmployeeID = parsedData.employeeNumber;
 
 
+            //if (parsedData.dateOfBirth) {
+            //  const [day, month, year] = parsedData.dateOfBirth.split('/');
+            //  this.request.DateOfBirth = `${year}-${month}-${day}`; // yyyy-MM-dd format
+            //}
+
             if (parsedData.dateOfBirth) {
-              const [day, month, year] = parsedData.dateOfBirth.split('/');
-              this.request.DateOfBirth = `${year}-${month}-${day}`; // yyyy-MM-dd format
+              const [dayStr, monthStr, yearStr] = parsedData.dateOfBirth.split('/');
+              const day = parseInt(dayStr, 10);
+              const month = parseInt(monthStr, 10); // 1-12
+              const year = parseInt(yearStr, 10);
+
+              // Format DateOfBirth as yyyy-MM-dd
+              const dob = new Date(year, month - 1, day);
+              this.request.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+
+              // Calculate retirement year
+              const retirementYear = year + 60;
+
+              // Calculate Date of Retirement based on day of month
+              let retirementDate: Date;
+              if (day === 1) {
+                // Last date of previous month in retirement year
+                retirementDate = new Date(retirementYear, month - 1, 0);
+              } else {
+                // Last date of current month in retirement year
+                retirementDate = new Date(retirementYear, month, 0);
+              }
+
+              // Format retirement date as dd-mm-yyyy
+              const rdDay = String(retirementDate.getDate()).padStart(2, '0');
+              const rdMonth = String(retirementDate.getMonth() + 1).padStart(2, '0');
+              const rdYear = retirementDate.getFullYear();
+              this.request.DateOfRetirement = `${rdYear}-${rdMonth}-${rdDay}`;
+
+              // Optionally, check if retirement date is in the future, etc.
             }
+
+
+
+
 
             if (parsedData.gender != null) {
               this.GetGenderID = this.GenderList.find((item: any) =>

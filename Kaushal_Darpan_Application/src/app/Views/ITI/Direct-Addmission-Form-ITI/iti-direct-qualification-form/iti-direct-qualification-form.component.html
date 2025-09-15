@@ -7,7 +7,7 @@
         योग्यता विवरण भरें (Fill qualification
         details):<span class="StarMarking">*</span>
       </label>
-      <div  class="hidden">
+      <div *ngIf="PersonalDetailsData.DirectAdmissionType==1" >
         <label class="me-2">
           <input type="checkbox" value="8" id="Box8THForm" (click)="onClick8thCheckbox()"
                  [checked]="box8Checked" />

@@ -167,6 +167,7 @@
                 <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID }" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend')"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold' || row.Status=='Approved')" (click)="CampusOnPostAction(MyModel_Action,row)"><i class="ti ti-check"></i></a>
                 <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status !='Suspend')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" (click)="openModalCampus(modal_Opens,row.PostID)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Update"><i class="ti ti-check"></i></a>
               </div>
             </td>
           </tr>
@@ -249,5 +250,59 @@
         </div>
       </div>
     </form>
+  </div>
+</ng-template>
+
+
+<ng-template #modal_Opens let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Update Details</b>
+        <button class="btn bg-info text-white" (click)="CloseModalPopupCampus()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Campus From Date : <span class="StarMarking">*</span>
+              </label>
+              <input class="form-input" placeholder="txtCampusFromDate" type="date"
+                     id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate">
+              <div *ngIf="isSubmitted&&form.txtCampusFromDate.errors" class="text-danger">
+                <p *ngIf="form.txtCampusFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Campus To Date : <span class="StarMarking">*</span>
+              </label>
+              <input class="form-input" placeholder="txtCampusToDate" type="date"
+                     id="txtCampusToDate" [(ngModel)]="request.CampusToDate" [min]="mincampusDate">
+              <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
+                <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Campus Time :<span class="StarMarking">*</span>
+              </label>
+              <input class="form-input" placeholder="txtCampusFromTime" type="time"
+                     id="txtCampusFromTime" [(ngModel)]="request.CampusFromTime">
+              <div *ngIf="isSubmitted&&form.txtCampusFromTime.errors" class="text-danger">
+                <p *ngIf="form.txtCampusFromTime.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer text-center">
+            <button type="button" class="btn bg-success text-white" (click)="UpdateCampusData()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </ng-template>

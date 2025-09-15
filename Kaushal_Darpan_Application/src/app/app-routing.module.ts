@@ -349,6 +349,12 @@ const routes: Routes = [
       { path: 'itiformstable', loadChildren: () => import('./Views/ITI/DashboardComponent/iti-forms-table/iti-forms-table.module').then(m => m.ItiFormsTableModule), title: 'ITI Form' },
       { path: 'itiformsprioritylist', loadChildren: () => import('./Views/ITI/DashboardComponent/iti-forms-priority-list/iti-forms-priority-list.module').then(m => m.ItiFormsPriorityListModule), title: 'ITI Forms priority List' },
 
+
+      { path: 'ItiJailApplication', loadChildren: () => import('./Views/ITI/iti-JailApplication/iti-JailApplication.module').then(m => m.ItiJailApplicationModule), title: 'ITI Jail Application' },
+      { path: 'ItiJailApplication/:id', loadChildren: () => import('./Views/ITI/iti-JailApplication/iti-JailApplication.module').then(m => m.ItiJailApplicationModule), title: 'ITI Jail Application' },
+      
+
+
       { path: 'documentationscrutiny', loadChildren: () => import('./Views/BTER/application-form/documentation-scrutiny/documentation-scrutiny.module').then(m => m.DocumentationScrutinyModule), title: 'Documentation Scrutiny' },
       { path: 'StudentVerificationList', loadChildren: () => import('./Views/Polytechnic/student-verification-list/student-verification-list.module').then(m => m.StudentVerificationListModule), title: 'Student Verification List' },
       { path: 'NodalDashboardITI', loadChildren: () => import('./Views/ITI/nodal-dashboard-iti/nodal-dashboard-iti.module').then(m => m.NodalDashboardITIModule), title: 'Nodal Dashboard ITI' },
@@ -1374,9 +1380,16 @@ const routes: Routes = [
       { path: 'JailAdmissionAllotment10/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
       { path: 'JailAdmissionAllotment12/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
       { path: 'JailAdmissionReporting/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/jail-admission-reporting/jail-admission-reporting.module').then(m => m.JailAdmissionReportingModule) },
-      { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
-      { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
-      { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'ExtraOrdinaryLeavesForStaff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/ExtraOrdinaryLeavesForStaff/ExtraOrdinaryLeavesForStaff.module').then(m => m.ExtraOrdinaryLeavesForStaffModule), title: 'Extra Ordinary Leaves For Staff' },
+      { path: 'ScvtCenterAllocation', loadChildren: () => import('./Views/ITI/scvt-center-allocation/scvt-center-allocation.module').then(m => m.ScvtCenterAllocationModule) },
+
+      { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
+
+        { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+        { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
+        { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+
+
     ]
   },
   

@@ -45,6 +45,7 @@ export class ITIDirectQualificationFormComponent {
   public BoardList: any = []
   public PassingYearList: any = []
   public QualificationDataList: any = []
+  public PersonalDetailsData: any = []
   public MarksTypeList: any = []
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public searchRequest = new ItiApplicationSearchmodel()
@@ -148,8 +149,9 @@ export class ITIDirectQualificationFormComponent {
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     if (this.ApplicationID > 0) {
       this.searchRequest.ApplicationID = this.ApplicationID;
-      this.GetById();
-      this.GetByIdQualification();
+      await this.GetPersonalDetailsById();
+      await this.GetById();
+      await this.GetByIdQualification();
     }
     await this.GetMasterDDL()
   }
@@ -853,7 +855,11 @@ export class ITIDirectQualificationFormComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.tabChange.emit(3);
+            if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+              this.tabChange.emit(2);
+            } else {
+              this.tabChange.emit(3);
+            }
           } else {
             this.toastr.error(data.ErrorMessage)
           }
@@ -885,14 +891,14 @@ export class ITIDirectQualificationFormComponent {
     try {
       this.loaderService.requestStarted();
       await this.ItiApplicationFormService.GetQualificationDatabyID(this.searchRequest)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.QualificationDataList = data.Data
           console.log(this.QualificationDataList)
-
+          
           this.QualificationDataList.map((list: any) => {
 
-            if (list.Qualification == "8") {
+            if (list.Qualification === "8") {
               this.box8Checked = true
               this.formData8th.StateID8 = list.StateID
               this.formData8th.SchoolCollege8 = list.SchoolCollege
@@ -902,9 +908,8 @@ export class ITIDirectQualificationFormComponent {
               this.formData8th.MaxMarks8 = list.MaxMarks
               this.formData8th.MarksObtained8 = list.MarksObtained
               this.calculatePercentage8th()
-
             }
-            else if (list.Qualification == "10") {
+            else if (list.Qualification === "10") {
               this.box10Checked = true
               this.formData10th.StateID10 = list.StateID
               this.formData10th.BoardUniversity10 = list.BoardUniversity
@@ -918,9 +923,8 @@ export class ITIDirectQualificationFormComponent {
               this.formData10th.ScienceMaxMarks10 = list.ScienceMaxMarks
               this.formData10th.ScienceMarksObtained10 = list.ScienceMarksObtained
               this.calculatePercentage10th()
-
             }
-            else if (list.Qualification == "12") {
+            else if (list.Qualification === "12") {
               this.box12Checked = true
               this.formData12th.StateID12 = list.StateID
               this.formData12th.SchoolCollege12 = list.SchoolCollege
@@ -930,7 +934,6 @@ export class ITIDirectQualificationFormComponent {
               this.formData12th.MaxMarks12 = list.MaxMarks
               this.formData12th.MarksObtained12 = list.MarksObtained
               this.calculatePercentage12th()
-
             }
             else {
               this.formData.StateIDHigh = list.StateID
@@ -1057,7 +1060,6 @@ export class ITIDirectQualificationFormComponent {
         console.log("GetQualificationDDL", this.GetQualificationDDL);
       })
 
-
     } catch (error) {
       console.error(error);
     } finally {
@@ -1068,7 +1070,11 @@ export class ITIDirectQualificationFormComponent {
   }
 
   async Back() {
-    this.tabChange.emit(1)
+    if(this.PersonalDetailsData.DirectAdmissionType == 1) {
+      this.tabChange.emit(0)
+    } else {
+      this.tabChange.emit(1)
+    }
   }
 
   numberOnly(event: KeyboardEvent): boolean {
@@ -1085,5 +1091,27 @@ export class ITIDirectQualificationFormComponent {
 
   }
 
+  async GetPersonalDetailsById() {
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequest.ApplicationID = this.ApplicationID
+      await this.ItiApplicationFormService.GetApplicationDatabyID(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data['Data'] != null) {
+            debugger
+            this.PersonalDetailsData = data['Data']
+            console.log("PersonalDetailsData",this.PersonalDetailsData);
+
+          }
+        }, error => console.error(error));
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
