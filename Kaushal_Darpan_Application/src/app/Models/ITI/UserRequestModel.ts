@@ -80,6 +80,8 @@ export class BterRequestSearchModel {
 
   public IsPensionable: boolean = false;
   public NumberOfPensionable: string = '';
+  public DateOfBirth: string = '';
+  
 
 
 }

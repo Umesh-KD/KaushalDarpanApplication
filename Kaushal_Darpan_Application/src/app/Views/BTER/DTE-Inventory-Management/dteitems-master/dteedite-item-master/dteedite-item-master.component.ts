@@ -112,6 +112,7 @@ this.itemsFormArray.get('items')?.valueChanges
   //  });
   //}
   async GetAllItemDetails() {
+    debugger
   if (this.ItemId != null && this.ItemId != undefined && this.ItemId > 0) {
     await this.dteItemsMasterService.GetAllDTEItemDetails(this.ItemId).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));

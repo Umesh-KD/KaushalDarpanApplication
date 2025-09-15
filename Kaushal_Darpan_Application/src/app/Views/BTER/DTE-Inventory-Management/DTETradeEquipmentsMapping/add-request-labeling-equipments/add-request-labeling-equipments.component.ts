@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GlobalConstants, EnumStatus, EnumDepartment } from '../../../../../Common/GlobalConstants';
+import { GlobalConstants, EnumStatus, EnumDepartment,EnumRole } from '../../../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../../Services/Loader/loader.service';
@@ -47,7 +47,7 @@ export class AddRequestLabelingEquipmentsComponent {
   public EquipmentsRequestFormGroup!: FormGroup;
   TradegroupForm!: FormGroup;
   public maxQty: number = 0;
-
+  _EnumRole = EnumRole;
   public isRequested: boolean = false;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -89,16 +89,7 @@ export class AddRequestLabelingEquipmentsComponent {
 
 
   async ngOnInit() {
-    this.activatedRoute.paramMap.subscribe(params => {
-      this.request.InstituteID = Number(params.get('id'));
-      this.request.CategoryId = Number(params.get('category'));
-      this.request.EquipmentId = Number(params.get('equipment'));
-      this.request.Quantity = Number(params.get('quantity'));
-      if (Number(params.get('equipment')) > 0) {
-        this.isRequested = true;
-      }
-      
-    });
+
     this.RequestFormGroup = this.formBuilder.group({
       ddlEquipmentsId: ['', [DropdownValidators]],
       ddlCategoryId: ['', [DropdownValidators]],
@@ -117,6 +108,26 @@ export class AddRequestLabelingEquipmentsComponent {
       IdentificationMark: ['', Validators.required],
       CampanyName: ['', Validators.required],
     });
+
+
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.request.InstituteID = Number(params.get('id'));
+      this.request.CategoryId = Number(params.get('category'));
+      this.request.EquipmentId = Number(params.get('equipment'));
+      this.request.Quantity = Number(params.get('quantity'));
+      this.request.MappingId = Number(params.get('mappingid'));
+      if (Number(params.get('equipment')) > 0) {
+        this.isRequested = true;
+      }
+      debugger
+      this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+      if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
+        this.RequestFormGroup.get('ddlInstituteID')?.disable();
+      }
+
+      
+    });
+   
     this.CategoriesRequestFormGroup = this.formBuilder.group({
       ItemCategoryName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
     });
@@ -138,6 +149,7 @@ export class AddRequestLabelingEquipmentsComponent {
     this.TE_MappingId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
+    
     await this.GetCategoryDDL();
     await this.CategoryWiseEquiments();
     await this.GetUnitDDL();
@@ -185,7 +197,7 @@ export class AddRequestLabelingEquipmentsComponent {
   //New Added
 
   calculateTotalPrice(): void {
-    debugger;
+   
     const quantity = this.request.Quantity ?? 0;
     const pricePerUnit = this.request.PricePerUnit ?? 0;
     // Calculate total price
@@ -215,15 +227,14 @@ export class AddRequestLabelingEquipmentsComponent {
   }
 
   async saveData() {
-    debugger;
+   debugger
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.isSubmitted = true;
 
     if (this.RequestFormGroup.value.CampanyName != null &&
       this.RequestFormGroup.value.IdentificationMark != null &&
       this.RequestFormGroup.value.ddlCategoryId != null &&
-      this.RequestFormGroup.value.ddlEquipmentsId != null &&
-      this.RequestFormGroup.value.ddlInstituteID != null &&
+      this.RequestFormGroup.value.ddlEquipmentsId != null &&      
       this.RequestFormGroup.value.txtPricePerUnit != null &&
       Number(this.RequestFormGroup.value.txtPricePerUnit) > 0 &&
       this.RequestFormGroup.value.txtQuantity != null &&
@@ -262,6 +273,9 @@ export class AddRequestLabelingEquipmentsComponent {
 
               //}
             }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning('This request has already been actioned.');
+            }
             else if (this.State == EnumStatus.Error) {
               this.toastr.error(this.ErrorMessage);
             }
@@ -283,7 +297,7 @@ export class AddRequestLabelingEquipmentsComponent {
   }
 
   async GetByID(id: number) {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
 
@@ -301,7 +315,7 @@ export class AddRequestLabelingEquipmentsComponent {
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
           console.log(data)
-          debugger
+          
           this.RequestFormGroup.patchValue({
             ItemCategoryId: data['Data']['ItemCategoryId']
           })
@@ -317,6 +331,12 @@ export class AddRequestLabelingEquipmentsComponent {
           if (btnReset) btnReset.innerHTML = "Cancel";
 
         }, error => console.error(error));
+        
+
+      //if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
+      //  this.RequestFormGroup.get('ddlInstituteID')?.disable();
+      //}
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -345,7 +365,7 @@ export class AddRequestLabelingEquipmentsComponent {
 
 
   async GetCategoryDDL() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       await this.itemCategoriesService.GetAllData()
@@ -395,7 +415,7 @@ export class AddRequestLabelingEquipmentsComponent {
   //}
 
   async GetEquipmentDDL() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       this.isLoading = true;

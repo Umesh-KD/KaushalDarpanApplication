@@ -146,8 +146,8 @@ export class EMPrincipleStaffComponent {
 
       Name: ['', [Validators.required]],
      
-      IsExtraWorking: [''],
-      IsEmployeeWorking: [''],
+      IsExtraWorking: ['false'],
+      IsEmployeeWorking: ['false'],
       
       IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
       //IsEmpWorkingOnPost: ['', [Validators.required]],
@@ -161,12 +161,14 @@ export class EMPrincipleStaffComponent {
       SelectionCategory: ['', [Validators.required]],
       HigherEduPermission: ['', [Validators.required]],
       
+      IsEmpWorkingOnDeputationToOther: [false],
+      IsEmpWorkingOnPost: [false],
+      IsSalaryDrawnFromSamePost: [false],
 
-
-      HigherEduInstitute: ['', [Validators.required]],
-      IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
-      IsEmpWorkingOnPost: [false, [Validators.required]],
-      IsSalaryDrawnFromSamePost: [false, [Validators.required]],
+      //HigherEduInstitute: ['', [Validators.required]],
+      //IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
+      //IsEmpWorkingOnPost: [false, [Validators.required]],
+      //IsSalaryDrawnFromSamePost: [false, [Validators.required]],
 
 
       DateOfBirth: ['', [Validators.required]],

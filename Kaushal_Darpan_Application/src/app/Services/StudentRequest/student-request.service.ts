@@ -6,6 +6,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import {  RoomAllotmentDataModel } from '../../Models/Hostel-Management/RoomAllotmentDataModel';
 import { DTEApplicationDashboardDataModel } from '../../Models/DTEApplicationDashboardDataModel';
+import { DownloadMarksheetSearchModel } from '../../Models/DownloadMarksheetDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -235,6 +236,14 @@ export class StudentRequestService {
   public async GetMeritGeneratedStudent_Hostel( searchRequest: GetMeritDataModel_Hostel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetMeritGeneratedStudent_Hostel`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DownloadStudentHostelAllotmentLetter( searchRequest: DownloadMarksheetSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/DownloadStudentHostelAllotmentLetter`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

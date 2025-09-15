@@ -346,7 +346,7 @@ export class HostelReportsComponent {
   }
 
   async openOTPModal_6thSemDallocation() {
-    this.Swal2.Confirmation("Are you sure you want to Deallocate this  ?",
+    this.Swal2.Confirmation("Are you sure you want to Deallocate 6th Semester Students  ?",
     async (result: any) => {
       if (result.isConfirmed) {
         this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno

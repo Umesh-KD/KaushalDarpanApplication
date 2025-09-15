@@ -2,17 +2,17 @@
 <app-loader></app-loader>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">{{TE_MappingId>0?'Edit':'Add'}} TradeEquipments</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">{{TE_MappingId>0?'Edit':'Add'}} BranchEquipments</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <!--<a href="/NodalOfficer" class="text-sm font-medium text-slate-700" aria-current="page">TradeEquipments</a>-->
-      <a [routerLink]="['/NodalOfficer']" class="text-sm font-medium text-slate-700" aria-current="page">TradeEquipments</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">BranchEquipments</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
         {{TE_MappingId>0?'Edit':'Add'}}
-        TradeEquipments
+        BranchEquipments
       </a>
     </div>
   </div>
@@ -26,7 +26,7 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Trade Equipment</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>{{TE_MappingId>0?'Edit':'Add'}} Branch Equipment</b>
     </div>
     <form [formGroup]="RequestFormGroup" (ngSubmit)="saveData()">
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
@@ -400,7 +400,7 @@
         <form [formGroup]="TradegroupForm">
           <div class="mb-8">
             <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
-              <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Trade:</b>
+              <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Branch:</b>
             </div>
             <div>
               <label>Code <span class="StarMarking">*</span></label>

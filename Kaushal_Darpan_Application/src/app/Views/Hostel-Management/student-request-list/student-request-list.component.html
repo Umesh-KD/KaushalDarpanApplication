@@ -78,8 +78,9 @@
             <th class="text-left">SR NO</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Application ID</th>
-            <th class="text-left">Student ID</th>
             <th class="text-left">{{titleDDLBranchTrade}}</th>
+            <th class="text-left">Semester</th>
+            
             <th class="text-left">Year</th>
             <th class="text-left">Any Room Partner</th>
             <th class="text-center">Action</th>
@@ -90,15 +91,16 @@
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.ApplicationId}}</td>
-            <td align="left">{{item.StudentId}}</td>
             <td align="left">{{item.StreamName}}</td>
+            <td align="left">{{item.Semester}}</td>
+            
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.RoomPartnerReq}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Request"><i class="ti ti-eye"></i> </a>
-                <a href="javascript:void(0)" (click)="btnUserApprove_OnClick(item.ReqId)" title="Approve Request"><i class="ti ti-check"></i></a>
-                <a href="javascript:void(0)" (click)="onCancelAllotment(modal_CancelAllotment, item)" title="Reject Request"><i class="ti ti-x"></i></a>
+                <!-- <a href="javascript:void(0)" (click)="btnUserApprove_OnClick(item.ReqId)" title="Approve Request"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0)" (click)="onCancelAllotment(modal_CancelAllotment, item)" title="Reject Request"><i class="ti ti-x"></i></a> -->
               </div>
             </td>
           </tr>
@@ -176,22 +178,22 @@
                 <td>Local Guardian Contact No.</td>
                 <td>{{StudentReqListList[0]?.LocalGuardianContactNo}}</td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td>Alloted Hostel in June 2023 Session</td>
                 <td>{{StudentReqListList[0]?.AllotedHostelInLastSessionRoomNo}}</td>
-              </tr>
-              <tr>
+              </tr> -->
+              <!-- <tr>
                 <td>Alloted Hostel in Dec 2023 session</td>
                 <td>{{StudentReqListList[0]?.AllotedHostelInLastSessionFeeDetails}}</td>
-              </tr>
-              <tr>
+              </tr> -->
+              <!-- <tr>
                 <td>Any Warning for Short of Attendance</td>
                 <td>{{StudentReqListList[0]?.AnyWorningForShortOfAttendance}}</td>
-              </tr>
-              <tr>
+              </tr> -->
+              <!-- <tr>
                 <td>Any Warning for Invovement Against Discipline</td>
                 <td>{{StudentReqListList[0]?.AnyWarningForInvovementAgainstDiscipline}}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td>Room Partner Application ID</td>
                 <td>{{StudentReqListList[0]?.RoomPartnerApplicationID}}</td>

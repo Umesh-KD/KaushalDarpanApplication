@@ -148,12 +148,11 @@
             </p>
           </div>
         </div>
-
+       
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
                  formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" />
-
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!
@@ -226,7 +225,7 @@
             <span class="StarMarking">*</span>
           </label>
           <input class="form-input" placeholder="Year Of Experience" name="Experience" id="Experience"
-                 formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2" (keypress)="validateNumber($event)"/>
+                 formControlName="Experience" [(ngModel)]="request.Experience" maxlength="2" (keypress)="validateNumber($event)" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Experience.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.Experience.errors.required">
@@ -237,7 +236,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification as per Service Book at the time of joining<span class="StarMarking">*</span></label>
-          <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining" 
+          <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining"
                  formControlName="QualificationAtJoining" [(ngModel)]="request.QualificationAtJoining" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.QualificationAtJoining.errors" class="text-danger">
@@ -258,10 +257,10 @@
             </p>
           </div>
         </div>
-
+        <!--{{request.DateOfRetirement|json}}-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
-          <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"  [min]="request.DateOfJoining" 
+          <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"
                  formControlName="DateOfRetirement" [(ngModel)]="request.DateOfRetirement" />
         </div>
 

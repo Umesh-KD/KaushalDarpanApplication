@@ -26,7 +26,8 @@
           </a>
         </div>
         <!--{{getstatuId|json}}
-        {{request.RequestType|json}}-->
+  {{request.RequestType|json}}-->
+        <!--{{request.DateOfBirth|json}}-->
         <form [formGroup]="groupForm">
           <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -47,15 +48,15 @@
 
 
 
-            <div *ngIf="getstatuId==2">
+            <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Name </label>
               <input type="text" class="form-input" id="txtEmployeeName" name="txtEmployeeName" formControlName="txtEmployeeName" [(ngModel)]="request.UserName" />
             </div>
-            <div *ngIf="getstatuId==2">
+            <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Designation </label>
               <input type="text" class="form-input" id="txtEmployeeDesignation" name="txtEmployeeDesignation" formControlName="txtEmployeeDesignation" [(ngModel)]="request.EmployeeDesignation" />
             </div>
-            <div *ngIf="getstatuId==2">
+            <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Employee Number </label>
               <input type="text" class="form-input" id="txtEmployeeNumber" name="txtEmployeeNumber" formControlName="txtEmployeeNumber" [(ngModel)]="request.EmployeeNumber" />
             </div>
@@ -185,10 +186,11 @@
 
 
             <div>
+              <label  *ngIf="getstatuId === 2" >Note:  Display above the text box: "Upload Application with verified principal signature."</label>
               <label *ngIf="getstatuId === 1 || getstatuId === 2"
                      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                      [attr.for]="getstatuId === 1 ? 'AttachDocument_signature' : 'AttachDocument_file'">
-                {{ getstatuId === 1 ? 'File' : 'Signature' }}
+                {{ getstatuId === 1 ? 'File' : 'Application with Signature' }}
               </label>
 
 
@@ -213,7 +215,7 @@
               <label *ngIf="getstatuId === 1 || getstatuId === 2"
                      [attr.for]="'txtRequestDate'"
                      class="text-gray-800 text-sm font-medium inline-block mb-2">
-                {{ getstatuId === 1 ? 'Request Date' : 'Date of VRS application' }}
+                {{ getstatuId === 1 ? 'Request Date' : 'Effective date of VRS' }}
                 <span class="StarMarking">*</span>
               </label>
               <input type="date"
@@ -221,8 +223,7 @@
                      id="txtRequestDate"
                      name="txtRequestDate"
                      formControlName="txtRequestDate"
-                     [(ngModel)]="request.RequestDate"
-                     >
+                     [(ngModel)]="request.RequestDate">
               <div *ngIf="isSubmitted&&_groupForm.txtRequestDate.errors" class="text-danger">
                 <p *ngIf="_groupForm.txtRequestDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
               </div>
@@ -242,7 +243,7 @@
 
 
 
-            <div *ngIf="getstatuId ==2">
+            <!--<div *ngIf="getstatuId ==2">
               <label class="inline-flex items-center">
                 <input type="checkbox"
                        class="form-checkbox"
@@ -251,7 +252,7 @@
                        name="isPensionable" />
                 <span class="ml-2 text-gray-800 text-sm">Is Pensionable</span>
               </label>
-            </div>
+            </div>-->
 
             <!-- Number of Pensionable (conditional textbox) -->
             <!--<div  *ngIf="getstatuId ==2 && IsPensionable == true">
@@ -263,8 +264,8 @@
                formControlName="txtNumberOfPensionable"
                [(ngModel)]="request.NumberOfPensionable" />
       </div>-->
-            <div *ngIf="getstatuId == 2 && groupForm.get('txtIsPensionable')?.value">
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Number of Pensionable</label>
+            <div *ngIf="getstatuId == 2">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Number of pensionble service years</label>
               <input type="text"
                      class="form-input"
                      id="txtNumberOfPensionable"

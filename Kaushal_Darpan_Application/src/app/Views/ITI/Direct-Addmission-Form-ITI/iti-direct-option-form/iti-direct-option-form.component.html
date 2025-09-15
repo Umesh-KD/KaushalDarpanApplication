@@ -160,6 +160,14 @@
           <button type="button" class="btn bg-light text-dark" (click)="ResetChoice()"><i class="ti ti-refresh"></i> Reset</button>
         </div>
 
+        <div class="pt-30" *ngIf="!IsJailAdmission">
+          <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
+            <i class="ti ti-plus"></i> Add
+            Choice
+          </button>
+          <button type="button" class="btn bg-light text-dark" (click)="ResetChoice()"><i class="ti ti-refresh"></i> Reset</button>
+        </div>
+
       </div>
       <!-- <div *ngIf="this.PersonalDetailsData.CategoryC == 69" class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 gap-6 mb-6 mt-4" id="DivLateral">
         <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert">
