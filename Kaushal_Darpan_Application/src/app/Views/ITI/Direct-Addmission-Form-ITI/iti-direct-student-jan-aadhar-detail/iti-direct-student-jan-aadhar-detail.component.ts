@@ -234,13 +234,22 @@ export class ITIDirectStudentJanAadharDetailComponent {
 
 
   Showdropdown() {
-    if (this.request.ENR_ID == 5)
+
+    if (this.request.ENR_ID == 5 )
     {
-      this.IsShowDropdown = false
+      if (this.IsDirectAdmission == true) {
+        this.IsShowDropdown = true
+      } else {
+        this.IsShowDropdown = false
+      }
+
     }
     else
     {
-      this.IsShowDropdown = false
+     
+        this.IsShowDropdown = false
+      
+  
     }
     if (this.request.ENR_ID != 5 && this.request.ENR_ID != 0)
     {
@@ -248,7 +257,12 @@ export class ITIDirectStudentJanAadharDetailComponent {
     }
     else
     {
-      this.IsShow = true
+      if (this.IsDirectAdmission == true) {
+        this.IsShow = false
+      } else {
+        this.IsShow = true
+      }
+    
     }
 
     if (this.request.ENR_ID != 5) {

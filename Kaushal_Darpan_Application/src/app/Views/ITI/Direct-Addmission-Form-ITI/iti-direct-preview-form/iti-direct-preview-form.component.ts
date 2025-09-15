@@ -259,7 +259,7 @@ export class ITIDirectPreviewFormComponent {
                 //  });
                 //}
 
-                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave, true);
+                this.ShowHideButtons(EnumApplicationFromStatus.FinalSave, true, this.request.DirectAdmissionType);
                 // this.router.navigate(['/Itipreviewform'], {
                 //   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
                 // });
@@ -329,12 +329,18 @@ export class ITIDirectPreviewFormComponent {
   } 
   async SavePreview(content: any, ApplicationID: number)
   {
+    if(this.request.PendingDataModel?.length > 0) {
+      this.toastr.error("Please fill in all the pending details first.")
+      return
+    }
 
-
-
+    if(this.IsTermAndCondition == false) {
+      this.toastr.error("Please read and check undertaking before proceeding.")
+      return
+    }
     ////this.IsShowViewStudent = true;
     this.request.ApplicationID = ApplicationID
-    this.GetById();
+    await this.GetById();
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -365,7 +371,8 @@ export class ITIDirectPreviewFormComponent {
 
     this.Swal2.Confirmation("Are you sure you want to Submit & Make Payment?", async (result: any) =>
     {
-      if (result.isConfirmed) {
+      if (result.isConfirmed)
+      {
         
         this.isLoading = true;
         this.emitraRequest = new EmitraRequestDetails();

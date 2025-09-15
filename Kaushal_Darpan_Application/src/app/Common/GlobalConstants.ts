@@ -366,6 +366,7 @@ export enum EnumDirectAdmissionType
   Management_Quota = 160,
   JailAdmission = 181,
   DirectAdmission = 182,
+  DirectAdmissionITI = 1,
 }
 
 export enum EnumConfigTypeTabs {

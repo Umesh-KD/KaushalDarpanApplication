@@ -327,11 +327,11 @@
                     <i class="ti ti-download"></i>
                   </a>
 
-                  <!-- <a *ngIf="item.HostelFeesReciept" (click)="DownloadHostelAllotmentLetter(item.ReqId)" class="text-success"
+                   <a *ngIf="item.HostelFeesReciept" (click)="DownloadHostelAllotmentLetter(item.ReqId)" class="text-success"
                      title="Download Allotment Letter">
                     <i class="ti ti-download"></i>
-                  </a> -->
-                  </div>
+                  </a>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -367,7 +367,7 @@
       <h3>Hostel Applied:</h3>
       <p>Your Application under process</p>
     </div>
-  </div>-->
+  </div>
   <!--{{StudentDetailsList|json}}-->
   <div class="card-body p-5" *ngIf="sSOLoginDataModel.RoleID != _EnumRole.Student && StudentDetailsList[0]?.AllotmentStatus == 10">
     <div class="mb-8">
