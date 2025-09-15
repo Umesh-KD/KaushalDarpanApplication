@@ -6,7 +6,7 @@ import { ITIsDataModels, ITIsSearchModel } from '../../Models/ITIsDataModels';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
 import { ITI_PlanningCollegesModel, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
-import { ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
+import { ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -181,6 +181,19 @@ export class ITIsService {
   public async ITIAllInstituteList_NCVT(searchRequest: ITIsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ITIAllInstituteList_NCVT`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  // changes 
+
+    public async ItiVacantSeatForDirectAdmission(request: ItiCollegeModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/ItiVacantSeatForDirectAdmission`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

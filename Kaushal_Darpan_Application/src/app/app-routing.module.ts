@@ -1383,6 +1383,7 @@ const routes: Routes = [
       { path: 'ExtraOrdinaryLeavesForStaff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/ExtraOrdinaryLeavesForStaff/ExtraOrdinaryLeavesForStaff.module').then(m => m.ExtraOrdinaryLeavesForStaffModule), title: 'Extra Ordinary Leaves For Staff' },
       { path: 'ScvtCenterAllocation', loadChildren: () => import('./Views/ITI/scvt-center-allocation/scvt-center-allocation.module').then(m => m.ScvtCenterAllocationModule) },
 
+      { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
     ]
   },
   

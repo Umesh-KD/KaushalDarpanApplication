@@ -19,6 +19,7 @@ import { ItiAdmissionComponent } from './iti-admission/iti-admission.component';
 import { KnowMeritITIComponent } from './know-merit-iti/know-merit-iti.component';
 import { UpwardMomentITIComponent } from './upward-moment-iti/upward-moment-iti.component';
 import { ItiCollegeSearchComponent } from './iti-college-search/iti-college-search.component';
+import { ItiVacantSeatDirectAdmissionComponent } from './iti-vacantseatfor-directadmission/iti-vacantseatfor-directadmission.component';
 
 
 @Component({
@@ -83,6 +84,7 @@ export class ITIPublicInfoTabsComponent implements OnInit {
     this.tabs.push({ TabName: 'Allotment Status', TabNameHI: 'आवंटन स्थिति', TabIcon: 'ti ti-exchange', component: AllotmentStatusITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Upward Movement', TabNameHI: 'अपवर्ड मोमेंट', TabIcon: 'ti ti-exchange', component: UpwardMomentITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'ITI College Search', TabNameHI: 'आईटीआई कॉलेज खोज', TabIcon: 'ti ti-license', component: ItiCollegeSearchComponent, DepartmentID: 2, HasLink: false });
+    this.tabs.push({ TabName: 'Vacant Seat For Direct Admission', TabNameHI: 'डायरेक्ट एडमिशन हेतु रिक्त सीट', TabIcon: 'ti ti-license', component: ItiVacantSeatDirectAdmissionComponent, DepartmentID: 2, HasLink: false });
 
   }
   public ngAfterViewInit(): void {

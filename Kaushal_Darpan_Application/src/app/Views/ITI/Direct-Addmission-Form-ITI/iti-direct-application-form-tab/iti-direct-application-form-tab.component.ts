@@ -145,10 +145,10 @@ export class ITIDirectApplicationFormTabComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data['Data'] != null) {
-            
+            debugger
             this.PersonalDetailsData = data['Data']
             console.log("PersonalDetailsData",this.PersonalDetailsData);
-            if(this.PersonalDetailsData.DirectAdmissionType !== 0) {
+            if(this.PersonalDetailsData.DirectAdmissionType == 1) {
               if (data['Data']['IsFinalSubmit'] == 2) {
                 this.router.navigate(['/Itipreviewform'], {
                   queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
@@ -157,6 +157,12 @@ export class ITIDirectApplicationFormTabComponent {
 
               if( this.PersonalDetailsData.DirectAdmissionType == 1) {
                 this.tabs.splice(1, 1)      
+              }
+            } else {
+              if (data['Data']['IsFinalSubmit'] == 2) {
+                this.router.navigate(['/Itipreviewform'], {
+                  queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
+                });
               }
             }
           }
