@@ -36,6 +36,8 @@ export class ItiApplicationService {
       ).toPromise();
   }
 
+
+
   public async GetItiOptionFormData(searchRequest: ItiDashApplicationSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetItiOptionFormData`, body, this.headersOptions)
@@ -43,5 +45,18 @@ export class ItiApplicationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  // iti jail application 
+    public async GetItiJailDashApplicationData(searchRequest: ItiDashApplicationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetItiJailDashApplicationData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 
 }
