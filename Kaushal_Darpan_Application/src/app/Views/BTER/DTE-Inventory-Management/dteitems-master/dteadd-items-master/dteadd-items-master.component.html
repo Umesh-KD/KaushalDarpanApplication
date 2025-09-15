@@ -33,20 +33,20 @@
 
 
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Branch: <span class="StarMarking">*</span>
-          </label>
-          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="StreamName"
-                     bindValue="StreamID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-                     [searchFn]="customSearch" (change)="ddlCategory_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Branch: <span class="StarMarking">*</span>
+    </label>
+    <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="StreamName"
+               bindValue="StreamID" placeholder="--Select--" [searchable]="true" [clearable]="true"
+               [searchFn]="customSearch" (change)="ddlCategory_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
+    </ng-select>
 
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
-            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
-            </p>
-          </div>
-        </div>-->
+    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+      <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required.
+      </p>
+    </div>
+  </div>-->
 
 
 
@@ -56,9 +56,9 @@
             Category: <span class="StarMarking">*</span>
           </label>
           <ng-select formControlName="ItemCategoryId" [(ngModel)]="request.ItemCategoryId" [items]="CategoryDDLList" bindLabel="Name"
-             bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
-             [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-  </ng-select>
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
+                     [searchFn]="customSearch" (change)="ddlEquipment_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
+          </ng-select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.ItemCategoryId.errors" class="text-danger">
             <p *ngIf="!_AddItemsRequestFormGroup.ItemCategoryId.errors.DropdownValidators">
@@ -71,21 +71,21 @@
         <!--{{EquipmentsDDLList|json}}-->
 
         <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Equipment: <span class="StarMarking">*</span>
-        </label>
-           <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
-             bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" [searchFn]="customSearch"
-             (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Equipment: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="EquipmentsId" [(ngModel)]="request.EquipmentsId" [items]="EquipmentsDDLList" bindLabel="Name"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" [searchFn]="customSearch"
+                     (change)="DGET_Details()" [loading]="isLoading" [loadingText]="'Loading...'">
             <ng-option *ngFor="let item of EquipmentsDDLList" [value]="item.EquipmentsId">{{ item.Name }}</ng-option>
-           </ng-select>
+          </ng-select>
 
-        <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
-          <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
-            <i aria-hidden="true"></i>This field is required.
-          </p>
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.EquipmentsId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.EquipmentsId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
         </div>
-      </div>
 
 
 
@@ -117,7 +117,7 @@
           </label>
           <input type="text" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
                  [(ngModel)]="request.VoucherNumber" maxlength="6" (keypress)="validateNumber($event)">
-          
+
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">
               <i aria-hidden="true"></i>
@@ -129,20 +129,19 @@
             </p>
           </div>
         </div>
-       
+
         <div>
           <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Quantity: <span class="StarMarking">*</span>
           </label>
 
-            <input type="text"
-               id="txtQuantity"
-               class="form-input"
-               formControlName="txtQuantity"
-              
-              [max]="maxQty"
-               step="1"
-               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
+          <input type="text"
+                 id="txtQuantity"
+                 class="form-input"
+                 formControlName="txtQuantity"
+                 [max]="maxQty"
+                 step="1"
+                 oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtQuantity.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtQuantity.errors.required">
@@ -195,6 +194,19 @@
             </p>
           </div>
         </div>
+       
+        <div class="mt-3">
+          <label class="block">IsConsumable </label>
+          <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+            <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
+                   [(ngModel)]="request.IsConsume">
+            <span class="toggleIcon">
+              <span class="toggleTitle"></span>
+            </span>
+          </label>
+        </div>
+
+
       </div>
 
       <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
