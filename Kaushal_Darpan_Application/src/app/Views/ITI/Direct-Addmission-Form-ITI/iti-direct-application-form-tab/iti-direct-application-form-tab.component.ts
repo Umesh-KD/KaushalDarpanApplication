@@ -66,7 +66,6 @@ export class ITIDirectApplicationFormTabComponent {
   async ngOnInit()
   {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetITIJailDateList();
     console.log("SSOLoginDataModel",this.SSOLoginDataModel)
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
     if (!this.ApplicationID)
@@ -74,11 +73,9 @@ export class ITIDirectApplicationFormTabComponent {
       window.open(`/StudentJanAadharDetail`, "_self");
     }
 
-
     await this.GetPersonalDetailsById()
+    await this.GetITIJailDateList();
     await this.GetActiveTabList();
-
-
   }
 
   ngAfterViewInit(): void {
@@ -151,15 +148,17 @@ export class ITIDirectApplicationFormTabComponent {
             
             this.PersonalDetailsData = data['Data']
             console.log("PersonalDetailsData",this.PersonalDetailsData);
-            if (data['Data']['IsFinalSubmit'] == 2) {
-              this.router.navigate(['/Itipreviewform'], {
-                queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
-              });
-            }
-            // if( this.PersonalDetailsData.DirectAdmissionType !== 0) {
-            //   this.tabs.splice(4, 1)      
-            // }
+            if(this.PersonalDetailsData.DirectAdmissionType !== 0) {
+              if (data['Data']['IsFinalSubmit'] == 2) {
+                this.router.navigate(['/Itipreviewform'], {
+                  queryParams: { AppID: this.encryptionService.encryptData(this.ApplicationID) }
+                });
+              }
 
+              if( this.PersonalDetailsData.DirectAdmissionType == 1) {
+                this.tabs.splice(1, 1)      
+              }
+            }
           }
         }, error => console.error(error));
     }
@@ -185,14 +184,31 @@ export class ITIDirectApplicationFormTabComponent {
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
-          
-          var lnth =
+          debugger
+          if(this.PersonalDetailsData.DirectAdmissionType==1) {
+            var lnth =
+            this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+            if (lnth <= 0)
+            {
+              this.toastr.warning("Addmission Date is not Open")
+              this.router.navigate(['/dashboard'])
+            }
+          } else {
+            var lnth =
             this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-          if (lnth <= 0)
-          {
-            this.toastr.warning("Addmission Date is not Open")
-            this.router.navigate(['/dashboard'])
+            if (lnth <= 0)
+            {
+              this.toastr.warning("Addmission Date is not Open")
+              this.router.navigate(['/dashboard'])
+            }
           }
+          // var lnth =
+          //   this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
+          // if (lnth <= 0)
+          // {
+          //   this.toastr.warning("Addmission Date is not Open")
+          //   this.router.navigate(['/dashboard'])
+          // }
         }, error => console.error(error));
     }
     catch (Ex) {

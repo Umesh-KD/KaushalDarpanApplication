@@ -117,16 +117,17 @@ export class ITIDirectPreviewFormComponent {
   {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.searchrequest.DepartmentID = EnumDepartment.ITI;
-    this.GetITIDateDataList();
+    
     this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     if (this.ApplicationID > 0)
     {
       this.searchrequest.ApplicationID = this.ApplicationID;
       this.request.ApplicationID = this.ApplicationID;
-      this.GetById()
+      await this.GetById()
     } else {
       window.open(`/StudentJanAadharDetail`, "_self");
     }
+    await this.GetITIDateDataList();
   }
 
   Changetab(index: number) {
@@ -177,7 +178,9 @@ export class ITIDirectPreviewFormComponent {
             const month = String(dob.getMonth() + 1).padStart(2, '0'); 
             const day = String(dob.getDate()).padStart(2, '0');
             this.request.DOB = `${year}-${month}-${day}`;
-            this.ShowHideButtons(this.request.IsfinalSubmit, this.request.IsFinalPay);
+
+            this.ShowHideButtons(this.request.IsfinalSubmit, this.request.IsFinalPay, this.request.DirectAdmissionType);
+
             if (this.request.PendingDataModel?.length > 0) { this.IsShowIncompleteData = true }
             else { this.IsShowIncompleteData = false }
           }
@@ -281,26 +284,48 @@ export class ITIDirectPreviewFormComponent {
     }
   }
 
-  ShowHideButtons(status: number, IsPaymentSuccess: boolean = false) {
+  ShowHideButtons(status: number, IsPaymentSuccess: boolean = false, AdmissionType: number = 0) {
+    // ---------- For Jail Admission ----------------
+    if(AdmissionType == 181) {
+      if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == false) {
 
-     
+        this.ShowfinalLButton = false;
+        this.ShowPaymentButton = true;
+        this.IsTermAndCondition = true;
+      }
+      else if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == true) {
+        this.ShowPaymentButton = false;
+        this.ShowfinalLButton = false
+        this.IsTermAndCondition = true;
+      }
+      else {
+        this.ShowfinalLButton = true;
+        this.ShowPaymentButton = false;
+        this.IsTermAndCondition = false;
+      }
+    } 
 
-    if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == false) {
+    // ---------- For Direct Admission ----------------
+    else if (AdmissionType == 1) {
+      if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == false) {
 
-      this.ShowfinalLButton = false;
-      this.ShowPaymentButton = true;
-      this.IsTermAndCondition = true;
+        this.ShowfinalLButton = false;
+        this.ShowPaymentButton = true;
+        this.IsTermAndCondition = true;
+      }
+      else if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == true) {
+        this.ShowPaymentButton = false;
+        this.ShowfinalLButton = false
+        this.IsTermAndCondition = true;
+      }
+      else {
+        this.ShowfinalLButton = true;
+        this.ShowPaymentButton = false;
+        this.IsTermAndCondition = false;
+      }
     }
-    else if (status == EnumApplicationFromStatus.FinalSave && IsPaymentSuccess == true) {
-      this.ShowPaymentButton = false;
-      this.ShowfinalLButton = false
-      this.IsTermAndCondition = true;
-    }
-    else {
-      this.ShowfinalLButton = true;
-      this.ShowPaymentButton = false;
-      this.IsTermAndCondition = false;
-    }
+
+    
   } 
   async SavePreview(content: any, ApplicationID: number)
   {
@@ -668,17 +693,27 @@ export class ITIDirectPreviewFormComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AdmissionDateList = data['Data'];
-           
+          
           const today = new Date();
           const deptID = EnumDepartment.ITI;
           var activeCourseID: any = [];
 
-          var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
-          if (lnth <= 0)
-          {
-            this.toastr.warning("Date for ITI Admission is Closed or Not Open");
-            this.isITIAddmissionOpen = false;
+          if(this.request.DirectAdmissionType == 1) {
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.DirectAdmission && x.DepartmentID == deptID }).length
+            if (lnth <= 0)
+            {
+              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+              this.isITIAddmissionOpen = false;
+            }
+          } else {
+            var lnth = this.AdmissionDateList.filter(function (x: any) { return new Date(x.To_Date) > today && new Date(x.From_Date) < today && x.TypeID == EnumConfigurationType.JailAdmission && x.DepartmentID == deptID }).length
+            if (lnth <= 0)
+            {
+              this.toastr.warning("Date for ITI Admission is Closed or Not Open");
+              this.isITIAddmissionOpen = false;
+            }
           }
+          
           const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
           this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
           console.log(this.FromDate,"from date")
