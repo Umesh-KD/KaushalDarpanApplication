@@ -161,13 +161,16 @@ constructor(
       this.formData.ModifyBy = this.SSOLoginDataModel.UserID;
       this.formData.SSOID = this.SSOLoginDataModel.SSOID;
      
-
       await this.ItiApplicationFormService.SaveAddressDetailsData(this.formData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.tabChange.emit(4)
+            if(this.PersonalDetails.DirectAdmissionType == 1) {
+              this.tabChange.emit(3);
+            } else {
+              this.tabChange.emit(4);
+            }
           }
           else {
             this.toastr.error(data.ErrorMessage)
@@ -230,7 +233,11 @@ constructor(
   }
 
   async Back() {
-    this.tabChange.emit(2)
+    if(this.PersonalDetails.DirectAdmissionType == 1){
+      this.tabChange.emit(1)
+    } else {
+      this.tabChange.emit(2)
+    }
   }
 
   async GetPersonalDetailById() {
