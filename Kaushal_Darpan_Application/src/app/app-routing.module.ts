@@ -1375,6 +1375,7 @@ const routes: Routes = [
       { path: 'JailAdmissionAllotment12/:id', loadChildren: () => import('./Views/ITI/jail-admission-allotment/jail-admission-allotment.module').then(m => m.JailAdmissionAllotmentModule) },
       { path: 'JailAdmissionReporting/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/jail-admission-reporting/jail-admission-reporting.module').then(m => m.JailAdmissionReportingModule) },
       { path: 'ExtraOrdinaryLeavesForStaff', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/ExtraOrdinaryLeavesForStaff/ExtraOrdinaryLeavesForStaff.module').then(m => m.ExtraOrdinaryLeavesForStaffModule), title: 'Extra Ordinary Leaves For Staff' },
+      { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
     ]
   },
   
