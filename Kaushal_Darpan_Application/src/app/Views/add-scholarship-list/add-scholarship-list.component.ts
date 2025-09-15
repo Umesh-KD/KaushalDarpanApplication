@@ -39,7 +39,7 @@ export class AddScholarshipListComponent {
   public ScholarshipFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public streamsearchmodel = new StreamDDL_InstituteWiseModel()
-
+  public InstituteID:number=0
   constructor(private commonMasterService: CommonFunctionService, private ScholarshipService: ScholarshipService, private toastr: ToastrService,
     private loaderService: LoaderService, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal) {

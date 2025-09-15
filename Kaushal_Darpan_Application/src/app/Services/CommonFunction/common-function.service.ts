@@ -1197,6 +1197,8 @@ export class CommonFunctionService {
   }
 
 
+
+
   public async GetDateConfigSetting(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     const headers = { 'content-type': 'application/json' }
