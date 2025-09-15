@@ -349,6 +349,12 @@ const routes: Routes = [
       { path: 'itiformstable', loadChildren: () => import('./Views/ITI/DashboardComponent/iti-forms-table/iti-forms-table.module').then(m => m.ItiFormsTableModule), title: 'ITI Form' },
       { path: 'itiformsprioritylist', loadChildren: () => import('./Views/ITI/DashboardComponent/iti-forms-priority-list/iti-forms-priority-list.module').then(m => m.ItiFormsPriorityListModule), title: 'ITI Forms priority List' },
 
+
+      { path: 'ItiJailApplication', loadChildren: () => import('./Views/ITI/iti-JailApplication/iti-JailApplication.module').then(m => m.ItiJailApplicationModule), title: 'ITI Jail Application' },
+      { path: 'ItiJailApplication/:id', loadChildren: () => import('./Views/ITI/iti-JailApplication/iti-JailApplication.module').then(m => m.ItiJailApplicationModule), title: 'ITI Jail Application' },
+      
+
+
       { path: 'documentationscrutiny', loadChildren: () => import('./Views/BTER/application-form/documentation-scrutiny/documentation-scrutiny.module').then(m => m.DocumentationScrutinyModule), title: 'Documentation Scrutiny' },
       { path: 'StudentVerificationList', loadChildren: () => import('./Views/Polytechnic/student-verification-list/student-verification-list.module').then(m => m.StudentVerificationListModule), title: 'Student Verification List' },
       { path: 'NodalDashboardITI', loadChildren: () => import('./Views/ITI/nodal-dashboard-iti/nodal-dashboard-iti.module').then(m => m.NodalDashboardITIModule), title: 'Nodal Dashboard ITI' },
