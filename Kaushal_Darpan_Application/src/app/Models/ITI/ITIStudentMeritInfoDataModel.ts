@@ -37,6 +37,9 @@ export class ITIStudentMeritInfoModel {
   public QualificationViewDetails: QualificationViewDetails[] = [];
 /*  public RecheckDocumentModel: RecheckDocumentModel[] = []*/
 
+}export class ItiCollegeModel
+{
+    public CollegeID: number = 0
 }
 
 export class ITICollegeSearchModel

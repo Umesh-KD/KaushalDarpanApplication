@@ -81,36 +81,36 @@
 
       </div>
 
-    <div class="overflow-x-auto mt-3">
-      <table class="table table-border w-full table-auto" cellpadding="5">
-        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
-          <tr>
-            <th>
-              <!--<input type="checkbox" class="checkboxSize" />-->
-              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th>
-            <th class="text-left">Sr.No.</th>
-            <!--sorting column-->
-            <th class="text-left cursorHand" title="Click to sorting">
-              Item Code
+      <div class="overflow-x-auto mt-3">
+        <table class="table table-border w-full table-auto" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+            <tr>
+              <th>
+                <!--<input type="checkbox" class="checkboxSize" />-->
+                <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+              </th>
+              <th class="text-left">Sr.No.</th>
+              <!--sorting column-->
+              <th class="text-left cursorHand" title="Click to sorting">
+                Item Code
 
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting">
-              Item Name
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Item - Company (Item Category)
 
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting">
-              Equipment ID
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Equipment Code
 
-            </th>
-            <th class="text-left cursorHand" title="Click to sorting">
-              Catogary ID
+              </th>
+              <th class="text-left cursorHand" title="Click to sorting">
+                Quantity
 
-            </th>
-            <!--<th class="text-left cursorHand" title="Click to sorting">
-              Company Name
+              </th>
+              <!--<th class="text-left cursorHand" title="Click to sorting">
+          Company Name
 
-            </th>-->
+        </th>-->
 
 
             </tr>
@@ -125,7 +125,7 @@
               <td align="left">{{idx+1}}</td>
 
               <td>{{row.ItemCode}}</td>
-              <td>{{row.ItemCategoryName}}</td>
+              <td> {{row.CampanyName}} ({{row.ItemCategoryName}})</td>
               <td>{{row.EquipmentsCode}}</td>
               <td>{{row.Quantity}}</td>
               <!--<td>{{row.CompanyName}}</td>-->
@@ -149,7 +149,7 @@
   <div class="modal-content">
     <div class="card">
       <div class="card-header flex justify-between  items-center">
-        <b><i class="fa fa-plus"></i> </b>
+        <b><i class="fa fa-plus">Issue Items</i> </b>
         <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">

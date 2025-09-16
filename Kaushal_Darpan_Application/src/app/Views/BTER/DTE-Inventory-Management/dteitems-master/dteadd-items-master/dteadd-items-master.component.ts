@@ -79,6 +79,7 @@ export class DteAddItemsMasterComponent {
       CampanyName: ['', Validators.required],
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['', [DropdownValidators]],
+      IsConsume: ['']
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -215,6 +216,7 @@ export class DteAddItemsMasterComponent {
           this.request.TotalPrice = data['Data']["TotalPrice"];
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
+          this.request.IsConsume = data['Data']["IsConsume"];
           console.log('GetByID',data)
           // Update UI elements if necessary
           const btnSave = document.getElementById('btnSave');

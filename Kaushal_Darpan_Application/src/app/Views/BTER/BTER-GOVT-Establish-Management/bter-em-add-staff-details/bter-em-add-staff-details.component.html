@@ -17,8 +17,34 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
-
+        {{request.OfficeID}}
+        {{request.OfficeID}}
+        {{request.IsNodal|json}}
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="Office">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_StaffMasterFormGroup.Office.errors" class="text-danger">
+            <p *ngIf="!_StaffMasterFormGroup.Office.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
+
+
+        <div *ngIf="request.IsNodal==true">
+          <br />
+          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            <input type="checkbox" id="IsNodal" name="IsNodal"
+                   formControlName="IsNodal" [(ngModel)]="request.IsNodal"> Add as Principal
+          </label>
+        </div>
+
+
+        <div *ngIf="request.OfficeID == 17 && request.IsNodal == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name  </label>
           <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
                   [(ngModel)]="request.InstituteID" (change)="getStreamMasterData()">
@@ -34,7 +60,7 @@
           </div>
         </div>
         <!--{{DesignationMasterDDLList|json}}
-        {{request.StaffTypeID|json}}-->
+  {{request.StaffTypeID|json}}-->
         <div *ngIf="IsHideShow">
           <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch <span class="StarMarking">*</span></label>
           <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
@@ -314,7 +340,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type<span class="StarMarking">*</span></label>
             <select class="form-select " name="SubjectID" id="ddlExamType" formControlName="ddlExamType"
-                    [(ngModel)]="Addrequest.ExamTypeID" (change)="ChangeSemester()">
+                    [(ngModel)]="Addrequest.ExamTypeID" (change)="SemesterMaster()">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>

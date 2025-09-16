@@ -124,7 +124,7 @@ export class AddItiIssueItemComponent {
           if (this.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.modalService.dismissAll();
-            this.routers.navigate(['/inventory-Issue-History']);
+            //this.routers.navigate(['/inventory-Issue-History']);
           }
           else if (this.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage)
@@ -284,7 +284,7 @@ export class AddItiIssueItemComponent {
     }
 
     if (this.Searchrequests.staffID == 0) {
-      this.toastr.error("Please select at least one Item!");
+      this.toastr.error("Please select at least one Staff!");
       return;
     }
 
@@ -311,6 +311,7 @@ export class AddItiIssueItemComponent {
       EquipmentsId: 0,
       ItemCategoryId: 0
     });
+    this.ItemsDDLList = [];
   }
 
   CloseModalPopup() {

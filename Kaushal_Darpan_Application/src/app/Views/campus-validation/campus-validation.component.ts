@@ -74,6 +74,24 @@ export class CampusValidationComponent {
   }
 
 
+  async openModalCampus(content: any, PostID: number) {
+    this.request.PostID = PostID;
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+  }
+
+
+  CloseModalPopupCampus() {
+    this.modalService.dismissAll();
+    //this.request.CampusFromDate = '';
+    //this.request.CampusFromTime = '';
+    //this.request.CampusToDate = '';
+  }
+
   get FormAction() { return this.formAction.controls; }
   async GetMasterData() {
     try {
@@ -350,7 +368,55 @@ export class CampusValidationComponent {
     }
   }
 
+  async UpdateCampusData() {
 
+    if (!this.request.CampusFromDate || !this.request.CampusFromTime || !this.request.CampusToDate) {
+      this.toastr.warning("Please fill all mandatory (*) fields");
+      return;
+    }
+
+    //Show Loading
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+    try {
+
+      this.sSOLoginDataModel = JSON.parse(localStorage.getItem('SSOLoginUser') || '{}');
+
+
+      let request = {
+        PostID: this.request.PostID,
+        CreatedBy: this.sSOLoginDataModel.UserID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CampusFromDate: this.request.CampusFromDate,
+        CampusFromTime: this.request.CampusFromTime,
+        CampusToDate: this.request.CampusToDate
+      };
+
+      await this.campusPostService.CampusPost_UpdateStatus(request)
+        .then((data: any) => {
+          
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.CloseModalPopupCampus();
+            this.request.CampusFromDate = '';
+            this.request.CampusFromTime = '';
+            this.request.CampusToDate = '';
+            this.btn_SearchClick();
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
 }
 
 

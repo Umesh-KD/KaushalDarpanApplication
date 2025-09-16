@@ -328,8 +328,10 @@ export class AddItiReturnItemComponent {
     this.isLoading = true;
 
     this.submitRequest.StaffId = this.Searchrequest.staffID,
-    this.submitRequest.Remarks = this.returnModel.Remarks,
-    this.submitRequest.ItemCategoryId = this.returnModel.ItemCondition,
+      this.submitRequest.Remarks = this.returnModel.Remarks,
+      this.submitRequest.ItemCategoryId = 0,
+      this.submitRequest.ReturnDate = this.returnModel.ReturnDate,
+      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition,
     this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
    
     try {
