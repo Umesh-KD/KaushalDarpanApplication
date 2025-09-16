@@ -92,7 +92,9 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public IssueDate: string = '';
   public ReturnDate: string = '';
   public Remarks: string = '';
+  public ConditionAtReturn: number = 0;
 
+  
   public ItemList: ItemsDetails[] = [];
 }
 

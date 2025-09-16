@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
-import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderService } from '../../../../../Services/Loader/loader.service';
-import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
-import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
-import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
+import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
-import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
-import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
+import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 
 
 @Component({
-  selector: 'app-iti-add-items-master',
-  templateUrl: './iti-return-item.component.html',
-  styleUrls: ['./iti-return-item.component.css'],
+  selector: 'app-bter-add-items-master',
+  templateUrl: './bter-return-item.component.html',
+  styleUrls: ['./bter-return-item.component.css'],
   standalone: false
 })
-export class AddItiReturnItemComponent {
+export class AddBterReturnItemComponent {
   public Searchrequest = new inventoryIssueHistorySearchModel()
   public returnModel = new itemReturnModel()
   public isLoading: boolean = false;
@@ -45,7 +45,7 @@ export class AddItiReturnItemComponent {
   public returnItemTypeList: any = [];
   //public today: Date = new Date();
   public submitRequest = new ItemsIssueReturnModels();
-  
+
 
   //ItemMasterListt = [
   //  {
@@ -91,7 +91,7 @@ export class AddItiReturnItemComponent {
     private activatedRoute: ActivatedRoute,
     private routers: Router,
     private Swal2: SweetAlert2,
-    private itiInventoryService: ITIInventoryService,
+    private bterInventoryService: DteItemsMasterService,
     private modalService: NgbModal,
     private commonMasterService: CommonFunctionService
   ) { }
@@ -116,14 +116,14 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-      await this.itiInventoryService.GetInventoryIssueItemList(this.Searchrequest)
+      await this.bterInventoryService.GetInventoryIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
             this.Message = data.Message;
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
-           // this.ItemMasterList1 = data.Data || [];
+            // this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }
@@ -146,7 +146,7 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'staffList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.staffDDLList = [
@@ -175,7 +175,7 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'TradeList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.TradeDDLList = [
@@ -204,7 +204,7 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TypeName = 'ItemList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
 
       if (data && data.State === EnumStatus.Success) {
         this.CategoryDDLList = [
@@ -327,29 +327,28 @@ export class AddItiReturnItemComponent {
     this.loaderService.requestStarted();
     this.isLoading = true;
 
-    this.submitRequest.StaffId = this.Searchrequest.staffID,
+      this.submitRequest.StaffId = this.Searchrequest.staffID,
       this.submitRequest.Remarks = this.returnModel.Remarks,
       this.submitRequest.ItemCategoryId = 0,
       this.submitRequest.ReturnDate = this.returnModel.ReturnDate,
       this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition,
-    this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
-   
+
+      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
+
     try {
-      await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
+      await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State == EnumStatus.Success)
-          {
+          if (this.State == EnumStatus.Success) {
             this.toastr.success("Items returned successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
 
             this.GetAllData();
-          } else if (this.State == EnumStatus.Error)
-          {
+          } else if (this.State == EnumStatus.Error) {
             this.toastr.error("Something went wrong.");
           }
         });
@@ -371,7 +370,7 @@ export class AddItiReturnItemComponent {
     try {
       this.loaderService.requestStarted();
 
-      const response: any = await this.commonMasterService.GetCommonMasterDDLByType('ItemConditions');
+      const response: any = await this.commonMasterService.GetCommonMasterDDLByType('BterItemConditions');
 
       if (response && response.Data) {
         this.returnItemTypeList = response.Data;
