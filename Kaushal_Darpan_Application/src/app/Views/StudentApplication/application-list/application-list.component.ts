@@ -79,7 +79,7 @@ export class ApplicationListComponent {
   DirectAdmissionApplicationID: number = 0
   public DateConfigSetting_Direct: any = [];
   DirectAdmissionMapKey: number = 0;
-
+  public IsAlloted:boolean=false
   constructor(
     private loaderService: LoaderService, 
     private encryptionService: EncryptionService, 
@@ -274,6 +274,12 @@ export class ApplicationListComponent {
                 encryptedApplicationID: this.encryptParameter(row.ApplicationID)  // Add the encrypted ApplicationID
               };
             });
+
+            var isaLLOT = this.StudentDetailsModelList.find((x) => x.AllotmentStatus == 4)
+            if (isaLLOT && this.sSOLoginDataModel.RoleID==3) {
+              this.IsAlloted=true
+            }
+
             console.log(this.StudentDetailsModelList)
           }
 

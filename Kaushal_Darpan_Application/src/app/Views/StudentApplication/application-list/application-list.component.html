@@ -148,35 +148,41 @@
     View
   </a>-->
               <!--<a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.SeatAllotmentStatus != 0"
-     (click)="DownloadAllotmentLetter(row.ApplicationID)"
-     class="btn bg-info text-white btn-sm"> Download Letter</a>-->
+  (click)="DownloadAllotmentLetter(row.ApplicationID)"
+  class="btn bg-info text-white btn-sm"> Download Letter</a>-->
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit !== 2" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> Complete Application</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType!=1 && !IsAlloted"
                  (click)="applyForDirectAdmission(row)"
                  class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2 && !!IsAlloted"
                  (click)="redirectToDirectAdmissionApplicationForm(row)"
                  class="btn bg-info text-white btn-sm"> Complete Direct Admission Form </a>
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && !(row.IsPaymentSuccess == true && sSOLoginDataModel.RoleID == 3)" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> View & Submit</a>
 
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.IsPaymentSuccess == true"
+                 [routerLink]="'/Itipreviewform'"
+                 [queryParams]="{ AppID: row.encryptedApplicationID }"
+                 class="btn bg-info text-white btn-sm"> View</a>
+
+
               <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit !== 2 && isITIAddmissionOpen || row.DepartmentID === _EnumDepartment.ITI && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
-     [routerLink]="'/ApplicationFormTab'"
-     [queryParams]="{ AppID: row.encryptedApplicationID }"
-     class="btn bg-info text-white btn-sm"> Complete Application</a>-->
+  [routerLink]="'/ApplicationFormTab'"
+  [queryParams]="{ AppID: row.encryptedApplicationID }"
+  class="btn bg-info text-white btn-sm"> Complete Application</a>-->
               <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 &&  row.IsPaymentSuccess == true && isITIAddmissionOpen"
-     [routerLink]="'/ApplicationFormTab'"
-     [queryParams]="{ AppID: row.encryptedApplicationID }"
-     class="btn bg-info text-white btn-sm"> Edit Application</a>-->
+  [routerLink]="'/ApplicationFormTab'"
+  [queryParams]="{ AppID: row.encryptedApplicationID }"
+  class="btn bg-info text-white btn-sm"> Edit Application</a>-->
               <!--<a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit === 2 && row.IsPaymentSuccess !== true && isITIAddmissionOpen"
-     [routerLink]="'/Itipreviewform'"
-     [queryParams]="{ AppID: row.encryptedApplicationID }"
-     class="btn bg-info text-white btn-sm"> View & Make Payment</a>-->
+  [routerLink]="'/Itipreviewform'"
+  [queryParams]="{ AppID: row.encryptedApplicationID }"
+  class="btn bg-info text-white btn-sm"> View & Make Payment</a>-->
               <!--<a *ngIf="row.DepartmentID == _EnumDepartment.BTER && row.SeatAllotmentStatus == 0
    && row.DirectAdmissionType != 0 && row.IsPaymentSuccess == true
    && sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon"
