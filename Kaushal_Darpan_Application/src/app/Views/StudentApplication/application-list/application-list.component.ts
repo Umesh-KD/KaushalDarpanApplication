@@ -274,7 +274,7 @@ export class ApplicationListComponent {
                 encryptedApplicationID: this.encryptParameter(row.ApplicationID)  // Add the encrypted ApplicationID
               };
             });
-
+            debugger
             var isaLLOT = this.StudentDetailsModelList.find((x) => x.AllotmentStatus == 4)
             if (isaLLOT && this.sSOLoginDataModel.RoleID==3) {
               this.IsAlloted=true
