@@ -29,6 +29,8 @@ export class AddStaffInitialDetailsComponent {
   public _EnumRole = EnumRole
   public isSSOVisible: boolean = false;
   public isSubmitted: boolean = false;
+  public IsNodalOfficer: boolean = false;
+  public IsAddasPrincipal: boolean = false;
 
   public OfficeList: any[] = [];
   public LevelList: any[] = [];
@@ -54,21 +56,22 @@ export class AddStaffInitialDetailsComponent {
 
   async ngOnInit() {
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
-      InstituteID: ['', [DropdownValidators]],
+      InstituteID: ['', []],
       RoleID: ['', [DropdownValidators]],
       StaffType: ['', [DropdownValidators]],
       SSOID: ['',],
       Name: [{ value: '', disabled: true }],
       Mobile: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
-      /*IsNodal: [false],*/
-      ddlPost: ['', [DropdownValidators]]
+      IsNodal: [false],
+      ddlPost: ['', [DropdownValidators]],
+      Office: ['', [DropdownValidators]]
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetOfficeList();
-    await this.GetInstituteMaster();
+    
    
     await this.GetStaffTypeData();
   }
@@ -78,6 +81,9 @@ export class AddStaffInitialDetailsComponent {
   
 
   goBack() {}
+
+
+
 
   async GetOfficeList() {
     this.formData.OfficeID = 0;
@@ -105,7 +111,34 @@ export class AddStaffInitialDetailsComponent {
       }, 200);
     }
   }
+
+
+  async GetOfficeWiselogic() {
+    if (this.formData.OfficeID == 17) {
+      this.IsNodalOfficer = true;
+    }
+    else {
+      this.IsNodalOfficer = false;
+      this.formData.IsNodal = false;
+    }
+    await this.GetRoleMasterData();
+  }
+
+  async InstituteMasterWiselogic() {
+    debugger
+    if (this.formData.IsNodal == true) {
+      await this.GetInstituteMaster();
+      this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+    } else {
+      this.formData.IsNodal = false;
+      this.AddStaffBasicDetailFromGroup.controls['InstituteID'].clearValidators();
+      this.formData.InstituteID = 0;
+    }
+    this.AddStaffBasicDetailFromGroup.controls['InstituteID'].updateValueAndValidity();
+
   
+  }
+
   async roleBySubDepartment() {
     debugger
    
@@ -130,11 +163,11 @@ export class AddStaffInitialDetailsComponent {
   }
 
   GetInstituteMaster() {
-    const officeList = [
-      { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID :17},
-      { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
-      { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
-    ];
+    //const officeList = [
+    //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID :17},
+    //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
+    //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
+    //];
 
     this.commonMasterService.InstituteMaster(
       this.sSOLoginDataModel.DepartmentID,
@@ -142,7 +175,8 @@ export class AddStaffInitialDetailsComponent {
       this.sSOLoginDataModel.EndTermID
     ).then((response: any) => {
       const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDL = officeList.concat(instituteList);
+      this.InstituteMasterDDL = instituteList;
+      //this.InstituteMasterDDL = officeList.concat(instituteList);
     });
   }
 
@@ -181,19 +215,19 @@ export class AddStaffInitialDetailsComponent {
      
         data = JSON.parse(JSON.stringify(data));
         this.RoleMasterList = data.Data;
-
-        if (this.formData.InstituteID == Number( "10001")) {
-          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.DTE || item.ID == this._EnumRole.Principal )
-        }
-        else if (this.formData.InstituteID == Number("10002")) {
-          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.Secretary_JD)
-        }
-        else if (this.formData.InstituteID == Number("10003")) {
-          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.JDConfidential_Eng)
-        }
-        else {
-          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.Principal)
-        }
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID);
+        //if (this.formData.InstituteID == Number( "10001")) {
+        //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.DTE || item.ID == this._EnumRole.Principal )
+        //}
+        //else if (this.formData.InstituteID == Number("10002")) {
+        //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID)
+        //}
+        //else if (this.formData.InstituteID == Number("10003")) {
+        //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.JDConfidential_Eng)
+        //}
+        //else {
+        //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.Principal)
+        //}
         
         console.log("RoleMasterList", this.RoleMasterList);
       })
