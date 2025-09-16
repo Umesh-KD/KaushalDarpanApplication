@@ -56,12 +56,32 @@
       <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
         <!--{{RoleMasterList|json}}-->
         <!--{{PostList|json}}-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="Office" (change)="GetOfficeWiselogic()">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.Office.errors" class="text-danger">
+            <p *ngIf="!_AddStaffBasicDetailFromGroup.Office.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+        </div>
 
+        <div *ngIf="IsNodalOfficer==true">
+          <br />
+          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            <input type="checkbox" id="IsNodal" name="IsNodal"
+                   formControlName="IsNodal" [(ngModel)]="formData.IsNodal" (change)="InstituteMasterWiselogic()"> Add as Principal
+          </label>
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
           <select class="form-select" name="StaffType" id="StaffType" formControlName="StaffType"
-                  [(ngModel)]="formData.StaffTypeID"  (change)="StaffTypeChangePost()">
+                  [(ngModel)]="formData.StaffTypeID" (change)="StaffTypeChangePost()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -87,9 +107,9 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="formData.IsNodal==true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute <span class="StarMarking">*</span></label>
-          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID" (change)="roleBySubDepartment()">
+          <select class="form-select" [(ngModel)]="formData.InstituteID" formControlName="InstituteID">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
@@ -117,13 +137,6 @@
 
 
 
-        <!--<div>
-          <br />
-          <label for="IsNodal" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            <input type="checkbox" id="IsNodal" name="IsNodal"
-                   formControlName="IsNodal" [(ngModel)]="formData.IsNodal"> Is Nodal
-          </label>
-        </div>-->
 
         <!-- <div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Level <span class="StarMarking">*</span></label>
@@ -138,19 +151,7 @@
       </p>
     </div>
   </div> -->
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
-    <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="Office" (change)="roleBySubDepartment()">
-      <option value="0">--Select--</option>
-      <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
-    </select>
-    <div *ngIf="isSubmitted&&_AddStaffBasicDetailFromGroup.Office.errors" class="text-danger">
-      <p *ngIf="!_AddStaffBasicDetailFromGroup.Office.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This
-        field is required .!
-      </p>
-    </div>
-  </div>-->
+
 
       </div>
       <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">

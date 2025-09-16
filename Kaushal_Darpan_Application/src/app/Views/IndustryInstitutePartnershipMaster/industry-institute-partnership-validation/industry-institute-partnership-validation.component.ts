@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { IndustryInstitutePartnershipMasterSearchModel, IndustryInstitutePartnershipMaster_Action, IIndustryInstitutePartnershipMasterDataModel } from '../../Models/IndustryInstitutePartnershipMasterDataModel';
-import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { IndustryInstitutePartnershipMasterService } from '../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
+import { IndustryInstitutePartnershipMasterSearchModel, IndustryInstitutePartnershipMaster_Action, IIndustryInstitutePartnershipMasterDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../Services/Loader/loader.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EnumStatus } from '../../Common/GlobalConstants';
-import { IndustryInstitutePartnershipMasterComponent } from '../IndustryInstitutePartnershipMaster/industry-institute-partnership-master/industry-institute-partnership-master.component';
+import { EnumStatus } from '../../../Common/GlobalConstants';
+import { IndustryInstitutePartnershipMasterComponent } from '../industry-institute-partnership-master/industry-institute-partnership-master.component';
 
 
 @Component({
