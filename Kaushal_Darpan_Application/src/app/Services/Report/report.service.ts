@@ -31,6 +31,7 @@ import { BterCertificateReportDataModel } from '../../Models/BTER/BterCertificat
 import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataModel';
 import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
+import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
 
 
 
@@ -1629,7 +1630,14 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
+  public async GetBterTabulationReport(request: TabulationReportSearchModel) {
+    return this.http.post(`${this.APIUrl}/TabulationDataReport`, request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 
