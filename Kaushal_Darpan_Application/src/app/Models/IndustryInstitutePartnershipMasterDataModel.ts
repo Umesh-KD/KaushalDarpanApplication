@@ -16,6 +16,11 @@ export class IndustryInstitutePartnershipMasterDataModels {
   public DepartmentID: number = 0
   public CreatedBy: number = 0
   public EventTypeID: number=0
+  public CompanyID: number = 0
+  public Logo: string = ''
+  public Dis_Logo: string = ''
+
+  public ConcernPersonDetails: ConcernPersonDetailsDataModel[] = []
 }
 
 export interface IIndustryInstitutePartnershipMasterDataModel {
@@ -80,4 +85,16 @@ export class IndustryTrainingSearch {
   public TradeID: number = 0;
   public DepartmentID: number = 0;
        
-    }
+}
+
+export class ConcernPersonDetailsDataModel {
+  public HRManagerID: number = 0;
+  public PlacementCompanyID: number = 0;
+  public Name: string = '';
+  public EmailId: string = '';
+  public MobileNo: String = '';
+  public ModifyBy: number = 0;
+  public ActiveStatus: boolean = true;
+  public DeleteStatus: boolean = false;
+  public DepartmentID: number = 0;
+}

@@ -158,14 +158,14 @@
                  (click)="applyForDirectAdmission(row)"
                  class="btn bg-info text-white btn-sm"> Apply For Direct Admission</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2 && !!IsAlloted"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && DirectAdmissionMapKey==1 && row.DirectAdmissionType==1 && row.IsFinalSubmit !== 2 && !IsAlloted"
                  (click)="redirectToDirectAdmissionApplicationForm(row)"
                  class="btn bg-info text-white btn-sm"> Complete Direct Admission Form </a>
 
               <a *ngIf="row.DepartmentID === _EnumDepartment.BTER && row.IsFinalSubmit === 2 && !(row.IsPaymentSuccess == true && sSOLoginDataModel.RoleID == 3)" (click)="redirectApplication(row,2)"
                  class="btn bg-info text-white btn-sm"> View & Submit</a>
 
-              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2 && row.IsPaymentSuccess == true"
+              <a *ngIf="row.DepartmentID === _EnumDepartment.ITI && row.IsFinalSubmit == 2"
                  [routerLink]="'/Itipreviewform'"
                  [queryParams]="{ AppID: row.encryptedApplicationID }"
                  class="btn bg-info text-white btn-sm"> View</a>
