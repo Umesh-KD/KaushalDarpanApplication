@@ -151,11 +151,11 @@ export class BTEREMStaffListComponent {
     }
   }
   GetInstituteMaster() {
-    const officeList = [
-      { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
-      { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
-      { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
-    ];
+    //const officeList = [
+    //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
+    //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
+    //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
+    //];
 
     this.commonMasterService.InstituteMaster(
       this.sSOLoginDataModel.DepartmentID,
@@ -163,7 +163,8 @@ export class BTEREMStaffListComponent {
       this.sSOLoginDataModel.EndTermID
     ).then((response: any) => {
       const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDL = officeList.concat(instituteList);
+      this.InstituteMasterDDL = instituteList;
+      //this.InstituteMasterDDL = officeList.concat(instituteList);
     });
   }
 
