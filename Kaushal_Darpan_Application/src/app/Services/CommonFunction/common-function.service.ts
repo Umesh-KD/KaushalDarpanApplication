@@ -275,14 +275,6 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async ChangeSemester(ShowAllSemester: number = 0) {
-
-    return await this.http.get(this.APIUrl + '/SemesterMaster/' + ShowAllSemester, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
-
   public async SemesterGenerateMaster() {
     return await this.http.get(this.APIUrl + '/SemesterGenerateMaster/', this.headersOptions)
       .pipe(

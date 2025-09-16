@@ -307,13 +307,13 @@ export class AddItiPrivateStaffMasterComponent implements OnInit {
     }
   }
 
-  async ChangeSemester() {
+  async SemesterMaster() {
     
     try {
       
       this.loaderService.requestStarted();
       this.ShowAllSemester = this.Addrequest.ExamTypeID
-      await this.commonMasterService.ChangeSemester(this.ShowAllSemester)
+      await this.commonMasterService.SemesterMaster(this.ShowAllSemester)
         .then((data: any) => {
           
           data = JSON.parse(JSON.stringify(data));
