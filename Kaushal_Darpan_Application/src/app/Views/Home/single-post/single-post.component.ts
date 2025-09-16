@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { HomeService } from '../../../Services/Home/home.service';
@@ -9,6 +9,11 @@ import { GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { CampusDetailsWebSearchModel } from '../../../Models/CampusDetailsWebDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CampusPostService } from '../../../Services/CampusPost/campus-post.service';
+import { SignedCopyOfResultSearchModel } from '../../../Models/CompanyMasterDataModel';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 
 @Component({
@@ -19,13 +24,32 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 })
 export class SinglePostComponent implements OnInit {
   public _GlobalConstants: any = GlobalConstants;
+  public requestSearch = new SignedCopyOfResultSearchModel()
+
+  dataSource1!:MatTableDataSource<any>;
+   @ViewChild('paginator1') paginator1!: MatPaginator;
+   @ViewChild(MatSort) sort!: MatSort;
   public PostId: number = 0;
+  public routeId: number = 0;
   public CampusPostDetail: any = null;
   public PlacementCompanyList: any[] = [];
+  public GetAllSignedCopyList: any = [];
   public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
 
-  constructor(private commonMasterService: CommonFunctionService,
+  modalReference: NgbModalRef | undefined;
+  closeResult: string | undefined;
+  modalRef1: NgbModalRef | null = null;
+    displayedColumns1: string[] = [
+    'SNo',
+    'FileType',
+    'CampusVenueName',
+    'CompanyName',
+    'actions'
+  ];
+  totalRecord1:number=0;
+
+  constructor(private commonMasterService: CommonFunctionService,private CampusPostService:CampusPostService,
     private homeService: HomeService, private toastr: ToastrService,
     private loaderService: LoaderService, private activatedRoute: ActivatedRoute,
     private routers: Router, private modalService: NgbModal,
@@ -40,9 +64,26 @@ export class SinglePostComponent implements OnInit {
     //edit
     if (this.PostId > 0) {
       await this.GetAllPost();
+      //await this.GetUnsignedDocList();
     }
+    // this.routeId=Number(this.activatedRoute.snapshot.paramMap.get('post'));
+    this.requestSearch.CampusPostID=this.PostId;
     //await this.GetAllPlacementCompany();
   }
+
+   initTable1(data: any) {
+    this.dataSource1 = new MatTableDataSource(data);
+    this.dataSource1.paginator = this.paginator1;
+    this.dataSource1.sort = this.sort;
+  }
+
+
+  ngAfterViewInit() {
+    // if (this.dataSource) this.dataSource.paginator = this.paginator;
+    if (this.dataSource1) this.dataSource1.paginator = this.paginator1;
+    // if (this.dataSource2) this.dataSource2.paginator = this.paginator2;
+  }
+
 
   // get detail by id
   async GetAllPost() {
@@ -70,6 +111,37 @@ export class SinglePostComponent implements OnInit {
     }
   }
 
+  // get detail by id
+  async GetUnsignedDocList() {
+    
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.requestSearch.RoleID = 6;
+      // this.requestSearch.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.requestSearch.CampusPostID = this.PostId;
+
+      await this.CampusPostService.GetAllSignedCopyData(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data['Data']);
+          this.GetAllSignedCopyList = data['Data'];
+          this.totalRecord1=data['Data'].length;
+          this.initTable1(this.GetAllSignedCopyList);
+          console.log('data check',this.GetAllSignedCopyList);
+        }, error => console.error(error));
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   getSanitizedUrl(url: string): string {
     if (!url) return '#';
 
@@ -82,6 +154,7 @@ export class SinglePostComponent implements OnInit {
     return 'https://' + url;
   }
 
+  
 
 
   // get all data
@@ -106,4 +179,62 @@ export class SinglePostComponent implements OnInit {
       }, 200);
     }
   }
+
+
+  // async openModalUnsignedDocList(content: any, PostID: number) {
+  //   debugger
+  //   this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+  //     this.closeResult = `Closed with: ${result}`;
+  //   }, (reason) => {
+  //     this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+  //   });
+  //   // this.GetAllstudent(PostID)
+  // }
+
+
+  //private getDismissReason(reason: any): string {
+  //    if (reason === ModalDismissReasons.ESC) {
+  //      return 'by pressing ESC';
+  //    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+  //      return 'by clicking on a backdrop';
+  //    } else {
+  //      return `with: ${reason}`;
+  //    }
+  //  }
+
+  //  CloseModalPopup() {
+  //  this.modalService.dismissAll();
+  //}
+
+
+    //async openModalUnsignedDocList(content: any, rowData?: any) {
+   
+    //debugger
+    // Open only once, store reference
+    //this.modalRef1 = this.modalService.open(content, {
+    //  size: 'xl',
+    //  ariaLabelledBy: 'modal-basic-title',
+    //  backdrop: 'static'
+    //});
+
+    // Handle result or dismissal
+    //this.modalRef1.result.then(
+    //  (result) => {
+    //    this.closeResult = `Closed with: ${result}`;
+    //  },
+    //  (reason: any) => {
+    //    this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    //  }
+    //);
+    
+  //}
+
+  //CloseModal1() {
+  //  debugger
+  //  if (this.modalRef1) {
+  //    this.modalRef1.dismiss();
+  //    this.modalRef1 = null;
+  //    // this.isSubmitted = false;
+  //  }
+  //}
 }

@@ -369,11 +369,18 @@ export class CampusValidationComponent {
   }
 
   async UpdateCampusData() {
-
+    debugger
     if (!this.request.CampusFromDate || !this.request.CampusFromTime || !this.request.CampusToDate) {
       this.toastr.warning("Please fill all mandatory (*) fields");
       return;
     }
+
+      
+    // if (!this.request.OfficerDocumnet || this.request.OfficerDocumnet.trim() === '') {
+    //   this.toastr.error("Officer Document is required.");
+    //   return;
+    // }
+    
 
     //Show Loading
     this.loaderService.requestStarted();
@@ -389,7 +396,9 @@ export class CampusValidationComponent {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CampusFromDate: this.request.CampusFromDate,
         CampusFromTime: this.request.CampusFromTime,
-        CampusToDate: this.request.CampusToDate
+        CampusToDate: this.request.CampusToDate,
+        // OfficerDocumnet:this.request.OfficerDocumnet,
+        // Dis_OfficerDoc:this.request.Dis_OfficerDoc
       };
 
       await this.campusPostService.CampusPost_UpdateStatus(request)

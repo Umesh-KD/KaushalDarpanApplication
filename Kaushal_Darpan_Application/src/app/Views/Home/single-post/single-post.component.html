@@ -4,11 +4,11 @@
 
 <div class="container-fluid AboutSection position-relative py-5" style="background: #deebff !important;">
   <img src="/assets/home/img/shape1.png" class="position-absolute shape2 left_image_bounce" />
-  <div class="container-xl position-relative" style="z-index:9999">
+  <div class="container-xl position-relative" style="z-index:50">
     <div class="row">
 
       <div class="col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="CampusPostDetail!=null">
-        <div class="card">
+        <div class="card ">
           <div class="card-body">
 
             <div class="row">
@@ -73,12 +73,14 @@
                         <td>
                           <!--{{CampusPostDetail.JobDiscription|json}}-->
                           <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+                          <!--<a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-4 mt-0 d-block " target="_blank"><i class="ti ti-download"></i></a>-->
+                          <!--<a href="javascript:void(0)" (click)="openModalUnsignedDocList(MyModel_EdiDetails,element)" class="btn bg-primary text-white m-4 d-block" id="btnEdit"  title="Upload Signed copy of Document"><i class="fa fa-eye"></i></a>-->
+                          <!-- <a href="javascript:void(0);" (click)="openModalUnsignedDocList(modal_Opens,row.PostID)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Upload Signed copy of Document"><i class="fa fa-eye"></i></a> -->
+                          <!-- <a href="javascript:void(0)" (click)="openModalUnsignedDocList(MyModel_EdiDetails,element)" class="btn-sm btn-primary d-block" title="Upload Signed copy of Document"><i class="ti ti-eye"></i> </a> -->
                         </td>
                       </tr>
-
                     </tbody>
                   </table>
-
                 </div>
               </div>
             </div>
@@ -97,4 +99,108 @@
 
   </div>
 </div>
+
+
+
+
+<!--<ng-template #MyModel_EdiDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[9999] transition-all duration-500 overflow-y-auto bg-black/50 [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center gap-4">
+        <b><i class="fa fa-plus"></i>&nbsp;Uploaded Documents Section</b>
+        <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Uploaded Documents List</b>
+        </div>
+        
+        
+         <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left"> S.No</th>
+                <th class="text-left">File Type</th>
+                <th class="text-left">Campus Venue Name</th>
+                <th class="text-left">Company Name</th>
+                <th class="text-left">File</th>-->
+                <!-- <th class="text-center" *ngIf="GetRoleID == _EnumRole.TPO">Action</th> -->
+              <!--</tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of GetAllSignedCopyList ;let idx=index;">
+                <td align="left">{{ idx + 1 }}</td>
+                <td align="left">
+                  <span *ngIf="row.FileType == 1">Consent List</span>
+                  <span *ngIf="row.FileType == 2">Short List</span>
+                  <span *ngIf="row.FileType == 3">Final Place List</span>
+                </td>
+                <td align="left">{{row.CampusVenue}}</td>
+                <td align="left">{{row.CompanyName}}</td>
+                <td align="left">-->
+                  <!--{{row.Dis_File}}-->
+                  <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </td>
+          
+              </tr>
+            </tbody>
+          </table>
+
+         <table mat-table [dataSource]="dataSource1" class="mat-elevation-z8" style="width: 100%;">
+          <ng-container matColumnDef="SNo">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="FileType">
+            <th mat-header-cell *matHeaderCellDef> File Type </th>
+            <td mat-cell *matCellDef="let element">
+               <span *ngIf="element.FileType == 1">Consent List</span>
+              <span *ngIf="element.FileType == 2">Short list</span>
+              <span *ngIf="element.FileType == 3">Final Result</span>
+               
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="CampusVenueName">
+            <th mat-header-cell *matHeaderCellDef> Campus Venue Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.CampusVenue}} </td>
+          </ng-container>
+          <ng-container matColumnDef="CompanyName">
+            <th mat-header-cell *matHeaderCellDef> Company Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.CompanyName}} </td>
+          </ng-container>
+        
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0)" (click)="EditBranchSectionData(MyModel_EditBranchSectionData,element)"
+                  title="View"><i class="ti ti-eye"></i> </a>
+                <a href="javascript:void(0);" (click)="AddStaffData(MyModel_EdiDetailsStaff,element)"
+                  class="btn bg-info btn-sm text-white">
+                  <i class="ti ti-user"></i> 
+                </a>
+              </div>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+
+        </table> 
+        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecord1 == 0">
+          No Record Found
+        </div>
+        <mat-paginator #paginator1 [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        <div class="text-center flex items-center justify-center" style="margin-top:50px">
+          <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                  class="btn bg-info text-white">
+            <i class="ti ti-device-floppy"></i> Submit
+          </button>
+          <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>-->
 
