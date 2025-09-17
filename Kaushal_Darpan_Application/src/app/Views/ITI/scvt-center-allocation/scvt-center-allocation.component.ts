@@ -30,6 +30,7 @@ export class ScvtCenterAllocationComponent {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public CenterMasterList: ITICenterAllocationtDataModels[] = [];
+  public MapingInstList:any[]=[]
   public UserID: number = 0;
   searchText: string = '';
   public isDisabledGrid: boolean = false;
@@ -238,6 +239,35 @@ export class ScvtCenterAllocationComponent {
       }, 200);
     }
   }
+
+
+
+  async GetCenterCollegeMapList(CenterID:number) {
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.CenterID = CenterID
+    try {
+      this.loaderService.requestStarted();
+      await this.centerAllocationService.GetCenterCollegeMapList(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.MapingInstList = data['Data'];
+
+          console.log(this.CenterMasterList, "dddddd");
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
 
   btnExportTable_Click(): void {
     this.loaderService.requestStarted();
@@ -454,6 +484,7 @@ export class ScvtCenterAllocationComponent {
       this.searchRequest.CenterID = row.CenterID;
       this.searchRequest.DepartmentID = EnumDepartment.ITI;
       await this.ddlInstitute_Change();
+      await this.GetCenterCollegeMapList(row.CenterID)
 
       //const assignedInstitutes = this.CenterMasterList
       //  .filter(center => center.CenterID !== row.CenterID && center.InstituteIDs)
