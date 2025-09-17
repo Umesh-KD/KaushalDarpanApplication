@@ -152,4 +152,13 @@ export class ITICenterAllocationService {
       ).toPromise();
   }
 
+
+
+  public async GetCenterCollegeMapList(searchRequest: ITIcenterAllocationSearchModel) {
+    return await this.http.post(this.APIUrl + "/GetCenterCollegeMapList", searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

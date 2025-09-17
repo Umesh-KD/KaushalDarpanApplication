@@ -123,7 +123,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name  <span class="StarMarking">*</span></label>
-          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade()" >
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of FilteredInstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
@@ -131,7 +131,7 @@
 
         <div class="mb-8">
           <label>Select Trade<span class="text-danger">*</span></label>
-          <ng-multiselect-dropdown [placeholder]="'Choose Option'"  
+          <ng-multiselect-dropdown [placeholder]="'Choose Option'"
                                    [settings]="settingsMultiselect"
                                    [data]="TradeList"
                                    [(ngModel)]="SelectedInstituteList"
@@ -145,7 +145,51 @@
           </ng-multiselect-dropdown>
           <button class="btn bg-info text-white mt-6" type="button" (click)="savescvtData()">Submit</button>
         </div>
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute List</b>
+        </div>
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+
+              <tr>
+                <th width="80px" align="left">Sr. No.</th>
+                <th class="text-left">Institute List</th>
+
+                <th class="text-left">Trade List</th>
+                <!--<th class="text-left">Examiner</th>-->
+                <!--<th class="text-left">Action</th>-->
+              </tr>
+            </thead>
+            <tbody>
+
+              <tr *ngFor="let row of MapingInstList let idx=index;" [ngClass]="{ 'text-danger': row.IsPresent == 0 }">
+          <td>{{idx+1}}</td>
+          <td>{{row.InstituteName}}</td>
+
+          <td align="left">{{row.TradeNames}}</td>
+          <!--<td align="left">{{row.SemesterName }}</td>
+          <td align="left">{{row.SubjectName }}</td>
+          <td align="left">{{row.Attendance }}</td>
+          <td align="left">{{row.Invigilators}}</td>-->
+              <!--<td align="left">
+          <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+
+
+          </div>
+        </td>-->
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
+
       </div>
+
+
 
     </div>
   </div>

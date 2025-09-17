@@ -87,10 +87,10 @@ export class DirectPersonalDetailsComponent implements OnInit {
         /*   txtSSOID: ['', Validators.required],*/
         txtnameHindi: [{ value: '' }, Validators.required],
         txtEmail: ['', Validators.pattern(GlobalConstants.EmailPattern)],
-        txtFather: [{ value: '', disabled: true }, Validators.required],
+        txtFather: [{ value: '', }, Validators.required],
         txtFatherHindi: [{ value: '' }, Validators.required],
         txtDOB: [{ value: '', disablex: true }, Validators.required],
-        txtMotherEngname: [{ value: '', disabled: true }, Validators.required],
+        txtMotherEngname: [{ value: '', }, Validators.required],
         Gender: [{ value: '', disabled: true }],
         MobileNumber: [{ value: '', disabled: true }, Validators.required],
         /*   txtWhatsappMobileNumber: [''],*/
