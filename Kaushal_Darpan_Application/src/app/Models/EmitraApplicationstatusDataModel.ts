@@ -7,5 +7,5 @@ export class EmitraApplicationstatusModel {
   public StatusID: number = 0
   public Status: string = ''
   public MobileNo: string = ''
-
+  public AllotmentStatus :number=0
 }

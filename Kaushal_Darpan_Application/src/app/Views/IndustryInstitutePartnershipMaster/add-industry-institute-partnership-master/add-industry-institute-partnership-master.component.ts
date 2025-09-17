@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import {ConcernPersonDetailsDataModel, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../../Models/CommonMasterDataModel';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
 
 @Component({
@@ -20,40 +20,58 @@ import { AppsettingService } from '../../../Common/appsetting.service';
   styleUrl: './add-industry-institute-partnership-master.component.css'
 })
 export class AddIndustryInstitutePartnershipMasterComponent {
-  public ID: number = 0;
+  public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new IndustryInstitutePartnershipMasterDataModels()
+  public personRequest = new ConcernPersonDetailsDataModel();
+
+  
+  public IIPMasterFormGroup!: FormGroup;
+  public HrMasterFormGroup!: FormGroup;
+  
+  public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
+  public StateMasterList: IStateMasterDataModel[] = []
+  public CompanyMasterList: any = []
+  public CompanyDetails: any = []
+  public HRList: ConcernPersonDetailsDataModel[] = []
+
+  public ID: number = 0;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public isHrFormSubmitted: boolean = false;
   public State: number = 0;
   public key: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  public IIPMasterFormGroup!: FormGroup;
-  public sSOLoginDataModel = new SSOLoginDataModel();
-  public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
-  public StateMasterList: IStateMasterDataModel[] = []
+  public CompanyID: number = 0
 
 
-  constructor(private commonMasterService: CommonFunctionService, private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private appsettingConfig: AppsettingService) {
-
-  }
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute, 
+    private routers: Router, 
+    private modalService: NgbModal, 
+    private appsettingConfig: AppsettingService
+  ) { }
 
 
   async ngOnInit() {
     // form group
-    this.IIPMasterFormGroup = this.formBuilder.group(
-      {
-        Name: ['', Validators.required],
+    this.IIPMasterFormGroup = this.formBuilder.group({
         Website: ['', Validators.required],
         Address: ['', Validators.required],
-
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
-        
+        CompanyID: ['', [DropdownValidators]],
+      });
 
-
+    this.HrMasterFormGroup = this.formBuilder.group({
+        Name: ['', Validators.required],
+        EmailId: ['', [Validators.required,Validators.pattern(GlobalConstants.EmailPattern)]],
+        MobileNo: ['', Validators.required],
       });
 
 
@@ -68,9 +86,34 @@ export class AddIndustryInstitutePartnershipMasterComponent {
       await this.GetById();
     }
   }
+
   get _IIPMasterFormGroup() { return this.IIPMasterFormGroup.controls; }
+  get _HrMasterFormGroup() { return this.HrMasterFormGroup.controls; }
 
-
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
+  }
+  async GetComapnyDetailsByID() {
+    try {
+      await this.commonMasterService.PlacementCompanyMaster_IDWise(this.request.CompanyID, this.sSOLoginDataModel.DepartmentID)
+      .then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CompanyDetails = data['Data'][0];
+        debugger
+        this.request.Website = this.CompanyDetails.Website
+        this.request.StateID = this.CompanyDetails.StateID
+        await this.ddlState_Change()
+        this.request.DistrictID = this.CompanyDetails.DistrictID
+        this.request.Address = this.CompanyDetails.Address
+        this.request.Logo = this.CompanyDetails.Logo
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async GetMaterData() {
     try {
@@ -80,8 +123,13 @@ export class AddIndustryInstitutePartnershipMasterComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data['Data']);
           this.StateMasterList = data['Data'];
-          console.log(this.StateMasterList);
         }, error => console.error(error));
+
+      await this.commonMasterService.PlacementCompanyMaster(this.sSOLoginDataModel.DepartmentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CompanyMasterList = data['Data'];
+        }, (error: any) => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);
@@ -165,6 +213,11 @@ export class AddIndustryInstitutePartnershipMasterComponent {
       this.isSubmitted = true;
       if (this.IIPMasterFormGroup.invalid) {
         console.log("errro")
+        return
+      }
+
+      if(this.request.ConcernPersonDetails.length <= 0 ) {
+        this.toastr.error("Please add at least one concern person details");
         return
       }
       this.isLoading = true;
@@ -376,15 +429,74 @@ export class AddIndustryInstitutePartnershipMasterComponent {
     }
   }
 
-
-
-
   // reset
   ResetControls() {
     this.request = new IndustryInstitutePartnershipMasterDataModels();
-
-
-    //this.multiSelect.toggleSelectAll();
   }
 
+  async resetHrDetails() {
+    this.personRequest = new ConcernPersonDetailsDataModel();
+  }
+
+  async AddMoreMembers() {
+    debugger
+    this.isHrFormSubmitted = true;
+    if(this.HrMasterFormGroup.invalid) {
+      this.toastr.error("Please fill all the required fields of Concern Person Form")
+      return;
+    }
+
+    this.request.ConcernPersonDetails.push(this.personRequest);
+    this.personRequest = new ConcernPersonDetailsDataModel();
+    this.isHrFormSubmitted = false;
+  }
+
+  async SaveData_IIP_Company() {
+    
+    try {
+      this.isSubmitted = true;
+      if (this.IIPMasterFormGroup.invalid) {
+        console.log("errro")
+        return
+      }
+
+      if(this.request.ConcernPersonDetails.length <= 0 ) {
+        this.toastr.error("Please add at least one concern person details");
+        return
+      }
+      this.loaderService.requestStarted();
+
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+
+      //save
+      await this.industryInstitutePartnershipMasterService.SaveData_IIP_Company(this.request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
+            this.ResetControls();
+            this.routers.navigate(['/IndustryInstitutePartnershipList']);
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

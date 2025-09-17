@@ -329,6 +329,15 @@ export class ITIDirectPreviewFormComponent {
   } 
   async SavePreview(content: any, ApplicationID: number)
   {
+    if(this.request.PendingDataModel?.length > 0) {
+      this.toastr.error("Please fill in all the pending details first.")
+      return
+    }
+
+    if(this.IsTermAndCondition == false) {
+      this.toastr.error("Please read and check undertaking before proceeding.")
+      return
+    }
     ////this.IsShowViewStudent = true;
     this.request.ApplicationID = ApplicationID
     await this.GetById();

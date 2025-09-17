@@ -148,6 +148,7 @@ export class BTER_EM_AddStaffDetailsDataModel extends RequestBaseModel {
   public Remark: string = ''
 
   public ProfileStatusID?: number = 0
+  public IsNodal: boolean = false
 
   public StaffUserID: number = 0
   public ModifyBy: number = 0

@@ -88,6 +88,7 @@ export class BterEMAddStaffDetailsComponent {
       EmployeeID: [''],
 
       CurrentDesignationID: ['', [DropdownValidators]],
+      Office: [{ value: 0, disabled: true }],
 
       Experience: ['', [Validators.required]],
 
@@ -96,6 +97,7 @@ export class BterEMAddStaffDetailsComponent {
 
       DateOfRetirement: [{ value: '', disabled: true }],
       Remark: [''],
+      IsNodal: [false],
     });
 
     this.AddsubjectFormGroup = this.formBuilder.group({
@@ -223,13 +225,13 @@ export class BterEMAddStaffDetailsComponent {
     }
   }
 
-  async ChangeSemester() {
-
+  async SemesterMaster() {
+    debugger
     try {
 
       this.loaderService.requestStarted();
       this.ShowAllSemester = this.Addrequest.ExamTypeID
-      await this.commonMasterService.ChangeSemester(this.ShowAllSemester)
+      await this.commonMasterService.SemesterMaster(this.ShowAllSemester)
         .then((data: any) => {
 
           data = JSON.parse(JSON.stringify(data));
@@ -299,6 +301,7 @@ export class BterEMAddStaffDetailsComponent {
   }
 
   async GetPersonalDetailByUserID() {
+    debugger
     try {
       
       this.loaderService.requestStarted();
@@ -356,7 +359,7 @@ export class BterEMAddStaffDetailsComponent {
 
 
   async GetOfficeList() {
-    this.request.OfficeID = 0;
+   /* this.request.OfficeID = 0;*/
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)

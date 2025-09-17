@@ -375,7 +375,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Exam Type<span class="StarMarking">*</span></label>
             <select class="form-select " name="SubjectID" id="ddlExamType" formControlName="ddlExamType"
-                    [(ngModel)]="Addrequest.ExamTypeID" (change)="ChangeSemester()" >
+                    [(ngModel)]="Addrequest.ExamTypeID" (change)="SemesterMaster()" >
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ExamTypeList" [value]="item.ID">{{item.Name}}</option>
             </select>

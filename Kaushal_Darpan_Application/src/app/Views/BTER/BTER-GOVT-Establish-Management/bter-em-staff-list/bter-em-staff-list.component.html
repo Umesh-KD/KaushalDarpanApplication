@@ -122,7 +122,7 @@
               <div class="flex align-center justify-center actionBtns">
                 <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID, row.StaffID, row.SSOID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
-                <a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending" href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending || row.ProfileStatusID == 289 " href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
                 <!--<a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Approve || row.ProfileStatusID !== _EnumEMProfileStatus.LockAndSubmit" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
               </div>

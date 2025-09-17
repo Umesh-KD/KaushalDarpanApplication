@@ -18,15 +18,16 @@
 </div>
 
 
-<form [formGroup]="IIPMasterFormGroup" id="IIPMasterFormGroup" class="form-horizontal">
-  <div class="card">
-    <div class="card-body p-5">
-      <div class="mb-8">
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form [formGroup]="IIPMasterFormGroup" id="IIPMasterFormGroup" class="form-horizontal">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Industry-Institute-Partnership Details</b>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-          <div>
+          <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Name <span class="StarMarking">*</span>
             </label>
@@ -36,6 +37,20 @@
               <p *ngIf="_IIPMasterFormGroup.Name.errors.required">
                 <i aria-hidden="true"></i> This field is
                 required.!
+              </p>
+            </div>
+          </div> -->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>
+            <select class="form-select" id="CompanyID" [(ngModel)]="request.CompanyID" formControlName="CompanyID"
+              (change)="GetComapnyDetailsByID()">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_IIPMasterFormGroup.CompanyID.errors" class="text-danger">
+              <p *ngIf="!_IIPMasterFormGroup.CompanyID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
           </div>
@@ -53,8 +68,6 @@
               </p>
             </div>
           </div>
-
-
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -137,23 +150,95 @@
               </div>
             </div>
           </div>
-
-
-
         </div>
-        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-          <div class="text-center">
-            <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
-              <i class="ti ti-refresh"></i> Reset
-            </button>
+      </form>
+
+
+      <form [formGroup]="HrMasterFormGroup" id="HrMasterFormGroup" class="form-horizontal mt-6">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Concern Person Details</b>
+        </div>
+        <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="personRequest.Name" formControlName="Name">
+            <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Name.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.Name.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
           </div>
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email <span class="StarMarking">*</span></label>
+            <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="personRequest.EmailId" formControlName="EmailId">
+            <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.EmailId.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_HrMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number <span class="StarMarking">*</span></label>
+            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="personRequest.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+            <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.MobileNo.errors" class="text-danger">
+              <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-center">
+              <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="resetHrDetails()">
+                <i class="ti ti-refresh"></i> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="mt-6">
+        <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5">Added Members</b>
         </div>
 
-
+        <div class="overflow-auto">
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr>
+                <th>Priority</th>
+                <th>Trade Level</th>
+                <th>Name of College</th>
+                <th>Branch Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of request.ConcernPersonDetails; let idx=index;" >
+                <td class="text-center">{{idx+1}}</td>
+                <td class="text-center">{{row.Name}}</td>
+                <td class="text-center">{{row.MobileNo}}</td>
+                <td class="text-center">{{row.EmailId}}</td>
+                <td class="text-center">
+                  <button class="btn bg-danger text-white" type="button" title="Delete">
+                    <i class="ti ti-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
+    <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      <div class="text-center">
+        <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_IIP_Company()">Submit</button>
+        <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+          <i class="ti ti-refresh"></i> Reset
+        </button> -->
+      </div>
+
+    </div>
   </div>
-</form>
+</div>
+
