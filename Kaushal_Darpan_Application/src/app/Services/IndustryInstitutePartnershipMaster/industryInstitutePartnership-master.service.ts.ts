@@ -111,5 +111,11 @@ export class IndustryInstitutePartnershipMasterService {
       ).toPromise();
   }
 
-  
+  public async SaveData_IIP_Company(request: IndustryInstitutePartnershipMasterDataModels) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveData_IIP_Company`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

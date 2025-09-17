@@ -265,7 +265,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
     
     }
 
-    if (this.request.ENR_ID != 5) {
+    if (this.request.ENR_ID == 8) {
       this.model.CategoryA = 1
       this.StudentJanDetailFormGroup.controls['ddlCategoryA'].disable();
     } else {
@@ -942,7 +942,7 @@ export class ITIDirectStudentJanAadharDetailComponent {
           const today = new Date();
           const deptID = this.DepartmentID;
           var activeCourseID: any = [];
-
+          
           if (this.DepartmentID == EnumDepartment.BTER) {
             this.AdmissionDateList.filter((x: any) => {
               if (new Date(x.To_Date) > today && x.TypeID == EnumConfigurationType.Admission && x.DepartmentID == deptID && x.CourseTypeID == EnumCourseType1.Diploma2ndYearEngLateralAdmission) {

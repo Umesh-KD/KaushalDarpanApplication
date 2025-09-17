@@ -716,7 +716,22 @@ export enum EnumFileUpload {
   FileNameWithDynamicPath = 1,
 }
 
+export enum HostelStatus {
+  Apply = 1,
+  PublishProvisionalMerit = 2,
+  UploadAffidavit = 3,
+  RoomAlloted = 4,
+  RejectHostelApplication = 5,
+  RejectRoomRequest = 6,
 
+
+  AffidavitApproved = 9,
+  AffidavitObject = 10,
+  PublishFinalMerit = 11,
+  SeatDeallocated = 12,
+  
+  GenerateProvisionalMerit = 14
+}
 
 
 
