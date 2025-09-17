@@ -785,6 +785,12 @@ export class ITIDirectStudentJanAadharDetailComponent {
       this.searchRequest.DepartmentID = this.DepartmentID;
       this.searchRequest.Action = Action
       this.searchRequest.JanAadharMemberId = this.janaadharMemberDetails.janmemid;
+      if (this.IsDirectAdmission == true) {
+        this.searchRequest.DirectAdmission = 1
+      } else {
+        this.searchRequest.DirectAdmission = 0
+      }
+
 
       // if (this.IsDirectAdmission && this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI) {
       //   this.searchRequest.RoleID = EnumRole.ITIPrincipal
