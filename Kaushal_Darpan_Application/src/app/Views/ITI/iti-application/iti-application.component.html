@@ -88,6 +88,17 @@
             <option value="70">None</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Admission Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.AdmissionType">
+          <!-- <select class="form-select" > -->
+            <option value="-1">Choose Option</option>
+            <option value="0">Online Admission</option>
+            <option value="1">Direct Admission</option>
+            <option value="181">Jail Admission</option>
+          </select>
+        </div>
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Category D:</label>
     <select class="form-select" [(ngModel)]="searchRequest.CategoryD">

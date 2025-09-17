@@ -198,6 +198,11 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
+
+      { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
+
+
+
       { path: 'addstaffmaster', loadChildren: () => import('./Views/staffMaster/add-staff-master/add-staff-master.module').then(m => m.AddStaffMasterModule), title: 'Add Staff' },
       { path: 'staffmaster', loadChildren: () => import('./Views/staffMaster/staff-master/staff-master.module').then(m => m.StaffMasterModule), title: 'Staff Master' },
       { path: 'addstaffbasicdetail', loadChildren: () => import('./Views/staffMaster/add-staff-basic-detail/add-staff-basic-detail.module').then(m => m.AddStaffBasicDetailModule), title: 'Add Staff Basic Details' },

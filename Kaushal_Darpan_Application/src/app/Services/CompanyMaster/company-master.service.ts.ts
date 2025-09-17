@@ -100,6 +100,13 @@ export class CompanyMasterService {
       ).toPromise();
   }
 
-  
+    //Get studetn list eligible for placement all data
+  public async GetEligibleStudentListData(searchRequest: CompanyMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetEligibleStudentListData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

@@ -117,6 +117,7 @@ export class BranchSectionCreateComponent {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
       this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)
+      console.log('data ==>',this.StreamMasterDDL)
     })
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));

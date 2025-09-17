@@ -29,6 +29,7 @@ export class ItiDashApplicationSearchModel {
   public CategoryA: number = 0;
   public CategoryB: number = 0;
   public CategoryC: number = 0;
+  public AdmissionType: number = -1;
   public CategoryD: number = 0;
   public EndTermID: number = 0;
   public Eng_NonEng: number = 0;
