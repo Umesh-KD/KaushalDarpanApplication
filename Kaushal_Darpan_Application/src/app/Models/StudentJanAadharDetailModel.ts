@@ -185,4 +185,5 @@ export class SearchApplicationStudentDatamodel {
   public JanAadharMemberId: string| undefined = ''
   public Action:string=''
   public CourseTypeID: number = 0
+  public DirectAdmission:number=0
 }
