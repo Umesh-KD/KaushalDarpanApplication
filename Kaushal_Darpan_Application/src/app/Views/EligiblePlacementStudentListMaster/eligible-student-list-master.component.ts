@@ -4,20 +4,21 @@ import { CommonFunctionService } from '../../Services/CommonFunction/common-func
 import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { CompanyMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
+import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
 @Component({
-    selector: 'student-list-master-master',
-    templateUrl: './student-list-master.component.html',
-    styleUrls: ['./student-list-master.component.css'],
+    selector: 'eligible-student-list-master',
+    templateUrl: './eligible-student-list-master.component.html',
+    styleUrls: ['./eligible-student-list-master.component.css'],
     standalone: false
 })
-export class StudentListMasterComponent implements OnInit {
+export class EligibleStudentListMasterComponent implements OnInit {
   public StudentList: any = [];
   public Table_SearchText: string = "";
-  public searchRequest = new CompanyMasterSearchModel();
+  public searchRequest = new EligibleStudentListMasterSearchModel();
+  // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
 
@@ -28,7 +29,7 @@ export class StudentListMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetAllData();
+    await this.GetEligibleStudentListData();
   }
 
 
@@ -52,13 +53,15 @@ export class StudentListMasterComponent implements OnInit {
     XLSX.writeFile(wb, 'StudentListData.xlsx');
   }
 
-  async GetAllData() {
+  async GetEligibleStudentListData() {
+    debugger
     try {
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.loaderService.requestStarted();
-      await this.companyMasterService.GetAllData(this.searchRequest).then((data: any) => {
+      await this.companyMasterService.GetEligibleStudentListData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentList = data.Data;
         console.log(this.StudentList)
@@ -79,7 +82,7 @@ export class StudentListMasterComponent implements OnInit {
     this.searchRequest.Name = '';
     this.searchRequest.Status = '';
 
-    await this.GetAllData();
+    await this.GetEligibleStudentListData();
   }
 
 
@@ -101,7 +104,7 @@ export class StudentListMasterComponent implements OnInit {
 
                 if (!data.State) {
                   this.toastr.success(data.Message)
-                  await this.GetAllData();
+                  await this.GetEligibleStudentListData();
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)

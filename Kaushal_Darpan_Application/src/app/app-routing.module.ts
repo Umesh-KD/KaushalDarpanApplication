@@ -199,7 +199,7 @@ const routes: Routes = [
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
 
-      { path: 'StudentListMaster', loadChildren: () => import('./Views/StudentListMaster/student-list-master.module').then(m => m.StudentListMasterModule), title: 'Student List Master' },
+      { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
 
 
