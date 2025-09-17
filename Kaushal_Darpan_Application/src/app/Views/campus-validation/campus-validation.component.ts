@@ -35,6 +35,8 @@ export class CampusValidationComponent {
   public CheckStatus: string = "";
   public currentStatus: number = 0;
 
+  public reactiveSuspened:boolean=false;
+
   public messageModel = new ApplicationMessageDataModel()
   
 
@@ -52,7 +54,8 @@ export class CampusValidationComponent {
   public getSSOIDDetailData: any[]=[];
   formAction!: FormGroup;
   public flagName: string = "TotalNoOfCampus";
-  public TodayDate = new Date()
+  public TodayDate = new Date();
+  public selectedSuspendedPost : any = {};
 
   constructor(private commonMasterService: CommonFunctionService,private smsMailService: SMSMailService, private campusPostService: CampusPostService, private loaderService: LoaderService,
     private modalService: NgbModal, private route: ActivatedRoute, private formBuilder: FormBuilder, public appsettingConfig: AppsettingService, private toastr: ToastrService) {
@@ -74,8 +77,10 @@ export class CampusValidationComponent {
   }
 
 
-  async openModalCampus(content: any, PostID: number) {
-    this.request.PostID = PostID;
+  async openModalCampus(content: any, Post: any) {
+    this.selectedSuspendedPost = Post;
+    this.requestAction.SuspendDocumnet
+    this.request.PostID = Post.PostID;
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -209,6 +214,7 @@ export class CampusValidationComponent {
     }
   }
   CloseModalPopup() {
+    this.selectedSuspendedPost = {};
     this.modalService.dismissAll();
   }
   async SaveData_ApprovedCampus() {
@@ -263,19 +269,24 @@ export class CampusValidationComponent {
 
         // upload to server folder
         this.loaderService.requestStarted();
+        console.log(this.selectedSuspendedPost);
 
         await this.commonMasterService.UploadDocument(this.file)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
-
             this.State = data['State'];
             this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
 
             if (this.State == EnumStatus.Success) {
               if (Type == "Photo") {
-                this.requestAction.Dis_SuspendDoc = data['Data'][0]["Dis_FileName"];
-                this.requestAction.SuspendDocumnet = data['Data'][0]["FileName"];
+                // if(this.selectedSuspendedPost.Status = 'Suspend'){
+
+                // }
+                // else{
+                  this.requestAction.Dis_SuspendDoc = data['Data'][0]["Dis_FileName"];
+                  this.requestAction.SuspendDocumnet = data['Data'][0]["FileName"];
+                // }
 
               }
               //else if (Type == "Sign") {
@@ -397,8 +408,9 @@ export class CampusValidationComponent {
         CampusFromDate: this.request.CampusFromDate,
         CampusFromTime: this.request.CampusFromTime,
         CampusToDate: this.request.CampusToDate,
-        // OfficerDocumnet:this.request.OfficerDocumnet,
-        // Dis_OfficerDoc:this.request.Dis_OfficerDoc
+        SuspendDocumnet:this.requestAction.SuspendDocumnet,
+        Dis_SuspendDoc:this.requestAction.Dis_SuspendDoc,
+        ActionRemarks:this.request.ActionRemarks
       };
 
       await this.campusPostService.CampusPost_UpdateStatus(request)
@@ -410,6 +422,9 @@ export class CampusValidationComponent {
             this.request.CampusFromDate = '';
             this.request.CampusFromTime = '';
             this.request.CampusToDate = '';
+            this.requestAction.SuspendDocumnet = '';
+            this.requestAction.Dis_SuspendDoc = '';
+            this.request.ActionRemarks = '';
             this.btn_SearchClick();
           }
           else {

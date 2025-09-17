@@ -152,7 +152,7 @@
               {{row.Status}}
 
               <!-- Show 'View' button only if status is 'Suspend' AND SuspendDocumnet is not empty -->
-              <div class="flex" *ngIf="row.Status === 'Suspend' && row.SuspendDocumnet">
+              <div class="flex" *ngIf="(row.Status === 'Suspend' || row.Status === 'Approved') && row.SuspendDocumnet">
                 <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.SuspendDocumnet }}"
                    class="btn bg-primary text-white m-0"
                    target="_blank">
@@ -167,7 +167,7 @@
                 <a [routerLink]="['/campuspost']" [queryParams]="{ id: row.PostID }" id="btnEdit" title="Edit" *ngIf="(row.Status !='Suspend')"><i class="ti ti-pencil"></i></a>
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold' || row.Status=='Approved')" (click)="CampusOnPostAction(MyModel_Action,row)"><i class="ti ti-check"></i></a>
                 <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status !='Suspend')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a>
-                <a href="javascript:void(0);" (click)="openModalCampus(modal_Opens,row.PostID)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Update"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" (click)="openModalCampus(modal_Opens,row)" id="btnEdit" *ngIf="(row.Status =='Suspend' && GetRoleID != 6)" title="Update"><i class="ti ti-check"></i></a>
               </div>
             </td>
           </tr>
@@ -216,7 +216,7 @@
                   </label>
                   <div class="flex">
                     <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestAction.SuspendDocumnet}}"
-                       *ngIf="this.requestAction.SuspendDocumnet !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                       *ngIf="this.requestAction.SuspendDocumnet !='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                     <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
                        (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
                       <i class="ti ti-trash"></i>
@@ -296,7 +296,7 @@
             </div>
 
               <!-- <div *ngIf="requestAction.Action == 'Suspend' && CheckStatus == 'Approved'"> -->
-            <!-- <div > 
+            <div > 
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                        for="fileStudentPhoto">Upload Office Order Document</label>
                 <div class="flex fileUploader">
@@ -308,13 +308,13 @@
                       
                   </label>
                   <div class="flex">
-                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.OfficerDocumnet}}"
-                       *ngIf="this.request.OfficerDocumnet !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>                 
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestAction.SuspendDocumnet}}"
+                       *ngIf="this.requestAction.SuspendDocumnet !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>                 
                   </div>
                 </div>
-            </div> -->
+            </div>
 
-            <!-- <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
               <div>
                 <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
                 <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" [(ngModel)]="request.ActionRemarks"></textarea>
@@ -322,7 +322,7 @@
                   <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
-            </div> -->
+            </div>
               
           </div>
           <div class="card-footer text-center">
