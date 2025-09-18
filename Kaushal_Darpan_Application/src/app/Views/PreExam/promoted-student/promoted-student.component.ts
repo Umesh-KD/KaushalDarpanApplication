@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, EnumStudentType, GlobalConstants } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { PromotedStudentService } from '../../../Services/PromotedStudent/promoted-student.service';
 import { PrometedStudentMasterModel, PromotedStudentMarkedModel, PromotedStudentSearchModel } from '../../../Models/PrometedStudentMasterModel';
 import { MenuService } from '../../../Services/Menu/menu.service';
+
 
 @Component({
   selector: 'app-promoted-student',
@@ -56,6 +57,7 @@ export class PromotedStudentComponent {
   public totalInTableRecord: number = 0;
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
+  public _EnumStudentType = EnumStudentType;
 
   //end table feature default
 
@@ -96,11 +98,7 @@ export class PromotedStudentComponent {
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
 
-      let ShowAllSemester = 0, EndTermID = this.sSOLoginDataModel.EndTermID, IsWithNotYearly = 1, IsPromote = 1;
-      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote)
-        .then((data: any) => {
-          this.SemesterMasterList = data['Data'];
-        }, (error: any) => console.error(error));
+      await this.GetSemesterData();
     }
     catch (Ex) {
       console.log(Ex);
@@ -312,27 +310,54 @@ export class PromotedStudentComponent {
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
               InstituteId: x.InstituteId,
               SessionTypeID: 0,
+              StudentTypeId: x.StudentTypeId,
+              StudentExamID: x.StudentExamID,
+              IsYearly: x.IsYearly
             })
           });
-          // Call service to save student exam status
-          await this.promotedstudentservice.SavePromotedStudent(request)
-            .then(async (data: any) => {
-              this.State = data['State'];
-              this.Message = data['Message'];
-              this.ErrorMessage = data['ErrorMessage'];
-              //
-              if (this.State == EnumStatus.Success) {
-                this.toastr.success(this.Message)
-                await this.GetPromotedStudent();
-              }
-              else if (this.State == EnumStatus.Warning) {
-                this.toastr.warning(this.Message)
-              }
-              else {
-                this.toastr.error(this.Message)
-                console.log(this.ErrorMessage);
-              }
-            })
+
+          if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
+            // Call service to save student exam status
+            await this.promotedstudentservice.SavePromotedStudent(request)
+              .then(async (data: any) => {
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+                //
+                if (this.State == EnumStatus.Success) {
+                  this.toastr.success(this.Message)
+                  await this.GetPromotedStudent();
+                }
+                else if (this.State == EnumStatus.Warning) {
+                  this.toastr.warning(this.Message)
+                }
+                else {
+                  this.toastr.error(this.Message)
+                  console.log(this.ErrorMessage);
+                }
+              })
+          }
+          else { // ex
+            // Call service to save student exam status
+            await this.promotedstudentservice.SaveExPromotedStudent(request)
+              .then(async (data: any) => {
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+                //
+                if (this.State == EnumStatus.Success) {
+                  this.toastr.success(this.Message)
+                  await this.GetPromotedStudent();
+                }
+                else if (this.State == EnumStatus.Warning) {
+                  this.toastr.warning(this.Message)
+                }
+                else {
+                  this.toastr.error(this.Message)
+                  console.log(this.ErrorMessage);
+                }
+              })
+          }
         } catch (ex) {
           this.toastr.error(GlobalConstants.MSG_ERROR_OCCURRED);
           console.log(ex);
@@ -340,6 +365,7 @@ export class PromotedStudentComponent {
       }
     });
   }
+
   async GetDateConfig() {
 
     var data = {
@@ -367,6 +393,40 @@ export class PromotedStudentComponent {
     return id > 0 ? id - 1 : id;
   }
 
+  async onChangeStudentType() {
+    this.request.InstituteID = "0";
+    this.request.SemesterID = "0";
+    this.request.StreamID = "0";
+    this.request.IsBridge = "0";
+    this.AllInTableSelect = false;
+    this.paginatedInTableData = this.prometedStudentData = [];
+    await this.GetSemesterData();
+  }
+
+  async GetSemesterData() {
+    //debugger
+    try {
+      let ShowAllSemester = 0;
+      let EndTermID = this.sSOLoginDataModel.EndTermID;
+      let IsWithNotYearly = 1;
+      let IsPromote = 0;
+      let IsForEx = this.request.StudentTypeId == this._EnumStudentType.Reg ? 0 : 1;
+      if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
+        IsPromote = 1;
+      }
+      else {
+        IsPromote = 0;
+      }
+      this.SemesterMasterList = [];
+      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx)
+        .then((data: any) => {
+          this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }
 
 
