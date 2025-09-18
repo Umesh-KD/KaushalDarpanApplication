@@ -13,9 +13,6 @@ export class GenerateAdmitCardSearchModel {
   public AdmitCard?: string = ''
   public AdmitCardPath?: string = ''
 }
-
-
-
 export class GenerateAdmitCardModel {
 
   public StudentID: number = 0
@@ -67,8 +64,6 @@ export class GetUFMStudentReport {
 
 }
 
-
-
 export class GetSessionalFailStudentReport {
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
@@ -99,6 +94,13 @@ export class GetRevaluationStudentDetailReport {
 }
 
 export class GetStudentExaminerDetailReport {
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public SemesterID: number = 0;
+}
+
+export class DownloadAppearedPassed {
   public DepartmentID: number = 0;
   public EndTermID: number = 0;
   public Eng_NonEng: number = 0;

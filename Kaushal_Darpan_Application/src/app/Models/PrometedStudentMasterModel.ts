@@ -1,7 +1,7 @@
 import { RequestBaseModel } from "./RequestBaseModel";
 import { ResponseBaseModel } from "./ResponseBaseModel";
 
-export class PrometedStudentMasterModel extends ResponseBaseModel  {
+export class PrometedStudentMasterModel extends ResponseBaseModel {
   public Selected: boolean = false;  // default value is false (from convert(bit, 0))
   public StudentID: number = 0;  // default value is 0
   public ApplicationNo: string = '';  // default value is empty string
@@ -16,16 +16,19 @@ export class PrometedStudentMasterModel extends ResponseBaseModel  {
   public StreamID: number = 0;  // default value is 0
   public SemesterID: number = 0;  // default value is 0
   public Dis_DOB: string = '';  // default value is a Unix epoch date (could be an invalid date)
-  public IsBridge: boolean = false;  
+  public IsBridge: boolean = false;
 
   public EarnedCreditsSem1: number = 0;
   public EarnedCreditsSem2: number = 0;
   public TotalEarnedCredits: number = 0;
-  public Detain: boolean = false; 
-  public UFM: boolean = false; 
-  public UFMCategory: number = 0;  
-  public InstituteId: number = 0;  
+  public Detain: boolean = false;
+  public UFM: boolean = false;
+  public UFMCategory: number = 0;
+  public InstituteId: number = 0;
   public StudentType: string = ''; 
+  public StudentTypeId: number = 0;
+  public StudentExamID: number = 0;
+  public IsYearly: number = 0;
 }
 
 export class PromotedStudentMarkedModel extends RequestBaseModel {
@@ -48,6 +51,9 @@ export class PromotedStudentMarkedModel extends RequestBaseModel {
   public StreamId: number = 0;
   public ModifyBy: number = 0;
   public IPAddress: string = '';
+  public StudentTypeId: number = 0;
+  public StudentExamID: number = 0;
+  public IsYearly: number = 0;
 }
 
 export class PromotedStudentSearchModel extends RequestBaseModel {
@@ -55,5 +61,6 @@ export class PromotedStudentSearchModel extends RequestBaseModel {
   public SemesterID: string = '0';   // default value is empty string
   public StreamID: string = '0';     // default value is empty string
   public IsBridge: string = '';
+  public StudentTypeId: number = 1;
 }
 

@@ -330,6 +330,9 @@ export class ItiPromoteStudentComponent {
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
               InstituteId: 0,
               SessionTypeID: 0,
+              StudentTypeId: x.StudentTypeId,
+              StudentExamID: x.StudentExamID,
+              IsYearly: x.IsYearly
             })
           });
           // Call service to save student exam status

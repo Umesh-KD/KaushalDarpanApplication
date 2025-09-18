@@ -109,7 +109,7 @@ export class BterResultReportsComponent implements OnInit {
         this.SemesterMasterList = data['Data'];
       });
 
-    
+
     this.commonMasterService.GetExamResultType().then((data: any) => {
       this.ResultTypeList = data['Data'] || [];
     });
@@ -118,7 +118,7 @@ export class BterResultReportsComponent implements OnInit {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterList = data.Data;
     })
-   
+
     this.ReportTypelist = [
       { ID: 1, Name: 'Result Statistics Bridge Course Report', URL: 'result-statistics-bridge-course' },
       { ID: 2, Name: 'Result Statistics Report', URL: 'result-statistics' },
@@ -132,6 +132,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 10, Name: 'RMI Fail Student Report', URL: 'RMIFailStudentReport' },
       { ID: 11, Name: 'Theory Fail Student Report', URL: 'TheoryPaperFailStudent' },
       { ID: 12, Name: 'Student Examiner Detail Report', URL: 'StudentDetailsReport' },
+      { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics'},
       
     ];
   }
@@ -221,6 +222,13 @@ export class BterResultReportsComponent implements OnInit {
         case "StudentDetailsReport":
           response = await this.reportService.GetStudentExaminerDetailReport(this.filterModel);
           return;
+        case "Appeared-Passesd-Statistics":
+          response = await this.reportService.DownloadAppearedPassed(this.filterModel);
+            return;
+        //case "Appeared-Passesd-Statistics":
+        //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
+        //  return;
+          
         default:
           this.toastrService.warning("Unknown report type selected.");
           return;
