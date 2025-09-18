@@ -97,6 +97,16 @@ export class ItiApplicationFormService {
       ).toPromise();
   }
 
+
+  public async GetEditQualificationDatabyID(searchRequest: ItiApplicationSearchmodel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetEditQualificationDatabyID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async GetOptionDetailsbyID(searchRequest: ItiApplicationSearchmodel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetOptionDetailsbyID`, body, this.headersOptions)
@@ -180,5 +190,15 @@ export class ItiApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
- 
+
+
+  public async SaveEditQualificationDetailsData(request: QualificationDetailsDataModel[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveEditQualificationDetailsData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 }

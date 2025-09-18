@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { lastValueFrom, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel, GetCollegeInformationReport, GetEWSReport, GetUFMStudentReport, GetSessionalFailStudentReport, GetRMIFailStudentReport, GetTheoryFailStudentReport, GetRevaluationStudentDetailReport, GetStudentExaminerDetailReport } from '../../Models/GenerateAdmitCardDataModel';
+import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel, GetCollegeInformationReport, GetEWSReport, GetUFMStudentReport, GetSessionalFailStudentReport, GetRMIFailStudentReport, GetTheoryFailStudentReport, GetRevaluationStudentDetailReport, GetStudentExaminerDetailReport, DownloadAppearedPassed } from '../../Models/GenerateAdmitCardDataModel';
 import { PrincipalIssueCertificateModel } from '../../Models/PrincipalIssueCertificateModel';
 import { AttendanceRpt13BDataModel, AttendanceRpt23DataModel, ReportBasedModel } from '../../Models/ReportBasedDataModel';
 import { DataPagingListModel } from '../../Models/DataPagingListModel';
@@ -1574,6 +1574,14 @@ export class ReportService {
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();
+    }
+
+   public async DownloadAppearedPassed(request: DownloadAppearedPassed) {
+      const body = JSON.stringify(request);
+      return this.http.post(`${this.APIUrl}/DownloadAppearedPassed`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
     }
 
     public async GetITIEstablishManagementStaffReport(data: any) {

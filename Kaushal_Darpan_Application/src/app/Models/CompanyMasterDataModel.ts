@@ -85,3 +85,18 @@ export class  SignedCopyOfResultSearchModel {
   public RoleID: number = 0;
 
 }
+
+
+export class EligibleStudentListMasterSearchModel {
+  public Name: string = '';
+  public Status: string = '';
+  public ModifyBy: number = 0
+  public RoleID: number = 0
+  public DepartmentID: number = 0;
+  public InstituteID:number=0;
+  public PageSize: number = 50
+  public PageNumber: number = 1
+
+  public SortOrder: string = '';
+  public SortColumn: string = '';
+}

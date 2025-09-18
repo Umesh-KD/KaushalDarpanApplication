@@ -125,6 +125,7 @@ export class QualificationDetailsDataModel {
   public CreatedBy: number = 0
   public ActiveStatus: number = 1
   public DeleteStatus: number = 0
+
 }
 
 export class HighestQualificationDetailsDataModel {
@@ -139,6 +140,8 @@ export class HighestQualificationDetailsDataModel {
   public MarksObtainedHigh: number = 0
   public ApplicationQualificationId: number = 0
   public PercentageHigh: string = ''
+
+
 }
 
 export class Qualification8thDetailsDataModel {
@@ -151,7 +154,12 @@ export class Qualification8thDetailsDataModel {
   public MaxMarks8: number = 0
   public MarksObtained8: number = 0
   public Percentage8: string = ''
+  public FileName: string = ''
+  public DisFileName: string = ''
 }
+
+
+
 
 
 export class Qualification10thDetailsDataModel {
@@ -169,6 +177,8 @@ export class Qualification10thDetailsDataModel {
   public ScienceMaxMarks10: number = 0
   public ScienceMarksObtained10: number = 0
   public Percentage10: string = ''
+  public FileName: string = ''
+  public DisFileName: string = ''
 }
 
 export class Qualification12thDetailsDataModel {
@@ -181,6 +191,8 @@ export class Qualification12thDetailsDataModel {
   public MaxMarks12: number = 0
   public MarksObtained12: number = 0
   public Percentage12: string = ''
+  public FileName: string = ''
+  public DisFileName: string = ''
 }
 
 export class PersonalDetailsDatamodel {

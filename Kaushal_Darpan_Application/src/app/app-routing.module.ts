@@ -198,6 +198,11 @@ const routes: Routes = [
       { path: 'AddCompany', loadChildren: () => import('./Views/CompanyMaster/add-company-master/add-company-module').then(m => m.CompanyMasterModule), title: 'Add Company' },
       { path: 'CompanyMaster', loadChildren: () => import('./Views/CompanyMaster/company-master/company-master.module').then(m => m.CompanyMasterListModule), title: 'Company Master' },
 
+
+      { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
+
+
+
       { path: 'addstaffmaster', loadChildren: () => import('./Views/staffMaster/add-staff-master/add-staff-master.module').then(m => m.AddStaffMasterModule), title: 'Add Staff' },
       { path: 'staffmaster', loadChildren: () => import('./Views/staffMaster/staff-master/staff-master.module').then(m => m.StaffMasterModule), title: 'Staff Master' },
       { path: 'addstaffbasicdetail', loadChildren: () => import('./Views/staffMaster/add-staff-basic-detail/add-staff-basic-detail.module').then(m => m.AddStaffBasicDetailModule), title: 'Add Staff Basic Details' },
@@ -1393,6 +1398,8 @@ const routes: Routes = [
         { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
         { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
         { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
+
 
 
     ]
@@ -1456,6 +1463,8 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
+ 
+
 
     ]
   },
@@ -1496,9 +1505,6 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-
-
-
 
 
 
