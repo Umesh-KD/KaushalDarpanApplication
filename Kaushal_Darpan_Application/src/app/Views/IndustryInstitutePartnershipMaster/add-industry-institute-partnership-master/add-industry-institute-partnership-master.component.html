@@ -43,13 +43,13 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>
-            <select class="form-select" id="CompanyID" [(ngModel)]="request.CompanyID" formControlName="CompanyID"
+            <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.PlacementCompanyID" formControlName="PlacementCompanyID"
               (change)="GetComapnyDetailsByID()">
               <option value="0">--All--</option>
               <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-            <div *ngIf="isSubmitted&&_IIPMasterFormGroup.CompanyID.errors" class="text-danger">
-              <p *ngIf="!_IIPMasterFormGroup.CompanyID.errors.DropdownValidators">
+            <div *ngIf="isSubmitted&&_IIPMasterFormGroup.PlacementCompanyID.errors" class="text-danger">
+              <p *ngIf="!_IIPMasterFormGroup.PlacementCompanyID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
@@ -125,7 +125,7 @@
                 {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
               </label>
               <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Logo}}"
                    *ngIf="this.request.Dis_CompanyName !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
               </div>
@@ -133,7 +133,7 @@
           </div>
 
 
-          <div>
+          <!-- <div>
             <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                    for="fileStudentCompany">Company Document</label>
             <div class="flex fileUploader">
@@ -149,7 +149,7 @@
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </form>
 
@@ -205,10 +205,10 @@
           <table class="w-full table-border" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
               <tr>
-                <th>Priority</th>
-                <th>Trade Level</th>
-                <th>Name of College</th>
-                <th>Branch Name</th>
+                <th>Sr No</th>
+                <th>Name</th>
+                <th>Contact No</th>
+                <th>Email</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -219,7 +219,7 @@
                 <td class="text-center">{{row.MobileNo}}</td>
                 <td class="text-center">{{row.EmailId}}</td>
                 <td class="text-center">
-                  <button class="btn bg-danger text-white" type="button" title="Delete">
+                  <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
                     <i class="ti ti-trash"></i>
                   </button>
                 </td>
