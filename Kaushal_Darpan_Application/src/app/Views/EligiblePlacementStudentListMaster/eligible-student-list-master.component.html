@@ -2,12 +2,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Company Master</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Eligible Student </h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Eligible Student</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Company Master</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Eligible Student List</a>
     </div>
   </div>
 </div>
@@ -39,7 +39,7 @@
         <div>
           
 
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
             Reset
@@ -56,7 +56,8 @@
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+        <!-- [(ngModel)]="pageSize" -->
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetEligibleStudentListData(1)">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
@@ -65,9 +66,9 @@
       </div>
       <div class=""></div>
       <div class=""></div>
-      <div class="">
+      <!-- <div class="">
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
-      </div>
+      </div> -->
     </div>
 
     <div class="overflow-auto mt-3">
@@ -107,6 +108,23 @@
         </tbody>
       </table>
     </div>
+  <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  StudentList?.length }} of {{StudentList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetEligibleStudentListData(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="StudentList[0]?.TotalRecords==0" (change)="GetEligibleStudentListData(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetEligibleStudentListData(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+    <!--end pagination-->
   </div>
 </div>
 <!-- end row -->

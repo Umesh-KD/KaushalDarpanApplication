@@ -94,6 +94,9 @@ export class EligibleStudentListMasterSearchModel {
   public RoleID: number = 0
   public DepartmentID: number = 0;
   public InstituteID:number=0;
-  public PageNumber: number = 0;
-  public PageSize: number = 0;
+  public PageSize: number = 50
+  public PageNumber: number = 1
+
+  public SortOrder: string = '';
+  public SortColumn: string = '';
 }
