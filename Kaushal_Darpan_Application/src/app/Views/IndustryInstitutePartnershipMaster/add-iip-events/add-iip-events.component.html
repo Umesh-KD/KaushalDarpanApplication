@@ -1,0 +1,179 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Industry Institute Partnership Events</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Industry-Institute-Partnership Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Events</a>
+    </div>
+  </div>
+  
+</div>
+
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <form [formGroup]="EventFormGroup" id="IIPMasterFormGroup" class="form-horizontal">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Industry-Institute-Partnership Details</b>
+          <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
+            <i class="ti ti-chevron-left"></i>Back
+          </a>
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event Type<span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.EventTypeID" formControlName="EventTypeID">
+              <option value="0">--Select--</option>
+              <option value="1">Online</option>
+              <option value="2">Offline</option>
+            </select>
+            <div *ngIf="isSubmitted &&_EventFormGroup.EventTypeID.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.EventTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event<span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" [(ngModel)]="request.Event" formControlName="Event">
+              <option value="0">--Select--</option>
+              <option value="1">Webinar</option>
+              <option value="2">Job Fair</option>
+            </select>
+            <div *ngIf="isSubmitted &&_EventFormGroup.Event.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.Event.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+            <select class="form-select" id="SemesterID" formControlName="SemesterID"
+                    [(ngModel)]="request.SemesterID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
+            </select>
+            <div *ngIf="isSubmitted &&_EventFormGroup.SemesterID.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.SemesterID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div> -->
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Event For<span class="StarMarking">*</span></label>
+            <select class="form-select" id="EventForID" [(ngModel)]="request.EventForID" formControlName="EventForID">
+              <option value="0">--Select--</option>
+              <option value="1">Student</option>
+              <option value="2">Faculty</option>
+              <option value="3">Both</option>
+            </select>
+            <div *ngIf="isSubmitted &&_EventFormGroup.EventForID.errors" class="text-danger">
+              <p *ngIf="!_EventFormGroup.EventForID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>From Date</label>
+            <input type="datetime-local" class="form-input" name="Date" id="txtFromDate" formControlName="EventStartDate"
+                   [(ngModel)]="request.EventStartDate" [min]="todayDate" />
+            <div *ngIf="isSubmitted && _EventFormGroup.EventStartDate.errors"
+                 class="text-danger">
+              <p *ngIf="_EventFormGroup.EventStartDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>To Date</label>
+            <input type="datetime-local" class="form-input" name="ToDate" id="EventEndDate" formControlName="EventEndDate"
+                   [(ngModel)]="request.EventEndDate" [min]="request.EventStartDate" />
+            <div *ngIf="isSubmitted && _EventFormGroup.EventEndDate.errors"
+                 class="text-danger">
+              <p *ngIf="_EventFormGroup.EventEndDate.errors.required">
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+            </div>
+          </div>
+
+          <div class="mb-8">
+            <label>Branch<span class="text-danger">*</span></label>
+            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                    [settings]="settingsMultiselect"
+                                    [data]="StreamMasterList"
+                                    [(ngModel)]="request.Branchlist"
+                                    [disabled]="false"
+                                    (onFilterChange)="onFilterChange($event)"
+                                    (onDropDownClose)="onDropDownClose($event)"
+                                    (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="onDeSelect($event)"
+                                    (onSelectAll)="onSelectAll($event)"
+                                    (onDeSelectAll)="onDeSelectAll($event)"
+                                    formControlName="Branchlist">
+            </ng-multiselect-dropdown>
+          </div>
+
+          <div class="mb-8">
+            <label>Semester<span class="text-danger">*</span></label>
+            <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                    [settings]="settingsMultiselectSem"
+                                    [data]="SemesterMasterList"
+                                    [(ngModel)]="request.Semesterlist"
+                                    [disabled]="false"
+                                    (onFilterChange)="onFilterChange($event)"
+                                    (onDropDownClose)="onDropDownClose($event)"
+                                    (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="onDeSelect($event)"
+                                    (onSelectAll)="onSelectAll($event)"
+                                    (onDeSelectAll)="onDeSelectAll($event)"
+                                    formControlName="Semesterlist">
+            </ng-multiselect-dropdown>
+          </div>
+
+          <!-- <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileStudentCompany">Company Document</label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileStudentCompany" type="file" (change)="onFilechangeCompany($event,'CompanyDocument')">
+              <label for="fileStudentCompany">
+                <span>Choose File</span>
+                {{request.Dis_DocName === '' ? 'No File Choosen' : request.Dis_DocName}}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyDocument}}"
+                   *ngIf="this.request.Dis_DocName !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div >
+              <button type="button" class="btn bg-info text-white mt-6" (click)="SaveEventData()">Submit</button>
+              <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+                <i class="ti ti-refresh"></i> Reset
+              </button> -->
+            </div>
+
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+

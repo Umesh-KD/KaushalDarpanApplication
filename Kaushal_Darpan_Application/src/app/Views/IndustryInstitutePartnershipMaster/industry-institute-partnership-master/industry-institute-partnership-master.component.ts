@@ -4,7 +4,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { IndustryInstitutePartnershipMasterSearchModel, IIndustryInstitutePartnershipMasterDataModel, IndustryTrainingMaster } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { IndustryInstitutePartnershipMasterSearchModel, IIndustryInstitutePartnershipMasterDataModel, IndustryTrainingMaster, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -40,31 +40,20 @@ export class IndustryInstitutePartnershipMasterComponent {
   public DDlTradesearchRequest = new ItiTradeSearchModel();
   public isLoading: boolean = false;
   public IndID: number = 0;
-  constructor(private fb: FormBuilder, private commonMasterService: CommonFunctionService, private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
-    private toastr: ToastrService, private appsettingConfig: AppsettingService, private loaderService: LoaderService, private Swal2: SweetAlert2, private modalService: NgbModal,) {
-
-  }
+  public deleteReq = new IndustryInstitutePartnershipMasterDataModels()
+  constructor(
+    private fb: FormBuilder, 
+    private commonMasterService: CommonFunctionService, 
+    private industryInstitutePartnershipMasterService: IndustryInstitutePartnershipMasterService,
+    private toastr: ToastrService, 
+    private appsettingConfig: AppsettingService, 
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private modalService: NgbModal,
+  ) { }
 
 
   async ngOnInit() {
-
-   
-
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetAllData();
-    await this.GetEventTypelist();
-    await this.GetTradeListDDL();
-    await this.commonMasterService.SemesterMaster().then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.SemesterMasterList = data['Data'];
-    }, (error: any) => console.error(error));
-
-   
-
-    const today = new Date();
-    this.todayDate = this.formatDate(today);
-
-    this.request.EventDate = this.formatDate(today);
     this.groupForm = this.fb.group({
       ddlEventTypeID: [0, [DropdownValidators]],
       ddlSemesterID: [0, [DropdownValidators]],
@@ -73,11 +62,20 @@ export class IndustryInstitutePartnershipMasterComponent {
       txtEventDate: ['', Validators.required]
 
     });
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetAllData();
+    await this.GetEventTypelist();
+    await this.GetTradeListDDL();
+    await this.commonMasterService.SemesterMaster().then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SemesterMasterList = data['Data'];
+    }, (error: any) => console.error(error));
+    const today = new Date();
+    this.todayDate = this.formatDate(today);
+
+    this.request.EventDate = this.formatDate(today);
+    
   }
-
-
- 
-
   async GetEventTypelist() {
     this.EventTypelist = [
       { ID: 1, Name: 'Online Event' },
@@ -186,22 +184,18 @@ export class IndustryInstitutePartnershipMasterComponent {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-
-            await this.industryInstitutePartnershipMasterService.DeleteById(ID, this.sSOLoginDataModel.UserID)
+            this.deleteReq.CompanyID = ID;
+            this.deleteReq.ModifyBy = this.sSOLoginDataModel.UserID;
+            await this.industryInstitutePartnershipMasterService.DeleteCompanyById_IIP(this.deleteReq)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
-                this.State = data['State'];
-                this.Message = data['Message'];
-                this.ErrorMessage = data['ErrorMessage'];
-                console.log(data);
-
-                if (this.State == EnumStatus.Success) 
-                  {
-                    this.toastr.warning(this.Message)
+                
+                if (data.State == EnumStatus.Success) {
+                    this.toastr.success(data.Message)
                     await this.GetAllData();
                   }
                 else {
-                  this.toastr.error(this.ErrorMessage)
+                  this.toastr.error(data.ErrorMessage)
                 }
 
               }, (error: any) => console.error(error)
