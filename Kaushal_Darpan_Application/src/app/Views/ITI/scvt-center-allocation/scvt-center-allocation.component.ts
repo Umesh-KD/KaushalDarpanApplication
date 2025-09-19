@@ -31,6 +31,8 @@ export class ScvtCenterAllocationComponent {
   public isSubmitted: boolean = false;
   public CenterMasterList: ITICenterAllocationtDataModels[] = [];
   public MapingInstList:any[]=[]
+  public Branchlist:any[]=[]
+  public InstituteMasterDDLList:any[]=[]
   public UserID: number = 0;
   searchText: string = '';
   public isDisabledGrid: boolean = false;
@@ -102,6 +104,7 @@ export class ScvtCenterAllocationComponent {
     await this.GetCenterMasterList();
     this.UserID = this.sSOLoginDataModel.UserID;
     this.ddlInstitute_Change()
+    await this.GetMasterData()
 
   }
 
@@ -128,7 +131,7 @@ export class ScvtCenterAllocationComponent {
   //  }
   //}
 
-  async GetTrade() {
+  async GetTrade(Action:string='') {
     try {
       this.loaderService.requestStarted();
       this.TradeList = []
@@ -139,6 +142,7 @@ export class ScvtCenterAllocationComponent {
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.searchRequest.FinancialYearID = this.sSOLoginDataModel.FinancialYearID
       this.searchRequest.InstituteID = this.request.InstituteID
+      this.searchRequest.Action = Action
       debugger
       //Center ID
       await this.centerAllocationService.GetscvtTradeByCenterID(this.searchRequest)
@@ -207,6 +211,8 @@ export class ScvtCenterAllocationComponent {
     this.searchByCenterName = '';
     this.searchRequest.centerCode = ''
     this.searchRequest.Name = ''
+    this.searchRequest.InstituteID = 0
+    this.searchRequest.TradeID = 0
     this.CenterMasterList = [];
     this.request = new ITICenterAllocationtDataModels();
     this.GetCenterMasterList();
@@ -377,6 +383,27 @@ export class ScvtCenterAllocationComponent {
         //    }) : []; // If InstituteList is undefined or not an array, return an empty array
         //});
         // //Call service to save data
+
+
+        if (this.request.InstituteID == 0) {
+          this.toastr.warning("Please Select Institute")
+          return
+        }
+        if(this.SelectedInstituteList.length==0) {
+          this.toastr.warning("Please Select Trade")
+          return
+        }
+
+        if (this.request.CenterAllocationID == 0) {
+          var isExist = this.MapingInstList.find((x: any) => x.InstituteID == this.request.InstituteID)
+          if (isExist) {
+            this.toastr.warning("You have already Allocate this Institute Please edit to make changes ")
+           return
+          }
+        }
+
+       
+
         const tradeIds = this.SelectedInstituteList.map(x => x.ID).join(', ');
         debugger
         var centersData = {
@@ -386,7 +413,8 @@ export class ScvtCenterAllocationComponent {
           ModifyBy: this.sSOLoginDataModel.UserID,
           DepartmentID: this.sSOLoginDataModel.DepartmentID,
           EndtermID: this.sSOLoginDataModel.EndTermID,
-          CourseTypeID: this.sSOLoginDataModel.Eng_NonEng
+          CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+          CenterAllocationID: this.request.CenterAllocationID
         }
         
 
@@ -400,6 +428,7 @@ export class ScvtCenterAllocationComponent {
 
             if (this.State === EnumStatus.Success) {
               this.toastr.success(this.Message);
+              this.GetCenterCollegeMapList(this.searchRequest.CenterID)
               this.ResetControl();
             } else {
               this.toastr.error(this.ErrorMessage);
@@ -537,6 +566,9 @@ export class ScvtCenterAllocationComponent {
 
   CloseModal() {
     this.modalService.dismissAll();
+    this.request.CenterID = 0
+    this.SelectedInstituteList = []
+    this.MapingInstList=[]
   }
 
   MapInsitute() {
@@ -567,4 +599,101 @@ export class ScvtCenterAllocationComponent {
       this.toastr.error("Failed to map institutes. Please try again.");
     }
   }
+
+  async btnEdit_OnClick(row: any) {
+
+    this.request.InstituteID = row.InstituteID;
+    this.request.CenterAllocationID = row.CenterAllocationID
+    await this.GetTrade('EDIT')
+    
+    // assume row.TradeIDs = "1,2,3"
+    //        row.TradeNames = "Carpentry,Welding,Fitting"
+
+
+    const ids = row.TradeIds ? row.TradeIds.split(',') : [];
+    const names = row.TradeNames ? row.TradeNames.split(',') : [];
+    console.log(ids)
+    console.log(names)
+
+    this.SelectedInstituteList = ids.map((id: string, i: number) => ({
+      ID: +id.trim(),
+      Name: names[i]?.trim() || ''
+    }));
+
+    console.log(this.SelectedInstituteList)
+  }
+
+
+
+  async Delete(row:any) {
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.CenterID = row.CenterID
+    this.searchRequest.InstituteID=row.InstituteID
+    try {
+      this.loaderService.requestStarted();
+      await this.centerAllocationService.DeleteCenterMapping(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.CenterMasterList = data['Data'];
+
+          console.log(this.CenterMasterList, "dddddd");
+        }, error => console.error(error));
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
+
+
+
+      await this.commonMasterService.Iticollege(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID
+        , this.sSOLoginDataModel.InstituteID).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InstituteMasterDDLList = data.Data;
+          console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+        })
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetItiTrade() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.searchRequest.InstituteID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.Branchlist = data['Data'];
+        }, error => console.error(error));
+
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 }
