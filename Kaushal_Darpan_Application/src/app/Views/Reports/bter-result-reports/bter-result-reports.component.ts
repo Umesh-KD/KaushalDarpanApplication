@@ -133,6 +133,7 @@ export class BterResultReportsComponent implements OnInit {
       { ID: 11, Name: 'Theory Fail Student Report', URL: 'TheoryPaperFailStudent' },
       { ID: 12, Name: 'Student Examiner Detail Report', URL: 'StudentDetailsReport' },
       { ID: 13, Name: 'Appeared/Passed Statistics Report', URL: 'Appeared-Passesd-Statistics'},
+      { ID: 14, Name: 'Appeared/Passed Statistics Institute wise Report', URL: 'Appeared-Passesd-Statistics-Institute-wise'},
       
     ];
   }
@@ -207,10 +208,10 @@ export class BterResultReportsComponent implements OnInit {
           break;
         case "mass-copping-report":
           await this.GetAllMassCoppingReport();
-          return;
+          break;
         case "sessional-fail-student-report":
           await this.GetAllSessionalReport();
-          return;
+          break;
         case "RMIFailStudentReport":
           response = await this.reportService.GetRMIFailStudentReport(this.filterModel);
           break;
@@ -219,13 +220,16 @@ export class BterResultReportsComponent implements OnInit {
           break;
         case "institute-student-report":
           await this.GetAllInstituteStudentReportData();
-          return;
+          break;
         case "StudentDetailsReport":
           response = await this.reportService.GetStudentExaminerDetailReport(this.filterModel);
-          return;
+          break;
         case "Appeared-Passesd-Statistics":
           response = await this.reportService.DownloadAppearedPassed(this.filterModel);
-            return;
+          break;
+        case "Appeared-Passesd-Statistics-Institute-wise":
+          response = await this.reportService.DownloadAppearedPassedInstitutewise(this.filterModel);
+          break;
         //case "Appeared-Passesd-Statistics":
         //  response = await this.reportService.AppearedPassedStatisticsReportDownload(this.filterModel);
         //  return;
@@ -236,6 +240,7 @@ export class BterResultReportsComponent implements OnInit {
       }
 
       const data = JSON.parse(JSON.stringify(response));
+      debugger
       if (data.State === EnumStatus.Success) {
         if (["bridge-course-report", "branch-wise-statistical-reports"].includes(this.ActionDynamic)) {
           this.downloadBase64PDF(data.Data, this.getReportFileName(this.ActionDynamic));
