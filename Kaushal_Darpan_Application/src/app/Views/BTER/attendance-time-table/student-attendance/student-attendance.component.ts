@@ -154,6 +154,7 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
+    debugger
     if (ID && SemesterID != "" && SemesterID != null) {
       this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -165,15 +166,96 @@ export class StudentAttendanceComponent implements OnInit {
 
   }
 
+  //async GetAttendanceTimeTable() {
+  //  debugger
+  //  try {
+  //    const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
+  //    dateStart.setDate(dateStart.getDate() + 1);
+  //    const formattedDateStart = dateStart.toISOString().split('T')[0];
+  //    const dateEnd = new Date(this.TableForm.value.AttendanceEndDate.toLocaleDateString());
+  //    dateEnd.setDate(dateEnd.getDate() + 1);
+  //    const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+  //    let obj = {
+  //      SemesterID: this.TableForm.value.SemesterID,
+  //      EndTermID: this.sSOLoginDataModel.EndTermID,
+  //      InstituteID: this.sSOLoginDataModel.InstituteID,
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //      CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+  //      StreamID: this.TableForm.value.StreamID,
+  //      SectionID: this.TableForm.value.SectionID,
+  //      SubjectID: this.TableForm.value.SubjectID,
+  //      AttendanceStartDate: formattedDateStart,
+  //      AttendanceEndDate: formattedDateEnd
+  //    };
+
+  //    this.filterData = [];
+
+
+  //    await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data['Data']));
+  //      this.filterData = data;
+
+  //      if (this.filterData.length > 0) {
+  //        this.dynamicColumns = [];
+  //        this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+  //        this.dynamicColumns = Object.keys(this.filterData[0])
+  //          .filter(key => ![
+  //            'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+  //            'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+  //            'EndTermID', 'CourseTypeID', 'StudentID'
+  //          ].includes(key))
+  //          .map(key => {
+  //            const isHoliday = key.toLowerCase().includes('holiday');
+  //            return { name: key, locked: isHoliday };
+  //          });
+
+
+  //        this.filterData.forEach(student => {
+  //          this.dynamicColumns.forEach(col => {
+  //            if (!student[col.name]) {
+  //              student[col.name] = col.locked ? 'H' : 'A'; // Holiday=H, Working=A
+  //            }
+  //          });
+  //        });
+
+  //        this.displayedColumns = [
+  //          ...this.displayedColumns,
+  //          ...this.dynamicColumns.map(c => c.name)
+  //        ];
+  //      }
+
+  //      this.dataSource.data = this.filterData;
+  //      this.dataSource.sort = this.sort;
+  //      this.totalRecords = this.filterData.length;
+  //      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+  //      this.updateTable();
+  //    }, error => console.error(error));
+
+
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
+
+
+
   async GetAttendanceTimeTable() {
-    debugger
+    debugger;
     try {
-      const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
+      const rawStart = this.TableForm.value.AttendanceStartDate;
+      const rawEnd = this.TableForm.value.AttendanceEndDate;
+
+      // Parse correctly whether string or Date
+      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
       dateStart.setDate(dateStart.getDate() + 1);
       const formattedDateStart = dateStart.toISOString().split('T')[0];
-      const dateEnd = new Date(this.TableForm.value.AttendanceEndDate.toLocaleDateString());
+
+      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
       dateEnd.setDate(dateEnd.getDate() + 1);
       const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
       let obj = {
         SemesterID: this.TableForm.value.SemesterID,
         EndTermID: this.sSOLoginDataModel.EndTermID,
@@ -188,7 +270,6 @@ export class StudentAttendanceComponent implements OnInit {
       };
 
       this.filterData = [];
-
 
       await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
@@ -209,7 +290,6 @@ export class StudentAttendanceComponent implements OnInit {
               return { name: key, locked: isHoliday };
             });
 
-          
           this.filterData.forEach(student => {
             this.dynamicColumns.forEach(col => {
               if (!student[col.name]) {
@@ -231,15 +311,15 @@ export class StudentAttendanceComponent implements OnInit {
         this.updateTable();
       }, error => console.error(error));
 
-
-
     } catch (Ex) {
       console.log(Ex);
     }
   }
 
+
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
+    debugger
     const attendanceStatus = event.checked ? 'P' : 'A';
     element[column] = attendanceStatus;
     console.log(`${element.StudentName}'s attendance for ${column} changed to ${attendanceStatus}`);
@@ -247,6 +327,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to toggle all attendance for a specific column to 'Present'
   toggleAllAttendanceForColumn(column: string, checked: boolean) {
+    debugger
     this.dataSource.data.forEach((row: { [x: string]: string; }) => {
       row[column] = checked ? 'P' : 'A'; // Set all attendance to 'P' or 'A'
     });
@@ -450,7 +531,7 @@ export class StudentAttendanceComponent implements OnInit {
         ];
 
         if (!skipKeys.includes(key)) {
-          // ✅ Remove (Working Day) / (Holiday) prefix → keep only yyyy-mm-dd
+          //  Remove (Working Day) / (Holiday) prefix → keep only yyyy-mm-dd
           const cleanedDate = key.replace(/\(.*?\)\s*/g, '').trim();
 
           attendanceArray.push({
@@ -481,6 +562,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   // Method to toggle all attendance to present or absent
   toggleAllAttendance() {
+    debugger
     const attendanceStatus = this.checkedAll ? 'P' : 'A';
     this.dataSource.data.forEach((element: { Attendance: string; }) => {
       element.Attendance = attendanceStatus;
@@ -524,6 +606,10 @@ export class StudentAttendanceComponent implements OnInit {
         }
       });
     }
+  }
+
+  openDatePicker(event: any) {
+    event.target.showPicker();
   }
 }
 

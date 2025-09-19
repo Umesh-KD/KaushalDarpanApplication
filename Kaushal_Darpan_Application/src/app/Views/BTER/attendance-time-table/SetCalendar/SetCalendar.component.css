@@ -76,3 +76,57 @@ td.selected {
   background-color: #ffd54f; /* darker yellow for selected day */
   font-weight: bold;
 }
+
+
+
+.calendar-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+  .calendar-toolbar .month-year {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .calendar-toolbar input {
+    width: 70px;
+    text-align: center;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  .calendar-toolbar button {
+    padding: 6px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+
+  .calendar-toolbar .nav-btn {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+    .calendar-toolbar .nav-btn:hover {
+      background-color: #e0e0e0;
+    }
+
+  .calendar-toolbar .save-btn {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+
+    .calendar-toolbar .save-btn:hover {
+      background-color: #0056b3;
+    }
