@@ -26,7 +26,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
             <option value="0">--All--</option>
@@ -35,7 +35,7 @@
             <option value="Rejected">Rejected</option>
             <option value="Hold">Hold</option>
           </select>
-        </div>
+        </div> -->
         <div>
 
 
@@ -95,7 +95,7 @@
                     title="Edit"><i class="ti ti-pencil"></i></a>
 
                 <a href="javascript:void(0);" title="Delete"
-                   (click)="DeleteById(item.ID)">
+                   (click)="DeleteById(item.CompanyID)">
                   <i class="ti ti-trash"></i></a>
 
                 <a href="javascript:void(0);" title="Add Event"

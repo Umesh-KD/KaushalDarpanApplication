@@ -115,6 +115,7 @@ export class IIP_EventDataModel extends RequestBaseModel {
   public EventStartDate: string = ''
   public EventEndDate: string = ''
   public EventForID: number = 0
+  public UserID: number = 0
   public Branchlist: BranchList[] = []
   public Semesterlist: BranchList[] = []
 }
@@ -130,4 +131,5 @@ export class Semesterlist {
 
 export class CompanyEventSearchModel extends RequestBaseModel {
   public CompanyID: number = 0
+  public EventID: number = 0
 }

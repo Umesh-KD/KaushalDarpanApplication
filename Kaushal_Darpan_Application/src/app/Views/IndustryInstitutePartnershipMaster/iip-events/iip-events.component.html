@@ -58,8 +58,8 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventFor}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventStartDate}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventEndDate}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ row.EventStartDate | date:'dd-MM-yyyy HH:mm' }}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventEndDate | date:'dd-MM-yyyy HH:mm' }}</td>
             <td>{{row.EventStatus}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -67,11 +67,11 @@
                 <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID}"
                     title="Edit"><i class="ti ti-pencil"></i></a>
 
-                <!-- <a href="javascript:void(0);" title="Delete"
-                   (click)="DeleteById(item.ID)">
+                <a href="javascript:void(0);" title="Delete"
+                   (click)="DeleteEvent_ById(row.EventID)">
                   <i class="ti ti-trash"></i></a>
 
-                <a href="javascript:void(0);" title="Add Event"
+                <!-- <a href="javascript:void(0);" title="Add Event"
                    [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}">
                   <i class="ti ti-calendar-week"></i></a>
 

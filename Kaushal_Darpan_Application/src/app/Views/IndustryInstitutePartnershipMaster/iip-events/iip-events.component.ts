@@ -8,8 +8,9 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { CommonFunctionService } from '../../../Common/common';
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { CompanyEventSearchModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { CompanyEventSearchModel, IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-iip-events',
@@ -20,6 +21,8 @@ import { EnumStatus } from '../../../Common/GlobalConstants';
 export class IIPEventsComponent {
   public sSOLoginDataModel = new SSOLoginDataModel(); 
   public searchRequest = new CompanyEventSearchModel(); 
+
+  public deleteReq = new IIP_EventDataModel();
 
   public CompanyEventsList: any = []
 
@@ -34,7 +37,8 @@ export class IIPEventsComponent {
     private activatedRoute: ActivatedRoute, 
     private routers: Router, 
     private modalService: NgbModal, 
-    private appsettingConfig: AppsettingService
+    private appsettingConfig: AppsettingService,
+    private Swal2: SweetAlert2, 
   ) { }
 
   async ngOnInit() { 
@@ -61,5 +65,30 @@ export class IIPEventsComponent {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  async DeleteEvent_ById(EventID: number) {
+    this.Swal2.Confirmation("Do you want to delete?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.deleteReq.EventID = EventID
+            this.deleteReq.UserID = this.sSOLoginDataModel.UserID
+            await this.industryInstitutePartnershipMasterService.DeleteEvent_ById(this.deleteReq)
+              .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if(data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message)
+                await this.GetCompanyEvents();
+              } else {
+                this.toastr.error(data.ErrorMessage)
+              }
+            })
+          } catch (error) {
+            console.error(error)
+          }
+        }
+      })
   }
 }
