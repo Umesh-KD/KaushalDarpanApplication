@@ -32,5 +32,7 @@ export class CampusStudentConsentModel {
 
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
-
+  public UploadedResume: string = '';
+  public Dis_UploadedResume: string = '';
+  
 }

@@ -121,6 +121,61 @@ export class StudentPlacementConsentComponent {
     this.CampusValidationListData = [];
   }
 
+    public file!: File;
+    async onFilechange(event: any, Type: string) {
+      try {
+        debugger;
+        this.file = event.target.files[0];
+        if (this.file) {
+  
+          // upload to server folder
+          this.loaderService.requestStarted();
+          // console.log(this.selectedSuspendedPost);
+  
+          await this.commonMasterService.UploadDocument(this.file)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+  
+              if (this.State == EnumStatus.Success) {
+                if (Type == "Photo") {
+                  // if(this.selectedSuspendedPost.Status = 'Suspend'){
+  
+                  // }
+                  // else{
+                    this.Request.Dis_UploadedResume = data['Data'][0]["Dis_FileName"];
+                    this.Request.UploadedResume = data['Data'][0]["FileName"];
+                  // }
+  
+                }
+                //else if (Type == "Sign") {
+                //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
+                //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
+                //}
+                /*              item.FilePath = data['Data'][0]["FilePath"];*/
+                event.target.value = null;
+              }
+              if (this.State == EnumStatus.Error) {
+                this.toastr.error(this.ErrorMessage)
+              }
+              else if (this.State == EnumStatus.Warning) {
+                this.toastr.warning(this.ErrorMessage)
+              }
+            });
+        }
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+      finally {
+        /*setTimeout(() => {*/
+        this.loaderService.requestEnded();
+        /*  }, 200);*/
+      }
+    }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
