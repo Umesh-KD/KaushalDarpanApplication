@@ -160,5 +160,10 @@ export class ITICenterAllocationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  public async DeleteCenterMapping(searchRequest: ITIcenterAllocationSearchModel) {
+    return await this.http.post(this.APIUrl + "/DeleteCenterMapping", searchRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -33,6 +33,26 @@
         </div>
 
         <div>
+
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.InstituteID" (change)="GetItiTrade()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+        </div>
+
+        <div>
+
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade:</label>
+          <select class="form-select" id="StudentExamYear" [(ngModel)]="searchRequest.TradeID" (change)="GetItiTrade()">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of Branchlist" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetCenterMasterList()">Search</button>
           <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
             <i class="ti ti-refresh"></i> Reset
@@ -71,6 +91,7 @@
               <th class="text-left">Center Name</th>
               <th class="text-left">CC Code</th>
               <th class="text-left">Institute Names</th>
+              <th class="text-left">Trade Names</th>
               <th class="text-left">Action</th>
             </tr>
           </thead>
@@ -92,14 +113,28 @@
                 <div *ngIf="IsShowDropdown || !row.InstituteNames || row.InstituteNames.length === 0">
                 </div>
               </td>
+
+              <td>
+                <div *ngIf="row.TradesWithInstitute && row.TradesWithInstitute.length > 0">
+                  <span style="white-space: pre-line;">{{ row.TradesWithInstitute }}</span>
+                </div>
+
+                <div *ngIf="IsShowDropdown || !row.TradesWithInstitute || row.TradesWithInstitute.length === 0">
+                  <!-- multi-select dropdown -->
+                </div>
+              </td>
+
+
+
               <td>
                 <button type="button" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute,row,idx)">Add</button>
+
               </td>
             </tr>
           </tbody>
         </table>
         <div>
-          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="saveData()">Save</button>
+          <!--<button type="button" class="btn bg-info text-white mt-6 me-1" (click)="saveData()">Save</button>-->
         </div>
       </div>
     </div>
@@ -123,7 +158,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name  <span class="StarMarking">*</span></label>
-          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade()">
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade('ALL')">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of FilteredInstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
@@ -160,7 +195,7 @@
 
                 <th class="text-left">Trade List</th>
                 <!--<th class="text-left">Examiner</th>-->
-                <!--<th class="text-left">Action</th>-->
+                <th class="text-left">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -174,12 +209,19 @@
           <td align="left">{{row.SubjectName }}</td>
           <td align="left">{{row.Attendance }}</td>
           <td align="left">{{row.Invigilators}}</td>-->
-              <!--<td align="left">
-          <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+              <td align="left">
+                <div class="flex align-l justify-l actionBtns w-auto" style="width:auto !important">
+              
+                  <a (click)="btnEdit_OnClick(row)" title="Edit">
+                    <i class="ti ti-pencil"></i>
+                  </a>
 
+                  <a (click)="Delete(row)" title="Delete">
+                    <i class="ti ti-trash"></i>
+                  </a>
 
-          </div>
-        </td>-->
+                </div>
+        </td>
               </tr>
             </tbody>
           </table>
