@@ -14,7 +14,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <div>
+        <!--<div>
           <label>
             <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.Reg" (change)="onChangeStudentType()" />
             Reg.
@@ -24,7 +24,7 @@
             <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.Ex" (change)="onChangeStudentType()" />
             Ex.
           </label>
-        </div>
+        </div>-->
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -49,7 +49,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester/Year</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester (Prev.)</label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>

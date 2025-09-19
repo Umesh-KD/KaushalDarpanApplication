@@ -670,7 +670,14 @@ export class StudentEnrollmentComponent {
 
   // save edited student
   async SaveData_EditStudentDetails() {
-    debugger;
+    //debugger;
+
+    // not allowed for all filter
+    if (this.request.StudentFilterStatusId == 0) {
+      this.toastr.warning("Please choose valid 'Status' filter to perform further action!");
+      return;
+    }
+
     //reset    
     if (this.SubCasteCategoryADDLList.length > 0) {
       this.resetValidationSubCastCategoryA(true);
@@ -802,7 +809,14 @@ export class StudentEnrollmentComponent {
   // ---------- save marked student with exam flow ------
   async SaveDataMarked() {
     // status marked
-    debugger;
+    //debugger;
+
+    // not allowed for all filter
+    if (this.request.StudentFilterStatusId == 0) {
+      this.toastr.warning("Please choose valid 'Status' filter to perform further action!");
+      return;
+    }
+
     if (this.status <= 0) {
       this.toastr.error("Please select 'Mark As' status!");
       return;
@@ -1535,10 +1549,6 @@ export class StudentEnrollmentComponent {
       );
   }
 
-
-
-
-
   async SaveRevokeDropout() {
     // confirm
     this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
@@ -1596,8 +1606,6 @@ export class StudentEnrollmentComponent {
       }
     });
   }
-
-
 
   async SendForSMSEnrollmentStudent() {
     // confirm
