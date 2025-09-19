@@ -82,7 +82,7 @@
             <th class="text-left">DOB</th>
             <th class="text-center">MobileNo</th>
             <th class="text-center">Status</th>
-           
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -93,8 +93,16 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? item.SSOID :'UnMapped Student'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td>
             <!-- <td>{{item.Status}}</td> -->
+             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                <a *ngIf="!item.SSOID || item.SSOID.trim()===''"  [routerLink]="'/StudentPlacementMapping'" [queryParams]="{ID:item.StudentID, key:1}"  title="Edit"><i class="ti ti-check"></i></a>
+                <!-- <a href="javascript:void(0);" title="Company On Action" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a> -->
+               
+              </div>
+             </td>
+              <!-- *ngIf="!item.SSOID || item.SSOID.trim() === ''" -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a [routerLink]="'/AddCompany'" [queryParams]="{CompanyID:company.ID, key:1}" *ngIf="(company.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>

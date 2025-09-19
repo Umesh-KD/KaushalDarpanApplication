@@ -60,6 +60,7 @@ export class ItiCompanyMasterComponent implements OnInit {
   }
 
   async DeleteById(ID: number) {
+    debugger;
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed
@@ -73,7 +74,7 @@ export class ItiCompanyMasterComponent implements OnInit {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);
 
-                if (!data.State) {
+                if (data.State) {
                   this.toastr.success(data.Message)
                   await this.GetAllData();
                 }
