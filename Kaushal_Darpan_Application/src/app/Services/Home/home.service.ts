@@ -3,7 +3,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CampusDetailsWebSearchModel } from '../../Models/CampusDetailsWebDataModel';
+import { CampusDetailsWebSearchModel, IIP_EventSearchModel } from '../../Models/CampusDetailsWebDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -64,4 +64,11 @@ export class HomeService {
       ).toPromise();
   }
 
+  public async GetAllPost_IIP(searchRequest: IIP_EventSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllPost_IIP`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

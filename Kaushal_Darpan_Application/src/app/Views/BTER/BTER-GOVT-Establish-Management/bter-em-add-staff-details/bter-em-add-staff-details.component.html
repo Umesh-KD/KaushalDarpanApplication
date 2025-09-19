@@ -17,9 +17,9 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+        <!--{{request.OfficeID}}
         {{request.OfficeID}}
-        {{request.OfficeID}}
-        {{request.IsNodal|json}}
+        {{request.IsNodal|json}}-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="Office">
@@ -140,7 +140,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
           <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
-                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" />
+                 formControlName="DateOfBirth" [(ngModel)]="request.DateOfBirth" (click)="openDatePicker($event)" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfBirth.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfBirth.errors.required">
@@ -152,7 +152,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining in Department<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate" id="DepartmentJoiningDate"
-                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" />
+                 formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" (click)="openDatePicker($event)" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DepartmentJoiningDate.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DepartmentJoiningDate.errors.required">
@@ -166,7 +166,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining"
-                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" />
+                 formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" (click)="openDatePicker($event)" />
 
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfAppointment.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfAppointment.errors.required">
@@ -178,7 +178,7 @@
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
-                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" />
+                 formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" />
           <div *ngIf="isSubmitted&&_StaffMasterFormGroup.DateOfJoining.errors" class="text-danger">
             <p *ngIf="_StaffMasterFormGroup.DateOfJoining.errors.required">
               <i aria-hidden="true"></i>This field is required .!

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
 import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
-import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
+import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -145,6 +145,8 @@ export class PreExamStudentExaminationComponent {
   modalRef!: NgbModalRef;
   
   public IsYearly: boolean = false;
+  public _enumStudentType = EnumStudentType;
+
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
     private loaderService: LoaderService,
@@ -916,6 +918,11 @@ export class PreExamStudentExaminationComponent {
 
   async SaveData_EditStudentDetails() {
 
+    // not allowed for all filter
+    if (this.request.StudentFilterStatusId == 0) {
+      this.toastr.warning("Please choose valid 'Status' filter to perform further action!");
+      return;
+    }
 
     const sPaperString = this.SelectedSubjectList.map((subject: any) => subject.Code).join(',');
 
@@ -1114,22 +1121,15 @@ export class PreExamStudentExaminationComponent {
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   // ---------- save marked student with exam flow ------
   async SaveDataMarked() {
-    debugger
+    //debugger
+
+    // not allowed for all filter
+    if (this.request.StudentFilterStatusId == 0) {
+      this.toastr.warning("Please choose valid 'Status' filter to perform further action!");
+      return;
+    }
 
     // status marked
     if (this.status <= 0) {
