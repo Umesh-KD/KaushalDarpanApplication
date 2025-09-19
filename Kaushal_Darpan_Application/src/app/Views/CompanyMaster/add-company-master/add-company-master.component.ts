@@ -152,6 +152,7 @@ export class AddCompanyMasterComponent implements OnInit {
 
   // get detail by id
   async GetById() {
+    debugger
     try {
 
       this.loaderService.requestStarted();

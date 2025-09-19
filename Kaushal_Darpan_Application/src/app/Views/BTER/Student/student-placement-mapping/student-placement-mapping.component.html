@@ -42,7 +42,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" formControlName="txtApplicationNo" [(ngModel)]="searchRequest.ApplicationNo">
+            <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" formControlName="txtApplicationNo" [(ngModel)]="StudentDataEnrollmentWise.EnrollmentNo">
             <div *ngIf="isSubmitted && _searchssoform.txtApplicationNo.errors" class="text-danger">
               <p *ngIf="_searchssoform.txtApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>

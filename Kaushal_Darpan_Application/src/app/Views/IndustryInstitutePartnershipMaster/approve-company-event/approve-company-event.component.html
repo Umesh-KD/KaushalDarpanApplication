@@ -1,0 +1,196 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Approve Company Events</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Industry Institute Partnership Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Approve Company Events</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+            <option value="0">--All--</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Hold">Hold</option>
+          </select>
+        </div> -->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""><button class="btn bg-success text-white" (click)="ApproveCompanyEvents()" type="button">Approve Company</button></div>
+      <div class=""></div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+      </div>
+    </div>
+    <!--{{IndustryInstitutePartnershipMasterList|json}}-->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Website</th>
+            <th class="text-left">Address</th>
+            <th class="text-left">Status</th>
+            <th >Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
+                     *ngIf="row.CompanyStatus != 1">
+            </td>
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>{{row.CompanyName}}</td>
+            <td>{{row.Website}}</td>
+            <td>{{row.Address}}</td>
+            <td>{{row.Status}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+
+                <a href="javascript:void(0);" title="View Company Events"
+                   (click)="ViewCompanyEvents(MyModel_ViewEventDetails, row.CompanyID)">
+                  <i class="ti ti-eye"></i></a>
+
+                <!-- <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{IndustryInstitutePartnershipID:item.CompanyID, key:1}"
+                    title="Edit"><i class="ti ti-pencil"></i></a>
+
+                <a href="javascript:void(0);" title="Delete"
+                   (click)="DeleteById(item.CompanyID)">
+                  <i class="ti ti-trash"></i></a>
+
+                <a href="javascript:void(0);" title="Add Event"
+                   [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}">
+                  <i class="ti ti-calendar-week"></i></a>
+
+                <a href="javascript:void(0);" title="View Company Events"
+                   [routerLink]="'/iip-events'" [queryParams]="{id:item.CompanyID}">
+                  <i class="ti ti-eye"></i></a> -->
+
+                <!-- <a [routerLink]="'/IndustryTrainingList'" [queryParams]="{IndustryID:item.ID, key:1}"
+                   title="Event List"><i class="ti ti-list"></i></a>
+
+                <div *ngIf="item.CompanyDocument" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                  <a download target="_blank"
+                    href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.CompanyDocument}}"
+                    title="Download"><i class="ti ti-download"></i></a>
+
+                </div> -->
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+
+<ng-template #MyModel_ViewEventDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b><i class="fa fa-plus"></i> Team Member Details </b>
+        <button class="btn bg-info text-white" (click)="CloseEventModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
+        
+          <div class="overflow-auto mt-3">
+            <table class="table table-border w-full" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                    <th>Sr. No.</th>
+                    <th class="text-left">Event Type</th>
+                    <th class="text-left">Event</th>
+                    <th class="text-left">Event For</th>
+                    <th class="text-left">Event Start Date</th>
+                    <th class="text-left">Event End Date</th>
+                    <th class="text-left">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+                    <td>{{idx+1}}</td>
+                    <td >{{row.EventType}}</td>
+                    <td>{{row.Event}}</td>
+                    <td >{{row.EventFor}}</td>
+                    <td >{{ row.EventStartDate | date:'dd-MM-yyyy HH:mm' }}</td>
+                    <td >{{row.EventEndDate | date:'dd-MM-yyyy HH:mm' }}</td>
+                    <td>{{row.EventStatus}}</td>
+                </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>

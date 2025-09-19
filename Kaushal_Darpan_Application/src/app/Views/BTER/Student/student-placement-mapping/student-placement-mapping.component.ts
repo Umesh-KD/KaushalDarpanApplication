@@ -16,6 +16,8 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { StudentService } from '../../../../Services/Student/student.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { ActivatedRoute } from '@angular/router';
+import { CompanyMasterService } from '../../../../Services/CompanyMaster/company-master.service.ts';
 
 @Component({
   selector: 'app-student-placement-mapping',
@@ -50,12 +52,16 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
   MapKeyEng: number = 0;
   BterMapKeyEng: number = 0;
   studentDetailsModel = new StudentDetailsModel();
+
+  public studentID:number=0;
+  public StudentDataEnrollmentWise:any = [];
+
   //Modal Boostrap.
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   ShowBTERApply: boolean = false;
   dateConfiguration = new DateConfigurationModel();
-  constructor(private loaderService: LoaderService, private encryptionService: EncryptionService,
+  constructor(private loaderService: LoaderService, private companyMasterService: CompanyMasterService, private activatedRoute:ActivatedRoute, private encryptionService: EncryptionService,
     private commonservice: CommonFunctionService, public appsettingConfig: AppsettingService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService:
       ToastrService, private sMSMailService: SMSMailService, private cookieService: CookieService, private formBuilder: FormBuilder, private dateMasterService: DateConfigService) { }
@@ -75,6 +81,12 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
     this.BTER = this.encryptParameter(this._EnumDepartment.BTER);
     this.ITI = this.encryptParameter(this._EnumDepartment.ITI)
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    
+    if(this.activatedRoute.snapshot.queryParamMap.get('ID')!=null){
+      this.studentID=Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
+      await this.GetDataByStudentId();
+    }
+
     await this.GetDateConfig();
     await this.GetBterDateConfig();
     await this.GetDateDataList();
@@ -163,6 +175,56 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  async GetDataByStudentId() {
+    debugger
+    try {
+      // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
+      //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.loaderService.requestStarted();
+      await this.companyMasterService.GetDataByStudentId(this.studentID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.StudentDataEnrollmentWise = data.Data[0]?.EnrollmentNo;
+        this.StudentDataEnrollmentWise = data.Data[0];
+        // if(this.StudentDataEnrollmentWise.EnrollmentNo!=null && this.StudentDataEnrollmentWise.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise.DOB!=null && this.StudentDataEnrollmentWise.DOB.length>0)
+        // {
+        //   this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise.EnrollmentNo.trim();
+        //   this.searchRequest.DOB = this.StudentDataEnrollmentWise.DOB;
+        // }
+        
+        if(this.StudentDataEnrollmentWise.EnrollmentNo!=null && this.StudentDataEnrollmentWise.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise.DOB!=null && this.StudentDataEnrollmentWise.DOB.length>0)
+        {
+          this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise.EnrollmentNo.trim();
+          // Convert DOB to yyyy-MM-dd
+          // const dob=new Date(this.StudentDataEnrollmentWise.DOB);
+          const dob=new Date(this.StudentDataEnrollmentWise.DOB);
+          const year = dob.getFullYear();
+          const month = ('0' + (dob.getMonth() + 1)).slice(-2);
+          const day = ('0' + dob.getDate()).slice(-2);
+
+          this.searchRequest.DOB = `${year}-${month}-${day}`;  
+          // this.searchRequest.DOB=dob.toISOString().split('T')[0];  //"1997-07-21"
+          // this.searchRequest.DOB = dob.toLocaleDateString('en-GB').replace(/\//g, '-');
+          //this.searchRequest.DOB = this.StudentDataEnrollmentWise.DOB;
+        }
+        // this.totalRecord=this.StudentList[0]?.TotalRecords;
+        // this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+        console.log(this.StudentDataEnrollmentWise);
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   async GetAllDataActionWise() {
     this.isSubmitted = true
     if (this.searchssoform.invalid) {
@@ -174,6 +236,27 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
       /*this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForPlacementMapping_ITI" : "_GetStudentForPlacementMapping";*/
 
     this.searchRequest.DepartmentID = this.searchRequest.DepartmentID;
+
+    if(this.StudentDataEnrollmentWise.EnrollmentNo!=null && this.StudentDataEnrollmentWise.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise.DOB!=null && this.StudentDataEnrollmentWise.DOB.length>0)
+    {
+      this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise.EnrollmentNo.trim();
+      // Convert DOB to yyyy-MM-dd
+      const dob=new Date(this.StudentDataEnrollmentWise.DOB);
+      const year = dob.getFullYear();
+      const month = ('0' + (dob.getMonth() + 1)).slice(-2);
+      const day = ('0' + dob.getDate()).slice(-2);
+
+      this.searchRequest.DOB = `${year}-${month}-${day}`;  // yyyy-MM-dd
+      // this.searchRequest.DOB=dob.toISOString().split('T')[0];  //"1997-07-21"
+      // this.searchRequest.DOB = dob.toLocaleDateString('en-GB').replace(/\//g, '-');
+      //this.searchRequest.DOB = this.StudentDataEnrollmentWise.DOB;
+    }
+
+//      if (this.StudentDataEnrollmentWise.DOB) {
+//   const dob = new Date(this.StudentDataEnrollmentWise.DOB);
+//   this.searchRequest.DOB = dob.toLocaleDateString('en-GB'); // "21/07/1997"
+// }
+// this.searchRequest.DOB = dob.toLocaleDateString('en-GB').replace(/\//g, '-');
 
     this.StudentDetailsModelList = [];
     try {

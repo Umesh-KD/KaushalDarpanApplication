@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {ConcernPersonDetailsDataModel, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import {ConcernPersonDetailsDataModel, IIP_SearchModel, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -23,7 +23,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new IndustryInstitutePartnershipMasterDataModels()
   public personRequest = new ConcernPersonDetailsDataModel();
-
+  public searchReq = new IIP_SearchModel();
   
   public IIPMasterFormGroup!: FormGroup;
   public HrMasterFormGroup!: FormGroup;
@@ -65,7 +65,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
         Address: ['', Validators.required],
         ddlState: ['', [DropdownValidators]],
         ddlDistrict: ['', [DropdownValidators]],
-        CompanyID: ['', [DropdownValidators]],
+        PlacementCompanyID: ['', [DropdownValidators]],
       });
 
     this.HrMasterFormGroup = this.formBuilder.group({
@@ -83,6 +83,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
 
     //edit
     if (this.ID > 0) {
+      this.searchReq.CompanyID = this.ID
       await this.GetById();
     }
   }
@@ -178,16 +179,15 @@ export class AddIndustryInstitutePartnershipMasterComponent {
     try {
 
       this.loaderService.requestStarted();
-
-      await this.industryInstitutePartnershipMasterService.GetById(this.ID)
-
+      
+      await this.industryInstitutePartnershipMasterService.GetById_IIP_CompanyDetails(this.searchReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-
+          debugger
           this.request = data['Data'];
           this.request.Dis_CompanyName = data['Data']['Dis_Name'];
-          this.request.CompanyPhoto = data['Data']['Logo'];
+          this.request.Logo = data['Data']['Logo'];
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
           console.log(this.request, "request");
@@ -297,8 +297,8 @@ export class AddIndustryInstitutePartnershipMasterComponent {
 
             if (this.State == EnumStatus.Success) {
               if (Type == "Photo") {
-                this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-                this.request.CompanyPhoto = data['Data'][0]["FileName"];
+                this.request.Dis_Logo = data['Data'][0]["Dis_FileName"];
+                this.request.Logo = data['Data'][0]["FileName"];
 
               }
               //else if (Type == "Sign") {
@@ -439,16 +439,28 @@ export class AddIndustryInstitutePartnershipMasterComponent {
   }
 
   async AddMoreMembers() {
-    debugger
+    
     this.isHrFormSubmitted = true;
     if(this.HrMasterFormGroup.invalid) {
       this.toastr.error("Please fill all the required fields of Concern Person Form")
       return;
     }
 
-    this.request.ConcernPersonDetails.push(this.personRequest);
-    this.personRequest = new ConcernPersonDetailsDataModel();
-    this.isHrFormSubmitted = false;
+    const personExists = this.request.ConcernPersonDetails.some(person =>
+      person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
+    );
+
+    if (!personExists) {
+      this.request.ConcernPersonDetails.push(this.personRequest);
+      this.personRequest = new ConcernPersonDetailsDataModel();
+      this.isHrFormSubmitted = false;
+    } else {
+      this.toastr.error("Person already exists with the same emailid and mobileno.");
+      return
+    }
+
+    // this.request.ConcernPersonDetails.push(this.personRequest);
+  
   }
 
   async SaveData_IIP_Company() {
@@ -497,6 +509,14 @@ export class AddIndustryInstitutePartnershipMasterComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async Delete_Hr(idx: number) {
+    try {
+      this.request.ConcernPersonDetails.splice(idx, 1);
+    } catch (error) {
+      console.error(error)
     }
   }
 }

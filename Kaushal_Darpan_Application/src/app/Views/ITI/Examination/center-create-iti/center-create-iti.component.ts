@@ -107,6 +107,7 @@ export class CenterCreateITIComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.ItiCenterService.GetAllData(this.Request)
         .then((data: any) => {
+          debugger
           data = JSON.parse(JSON.stringify(data));
 
           this.CenterAllotList = data['Data'];
@@ -326,6 +327,16 @@ export class CenterCreateITIComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'Center-Report-Data.xlsx');
+  }
+
+
+  async OnRemarkChange(college:any,Self: any) {
+    if (Self == 1) {
+      college.Self = true
+
+    } else {
+      college.Self = false
+    }
   }
 
 }

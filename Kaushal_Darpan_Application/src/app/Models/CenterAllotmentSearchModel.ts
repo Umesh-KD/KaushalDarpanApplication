@@ -27,6 +27,7 @@ export class CenterAllotmentDataModel extends RequestBaseModel {
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public Marked?: boolean = false;
+  public Self?: boolean = true;
   public CCCode: number = 0;
   public Capacity:number=0
 }

@@ -108,11 +108,13 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">Mark</th>
+
             <th class="text-left">College Name</th>
             <th class="text-left">Phone No.</th>
             <th class="text-left">Email Id</th>
             <th class="text-left">SSO Id</th>
             <th class="text-left">CC Code</th>
+            <th class="text-left">Self Allocate</th>
             <!--<th class="text-center">Action</th>-->
           </tr>
         </thead>
@@ -122,30 +124,50 @@
             <td align="left">
               <input type="checkbox" name="MarkCheck" [(ngModel)]="college.Marked" />
             </td>
+
             <td>{{ college.Institutename }}</td>
             <td>{{ college.MobileNumber }}</td>
             <td>{{ college.Email }}</td>
             <!--<td>-->
             <!--<input class="form-input SSOFields" placeholder="Enter SSO Id" [disabled]="!college.Marked"
-                [(ngModel)]="college.SSOID" />
-            </td>
-            <td>
-              <input class="form-input" placeholder="Enter College Code" [disabled]="!college.Marked"
-                [(ngModel)]="college.InstituteCode" />
-            </td>-->
+      [(ngModel)]="college.SSOID" />
+  </td>
+  <td>
+    <input class="form-input" placeholder="Enter College Code" [disabled]="!college.Marked"
+      [(ngModel)]="college.InstituteCode" />
+  </td>-->
             <td>{{college.SSOID}}</td>
             <td>{{college.CCCode}}</td>
             <!--<td>-->
-              <!--<div *ngIf="college.Id>0" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/AddCenterITI'" [queryParams]="{id:college.Id}" title="Edit">
-                  <i class="ti ti-pencil"></i>
-                </a>-->
-                <!--<a href="javascript:void(0);" title="Delete" (click)=" btnDelete_OnClick(row.CenterID)">
-                  <i class="ti ti-trash"></i>
-                </a>-->
-              <!--</div>-->
-
+            <!--<div *ngIf="college.Id>0" class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+  <a [routerLink]="'/AddCenterITI'" [queryParams]="{id:college.Id}" title="Edit">
+    <i class="ti ti-pencil"></i>
+  </a>-->
+            <!--<a href="javascript:void(0);" title="Delete" (click)=" btnDelete_OnClick(row.CenterID)">
+    <i class="ti ti-trash"></i>
+  </a>-->
+            <!--</div>-->
             <!--</td>-->
+
+            <td align="left">
+              <div class="flex">
+                <label class="me-3">
+                  <input type="radio"
+                         name="SubjectRadio{{idx}}"
+                         [(ngModel)]="college.Self"
+                         (click)="OnRemarkChange(college,1)"
+                         [value]="true" />Yes
+                </label>
+                <label class="me-3">
+                  <input type="radio"
+                         name="SubjectRadio{{idx}}"
+                         [(ngModel)]="college.Self"
+                         (click)="OnRemarkChange(college,0)"
+                         [value]="false" /> No
+                </label>
+              </div>
+            </td>
+
           </tr>
 
         </tbody>

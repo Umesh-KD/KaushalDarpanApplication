@@ -50,6 +50,14 @@ export class PromotedStudentService {
       ).toPromise();
   }
 
+  public async SaveExPromotedStudent(request: PromotedStudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveExPromotedStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SaveITIPromotedStudent(request: PromotedStudentMarkedModel[]) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/SaveITIPromotedStudent`, body, this.headersOptions)

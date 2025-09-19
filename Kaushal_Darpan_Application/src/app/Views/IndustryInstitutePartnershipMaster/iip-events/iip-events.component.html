@@ -1,0 +1,89 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Company Events</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Industry Institute Partnership Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Company Events</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a routerLink="/IndustryInstitutePartnershipList" class="inline-flex items-center btn bg-dark text-white btn-sm">
+        <i class="ti ti-chevron-left"></i>Back</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <!--{{IndustryInstitutePartnershipMasterList|json}}-->
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Event Type</th>
+            <th class="text-left">Event</th>
+            <th class="text-left">Event For</th>
+            <th class="text-left">Event Start Date</th>
+            <th class="text-left">Event End Date</th>
+            <th class="text-left">Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of CompanyEventsList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventType}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Event}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventFor}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{ row.EventStartDate | date:'dd-MM-yyyy HH:mm' }}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EventEndDate | date:'dd-MM-yyyy HH:mm' }}</td>
+            <td>{{row.EventStatus}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+
+                <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID}"
+                    title="Edit"><i class="ti ti-pencil"></i></a>
+
+                <a href="javascript:void(0);" title="Delete"
+                   (click)="DeleteEvent_ById(row.EventID)">
+                  <i class="ti ti-trash"></i></a>
+
+                <!-- <a href="javascript:void(0);" title="Add Event"
+                   [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}">
+                  <i class="ti ti-calendar-week"></i></a>
+
+                <a href="javascript:void(0);" title="View Company Events"
+                   [routerLink]="'/iip-events'" [queryParams]="{id:item.CompanyID}">
+                  <i class="ti ti-eye"></i></a> -->
+
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
