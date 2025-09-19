@@ -178,6 +178,7 @@ export class BterResultReportsComponent implements OnInit {
 
 
   async GetAllData(): Promise<void> {
+    debugger
     this.ActionDynamic = this.filterModel.Action;
     this.ReportsListData = [];
 
@@ -272,6 +273,7 @@ export class BterResultReportsComponent implements OnInit {
   }
 
   DownloadFile(fileName: string): void {
+    debugger;
     const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${fileName}`;
 
     this.http.get(fileUrl, { responseType: 'blob', observe: 'response' }).subscribe(response => {
@@ -345,7 +347,7 @@ export class BterResultReportsComponent implements OnInit {
       this.loaderService.requestEnded();
     }
   }
- 
+
   exportToExcelSessional() {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.SessionalStudentFailReportList);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
