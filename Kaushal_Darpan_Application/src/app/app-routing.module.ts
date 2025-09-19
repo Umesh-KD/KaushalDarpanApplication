@@ -66,6 +66,7 @@ const routes: Routes = [
       {
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
+      { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List'},
       { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
 
 
@@ -87,7 +88,7 @@ const routes: Routes = [
       {
         path: 'ViewplacedStudent', loadChildren: () => import('./Views/Home/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
       },
-      {
+      { 
         path: 'citizensuggestion', loadChildren: () => import('./Views/Citizen-Suggestion/citizen-suggestion/citizen-suggestion-routing.module').then(m => m.CitizenSuggestionRoutingModule), title: 'Citizen Suggetion'
       },
       {
