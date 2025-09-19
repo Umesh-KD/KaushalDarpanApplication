@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { GlobalConstants } from '../../../Common/GlobalConstants';
 import { CampusStudentConsentModel, PlacementStudentSearchModel, StudentConsentSearchModel } from '../../../Models/PlacementStudentSearchModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { ITICampusStudentConsentModel } from '../../../Models/ITI/ITIPlacementStudentSearchModel';
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class ITIPlacementStudentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async SaveData(searchrequest: CampusStudentConsentModel) {
+  public async SaveData(searchrequest: ITICampusStudentConsentModel) {
     const body = JSON.stringify(searchrequest);
     return await this.http.post(this.APIUrl + "/SaveData", body, this.headersOptions)
       .pipe(

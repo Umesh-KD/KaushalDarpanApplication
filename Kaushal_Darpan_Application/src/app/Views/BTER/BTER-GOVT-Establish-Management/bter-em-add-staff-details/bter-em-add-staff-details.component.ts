@@ -703,7 +703,11 @@ export class BterEMAddStaffDetailsComponent {
       event.preventDefault();
     }
   }
+
+  openDatePicker(event: any) {
+    event.target.showPicker();
   }
+}
 
 
   
