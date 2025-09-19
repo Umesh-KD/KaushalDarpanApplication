@@ -62,7 +62,7 @@ export class CompanyMasterService {
   //delete
   public async DeleteById(ID: number, userId: number) {
     var body = JSON.stringify({ "HRManagerID": ID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID/${ID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${ID}/${userId}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -108,5 +108,22 @@ export class CompanyMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+    public async GetDataByStudentId(ID: number) {
+    var body = JSON.stringify({ "StudentID": ID});
+    return await this.http.post(`${this.APIUrl}/GetDataByStudentId/${ID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  //   //Get by id
+  // public async GetDataByStudentId(ID: number) {
+  //   return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
+  //     .pipe(
+  //       catchError(this.handleErrorObservable)
+  //     ).toPromise();
+  // }
+
 
 }

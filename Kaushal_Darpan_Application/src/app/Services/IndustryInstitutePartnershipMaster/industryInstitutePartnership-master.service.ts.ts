@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { CommonSubjectMasterSearchModel } from '../../Models/CommonSubjectMasterSearchModel';
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
-import { IndustryInstitutePartnershipMasterDataModels, IndustryInstitutePartnershipMasterSearchModel, IndustryInstitutePartnershipMaster_Action, IndustryTrainingMaster, IndustryTrainingSearch } from '../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { CompanyEventSearchModel, ConcernPersonDetailsDataModel, IIP_EventDataModel, IIP_SearchModel, IndustryInstitutePartnershipMasterDataModels, IndustryInstitutePartnershipMasterSearchModel, IndustryInstitutePartnershipMaster_Action, IndustryTrainingMaster, IndustryTrainingSearch } from '../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 
@@ -114,6 +114,62 @@ export class IndustryInstitutePartnershipMasterService {
   public async SaveData_IIP_Company(request: IndustryInstitutePartnershipMasterDataModels) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/SaveData_IIP_Company`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetById_IIP_CompanyDetails(request: IIP_SearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetById_IIP_CompanyDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteCompanyById_IIP(request: IndustryInstitutePartnershipMasterDataModels) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteCompanyById_IIP`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async Delete_Hr(request: ConcernPersonDetailsDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/Delete_Hr`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveData_IIP_Events(request: IIP_EventDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveData_IIP_Events`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetCompanyEvents(searchRequest: CompanyEventSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCompanyEvents`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteEvent_ById(request: IIP_EventDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteEvent_ById`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEvent_ById(request: CompanyEventSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetEvent_ById`,body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

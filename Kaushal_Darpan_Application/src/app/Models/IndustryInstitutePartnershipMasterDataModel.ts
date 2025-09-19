@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "./RequestBaseModel"
+
 export class IndustryInstitutePartnershipMasterDataModels {
   public ID: number = 0
   public Name: string = ''
@@ -19,6 +21,7 @@ export class IndustryInstitutePartnershipMasterDataModels {
   public CompanyID: number = 0
   public Logo: string = ''
   public Dis_Logo: string = ''
+  public PlacementCompanyID?: number = 0
 
   public ConcernPersonDetails: ConcernPersonDetailsDataModel[] = []
 }
@@ -97,4 +100,36 @@ export class ConcernPersonDetailsDataModel {
   public ActiveStatus: boolean = true;
   public DeleteStatus: boolean = false;
   public DepartmentID: number = 0;
+}
+
+export class IIP_SearchModel extends RequestBaseModel {
+  public CompanyID?: number = 0
+}
+
+export class IIP_EventDataModel extends RequestBaseModel {
+  public EventID: number = 0
+  public CompanyID: number = 0
+  public EventTypeID: number = 0
+  public Event: number = 0
+  public SemesterID: number = 0
+  public EventStartDate: string = ''
+  public EventEndDate: string = ''
+  public EventForID: number = 0
+  public UserID: number = 0
+  public Branchlist: BranchList[] = []
+  public Semesterlist: BranchList[] = []
+}
+
+export class BranchList {
+  public StreamID: number = 0
+  public StreamName:string=''
+}
+export class Semesterlist {
+  public SemesterID: number = 0
+  public SemesterName: string=''
+}
+
+export class CompanyEventSearchModel extends RequestBaseModel {
+  public CompanyID: number = 0
+  public EventID: number = 0
 }

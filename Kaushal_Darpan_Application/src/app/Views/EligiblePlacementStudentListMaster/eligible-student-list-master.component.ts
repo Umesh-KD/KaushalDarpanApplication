@@ -22,6 +22,16 @@ export class EligibleStudentListMasterComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
 
+  // pagination
+   pageNo: any = 1;
+   pageSize: any = 50;
+  isPre: boolean = false;
+  isNext: boolean = false;
+  totalRecord: any = 0;
+  TotalPages: any = 0;
+  sortColumn: string = "";
+  sortOrder: string = "";
+
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute) {
 
@@ -29,7 +39,7 @@ export class EligibleStudentListMasterComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetEligibleStudentListData();
+    await this.GetEligibleStudentListData(1);
   }
 
 
@@ -53,9 +63,33 @@ export class EligibleStudentListMasterComponent implements OnInit {
     XLSX.writeFile(wb, 'StudentListData.xlsx');
   }
 
-  async GetEligibleStudentListData() {
+  async GetEligibleStudentListData(i:any) {
     debugger
+    console.log(i);
+    if(i==1){
+      this.pageNo=1;
+    }
+    else if(i==2){
+      // if (this.totalRecord > (this.pageNo * this.pageSize)) {
+        this.pageNo++;
+      // }
+    }
+    else if(i==3){
+      if (this.pageNo > 1) {
+        this.pageNo--;
+      }
+    }
+    else{
+      this.pageNo=i>0?i:1;
+    }
+
     try {
+
+      this.searchRequest.PageNumber=this.pageNo
+      this.searchRequest.PageSize=this.pageSize
+      this.searchRequest.SortColumn=this.sortColumn
+      this.searchRequest.SortOrder=this.sortOrder
+
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -64,6 +98,10 @@ export class EligibleStudentListMasterComponent implements OnInit {
       await this.companyMasterService.GetEligibleStudentListData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentList = data.Data;
+
+        this.totalRecord=this.StudentList[0]?.TotalRecords;
+        this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
         console.log(this.StudentList)
       }, (error: any) => console.error(error))
     }
@@ -81,8 +119,9 @@ export class EligibleStudentListMasterComponent implements OnInit {
   async ClearSearchData() {
     this.searchRequest.Name = '';
     this.searchRequest.Status = '';
-
-    await this.GetEligibleStudentListData();
+    this.searchRequest.PageNumber = this.pageNo;
+    this.searchRequest.PageSize = this.pageSize;
+    await this.GetEligibleStudentListData(1);
   }
 
 
@@ -104,7 +143,7 @@ export class EligibleStudentListMasterComponent implements OnInit {
 
                 if (!data.State) {
                   this.toastr.success(data.Message)
-                  await this.GetEligibleStudentListData();
+                  await this.GetEligibleStudentListData(1);
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)
@@ -124,4 +163,40 @@ export class EligibleStudentListMasterComponent implements OnInit {
         }
       });
   }
+
+
+
+  // pagination start
+
+   totalShowData: any = 0
+  pageSizeChange(event: any): void {
+    ;
+    this.pageNo = 1;
+    this.pageSize = event.value;
+    //this.pageNo = 1;
+    this.GetEligibleStudentListData(1)
+  }
+
+  nextData() {
+    if (this.totalShowData < Number(this.StudentList[0]?.TotalRecords)) {
+      if (this.pageNo >= 1) {
+        // this.pageNo = this.pageNo + 1
+      }
+      this.GetEligibleStudentListData(2)
+    }
+
+  }
+  previousData() {
+    if (this.pageNo > 1) {
+      //this.pageNo = this.pageNo - 1;
+      this.GetEligibleStudentListData(3)
+    }
+  }
+
+  // sortData(sortColumn: string) {
+  //   this.sortColumn = sortColumn;
+  //   this.sortOrder = this.sortOrder == "" ? "ASC" : (this.sortOrder == "ASC" ? "DESC" : "ASC");
+  //   // this.GetEligibleStudentListData(1);
+  // }
+
 }
