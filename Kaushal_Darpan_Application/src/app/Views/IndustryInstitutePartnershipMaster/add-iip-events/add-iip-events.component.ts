@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
+import { CompanyEventSearchModel, IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
@@ -23,6 +23,7 @@ export class AddIIPEventsComponent {
 
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request = new IIP_EventDataModel();
+  public searchRequest = new CompanyEventSearchModel();
 
   public SemesterMasterList: any = [];
   public CourseMasterDDL: any = [];
@@ -35,6 +36,7 @@ export class AddIIPEventsComponent {
   public isSubmitted: boolean = false
   public todayDate: any;
   public CompanyID: number = 0;
+  public EventID: number = 0;
   
 
   constructor(
@@ -101,11 +103,18 @@ export class AddIIPEventsComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CompanyID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    this.EventID = Number(this.activatedRoute.snapshot.queryParamMap.get('event')?.toString());
     if(this.CompanyID > 0) {
       this.request.CompanyID = this.CompanyID
     }
     this.todayDate = new Date().toISOString().substring(0, 16);
     await this.GetMasterData();
+
+    if(this.CompanyID > 0 && this.EventID > 0) {
+      this.searchRequest.CompanyID = this.CompanyID;
+      this.searchRequest.EventID = this.EventID;
+      await this.GetEvent_ById();
+    }
   }
 
   get _EventFormGroup() { return this.EventFormGroup.controls; }
@@ -153,6 +162,24 @@ export class AddIIPEventsComponent {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
             this.routers.navigate(['/IndustryInstitutePartnershipList']);
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async GetEvent_ById() {
+    try {
+      await this.industryInstitutePartnershipMasterService.GetEvent_ById(this.searchRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.request = data.Data;
+            this.SelectedBranchList = this.request.Branchlist;
+            this.SelectedSemesterList = this.request.Semesterlist;
           } else {
             this.toastr.error(data.ErrorMessage)
           }

@@ -16,12 +16,15 @@ export class ITICenterAllocationtDataModels {
 
   public CourseTypeID: number = 0
   public Status:number=0
+  public CenterAllocationID: number = 0
 }
 
 export class ITIcenterAllocationSearchModel extends RequestBaseModel {
   public Name: string = ''
   public centerCode: String = ''
+  public Action: String = ''
   public CenterID: number = 0
   public InstituteID:number=0
+  public TradeID:number=0
   
 }

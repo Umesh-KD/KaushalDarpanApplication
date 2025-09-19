@@ -252,8 +252,8 @@ export class PendingFeesComponent implements OnInit {
 
   async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false) {
 
-    const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
-    if (isValid) {
+    //const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
+    if (1==1) {
 
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra

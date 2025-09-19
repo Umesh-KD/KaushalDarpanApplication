@@ -158,4 +158,28 @@ export class IndustryInstitutePartnershipMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async DeleteEvent_ById(request: IIP_EventDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteEvent_ById`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEvent_ById(request: CompanyEventSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetEvent_ById`,body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ApproveCompanyEvents(request: IndustryInstitutePartnershipMasterDataModels[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ApproveCompanyEvents`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
