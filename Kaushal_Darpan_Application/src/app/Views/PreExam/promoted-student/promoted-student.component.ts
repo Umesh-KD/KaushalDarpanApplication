@@ -337,7 +337,10 @@ export class PromotedStudentComponent {
                 }
               })
           }
-          else { // ex
+          else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) {
+            // need tom implement
+          }
+          else if (this.request.StudentTypeId == this._EnumStudentType.Ex) { // ex
             // Call service to save student exam status
             await this.promotedstudentservice.SaveExPromotedStudent(request)
               .then(async (data: any) => {
@@ -357,6 +360,10 @@ export class PromotedStudentComponent {
                   console.log(this.ErrorMessage);
                 }
               })
+          }
+          else {
+            this.toastr.warning("Invalid Action!");
+            return;
           }
         } catch (ex) {
           this.toastr.error(GlobalConstants.MSG_ERROR_OCCURRED);
@@ -414,8 +421,14 @@ export class PromotedStudentComponent {
       if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
         IsPromote = 1;
       }
-      else {
+      else if (this.request.StudentTypeId == this._EnumStudentType.Ex) {
         IsPromote = 0;
+      }
+      else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) {
+        IsPromote = 0;
+      }
+      else {
+        return;
       }
       this.SemesterMasterList = [];
       await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx)

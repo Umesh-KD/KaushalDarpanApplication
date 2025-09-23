@@ -1,35 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
-import { HomeService } from '../../../Services/Home/home.service';
-import { EnumDepartment, GlobalConstants } from '../../../Common/GlobalConstants';
-import { CampusDetailsWebSearchModel } from '../../../Models/CampusDetailsWebDataModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { CommonFunctionService } from '../../../Common/common';
+import { GlobalConstants, EnumDepartment } from '../../../Common/GlobalConstants';
+import { CampusDetailsWebSearchModel, IIP_EventSearchModel } from '../../../Models/CampusDetailsWebDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { StreamMasterService } from '../../../Services/BranchesMaster/branches-master.service';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { HttpClient } from '@angular/common/http';
-
+import { HomeService } from '../../../Services/Home/home.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
 
 @Component({
-    selector: 'app-all-post',
-    templateUrl: './all-post.component.html',
-    styleUrls: ['./all-post.component.css'],
-    standalone: false
+  selector: 'app-iip-web-all-post',
+  standalone: false,
+  templateUrl: './iip-web-all-post.component.html',
+  styleUrl: './iip-web-all-post.component.css'
 })
-export class AllPostComponent implements OnInit {
+export class IIPWebAllPostComponent {
   public _GlobalConstants: any = GlobalConstants;
   public PostId: number = 0;
   public CampusPostList: any[] = [];
+  public IIPEventList: any[] = [];
   public PlacementCompanyList: any[] = [];
-  public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public eventSearchRequest = new IIP_EventSearchModel();
+
   public FinancialYear: any = [];
   public CollegeList: any = [];
-   public settingsMultiselect: object = {};
-   public settingsMultiselect2: object = {};
+  
 
   minEndDate: string = '';
 
@@ -40,14 +40,12 @@ export class AllPostComponent implements OnInit {
   FilteredCampusPostList: any[] = [];
   CampusFromDate: string = '';
   CampusToDate: string = '';
-  FinancialYearID: number = 9;
-  InstituteID: string = '0';
-  
-  OriginalCampusPostList: any[] = []; // Store unfiltered data
+  FinancialYearID: number = 0;
+  InstituteID: number = 0;
+  OriginalCampusPostList: any[] = [];
+
   public BranchMasterList: any[] = [];
-  StreamID: string = '0';
-  public SelectedInstituteId : any = [];
-  public SelectedStreamID : any = [];
+  StreamID: number = 0;
 
  
 
@@ -64,48 +62,9 @@ export class AllPostComponent implements OnInit {
     private http: HttpClient
   ) {}
 
-  
-
   async ngOnInit() {
-    // console.log("In OnInit Method");
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.settingsMultiselect = {
-        singleSelection: false,
-        idField: 'StreamID',
-        textField: 'Name',
-        enableCheckAll: true,
-        selectAllText: 'Select All',
-        unSelectAllText: 'Unselect All',
-        allowSearchFilter: true,
-        limitSelection: -1,
-        clearSearchFilter: true,
-        maxHeight: 197,
-        itemsShowLimit: 10,
-        searchPlaceholderText: 'Search...',
-        noDataAvailablePlaceholderText: 'Not Found',
-        closeDropDownOnSelection: false,
-        showSelectedItemsAtTop: false,
-        defaultOpen: false,
-      };
 
-      this.settingsMultiselect2 = {
-        singleSelection: false,
-        idField: 'InstituteID',
-        textField: 'InstituteName',
-        enableCheckAll: true,
-        selectAllText: 'Select All',
-        unSelectAllText: 'Unselect All',
-        allowSearchFilter: true,
-        limitSelection: -1,
-        clearSearchFilter: true,
-        maxHeight: 197,
-        itemsShowLimit: 10,
-        searchPlaceholderText: 'Search...',
-        noDataAvailablePlaceholderText: 'Not Found',
-        closeDropDownOnSelection: false,
-        showSelectedItemsAtTop: false,
-        defaultOpen: false,
-      };
     
     await this.GetAllData();
     await this.GetStreamMasterList();
@@ -131,43 +90,14 @@ export class AllPostComponent implements OnInit {
   }
 
   async GetAllData() {
-    debugger
-    console.log('Selected Stream ID ==>',this.SelectedStreamID);  
-    console.log('Selected Institute ID ==>',this.SelectedInstituteId);  
-    this.StreamID = this.SelectedStreamID.length > 0 ? this.SelectedStreamID.map((item: any) => item.StreamID).join(',') : 0;
-    this.InstituteID = this.SelectedInstituteId.length > 0 ? this.SelectedInstituteId.map((item: any) => item.InstituteID).join(',') : 0;
-    console.log('Stream ID ==>',this.StreamID);  
-    console.log('Institute ID ==>',this.InstituteID);
+    this.eventSearchRequest.DepartmentID = EnumDepartment.BTER;
     try {
       this.loaderService.requestStarted();
-      await this.homeService.GetAllPostFilter(this.PostId, EnumDepartment.BTER, this.StreamID, this.CampusFromDate, this.CampusToDate, this.FinancialYearID, this.InstituteID)
-        .then((data: any) => {
-          
-          data = JSON.parse(JSON.stringify(data));
-          this.CampusPostList = data['Data'];
-          console.log('Campus Post List ==>',this.CampusPostList)
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  async GetAllPlacementCompany() {
-    this.searchRequest.DepartmentID = EnumDepartment.BTER
-    try {
-      this.loaderService.requestStarted();
-      await this.homeService.GetAllPlacementCompany(this.searchRequest)
+      await this.homeService.GetAllPost_IIP(this.eventSearchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log(data);
-          this.PlacementCompanyList = data['Data'];
+          this.IIPEventList = data['Data'];
+          console.log('Campus Post List ==>',this.IIPEventList)
         }, (error: any) => console.error(error)
         );
     }
@@ -226,7 +156,7 @@ export class AllPostComponent implements OnInit {
       if (toDate && itemDate > toDate) return false;
 
       // Branch filter
-      if (this.StreamID && this.StreamID !== '0' && item.StreamID !== this.StreamID) {
+      if (this.StreamID && this.StreamID !== 0 && item.StreamID !== this.StreamID) {
         return false;
       }
 
@@ -260,47 +190,4 @@ export class AllPostComponent implements OnInit {
     }
 
   }
-
-
-  onFilterChange(event: any) {
-      // Handle filtering logic (if needed)
-      console.log(event);
-    }
-  
-    onDropDownClose(event: any) {
-      // Handle dropdown close event
-      console.log(event);
-    }
-
-    onSelectAll(event:any){
-      console.log(event);
-    }
-
-    onItemSelect(evet:any) {
-      console.log("on select", evet);
-
-
-  }
-
-  onDeSelect(event:any) {
-
-
-
-  }
-
-
-
-  // onSelectAll(items: any[], centerID: number) {
-
-
-
-  // }
-
-  onDeSelectAll(event:any) {
-
-
-
-  }
-
-
 }

@@ -24,6 +24,11 @@
             <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.Ex" (change)="onChangeStudentType()" />
             Ex.
           </label>
+          <label>&nbsp;&nbsp;</label>
+          <label>
+            <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.NotFormFilled" (change)="onChangeStudentType()" />
+            Not Promoted
+          </label>
         </div>
       </div>
 
@@ -49,7 +54,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester/Year</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester (Prev.)</label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>

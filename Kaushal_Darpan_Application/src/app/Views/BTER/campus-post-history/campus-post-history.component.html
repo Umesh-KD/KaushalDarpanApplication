@@ -133,11 +133,15 @@
               {{row.CampusVenue}}
             </td>
 
-            <td>
-              {{
-row.ActionRemarks
-              }}
-            </td>
+            <!-- <td  
+            class="role-detail" [innerHtml]="row.ActionRemarks">
+              
+            </td> -->
+            <!-- <td>
+              <div class="role-detail" [innerHtml]="row.ActionRemarks"> </div>
+            </td> -->
+             <td><div class="role-detail" [innerHtml]="row.ActionRemarks"> </div></td>
+            
 
             <td>
               {{ row.ActionRTS | date:'yyyy-MM-dd' }}

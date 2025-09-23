@@ -3,7 +3,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CampusDetailsWebSearchModel } from '../../Models/CampusDetailsWebDataModel';
+import { CampusDetailsWebSearchModel, IIP_EventSearchModel } from '../../Models/CampusDetailsWebDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +42,20 @@ export class HomeService {
       ).toPromise();
   }
 
+  public async GetAllPostFilter(postId: number = 0, DepartmentID: number = 0, StreamID: string = '0', CampusFromDate: string = '', CampusToDate: string = '', FinancialYearID: number = 0, InstituteID: string = '0') {
+    debugger
+    const params = new HttpParams()
+      .set('CampusFromDate', CampusFromDate)
+      .set('CampusToDate', CampusToDate)
+      .set('StreamID', StreamID)
+      .set('InstituteID', InstituteID);
+
+    return await this.http.get(`${this.APIUrl}/GetAllPostFilter/${postId}/${DepartmentID}/${FinancialYearID}`, { params })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   //Get all placement company
   public async GetAllPlacementCompany(searchRequest: CampusDetailsWebSearchModel) {
@@ -64,4 +78,11 @@ export class HomeService {
       ).toPromise();
   }
 
+  public async GetAllPost_IIP(searchRequest: IIP_EventSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllPost_IIP`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

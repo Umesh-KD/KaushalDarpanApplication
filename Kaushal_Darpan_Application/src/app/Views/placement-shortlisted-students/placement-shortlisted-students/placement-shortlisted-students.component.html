@@ -105,6 +105,7 @@
             <th class="text-left">Institute Name   </th>
             <th class="text-left">Institute Type</th>
             <th class="text-left">Enrollment No</th>
+            <th class="text-left">Uploaded Resume</th>
 
 
           </tr>
@@ -139,6 +140,21 @@
             <td class="text-left">{{row.InstituteName}}</td>
             <td class="text-left">{{row.InstitutionManagementType}}</td>
             <td class="text-left">{{row.EnrollmentNo}}</td>
+            <td class="text-left">
+               <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}" *ngIf="row.UploadedResume; Not Uploaded"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
+               <!-- <a href="{{row.UploadedResume}}"  class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>          -->
+              <!-- D:\KAUSHAL-DARPAN\Api\Kaushal_Darpan.Api\StaticFiles\Sep232025124008692593.png -->
+              <ng-container *ngIf="row.UploadedResume && row.UploadedResume.trim() !== ''; else notUploaded">
+              <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{row.StaticFiles}}/{{row.UploadedResume}}"
+                class="btn bg-primary text-white m-0"
+                target="_blank">
+                <i class="ti ti-eye"></i>
+              </a>
+              </ng-container>
+              <ng-template #notUploaded>
+                <span class="text-muted">Not Uploaded</span>
+              </ng-template>
+            </td>
 
           </tr>
         </tbody>

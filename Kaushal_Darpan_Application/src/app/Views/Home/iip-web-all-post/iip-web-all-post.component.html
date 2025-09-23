@@ -1,6 +1,6 @@
 <div class="container-fluid p-3 py-5 bg-primary text-white text-center">
-  <h3 class="mt-0 text-white">All Campus List</h3>
-  <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p>
+  <h3 class="mt-0 text-white">Industry Institute Partnership Events List</h3>
+  <!-- <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p> -->
 </div>
 
 <div class="container-fluid AboutSection position-relative" style="background: #deebff !important;">
@@ -9,7 +9,7 @@
     <div class="row">
 
       <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-        <div class="card all-post-filer mb-3">
+        <!-- <div class="card all-post-filer mb-3">
           <div class="card-header">
             <h4>Filter</h4>
           </div>
@@ -18,27 +18,14 @@
             <form class="row g-3 align-items-end">
               <div class="col-md-3">
                 <label for="inputState" class="form-label">Branch</label>
-                <ng-multiselect-dropdown #multiSelect1 [placeholder]="'Choose Option'"
-                                   [settings]="settingsMultiselect"
-                                   [data]="BranchMasterList"
-                                   [(ngModel)]="SelectedStreamID"
-                                   [disabled]="false"
-                                   name="SelectedStreamID"
-                                   (onFilterChange)="onFilterChange($event)"
-                                   (onDropDownClose)="onDropDownClose($event)"
-                                   (onSelect)="onItemSelect($event)"
-                                   (onDeSelect)="onDeSelect($event)"
-                                   (onSelectAll)="onSelectAll($event)"
-                                   (onDeSelectAll)="onDeSelectAll($event)">
-                </ng-multiselect-dropdown>
-                <!-- <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
+                <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
                         name="branch" [(ngModel)]="StreamID">
                   <option value="0">Choose Option</option>
                   <option *ngFor="let item of BranchMasterList"
                           [value]="item.StreamID">
                     ({{item.Code}}) {{item.Name}}
-                  </option> 
-                </select>-->
+                  </option>
+                </select>
               </div>
               <div class="col-md-3">
                 <label for="startDate" class="form-label">Start Date</label>
@@ -61,34 +48,18 @@
                 <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
                   <option value=0>--All--</option>
                   <option value=8>2024-2025</option>
-                  <option value=9>2025-2026</option>
-                  <!--<option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
-                    {{item.YearName}}
-                  </option>-->
+                  <option value=9 selected>2025-2026</option>
                 </select>
               </div>
 
               <div class="col-md-3">
                 <label class="form-label">College Name: </label>
-                  <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
-                                   [settings]="settingsMultiselect2"
-                                   [data]="CollegeList"
-                                   [(ngModel)]="SelectedInstituteId"
-                                   [disabled]="false"
-                                   name="SelectedInstituteId"
-                                   (onFilterChange)="onFilterChange($event)"
-                                   (onDropDownClose)="onDropDownClose($event)"
-                                   (onSelect)="onItemSelect($event)"
-                                   (onDeSelect)="onDeSelect($event)"
-                                   (onSelectAll)="onSelectAll($event)"
-                                   (onDeSelectAll)="onDeSelectAll($event)">
-                  </ng-multiselect-dropdown>
-                <!-- <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
+                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
                   <option value=0>--All--</option>
                   <option *ngFor="let item of CollegeList" [value]="item.InstituteID">
                     {{item.InstituteName}}
                   </option>
-                </select> -->
+                </select>
               </div>
               <div class="col-md-3">
                 <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">
@@ -99,17 +70,16 @@
                 <div class="btn text-white StateLevelPoolCampus"></div><label>State Level Pool Campus</label>
                 <div class="btn text-white InstituteLevelCampus"></div><label>Institute Level Campus</label>
                 <div class="btn text-white DivisionLevelPoolCampus"></div><label>Division Level Pool Campus</label>
-                <!--<div  class="btn text-white SuspendLevelCampus mt-4"></div><label>Suspend Level Campus</label>-->
               </div>
             </form>
           </div>
-        </div>
+        </div> -->
         <!--{{CampusPostList|json}}-->
 
         <div class="card">
           <div class="card-body p-0">
             <ul class="marqueeUl postlist-mar">
-              <li class="marqueeUlCampus p-0" *ngFor="let item of CampusPostList;">
+              <li class="marqueeUlCampus p-0" *ngFor="let item of IIPEventList;">
                 <div class="d-flex {{item.CampusTypeClass}} p-3">
                   <div class="iconMarquee d-flex justify-content-center align-items-center">
                     <i class="fa fa-building-o"></i>
@@ -121,9 +91,9 @@
                       <div class="postno">
                         <!--<b class="d-block">{{item.PostNo}}</b>-->
 
-                        <b style="border-color: #b4cedf;" width="140px">
+                        <!-- <b style="border-color: #b4cedf;" width="140px">
                           {{ ('2025-26')+ '-' + (item.InstituteCode | number:'3.0') + '-' + item.Dis_PostId }}
-                        </b>
+                        </b> -->
 
                       </div>
                       <div class="compButton d-flex">
@@ -136,13 +106,31 @@
                     </div>
                     <h4 class="my-2">{{item.CompanyName}}</h4>
                     <div class="d-flex justify-content-between w-100 flex-wrap">
-                      <span>Total No. of Vacancy:{{item.TotalPositions}} </span>
-                      <span [innerHtml]="item.JobDescription"></span>
+                      <span>Company Website: {{item.Website}} </span>
+                      <!-- <span [innerHtml]="item.JobDescription"></span> -->
                     </div>
                     <div class="d-flex justify-content-between w-100 flex-wrap">
                       <span>
-                        Campus Orgnize Date: <i class="fa fa-calendar-o"></i>&nbsp;{{item.CampusFromDate}}<br />
-                        <span class="bold">Campus Orgnize By: {{item.TPOCollegeName}}</span>
+                        <b>Event Type: {{item.EventType}}</b> | 
+                        <b>Event: {{item.Event}}</b> | 
+                        <b>Event For: {{item.EventFor}}</b>
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>
+                        <b>Branch Name:</b> {{item.BranchName}}
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>
+                        <b>Semester Name:</b> {{item.SemesterName}}
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                      <span>
+                        Event Start Date: <i class="fa fa-calendar-o"></i>&nbsp;{{item.EventStartDate | date:'dd/MM/yyyy hh:mm a'}}<br />
+                        Event End Date: <i class="fa fa-calendar-o"></i>&nbsp;{{item.EventEndDate | date:'dd/MM/yyyy hh:mm a'}}<br />
+                        <!-- <span class="bold">Campus Orgnize By: {{item.TPOCollegeName}}</span> -->
                       </span>
                     </div>
                     <div class="d-flex justify-content-end w-100">

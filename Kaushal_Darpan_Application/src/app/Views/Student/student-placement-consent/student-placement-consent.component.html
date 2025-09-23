@@ -8,6 +8,7 @@
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student Placement Consent</a>
+     
     </div>
   </div>
 
@@ -21,6 +22,29 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-map"></i>  Student Placement Consent  </b>
       </div>
+
+      <div></div>
+      <div></div>
+      <div class=""> 
+        <!-- Keep heading left -->
+        <label class="flex justify-end me-2 pr-3 block mb-2 text-sm font-medium text-gray-900 dark:text-white "
+              for="fileStudentPhoto">Upload Resume</label>
+
+        <!-- Align this uploader to the right -->
+        <div class="flex justify-end">
+          <div class="flex items-center gap-2 fileUploader">
+            <input class="block form-input w-full max-w-xs text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  id="fileStudentPhoto" type="file" 
+                  (change)="onFilechange($event,'Photo')">
+
+            <label for="fileStudentPhoto" class="text-sm text-gray-700 dark:text-gray-300">
+              <span>Choose File</span>
+              {{Request.Dis_UploadedResume === '' ? 'No File Choosen' : Request.Dis_UploadedResume}}
+            </label>
+          </div>
+        </div>
+      </div>
+
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 

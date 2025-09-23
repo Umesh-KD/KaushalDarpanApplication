@@ -2,15 +2,7 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Set Calendar</h4>
-
-    <!--<div class="md:flex hidden items-center gap-3 text-sm font-semibold">-->
-      <!--<a href="/public-info-list" class="text-sm font-medium text-slate-700" aria-current="page">Public Info</a>-->
-      <!--<a [routerLink]="['/public-info-list']" class="text-sm font-medium text-slate-700" aria-current="page">Public Info</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/add-public-info" class="text-sm font-medium text-slate-700" aria-current="page">Add Public Info</a>
-    </div>-->
   </div>
-  <!--<a routerLink="/public-info-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>-->
 </div>
 <!-- Page Title End -->
 <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
@@ -20,20 +12,19 @@
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i> Months Wise Teacaher Calendar</b>
         </div>
-        <div style="text-align:center; margin-bottom: 15px;">
-          <button (click)="prevMonth()">&#8592; Previous</button>
+        <div class="calendar-toolbar">
+          <button class="nav-btn" (click)="prevMonth()">Previous</button>
 
-          <span style="font-weight: bold; margin: 0 15px;">
+          <span class="month-year">
             {{ monthName }}
-            <input type="number" [value]="year" (change)="onYearChange($event)"
-                   style="width: 70px; text-align:center;" min="1900" max="2100" />
+            <input type="number" [value]="year" (change)="onYearChange($event)" min="1900" max="2100" />
           </span>
 
-          <button (click)="nextMonth()">Next &#8594;</button>
+          <button class="nav-btn" (click)="nextMonth()">Next</button>
 
-          <!-- Save All Button -->
-          <button (click)="saveAllEvents()">Save All</button>
+          <button class="save-btn" (click)="saveAllEvents()">Save All</button>
         </div>
+
 
         <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; text-align: center; width: 80%; margin: auto;">
           <tr>

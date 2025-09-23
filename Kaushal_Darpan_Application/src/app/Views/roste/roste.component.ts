@@ -203,13 +203,14 @@ export class RosteComponent implements OnInit {
   DayListBind() {
 
     this.DayList = [
-      { DayID: 1, DayName: 'Sunday' },
+     
       { DayID: 2, DayName: 'Monday' },
       { DayID: 3, DayName: 'Tuesday' },
       { DayID: 4, DayName: 'Wednesday' },
       { DayID: 5, DayName: 'Thursday' },
       { DayID: 6, DayName: 'Friday' },
-      { DayID: 7, DayName: 'Saturday' }
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
     ];
 
   }

@@ -75,7 +75,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Teachers<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block"> Teachers<span class="StarMarking">*</span></label>
           <ng-select formControlName="StaffID" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of ExaminerDDL; track item.StaffID) {
@@ -90,7 +90,7 @@
 
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block"> Section <span class="StarMarking">*</span></label>
           <ng-select formControlName="SectionID" [items]="GetSectionData" bindLabel="SectionName"
                      bindValue="SectionID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
                      placeholder="--Select Branch--">
@@ -118,43 +118,78 @@
     </mat-form-field>
   </div>-->
         <!-- Start Time Picker -->
-        <div>
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>Start Time</mat-label>
-            <input matInput [ngxTimepicker]="startTimePicker" formControlName="AttendanceStartTime" readonly>
-            <ngx-material-timepicker #startTimePicker
-                                     [min]="minTime"
-                                     [max]="maxTime"
-                                     [format]="24"
-                                     [minutesGap]="5">
-            </ngx-material-timepicker>
-          </mat-form-field>
+        <!--<div>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Start Time</mat-label>
+      <input matInput [ngxTimepicker]="startTimePicker" formControlName="AttendanceStartTime" readonly>
+      <ngx-material-timepicker #startTimePicker
+                               [min]="minTime"
+                               [max]="maxTime"
+                               [format]="24"
+                               [minutesGap]="5">
+      </ngx-material-timepicker>
+    </mat-form-field>
+  </div>-->
+
+        <div class="time-field">
+          <label class="form-label">Start Time <span class="StarMarking">*</span></label>
+          <input type="text"
+                 class="form-input"
+                 formControlName="AttendanceStartTime"
+                 [ngxTimepicker]="startTimePicker"
+                 readonly style="width:100%"/>
+
+          <ngx-material-timepicker #startTimePicker
+                                   [min]="minTime"
+                                   [max]="maxTime"
+                                   [format]="24"
+                                   [minutesGap]="5">
+          </ngx-material-timepicker>
         </div>
+
 
         <!-- End Time Picker -->
-        <div>
-          <mat-form-field appearance="fill" class="w-full">
-            <mat-label>End Time</mat-label>
-            <input matInput [ngxTimepicker]="endTimePicker" formControlName="AttendanceEndTime" readonly>
-            <ngx-material-timepicker #endTimePicker
-                                     [min]="minTime"
-                                     [max]="maxTime"
-                                     [format]="24"
-                                     [minutesGap]="5">
-            </ngx-material-timepicker>
-          </mat-form-field>
+        <!--<div>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>End Time</mat-label>
+      <input matInput [ngxTimepicker]="endTimePicker" formControlName="AttendanceEndTime" readonly>
+      <ngx-material-timepicker #endTimePicker
+                               [min]="minTime"
+                               [max]="maxTime"
+                               [format]="24"
+                               [minutesGap]="5">
+      </ngx-material-timepicker>
+    </mat-form-field>
+  </div>-->
+
+        <div class="time-field">
+          <label class="form-label">End Time <span class="StarMarking">*</span></label>
+          <input type="text"
+                 class="form-input"
+                 formControlName="AttendanceEndTime"
+                 [ngxTimepicker]="endTimePicker"
+                 readonly style="width:100%" />
+
+          <ngx-material-timepicker #endTimePicker
+                                   [min]="minTime"
+                                   [max]="maxTime"
+                                   [format]="24"
+                                   [minutesGap]="5">
+          </ngx-material-timepicker>
         </div>
 
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-            Room No 
+          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">-->
+          <label>
+            Room No
           </label>
 
           <input type="text"
-                class="form-input"
+                 class="form-input"
                  placeholder="Enter Room No"
-                 formControlName="RoomNo" />        
-        
+                 formControlName="RoomNo" />
+
         </div>
 
 

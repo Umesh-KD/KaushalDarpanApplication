@@ -66,6 +66,7 @@ const routes: Routes = [
       {
         path: 'allpost', loadChildren: () => import('./Views/Home/all-post/all-post.module').then(m => m.AllPostModule), title: 'All Campus List'
       },
+      { path: 'iip-allpost', loadChildren: () => import('./Views/Home/iip-web-all-post/iip-web-all-post.module').then(m => m.IIPWebAllPostModule), title: 'IIP Post List'},
       { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
 
 
@@ -87,7 +88,7 @@ const routes: Routes = [
       {
         path: 'ViewplacedStudent', loadChildren: () => import('./Views/Home/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
       },
-      {
+      { 
         path: 'citizensuggestion', loadChildren: () => import('./Views/Citizen-Suggestion/citizen-suggestion/citizen-suggestion-routing.module').then(m => m.CitizenSuggestionRoutingModule), title: 'Citizen Suggetion'
       },
       {
@@ -755,6 +756,7 @@ const routes: Routes = [
       { path: 'industryInstitutePartnership-validation', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/industry-institute-partnership-validation/industry-institute-partnership-validation.module').then(m => m.IndustryInstitutePartnershipValidationModule) },
       { path: 'iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/iip-events/iip-events.module').then(m => m.IIPEventsModule), title: 'IIP Events' },
       { path: 'add-iip-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/add-iip-events/add-iip-events.module').then(m => m.AddIIPEventsModule), title: 'Add IIP Events' },
+      { path: 'approve-company-events', loadChildren: () => import('./Views/IndustryInstitutePartnershipMaster/approve-company-event/approve-company-event.module').then(m => m.ApproveCompanyEventModule), title: 'Approve Company Events' },
       
       { path: 'EditMeritDocument', loadChildren: () => import('./Views/BTER/BterMerit/edit-merit-document/edit-merit-document.module').then(m => m.EditMeritDocumentModule) },
       { path: 'AllotmentConfiguration', loadChildren: () => import('./Views/master-configuration/allotment-configuration/allotment-configuration.module').then(m => m.AllotmentConfigurationModule) },

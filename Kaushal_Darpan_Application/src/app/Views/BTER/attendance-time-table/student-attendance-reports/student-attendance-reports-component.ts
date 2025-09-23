@@ -57,6 +57,7 @@ export class StudentAttendanceReportsComponent implements OnInit {
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  minEndDate: string | null = null;
 
   constructor(
     private attendanceServiceService: AttendanceServiceService,
@@ -111,6 +112,11 @@ export class StudentAttendanceReportsComponent implements OnInit {
         this.getData();
       }
     }, 1000);
+
+    const today = new Date();
+    today.setDate(today.getDate() - 1);
+    this.yesterdayDate = today.toISOString().split('T')[0];
+    this.minEndDate = null;
     
   }
   get formTable() { return this.TableForm.controls; }
@@ -330,4 +336,16 @@ export class StudentAttendanceReportsComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
+  onStartDateChange(event: any) {
+    const startDate = event.target.value;
+    if (startDate) {
+      this.minEndDate = startDate; // set EndDate minimum = StartDate
+
+      const endDate = this.TableForm.value.AttendanceEndDate;
+      if (endDate && endDate < startDate) {
+        // reset end date if it's before new start date
+        this.TableForm.patchValue({ AttendanceEndDate: '' });
+      }
+    }
+  }
 }

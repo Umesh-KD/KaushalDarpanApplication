@@ -22,6 +22,7 @@ export class IndustryInstitutePartnershipMasterDataModels {
   public Logo: string = ''
   public Dis_Logo: string = ''
   public PlacementCompanyID?: number = 0
+  public Selected?: boolean = false
 
   public ConcernPersonDetails: ConcernPersonDetailsDataModel[] = []
 }
@@ -48,6 +49,7 @@ export class IndustryInstitutePartnershipMasterSearchModel {
   public RoleID: number = 0
   public DepartmentID: number = 0;
   public EventTypeID: number = 0
+  public CompanyStatus?: number = 0
 }
 export class IndustryInstitutePartnershipMaster_Action {
   public ID: number = 0;
