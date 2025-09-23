@@ -11,6 +11,7 @@ import { PlacementShortlistedStudentsService } from '../../../Services/Placement
 import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel } from '../../../Models/PlacementShortListStudentResponseModel';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { AppsettingService } from '../../../Common/appsetting.service';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -43,8 +44,21 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   public StudentList: PlacementShortListStudentResponseModel[] = [];
   public searchRequest = new PlacementShortlistedStuSearch();
 
-  constructor(private commonMasterService: CommonFunctionService, private Router: Router, private placementShortListStudentService: PlacementShortlistedStudentsService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private router: ActivatedRoute, private routers: Router, private fb: FormBuilder, private modalService: NgbModal) {
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private Router: Router, 
+    private placementShortListStudentService: PlacementShortlistedStudentsService, 
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder, 
+    private router: ActivatedRoute, 
+    private routers: Router, 
+    private fb: FormBuilder, 
+    private modalService: NgbModal,
+    private appsettingConfig:AppsettingService
+  ) {
   }
+
 
   async ngOnInit() {
 
@@ -126,6 +140,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
   //get all
   async GetAllData() {
+    debugger
     this.isSubmitted = true;
     //
     this.refreshBranchRefValidation(false);

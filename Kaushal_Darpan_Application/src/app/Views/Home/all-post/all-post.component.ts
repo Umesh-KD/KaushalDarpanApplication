@@ -67,7 +67,7 @@ export class AllPostComponent implements OnInit {
   
 
   async ngOnInit() {
-    console.log("In OnInit Method");
+    // console.log("In OnInit Method");
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.settingsMultiselect = {
         singleSelection: false,

@@ -70,7 +70,7 @@
 
               <div class="col-md-3">
                 <label class="form-label">College Name: </label>
-                 <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                  <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
                                    [settings]="settingsMultiselect2"
                                    [data]="CollegeList"
                                    [(ngModel)]="SelectedInstituteId"
@@ -82,7 +82,7 @@
                                    (onDeSelect)="onDeSelect($event)"
                                    (onSelectAll)="onSelectAll($event)"
                                    (onDeSelectAll)="onDeSelectAll($event)">
-          </ng-multiselect-dropdown>
+                  </ng-multiselect-dropdown>
                 <!-- <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
                   <option value=0>--All--</option>
                   <option *ngFor="let item of CollegeList" [value]="item.InstituteID">
