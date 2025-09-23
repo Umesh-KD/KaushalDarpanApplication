@@ -30,7 +30,7 @@
                                    (onDeSelect)="onDeSelect($event)"
                                    (onSelectAll)="onSelectAll($event)"
                                    (onDeSelectAll)="onDeSelectAll($event)">
-          </ng-multiselect-dropdown>
+                </ng-multiselect-dropdown>
                 <!-- <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
                         name="branch" [(ngModel)]="StreamID">
                   <option value="0">Choose Option</option>
@@ -83,12 +83,12 @@
                                    (onSelectAll)="onSelectAll($event)"
                                    (onDeSelectAll)="onDeSelectAll($event)">
           </ng-multiselect-dropdown>
-                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
+                <!-- <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
                   <option value=0>--All--</option>
                   <option *ngFor="let item of CollegeList" [value]="item.InstituteID">
                     {{item.InstituteName}}
                   </option>
-                </select>
+                </select> -->
               </div>
               <div class="col-md-3">
                 <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">
