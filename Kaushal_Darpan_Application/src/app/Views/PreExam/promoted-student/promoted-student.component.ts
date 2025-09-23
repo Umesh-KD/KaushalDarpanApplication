@@ -421,6 +421,9 @@ export class PromotedStudentComponent {
       if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
         IsPromote = 1;
       }
+      else if (this.request.StudentTypeId == this._EnumStudentType.Ex) {
+        IsPromote = 0;
+      }
       else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) {
         IsPromote = 0;
       }
