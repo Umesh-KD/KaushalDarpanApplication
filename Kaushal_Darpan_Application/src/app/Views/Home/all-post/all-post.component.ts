@@ -40,7 +40,7 @@ export class AllPostComponent implements OnInit {
   FilteredCampusPostList: any[] = [];
   CampusFromDate: string = '';
   CampusToDate: string = '';
-  FinancialYearID: number = 0;
+  FinancialYearID: number = 9;
   InstituteID: string = '0';
   
   OriginalCampusPostList: any[] = []; // Store unfiltered data
@@ -67,6 +67,7 @@ export class AllPostComponent implements OnInit {
   
 
   async ngOnInit() {
+    console.log("In OnInit Method");
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.settingsMultiselect = {
         singleSelection: false,
