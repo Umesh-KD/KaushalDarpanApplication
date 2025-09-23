@@ -430,32 +430,29 @@ export class RosteListComponent implements OnInit {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
-   
-       
-
-        this._RosterDisplayTimeTableDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-        this._RosterDisplayTimeTableDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-        this._RosterDisplayTimeTableDataModel.SemesterID = 0;
+    this._RosterDisplayTimeTableDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this._RosterDisplayTimeTableDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this._RosterDisplayTimeTableDataModel.SemesterID = 0;
     this._RosterDisplayTimeTableDataModel.StreamID = this.filterModel.StreamID;
-        this._RosterDisplayTimeTableDataModel.SubjectID = 0;
-        await this.GetRosterDisplay_PDFTimeTablePDF();
+    this._RosterDisplayTimeTableDataModel.SubjectID = 0;
+    await this.GetRosterDisplay_PDFTimeTablePDF();
 
-        await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
-          .then((data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            this.GetGenerateTimetableData = data.Data
-            this.totalRecord1 = data['Data'].length;
-            if (this.GetGenerateTimetableData && this.GetGenerateTimetableData.length > 0) {
-              // Extract all keys from the first object
-              const allKeys = Object.keys(this.GetGenerateTimetableData[0]);
-              // Filter keys that look like time slots (contain ":")
-              this.timeColumns = allKeys.filter(k => k.includes(':'));
-            }
+    await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GetGenerateTimetableData = data.Data
+        this.totalRecord1 = data['Data'].length;
+        if (this.GetGenerateTimetableData && this.GetGenerateTimetableData.length > 0) {
+          // Extract all keys from the first object
+          const allKeys = Object.keys(this.GetGenerateTimetableData[0]);
+          // Filter keys that look like time slots (contain ":")
+          this.timeColumns = allKeys.filter(k => k.includes(':'));
+        }
 
-            console.log(this.GetGenerateTimetableData)
-            this.initTable1(this.GetGenerateTimetableData);
-          }, (error: any) => console.error(error)
-          );
+        console.log(this.GetGenerateTimetableData)
+        this.initTable1(this.GetGenerateTimetableData);
+      }, (error: any) => console.error(error)
+      );
       
   }
 
@@ -483,7 +480,7 @@ export class RosteListComponent implements OnInit {
   }
 
   async GetRosterDisplay_PDFTimeTablePDF() {
-
+    debugger
     try {
 
       this.loaderService.requestStarted();
