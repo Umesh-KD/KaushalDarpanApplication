@@ -173,7 +173,7 @@ export class ITIAllotmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async UpdateAllotments(request: DirectAllocationDataModel) {
+  public async UpdateAllotments(request: any) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/UpdateAllotments`, body, this.headersOptions)
       .pipe(
@@ -207,7 +207,7 @@ export class ITIAllotmentService {
 
 
 
-  public async RevertAllotments(request: DirectAllocationDataModel) {
+  public async RevertAllotments(request: any) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/RevertAllotments`, body, this.headersOptions)
       .pipe(
@@ -217,7 +217,7 @@ export class ITIAllotmentService {
 
 
 
-  public async RevertJailAllotments(request: DirectAllocationDataModel) {
+  public async RevertJailAllotments(request: any) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/RevertJailAllotments`, body, this.headersOptions)
       .pipe(

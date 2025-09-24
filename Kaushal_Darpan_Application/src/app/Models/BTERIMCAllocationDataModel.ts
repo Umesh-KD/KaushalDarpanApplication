@@ -15,6 +15,7 @@ export class BTERIMCAllocationDataModel {
   public ShiftUnit: number = 0;
   public CollegeTradeID: number = 0;
   public TradeLevel: number = 0;
+
 }
 
 

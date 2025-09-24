@@ -93,7 +93,7 @@ export class StudentSeatAllotmentdataModel {
   public AllotedGender: String = '';
   public AllotedPriority: number = 0;
 }
-
+  
 
 export class DirectAllocationDataModel {
   public InstituteID: number = 0;
@@ -111,6 +111,7 @@ export class DirectAllocationDataModel {
   public ShiftUnit: number = 0;
   public CollegeTradeID: number = 0;
   public TradeLevel: number = 0;
+  public DocumentList:any[]=[]
 
 }
 

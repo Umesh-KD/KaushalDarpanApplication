@@ -20,6 +20,9 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ITIAllotmentService } from '../../../../Services/ITI/ITIAllotment/itiallotment.service';
 import { DirectAllocationDataModel, DirectAllocationSearchModel } from '../../../../Models/ITIAllotmentDataModel';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
+import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 
 
@@ -110,6 +113,7 @@ export class VerifyStudentAllotComponent {
     private router: Router,
     private routers: ActivatedRoute,
     private modalService: NgbModal, private http: HttpClient, private sanitizer: DomSanitizer, public appsettingConfig: AppsettingService,
+    private documentDetailsService: DocumentDetailsService,
     private Swal2: SweetAlert2) {
   }
 
@@ -217,7 +221,7 @@ export class VerifyStudentAllotComponent {
           this.request.TradeLevel = data['Data'].Table[0].ApplicationID;
           this.requestReporting = data['Data'].Table[0];
           this.requestReporting.AllotmentDocumentModel = data['Data'].Table1;
-
+          this.requestReporting.AllotmentDocumentModel.forEach(e => e.DocumentStatus=true)
           //alert(this.StudentVerifyPhoneData[0].ApplicationVerified);
           //if (this.StudentVerifyPhoneData[0].ApplicationVerified !== 0) {
           //  this.ApplicationAlloted = false;
@@ -534,6 +538,11 @@ export class VerifyStudentAllotComponent {
       this.loaderService.requestStarted();
       this.request.TradeLevel = this.searchRequest.TradeLevel
       this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.request.DocumentList = this.requestReporting.AllotmentDocumentModel
+
+
+    
+
       await this.allotmentService.UpdateAllotments(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -681,6 +690,13 @@ export class VerifyStudentAllotComponent {
   }
 
   openSubmitOTP() {
+    const filteredDocuments1 = this.requestReporting.AllotmentDocumentModel
+    filteredDocuments1.forEach((e: any) => e.IsMandatory = 1)
+
+    if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
+      return;
+    }
+
     this.childComponent.MobileNo = this.requestReporting.MobileNo;
     this.CloseModal();
     this.childComponent.OpenOTPPopup();
@@ -691,4 +707,68 @@ export class VerifyStudentAllotComponent {
     });
   }
 
+
+  async UploadDocument(event: any, item: any) {
+    try {
+      //upload model
+      let uploadModel = new UploadFileModel();
+      uploadModel.FileExtention = item.FileExtention ?? "";
+      uploadModel.MinFileSize = item.MinFileSize ?? "";
+      uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+      uploadModel.FolderName = item.FolderName ?? "";
+      //call
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+
+          if (data.State == EnumStatus.Success) {
+            //add/update document in js list
+            const index = this.requestReporting.AllotmentDocumentModel.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+            if (index !== -1) {
+              this.requestReporting.AllotmentDocumentModel[index].FileName = data.Data[0].FileName;
+              this.requestReporting.AllotmentDocumentModel[index].Dis_FileName = data.Data[0].Dis_FileName;
+            }
+            console.log(this.requestReporting.AllotmentDocumentModel)
+            //reset file type
+            event.target.value = null;
+          }
+          if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async DeleteDocument(item: any) {
+    try {
+      // delete from server folder
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName = item.FolderName ?? "";
+      deleteModel.FileName = item.FileName;
+      //call
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+
+          if (data.State != EnumStatus.Error) {
+            //add/update document in js list
+            const index = this.requestReporting.AllotmentDocumentModel.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+            if (index !== -1) {
+              this.requestReporting.AllotmentDocumentModel[index].FileName = '';
+              this.requestReporting.AllotmentDocumentModel[index].Dis_FileName = '';
+            }
+            console.log(this.requestReporting.AllotmentDocumentModel)
+          }
+          if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }

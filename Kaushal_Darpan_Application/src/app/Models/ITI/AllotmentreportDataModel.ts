@@ -49,5 +49,7 @@ export class AllotmentDocumentModel {
   public Dis_FileName: string = '';
   public GroupNo: number = 0;
   public DocumentStatus: boolean = false
+
+
 /*  public ShowRemark :Boolean*/
 }
