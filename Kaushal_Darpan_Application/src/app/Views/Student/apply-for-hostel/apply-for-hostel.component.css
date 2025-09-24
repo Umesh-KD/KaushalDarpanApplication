@@ -1,0 +1,15 @@
+.multiselect-dropdown .dropdown-list {
+  z-index: 9999 !important;
+}
+
+.container-fluid, .grid, .form-section {
+  overflow: visible !important;
+}
+
+.card-body {
+  overflow: visible !important;
+}
+
+.form-select {
+  margin-bottom: 150px; /* adjust as per your UI */
+}

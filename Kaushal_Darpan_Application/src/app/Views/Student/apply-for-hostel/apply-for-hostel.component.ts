@@ -5,7 +5,7 @@ import { HostelManagmentService } from '../../../Services/HostelManagment/Hostel
 import { ToastrService } from 'ngx-toastr';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { HostelStudentSearchModel, StudentDataModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
+import { HostelStudentSearchModel, SelectedRoomTyps, StudentDataModel } from '../../../Models/Hostel-Management/HostelManagmentDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -55,6 +55,13 @@ export class ApplyForHostelComponent {
   public LastTerm2: string = '';
   public LastFY: string = '';
   public allotedhostellastendterm: boolean = false;
+  public RoomTypeDDLList: any = [];
+
+  public settingsMultiselect: object = {};
+  // public SelectedRoomTypeID : SelectedRoomTyps[] = [];
+  public SelectedRoomTypeID : any[] = [];
+  public selectedRoomTypes: any[] = []; 
+
 
   _EnumRole = EnumRole;
   public isEditMode: boolean = true;
@@ -77,6 +84,26 @@ export class ApplyForHostelComponent {
   ) { }
 
   async ngOnInit() {
+    this.settingsMultiselect = {
+        singleSelection: false,
+        idField: 'ID',
+        textField: 'Name',
+        enableCheckAll: true,
+        selectAllText: 'Select All',
+        unSelectAllText: 'Unselect All',
+        allowSearchFilter: true,
+        limitSelection: -1,
+        clearSearchFilter: true,
+        maxHeight: 197,
+        itemsShowLimit: 10,
+        searchPlaceholderText: 'Search...',
+        noDataAvailablePlaceholderText: 'Not Found',
+        closeDropDownOnSelection: false,
+        showSelectedItemsAtTop: false,
+        defaultOpen: false,
+        appendTo: 'body'   
+      };
+
     this.groupForm = this.fb.group({
       txtFatherContactNo: ['', Validators.required],
       txtLocalGuardianName: [''],
@@ -88,6 +115,7 @@ export class ApplyForHostelComponent {
       txtAnyWarningForInvovementAgainstDiscipline: ['2'],
       txtPartnerApplicationID: [''],
       txtRequestForRoomPartner: [this.RequestForRoomPartner],
+      SelectedRoomTypeID: [[]], 
     });
     this.groupFormAffidavit = this.fb.group({
       txtAffidavitDocument: ['', Validators.required],
@@ -110,6 +138,7 @@ export class ApplyForHostelComponent {
     await this.GetMarksDetails();
     await this.GetLastFYEndTerm();
     await this.GetAllData();
+    await this.GetRoomTypeDDL();
 
     if(this.HostelID > 0) {
       if(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
@@ -557,8 +586,45 @@ export class ApplyForHostelComponent {
     }
   }
 
+  async GetRoomTypeDDL() {
+    this.HostelID = this.HostelID;
+    //alert(this.HostelID);
+    try {
+      this.loaderService.requestStarted();
+      await this.commonFunctionService.GetRoomTypeDDLByHostel('HostelRoomSeatType', this.HostelID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.RoomTypeDDLList = data['Data'];
+          console.log("Hostel Room Seat List", this.RoomTypeDDLList);
+          //this.GetRoomNoDDL();
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+  }
+}
 
   async saveData() {
+    debugger
+
+    // const selectedIDs = this.groupForm.value.SelectedRoomTypeID.map((item: any) => item.ID);
+     
+    // Convert to JSON string
+    // const selectedIDsJson = JSON.stringify(selectedIDs);
+    // take full objects directly from form
+    const selectedRooms = this.groupForm.value.SelectedRoomTypeID;
+    console.log("SelectedRoomTypeID =>", this.SelectedRoomTypeID);
+    // convert to JSON string
+    this.request.SelectedRoomTypeID = selectedRooms;
+    // this.updateSelectedIDs();
+ 
+    // this.request.SelectedRoomTypeID=selectedIDsJson;
     this.request.StudentID = this.sSOLoginDataModel.StudentID;
     this.request.HostelID = this.HostelID;
     this.request.EndTermId = this.sSOLoginDataModel.EndTermID;
@@ -964,5 +1030,47 @@ export class ApplyForHostelComponent {
       console.log(ex);
     }
   }
+
+
+   onFilterChange(event: any) {
+      // Handle filtering logic (if needed)
+      console.log(event);
+    }
+  
+    onDropDownClose(event: any) {
+      // Handle dropdown close event
+      console.log(event);
+    }
+
+    onSelectAll(event:any){
+      console.log(event);
+      // this.updateSelectedIDs();
+    }
+
+    onItemSelect(evet:any) {
+      console.log("on select", evet);
+      // this.updateSelectedIDs();
+    }
+
+  onDeSelect(event:any) {
+    // this.updateSelectedIDs();
+  }
+
+  onDeSelectAll(event:any) {
+    // this.updateSelectedIDs();
+  }
+
+
+//   private updateSelectedIDs() {
+//     // if(this.SelectedRoomTypeID.length>0){
+//       this.SelectedRoomTypeID=this.SelectedRoomTypeID.map((item:any)=> item.ID);
+//     // }
+//   // this.SelectedRoomTypeID = this.selectedRoomTypes.map(x => x.ID);
+
+
+//   // this.StreamID = this.SelectedStreamID.length > 0 ? this.SelectedStreamID.map((item: any) => item.StreamID).join(',') : 0;
+//   console.log("Selected IDs =>", this.SelectedRoomTypeID);
+// }
+
 }
 

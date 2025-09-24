@@ -73,6 +73,9 @@
 
         <div class="flex-1">
           <!-- <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label> -->
+          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Gender: <span class="StarMarking">*</span>
+          </label>
           <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllPrincipalstudentmeritlist()">
             <option value="0" selected>--Select Gender--</option>
             <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>

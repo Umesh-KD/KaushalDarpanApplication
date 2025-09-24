@@ -145,6 +145,7 @@
           </div>
         </div>
 
+     
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3" *ngIf="RequestForRoomPartner === true">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application No</label>
@@ -189,6 +190,60 @@
             </div>
           </div>
         </div>-->
+
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3 ">
+          <div class="flex justify-between flex-wrap items-center ">
+            <b class="text-1xl-5 "><i class="ti ti-search"></i> Request For Room Choice</b>
+            <!-- <div class="ms-3">
+              <label for="txtRequestForRoomPartner">
+                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(true)" [value]="true" /> Yes
+              </label>
+              <label for="txtRequestForRoomPartner">
+                <input type="radio" formControlName="txtRequestForRoomPartner" (change)="isRequestForRoomPartner(false)" [value]="false" /> No
+              </label>
+            </div> -->
+          </div>
+        </div>
+
+        <!-- <div > -->
+          <div class="col-md-3 w-48 max-h-40">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+
+            <!-- <label for="inputState" class="form-label">Branch</label> -->
+              <ng-multiselect-dropdown  #multiSelect1 class="w-40 text-sm" [placeholder]="'Choose Option'"
+                                    [settings]="settingsMultiselect"
+                                    [data]="RoomTypeDDLList"
+                                    formControlName="SelectedRoomTypeID"
+                                    name="SelectedRoomTypeID"
+                                    [disabled]="false"
+                                    (onFilterChange)="onFilterChange($event)"
+                                    (onDropDownClose)="onDropDownClose($event)"
+                                    (onSelect)="onItemSelect($event)"
+                                    (onDeSelect)="onDeSelect($event)"
+                                    (onSelectAll)="onSelectAll($event)"
+                                    (onDeSelectAll)="onDeSelectAll($event)">
+              </ng-multiselect-dropdown>
+    <!-- [(ngModel)]="SelectedRoomTypeID" -->
+            <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
+            <!-- <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+              <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+            </div> -->
+          </div>
+        <!-- </div> -->
+
+         <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Room Type</label>
+          <select formControlName="txtRoomType" class="form-input" type="text" id="RoomType" placeholder="Enter Room Type"
+                  [(ngModel)]="request.RoomType" (change)="changeSeats()">
+            <option value="0">--Choose Room Type--</option>
+            <option *ngFor="let item of RoomTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <small>(1 Seater, 2 Seater, 3 Seater, 4 Seater)</small>
+          <div *ngIf="isSubmitted && groupForm.controls.txtRoomType.errors" class="text-danger">
+            <p *ngIf="!_groupForm.txtRoomType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+          </div>
+        </div> -->
 
 
 
