@@ -3,7 +3,8 @@ import { RequestBaseModel } from "../RequestBaseModel";
 export class BTERSectionAddDataModel extends RequestBaseModel {
   public DayID: number = 0;
   public SemesterID: number = 0;
-  public StreamID: number = 0;
+  //public StreamID: number = 0;
+  public StreamID: string[] = [];
   public SubjectID: string = '';
   public StaffID: number = 0;
   public SectionID: number[] = [];
