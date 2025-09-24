@@ -87,8 +87,13 @@
         </a> -->
 
         <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="GenerateProvisionalMerit_Hostel()"
-          *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon" >
-           Generate Merit List({{ getSelectedItems().length }} selected)
+           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && !showRegenerateMerit">
+          Generate Merit List ({{ getSelectedItems().length }} selected)
+        </a>
+
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="ReGenerateProvisionalMerit_Hostel()"
+           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && showRegenerateMerit">
+          Regenerate Merit List ({{ getSelectedItems().length }} selected)
         </a>
 
       </div>
@@ -108,9 +113,10 @@
             </th>
             <th class="text-left">SR NO</th>
             <th class="text-left">Student Name</th>
-            <th class="text-left">Application ID</th>
-            <th class="text-left">Type</th>
+            <th class="text-left">Hostel Request No</th>
+            <!--<th class="text-left">Type</th>-->
             <th class="text-left">{{titleDDLBranchTrade}}</th>
+            <th class="text-left">Semester</th>
             <th class="text-left">Year</th>
             <th class="text-left">Percentage</th>
             <!-- <th class="text-center" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">Action</th> -->
@@ -123,9 +129,10 @@
             </td>
             <td align="left">{{idx + 1}}</td>
             <td align="left">{{item.StudentName}}</td>
-            <td align="left">{{item.ApplicationId}}</td>
-            <td align="left">{{item.StudentType}}</td>
+            <td align="left">{{item.HostelRequestNo}}</td>
+            <!--<td align="left">{{item.StudentType}}</td>-->
             <td align="left">{{item.StreamName}}</td>
+            <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.TotalAvgPercentage}}</td>
             <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">

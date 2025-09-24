@@ -731,7 +731,8 @@ export enum HostelStatus {
   PublishFinalMerit = 11,
   SeatDeallocated = 12,
   
-  GenerateProvisionalMerit = 14
+  GenerateProvisionalMerit = 14,
+  ReGenerateProvisionalMerit = 15,
 }
 
 
