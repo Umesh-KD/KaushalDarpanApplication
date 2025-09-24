@@ -94,14 +94,14 @@ export class ApplyForHostelComponent {
         allowSearchFilter: true,
         limitSelection: -1,
         clearSearchFilter: true,
-        maxHeight: 197,
-        itemsShowLimit: 10,
+        maxHeight: 150,
+        itemsShowLimit: 3,
         searchPlaceholderText: 'Search...',
         noDataAvailablePlaceholderText: 'Not Found',
         closeDropDownOnSelection: false,
         showSelectedItemsAtTop: false,
-        defaultOpen: false,
-        appendTo: 'body'   
+        defaultOpen: false
+         
       };
 
     this.groupForm = this.fb.group({

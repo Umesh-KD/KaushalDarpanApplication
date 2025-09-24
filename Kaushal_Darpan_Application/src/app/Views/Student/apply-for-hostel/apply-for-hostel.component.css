@@ -13,3 +13,7 @@
 .form-select {
   margin-bottom: 150px; /* adjust as per your UI */
 }
+
+.card {
+  overflow: visible !important;
+}
