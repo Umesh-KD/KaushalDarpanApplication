@@ -52,7 +52,8 @@ export class CollegeHostelDetailsComponent {
     ) { }
 
 
-    async ngOnInit() {
+  async ngOnInit() {
+    
         this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
         this.groupForm = this.fb.group({
@@ -63,8 +64,10 @@ export class CollegeHostelDetailsComponent {
             //ddlPlayGround: ['',],
             //txtPlayGroundDistance: ['', Validators.required]
         });
-        await this.CollegeHostelDetailsList();
+
       await this.GetStudentDetailsForApply();
+      await this.CollegeHostelDetailsList();
+      
 
     }
   //async CollegeHostelDetailsList() {
@@ -122,7 +125,7 @@ export class CollegeHostelDetailsComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.StudentDetailsList = data['Data'];
-          if (this.StudentDetailsList[0].AllotmentStatus > 0) {
+          if (!(this.StudentDetailsList[0].AllotmentStatus == 0 || this.StudentDetailsList[0].AllotmentStatus == 12)) {
             this.router.navigateByUrl('/ApplyForHostel?id=' + this.StudentDetailsList[0].HostelID)
           }
 
@@ -152,6 +155,11 @@ export class CollegeHostelDetailsComponent {
           this.ErrorMessage = data['ErrorMessage'];
           if (data && data['Data']) {
             this.CollegeHostelList = data['Data'].Table;
+
+            if (this.StudentDetailsList[0].AllotmentStatus == 12) {
+              this.CollegeHostelList = this.CollegeHostelList.filter((x: any) => x.HostelID !== this.StudentDetailsList[0].HostelID)
+            }
+
             this.CollegeHostelFacilityList = data['Data'].Table1;
             this.CollegeHostelFeeList = data['Data'].Table2;
             this.HostelTotalDetails = this.CollegeHostelList.map((hostel: any) => {

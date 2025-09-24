@@ -162,7 +162,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   async GetBranchMaster() {
     try {
       this.loaderService.requestStarted();
-      await this.commonFunctionService.StreamMaster(this.sSOLoginDataModel.DepartmentID)
+      await this.commonFunctionService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BrachDDLList = data['Data'];
