@@ -233,6 +233,14 @@ export class StudentRequestService {
       ).toPromise();
   }
 
+  public async ReGenerateProvisionalMerit_Hostel(Gender: number = 0, searchRequest: StudentRequestDataModal[]) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ReGenerateProvisionalMerit_Hostel/${Gender}`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetMeritGeneratedStudent_Hostel( searchRequest: GetMeritDataModel_Hostel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetMeritGeneratedStudent_Hostel`, body, this.headersOptions)

@@ -55,7 +55,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   HostelDetails = new HostelStudentSearchModel();
   EditHostelDetails = new EditHostelStudentSearchModel();
   _EnumRole = EnumRole;
-
+  public showRegenerateMerit: boolean = false;
 
   constructor(
     private toastr: ToastrService,
@@ -106,7 +106,6 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   
   async GetAllPrincipalstudentmeritlist() {
      
-    
     try {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
@@ -118,16 +117,20 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       await this.studentRequestService.GetAllPrincipalstudentmeritlist(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.StudentReqListList = data['Data'];
+          if (data.State == EnumStatus.Success) {
+            this.StudentReqListList = data['Data'];
 
-          this.StudentReqListList.forEach((item: any) => {
-            item.selected = false;
-          });
+            this.StudentReqListList.forEach((item: any) => {
+              item.selected = false;
+            });
 
-          console.log('Student List ==>',this.StudentReqListList)
+            this.showRegenerateMerit = this.StudentReqListList.some((x: any) => x.MeritType === 2)
+
+            console.log('Student List ==>', this.StudentReqListList)
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+          
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);
@@ -468,7 +471,47 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
           // this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'], {
           //   queryParams: { ids: encodeURIComponent(encrypted) }
           // });
-          this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'])
+          //this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'])
+          window.location.reload();
+        } else {
+          this.toastr.error(data.ErrorMessage);
+          this.toastr.warning(data.Message);
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    console.log(selected);
+  }
+
+  async ReGenerateProvisionalMerit_Hostel() {
+    if(this.Searchrequest.Gender == 0 || this.Searchrequest.Gender == undefined || this.Searchrequest.Gender == null){
+      this.toastr.warning("Please select gender.");
+      return;
+    }
+    let selected = this.getSelectedItems();
+    if (selected.length === 0) {
+      this.toastr.warning("Please select student.");
+      return;
+    }
+
+    selected.forEach(item => {
+      item.modifyby = this.sSOLoginDataModel.UserID;
+    });
+    
+    try {
+      await this.studentRequestService.ReGenerateProvisionalMerit_Hostel(this.Searchrequest.Gender, selected)
+      .then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State == EnumStatus.Success){
+          this.toastr.success(data.Message);
+          const selectedIds = selected.map(item => item.ReqId).join(',');
+          const encrypted = CryptoJS.AES.encrypt(selectedIds, secretKey).toString();
+          // this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'], {
+          //   queryParams: { ids: encodeURIComponent(encrypted) }
+          // });
+          //this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'])
+          window.location.reload();
         } else {
           this.toastr.error(data.ErrorMessage);
           this.toastr.warning(data.Message);
