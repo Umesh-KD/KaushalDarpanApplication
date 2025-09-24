@@ -94,7 +94,7 @@ export class ApplyForHostelComponent {
         allowSearchFilter: true,
         limitSelection: -1,
         clearSearchFilter: true,
-        maxHeight: 150,
+        maxHeight: 70,
         itemsShowLimit: 3,
         searchPlaceholderText: 'Search...',
         noDataAvailablePlaceholderText: 'Not Found',
