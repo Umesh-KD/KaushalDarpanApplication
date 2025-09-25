@@ -335,7 +335,7 @@ export class MasterLayoutComponent implements OnInit {
   // when role change
   async loadMenuByRoleID(SeletedUserId: any) {
     // filter by roleid
-    debugger
+    //debugger
 
     var r = this.lstUserRole.filter((x: any) => x.RoleID == this.RoleID)[0];
     this.sSOLoginDataModel.RoleID = this.RoleID;

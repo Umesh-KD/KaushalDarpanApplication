@@ -129,12 +129,16 @@ export class SubjectModel {
 }
 
 export class StudentMarkedModel {
-  public Marked: boolean = false;
-  public StudentId: number = 0;
-  public Status: number = 0;
-  public StudentFilterStatusId: number = 0;
-  public ModifyBy: number = 0;
-  public RoleId: number = 0;
+  public Marked?: boolean = false;
+  public StudentId?: number = 0;
+  public Status?: number = 0;
+  public StudentFilterStatusId?: number = 0;
+  public ModifyBy?: number = 0;
+  public RoleId?: number = 0;
+  public DepartmentID?: number = 0
+  public Eng_NonEng?: number = 0
+  public EndTermID?: number = 0
+  public StudentExamID?: number = 0
 }
 
 export class StudentRejectMarkedModel {

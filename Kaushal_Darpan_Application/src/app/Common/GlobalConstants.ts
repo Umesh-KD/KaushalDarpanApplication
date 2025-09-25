@@ -202,6 +202,11 @@ export enum enumExamStudentStatus {
   DetainedRevoke = 233,
   ReturnByAcp = 316,
   ApproveByAcp = 317,
+  VerifyandForwardtoExamIncharge = 1325,
+  VerifyandForwardtoRegistrar = 1326,
+  ApprovebyRegistrar = 1327,
+  ReturnbyRegistrar = 1328,
+  Enrolled_promoted = 1329,
 }
 
 export enum EnumUserType {

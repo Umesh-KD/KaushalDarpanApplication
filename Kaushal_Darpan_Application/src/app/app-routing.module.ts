@@ -1383,7 +1383,7 @@ const routes: Routes = [
       { path: 'SetCalendar', loadChildren: () => import('./Views/BTER/attendance-time-table/SetCalendar/SetCalendar.module').then(m => m.SetCalendarModule), title: 'Set-Calendar' },
 
       { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
-
+      { path: 'enrolled-promoted-student-verification', loadChildren: () => import('./Views/enrolled-student-verification/enrolled-student-verification.module').then(m => m.EnrolledStudentVerificationModule), title: 'Student Verification' },
 
       { path: 'ExaminerBundleList', loadChildren: () => import('./Views/ITI/Examination/examiner-bundle-list/examiner-bundle-list.module').then(m => m.ExaminerBundleListModule) },
       { path: 'JailAdmissionApply', loadChildren: () => import('./Views/ITI/Examination/jail-admission-apply/jail-admission-apply.module').then(m => m.JailAdmissionApplyModule) },

@@ -39,7 +39,7 @@ export class OTPModalComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    
   }
 
   formatMobileNo(mobile: string): string {
