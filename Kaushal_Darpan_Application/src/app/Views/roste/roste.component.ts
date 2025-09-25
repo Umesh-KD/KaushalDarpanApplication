@@ -16,6 +16,7 @@ import { DropdownValidators } from '../../Services/CustomValidators/custom-valid
 import { EnumStatus } from '../../Common/GlobalConstants';
 import { BTERSectionAddDataModel } from '../../Models/BTER/BTERSectionAddDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { BranchHODModel } from '../../Models/StaffMasterDataModel';
 
 @Component({
   selector: 'app-roste',
@@ -27,7 +28,7 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 export class RosteComponent implements OnInit {
   displayedColumns: string[] = [];
   columnSchema: Array<{ key: string; label: string; isAction?: boolean; isDate?: boolean }> = [];
-
+  public request = new BranchHODModel()
   dataSource = new MatTableDataSource<any>();
   dynamicColumns: string[] = [];
   filterData: any[] = [];
@@ -163,17 +164,8 @@ export class RosteComponent implements OnInit {
     })
   }
 
-  SemesterChange() {
-
-    this.TableForm.patchValue({
-      
-      SubjectID: 0,
-      StreamID: 0,
-      
-    });
-
-  }
-
+  
+ 
   async GetAllRosterDisplay() {
     try {
 
@@ -203,19 +195,78 @@ export class RosteComponent implements OnInit {
   DayListBind() {
 
     this.DayList = [
-      { DayID: 1, DayName: 'Sunday' },
+     
       { DayID: 2, DayName: 'Monday' },
       { DayID: 3, DayName: 'Tuesday' },
       { DayID: 4, DayName: 'Wednesday' },
       { DayID: 5, DayName: 'Thursday' },
       { DayID: 6, DayName: 'Friday' },
-      { DayID: 7, DayName: 'Saturday' }
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
     ];
 
   }
 
+  SemesterChange() {
 
-  async BindSubject() {
+    this.TableForm.patchValue({
+      SubjectID: 0,
+      StreamID: 0,
+    });
+  }
+
+  //SemesterChange() {
+  //  const selectedSemester = this.TableForm.get('SemesterID')?.value;
+
+  //  // Reset branch & subject
+  //  this.TableForm.patchValue({
+  //    StreamID: 0,
+  //    SubjectID: 0,
+  //  });
+
+  //  if (selectedSemester === 1 && this.StreamMasterDDL?.length > 0) {
+  //    const defaultBranch = this.StreamMasterDDL[0].StreamID;
+  //    this.TableForm.patchValue({
+  //      StreamID: defaultBranch
+  //    });
+  //    this.BindSubject();
+  //  }
+  //}
+
+
+  //async BindSubject() {
+  //  // Reset subject
+  //  this.TableForm.patchValue({
+  //    SubjectID: 0,
+  //  });
+
+  //  const GetstreamId = this.TableForm.get('StreamID')?.value;
+  //  const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+
+  //  let obj = {
+  //    Action: "GET_BY_ID",
+  //    DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //    EndTermID: this.sSOLoginDataModel.EndTermID,
+  //    Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+  //    StreamID: GetstreamId,
+  //    SemesterID: GetSemesterID
+  //  };
+
+  //  try {
+  //    const data: any = await this.staffMasterService.GetBranchSectionData(obj);
+  //    const parsed = JSON.parse(JSON.stringify(data));
+  //    this.GetSectionData = parsed.Data;
+  //    this.allSections = parsed.Data;
+  //    this.GetSectionData = [...this.allSections];
+
+  //    // ✅ After fetching sections, also bind subjects
+  //    this.getSubjectMasterDDL(GetstreamId, GetSemesterID);
+  //  } catch (error) {
+  //    console.error(error);
+  //  }
+  //}
+
+   async BindSubject() {
     this.TableForm.patchValue({     
       SubjectID: 0,      
     });
@@ -239,10 +290,6 @@ export class RosteComponent implements OnInit {
         this.GetSectionData = [...this.allSections];
       }, (error: any) => console.error(error)
       );
-
-
-
-
 
     this.getSubjectMasterDDL(this.TableForm.get('StreamID')?.value, this.TableForm.get('SemesterID')?.value)
 
@@ -728,6 +775,28 @@ export class RosteComponent implements OnInit {
   trackByFn(index: number, item: any): any {
     return item.id || index; // use unique ID if available
   }
+
+  //onSemesterChange(event: any) {
+  //  const semesterId = event; // selected semester
+  //  if (semesterId && semesterId != 0) {
+  //    // Select all branches automatically
+  //    const allBranchIds = this.StreamMasterDDL.map(x => x.StreamID);
+  //    this.EditDataFormGroup.patchValue({
+  //      StreamIDs: allBranchIds
+  //    });
+
+  //    // Bind subjects automatically after selecting all branches
+  //    this.BindSubject();
+  //  } else {
+  //    // If "--Select--" chosen, clear branches
+  //    this.EditDataFormGroup.patchValue({
+  //      StreamIDs: []
+  //    });
+  //    this.GetSectionData = [];
+  //  }
+  //}
+
+
 }
 
 

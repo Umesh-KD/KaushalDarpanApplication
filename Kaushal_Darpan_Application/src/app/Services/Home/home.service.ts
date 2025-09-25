@@ -42,6 +42,20 @@ export class HomeService {
       ).toPromise();
   }
 
+  public async GetAllPostFilter(postId: number = 0, DepartmentID: number = 0, StreamID: string = '0', CampusFromDate: string = '', CampusToDate: string = '', FinancialYearID: number = 0, InstituteID: string = '0') {
+    debugger
+    const params = new HttpParams()
+      .set('CampusFromDate', CampusFromDate)
+      .set('CampusToDate', CampusToDate)
+      .set('StreamID', StreamID)
+      .set('InstituteID', InstituteID);
+
+    return await this.http.get(`${this.APIUrl}/GetAllPostFilter/${postId}/${DepartmentID}/${FinancialYearID}`, { params })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
   //Get all placement company
   public async GetAllPlacementCompany(searchRequest: CampusDetailsWebSearchModel) {

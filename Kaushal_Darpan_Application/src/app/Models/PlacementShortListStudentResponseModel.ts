@@ -56,6 +56,7 @@ export class PlacementShortListStudentResponseModel {
   public ModifyBy: number = 0
   public IPAddress: string = ''
   public PostNo: string = ''
+  public UploadedResume: string = ''
 }
 
 export class PlacementShortlistedStuSearch {

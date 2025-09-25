@@ -5,6 +5,7 @@ import { ApplyForHostelComponent } from './apply-for-hostel.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
     FormsModule,
     ReactiveFormsModule,
     LoaderModule,
-    TableSearchFilterModule
+    TableSearchFilterModule,
+    NgMultiSelectDropDownModule.forRoot()
   ]
 })
 export class ApplyForHostelModule { }

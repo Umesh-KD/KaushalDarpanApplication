@@ -18,14 +18,27 @@
             <form class="row g-3 align-items-end">
               <div class="col-md-3">
                 <label for="inputState" class="form-label">Branch</label>
-                <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
+                <ng-multiselect-dropdown #multiSelect1 [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect"
+                                   [data]="BranchMasterList"
+                                   [(ngModel)]="SelectedStreamID"
+                                   [disabled]="false"
+                                   name="SelectedStreamID"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+                </ng-multiselect-dropdown>
+                <!-- <select class="form-select mb-0" id="StreamStreamTypeId" dropdownPosition="bottom"
                         name="branch" [(ngModel)]="StreamID">
                   <option value="0">Choose Option</option>
                   <option *ngFor="let item of BranchMasterList"
                           [value]="item.StreamID">
                     ({{item.Code}}) {{item.Name}}
-                  </option>
-                </select>
+                  </option> 
+                </select>-->
               </div>
               <div class="col-md-3">
                 <label for="startDate" class="form-label">Start Date</label>
@@ -48,7 +61,7 @@
                 <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="FinancialYearID">
                   <option value=0>--All--</option>
                   <option value=8>2024-2025</option>
-                  <option value=9 selected>2025-2026</option>
+                  <option value=9>2025-2026</option>
                   <!--<option *ngFor="let item of FinancialYear" [value]="item.FinancialYearID">
                     {{item.YearName}}
                   </option>-->
@@ -57,12 +70,25 @@
 
               <div class="col-md-3">
                 <label class="form-label">College Name: </label>
-                <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
+                  <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                   [settings]="settingsMultiselect2"
+                                   [data]="CollegeList"
+                                   [(ngModel)]="SelectedInstituteId"
+                                   [disabled]="false"
+                                   name="SelectedInstituteId"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)">
+                  </ng-multiselect-dropdown>
+                <!-- <select class="form-select mb-0" id="ddlFinancialYearID" name="ddlFinancialYearID" placeholderName="Please Select" [(ngModel)]="InstituteID">
                   <option value=0>--All--</option>
                   <option *ngFor="let item of CollegeList" [value]="item.InstituteID">
                     {{item.InstituteName}}
                   </option>
-                </select>
+                </select> -->
               </div>
               <div class="col-md-3">
                 <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">

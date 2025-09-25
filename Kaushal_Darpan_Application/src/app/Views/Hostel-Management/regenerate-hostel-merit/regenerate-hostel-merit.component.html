@@ -41,7 +41,7 @@
             <option *ngFor="let item of BrachDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
         </div>
-        
+
         <!-- <div>
           <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label>
           <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllPrincipalstudentmeritlist()">
@@ -73,9 +73,6 @@
 
         <div class="flex-1">
           <!-- <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label> -->
-          <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Gender: <span class="StarMarking">*</span>
-          </label>
           <select class="form-select" id="ddlIdentityProof" [(ngModel)]="Searchrequest.Gender" (change)="GetAllPrincipalstudentmeritlist()">
             <option value="0" selected>--Select Gender--</option>
             <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
@@ -83,20 +80,15 @@
         </div>
       </div>
       <div class="">
-       
+
         <!-- <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="onGenerateMeritList()"
           *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon" >
            Generate Merit List({{ getSelectedItems().length }} selected)
         </a> -->
 
         <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="GenerateProvisionalMerit_Hostel()"
-           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && !showRegenerateMerit">
-          Generate Merit List ({{ getSelectedItems().length }} selected)
-        </a>
-
-        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="ReGenerateProvisionalMerit_Hostel()"
-           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && showRegenerateMerit">
-          Regenerate Merit List ({{ getSelectedItems().length }} selected)
+           *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
+          Generate Merit List({{ getSelectedItems().length }} selected)
         </a>
 
       </div>
@@ -107,7 +99,7 @@
       </div>
     </div>
     <div class="overflow-x-auto mt-3">
-     
+
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
@@ -140,8 +132,8 @@
             <td align="left">{{item.TotalAvgPercentage}}</td>
             <!-- <td *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> -->
-                <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
-                <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
+            <!--<a href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>-->
+            <!-- <a href="javascript:void(0)" (click)="onApplyForHostel(modal_ApplyForHostel, item)" title="Show Applicant Details"><i class="ti ti-pencil"></i></a>
               </div>
             </td> -->
           </tr>
@@ -162,7 +154,7 @@
         <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
       </div>
 
-      <div class="card-body"  *ngIf="StudentReqListList">
+      <div class="card-body" *ngIf="StudentReqListList">
         <div class="overflow-x-auto">
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -179,7 +171,7 @@
               <tr>
                 <td>Name of Student</td>
                 <!--<td>{{StudentReqListList[0]?.StudentName}}</td>-->
-              <td>{{ViewRequest.StudentName}}</td>
+                <td>{{ViewRequest.StudentName}}</td>
               </tr>
               <tr>
                 <td>Father's Name</td>
@@ -197,22 +189,22 @@
                 <td>Cast/Category</td>
                 <td> {{ViewRequest.CasteCategoryNameEnglish}}</td>
               </tr>
-                <!--<tr *ngIf="MarksDetailsList">
-                  <td>(A).Aggregate Marks in 10th & Percentage</td>
-                  <td>{{ViewRequest.Marks10}} - {{ViewRequest.AvgMarks10}}%</td>
-                </tr>
-                <tr *ngIf="MarksDetailsList">
-                  <td>(B).Aggregate Marks in 1st year & Percentage</td>
-                  <td>{{ViewRequest.MarksFirstYear}} - {{ViewRequest.AvgMarksFirstYear}}%</td>
-                </tr>
-                <tr *ngIf="MarksDetailsList">
-                  <td>(C).Aggregate Marks in 2nd year & Percentage</td>
-                  <td>{{ViewRequest.MarksSecondYear}} - {{ViewRequest.AvgMarksSecondYear}}%</td>
-                </tr>
-                <tr *ngIf="MarksDetailsList">
-                  <td>(D). Total (A)+(B)+(C) Aggregate & Percentage</td>
-                  <td>{{ViewRequest.TotalAvg}}%</td>
-                </tr>-->
+              <!--<tr *ngIf="MarksDetailsList">
+                <td>(A).Aggregate Marks in 10th & Percentage</td>
+                <td>{{ViewRequest.Marks10}} - {{ViewRequest.AvgMarks10}}%</td>
+              </tr>
+              <tr *ngIf="MarksDetailsList">
+                <td>(B).Aggregate Marks in 1st year & Percentage</td>
+                <td>{{ViewRequest.MarksFirstYear}} - {{ViewRequest.AvgMarksFirstYear}}%</td>
+              </tr>
+              <tr *ngIf="MarksDetailsList">
+                <td>(C).Aggregate Marks in 2nd year & Percentage</td>
+                <td>{{ViewRequest.MarksSecondYear}} - {{ViewRequest.AvgMarksSecondYear}}%</td>
+              </tr>
+              <tr *ngIf="MarksDetailsList">
+                <td>(D). Total (A)+(B)+(C) Aggregate & Percentage</td>
+                <td>{{ViewRequest.TotalAvg}}%</td>
+              </tr>-->
               <tr>
                 <td>Father's Contact/Mobile No.</td>
                 <td>{{ViewRequest.FatherContactNo}}</td>

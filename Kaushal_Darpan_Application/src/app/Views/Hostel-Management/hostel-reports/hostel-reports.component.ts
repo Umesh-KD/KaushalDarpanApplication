@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { DeallocateRoomDataModel, StudentRequestDataModal } from '../../../Models/Hostel-Management/StudentRequestDataModal';
 import * as XLSX from 'xlsx';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
@@ -42,6 +42,7 @@ export class HostelReportsComponent {
   public titleDDLBranchTrade: string = ''
   public status: number = 0
   public deallocateRequest = new DeallocateRoomDataModel();
+  _EnumRole = EnumRole;
 
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
@@ -160,6 +161,8 @@ export class HostelReportsComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
+    this.Searchrequest = new StudentRequestDataModal();
+    await this.GetReportData();
   }
 
   exportToExcel(): void {

@@ -244,7 +244,8 @@ export class BranchSectionCreateComponent {
         x.StreamID === formStreamID && x.SemesterID === formSemesterID
     );
     if (exists) {
-      this.toastr.warning("Branch Alredy Exists!");
+      //this.toastr.warning("Branch Alredy Exists!");
+      this.toastr.warning("Section for this branch is already created!");
       return
     }
 
@@ -472,7 +473,8 @@ export class BranchSectionCreateComponent {
     );
 
     if (exists) {
-      this.toastr.warning("Branch Alredy Exists!");
+      //this.toastr.warning("Branch Alredy Exists!");
+      this.toastr.warning("Section for this branch is already created!");
       return
     }
 	

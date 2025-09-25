@@ -54,7 +54,7 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
       this.loaderService.requestStarted();
       this.GenerateAdmitCardsearchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.GenerateAdmitCardsearchRequest.DepartmentID = 2
-      this.GenerateRollNosearchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
+      this.GenerateAdmitCardsearchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       await this.reportService.GetITIStudentAdmitCardBulk_CollegeWise(this.GenerateAdmitCardsearchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

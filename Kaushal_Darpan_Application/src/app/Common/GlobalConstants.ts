@@ -393,7 +393,8 @@ export enum EnumFeeFor {
 }
 export enum EnumStudentType {
   Reg = 1,
-  Ex = 2
+  Ex = 2,
+  NotFormFilled = 3
 }
 export enum EnumStudentExamType {
   Special = 77,
@@ -735,7 +736,8 @@ export enum HostelStatus {
   PublishFinalMerit = 11,
   SeatDeallocated = 12,
   
-  GenerateProvisionalMerit = 14
+  GenerateProvisionalMerit = 14,
+  ReGenerateProvisionalMerit = 15,
 }
 
 

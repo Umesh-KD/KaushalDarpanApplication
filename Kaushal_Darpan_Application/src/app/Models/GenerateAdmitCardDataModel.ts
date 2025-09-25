@@ -106,3 +106,10 @@ export class DownloadAppearedPassed {
   public Eng_NonEng: number = 0;
   public SemesterID: number = 0;
 }
+
+export class DownloadAppearedPassedInstitutewise {
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public SemesterID: number = 0;
+}
