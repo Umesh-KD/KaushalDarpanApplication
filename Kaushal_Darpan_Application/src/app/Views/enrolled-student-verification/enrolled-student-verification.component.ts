@@ -13,6 +13,7 @@ import { CommonFunctionService } from '../../Services/CommonFunction/common-func
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 import { EnrolledPromotedStudentVerifyService } from '../../Services/Enrolled-promoted-student-verify/enrolled-promoted-student-verify.service';
 import { EnrolledPromotedStudentModel, EnrolledPromotedStudentSaveModel } from '../../Models/EnrolledPromotedStudentDataModel';
+import { StudentExamDetailsViewModalComponent } from '../Student/student-exam-details-view-modal/student-exam-details-view-modal.component';
 
 
 @Component({
@@ -72,6 +73,7 @@ export class EnrolledStudentVerificationComponent {
 
   public _enumExamStudentStatus = enumExamStudentStatus;
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  @ViewChild('MyModel_ViewStudentExam') childComponentViewStudentExam!: StudentExamDetailsViewModalComponent;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -757,5 +759,12 @@ export class EnrolledStudentVerificationComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StudentsData.xlsx');
+  }
+
+  async openViewStudentExamDetailsPopup(StudentID: number, StudentExamID: number) {
+    //debugger
+    this.childComponentViewStudentExam.StudentID = StudentID;
+    this.childComponentViewStudentExam.StudentExamID = StudentExamID;
+    await this.childComponentViewStudentExam.OpenViewStudentExamDetailsPopup();
   }
 }

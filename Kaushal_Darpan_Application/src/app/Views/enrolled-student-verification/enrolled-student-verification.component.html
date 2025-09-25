@@ -20,8 +20,8 @@
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Application No</label>
-            <input class="form-input" type="text" id="ApplicationNo" [(ngModel)]="enrolledPromotedStudentRequest.ApplicationNo">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Enrollment No</label>
+            <input class="form-input" type="text" id="EnrollmentNo" [(ngModel)]="enrolledPromotedStudentRequest.EnrollmentNo">
           </div>
 
           <div>
@@ -103,6 +103,7 @@
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
             <th class="text-left">Sr.No.</th>
+            <th class="text-left">Action</th>
             <!--sorting column-->
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
@@ -112,9 +113,9 @@
               Father Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='FatherName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
-            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ApplicationNo')">
-              Application No.
-              <span class="shortingSpan" *ngIf="sortInTableColumn=='ApplicationNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EnrollmentNo')">
+              Enrollment No.
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EnrollmentNo'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('Dis_DOB')">
               DOB.
@@ -146,10 +147,15 @@
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
+              </div>
+            </td>
             <td>{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
-            <td align="left">{{row.ApplicationNo}}</td>
-            <td align="left">{{row.Dis_DOB | date:'dd-MM-yyyy'}}</td>
+            <td align="left">{{row.EnrollmentNo}}</td>
+            <td align="left">{{row.Dis_DOB}}</td>
             <td align="left">{{row.MobileNo}}</td>
             <td align="left">{{row.InstituteName}}</td>
             <td align="left">{{row.BranchName}}</td>
@@ -161,7 +167,7 @@
                     matTooltip="{{ row.st_his_Remark }}"
                     matTooltipPosition="above"
                     matTooltipClass="custom-tooltip">
-                {{ row.StudentExamStatus }} 
+                {{ row.StudentExamStatus }}
               </span>
 
               <span *ngIf="!(row.STATUS == _enumExamStudentStatus.ReturnbyRegistrar
@@ -192,3 +198,4 @@
 
 
 <app-otpmodal #otpModal></app-otpmodal>
+<app-student-exam-details-view-modal #MyModel_ViewStudentExam></app-student-exam-details-view-modal>

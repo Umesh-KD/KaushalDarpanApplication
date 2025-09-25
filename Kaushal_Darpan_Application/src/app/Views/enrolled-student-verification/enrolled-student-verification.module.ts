@@ -9,6 +9,7 @@ import { EnrolledStudentVerificationComponent } from './enrolled-student-verific
 import { OTPModalModule } from '../otpmodal/otpmodal.module';
 import { EnrolledStudentVerificationRoutingModule } from './enrolled-student-verification-routing.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { StudentExamDetailsViewModalModule } from '../Student/student-exam-details-view-modal/student-exam-details-view-modal.module';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TableSearchFilterModule,
     EnrolledStudentVerificationRoutingModule,
     OTPModalModule,
-    MatTooltipModule
+    MatTooltipModule,
+    StudentExamDetailsViewModalModule
   ]
 })
 export class EnrolledStudentVerificationModule { }

@@ -10,6 +10,7 @@ export class EnrolledPromotedStudentModel extends RequestBaseModel {
   StreamID: number = 0;
   SemesterID: number = 0;
   Selected: boolean = false;
+  EnrollmentNo: string = '';
 }
 export class EnrolledPromotedStudentSaveModel extends ResponseBaseModel {
   StudentId: number = 0;
