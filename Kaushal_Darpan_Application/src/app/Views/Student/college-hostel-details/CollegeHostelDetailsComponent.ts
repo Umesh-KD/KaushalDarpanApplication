@@ -156,9 +156,9 @@ export class CollegeHostelDetailsComponent {
           if (data && data['Data']) {
             this.CollegeHostelList = data['Data'].Table;
 
-            if (this.StudentDetailsList[0].AllotmentStatus == 12) {
-              this.CollegeHostelList = this.CollegeHostelList.filter((x: any) => x.HostelID !== this.StudentDetailsList[0].HostelID)
-            }
+            //if (this.StudentDetailsList[0].AllotmentStatus == 12) {
+            //  this.CollegeHostelList = this.CollegeHostelList.filter((x: any) => x.HostelID !== this.StudentDetailsList[0].HostelID)
+            //}
 
             this.CollegeHostelFacilityList = data['Data'].Table1;
             this.CollegeHostelFeeList = data['Data'].Table2;
