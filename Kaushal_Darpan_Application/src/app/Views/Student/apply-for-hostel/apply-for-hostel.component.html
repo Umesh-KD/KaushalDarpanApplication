@@ -11,7 +11,7 @@
 <!-- Page Title End -->
 <!--{{StudentDetailsList|json}}-->
 <div class="card">
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 ">
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 || StudentDetailsList[0]?.AllotmentStatus == 12">
 
     <div class="mb-8">
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
@@ -71,7 +71,7 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
       </div>
-      <form [formGroup]="groupForm" (ngSubmit)="saveData()" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 ">
+      <form [formGroup]="groupForm" (ngSubmit)="saveData()" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 || StudentDetailsList[0]?.AllotmentStatus === 12 ">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
