@@ -53,6 +53,7 @@ export class RoomAllotmentComponent {
   public RoomNoDDLList: any = [];
   public BrachDDLList: any = [];
   public RelationQueryDDL: any = [];
+  public StudentRoomPreferenceList: any = [];
   public CancelRequest: any;
   public Allotmentrequest = new RoomAllotmentDataModel();
   public request: any;
@@ -312,7 +313,7 @@ export class RoomAllotmentComponent {
 
 
   async onSubmit(model: any, userSubmitData: any) {
-    
+    await this.GetRoomPreference(userSubmitData.ReqId);
     try {
       this.request = { ...userSubmitData };
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
@@ -439,6 +440,7 @@ export class RoomAllotmentComponent {
   CloseModal() {
     this.modalService.dismissAll();
     this.modalReference?.close();
+    this.StudentRoomPreferenceList = [];
   }
 
   public file!: File;
@@ -754,5 +756,19 @@ export class RoomAllotmentComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'VerifiedStudentHostelAppliedReportData.xlsx');
+  }
+
+  async GetRoomPreference(ReqId: number) {
+    try {
+      let obj = {
+        ReqId: ReqId
+      }
+      await this.studentRequestService.GetRoomPreference(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StudentRoomPreferenceList = data.Data
+      })
+    } catch (error) {
+      console.error(error)
+    }
   }
 }

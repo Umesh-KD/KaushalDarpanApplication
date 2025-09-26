@@ -29,6 +29,7 @@ export class PrometedStudentMasterModel extends ResponseBaseModel {
   public StudentTypeId: number = 0;
   public StudentExamID: number = 0;
   public IsYearly: number = 0;
+  public EndTermName: string = '';
 }
 
 export class PromotedStudentMarkedModel extends RequestBaseModel {
@@ -61,6 +62,6 @@ export class PromotedStudentSearchModel extends RequestBaseModel {
   public SemesterID: string = '0';   // default value is empty string
   public StreamID: string = '0';     // default value is empty string
   public IsBridge: string = '';
-  public StudentTypeId: number = 1;
+  public StudentTypeId: number = 0;
 }
 

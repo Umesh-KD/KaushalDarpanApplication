@@ -268,8 +268,8 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0) {
-    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}`, this.headersOptions)
+  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0) {
+    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
