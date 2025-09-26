@@ -148,7 +148,8 @@ export class StudentAttendanceComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.GetSectionData = data.Data
         }, (error: any) => console.error(error)
-        );
+      );
+      console.log('Get Section all Data ==>', this.GetSectionData)
       //await this.commonMasterService.GetSubjectMaster(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.SubjectMasterDDL = data.Data;

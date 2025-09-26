@@ -14,6 +14,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { AttendanceServiceService } from '../../../../Services/AttendanceServices/attendance-service.service';
 import { StudentService } from '../../../../Services/Student/student.service';
 import { stream } from 'xlsx';
+import { EnumStatus } from '../../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-branch-section-create',
@@ -75,7 +76,7 @@ export class BranchSectionCreateComponent {
   ];
   displayedColumns2: string[] = [
     'SNo',
-    'ApplicationID',
+    // 'ApplicationID',
     'EnrollmentNo',
     'StudentName',
     'SectionName',
@@ -155,13 +156,13 @@ export class BranchSectionCreateComponent {
       StreamID: [0, Validators.required],
       SemesterID: [0, Validators.required],
     });
-    this.GetBranchHODApplyList();
-    this.getData();
-    this.loadDropdownData();
 
+    await this.loadDropdownData();
+    await this.GetBranchHODApplyList();
+    await this.getData();
   }
 
-  loadDropdownData(): void {
+  async loadDropdownData() {
     let obj = {
       InstituteID: this.sSOLoginDataModel.InstituteID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -579,8 +580,8 @@ export class BranchSectionCreateComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetBranchSectionData = data.Data
-
-        this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
+        debugger
+        this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)
         this.totalRecord = data['Data'].length;
         console.log(this.GetBranchSectionData)
         this.initTable(this.GetBranchSectionData);
@@ -813,6 +814,7 @@ export class BranchSectionCreateComponent {
 
   async AddStaffData(content: any, rowData?: any) {
     debugger
+    await this.GetAssignedTeacherForSubject_BySecctionID(rowData.SectionID)
     this.isSubmitted = true;
     this.AddStaffSubjectSectionModel.SubjectID = 0;
     this.AddStaffSubjectSectionModel.SemesterID=rowData?.SemesterID || 0;
@@ -823,6 +825,7 @@ export class BranchSectionCreateComponent {
         //this.AddStaffSubjectSectionModel.SemesterID;
         //this.AddStaffSubjectSectionModel.StreamID;
         // await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
+        //AddStaffSubjectSectionModelList
 
         this.SSOIDExists = true;
         this.AddStaffSubjectSectionModel.SemesterID = rowData.SemesterID;
@@ -1086,5 +1089,24 @@ export class BranchSectionCreateComponent {
   //  }
 
   //}
+
+  async GetAssignedTeacherForSubject_BySecctionID(SectionID: number) {
+    try {
+      this.AddStaffSubjectSectionModelList = []
+      let obj = {
+        SectionID: SectionID
+      }
+      await this.staffMasterService.GetAssignedTeacherForSubject_BySecctionID(obj).then(async (data: any)=> {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        debugger
+        if(data.length > 0) {
+          // this.toastr.success(data.Message)
+          this.AddStaffSubjectSectionModelList = data
+        } 
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
 }

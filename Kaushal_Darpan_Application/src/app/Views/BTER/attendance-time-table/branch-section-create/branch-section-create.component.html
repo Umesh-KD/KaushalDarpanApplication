@@ -281,10 +281,10 @@
             <th mat-header-cell *matHeaderCellDef>#</th>
             <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
           </ng-container>
-          <ng-container matColumnDef="ApplicationID">
+          <!-- <ng-container matColumnDef="ApplicationID">
             <th mat-header-cell *matHeaderCellDef> Application ID </th>
             <td mat-cell *matCellDef="let element"> {{element.ApplicationID}} </td>
-          </ng-container>
+          </ng-container> -->
           <ng-container matColumnDef="EnrollmentNo">
             <th mat-header-cell *matHeaderCellDef> Enrollment No </th>
             <td mat-cell *matCellDef="let element"> {{element.EnrollmentNo}} </td>
@@ -433,12 +433,12 @@
             <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
               <b class="text-1xl-5">Assigned List</b>
             </div>
-            <!--{{AddStaffSubjectSectionModelList|json}}-->
+            <!-- {{AddStaffSubjectSectionModelList|json}} -->
             <div class="overflow-x-auto mt-3">
               <table class="table table-border w-full table-auto" cellpadding="5">
                 <thead>
                   <tr>
-                    <th>ID</th>
+                    <!-- <th>ID</th> -->
                     <th>Stream</th>
                     <th>Semester</th>
                     <th>Subject</th>
@@ -449,7 +449,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let row of AddStaffSubjectSectionModelList; let i = index">
-                    <td>{{ row.ID }}</td>
+                    <!-- <td>{{ row.ID }}</td> -->
                     <td>{{ row.SemesterName }}</td>
                     <td>{{ row.StreamName }}</td>
                     <td>{{ row.SubjectName }}</td>

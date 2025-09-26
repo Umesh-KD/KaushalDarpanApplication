@@ -269,7 +269,11 @@ export class StaffMasterService {
     ).toPromise();
   }
 
- 
+  public async GetAssignedTeacherForSubject_BySecctionID(model: any) {
+    return await this.http.post(this.APIUrl + '/GetAssignedTeacherForSubject_BySecctionID', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
 
 }
 
