@@ -99,6 +99,8 @@ export class AddStaffInitialDetailsComponent {
           if (this.sSOLoginDataModel.RoleID == 50) {
             this.OfficeList = this.OfficeList.filter(x => x.ID == 18);
           }
+          this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
+
           console.log(this.OfficeList, "OfficeList")          
         }, error => console.error(error));
     }
