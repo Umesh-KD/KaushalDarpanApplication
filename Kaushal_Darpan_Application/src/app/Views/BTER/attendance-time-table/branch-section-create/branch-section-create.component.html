@@ -136,7 +136,7 @@
 
       </form>
     </ng-container>
-
+    <!--{{resBranchHOD|json}}-->
 
     <div class="table-container mt-5">
       <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light">
@@ -165,7 +165,7 @@
         <!-- Created Date Column -->
         <ng-container matColumnDef="LastCreated">
           <th mat-header-cell *matHeaderCellDef> Last Created </th>
-          <td mat-cell *matCellDef="let element"> {{element.LastCreated | date:'short'}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.LastCreated}} </td>
         </ng-container>
 
         <!-- Actions Column (optional) -->
@@ -173,8 +173,9 @@
           <th mat-header-cell *matHeaderCellDef> Actions </th>
           <td mat-cell *matCellDef="let element">
             <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,element)" title="View"><i
-                  class="ti ti-eye"></i> </a>
+              <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,element)" title="View">
+                <i class="ti ti-eye"></i>
+              </a>
 
 
               <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
