@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../Common/appsetting.service';
@@ -102,6 +102,7 @@ export class EnrolledStudentVerificationComponent {
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public enrolledPromotedStudentVerifyService: EnrolledPromotedStudentVerifyService,
+    private router: Router
   ) { }
 
   async ngOnInit() {
@@ -109,6 +110,7 @@ export class EnrolledStudentVerificationComponent {
     // get key by param
     this.ParamTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab") ?? 0);
     if (!this.ValidParamTab.includes(this.ParamTab)) {
+      this.router.navigate(['/**']);
       return;
     }
 
