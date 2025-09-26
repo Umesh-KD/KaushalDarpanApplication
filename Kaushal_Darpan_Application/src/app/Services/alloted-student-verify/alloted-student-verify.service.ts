@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { StudentApplicationModel, StudentApplicationSaveModel } from '../../Models/StudentApplicationDataModel';
+import { StudentMarkedModel } from '../../Models/StudentEnrollmentApprovalRejectModels';
 
 @Injectable({
   providedIn: 'root'
@@ -45,5 +46,19 @@ export class AllotedStudentVerifyService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetEnrolledStudentForVerification(request: StudentApplicationModel) {
+    return await this.http.post(this.APIUrl + "/GetEnrolledStudentForVerification", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
+  public async EnrolledStudentVerify_Save(RoleID: number = 0, request: StudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/EnrolledStudentVerify_Save/${RoleID}`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

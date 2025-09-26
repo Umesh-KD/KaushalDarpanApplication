@@ -121,6 +121,7 @@ export class HrMasterComponent implements OnInit {
 
   // delete by id
   async DeleteById(PlacementCompanyID: number) {
+
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed
@@ -128,7 +129,7 @@ export class HrMasterComponent implements OnInit {
           try {
             //Show Loading
             this.loaderService.requestStarted();
-
+            debugger
             await this.HrMasterService.DeleteById(PlacementCompanyID, this.sSOLoginDataModel.UserID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));

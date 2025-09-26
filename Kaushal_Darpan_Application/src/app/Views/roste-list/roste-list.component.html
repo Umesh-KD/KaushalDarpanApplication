@@ -130,8 +130,16 @@
                
                 <th>Group</th>
                 <th>Teacher / Class Total</th>
+                <!--<th>09:00-10:00</th>
+                <th>10:00-11:00</th>
+                <th>11:00-12:00</th>
+                <th>12:00-01:00</th>
+                <th>14:00-15:00</th>
+                <th>15:00-16:00</th>-->
                
                 <th *ngFor="let col of timeColumns">{{ col }}</th>
+
+
               </tr>
             </thead>
             <tbody>
@@ -151,7 +159,7 @@
         </div>
 
         <div class="text-center flex items-center justify-center" style="margin-top:50px">
-          <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+          <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
         </div>
       </div>
     </div>

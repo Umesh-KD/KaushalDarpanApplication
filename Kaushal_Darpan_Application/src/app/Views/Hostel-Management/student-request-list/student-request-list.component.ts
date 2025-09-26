@@ -43,6 +43,7 @@ export class StudentRequestListComponent {
   public SemesterDDLList: any = [];
   public BrachDDLList: any = [];
   public MarksDetailsList: any = [];
+  public StudentDetailsList: any = [];
   public Allotmentrequest = new RoomAllotmentDataModel();
   public titleDDLBranchTrade: string =''
   public status: number = 0
@@ -92,7 +93,7 @@ export class StudentRequestListComponent {
     await this.GetAllData();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
-    await this.GetMarksDetails();
+    //await this.GetMarksDetails();
     
   }
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
@@ -178,20 +179,45 @@ export class StudentRequestListComponent {
   }
   
 
-  async GetMarksDetails() {
+  async GetMarksDetails(StudentID: number) {
     try {
       let obj = {
-        StudentID: 7,
+        StudentID: StudentID,
         Action: "_MarksDetails",
         DepartmentID: this.sSOLoginDataModel.DepartmentID
       }
       await this._HostelManagmentService.GetStudentDetailsForApply(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.MarksDetailsList = data['Data'];
+          if (data.State == EnumStatus.Success) {
+            this.MarksDetailsList = data['Data'];
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async GetStudentDetails(StudentID: number) {
+    try {
+      let obj = {
+        StudentID: StudentID,
+        Action: "_StudentDetails",
+        DepartmentID: this.sSOLoginDataModel.DepartmentID
+      }
+      await this._HostelManagmentService.GetStudentDetailsForApply(obj)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.StudentDetailsList = data['Data'];
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -201,13 +227,17 @@ export class StudentRequestListComponent {
 
 
   async onView(model: any, studentData: any) {
+    debugger
     try {
-      this.ViewRequest = { ...studentData };
-      this.RequestFormGroup.patchValue({
-        StudentName: this.ViewRequest.StudentName,
-        ClassPercentage: this.ViewRequest.ClassPercentage,
-        StreamName: this.ViewRequest.StreamName
-      });
+      //this.ViewRequest = { ...studentData };
+      //this.RequestFormGroup.patchValue({
+      //  StudentName: this.ViewRequest.StudentName,
+      //  ClassPercentage: this.ViewRequest.ClassPercentage,
+      //  StreamName: this.ViewRequest.StreamName
+      //});
+
+      await this.GetStudentDetails(studentData.StudentId);
+      await this.GetMarksDetails(studentData.StudentId); 
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -737,6 +737,7 @@ const routes: Routes = [
       { path: 'RoomAvailabilties', loadChildren: () => import('./Views/Hostel-Management/room-availabilties/room-availabilties.module').then(m => m.RoomAvailabiltiesModule) },
       { path: 'RoomAllotment', loadChildren: () => import('./Views/Hostel-Management/room-allotment/room-allotment.module').then(m => m.RoomAllotmentModule) },
       { path: 'HostelReports', loadChildren: () => import('./Views/Hostel-Management/hostel-reports/hostel-reports.module').then(m => m.HostelReportsModule) },
+      { path: 'hostel-student-details', loadChildren: () => import('./Views/Hostel-Management/hostel-reports/hostel-reports.module').then(m => m.HostelReportsModule) },
       { path: 'HostelDashboard', loadChildren: () => import('./Views/Hostel-Management/hostel-dashboard/hostel-dashboard.module').then(m => m.HostelDashboardModule) },
       { path: 'direct-hostel-allotment', loadChildren: () => import('./Views/Hostel-Management/direct-hostel-allotment/direct-hostel-allotment.module').then(m => m.DirectHostelAllotmentModule), title: 'Direct Hostel Allotment' },
 
@@ -1383,7 +1384,7 @@ const routes: Routes = [
       { path: 'SetCalendar', loadChildren: () => import('./Views/BTER/attendance-time-table/SetCalendar/SetCalendar.module').then(m => m.SetCalendarModule), title: 'Set-Calendar' },
 
       { path: 'admitted-student-verify', loadChildren: () => import('./Views/alloted-student-verify/alloted-student-verify.module').then(m => m.AllotedStudentVerifyModule), title: 'BTER-admitted-student-verify Form' },
-
+      { path: 'enrolled-promoted-student-verification', loadChildren: () => import('./Views/enrolled-student-verification/enrolled-student-verification.module').then(m => m.EnrolledStudentVerificationModule), title: 'Student Verification' },
 
       { path: 'ExaminerBundleList', loadChildren: () => import('./Views/ITI/Examination/examiner-bundle-list/examiner-bundle-list.module').then(m => m.ExaminerBundleListModule) },
       { path: 'JailAdmissionApply', loadChildren: () => import('./Views/ITI/Examination/jail-admission-apply/jail-admission-apply.module').then(m => m.JailAdmissionApplyModule) },
@@ -1401,8 +1402,8 @@ const routes: Routes = [
         { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
         { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
-
-
+      
+      { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
 
     ]
   },

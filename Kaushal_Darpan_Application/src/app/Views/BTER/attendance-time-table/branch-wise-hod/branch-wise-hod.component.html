@@ -44,6 +44,10 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+
+
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester <span class="StarMarking">*</span></label>
           <ng-select [(ngModel)]="request.SemesterID" (change)="onSemesterChange($event)" formControlName="SemesterID" [clearable]="false">
@@ -56,14 +60,6 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Branch <span class="StarMarking">*</span></label>
-          <!--<ng-select formControlName="StreamID" [clearable]="false">
-    <ng-option [value]="0">--Select--</ng-option>
-    @for (item of StreamMasterDDL; track item.StreamID) {
-    <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
-    }
-  </ng-select>-->
-          <!--{{StreamMasterDDL|json}}  ---------hide list--------------------
-          {{BranchHideList|json}}-->
           <ng-select formControlName="StreamIDs"
                      [items]="StreamMasterDDL"
                      bindLabel="StreamName"
@@ -80,8 +76,12 @@
               {{ item.StreamName }}
             </ng-template>
           </ng-select>
-
         </div>
+
+
+
+
+
 
 
         <div>

@@ -57,8 +57,9 @@ export class CollegeHostelDetailsComponent {
 
 
   async ngOnInit() {
+    debugger
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    
     this.groupForm = this.fb.group({
       //ddlWaterCooler: ['',],
       //ddlRoWater: ['',],

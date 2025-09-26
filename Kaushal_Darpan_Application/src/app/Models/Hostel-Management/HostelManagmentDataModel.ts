@@ -57,7 +57,8 @@ export class StudentDataModel {
 
   public CurrentEndTermId: number = 0;
   public CourseTypeID: number = 0;
-
+ 
+  public SelectedRoomTypeID: SelectedRoomTyps[] = []; 
 }
 export class HostelStudentSearchModel {
   public StudentID: number = 0;
@@ -194,4 +195,7 @@ export class StatusChangeHostelModel {
   public ModifyBy: number = 0;
 }
 
-
+export class SelectedRoomTyps {
+  public ID: number = 0;
+  public Name: string = '';
+}
