@@ -148,12 +148,13 @@
 <ng-template #MyModel_EdiDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
-       <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
+      
             <div class="card">
               <div class="card-header flex justify-between items-center">
                 <b><i class="fa fa-plus"></i>&nbsp;Add-Edit CollegeWise Scholarship Section</b>
-                <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+                <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
               </div>
+            <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
               <div class="card-body">
                 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
                   <b class="text-1xl-5">Basic Details</b>
@@ -178,11 +179,14 @@
 
                   <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
-                    <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown">
+                    <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown" >
                       <ng-option [value]="0">--Select--</ng-option>
-                      <ng-option [value]="1">Scheme 1</ng-option>
+                     <ng-option *ngFor="let item of schemeTypes" [value]="item.id">
+                        {{ item.name }}
+                      </ng-option>
+                      <!-- <ng-option [value]="1">Scheme 1</ng-option>
                       <ng-option [value]="2">Scheme 2</ng-option>
-                      <ng-option [value]="2">Scheme 2</ng-option>
+                      <ng-option [value]="2">Scheme 2</ng-option> -->
                     </ng-select>
                     <div *ngIf="isSubmitted && formEditData.SchemeID.errors" class="text-danger">
                       <p *ngIf="formEditData.SchemeID.errors.required"><i></i> This field is required .!</p>
@@ -193,9 +197,9 @@
                       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type of Scholarship</label>
                       <ng-select formControlName="ScholarshipType" [clearable]="false">
                         <ng-option [value]="'0'">--Select--</ng-option>
-                        <ng-option [value]="'1'">Cash</ng-option>
-                        <ng-option [value]="'2'">Scooty</ng-option>
-                        <ng-option [value]="'3'">Laptop</ng-option>
+                       <ng-option *ngFor="let item of scholarshipTypes" [value]="item.id">
+                          {{ item.name }}
+                        </ng-option>
                       </ng-select>
                       <div *ngIf="isSubmitted && formEditData.ScholarshipType.errors" class="text-danger">
                         <p *ngIf="formEditData.ScholarshipType.errors.required"><i></i> This field is required .!</p>
@@ -203,7 +207,7 @@
                   </div>
 
                   <!-- Amount (only if ScholarshipType == Cash) -->
-                  <div *ngIf="EditDataFormGroup.get('ScholarshipType')?.value === '1'">
+                  <div *ngIf="EditDataFormGroup.get('ScholarshipType')?.value === 1">
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Amount</label>
                     <input type="text" formControlName="Amount" class="form-control" placeholder="Enter Amount" />
                     <div *ngIf="isSubmitted && formEditData.Amount?.errors" class="text-danger">
@@ -240,21 +244,21 @@
                     <table class="table table-border w-full table-auto" cellpadding="5">
                       <thead>
                         <tr>
-                          <th>Stream</th>
-                          <th>Semester</th>
-                          <th>Subject</th>
-                          <th>Staff</th>
-                          <th>Sections</th>
+                          <th>Scheme</th>
+                          <th>Scholarship Type</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <!-- <th>Sections</th> -->
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let row of AddStaffSubjectSectionModelList; let i = index">
-                          <td>{{ row.SemesterName }}</td>
-                          <td>{{ row.StreamName }}</td>
-                          <td>{{ row.SubjectName }}</td>
-                          <td>{{ row.SatffName }}</td>
-                          <td>{{ row.SectionsName }}</td>
+                        <tr *ngFor="let row of AddCollegeWiseScholarshipModelList; let i = index">
+                          <td>{{ row.SchemeName }}</td>
+                          <td>{{ row.ScholarShipTypeName }}</td>
+                          <td>{{ row.ScholarShipAmount }}</td>
+                          <td>{{ row.ScholarShipDate }}</td>
+                          <!-- <td>{{ row.SectionsName }}</td> -->
                           <td>
                             <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
                               Delete
@@ -271,15 +275,15 @@
                     <button type="button" id="btnSave" (click)="SaveData_EditDetails()" class="btn bg-info text-white">
                       <i class="ti ti-device-floppy"></i> Submit
                     </button>
-                    <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+                    <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
                   </div>
                   <!--{{ApprovedTeacherList|json}}-->
                 </div>
               </div>
-
+            </form>
               
             </div>
-          </form>
+       
 
   </div>
 </ng-template>

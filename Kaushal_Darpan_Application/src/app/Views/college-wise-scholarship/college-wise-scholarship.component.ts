@@ -9,7 +9,7 @@ import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompan
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
@@ -40,6 +40,21 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   isSubmitted:boolean =false;
   closeResult:string | undefined;
   EditDataFormGroup!: FormGroup;
+  AddCollegeWiseScholarshipModelList: AddCollegeWiseScholarshipModel[]=[];
+  AddCollegeWiseScholarshipModel =new AddCollegeWiseScholarshipModel();
+  scholarshipTypes = [
+  { id: 1, name: 'Cash' },
+  { id: 2, name: 'Scooty' },
+  { id: 3, name: 'Laptop' }
+];
+
+schemeTypes = [
+  { id: 1, name: 'Scheme 1' },
+  { id: 2, name: 'Scheme 2' },
+  { id: 3, name: 'Scheme 3' }
+];
+
+
 
   constructor(private commonMasterService: CommonFunctionService, private CollegeWiseScholarshipService: CollegeWiseScholarshipService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
@@ -107,6 +122,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
 
    async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
+    
     debugger
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
@@ -152,72 +168,77 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   }
 
 
-    // AddToList() {
-    //   debugger
-    //   this.isSubmitted = true;
-    //   if (this.EditDataFormGroup.invalid) return;
-    //   // if(this.availSectionData.length>0){
-    //   //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
-    //   //    if(existAssignedTeacherData){
-    //   //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
-    //   //     return;
-    //   //    }
-    //   // }
-    //   const formValue = this.EditDataFormGroup.value;
+    AddToList() {
+      debugger
+      this.isSubmitted = true;
+      if (this.EditDataFormGroup.invalid) return;
+      // if(this.availSectionData.length>0){
+      //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
+      //    if(existAssignedTeacherData){
+      //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
+      //     return;
+      //    }
+      // }
+      const formValue = this.EditDataFormGroup.value;
   
-    //   const newItem = new AddStaffSubjectSectionModel();
-    //   newItem.ID = this.AddStaffSubjectSectionModelList.length + 1;
-    //   newItem.StreamID = this.AddStaffSubjectSectionModel.StreamID;
-    //   newItem.SemesterID = this.AddStaffSubjectSectionModel.SemesterID;
-    //   newItem.SubjectID = this.AddStaffSubjectSectionModel.SubjectID;
-    //   newItem.StaffID = this.AddStaffSubjectSectionModel.StaffID;
+      const newItem = new AddCollegeWiseScholarshipModel();
+      newItem.ID = this.AddCollegeWiseScholarshipModelList.length + 1;
+      newItem.ScholarShipTypeID = this.EditDataFormGroup.get('ScholarshipType')?.value;
+      newItem.SchemeID = this.EditDataFormGroup.get('SchemeID')?.value;
+      newItem.ScholarShipAmount = this.EditDataFormGroup.get('Amount')?.value;
+      newItem.ScholarShipDate = this.EditDataFormGroup.get('ScholarshipDate')?.value;
+      newItem.CreatedBy = this.sSOLoginDataModel.UserID;
+      newItem.ModifyBy = this.sSOLoginDataModel.UserID;
+
+      const selectedScholarship = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
+      const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID)?.name ?? '';
+      // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
+      newItem.SchemeName=selectedScheme;
+      newItem.ScholarShipTypeName=selectedScholarship;
+      // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
   
-    //   // Save as CSV
-    //   newItem.SectionIDs = (formValue.SectionID || []).join(',');
-  
-  
-  
-    //   newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
-    //   newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
-    //   newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
-    //   newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
-    //   newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
-  
-  
-  
-    //   //newItem.SemesterName = "";
-    //   //newItem.StreamName = "";
-    //   //newItem.SubjectName = "";
-    //   //newItem.SatffName = "";
-    //   //newItem.SectionsName = "";
-    //   this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
-    //   this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-    //   this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
-    //   this.AddStaffSubjectSectionModelList.push(newItem);
-  
-    //   // remove used sections from dropdown
-    //   this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
-    //   this.refreshAvailableSections();
-    //   this.EditDataFormGroup.reset({
-    //     SectionID: [],
-    //     StreamID: this.oldStreamID,
-    //     SemesterID: this.oldSemesterID
-    //   });
-    //   this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
-    //   this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
-    //   this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
-  
-    //   // reset form
-    //   //this.EditDataFormGroup.reset({
-    //   //  SubjectID: 0,
-    //   //  UserID: 0,
-    //   //  SectionID: []
-    //   //});
-  
-    //   this.isSubmitted = false;
+      // Save as CSV
+      // newItem.SectionIDs = (formValue.SectionID || []).join(',');
   
   
-    // }
+  
+      // newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
+      // newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
+      // newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
+      // newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
+      // newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
+  
+  
+  
+      //newItem.SemesterName = "";
+      //newItem.StreamName = "";
+      //newItem.SubjectName = "";
+      //newItem.SatffName = "";
+      //newItem.SectionsName = "";
+      // this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
+      // this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+      // this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.AddCollegeWiseScholarshipModelList.push(newItem);
+  
+      // remove used sections from dropdown
+      // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
+      // this.refreshAvailableSections();
+      this.EditDataFormGroup.reset();
+      // this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
+      // this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
+      // this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
+  
+      // reset form
+      //this.EditDataFormGroup.reset({
+      //  SubjectID: 0,
+      //  UserID: 0,
+      //  SectionID: []
+      //});
+  
+      this.isSubmitted = false;
+  
+  
+    }
 
   async GetEligibleStudentListData(i:any) {
     debugger

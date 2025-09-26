@@ -14,29 +14,47 @@ export class CollegeWiseScholarshipSearchModel {
 }
 
 
-export class AddScholarshipSectionModel {
-  public ID: number = 0;
-  public StreamID: number = 0;
-  public SemesterID: number = 0;
-  public SubjectID: number = 0;
-  public SSOID: string = '';
-  public UserID: number = 0;
-  public StaffID: number = 0;
-  public SectionIDs: string = '';
-  public DisplayName: string = '';
-  public DepartmentID: number = 0;
-  public ActiveStatus: boolean = false;
-  public DeleteStatus: boolean = false;
-  public CreatedBy: number = 0;
-  public ModifyBy: number = 0;
-  public EndTermID: number = 0;
-  public RoleID: number = 0;
-  public InstituteID: number = 0;
+// export class AddCollegeWiseScholarshipModel1 {
+//   public ID: number = 0;
+//   public StreamID: number = 0;
+//   public SemesterID: number = 0;
+//   public SubjectID: number = 0;
+//   public SSOID: string = '';
+//   public UserID: number = 0;
+//   public StaffID: number = 0;
+//   public SectionIDs: string = '';
+//   public DisplayName: string = '';
+//   public DepartmentID: number = 0;
+//   public ActiveStatus: boolean = false;
+//   public DeleteStatus: boolean = false;
+//   public CreatedBy: number = 0;
+//   public ModifyBy: number = 0;
+//   public EndTermID: number = 0;
+//   public RoleID: number = 0;
+//   public InstituteID: number = 0;
 
-  public StreamName: string = "";
-  public SemesterName: string = "";
-  public SubjectName: string = "";
-  public SatffName: string = '';
-  public SectionsName: string = '';
+//   public StreamName: string = "";
+//   public SemesterName: string = "";
+//   public SubjectName: string = "";
+//   public SatffName: string = '';
+//   public SectionsName: string = '';
+ 
+// }
+
+
+export class AddCollegeWiseScholarshipModel{
+  public ID: number = 0;
+  public StudentID  :number=0;
+  public	SchemeID  :number=0;
+  public SchemeName:string='';
+  public	ScholarShipTypeID :number=0;
+  public ScholarShipTypeName:string='';
+  public ScholarShipAmount :number=0;
+  public	ScholarShipDate  :string='';
+  public	ScholarShipApprovalID  :string='';
+  public ActiveStatus  :boolean=false;
+  public DeleteStatus  :boolean=false;
+  public CreatedBy :number=0;
+  public ModifyBy :number=0;
  
 }
