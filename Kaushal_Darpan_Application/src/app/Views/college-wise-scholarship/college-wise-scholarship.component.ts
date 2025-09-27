@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
-import { CollegeWiseScholarshipService } from '../../Services/CollegeWiseScholarship/college-wise-scholarship.ts';
+import { CollegeWiseScholarshipService } from '../../Services/CollegeWiseScholarship/college-wise-scholarship.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
@@ -42,17 +42,19 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   EditDataFormGroup!: FormGroup;
   AddCollegeWiseScholarshipModelList: AddCollegeWiseScholarshipModel[]=[];
   AddCollegeWiseScholarshipModel =new AddCollegeWiseScholarshipModel();
-  scholarshipTypes = [
+  scholarshipTypes:any = [
   { id: 1, name: 'Cash' },
   { id: 2, name: 'Scooty' },
   { id: 3, name: 'Laptop' }
 ];
 
-schemeTypes = [
+schemeTypes:any = [
   { id: 1, name: 'Scheme 1' },
   { id: 2, name: 'Scheme 2' },
   { id: 3, name: 'Scheme 3' }
 ];
+
+SelectedStudent:any = {};
 
 
 
@@ -64,6 +66,8 @@ schemeTypes = [
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.schemeTypes = await this.getSchemeList();
+    this.scholarshipTypes = await this.getScholershiptype();
 
       // this.EditDataFormGroup = this.fb.group({
       //     ID: [''],
@@ -76,9 +80,9 @@ schemeTypes = [
       //     //  StreamID: [0, Validators.required]
       //   });
       this.EditDataFormGroup = this.fb.group({
-        SchemeID: [0, Validators.required],
-        ScholarshipType: ['0', Validators.required],
-        Amount: ['0'] , // will validate only if Cash is selected
+        SchemeID: ['', Validators.required],
+        ScholarshipType: ['', Validators.required],
+        Amount: [''] , // will validate only if Cash is selected
         ScholarshipDate: ['', Validators.required]   // 👈 new field
       });
 
@@ -122,6 +126,7 @@ schemeTypes = [
 
    async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
+    this.SelectedStudent = rowData;
     
     debugger
     // Open only once, store reference
@@ -130,6 +135,7 @@ schemeTypes = [
       ariaLabelledBy: 'modal-basic-title',
       backdrop: 'static'
     });
+    await this.fetchById();
 
     // Handle result or dismissal
     this.modalRef1.result.then(
@@ -179,19 +185,31 @@ schemeTypes = [
       //     return;
       //    }
       // }
+
+      const filtered = this.AddCollegeWiseScholarshipModelList.filter(s => 
+        s.ScholarShipTypeID == this.EditDataFormGroup.get('ScholarshipType')?.value &&
+        s.SchemeID == this.EditDataFormGroup.get('SchemeID')?.value &&
+        new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
+      );
+      if(filtered.length > 0){
+        alert('Already got scholership');
+        return;
+      }
+
       const formValue = this.EditDataFormGroup.value;
   
       const newItem = new AddCollegeWiseScholarshipModel();
-      newItem.ID = this.AddCollegeWiseScholarshipModelList.length + 1;
+      newItem.ID = 0;
       newItem.ScholarShipTypeID = this.EditDataFormGroup.get('ScholarshipType')?.value;
       newItem.SchemeID = this.EditDataFormGroup.get('SchemeID')?.value;
       newItem.ScholarShipAmount = this.EditDataFormGroup.get('Amount')?.value;
       newItem.ScholarShipDate = this.EditDataFormGroup.get('ScholarshipDate')?.value;
       newItem.CreatedBy = this.sSOLoginDataModel.UserID;
       newItem.ModifyBy = this.sSOLoginDataModel.UserID;
+      newItem.StudentID = this.SelectedStudent.StudentID;
 
-      const selectedScholarship = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
-      const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID)?.name ?? '';
+      const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
+      const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
       // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       newItem.SchemeName=selectedScheme;
       newItem.ScholarShipTypeName=selectedScholarship;
@@ -292,6 +310,40 @@ schemeTypes = [
     }
   }
 
+  async getSchemeList(){
+    this.loaderService.requestStarted();
+    try {
+      this.CollegeWiseScholarshipService.GetSchemeType().then((data:any)=>{
+        console.log('Scheme',data);
+      this.schemeTypes = data.Data;
+    })
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getScholershiptype(){
+    this.loaderService.requestStarted();
+    try {
+      this.CollegeWiseScholarshipService.GetScholershipType().then((data:any)=>{
+        console.log('Types ',data);
+      this.scholarshipTypes = data.Data;
+    })
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   // get all data
   async ClearSearchData() {
     this.searchRequest.Name = '';
@@ -376,10 +428,11 @@ schemeTypes = [
       this.modalRef1.dismiss();
       this.modalRef1 = null;
       this.isSubmitted = false;
+      this.SelectedStudent = {};
       this.EditDataFormGroup.patchValue({
-        SchemeID : 0,
-        Amount:0,
-        ScholarshipType:0,
+        SchemeID : '',
+        Amount:'',
+        ScholarshipType:'',
         ScholarshipDate:''
       });
       this.AddCollegeWiseScholarshipModelList = [];
@@ -406,6 +459,34 @@ schemeTypes = [
     DeleteFromList(index:any){
       this.AddCollegeWiseScholarshipModelList.splice(index, 1);
       console.log('test');
+    }
+
+    SaveData_EditDetails(){
+      console.log(this.AddCollegeWiseScholarshipModelList);
+      console.log(this.SelectedStudent);
+
+      this.CollegeWiseScholarshipService.SaveCollegeWiseScholarshipDetails(this.AddCollegeWiseScholarshipModelList).then((data:any)=>{
+        console.log(data);
+        this.CloseModal1();
+      })
+    }
+
+    async fetchById(){
+      try {
+        this.loaderService.requestStarted();
+        this.CollegeWiseScholarshipService.GetDetailsById(this.SelectedStudent.StudentID).then((data:any)=>{
+          this.AddCollegeWiseScholarshipModelList = data.Data;
+          
+        })
+      } catch (error) {
+        this.AddCollegeWiseScholarshipModelList = [];
+        console.log(error);
+      }
+      finally{
+        setTimeout(() => {
+          this.loaderService.requestEnded()
+        }, 200);
+      }
     }
 
 }

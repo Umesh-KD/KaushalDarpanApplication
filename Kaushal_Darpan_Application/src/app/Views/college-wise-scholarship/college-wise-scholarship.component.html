@@ -180,7 +180,7 @@
                   <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
                     <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown" >
-                      <ng-option [value]="0">--Select--</ng-option>
+                      <ng-option [value]="">--Select--</ng-option>
                      <ng-option *ngFor="let item of schemeTypes" [value]="item.id">
                         {{ item.name }}
                       </ng-option>
@@ -188,7 +188,7 @@
                       <ng-option [value]="2">Scheme 2</ng-option>
                       <ng-option [value]="2">Scheme 2</ng-option> -->
                     </ng-select>
-                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors" class="text-danger">
+                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors && formEditData.SchemeID.touched " class="text-danger">
                       <p *ngIf="formEditData.SchemeID.errors.required"><i></i> This field is required .!</p>
                     </div>
                   </div>
@@ -196,12 +196,12 @@
                   <div>
                       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type of Scholarship</label>
                       <ng-select formControlName="ScholarshipType" [clearable]="false">
-                        <ng-option [value]="'0'">--Select--</ng-option>
+                        <ng-option [value]="">--Select--</ng-option>
                        <ng-option *ngFor="let item of scholarshipTypes" [value]="item.id">
                           {{ item.name }}
                         </ng-option>
                       </ng-select>
-                      <div *ngIf="isSubmitted && formEditData.ScholarshipType.errors" class="text-danger">
+                      <div *ngIf="isSubmitted && formEditData.ScholarshipType.errors && formEditData.ScholarshipType.touched" class="text-danger">
                         <p *ngIf="formEditData.ScholarshipType.errors.required"><i></i> This field is required .!</p>
                       </div>
                   </div>
@@ -211,7 +211,7 @@
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Amount</label>
                     <br/>
                     <input type="text" formControlName="Amount" class="form-control" placeholder="Enter Amount" />
-                    <div *ngIf="isSubmitted && formEditData.Amount?.errors" class="text-danger">
+                    <div *ngIf="isSubmitted && formEditData.Amount?.errors && formEditData.Amount?.touched " class="text-danger">
                       <p *ngIf="formEditData.Amount.errors.required"><i></i> Amount is required .!</p>
                     </div>
                   </div>
@@ -227,7 +227,7 @@
                         placeholder="Select Date" 
                       />
                     </div>
-                    <div *ngIf="isSubmitted && formEditData.ScholarshipDate?.errors" class="text-danger">
+                    <div *ngIf="isSubmitted && formEditData.ScholarshipDate?.errors && formEditData.ScholarshipDate?.touched" class="text-danger">
                       <p *ngIf="formEditData.ScholarshipDate.errors.required"><i></i> Date is required .!</p>
                     </div>
                   </div>
@@ -275,7 +275,7 @@
                     </table>
                   </div>
                   <div class="text-center flex items-center justify-center mt-3">
-                    <button type="button" id="btnSave" (click)="SaveData_EditDetails()" class="btn bg-info text-white">
+                    <button type="button" id="btnSave" (click)="SaveData_EditDetails()" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" class="btn bg-info text-white">
                       <i class="ti ti-device-floppy"></i> Submit
                     </button>
                     <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
