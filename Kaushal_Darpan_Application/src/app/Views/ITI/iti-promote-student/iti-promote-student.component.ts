@@ -14,6 +14,7 @@ import * as XLSX from 'xlsx';
 import { PromotedStudentService } from '../../../Services/PromotedStudent/promoted-student.service';
 import { PrometedStudentMasterModel, PromotedStudentMarkedModel, PromotedStudentSearchModel } from '../../../Models/PrometedStudentMasterModel';
 import { MenuService } from '../../../Services/Menu/menu.service';
+import { SpecialEndTerm } from '../../../Common/GlobalConstants'
 
 @Component({
   selector: 'app-iti-promote-student',
@@ -26,6 +27,7 @@ export class ItiPromoteStudentComponent {
   public Message: any = [];
   public ErrorMessage: any = [];
   public isSubmitted: boolean = false;
+  public isspecialendterm: boolean = false;
 
   public sSOLoginDataModel = new SSOLoginDataModel();
 
@@ -36,11 +38,10 @@ export class ItiPromoteStudentComponent {
   public RoleID: number = 0
   public InstituteMasterList: any = [];
   public StreamMasterList: any = [];
-  public SemesterMasterList: any = [];
-  public StudentTypeMasterList: any = [];
+  public SemesterMasterList: any = [];public StudentTypeMasterList: any = [];
 
   public request = new PromotedStudentSearchModel();//search
-  public prometedStudentData: PrometedStudentMasterModel[] = [];//grid
+  public prometedStudentData: any[] = [];//grid
 
 
   //table feature default
@@ -82,6 +83,10 @@ export class ItiPromoteStudentComponent {
     await this.GetMasterData();
     await this.GetItiTrade()
     await this.GetDateConfig();
+    await this.checkspecialendterm()
+    if (this.isspecialendterm == true) {
+      this.request.StudentTypeId=2
+    }
   }
 
   async GetMasterData() {
@@ -132,6 +137,10 @@ export class ItiPromoteStudentComponent {
   async GetPromotedStudent() {
     try {
       //session
+      if (this.request.StudentTypeId == 0) {
+        this.toastr.warning("Please Select Student Type")
+        return
+      }
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
@@ -260,13 +269,11 @@ export class ItiPromoteStudentComponent {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.prometedStudentData.filter(x => x.StudentID == item.StudentID);
-    data.forEach(x => {
-      x.Selected = isSelected;
-    });
-    //select all(toggle)
+    // No need to set row.Selected manually, ngModel already does it
     this.AllInTableSelect = this.prometedStudentData.every(r => r.Selected);
   }
+  
+  
 
   exportToExcel(): void {
     const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Selected', 'status', 'StudentID',
@@ -300,11 +307,12 @@ export class ItiPromoteStudentComponent {
         try {
           this.isSubmitted = true;
           // Filter out only the selected students
+      
           const selectedStudents = this.prometedStudentData.filter(x => x.Selected);
           var request: PromotedStudentMarkedModel[] = [];
           selectedStudents.forEach(x => {
             request.push({
-              StudentId: x.StudentID,
+              StudentId: x.StudentId,
               Marked: x.Selected,
               ModifyBy: this.sSOLoginDataModel.UserID,
               RoleID: this.sSOLoginDataModel.RoleID,
@@ -321,15 +329,15 @@ export class ItiPromoteStudentComponent {
               IsDetain: x.Detain,
               IsUFM: x.UFM,
               MotherName: '',
-              SemesterId: x.SemesterID,
+              SemesterId: x.SemesterId,
               StreamId: x.StreamID,
               StreamName: x.BranchName,
               StudentName: x.StudentName,
               StudentType: x.StudentType,
               UFMCategory: x.UFMCategory,
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
-              InstituteId: 0,
-              SessionTypeID: 0,
+              InstituteId: x.InstituteID,
+              SessionTypeID: 2,
               StudentTypeId: x.StudentTypeId,
               StudentExamID: x.StudentExamID,
               IsYearly: x.IsYearly
@@ -361,6 +369,86 @@ export class ItiPromoteStudentComponent {
       }
     });
   }
+
+
+  async SavePromoteStudentReg() {
+    const isSelected = this.prometedStudentData.some(x => x.Selected);
+    if (!isSelected) {
+      this.toastr.error("Please select at least one Student!");
+      return;
+    }
+    // confirm
+    this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
+      //confirmed
+      if (result.isConfirmed) {
+        try {
+          this.isSubmitted = true;
+          // Filter out only the selected students
+
+          const selectedStudents = this.prometedStudentData.filter(x => x.Selected);
+          var request: PromotedStudentMarkedModel[] = [];
+          selectedStudents.forEach(x => {
+            request.push({
+              StudentId: x.StudentId,
+              Marked: x.Selected,
+              ModifyBy: this.sSOLoginDataModel.UserID,
+              RoleID: this.sSOLoginDataModel.RoleID,
+              EndTermID: this.sSOLoginDataModel.EndTermID,
+              DepartmentID: this.sSOLoginDataModel.DepartmentID,
+              DOB: x.Dis_DOB,
+              Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+              EnrollmentNo: x.EnrollmentNo,
+              FatherName: x.FatherName,
+              Gender: '',
+              InstituteNameEnglish: x.InstituteName,
+              IPAddress: '',
+              IsBridge: x.IsBridge,
+              IsDetain: x.Detain,
+              IsUFM: x.UFM,
+              MotherName: '',
+              SemesterId: x.SemesterId,
+              StreamId: x.StreamID,
+              StreamName: x.BranchName,
+              StudentName: x.StudentName,
+              StudentType: x.StudentType,
+              UFMCategory: x.UFMCategory,
+              FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
+              InstituteId: x.InstituteID,
+              SessionTypeID: 2,
+              StudentTypeId: x.StudentTypeId,
+              StudentExamID: x.StudentExamID,
+              IsYearly: x.IsYearly
+            })
+          });
+          // Call service to save student exam status
+          await this.promotedstudentservice.SaveITIPromotedStudentReg(request)
+            .then(async (data: any) => {
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+              //
+              if (this.State == EnumStatus.Success) {
+                this.toastr.success(this.Message)
+                await this.GetPromotedStudent();
+              }
+              else if (this.State == EnumStatus.Warning) {
+                this.toastr.warning(this.Message)
+              }
+              else {
+                this.toastr.error(this.Message)
+                console.log(this.ErrorMessage);
+              }
+            })
+        } catch (ex) {
+          this.toastr.error(GlobalConstants.MSG_ERROR_OCCURRED);
+          console.log(ex);
+        }
+      }
+    });
+  }
+
+
+
   async GetDateConfig() {
 
     var data = {
@@ -382,4 +470,14 @@ export class ItiPromoteStudentComponent {
       }, (error: any) => console.error(error)
       );
   }
+
+  checkspecialendterm() {
+    SpecialEndTerm.map((item: any) => {
+      if (item === this.sSOLoginDataModel.EndTermID) {
+        this.isspecialendterm = true
+      }
+    })
+  }
+
+
 }
