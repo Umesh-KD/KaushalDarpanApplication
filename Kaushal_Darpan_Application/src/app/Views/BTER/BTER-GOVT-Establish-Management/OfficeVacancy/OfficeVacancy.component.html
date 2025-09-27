@@ -104,8 +104,8 @@
 
   </div>
 </div>
-<!--{{OfficeVacancy|json}}
-{{OfficeVacancyList|json}}-->
+<!--{{OfficeVacancy|json}}-->
+<!--{{OfficeVacancyList|json}}-->
 <div class="card mt-3">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -121,6 +121,8 @@
             <th>Institute Name</th>
             <th>Designation Name</th>
             <th>Total Seat</th>
+            <th>Remaining Seat</th>
+            <th>Posted Seat</th>
             <th>Comments</th>
             <th>Actions</th>
           </tr>
@@ -133,9 +135,13 @@
             <td>{{ leave.InstituteName }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
+            <td>{{ leave.RemainingSeatID }}</td>
+            <td>{{ leave.PostedSeat }}</td>
             <td>{{ leave.Comments }}</td>
             <td>
-              <button class="btn btn-danger btn-sm" (click)="removeLeave(leave.Index, leave.ID)">Remove</button>
+              <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
+                Remove
+              </button>
             </td>
           </tr>
         </tbody>
