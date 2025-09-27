@@ -157,6 +157,26 @@ export class BranchSectionCreateComponent {
       SemesterID: [0, Validators.required],
     });
 
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StreamMasterDDL = data.Data;
+      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)
+      console.log('data ==>', this.StreamMasterDDL)
+    })
+    await this.commonMasterService.SemesterMaster().then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.SemesterMasterDDL = data.Data;
+    })
+    this.IsBranch = false;
+
+
+  await this.getData();
+    await this.loadDropdownData();
+    await this.GetBranchHODApplyList();
+
+    
+
     await this.loadDropdownData();
     await this.GetBranchHODApplyList();
     await this.getData();
@@ -185,7 +205,7 @@ export class BranchSectionCreateComponent {
   get _IIPMasterFormGroup() {
     return this.IIPMasterFormGroup.controls;
   }
-
+  
   async GetBranchHODApplyList() {
     try {
       this.requestBranchHOD.Action = "GETALL";
@@ -196,10 +216,12 @@ export class BranchSectionCreateComponent {
       await this.staffMasterService.AllBranchHOD(this.requestBranchHOD)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+          debugger
           this.resBranchHOD = data.Data
           // this.IIPMasterFormGroup.patchValue({
           //   StreamID: this.resBranchHOD[0].StreamID
           // });
+          this.dataSource = new MatTableDataSource(this.resBranchHOD);
           this.iSHOD = this.resBranchHOD.some((x: { SSOID: string; }) => x.SSOID === this.sSOLoginDataModel.SSOID);
         }, error => console.error(error));
     }
@@ -524,6 +546,7 @@ export class BranchSectionCreateComponent {
           this.isSubmitted = false;
           this.reset();
           this.getData();
+          this.GetBranchHODApplyList();
         }
 
         else {
