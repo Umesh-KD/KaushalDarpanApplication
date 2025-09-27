@@ -77,8 +77,8 @@ schemeTypes = [
       //   });
       this.EditDataFormGroup = this.fb.group({
         SchemeID: [0, Validators.required],
-        ScholarshipType: ['', Validators.required],
-        Amount: [''] , // will validate only if Cash is selected
+        ScholarshipType: ['0', Validators.required],
+        Amount: ['0'] , // will validate only if Cash is selected
         ScholarshipDate: ['', Validators.required]   // 👈 new field
       });
 
@@ -376,6 +376,13 @@ schemeTypes = [
       this.modalRef1.dismiss();
       this.modalRef1 = null;
       this.isSubmitted = false;
+      this.EditDataFormGroup.patchValue({
+        SchemeID : 0,
+        Amount:0,
+        ScholarshipType:0,
+        ScholarshipDate:''
+      });
+      this.AddCollegeWiseScholarshipModelList = [];
     }
   }
   
@@ -394,5 +401,10 @@ schemeTypes = [
   //   this.sortOrder = this.sortOrder == "" ? "ASC" : (this.sortOrder == "ASC" ? "DESC" : "ASC");
   //   // this.GetEligibleStudentListData(1);
   // }
+
+
+    DeleteFromList(index:any){
+      this.AddCollegeWiseScholarshipModelList.splice(index, 1);
+    }
 
 }

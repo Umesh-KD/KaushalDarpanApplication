@@ -209,6 +209,7 @@
                   <!-- Amount (only if ScholarshipType == Cash) -->
                   <div *ngIf="EditDataFormGroup.get('ScholarshipType')?.value === 1">
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Amount</label>
+                    <br/>
                     <input type="text" formControlName="Amount" class="form-control" placeholder="Enter Amount" />
                     <div *ngIf="isSubmitted && formEditData.Amount?.errors" class="text-danger">
                       <p *ngIf="formEditData.Amount.errors.required"><i></i> Amount is required .!</p>
@@ -217,13 +218,15 @@
 
                   <!-- Date Field -->
                   <div>
-                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date</label>
-                    <input 
-                      type="date" 
-                      formControlName="ScholarshipDate" 
-                      class="form-control" 
-                      placeholder="Select Date" 
-                    />
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date</label><br/>
+                    <div>
+                      <input 
+                        type="date" 
+                        formControlName="ScholarshipDate" 
+                        class="form-control" 
+                        placeholder="Select Date" 
+                      />
+                    </div>
                     <div *ngIf="isSubmitted && formEditData.ScholarshipDate?.errors" class="text-danger">
                       <p *ngIf="formEditData.ScholarshipDate.errors.required"><i></i> Date is required .!</p>
                     </div>
