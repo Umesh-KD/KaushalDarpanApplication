@@ -482,13 +482,13 @@
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
-                    <span>Yes</span>
+                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(true)" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <span>Work Arrangement</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
-                    <span>No</span>
+                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(false)" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <span>Regular</span>
                   </label>
                 </div>
 
@@ -499,17 +499,17 @@
                 </div>
               </div>
 
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on against post Y/N<span class="StarMarking">*</span></label>
+              <div *ngIf="approveRequest.IsExtraWorking === true">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on against post Y/N</label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" />
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(true)" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" />
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(false)" />
                     <span>No</span>
                   </label>
                 </div>
@@ -521,7 +521,7 @@
                 </div>
               </div>
 
-              <div>
+              <div *ngIf="approveRequest.IsExtraWorking == true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation from other Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
@@ -550,7 +550,7 @@
                 <select class="form-select " name="EmpInstituteID" id="EmpInstituteID" formControlName="EmpInstituteID"
                         [(ngModel)]="approveRequest.EmpInstituteID" (change)="getStreamMasterData()">
                   <option value="0">Choose Option</option>
-                  <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                  <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
                 </select>
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.EmpInstituteID.errors" class="text-danger">
@@ -561,8 +561,8 @@
                 </div>
               </div>
 
-              <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation to other Y/N<span class="StarMarking">*</span></label>
+              <div *ngIf="approveRequest.IsExtraWorking != true">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation to other Y/N</label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
@@ -585,7 +585,7 @@
                 </div>
               </div>
 
-              <div *ngIf="approveRequest.IsEmpWorkingOnDeputationToOther">
+              <div *ngIf=" approveRequest.IsExtraWorking != true && approveRequest.IsEmpWorkingOnDeputationToOther">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Institute in which employee is deputed</label>
                 <select class="form-select " name="EmpDeputatedInstituteID" id="EmpDeputatedInstituteID" formControlName="EmpDeputatedInstituteID"
                         [(ngModel)]="approveRequest.EmpDeputatedInstituteID" (change)="getStreamMasterData()">
@@ -601,19 +601,20 @@
                 </div>
               </div>
 
+
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Salary drawn from same post on which posted Y/N<span class="StarMarking">*</span></label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Salary drawn from same post on which posted Y/N</label>
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromSamePost" [value]="true" formControlName="IsSalaryDrawnFromSamePost"
-                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" />
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" (change)="onSalaryDrawnChange(true)" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
                     <input type="radio" name="IsSalaryDrawnFromSamePost" [value]="false" formControlName="IsSalaryDrawnFromSamePost"
-                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" />
+                           [(ngModel)]="approveRequest.IsSalaryDrawnFromSamePost" (change)="onSalaryDrawnChange(false)" />
                     <span>No</span>
                   </label>
                 </div>
@@ -624,8 +625,8 @@
                   </p>
                 </div>
               </div>
-
-              <div *ngIf="approveRequest.IsSalaryDrawnFromSamePost">
+              <!--*ngIf="approveRequest.IsExtraWorking === true"-->
+              <div *ngIf="approveRequest.IsSalaryDrawnFromSamePost=== false">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of post from which salary is drawn <span class="StarMarking">*</span> </label>
                 <select class="form-select " name="SalaryDrawnPostID" id="SalaryDrawnPostID" formControlName="SalaryDrawnPostID"
                         [(ngModel)]="approveRequest.SalaryDrawnPostID">
@@ -640,7 +641,7 @@
                 </div>
               </div>
 
-              <div>
+              <div *ngIf=" approveRequest.IsExtraWorking === true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Salary drawn from other Institute Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
@@ -669,7 +670,7 @@
                 <select class="form-select " name="SalaryDrawnInstituteID" id="SalaryDrawnInstituteID" formControlName="SalaryDrawnInstituteID"
                         [(ngModel)]="approveRequest.SalaryDrawnInstituteID">
                   <option value="0">Choose Option</option>
-                  <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                  <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
                 </select>
 
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SalaryDrawnInstituteID.errors" class="text-danger">
@@ -761,10 +762,10 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection</label>
                 <!-- <select class="form-select " name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory"
-                    [(ngModel)]="approveRequest.SelectionCategory">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-            </select> -->
+            [(ngModel)]="approveRequest.SelectionCategory">
+      <option value="0">Choose Option</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+    </select> -->
 
                 <input class="form-input" placeholder="Higher Education Institute" name="SelectionCategory" id="SelectionCategory"
                        formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" />

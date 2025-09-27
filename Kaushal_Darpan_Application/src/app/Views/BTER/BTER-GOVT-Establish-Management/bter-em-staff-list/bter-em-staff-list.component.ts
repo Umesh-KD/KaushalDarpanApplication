@@ -455,6 +455,17 @@ export class BTEREMStaffListComponent {
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+
+    this.approveRequest.IsExtraWorking = false;
+
+    if (this.approveRequest.IsExtraWorking == false) {
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+    }
+    else {
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+    }
   }
 
   ClosePopup(): void {
@@ -725,4 +736,32 @@ export class BTEREMStaffListComponent {
     }
   }
 
+  onSalaryDrawnChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsSalaryDrawnFromSamePost = value;
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsEmpWorkingOnPost = false;
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsEmpWorkingOnPost = true;
+    }
+  }
+
+  WorkAccordingonSalaryDrawnChange(value: boolean) {
+    debugger;
+    /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+    }
+  }
 }
