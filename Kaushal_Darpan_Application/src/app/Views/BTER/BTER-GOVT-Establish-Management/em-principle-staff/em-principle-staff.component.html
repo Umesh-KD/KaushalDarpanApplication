@@ -726,7 +726,7 @@
               </div>
               <!--*ngIf="approveRequest.IsExtraWorking === true"-->
               <div *ngIf="approveRequest.IsSalaryDrawnFromSamePost=== false">
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of post from which salary is drawn <span class="StarMarking">*</span> </label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of post from which salary is drawn </label>
                 <select class="form-select " name="SalaryDrawnPostID" id="SalaryDrawnPostID" formControlName="SalaryDrawnPostID"
                         [(ngModel)]="approveRequest.SalaryDrawnPostID">
                   <option value="0">Choose Option</option>
