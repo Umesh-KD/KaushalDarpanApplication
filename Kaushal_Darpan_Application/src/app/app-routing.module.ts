@@ -202,6 +202,8 @@ const routes: Routes = [
 
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
+      { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
+
 
 
       { path: 'addstaffmaster', loadChildren: () => import('./Views/staffMaster/add-staff-master/add-staff-master.module').then(m => m.AddStaffMasterModule), title: 'Add Staff' },

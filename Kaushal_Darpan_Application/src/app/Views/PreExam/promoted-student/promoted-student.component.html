@@ -14,25 +14,21 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <div>
-          <label>
-            <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.Reg" (change)="onChangeStudentType()" />
-            Reg.
-          </label>
-          <label>&nbsp;&nbsp;</label>
-          <label>
-            <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.Ex" (change)="onChangeStudentType()" />
-            Ex.
-          </label>
-          <label>&nbsp;&nbsp;</label>
-          <label>
-            <input type="radio" name="StudentType" [(ngModel)]="request.StudentTypeId" [value]="_EnumStudentType.NotFormFilled" (change)="onChangeStudentType()" />
-            Not Promoted
-          </label>
-        </div>
+
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Student Status </label>
+          <select class="form-select" id="StudentType" [(ngModel)]="request.StudentTypeId" (change)="onChangeStudentType()">
+            <option value="0">--Select--</option>
+            <option value="{{_EnumStudentType.Reg}}"> Reg. </option>
+            <option value="{{_EnumStudentType.Ex}}"> Ex. </option>
+            <option value="{{_EnumStudentType.NotFormFilled}}"> Exam. Form Not Filled </option>
+            <option value="{{_EnumStudentType.Detained}}"> Detained </option>
+          </select>
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
@@ -147,6 +143,10 @@
               Semester
               <span class="shortingSpan" *ngIf="sortInTableColumn=='SemesterName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('EndTermName')">
+              Session
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='EndTermName'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('IsBridge')">
               Bridge Course
               <span class="shortingSpan" *ngIf="sortInTableColumn=='IsBridge'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -194,9 +194,11 @@
             <td>{{row.Dis_DOB}}</td>
             <!--<td>{{row.RollNo}}</td>
             <td>{{row.MobileNo}}</td>-->
+
             <td>{{row.InstituteName}}</td>
             <td>{{row.BranchName}}</td>
             <td>{{row.SemesterName}}</td>
+            <td>{{row.EndTermName}}</td>
             <td>{{row.IsBridge==true?'Yes':'No'}}</td>
 
             <td>{{row.EarnedCreditsSem1}}</td>

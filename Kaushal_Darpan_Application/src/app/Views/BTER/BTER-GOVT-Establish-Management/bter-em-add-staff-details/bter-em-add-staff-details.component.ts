@@ -97,7 +97,8 @@ export class BterEMAddStaffDetailsComponent {
 
       DateOfRetirement: [{ value: '', disabled: true }],
       Remark: [''],
-      IsNodal: [false],
+      IsNodal: [{ value: false, disabled: true }],
+      
     });
 
     this.AddsubjectFormGroup = this.formBuilder.group({
@@ -114,6 +115,8 @@ export class BterEMAddStaffDetailsComponent {
       // ITIExamType: ['', [DropdownValidators]],
       // ITIStreamType: ['', [DropdownValidators]],
     })
+
+    
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -313,7 +316,20 @@ export class BterEMAddStaffDetailsComponent {
           this.request = data.Data[0];
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
           console.log("GetPersonalDetailByUserID", this.request);
-          
+          debugger
+          //if (this.request.DepartmentJoiningDate != '' || this.request.DepartmentJoiningDate != null) {
+          //  const isoDate = this.request.DepartmentJoiningDate;
+          //  const dateObj = new Date(isoDate);
+
+          //  const day = String(dateObj.getDate()).padStart(2, '0');
+          //  const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // months are zero-indexed
+          //  const year = dateObj.getFullYear();
+
+          //  const formattedDate = `${day}-${month}-${year}`;
+          //  this.request.DepartmentJoiningDate = formattedDate;
+          //}
+         
+
           //this.StaffMasterFormGroup.get('InstituteID')?.setValue(this.request.InstituteID);
         }
 
@@ -369,8 +385,14 @@ export class BterEMAddStaffDetailsComponent {
           if (this.sSOLoginDataModel.RoleID == 194) {
             this.OfficeList = this.OfficeList.filter(x => x.ID == 19);
           }
-          if (this.sSOLoginDataModel.RoleID == 50) {
+          if (this.sSOLoginDataModel.RoleID == this._EnumRole.JDConfidential_Eng) {
             this.OfficeList = this.OfficeList.filter(x => x.ID == 18);
+          }
+          //if (this.sSOLoginDataModel.RoleID == this._EnumRole.Principal) {
+          //  this.OfficeList = this.OfficeList.filter(x => x.ID == 21);
+          //} else
+          {
+            this.OfficeList = this.OfficeList;
           }
           console.log(this.OfficeList, "OfficeList")
         }, error => console.error(error));

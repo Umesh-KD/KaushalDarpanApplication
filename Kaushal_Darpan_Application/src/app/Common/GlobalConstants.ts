@@ -396,7 +396,8 @@ export enum EnumFeeFor {
 export enum EnumStudentType {
   Reg = 1,
   Ex = 2,
-  NotFormFilled = 3
+  NotFormFilled = 3, //  custom
+  Detained = 4 //  custom
 }
 export enum EnumStudentExamType {
   Special = 77,

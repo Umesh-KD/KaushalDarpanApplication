@@ -225,7 +225,8 @@ export class BTEREMStaffListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.filteredStatusList = data['Data'];
-          this.filteredStatusList = this.filteredStatusList.filter((item: any) => item.ID != this._EnumEMProfileStatus.Pending && item.ID != this._EnumEMProfileStatus.Completed && item.ID != this._EnumEMProfileStatus.LockAndSubmit)
+          //this.filteredStatusList = this.filteredStatusList.filter((item: any) => item.ID != this._EnumEMProfileStatus.Pending && item.ID != this._EnumEMProfileStatus.Completed && item.ID != this._EnumEMProfileStatus.LockAndSubmit)
+          this.filteredStatusList = this.filteredStatusList.filter((item: any) => item.ID == 249)
           console.log(this.filteredStatusList, "GetStatusList")
         }, error => console.error(error));
     }
@@ -454,6 +455,17 @@ export class BTEREMStaffListComponent {
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+
+    this.approveRequest.IsExtraWorking = false;
+
+    if (this.approveRequest.IsExtraWorking == false) {
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+    }
+    else {
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+    }
   }
 
   ClosePopup(): void {
@@ -580,11 +592,22 @@ export class BTEREMStaffListComponent {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      //await this.commonMasterService.GetDesignationMaster().then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.DesignationMasterDDLList = data.Data;
+      //  // console.log("DesignationMasterList", this.DesignationMasterDDLList);
+      //}, error => console.error(error))
+
+      await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
+        this.DesignationMasterDDLList = this.DesignationMasterDDLList;
+       
         // console.log("DesignationMasterList", this.DesignationMasterDDLList);
       }, error => console.error(error))
+
+
+
 
       await this.commonMasterService.GetCommonMasterDDLByType('Gender')
         .then((data: any) => {
@@ -644,5 +667,101 @@ export class BTEREMStaffListComponent {
         }
       });
 
+  }
+
+
+  async RevertStaffProfile(model: any, userSubmitData: any) {
+    debugger
+
+    try {
+      await this.GetStatusList()
+      this.RequestUpdateStatus.StatusIDs = 249;
+
+      this.RequestUpdateStatus = { ...userSubmitData };
+      this.RequestUpdateStatus.StatusIDs = 0;
+      this.RequestUpdateStatus.Remark = '';
+      console.log(this.RequestUpdateStatus, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+  async RevertupdateReqStatus() {
+
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.RequestUpdateStatus.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.RequestUpdateStatus.StatusIDs = 249;
+      this.unlockRequest.StaffUserID = 0;
+      this.unlockRequest.SSOID = "";
+      this.unlockRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.unlockRequest.StaffID = this.RequestUpdateStatus.StaffID;
+      this.unlockRequest.Remark = this.RequestUpdateStatus.Remark;
+      this.loaderService.requestStarted();
+      this.Swal2.Confirmation("Are you sure you want Revert ?",
+        async (result: any) => {
+          if (result.isConfirmed) {
+            try {
+              await this.bterEstablishManagementService.Bter_RevertStaffProfile(this.unlockRequest).then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State == EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  window.location.reload();
+                }
+              })
+            } catch (error) {
+              console.log(error);
+            } finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200)
+            }
+          }
+        });
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  onSalaryDrawnChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsSalaryDrawnFromSamePost = value;
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsEmpWorkingOnPost = false;
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsEmpWorkingOnPost = true;
+    }
+  }
+
+  WorkAccordingonSalaryDrawnChange(value: boolean) {
+    debugger;
+    /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+    }
   }
 }

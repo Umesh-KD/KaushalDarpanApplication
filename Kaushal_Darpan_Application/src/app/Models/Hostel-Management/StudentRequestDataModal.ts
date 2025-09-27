@@ -69,4 +69,5 @@ export class GetMeritDataModel_Hostel extends RequestBaseModel
     public Gender?: number = 0
     public HostelID?: number = 0
     public InstituteID?: number = 0
+    public ReqId?: number = 0
 }
