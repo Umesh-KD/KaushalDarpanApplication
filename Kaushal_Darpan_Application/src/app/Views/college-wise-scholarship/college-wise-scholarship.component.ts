@@ -405,6 +405,7 @@ schemeTypes = [
 
     DeleteFromList(index:any){
       this.AddCollegeWiseScholarshipModelList.splice(index, 1);
+      console.log('test');
     }
 
 }
