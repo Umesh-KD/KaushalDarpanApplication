@@ -131,6 +131,25 @@
         </div>
 
         <div>
+          <label for="VoucherNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Voucher Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
+                 [(ngModel)]="request.VoucherNumber" maxlength="6" (keypress)="validateNumber($event)">
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
+            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required .!
+            </p>
+            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.pattern">
+              <i aria-hidden="true"></i>
+              Voucher Number must be at least 4 digits and positive only!
+            </p>
+          </div>
+        </div>
+
+        <div>
           <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Quantity: <span class="StarMarking">*</span>
           </label>
@@ -194,7 +213,7 @@
             </p>
           </div>
         </div>
-       
+
         <div class="mt-3">
           <label class="block">IsConsumable </label>
           <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">

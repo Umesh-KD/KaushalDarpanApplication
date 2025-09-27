@@ -66,4 +66,19 @@ export class PromotedStudentService {
       ).toPromise();
   }
 
+  public async SaveFormNotFilledPromotedStudent(request: PromotedStudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveFormNotFilledPromotedStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveDetainedPromotedStudent(request: PromotedStudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveDetainedPromotedStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

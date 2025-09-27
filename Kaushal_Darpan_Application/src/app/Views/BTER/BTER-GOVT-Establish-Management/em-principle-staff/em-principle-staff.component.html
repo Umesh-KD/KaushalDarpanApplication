@@ -579,12 +579,12 @@
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(true)" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
                     <span>Work Arrangement</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(false)" [value]="false" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
                     <span>Regular</span>
                   </label>
                 </div>
@@ -596,21 +596,7 @@
                 </div>
               </div>
 
-              <!--<div *ngIf="approveRequest.IsExtraWorking === true">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-2">
-      Employee Working <span class="StarMarking">*</span>
-    </label>
-
-    <label class="flex items-center space-x-2">
-      <input type="radio" name="IsEmployeeWorking" [value]="true" formControlName="IsEmployeeWorking" [(ngModel)]="approveRequest.IsEmployeeWorking" />
-      <span>Yes</span>
-    </label>
-
-    <label class="flex items-center space-x-2">
-      <input type="radio" name="IsEmployeeWorking" [value]="false" formControlName="IsEmployeeWorking" [(ngModel)]="approveRequest.IsEmployeeWorking" />
-      <span>No</span>
-    </label>
-  </div>-->
+              
 
 
               <div *ngIf="approveRequest.IsExtraWorking === true">
@@ -635,7 +621,7 @@
                 </div>
               </div>
 
-              <div>
+              <div *ngIf="approveRequest.IsExtraWorking == true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation from other Y/N<span class="StarMarking">*</span></label>
 
                 <div class="flex gap-4">
@@ -675,7 +661,7 @@
                 </div>
               </div>
 
-              <div *ngIf="approveRequest.IsExtraWorking === true">
+              <div *ngIf="approveRequest.IsExtraWorking != true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on deputation to other Y/N</label>
 
                 <div class="flex gap-4">
@@ -699,7 +685,7 @@
                 </div>
               </div>
 
-              <div *ngIf=" approveRequest.IsExtraWorking === true && approveRequest.IsEmpWorkingOnDeputationToOther">
+              <div *ngIf=" approveRequest.IsExtraWorking != true && approveRequest.IsEmpWorkingOnDeputationToOther">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Institute in which employee is deputed</label>
                 <select class="form-select " name="EmpDeputatedInstituteID" id="EmpDeputatedInstituteID" formControlName="EmpDeputatedInstituteID"
                         [(ngModel)]="approveRequest.EmpDeputatedInstituteID" (change)="getStreamMasterData()">

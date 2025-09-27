@@ -107,6 +107,17 @@ export class PromotedStudentComponent {
 
   async GetPromotedStudent() {
     try {
+      // validation
+      if (this.request.StudentTypeId <= 0) {
+        this.toastr.error("Please select 'Student Status'!.");
+        return;
+      }
+      // validation
+      if (parseInt(this.request.SemesterID || "0") <= 0) {
+        this.toastr.error("Please select 'Semester'!.");
+        return;
+      }
+
       //session
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -136,10 +147,6 @@ export class PromotedStudentComponent {
 
   async btn_SearchClick() {
     try {
-      if (parseInt(this.request.SemesterID || "0") <= 0) {
-        this.toastr.error("Please select Semester/Year!.");
-        return;
-      }
       await this.GetPromotedStudent();
     }
     catch (Ex) {
@@ -268,6 +275,7 @@ export class PromotedStudentComponent {
   }
 
   async SavePromoteStudent() {
+    // validation
     const isSelected = this.prometedStudentData.some(x => x.Selected);
     if (!isSelected) {
       this.toastr.error("Please select at least one Student!");
@@ -336,13 +344,49 @@ export class PromotedStudentComponent {
                   console.log(this.ErrorMessage);
                 }
               })
-          }
-          else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) {
-            // need tom implement
-          }
-          else if (this.request.StudentTypeId == this._EnumStudentType.Ex) { // ex
+          } else if (this.request.StudentTypeId == this._EnumStudentType.Ex) { // ex
             // Call service to save student exam status
             await this.promotedstudentservice.SaveExPromotedStudent(request)
+              .then(async (data: any) => {
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+                //
+                if (this.State == EnumStatus.Success) {
+                  this.toastr.success(this.Message)
+                  await this.GetPromotedStudent();
+                }
+                else if (this.State == EnumStatus.Warning) {
+                  this.toastr.warning(this.Message)
+                }
+                else {
+                  this.toastr.error(this.Message)
+                  console.log(this.ErrorMessage);
+                }
+              })
+          } else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) { // Form not Filled
+            // Call service to save student exam status
+            await this.promotedstudentservice.SaveFormNotFilledPromotedStudent(request)
+              .then(async (data: any) => {
+                this.State = data['State'];
+                this.Message = data['Message'];
+                this.ErrorMessage = data['ErrorMessage'];
+                //
+                if (this.State == EnumStatus.Success) {
+                  this.toastr.success(this.Message)
+                  await this.GetPromotedStudent();
+                }
+                else if (this.State == EnumStatus.Warning) {
+                  this.toastr.warning(this.Message)
+                }
+                else {
+                  this.toastr.error(this.Message)
+                  console.log(this.ErrorMessage);
+                }
+              })
+          } else if (this.request.StudentTypeId == this._EnumStudentType.Detained) { // Detained
+            // Call service to save student exam status
+            await this.promotedstudentservice.SaveDetainedPromotedStudent(request)
               .then(async (data: any) => {
                 this.State = data['State'];
                 this.Message = data['Message'];
@@ -418,20 +462,24 @@ export class PromotedStudentComponent {
       let IsWithNotYearly = 1;
       let IsPromote = 0;
       let IsForEx = this.request.StudentTypeId == this._EnumStudentType.Reg ? 0 : 1;
+      let IsWithNot6thSem = 0;
+      this.SemesterMasterList = [];// reset
       if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
         IsPromote = 1;
+        IsWithNot6thSem = 1;
       }
       else if (this.request.StudentTypeId == this._EnumStudentType.Ex) {
         IsPromote = 0;
       }
-      else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) {
+      else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled ||
+        this.request.StudentTypeId == this._EnumStudentType.Detained) {
         IsPromote = 0;
+        IsWithNot6thSem = 1;
       }
       else {
         return;
       }
-      this.SemesterMasterList = [];
-      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx)
+      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx, IsWithNot6thSem)
         .then((data: any) => {
           this.SemesterMasterList = data['Data'];
         }, (error: any) => console.error(error));

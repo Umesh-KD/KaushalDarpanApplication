@@ -94,6 +94,8 @@ export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
   public EMTypeID: number = 0;
   public guestRoomID: number = 0;
   public PostID: number = 0;
+  public OfficeID: number = 0;
+
 }
 
 export class BTER_EM_StaffHostelListModel {
