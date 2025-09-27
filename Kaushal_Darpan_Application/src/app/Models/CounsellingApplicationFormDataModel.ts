@@ -53,12 +53,14 @@ export class CounsellingApplicationSearchModel {
 }
 
 export class Counselling_OptionFormDataModel extends RequestBaseModel{
+    public OptionID?: number = 0;
     public Priority?: number = 0;
     public CandidateID?: number = 0;
     public TradeId?: number = 0;
     public InstituteID?: number = 0;
     public CourseType?: number = 0;
     public ModifyBy?: number = 0;
+    public Type?: string = '';
 }
 
 export class Counselling_DropdownDataModel extends RequestBaseModel {

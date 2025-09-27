@@ -25,3 +25,29 @@ export class DocumentDetailsModel {
   public OldFileName?: string = '';
   public Status?: number = 0
 }
+
+export class Counselling_DocumentDetailsModel {
+    public CandidateDocumentID?: number = 0;
+    public DocumentMasterID?: number = 0;
+    public CandidateID?: number = 0;
+    public TableName?: string = '';
+    public ColumnName?: string = '';
+    public DisplayColumnNameEn?: string = '';
+    public DisplayColumnNameHi?: string = '';
+    public FolderName?: string = '';
+    public FileName?: string = '';
+    public Dis_FileName?: string = '';
+    public ModifyBy?: number = 0;
+    public IPAddress?: string = '';
+    public IsMandatory?: boolean = false;
+    public GroupNo?: number = 0;
+    public SortOrder?: number = 0;
+    public MaxFileSize?: string = '';
+    public MinFileSize?: string = '';
+    public FileExtention?: string = '';
+    public Remark?: string = '';
+    public OldFileName?: string = '';
+    public Status?: number = 0;
+    public AcademicYearID?: number = 0;
+}
+

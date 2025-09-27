@@ -66,4 +66,26 @@ export class CounsellingApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async DeleteOptionByID_Counselling(request: Counselling_OptionFormDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteOptionByID_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async PriorityChange_Counselling(request: Counselling_OptionFormDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/PriorityChange_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetDocumentDatabyID_Counselling(request: CounsellingApplicationSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetDocumentDatabyID_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

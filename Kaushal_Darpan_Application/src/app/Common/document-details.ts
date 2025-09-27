@@ -1,9 +1,9 @@
 import { Injectable, signal } from "@angular/core";
-import { UploadBTERFileModel, UploadFileModel } from "../Models/UploadFileModel";
+import { UploadBTERFileModel, UploadCounsellingFileModel, UploadFileModel } from "../Models/UploadFileModel";
 import { CommonFunctionService } from "../Services/CommonFunction/common-function.service";
 import { ToastrService } from "ngx-toastr";
 import { AppsettingService } from "./appsetting.service";
-import { DeleteDocumentDetailsModel } from "../Models/DeleteDocumentDetailsModel";
+import { DeleteDocumentDetailsModel, DeleteDocumentDetailsModel_Counselling } from "../Models/DeleteDocumentDetailsModel";
 import { EnumStatus } from "./GlobalConstants";
 
 
@@ -316,5 +316,83 @@ export class DocumentDetailsService {
     return false;
   }
   //end document
+
+  async Counselling_UploadDocument(event: any, uploadModel: UploadCounsellingFileModel) {
+    try {
+      debugger
+      const file: File = event.target.files[0];
+      if (file) {
+        let fileValue = event.target.value;
+        // extention
+        if (uploadModel?.FileExtention != null && uploadModel?.FileExtention != "") {
+          var _validFileExtensions = uploadModel?.FileExtention?.toLowerCase()?.split(',');
+          if (_validFileExtensions?.indexOf("." + fileValue.split('.').pop().toLowerCase()) == -1) {
+            //reset file type
+            fileValue = null;
+            this.toastr.warning(`Invalid extension, allowed only ${uploadModel?.FileExtention}`);
+            return;
+          }
+        }
+
+        // min size
+        if (parseInt(uploadModel?.MinFileSize ?? "0") > 0) {
+          let acceptMinFileSize = parseInt(uploadModel?.MinFileSize ?? "0");
+          let fileSize = 0;
+          if ((uploadModel?.MinFileSize ?? "0").toLowerCase().indexOf("mb") != -1) {
+            fileSize = Math.round(file.size / 1024 / 1024);
+          }
+          else if ((uploadModel?.MinFileSize ?? "0").toLowerCase().indexOf("kb") != -1) {
+            fileSize = Math.round(file.size / 1024);
+          }
+          if (fileSize < acceptMinFileSize) {
+            //reset file type
+            fileValue = null;
+            this.toastr.warning(`Invalid file size, Min allowed only ${uploadModel?.MinFileSize}`);
+            return;
+          }
+        }
+
+        // ṃax size
+        if (parseInt(uploadModel?.MaxFileSize ?? "0") > 0) {
+          let acceptMaxFileSize = parseInt(uploadModel?.MaxFileSize ?? "0");
+          let fileSize = 0;
+          if ((uploadModel?.MaxFileSize ?? "0").toLowerCase().indexOf("mb") != -1) {
+            fileSize = Math.round(file.size / 1024 / 1024);
+          }
+          else if ((uploadModel?.MaxFileSize ?? "0").toLowerCase().indexOf("kb") != -1) {
+            fileSize = Math.round(file.size / 1024);
+          }
+          if (fileSize > acceptMaxFileSize) {
+            //reset file type
+            fileValue = null;
+            this.toastr.warning(`Invalid file size, Max allowed only ${uploadModel?.MaxFileSize}`);
+            return;
+          }
+        }
+
+        // upload to server folder
+        return await this.commonMasterService.Counselling_UploadDocument(file, uploadModel)
+          .then((data: any) => {
+            return data;
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+  async Counselling_DeleteDocument(deleteModel: DeleteDocumentDetailsModel_Counselling) {
+    try {
+      // delete from server folder
+      return await this.commonMasterService.Counselling_DeleteDocument(deleteModel)
+        .then((data: any) => {
+          return data;
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
 }
