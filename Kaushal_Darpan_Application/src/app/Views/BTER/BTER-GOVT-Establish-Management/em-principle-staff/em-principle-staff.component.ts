@@ -164,8 +164,8 @@ export class EMPrincipleStaffComponent {
       IsEmpWorkingOnDeputationToOther: [false],
       IsEmpWorkingOnPost: [false],
       IsSalaryDrawnFromSamePost: [false],
-
-      //HigherEduInstitute: ['', [Validators.required]],
+      HigherEduInstitute: [''],
+      
       //IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
       //IsEmpWorkingOnPost: [false, [Validators.required]],
       //IsSalaryDrawnFromSamePost: [false, [Validators.required]],
@@ -1026,21 +1026,21 @@ async GetTechnicianDll() {
     this.approveRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.approveRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     
-    try {
-      await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfile(this.approveRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          window.location.reload();
-        }
-      })
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200)
-    }
+    //try {
+    //  await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfile(this.approveRequest).then(async (data: any) => {
+    //    data = JSON.parse(JSON.stringify(data));
+    //    if(data.State == EnumStatus.Success) {
+    //      this.toastr.success(data.Message);
+    //      window.location.reload();
+    //    }
+    //  })
+    //} catch (error) {
+    //  console.log(error);
+    //} finally {
+    //  setTimeout(() => {
+    //    this.loaderService.requestEnded();
+    //  }, 200)
+    //}
   }
 
   async UnlockProfile(StaffUserID: any, SSOID: any, StaffID: any) {
