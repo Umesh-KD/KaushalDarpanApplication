@@ -50,6 +50,10 @@ export class CounsellingApplicationSearchModel {
   public JanAadharNo?: string = '';
   public CandidateName?: string = ''; 
   public MobileNo?: string = '';
+  
+  public AadharNo?: string = '';
+  public DOB?: string = '';
+  public Action?: string = '';
 }
 
 export class Counselling_OptionFormDataModel extends RequestBaseModel{
