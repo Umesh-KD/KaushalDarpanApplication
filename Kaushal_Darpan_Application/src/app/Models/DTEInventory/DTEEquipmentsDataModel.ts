@@ -11,4 +11,6 @@ export class DTEEquipmentsDataModel {
   public OfficeID: number = 0;
   public RoleID: number = 0;
   public ItemCategoryId: number = 0;
+  public IsConsumable: number = 0;
+  public IsSerialNo: number = 0;
 }

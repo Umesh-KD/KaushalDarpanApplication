@@ -99,6 +99,7 @@ export class DteItemsMasterComponent {
           this.ErrorMessage = data['ErrorMessage'];
           this.ItemMasterList = data['Data'];
           this.ItemMasterList1 = data['Data'];
+          console.log('Item Master List ==>', this.ItemMasterList)
         }, error => console.error(error));
     }
     catch (Ex) {

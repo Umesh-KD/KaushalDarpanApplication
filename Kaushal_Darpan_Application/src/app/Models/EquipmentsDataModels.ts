@@ -11,4 +11,6 @@ export class EquipmentsDataModels {
   public RoleID: number = 0;
   public OfficeID: number = 0;
   public DepartmentID: number = 0;
+  public IsConsumable: number = 0;
+  public IsSerialNo: number = 0;
 }

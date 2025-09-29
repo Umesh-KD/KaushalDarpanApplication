@@ -31,26 +31,6 @@
     <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
       <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
-
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-      Branch: <span class="StarMarking">*</span>
-    </label>
-    <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="StreamName"
-               bindValue="StreamID" placeholder="--Select--" [searchable]="true" [clearable]="true"
-               [searchFn]="customSearch" (change)="ddlCategory_Change()" [loading]="isLoading" [loadingText]="'Loading...'">
-    </ng-select>
-
-    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
-      <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required.
-      </p>
-    </div>
-  </div>-->
-
-
-
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Category: <span class="StarMarking">*</span>
@@ -66,9 +46,6 @@
             </p>
           </div>
         </div>
-
-
-        <!--{{EquipmentsDDLList|json}}-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -131,20 +108,15 @@
         </div>
 
         <div>
-          <label for="VoucherNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
+          <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Voucher Date: <span class="StarMarking">*</span>
           </label>
-          <input type="date" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
-                 [(ngModel)]="request.VoucherNumber" maxlength="6" (keypress)="validateNumber($event)">
+          <input type="date" class="form-input" id="voucherdate" name="voucherdate" formControlName="voucherdate"
+                 [(ngModel)]="request.voucherdate">
 
-          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
-            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required .!
-            </p>
-            <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.pattern">
-              <i aria-hidden="true"></i>
-              Voucher Number must be at least 4 digits and positive only!
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.voucherdate.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
             </p>
           </div>
         </div>
@@ -214,16 +186,48 @@
           </div>
         </div>
 
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Unit: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="UnitId"
+                     [(ngModel)]="request.UnitId"
+                     [items]="UnitMasterList"
+                     bindLabel="UnitName"
+                     bindValue="UnitId"
+                     placeholder="--Select--"
+                     [searchable]="true"
+                     [clearable]="false"
+                     [searchFn]="customSearch"
+                     [loading]="isLoading"
+                     [loadingText]="'Loading...'">
+          </ng-select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.UnitId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.UnitId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
+
+
         <div class="mt-3">
-          <label class="block">IsConsumable </label>
-          <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-            <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
+          <label class="block">IsConsumable</label>
+          <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive"
+                 (click)="$event.preventDefault()">
+            <input class="sr-only peer"
+                   type="checkbox"
+                   id="Active"
+                   formControlName="IsConsume"
                    [(ngModel)]="request.IsConsume">
             <span class="toggleIcon">
               <span class="toggleTitle"></span>
             </span>
           </label>
         </div>
+
 
 
       </div>

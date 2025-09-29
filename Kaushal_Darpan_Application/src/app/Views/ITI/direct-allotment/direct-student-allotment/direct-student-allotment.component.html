@@ -1,3 +1,9 @@
+<style type="text/css">
+  .fileinput{
+      max-width:200px;
+      width:100%;
+  }
+</style>
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Direct Admission</h4>
@@ -81,6 +87,15 @@
               <p class="mb-0">{{requestReporting.Email}}</p>
             </div>
           </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-6">
+
+              
+              <button type="button" class="btn bg-primary text-white mt-6" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button>
+         
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -105,7 +120,7 @@
               <tr *ngFor="let item of requestReporting.AllotmentDocumentModel;  let idx=index;">
                 <td>{{idx+1}}</td>
                 <td>
-                  <div class="flex">
+                  <div class="flex justify-between">
                     <a href="javascript:void(0)"
                        (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + item.FolderName + '/' + item.FileName)"
                        class="text-success">
@@ -113,19 +128,20 @@
                     </a>
 
 
-                    <div *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false" class="flex fileUploader items-center gap-2">
-                      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                             id="filepanPhoto_{{ idx + 1 }}"
-                             type="file"
-                             accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
-                             (change)="UploadDocument($event, item)" />
+                    <div *ngIf="item.ShowRemark && TradeBox==true && ApplicationAlloted==false" class="flex  fileUploader items-center gap-2">
+                      <div class="fileinput">
+                        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                               id="filepanPhoto_{{ idx + 1 }}"
+                               type="file"
+                               accept=".pdf,.jpg,.jpeg,.png,.doc,.docx"
+                               (change)="UploadDocument($event, item)" />
 
-                      <label for="filepanPhoto_{{ idx + 1 }}">
+                        <label for="filepanPhoto_{{ idx + 1 }}">
 
-                        <span>Choose File</span>
-                        {{ !item.Dis_FileName ? 'No File Chosen' : item.Dis_FileName }}
-                      </label>
-
+                          <span>Choose File</span>
+                          {{ !item.Dis_FileName ? 'No File Chosen' : item.Dis_FileName }}
+                        </label>
+                      </div>
                       <!--<span class="ml-2 file-name">
                       
                       </span>-->
