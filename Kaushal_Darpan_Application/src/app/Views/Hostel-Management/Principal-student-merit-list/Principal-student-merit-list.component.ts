@@ -466,8 +466,8 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success){
           this.toastr.success(data.Message);
-          const selectedIds = selected.map(item => item.ReqId).join(',');
-          const encrypted = CryptoJS.AES.encrypt(selectedIds, secretKey).toString();
+          // const selectedIds = selected.map(item => item.ReqId).join(',');
+          // const encrypted = CryptoJS.AES.encrypt(selectedIds, secretKey).toString();
           // this.routers.navigate(['/HostelMeritlist/HostelGenerateMeritlist'], {
           //   queryParams: { ids: encodeURIComponent(encrypted) }
           // });
