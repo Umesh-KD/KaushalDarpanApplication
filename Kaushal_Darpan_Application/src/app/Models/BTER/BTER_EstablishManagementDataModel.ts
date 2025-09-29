@@ -542,4 +542,5 @@ export class OfficeVacancyModel {
   public DesignationName: string = '';
   public InstituteName: string = '';
   public StaffTypeName: string = '';
+  public PostedSeat: number = 0;
 }
