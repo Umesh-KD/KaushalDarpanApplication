@@ -25,6 +25,8 @@ export class CandidateOptionDetailsComponent {
   public tradeRequest = new Counselling_DropdownDataModel();
   public insRequest = new Counselling_DropdownDataModel();
   public searchReq = new Counselling_OptionFormDataModel();
+  public priorityChangeReq = new Counselling_OptionFormDataModel();
+  public deleteOptionReq = new Counselling_OptionFormDataModel();
 
   public TradeList: any = []
   public InstituteList: any = []
@@ -97,7 +99,10 @@ export class CandidateOptionDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message)
-
+          await this.Counselling_GetOptionDetailsByID();
+          this.formData.TradeId = 0;
+          this.formData.InstituteID = 0;
+          this.isSubmitted = false;
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
@@ -115,8 +120,49 @@ export class CandidateOptionDetailsComponent {
       await this.counsellingApplicationFormService.Counselling_GetOptionDetailsByID(this.searchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message)
+          // this.toastr.success(data.Message)
           this.AddedChoices = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async PriorityChange_Counselling(row: any, Type: string) {
+    try {
+      this.priorityChangeReq.CandidateID = row.CandidateID
+      this.priorityChangeReq.OptionID = row.OptionID
+      this.priorityChangeReq.Type = Type
+      await this.counsellingApplicationFormService.PriorityChange_Counselling(this.priorityChangeReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message)
+          await this.Counselling_GetOptionDetailsByID();
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async DeleteOptionByID_Counselling(row: any) {
+    try {
+      this.deleteOptionReq.CandidateID = row.CandidateID
+      this.deleteOptionReq.OptionID = row.OptionID
+      await this.counsellingApplicationFormService.DeleteOptionByID_Counselling(this.deleteOptionReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message)
+          await this.Counselling_GetOptionDetailsByID();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {

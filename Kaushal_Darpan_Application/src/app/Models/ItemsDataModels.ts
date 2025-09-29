@@ -23,6 +23,8 @@ export class ItemsDataModels {
   public ItemType : number = 0;
   public IsConsume: number = 0;
   public StaffID: number = 0;
+  public UnitId: number = 0;
+  public voucherdate: string = '';
   //public Unit: number = 0;
 }
 export class ItemsSearchModel {
