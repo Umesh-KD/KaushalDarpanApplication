@@ -11,8 +11,8 @@ import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '..
 import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterRequestModel';
 import { DDL_InvigilatorSSOID_DataModel, ItiCollegesSearchModel, ItiStuAppSearchModelUpward, ItiTradeSearchModel, QualificationDDLDataModel, StreamDDL_InstituteWiseModel, TSPTehsilDataModel, UpwardMoment } from '../../Models/CommonMasterDataModel';
 import { BterCollegesSearchModel } from '../../Models/ApplicationFormDataModel';
-import { UploadBTERFileModel, UploadFileModel } from '../../Models/UploadFileModel';
-import { DeleteDocumentDetailsModel } from '../../Models/DeleteDocumentDetailsModel';
+import { UploadBTERFileModel, UploadCounsellingFileModel, UploadFileModel } from '../../Models/UploadFileModel';
+import { DeleteDocumentDetailsModel, DeleteDocumentDetailsModel_Counselling } from '../../Models/DeleteDocumentDetailsModel';
 import { ViewStudentDetailsRequestModel } from '../../Models/ViewStudentDetailsRequestModel';
 import { CommonDDLCommonSubjectModel } from '../../Models/CommonDDLCommonSubjectModel';
 import { CommonDDLExaminerGroupCodeModel } from '../../Models/CommonDDLExaminerGroupCodeModel';
@@ -269,6 +269,7 @@ export class CommonFunctionService {
   }
 
   public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0) {
+    
     return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1896,5 +1897,34 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async Counselling_UploadDocument(file: any, model: UploadCounsellingFileModel | null = null) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("FolderName", model?.FolderName ?? "");
+    formData.append("FileExtention", model?.FileExtention ?? "");
+    formData.append("MinFileSize", model?.MinFileSize ?? "");
+    formData.append("MaxFileSize", model?.MaxFileSize ?? "");
+    formData.append("FileName", model?.FileName ?? "");
+    formData.append("CandidateID", model?.CandidateID ?? "0");
+    formData.append("AcademicYear", model?.AcademicYear ?? "0");
+    formData.append("DepartmentID", model?.DepartmentID ?? "0");
+    formData.append("EndTermID", model?.EndTermID ?? "0");
+    formData.append("Eng_NonEng", model?.Eng_NonEng ?? "0");
+    formData.append("IsCopy", model?.IsCopy?.toString() ?? "false");
+    formData.append("FileNameWithDynamicPath", model?.FileNameWithDynamicPath?.toString() ?? "");
+    formData.append("FilePrefix", model?.FilePrefix?.toString() ?? "");
 
+    return await this.http.post(this.APIUrl + "/Counselling_UploadDocument", formData)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async Counselling_DeleteDocument(model: DeleteDocumentDetailsModel_Counselling | null = null) {
+    const body = JSON.stringify(model);
+    return await this.http.post(this.APIUrl + "/Counselling_DeleteDocument", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

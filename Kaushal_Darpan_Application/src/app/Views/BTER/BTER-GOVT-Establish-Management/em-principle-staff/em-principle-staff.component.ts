@@ -149,12 +149,12 @@ export class EMPrincipleStaffComponent {
       IsExtraWorking: ['false'],
       IsEmployeeWorking: ['false'],
       
-      IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
+      IsEmpWorkingOnDeputationFromOther: [''],
       //IsEmpWorkingOnPost: ['', [Validators.required]],
       //IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
       //IsSalaryDrawnFromSamePost: ['', [Validators.required]],
       //HigherEduInstitute: ['', [Validators.required]],
-      IsSalaryDrawnFromOtherInstitute: ['', [Validators.required]],
+      IsSalaryDrawnFromOtherInstitute: [''],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
       ExtraOrdinaryLeave: ['', [Validators.required]],
@@ -164,8 +164,8 @@ export class EMPrincipleStaffComponent {
       IsEmpWorkingOnDeputationToOther: [false],
       IsEmpWorkingOnPost: [false],
       IsSalaryDrawnFromSamePost: [false],
-
-      //HigherEduInstitute: ['', [Validators.required]],
+      HigherEduInstitute: [''],
+      
       //IsEmpWorkingOnDeputationToOther: [false, [Validators.required]],
       //IsEmpWorkingOnPost: [false, [Validators.required]],
       //IsSalaryDrawnFromSamePost: [false, [Validators.required]],
@@ -276,7 +276,7 @@ export class EMPrincipleStaffComponent {
     if(this.approveRequest.IsEmpWorkingOnDeputationToOther == false) {
       this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.removeValidators([DropdownValidators]);
     }
-    if(this.approveRequest.IsSalaryDrawnFromSamePost == false) {
+    if(this.approveRequest.IsSalaryDrawnFromSamePost == true) {
       this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([DropdownValidators]);
     }
     if(this.approveRequest.IsSalaryDrawnFromOtherInstitute == false) {
@@ -285,6 +285,7 @@ export class EMPrincipleStaffComponent {
     if(this.approveRequest.HigherEduPermission == false) {
       this.StaffMasterFormGroup.get('HigherEduInstitute')?.removeValidators([Validators.required]);
     }
+
     this.StaffMasterFormGroup.get('EmpInstituteID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.updateValueAndValidity();
@@ -990,28 +991,29 @@ async GetTechnicianDll() {
 
 
   async ApproveStaffProfile() {
-    debugger
+    
     await this.refreshValidators();
     this.isApproveSubmitted = true;
+    
     if (this.StaffMasterFormGroup.invalid) {
-      Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
-        const control = this.StaffMasterFormGroup.get(key);
-        if (control && control.invalid) {
-         /* console.error(`Field '${key}' is invalid.`);*/
+      // Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+      //   const control = this.StaffMasterFormGroup.get(key);
+      //   if (control && control.invalid) {
+      //     console.error(`Field '${key}' is invalid.`);
 
-          if (control.errors) {
-            Object.keys(control.errors).forEach(errorKey => {
-              // Safely stringify the error value to avoid issues
-              const errorValue = control.errors![errorKey];
-              const errorMessage = (typeof errorValue === 'string')
-                ? errorValue
-                : JSON.stringify(errorValue, this.getCircularReplacer());
+      //     if (control.errors) {
+      //       Object.keys(control.errors).forEach(errorKey => {
+      //         // Safely stringify the error value to avoid issues
+      //         const errorValue = control.errors![errorKey];
+      //         const errorMessage = (typeof errorValue === 'string')
+      //           ? errorValue
+      //           : JSON.stringify(errorValue, this.getCircularReplacer());
 
-              /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
-            });
-          }
-        }
-      });
+      //         /*console.error(`  Error: ${errorKey} - ${errorMessage}`);*/
+      //       });
+      //     }
+      //   }
+      // });
 
       // Mark all controls as touched to trigger UI validation messages if any
       this.StaffMasterFormGroup.markAllAsTouched();
@@ -1027,19 +1029,19 @@ async GetTechnicianDll() {
     this.approveRequest.ModifyBy = this.sSOLoginDataModel.UserID;
     
     try {
-      await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfile(this.approveRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State == EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          window.location.reload();
-        }
-      })
+     await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfile(this.approveRequest).then(async (data: any) => {
+       data = JSON.parse(JSON.stringify(data));
+       if(data.State == EnumStatus.Success) {
+         this.toastr.success(data.Message);
+         window.location.reload();
+       }
+     })
     } catch (error) {
-      console.log(error);
+     console.log(error);
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200)
+     setTimeout(() => {
+       this.loaderService.requestEnded();
+     }, 200)
     }
   }
 

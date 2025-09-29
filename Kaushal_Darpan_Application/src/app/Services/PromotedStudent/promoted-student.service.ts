@@ -81,4 +81,11 @@ export class PromotedStudentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async SaveITIPromotedStudentReg(request: PromotedStudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveITIPromotedStudentReg`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

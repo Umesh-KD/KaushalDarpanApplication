@@ -146,6 +146,7 @@ export class DteUnitMasterComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.UnitMasterList = data['Data'];
+          console.log('Unit Master List ==>',this.UnitMasterList)
         }, error => console.error(error));
     }
     catch (Ex) {
