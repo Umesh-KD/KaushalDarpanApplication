@@ -475,6 +475,7 @@ export class CitizenqueryDetailsComponent implements OnInit {
 
       this.Request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
 
       if (this.sSOLoginDataModel.IsCitizenQueryUser) {
         this.searchRequest.SubjectId = this.sSOLoginDataModel.QueryType;
@@ -494,6 +495,23 @@ export class CitizenqueryDetailsComponent implements OnInit {
       {
         this.searchRequest.CommnID = 88;
       }
+
+      else if (
+        this.sSOLoginDataModel.RoleID == EnumRole.AdminNodel 
+      ) {
+        this.searchRequest.CommnID = 1331;
+      }
+
+
+      else if (
+        this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+      ) {
+        this.searchRequest.CommnID = 87;
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      }
+
+
+
       else if (
         this.sSOLoginDataModel.RoleID == EnumRole.DTETraing 
       ) {

@@ -27,9 +27,25 @@
                     </p>
                   </div>
                 </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
+                  <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Subject/Module <span class="StarMarking">*</span></label>
+                  <select class="form-select" formControlName="ddlSubject" [(ngModel)]="request.SubjectId">
+                    <option value="0" selected>--Choose Option--</option>
+
+
+                    <option *ngFor="let item of SubMasterList" value="{{item.ID}}">{{item.Name}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted&& _CitizenSuggestionFormGroup.ddlSubject.errors" class="text-danger">
+                    <p *ngIf="!_CitizenSuggestionFormGroup.ddlSubject.errors.DropdownValidators">
+                      <i aria-hidden="true"></i>Subject field is required .!
+                    </p>
+                  </div>
+                </div>
+
               </div>
+            
               <!-- Wrapper for ngSwitch -->
-             
+
               <div>
                 <div class="row">
                   <div class="col-lg-4 col-md-6 col-sm-12 col-12 mb-3" *ngIf="IsInstitute">
@@ -134,20 +150,7 @@
                       </div>
                     </ng-container>
                   </div>
-                  <div class="col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
-                    <label for="ddlSubject" class="text-gray-800 text-sm font-medium inline-block mb-1">Subject <span class="StarMarking">*</span></label>
-                    <select class="form-select" formControlName="ddlSubject" [(ngModel)]="request.SubjectId">
-                      <option value="0" selected>--Choose Option--</option>
 
-
-                      <option *ngFor="let item of SubMasterList" value="{{item.ID}}">{{item.Name}}</option>
-                    </select>
-                    <div *ngIf="isSubmitted&& _CitizenSuggestionFormGroup.ddlSubject.errors" class="text-danger">
-                      <p *ngIf="!_CitizenSuggestionFormGroup.ddlSubject.errors.DropdownValidators">
-                        <i aria-hidden="true"></i>Subject field is required .!
-                      </p>
-                    </div>
-                  </div>
 
 
                   <div class="col-lg-4 col-md-6 col-sm-12 col-12 mb-3">
@@ -160,16 +163,16 @@
                       <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AttchFilePath}}" *ngIf="this.request.AttchFilePath !=''"
                          class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                       <!--<label for="fileStudentPhoto">
-                        <span>Choose File</span>
-                        {{request.AttchFilePath === '' ? 'No File Choosen' : request.AttchFilePath}}
-                      </label>-->
+            <span>Choose File</span>
+            {{request.AttchFilePath === '' ? 'No File Choosen' : request.AttchFilePath}}
+          </label>-->
                       <!--<div class="flex">
 
-                      <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-                         (click)="DeleteImage(request.AttchFilePath,'Photo')" *ngIf="this.request.AttchFilePath !=''">
-                        <i class="ti ti-trash"></i>
-                      </a>
-                    </div>-->
+            <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+               (click)="DeleteImage(request.AttchFilePath,'Photo')" *ngIf="this.request.AttchFilePath !=''">
+              <i class="ti ti-trash"></i>
+            </a>
+          </div>-->
                     </div>
                   </div>
 

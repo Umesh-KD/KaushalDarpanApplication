@@ -40,6 +40,7 @@ export class SSOLoginDataModel {
   public InstituteID: number = 0;
   public RoleName: string = '';
   public StudentID: number = 0;
+  public CandidateID?: number = 0;
   public InstituteName: string = '';
   public Eng_NonEng: number = 0;
   public Eng_NonEngName: string = '';

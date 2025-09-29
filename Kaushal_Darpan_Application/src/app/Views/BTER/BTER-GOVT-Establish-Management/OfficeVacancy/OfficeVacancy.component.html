@@ -1,7 +1,4 @@
 <app-loader> </app-loader>
-<!-- Page Title Start -->
-
-
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Office Vacancy</h4>
@@ -11,18 +8,11 @@
     </div>-->
   </div>
 </div>
-
-<!-- Page Title End -->
-
-
 <div class="card">
   <div class="card-body p-5">
 
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Office Vacancy</b>
-      <!--<a href="javascript:void(0);" class="inline-flex items-center btn bg-dark text-white btn-sm">
-        <i class="ti ti-chevron-left"></i> Back
-      </a>-->
     </div>
     <form [formGroup]="AddOfficeVacancyForm">
       <div>
@@ -36,9 +26,8 @@
             <i aria-hidden="true"></i>This field is required .!
           </p>
         </div>
-
       </div>
-      <div *ngIf="formData.OfficeID==20">
+      <div *ngIf="formData.OfficeID==21">
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
         <select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
           <option value="0">--Select--</option>
@@ -60,8 +49,7 @@
           </p>
         </div>
       </div>
-
-
+     
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
         <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
@@ -75,33 +63,18 @@
           </p>
         </div>
       </div>
-
-
-
-
       <div class="form-group">
         <label for="TotalSeatID">Total Seat:</label>
         <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
       </div>
-
-
-
       <div class="form-group">
         <label for="Comments">Comments:</label>
         <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
       </div>
-
-
-
       <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add</button>
       <button type="submit" class="btn btn-primary" (click)="SaveData()">Final Save</button>
-
     </form>
-
-
-
-
   </div>
 </div>
 <!--{{OfficeVacancy|json}}-->
@@ -139,6 +112,18 @@
             <td>{{ leave.PostedSeat }}</td>
             <td>{{ leave.Comments }}</td>
             <td>
+              <!--<button class="btn btn-sm"
+          [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
+          (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
+    {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
+  </button>-->
+              <label class="switch">
+                <input type="checkbox"
+                       [checked]="leave.ActiveStatus"
+                       (change)="OfficeVacancyActiveDeActive(leave.ID, $event.target.checked)" />
+                <span class="slider round"></span>
+              </label>
+              <button *ngIf="!IsView" class="btn bg-info text-white" (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>
               <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
                 Remove
               </button>
@@ -149,6 +134,81 @@
     </div>
   </div>
 </div>
+<ng-template #modal_UpdateVacancyPost let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5">Action <small class="text-danger">(* fields are mandatory)</small></b>
+        <button class="btn bg-info text-white" (click)="CloseModal()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <form [formGroup]="groupForm">
+        <div class="card-body">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted && _groupForm.ddlOffice.errors" class="text-danger">
+              <p *ngIf="!_groupForm.ddlOffice.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+
+          </div>
+          <div *ngIf="formData.OfficeID==21">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Staff Type <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_groupForm.StaffTypeID.errors" class="text-danger">
+              <p *ngIf="!_groupForm.StaffTypeID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+          <!--{{formData.PostedSeat|json}}-->
+  <!--{{formData.DesignationID|json}}-->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
+            <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_groupForm.ddlPost.errors" class="text-danger">
+              <p *ngIf="!_groupForm.ddlPost.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="TotalSeatID">Total Seat:</label>
+            <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+                   [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+          </div>
+
+          <div class="form-group">
+            <label for="Comments">Comments:</label>
+            <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" (click)="VacancyPostUpdate()">Update</button>
+        </div>
+</form>
+    </div>
+  </div>
+</ng-template>
 
 
 
