@@ -203,6 +203,7 @@ const routes: Routes = [
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
+      { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
 
 
 
@@ -242,6 +243,9 @@ const routes: Routes = [
       {
         path: 'StudentSsoMapping', loadChildren: () => import('./Views/Student/student-sso-mapping/student-sso-mapping.module').then(m => m.StudentSsoMappingModule), title: 'Student SSO Mapping'
       },
+
+      { path: 'CandidateSsoMapping', loadChildren: () => import('./Views/Counselling-Master/candidate-sso-mapping-module/candidate-sso-mapping-module.module').then(m => m.CandidateSsoMappingModuleModule) },
+
       { path: 'StudentEmitraFeePayment', loadChildren: () => import('./Views/Student/student-emitra-fee-payment/student-emitra-fee-payment.module').then(m => m.StudentEmitraFeePaymentModule), title: 'Student Emitra Fee Payment' },
       { path: 'GenerateEnrollment', loadChildren: () => import('./Views/generate-enroll/generate-enroll.module').then(m => m.GenerateEnrollModule), title: 'Generate Enrollment' },
       { path: 'TheoryMarks', loadChildren: () => import('./Views/theory-marks/theory-marks.module').then(m => m.theorymarksModule), title: 'Theory Marks' },
@@ -1324,7 +1328,7 @@ const routes: Routes = [
       { path: '8th-admissions-in-women-wing', loadChildren: () => import('./Views/ITI/reports/iti-8th-admissions-in-women-wing/iti-8th-admissions-in-women-wing.module').then(m => m.Iti8ThAdmissionsInWomenWingModule), title: 'iti-8th-admissions-in-women-wing' },
       { path: '10th-admissions-in-women-wing', loadChildren: () => import('./Views/ITI/reports/iti-10th-admissions-in-women-wing/iti-10th-admissions-in-women-wing.module').then(m => m.Iti10ThAdmissionsInWomenWingModule), title: 'iti-10th-admissions-in-women-wing' },
 
-      { path: 'IssueTracker', loadChildren: () => import('./Views/issue-tracker/issue-tracker.module').then(m => m.IssueTrackerModule) },
+      { path: 'IssueTracker', loadChildren: () => import('./Views/Issue-tracker/issue-tracker.module').then(m => m.IssueTrackerModule) },
       { path: 'add-issue-tracker', loadChildren: () => import('./Views/BTER/add-issue-tracker/add-issue-tracker.module').then(m => m.AddIssueTrackerModule) },
       { path: 'IssuetrackerDashboard', loadChildren: () => import('./Views/BTER/IssueTracker-dashboard/issuetracker-dashboard.module').then(m => m.IssuetrackerDashboardModule) },
       { path: 'ReuploadDocumentList10th/:id', loadChildren: () => import('./Views/ITI/reupload-document-list/reupload-document-list.module').then(m => m.ReuploadDocumentListModule) },
@@ -1406,6 +1410,9 @@ const routes: Routes = [
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
       
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
+
+
+      { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
 
     ]
   },
@@ -1510,6 +1517,8 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+  
+  
 
 
 

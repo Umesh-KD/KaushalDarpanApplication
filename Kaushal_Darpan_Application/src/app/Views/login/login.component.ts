@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
     //await this.GetMasterData();
     //await this.loadDropdownData('Institute');
     //test, replace this sso token with active
-    this.SSOToken = "eTloQjczZGF5VVVRQ2pJV3R3NXczWklDMDVLR242TGd2dHVOazZlOFZNbjE0bE52UWtzcU1BaWlFbUZVdk5CWDBrTERFWHFEaHZPMjJCdmppd0N4K0twMmN5cTVwS1RXYk9Ta1EwNDhvV3EyTm1NYUJoQXBpYTBIbnlRMmhLTjBCd2JPQVJURXowcEo0Z1pYRHVUaXJySFRUQ09IVWZWYmZLYnNxZmN3UDNJdHVUS0pVd21jSXNRcUl1Q1RkSHlG";
+    this.SSOToken = "ZU53bU1vWVF2N1dVOVBBY1FGb290YjFxbmdpazBsVktJcUxRSElMK3JJUEVCTWhrSUFSZnZ6QWJVbnByQ1daMnpvV0tuNnczN3FaOEpzQTlDN1R4QXZiYzdwd0podEF6eWd0cjlTNDVQaDFOQTh0TDFjOU51eStxQ0FUenB5aXA0RXVuWEY2d3JGblpWM3VxeUtyZXoyd2YyM3JXTFhEdFNDREpLMkpOMDBnQ05Qbk1xZHBmTHYwTG5Pa2RXVVpQ";
   }
 
   loadDropdownData(MasterCode: string): void {
@@ -308,16 +308,21 @@ export class LoginComponent implements OnInit {
 
             }
 
-
-
             //set user session 
             localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
             //set cookie
             this.cookieService.set('LoginStatus', "OK");
 
-            //redirect
-            //window.open('/dashboard', "_self");
-            this.routers.navigate(['/dashboard']);
+            if (this.sSOLoginDataModel.RoleID == this._EnumRole.CandidateRole)
+            {
+              this.routers.navigate(['/CandidateApplicationList']);
+            }
+            else
+            {
+              //redirect
+              //window.open('/dashboard', "_self");
+              this.routers.navigate(['/dashboard']);
+            }
           }
           else {
             this.toastr.error(this.Message);

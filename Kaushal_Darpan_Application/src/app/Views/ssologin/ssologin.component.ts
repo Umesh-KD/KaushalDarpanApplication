@@ -110,7 +110,11 @@ export class SSOLoginComponent implements OnInit, AfterViewInit {
             {
               this.routers.navigate(['/emitradashboard']);
             }
-            else if (this.sSOLoginDataModel.RoleID == 0) {
+            else if (this.sSOLoginDataModel.RoleID == 999) {
+              this.routers.navigate(['/CandidateApplicationList']);
+            }
+            else if (this.sSOLoginDataModel.RoleID == 0)
+            {
               //open popup
               this.openModalCource(this.modal_GenrateOTP);
             }
