@@ -203,6 +203,7 @@ const routes: Routes = [
       { path: 'EligibleStudentListMaster', loadChildren: () => import('./Views/EligiblePlacementStudentListMaster/eligible-student-list-master.module').then(m => m.EligibleStudentListMasterModule), title: 'Eligible Student List Master' },
 
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
+      { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
 
 
 
@@ -1324,7 +1325,7 @@ const routes: Routes = [
       { path: '8th-admissions-in-women-wing', loadChildren: () => import('./Views/ITI/reports/iti-8th-admissions-in-women-wing/iti-8th-admissions-in-women-wing.module').then(m => m.Iti8ThAdmissionsInWomenWingModule), title: 'iti-8th-admissions-in-women-wing' },
       { path: '10th-admissions-in-women-wing', loadChildren: () => import('./Views/ITI/reports/iti-10th-admissions-in-women-wing/iti-10th-admissions-in-women-wing.module').then(m => m.Iti10ThAdmissionsInWomenWingModule), title: 'iti-10th-admissions-in-women-wing' },
 
-      { path: 'IssueTracker', loadChildren: () => import('./Views/issue-tracker/issue-tracker.module').then(m => m.IssueTrackerModule) },
+      { path: 'IssueTracker', loadChildren: () => import('./Views/Issue-tracker/issue-tracker.module').then(m => m.IssueTrackerModule) },
       { path: 'add-issue-tracker', loadChildren: () => import('./Views/BTER/add-issue-tracker/add-issue-tracker.module').then(m => m.AddIssueTrackerModule) },
       { path: 'IssuetrackerDashboard', loadChildren: () => import('./Views/BTER/IssueTracker-dashboard/issuetracker-dashboard.module').then(m => m.IssuetrackerDashboardModule) },
       { path: 'ReuploadDocumentList10th/:id', loadChildren: () => import('./Views/ITI/reupload-document-list/reupload-document-list.module').then(m => m.ReuploadDocumentListModule) },

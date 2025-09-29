@@ -1,6 +1,8 @@
 
 export class CollegeWiseScholarshipSearchModel {
   public Name: string = '';
+  public Enrollment: string = '';
+  public Category:string='';
   public Status: string = '';
   public ModifyBy: number = 0
   public RoleID: number = 0
@@ -52,9 +54,10 @@ export class AddCollegeWiseScholarshipModel{
   public ScholarShipAmount :number=0;
   public	ScholarShipDate  :string='';
   public	ScholarShipApprovalID  :string='';
-  public ActiveStatus  :boolean=false;
+  public ActiveStatus  :boolean=true;
   public DeleteStatus  :boolean=false;
   public CreatedBy :number=0;
   public ModifyBy :number=0;
+    public InstituteID :number=0;
  
 }

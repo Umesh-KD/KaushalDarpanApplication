@@ -1,24 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
-import { CollegeWiseScholarshipService } from '../../Services/CollegeWiseScholarship/college-wise-scholarship.service';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { CompanyMasterService } from '../../../Services/CompanyMaster/company-master.service.ts';
+import { CollegeWiseScholarshipService } from '../../../Services/CollegeWiseScholarship/college-wise-scholarship.service';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../Services/Loader/loader.service';
-import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
-import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../../Models/CompanyMasterDataModel';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../../Models/CollegeWiseScholarshipModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
-    selector: 'college-wise-scholarship',
-    templateUrl: './college-wise-scholarship.component.html',
-    styleUrls: ['./college-wise-scholarship.component.css'],
+    selector: 'iticollege-wise-scholarship',
+    templateUrl: './iticollege-wise-scholarship.component.html',
+    styleUrls: ['./iticollege-wise-scholarship.component.css'],
     standalone: false
 })
-export class CollegeWiseScholarshipComponent implements OnInit {
+export class ITICollegeWiseScholarshipComponent implements OnInit {
   public StudentList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CollegeWiseScholarshipSearchModel();
