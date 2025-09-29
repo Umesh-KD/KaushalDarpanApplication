@@ -204,6 +204,8 @@ const routes: Routes = [
 
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
       { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
+      { path: 'CollegeWiseScholarshipReport', loadChildren: () => import('./Views/college-wise-scholarship-report/college-wise-scholarship-report.module').then(m => m.CollegeWiseScholarshipReportModule), title: 'CollegeWise Scholarship Report' },
+
 
 
 
