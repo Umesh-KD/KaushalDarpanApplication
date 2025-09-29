@@ -296,4 +296,31 @@ export class BTEREstablishManagementService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async ViewByIDOfficeVacancy(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/ViewByIDOfficeVacancy/" + PK_ID , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async UpdateOfficeVacancy(request: OfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/UpdateOfficeVacancy`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async OfficeVacancyActiveDeActive(request: OfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/OfficeVacancyActiveDeActive`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
 }
