@@ -1898,6 +1898,7 @@ export class CommonFunctionService {
   }
 
   public async Counselling_UploadDocument(file: any, model: UploadCounsellingFileModel | null = null) {
+    debugger
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");
@@ -1913,7 +1914,6 @@ export class CommonFunctionService {
     formData.append("IsCopy", model?.IsCopy?.toString() ?? "false");
     formData.append("FileNameWithDynamicPath", model?.FileNameWithDynamicPath?.toString() ?? "");
     formData.append("FilePrefix", model?.FilePrefix?.toString() ?? "");
-
     return await this.http.post(this.APIUrl + "/Counselling_UploadDocument", formData)
       .pipe(
         catchError(this.handleErrorObservable)

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 
 @Injectable({
   providedIn: 'root'
@@ -102,6 +103,14 @@ export class CounsellingApplicationFormService {
   public async GetDocumentDatabyID_Counselling(request: CounsellingApplicationSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetDocumentDatabyID_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveDocumentData_Counselling(request: Counselling_DocumentDetailsModel[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveDocumentData_Counselling`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
