@@ -23,7 +23,8 @@ import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
 import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
-
+import { IMCManagementAllotmentService } from '../../../../Services/BTER/IMC-Management-Allotment/imc-management-allotment.service';
+import { BTERIMCAllocationDataModel } from '../../../../Models/BTERIMCAllocationDataModel';
 
 
 @Component({
@@ -66,6 +67,8 @@ export class VerifyStudentAllotComponent {
   public DetailsBox: boolean = false;
   public ApplicationAlloted: boolean = true;
   public requestReporting = new AllotmentReportingModel()
+  changeMobilerequest = new BTERIMCAllocationDataModel()
+
   public TradeBox: boolean = false;
   public IsOBC: boolean = true;
   public IsGEN: boolean = true;
@@ -112,8 +115,10 @@ export class VerifyStudentAllotComponent {
     private loaderService: LoaderService,
     private router: Router,
     private routers: ActivatedRoute,
+    private IMCManagementAllotmentService: IMCManagementAllotmentService,
     private modalService: NgbModal, private http: HttpClient, private sanitizer: DomSanitizer, public appsettingConfig: AppsettingService,
     private documentDetailsService: DocumentDetailsService,
+
     private Swal2: SweetAlert2) {
   }
 
@@ -332,23 +337,29 @@ export class VerifyStudentAllotComponent {
   }
 
 
-  async UpdateMobileNo() {
-    if (this.NewMobileNo.length === 10) {
-      this.request.CreatedBy = this.sSOLoginDataModel.UserID;
-      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+  async UpdateMobileNo()
+  {
+
+
+    if (this.NewMobileNo.length === 10)
+    {
+      this.changeMobilerequest.ApplicationID = this.request.ApplicationID;
+
+            this.changeMobilerequest.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.changeMobilerequest.ModifyBy = this.sSOLoginDataModel.UserID;
+      this.changeMobilerequest.MobileNo = this.NewMobileNo;
       try {
         this.loaderService.requestStarted();
-        await this.allotmentService.UpdateMobileNo(this.request)
+        await this.IMCManagementAllotmentService.UpdateMobileNo(this.changeMobilerequest)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             if (data.State == EnumStatus.Success) {
-              this.toastr.success('Student Allotment Successfully');
-              //Set User cookie
-              //localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
-              window.open("/ITIIMCVerifyStudentPhone/" + this.request.ApplicationID, "_self");
-            }
-            else {
-              this.toastr.success(data.Message);
+              this.toastr.success('Update Success');
+              setTimeout(() => {
+                location.reload();   // 🔄 reload page after success
+              }, 1000);
+            } else {
+              this.toastr.warning(data.Message);
             }
           }, (error: any) => console.error(error)
           );
@@ -366,7 +377,6 @@ export class VerifyStudentAllotComponent {
       this.toastr.warning('Please Enter 10 Digits Mobile No');
     }
   }
-
 
   async VerifyOTP() {
     if (this.OTP.length > 0) {
@@ -771,4 +781,9 @@ export class VerifyStudentAllotComponent {
       console.log(Ex);
     }
   }
+
+
+  
+
+
 }
