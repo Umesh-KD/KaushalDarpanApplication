@@ -13,7 +13,6 @@ import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } fro
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddITICollegeWiseScholarshipModel, ITICollegeWiseScholarshipSearchModel } from '../../../Models/ITICollegeWiseScholarshipModel';
-// import { ITICollegeWiseScholarshipService } from '../../Services/ITICollegeWiseScholarship/ITIcollege-wise-scholarship.service';
 import { ITICollegeWiseScholarshipService } from '../../../Services/ITICollegeWiseScholarship/iticollege-wise-scholarship.service';
 @Component({
     selector: 'iticollege-wise-scholarship',
