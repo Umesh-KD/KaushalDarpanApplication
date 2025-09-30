@@ -211,6 +211,7 @@ export enum enumExamStudentStatus {
   ApprovebyRegistrar = 1327,
   ReturnbyRegistrar = 1328,
   Enrolled_promoted = 1329,
+  ReturnbyExamIncharge = 1332,
 }
 
 export enum EnumUserType {

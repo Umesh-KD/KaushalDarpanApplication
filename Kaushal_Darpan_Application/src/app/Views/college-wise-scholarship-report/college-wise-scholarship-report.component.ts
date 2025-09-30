@@ -20,6 +20,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class CollegeWiseScholarshipReportComponent implements OnInit {
   public StudentList: any = [];
+  public SchemeCountList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CollegeWiseScholarshipSearchModel();
   // public instituteId:int=0;
@@ -206,15 +207,20 @@ debugger;
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.CourseType=this.sSOLoginDataModel.Eng_NonEng;
         console.log(this.searchRequest.Category);
+        
+        console.log(this.searchRequest.SchemeName);
       this.loaderService.requestStarted();
       await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipListReport(this.searchRequest).then((data: any) => {
+        debugger;
         data = JSON.parse(JSON.stringify(data));
-        this.StudentList = data.Data;
+        console.log(data);
+      this.StudentList = data.Data.Table || [];
 
         this.totalRecord=this.StudentList[0]?.TotalRecords;
         this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
-
+          this.SchemeCountList= data.Data.Table1 || [];
         console.log(this.StudentList)
       }, (error: any) => console.error(error))
     }

@@ -5,10 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
   selector: 'app-candidate-personal-details',
@@ -22,6 +22,7 @@ export class CandidatePersonalDetailsComponent {
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public errorMessage = '';
   public isSubmitted: boolean = false;
+  public CandidateID: number = 0;
 
   public GenderList: any = []
   public ReligionList: any = []
@@ -68,7 +69,7 @@ export class CandidatePersonalDetailsComponent {
       MaritalID: [0, [DropdownValidators]],
       IsMinority: ['',],
     });
-
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetMasterDDL();
 
     await this.GetApplicationDataByID_Counselling();
@@ -154,7 +155,7 @@ export class CandidatePersonalDetailsComponent {
 
   async SaveData() {
     try {
-      this.request.CandidateID = 1
+      this.request.CandidateID = this.CandidateID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -179,7 +180,7 @@ export class CandidatePersonalDetailsComponent {
 
   async GetApplicationDataByID_Counselling() {
     try {
-      this.appRequest.CandidateId = 1
+      this.appRequest.CandidateId = this.CandidateID;
       await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {

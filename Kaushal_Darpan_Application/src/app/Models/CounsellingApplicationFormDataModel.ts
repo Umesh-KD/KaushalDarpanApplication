@@ -62,10 +62,21 @@ export class Counselling_OptionFormDataModel extends RequestBaseModel{
     public Priority?: number = 0;
     public CandidateID?: number = 0;
     public TradeId?: number = 0;
+    public TradeName?: string = '';
     public InstituteID?: number = 0;
     public CourseType?: number = 0;
     public ModifyBy?: number = 0;
     public Type?: string = '';
+    public InstituteList?: InstituteListDataModel_Coun[] = [];
+}
+
+export class InstituteListDataModel_Coun {
+  public InstituteOptionID?: number = 0;
+  public InstituteID?: number = 0;
+  public Priority?: number = 0;
+  public InstituteName?: string = '';
+  public OptionID?: number = 0;
+  public Type?: string = '';
 }
 
 export class Counselling_DropdownDataModel extends RequestBaseModel {

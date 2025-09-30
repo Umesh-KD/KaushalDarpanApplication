@@ -13,6 +13,8 @@ export class CollegeWiseScholarshipSearchModel {
   public ScholarshipMode :  string ='';
   public SortOrder: string = '';
   public SortColumn: string = '';
+  public SchemeName: string='';
+  public CourseType: number=0;
 }
 
 

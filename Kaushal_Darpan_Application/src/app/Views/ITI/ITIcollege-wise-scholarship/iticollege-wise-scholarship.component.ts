@@ -13,7 +13,6 @@ import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } fro
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddITICollegeWiseScholarshipModel, ITICollegeWiseScholarshipSearchModel } from '../../../Models/ITICollegeWiseScholarshipModel';
-// import { ITICollegeWiseScholarshipService } from '../../Services/ITICollegeWiseScholarship/ITIcollege-wise-scholarship.service';
 import { ITICollegeWiseScholarshipService } from '../../../Services/ITICollegeWiseScholarship/iticollege-wise-scholarship.service';
 @Component({
     selector: 'iticollege-wise-scholarship',
@@ -215,6 +214,7 @@ SelectedStudent:any = {};
       newItem.CreatedBy = this.sSOLoginDataModel.UserID;
       newItem.ModifyBy = this.sSOLoginDataModel.UserID;
       newItem.StudentID = this.SelectedStudent.StudentID;
+      newItem.ScholarshipMode='Mannual';
 
       const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';

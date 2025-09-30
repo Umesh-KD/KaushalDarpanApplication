@@ -249,6 +249,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
 
   public ModifyBy: number = 0
   public StaffTypeID: number = 0
+  public WorkOfficeID: number = 0
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {

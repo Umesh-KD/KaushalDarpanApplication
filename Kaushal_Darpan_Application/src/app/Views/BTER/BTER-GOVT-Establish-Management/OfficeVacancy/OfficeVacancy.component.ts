@@ -233,9 +233,12 @@ export class OfficeVacancyComponent implements OnInit {
       await this.BTER_EstablishManagementService.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
+          
           this.OfficeVacancy = [];
-           this.OfficeVacancyDataList();
+          this.OfficeVacancyDataList();
+          this.toastr.success('Data saved successfully!');
+
+          window.location.reload();
            // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);

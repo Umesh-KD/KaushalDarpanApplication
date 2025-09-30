@@ -269,9 +269,8 @@
                           <th>Scheme</th>
                           <th>Scholarship Type</th>
                           <th>Amount</th>
-                          <th>Date</th>
-                          <!-- <th>Mode</th> -->
-                          <!-- <th>Sections</th> -->
+                          <th>Date</th> 
+                           <th>Scholarship Mode</th>
                           <th>Action</th>
                           
                         </tr>
@@ -282,8 +281,7 @@
                           <td>{{ row.ScholarShipTypeName }}</td>
                           <td>{{ row.ScholarShipAmount }}</td>
                           <td>{{ row.ScholarShipDate }}</td>
-                          <!-- <td>Manual</td> -->
-                          <!-- <td>{{ row.SectionsName }}</td> -->
+                          <td>{{ row.ScholarshipMode}}</td> 
                           <td>
                             <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
                               <i class="ti ti-trash"></i>

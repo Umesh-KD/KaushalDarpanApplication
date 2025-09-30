@@ -24,6 +24,7 @@ export class CousellingCandidateFormTabComponent {
     @ViewChild('tabContent', { read: ViewContainerRef }) tabContent!: ViewContainerRef;
     selectedTabIndex = 0;
     ApplicationID: number = 0;
+    CandidateID: number = 0;
     public searchRequest = new ItiApplicationSearchmodel()
     public PersonalDetailsData: any = []
     dateConfiguration = new DateConfigurationModel();
@@ -57,7 +58,7 @@ export class CousellingCandidateFormTabComponent {
     {
       this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       console.log("SSOLoginDataModel",this.SSOLoginDataModel)
-      // this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
+      this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
       // if (!this.ApplicationID)
       // {
       //   window.open(`/StudentJanAadharDetail`, "_self");

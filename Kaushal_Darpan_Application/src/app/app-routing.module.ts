@@ -1419,6 +1419,7 @@ const routes: Routes = [
 
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
+      { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
 
     ]
   },
@@ -1523,7 +1524,7 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-  
+
   
 
 

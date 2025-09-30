@@ -12,13 +12,13 @@ import { EmitraPaymentService } from '../../../../Services/EmitraPayment/emitra-
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ReportService } from '../../../../Services/Report/report.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
   selector: 'app-candidate-form-preview',
@@ -73,7 +73,8 @@ export class CandidateFormPreviewComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.CandidateID = 1   //this.sSOLoginDataModel.ApplicationID;
+
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     
     let id = this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0";
     //this.ApplicationID = Number(this.encryptionService.decryptData(id))
