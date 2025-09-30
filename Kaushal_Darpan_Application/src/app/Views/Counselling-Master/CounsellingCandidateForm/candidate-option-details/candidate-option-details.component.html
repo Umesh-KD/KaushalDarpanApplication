@@ -85,7 +85,7 @@
           <th>Priority</th>
           <th class="text-left">Trade Name</th>
           <th class="text-left">Name of College</th>
-          <th>Action</th>
+          <!-- <th>Action</th> -->
         </tr>
       </thead>
       
@@ -96,7 +96,7 @@
 
           <td class="text-left" >
 
-            <table>
+            <table class="w-full table-border">
               <tbody>
                 <tr *ngFor="let item of row.InstituteList; let idx = index">
                   <td class="text-center">{{item.Priority}}</td>
@@ -124,7 +124,7 @@
               </tbody>
             </table>
           </td>
-          <td class="text-center">
+          <!-- <td class="text-center">
             <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID_Counselling(row)">
               <i class="ti ti-trash"></i>
             </button>
@@ -142,7 +142,7 @@
                     [disabled]="idx === AddedChoices.length - 1">
               <i class="ti ti-arrow-narrow-down"></i>
             </button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>

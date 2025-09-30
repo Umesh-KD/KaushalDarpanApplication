@@ -7,9 +7,9 @@ import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, Institu
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
   selector: 'app-candidate-option-details',
@@ -39,6 +39,7 @@ export class CandidateOptionDetailsComponent {
   public settingsMultiselect: object = {};
 
   public isSubmitted: boolean = false
+  public CandidateID: number = 0
 
   constructor(
     private commonFunctionService: CommonFunctionService,
@@ -76,7 +77,7 @@ export class CandidateOptionDetailsComponent {
         // InstituteID: ['', [DropdownValidators]],
         InstituteList: ['', ],
       });
-
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.SSOLoginDataModel.ApplicationFinalSubmit == 2) {
       this.formSubmitSuccess.emit(true); // Notify parent of success
@@ -121,7 +122,7 @@ export class CandidateOptionDetailsComponent {
 
   async AddChoice() {
     try {
-      this.formData.CandidateID = 1;
+      this.formData.CandidateID = this.CandidateID;
       this.formData.Priority = this.AddedChoices.length + 1
       this.formData.ModifyBy = this.SSOLoginDataModel.UserID
       await this.counsellingApplicationFormService.Counselling_SaveOption(this.formData).then(async (data: any) => {
@@ -146,7 +147,7 @@ export class CandidateOptionDetailsComponent {
 
   async Counselling_GetOptionDetailsByID() {
     try {
-      this.searchReq.CandidateID = 1
+      this.searchReq.CandidateID = this.CandidateID;
       await this.counsellingApplicationFormService.Counselling_GetOptionDetailsByID(this.searchReq).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {

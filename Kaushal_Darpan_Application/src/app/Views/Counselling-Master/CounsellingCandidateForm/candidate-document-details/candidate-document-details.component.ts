@@ -9,12 +9,12 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { UploadCounsellingFileModel } from '../../../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel_Counselling } from '../../../../Models/DeleteDocumentDetailsModel';
 import { CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
   selector: 'app-candidate-document-details',
@@ -36,6 +36,7 @@ export class CandidateDocumentDetailsComponent {
   filteredDocumentsGroup2: any[] = [];
 
   public isSubmitted: boolean = false;
+  public CandidateID: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,6 +53,7 @@ export class CandidateDocumentDetailsComponent {
 
   async ngOnInit() { 
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetById();
   }
 
@@ -59,7 +61,7 @@ export class CandidateDocumentDetailsComponent {
     try {
       this.isSubmitted = false;
 
-      this.searchReq.CandidateId = 1  //this.SSOLoginDataModel.CandidateID
+      this.searchReq.CandidateId = this.CandidateID  //this.SSOLoginDataModel.CandidateID
 
       this.loaderService.requestStarted();
       await this.counsellingApplicationFormService.GetDocumentDatabyID_Counselling(this.searchReq)
@@ -101,7 +103,7 @@ export class CandidateDocumentDetailsComponent {
     try {
       //upload model
       let uploadModel: UploadCounsellingFileModel = {
-        CandidateID: '1',   //this.SSOLoginDataModel.ApplicationID.toString() ?? "0",
+        CandidateID: this.CandidateID.toString(),   //this.SSOLoginDataModel.ApplicationID.toString() ?? "0",
         AcademicYear: this.SSOLoginDataModel.FinancialYearID.toString() ?? "0",
         DepartmentID: this.SSOLoginDataModel.DepartmentID.toString() ?? "0",
         EndTermID: this.SSOLoginDataModel.EndTermID.toString() ?? "0",
@@ -226,7 +228,7 @@ export class CandidateDocumentDetailsComponent {
 
             this.documentDetails.forEach(e => {
               e.ModifyBy = this.SSOLoginDataModel.UserID;
-              e.CandidateID = 1    //this.request.ApplicationID;
+              e.CandidateID = this.CandidateID    //this.request.ApplicationID;
             })
 
             this.loaderService.requestStarted();
