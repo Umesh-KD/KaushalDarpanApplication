@@ -27,7 +27,11 @@ export class DTEItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
+  
+
 }
+
+
 export class ItemsDetailsModel {
   public Item: string = '';
   public Category: string = '';
@@ -66,6 +70,11 @@ export class inventoryIssueHistorySearchModel {
   public staffID: number = 0;
   public ItemId: number = 0;
   public collageTradeID: number = 0;
+  public issuedTo: number = 0;
+  public serialNo: number = 0;
+  public departmentID: number = 0;
+  public itemCategoryId: number = 0;
+  public ItemType: number = 0;
 }
 
 
@@ -128,4 +137,19 @@ export class itemStatusRevertModel {
   public Remark: string = '';
   
   
+}
+
+
+export class DTEItemsSaveModel {
+  public EquipmentsId: number = 0;
+  public ItemId: number = 0;
+  public CategoryId: number = 0;
+  public TradeId: number = 0;
+  public IssueNumber: string = '';
+  public IssueDate: string = '';
+  public CreatedBy: string = '';
+  public ReturnIssueNumber: string = '';
+  public ReturnIssueDate: string = '';
+  public IssueQuantity: number = 0;
+
 }

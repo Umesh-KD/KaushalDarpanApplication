@@ -1,0 +1,4 @@
+::ng-deep .scrollable-dropdown .ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 200px !important; /* Adjust height */
+  overflow-y: auto !important; /* Enable vertical scroll */
+}
