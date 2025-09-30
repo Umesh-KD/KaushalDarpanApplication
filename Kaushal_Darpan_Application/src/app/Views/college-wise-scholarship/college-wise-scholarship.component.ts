@@ -217,7 +217,8 @@ SelectedStudent:any = {};
       const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
       // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       newItem.SchemeName=selectedScheme;
-      newItem.ScholarShipTypeName=selectedScholarship;
+      newItem.ScholarShipTypeName = selectedScholarship;
+      newItem.ScholarshipMode = 'Mannual';
       // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
   
       // Save as CSV
