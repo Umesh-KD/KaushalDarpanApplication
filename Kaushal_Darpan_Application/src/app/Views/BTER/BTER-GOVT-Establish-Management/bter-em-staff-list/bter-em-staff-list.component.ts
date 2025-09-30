@@ -132,6 +132,7 @@ export class BTEREMStaffListComponent {
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
     await this.getInstituteMasterList();
+    this.approveRequest.WorkOfficeID = 0;
   }
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls }
