@@ -46,8 +46,8 @@
           <div class="text-center">
             <p><b>{{requestReporting.StudentName}}</b></p>
             <p><b>Father's Name: </b>{{requestReporting.FatherName}}</p>
-            <!--<p><b>Allotted Trade: </b>{{requestReporting.TradeName}}</p>
-    <p><b>Allotted Category:</b>{{requestReporting.AllotedCategory}}</p>-->
+            <p><b>Application No: </b>ITI-{{requestReporting.ApplicationNo}}</p>
+            <!-- <p><b>Allotted Category:</b>{{requestReporting.AllotedCategory}}</p>-->
             <p>
               <b>Gender: </b>{{ requestReporting.AllotedGender}}
             </p>
@@ -87,6 +87,14 @@
               <p class="mb-0">{{requestReporting.Email}}</p>
             </div>
           </div>
+
+          <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-6">
+
+            <button type="button" class="btn bg-primary text-white mt-6" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button>
+
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -305,14 +313,10 @@
       </div><div>{{StudentVerifyPhoneData[0]?.JoiningStatus}}</div>
     </div>
     <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-6">
-      <div class="text-center" *ngIf="ApplicationAlloted==true">
-        <button type="button" class="btn bg-success text-white mt-6" (click)="openModalGenerateOTP(modal_GenrateOTP)">Allot Seat</button>
+     
         <button type="button" class="btn bg-primary text-white mt-6" style="display: none;" (click)="openModalChangeMobileNo(modal_ChangeMobileNo)">Change Mobile No.</button>
       </div>
-      <div class="text-center" *ngIf="ApplicationAlloted==false">
-        <p class="text-success">This Record already Alloted. It something wrong please go back and revert it. !! Thanks</p>
-      </div>
-    </div>
+
 
   </div>
 </div>
@@ -569,12 +573,14 @@
       </div>
       <div class="card-body">
         <div class="mt-4">
-          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter New Mobile No.</label>
-          <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="NewMobileNo" placeholder="Enter New Mobile Number">-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter New Mobile No.</label>
+          <input type="text" (keypress)="numberOnly($event)" maxlength="10" class="form-input" [(ngModel)]="NewMobileNo" placeholder="Enter New Mobile Number">
         </div>
       </div>
       <div class="card-footer text-center flex items-center justify-center mt-3">
-        <button type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+
+
+        <button (click)="UpdateMobileNo()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Update Mobile</button>
       </div>
     </div>
   </div>

@@ -59,10 +59,11 @@ export class DteEquipmentsMasterComponent {
 
     this.EquipmentsRequestFormGroup = this.formBuilder.group({
       txtName: ['', Validators.required],
-      //txtName: ['', [Validators.required, Validators.pattern(GlobalConstants.NameNoNumbersPattern),]],
       Specification: ['', Validators.required],
       UnitId: ['', [DropdownValidators]],
       itemCategoryId: ['', [DropdownValidators]],
+      IsConsumable: [false],
+      IsSerialNo: [false]
     });
 
     this.EquipmentsId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -93,11 +94,11 @@ export class DteEquipmentsMasterComponent {
 
 
   async saveData() {
+    debugger
     this.isSubmitted = true;
     if (this.EquipmentsRequestFormGroup.invalid) {
       return console.log("Form is invalid, cannot submit")
     }
-    //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
 
@@ -110,6 +111,9 @@ export class DteEquipmentsMasterComponent {
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       }
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
+      this.request.IsConsumable = this.EquipmentsRequestFormGroup.value.IsConsumable ? 1 : 0;
+      this.request.IsSerialNo = this.EquipmentsRequestFormGroup.value.IsSerialNo ? 1 : 0;
       await this.dteEquipmentsService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -141,29 +145,78 @@ export class DteEquipmentsMasterComponent {
     }
   }
 
+  //async GetByID(id: number) {
+
+  //  try {
+  //    this.loaderService.requestStarted();
+
+  //    await this.dteEquipmentsService.GetByID(id)
+  //      .then((data: any) => {
+  //        console.log(data)
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.request.Name = data['Data']["Name"];
+  //        this.request.Specification = data['Data']["Specification"];
+  //        this.request.UnitId = data['Data']["UnitId"];
+  //        this.request.CreatedBy = data['Data']["CreatedBy"];
+  //        this.request.ModifyBy = data['Data']["ModifyBy"];
+  //        this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
+  //        this.request.IsConsumable = data['Data']["IsConsumable"] == 1 ? 1 : 0;
+  //        console.log('Get by ID ==>',data)
+  //        // Update UI elements if necessary
+  //        const btnSave = document.getElementById('btnSave');
+  //        if (btnSave) btnSave.innerHTML = "Update";
+
+  //        const btnReset = document.getElementById('btnReset');
+  //        if (btnReset) btnReset.innerHTML = "Cancel";
+
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
   async GetByID(id: number) {
-    
     try {
       this.loaderService.requestStarted();
 
       await this.dteEquipmentsService.GetByID(id)
         .then((data: any) => {
-          console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          this.request.Name = data['Data']["Name"];
-          this.request.Specification = data['Data']["Specification"];
-          this.request.UnitId = data['Data']["UnitId"];
-          this.request.CreatedBy = data['Data']["CreatedBy"];
-          this.request.ModifyBy = data['Data']["ModifyBy"];
-          this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
-          console.log(data)
-          // Update UI elements if necessary
+          const equipment = data['Data'];
+
+          this.EquipmentsRequestFormGroup.patchValue({
+            txtName: equipment["Name"],
+            Specification: equipment["Specification"],
+            UnitId: equipment["UnitId"],
+            itemCategoryId: equipment["ItemCategoryId"],
+            IsConsumable: equipment["IsConsumable"] == 1,
+            IsSerialNo: equipment["IsSerialNo"] == 1
+          });
+
+          this.request = {
+            ...this.request,
+            EquipmentsId: id,
+            Name: equipment["Name"],
+            Specification: equipment["Specification"],
+            UnitId: equipment["UnitId"],
+            ItemCategoryId: equipment["ItemCategoryId"],
+            CreatedBy: equipment["CreatedBy"],
+            ModifyBy: equipment["ModifyBy"],
+            IsConsumable: equipment["IsConsumable"] == 1 ? 1 : 0,
+            IsSerialNo: equipment["IsSerialNo"] == 1 ? 1 : 0
+          };
+
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
 
           const btnReset = document.getElementById('btnReset');
           if (btnReset) btnReset.innerHTML = "Cancel";
-
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -175,6 +228,7 @@ export class DteEquipmentsMasterComponent {
       }, 200);
     }
   }
+
 
   async GetAllData() {
     try {
@@ -191,6 +245,7 @@ export class DteEquipmentsMasterComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.EquipmentsMasterList = data['Data'];
+          console.log('Equipments Master List ==> ', this.EquipmentsMasterList)
         }, error => console.error(error));
     }
     catch (Ex) {

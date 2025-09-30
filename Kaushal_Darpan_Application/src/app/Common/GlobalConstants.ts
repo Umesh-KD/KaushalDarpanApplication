@@ -177,6 +177,8 @@ export enum EnumRole {
   DTEDegreeCourse1stYear = 80,
   DTEDegreeCourse2ndYear = 81,
 
+  CandidateRole=999,
+
 }
 
 export enum enumExamStudentStatus {
@@ -215,7 +217,8 @@ export enum EnumUserType {
   CITIZEN = "CITIZEN",
   GOVT = "GOVT",
   KIOSK = "KIOSK",
-  STUDENT = "STUDENT"
+  STUDENT = "STUDENT",
+  CANDIDATE ="CANDIDATE"
 }
 
 export enum EnumProfileStatus {

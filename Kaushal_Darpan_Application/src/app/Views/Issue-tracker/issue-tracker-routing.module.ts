@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IssueTrackerComponent } from './issue-tracker.component';
+import { IssueTrackerComponent } from './issue-tracker/issue-tracker.component';
 
 const routes: Routes = [{ path: '', component: IssueTrackerComponent }];
 

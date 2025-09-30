@@ -7,6 +7,7 @@ import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel'
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
 import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { AddCollegeWiseScholarshipModel } from '../../Models/CollegeWiseScholarshipModel';
 
 
 @Injectable({
@@ -107,6 +108,33 @@ export class CollegeWiseScholarshipService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
+  }
+ public async GetCollegeWiseScholarshipListReport(searchRequest: CompanyMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCollegeWiseScholarshipListReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetSchemeType(){
+    return await this.http.get(`${this.APIUrl}/GetSchemeList`,this.headersOptions).pipe(catchError(this.handleErrorObservable)).toPromise();
+  }
+
+  public async GetScholershipType(){
+    return await this.http.get(`${this.APIUrl}/GetTypeList`,this.headersOptions).pipe(catchError(this.handleErrorObservable)).toPromise();
+  }
+
+  public async SaveCollegeWiseScholarshipDetails(data: AddCollegeWiseScholarshipModel[]) {
+    var body = JSON.stringify(data);
+    return await this.http.post(`${this.APIUrl}/SaveCollegeWiseScholarshipDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetDetailsById(id:number){
+    return await this.http.get(`${this.APIUrl}/GetDetailsById/${id}`,this.headersOptions).pipe(catchError(this.handleErrorObservable)).toPromise();
   }
 
   //   public async GetDataByStudentId(ID: number) {

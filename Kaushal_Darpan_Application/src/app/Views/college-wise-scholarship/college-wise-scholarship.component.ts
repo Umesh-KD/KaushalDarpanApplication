@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
-import { CollegeWiseScholarshipService } from '../../Services/CollegeWiseScholarship/college-wise-scholarship.ts';
+import { CollegeWiseScholarshipService } from '../../Services/CollegeWiseScholarship/college-wise-scholarship.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../Models/CompanyMasterDataModel';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
+import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../Models/CollegeWiseScholarshipModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 @Component({
@@ -25,6 +25,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+    public mode:string='manual';
 
   // pagination
    pageNo: any = 1;
@@ -36,10 +37,30 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   sortColumn: string = "";
   sortOrder: string = "";
 
+
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
   closeResult:string | undefined;
   EditDataFormGroup!: FormGroup;
+  AddCollegeWiseScholarshipModelList: AddCollegeWiseScholarshipModel[]=[];
+   AddCollegeWiseScholarshipModelList2: AddCollegeWiseScholarshipModel[]=[];
+  AddCollegeWiseScholarshipModel =new AddCollegeWiseScholarshipModel();
+  CategoryList:any=[];
+  scholarshipTypes:any = [
+  { id: 1, name: 'Cash' },
+  { id: 2, name: 'Scooty' },
+  { id: 3, name: 'Laptop' }
+];
+
+schemeTypes:any = [
+  { id: 1, name: 'Scheme 1' },
+  { id: 2, name: 'Scheme 2' },
+  { id: 3, name: 'Scheme 3' }
+];
+
+SelectedStudent:any = {};
+
+
 
   constructor(private commonMasterService: CommonFunctionService, private CollegeWiseScholarshipService: CollegeWiseScholarshipService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
@@ -49,6 +70,8 @@ export class CollegeWiseScholarshipComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.schemeTypes = await this.getSchemeList();
+    this.scholarshipTypes = await this.getScholershiptype();
 
       // this.EditDataFormGroup = this.fb.group({
       //     ID: [''],
@@ -61,12 +84,12 @@ export class CollegeWiseScholarshipComponent implements OnInit {
       //     //  StreamID: [0, Validators.required]
       //   });
       this.EditDataFormGroup = this.fb.group({
-        SchemeID: [0, Validators.required],
+        SchemeID: ['', Validators.required],
         ScholarshipType: ['', Validators.required],
         Amount: [''] , // will validate only if Cash is selected
         ScholarshipDate: ['', Validators.required]   // 👈 new field
       });
-
+ await this.GetCategoryMatserDDL()
       // Add dynamic validator
       this.EditDataFormGroup.get('ScholarshipType')?.valueChanges.subscribe(val => {
         const amountCtrl = this.EditDataFormGroup.get('Amount');
@@ -80,6 +103,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
       });
 
     await this.GetEligibleStudentListData(1);
+       
   }
 
 
@@ -107,6 +131,8 @@ export class CollegeWiseScholarshipComponent implements OnInit {
 
    async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
+    this.SelectedStudent = rowData;
+    
     debugger
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
@@ -114,6 +140,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
       ariaLabelledBy: 'modal-basic-title',
       backdrop: 'static'
     });
+    await this.fetchById();
 
     // Handle result or dismissal
     this.modalRef1.result.then(
@@ -152,72 +179,89 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   }
 
 
-    // AddToList() {
-    //   debugger
-    //   this.isSubmitted = true;
-    //   if (this.EditDataFormGroup.invalid) return;
-    //   // if(this.availSectionData.length>0){
-    //   //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
-    //   //    if(existAssignedTeacherData){
-    //   //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
-    //   //     return;
-    //   //    }
-    //   // }
-    //   const formValue = this.EditDataFormGroup.value;
+    AddToList() {
+      debugger
+      this.isSubmitted = true;
+      if (this.EditDataFormGroup.invalid) return;
+      // if(this.availSectionData.length>0){
+      //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
+      //    if(existAssignedTeacherData){
+      //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
+      //     return;
+      //    }
+      // }
+
+      const filtered = this.AddCollegeWiseScholarshipModelList.filter(s => 
+        s.ScholarShipTypeID == this.EditDataFormGroup.get('ScholarshipType')?.value &&
+        s.SchemeID == this.EditDataFormGroup.get('SchemeID')?.value &&
+        new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
+      );
+      if(filtered.length > 0){
+        alert('Already got scholarship');
+        return;
+      }
+
+      const formValue = this.EditDataFormGroup.value;
   
-    //   const newItem = new AddStaffSubjectSectionModel();
-    //   newItem.ID = this.AddStaffSubjectSectionModelList.length + 1;
-    //   newItem.StreamID = this.AddStaffSubjectSectionModel.StreamID;
-    //   newItem.SemesterID = this.AddStaffSubjectSectionModel.SemesterID;
-    //   newItem.SubjectID = this.AddStaffSubjectSectionModel.SubjectID;
-    //   newItem.StaffID = this.AddStaffSubjectSectionModel.StaffID;
+      const newItem = new AddCollegeWiseScholarshipModel();
+      newItem.ID = 0;
+      newItem.ScholarShipTypeID = this.EditDataFormGroup.get('ScholarshipType')?.value;
+      newItem.SchemeID = this.EditDataFormGroup.get('SchemeID')?.value;
+      newItem.ScholarShipAmount = this.EditDataFormGroup.get('Amount')?.value;
+      newItem.ScholarShipDate = this.EditDataFormGroup.get('ScholarshipDate')?.value;
+      newItem.CreatedBy = this.sSOLoginDataModel.UserID;
+      newItem.ModifyBy = this.sSOLoginDataModel.UserID;
+      newItem.StudentID = this.SelectedStudent.StudentID;
+
+      const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
+      const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
+      // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
+      newItem.SchemeName=selectedScheme;
+      newItem.ScholarShipTypeName=selectedScholarship;
+      // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
   
-    //   // Save as CSV
-    //   newItem.SectionIDs = (formValue.SectionID || []).join(',');
-  
-  
-  
-    //   newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
-    //   newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
-    //   newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
-    //   newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
-    //   newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
-  
-  
-  
-    //   //newItem.SemesterName = "";
-    //   //newItem.StreamName = "";
-    //   //newItem.SubjectName = "";
-    //   //newItem.SatffName = "";
-    //   //newItem.SectionsName = "";
-    //   this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
-    //   this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-    //   this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
-    //   this.AddStaffSubjectSectionModelList.push(newItem);
-  
-    //   // remove used sections from dropdown
-    //   this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
-    //   this.refreshAvailableSections();
-    //   this.EditDataFormGroup.reset({
-    //     SectionID: [],
-    //     StreamID: this.oldStreamID,
-    //     SemesterID: this.oldSemesterID
-    //   });
-    //   this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
-    //   this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
-    //   this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
-  
-    //   // reset form
-    //   //this.EditDataFormGroup.reset({
-    //   //  SubjectID: 0,
-    //   //  UserID: 0,
-    //   //  SectionID: []
-    //   //});
-  
-    //   this.isSubmitted = false;
+      // Save as CSV
+      // newItem.SectionIDs = (formValue.SectionID || []).join(',');
   
   
-    // }
+  
+      // newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
+      // newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
+      // newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
+      // newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
+      // newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
+  
+  
+  
+      //newItem.SemesterName = "";
+      //newItem.StreamName = "";
+      //newItem.SubjectName = "";
+      //newItem.SatffName = "";
+      //newItem.SectionsName = "";
+      // this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
+      // this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
+      // this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.AddCollegeWiseScholarshipModelList.push(newItem);
+      // this.AddCollegeWiseScholarshipModelList2=this.AddCollegeWiseScholarshipModelList;
+      // remove used sections from dropdown
+      // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
+      // this.refreshAvailableSections();
+      this.EditDataFormGroup.reset();
+      // this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
+      // this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
+      // this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
+  
+      // reset form
+      //this.EditDataFormGroup.reset({
+      //  SubjectID: 0,
+      //  UserID: 0,
+      //  SectionID: []
+      //});
+  
+      this.isSubmitted = false;
+  
+  
+    }
 
   async GetEligibleStudentListData(i:any) {
     debugger
@@ -244,12 +288,12 @@ export class CollegeWiseScholarshipComponent implements OnInit {
       this.searchRequest.PageNumber=this.pageNo
       this.searchRequest.PageSize=this.pageSize
       this.searchRequest.SortColumn=this.sortColumn
-      this.searchRequest.SortOrder=this.sortOrder
-
+      this.searchRequest.SortOrder=this.sortOrder 
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+        console.log(this.searchRequest.Category);
       this.loaderService.requestStarted();
       await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipList(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -271,9 +315,46 @@ export class CollegeWiseScholarshipComponent implements OnInit {
     }
   }
 
+  async getSchemeList(){
+    this.loaderService.requestStarted();
+    try {
+      this.CollegeWiseScholarshipService.GetSchemeType().then((data:any)=>{
+        console.log('Scheme',data);
+      this.schemeTypes = data.Data;
+    })
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async getScholershiptype(){
+    this.loaderService.requestStarted();
+    try {
+      this.CollegeWiseScholarshipService.GetScholershipType().then((data:any)=>{
+        console.log('Types ',data);
+      this.scholarshipTypes = data.Data;
+    })
+    } catch (error) {
+      console.log(error)
+    }
+    finally{
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
   // get all data
   async ClearSearchData() {
+    debugger
     this.searchRequest.Name = '';
+    this.searchRequest.Enrollment = '';
+    this.searchRequest.Category='';
     this.searchRequest.Status = '';
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
@@ -355,6 +436,14 @@ export class CollegeWiseScholarshipComponent implements OnInit {
       this.modalRef1.dismiss();
       this.modalRef1 = null;
       this.isSubmitted = false;
+      this.SelectedStudent = {};
+      this.EditDataFormGroup.patchValue({
+        SchemeID : '',
+        Amount:'',
+        ScholarshipType:'',
+        ScholarshipDate:''
+      });
+      this.AddCollegeWiseScholarshipModelList = [];
     }
   }
   
@@ -373,5 +462,68 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   //   this.sortOrder = this.sortOrder == "" ? "ASC" : (this.sortOrder == "ASC" ? "DESC" : "ASC");
   //   // this.GetEligibleStudentListData(1);
   // }
+
+
+    DeleteFromList(index:any){
+      this.Swal2.Confirmation("Do you want to delete?",
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          this.AddCollegeWiseScholarshipModelList.splice(index, 1);
+          console.log('test');
+        }
+        
+      });
+    }
+
+      async GetCategoryMatserDDL() {
+    try {
+      this.AddCollegeWiseScholarshipModel.InstituteID = this.sSOLoginDataModel.DepartmentID
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CasteCategoryA()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CategoryList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+    SaveData_EditDetails(){
+      console.log(this.AddCollegeWiseScholarshipModelList);
+      console.log(this.SelectedStudent);
+
+      this.CollegeWiseScholarshipService.SaveCollegeWiseScholarshipDetails(this.AddCollegeWiseScholarshipModelList).then((data:any)=>{
+        console.log(data);
+        this.CloseModal1();
+      })
+    }
+
+    async fetchById(){
+      try {
+        this.loaderService.requestStarted();
+        this.CollegeWiseScholarshipService.GetDetailsById(this.SelectedStudent.StudentID).then((data:any)=>{
+          this.AddCollegeWiseScholarshipModelList = data.Data;
+          
+        })
+      } catch (error) {
+        this.AddCollegeWiseScholarshipModelList = [];
+        console.log(error);
+      }
+      finally{
+        setTimeout(() => {
+          this.loaderService.requestEnded()
+        }, 200);
+      }
+    }
 
 }

@@ -24,3 +24,21 @@ export interface UploadBTERFileModel {
   FileNameWithDynamicPath?: number;
   FilePrefix?: string;
 }
+
+export interface UploadCounsellingFileModel {
+  CandidateID?: string;
+  DocumentMasterID?: string;
+  AcademicYear?: string;
+  DepartmentID?: string;
+  EndTermID?: string;
+  Eng_NonEng?: string;
+  FileName?: string;
+  FolderName?: string;
+  FileExtention?: string;
+  MinFileSize?: string;
+  MaxFileSize?: string;
+  Password?: string;
+  IsCopy?: boolean;
+  FileNameWithDynamicPath?: number;
+  FilePrefix?: string;
+}

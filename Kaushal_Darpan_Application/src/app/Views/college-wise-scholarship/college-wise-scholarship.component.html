@@ -26,6 +26,31 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
+          <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
+        </div>
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+            </select>
+        
+        </div>
+         <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
+              <option value="0">Choose Option</option>
+              <option value="Mannual">Mannual</option>
+              <option value="API">API</option>
+            </select>
+        
+        </div>
+           <!-- <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category</label>   
+          <input type="text" class="form-input" placeholder="Category" id="Category" [(ngModel)]="searchRequest.Category">
+        </div> -->
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
@@ -78,7 +103,8 @@
             <th class="text-left">EnrollmentNo</th>
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
-            <th class="text-center">MobileNo</th>
+            <th class="text-left">Category</th>
+            <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
             <th class="text-center">Action</th>
           </tr>
@@ -90,7 +116,8 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.EnrollmentNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
             <!-- <td>{{item.Status}}</td> -->
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -148,12 +175,13 @@
 <ng-template #MyModel_EdiDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
-       <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
+      
             <div class="card">
               <div class="card-header flex justify-between items-center">
                 <b><i class="fa fa-plus"></i>&nbsp;Add-Edit CollegeWise Scholarship Section</b>
-                <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+                <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
               </div>
+            <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
               <div class="card-body">
                 <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
                   <b class="text-1xl-5">Basic Details</b>
@@ -178,13 +206,16 @@
 
                   <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
-                    <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown">
-                      <ng-option [value]="0">--Select--</ng-option>
-                      <ng-option [value]="1">Scheme 1</ng-option>
+                    <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown" >
+                      <ng-option [value]="">--Select--</ng-option>
+                     <ng-option *ngFor="let item of schemeTypes" [value]="item.id">
+                        {{ item.name }}
+                      </ng-option>
+                      <!-- <ng-option [value]="1">Scheme 1</ng-option>
                       <ng-option [value]="2">Scheme 2</ng-option>
-                      <ng-option [value]="2">Scheme 2</ng-option>
+                      <ng-option [value]="2">Scheme 2</ng-option> -->
                     </ng-select>
-                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors" class="text-danger">
+                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors && formEditData.SchemeID.touched " class="text-danger">
                       <p *ngIf="formEditData.SchemeID.errors.required"><i></i> This field is required .!</p>
                     </div>
                   </div>
@@ -192,35 +223,38 @@
                   <div>
                       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Type of Scholarship</label>
                       <ng-select formControlName="ScholarshipType" [clearable]="false">
-                        <ng-option [value]="'0'">--Select--</ng-option>
-                        <ng-option [value]="'1'">Cash</ng-option>
-                        <ng-option [value]="'2'">Scooty</ng-option>
-                        <ng-option [value]="'3'">Laptop</ng-option>
+                        <ng-option [value]="">--Select--</ng-option>
+                       <ng-option *ngFor="let item of scholarshipTypes" [value]="item.id">
+                          {{ item.name }}
+                        </ng-option>
                       </ng-select>
-                      <div *ngIf="isSubmitted && formEditData.ScholarshipType.errors" class="text-danger">
+                      <div *ngIf="isSubmitted && formEditData.ScholarshipType.errors && formEditData.ScholarshipType.touched" class="text-danger">
                         <p *ngIf="formEditData.ScholarshipType.errors.required"><i></i> This field is required .!</p>
                       </div>
                   </div>
 
                   <!-- Amount (only if ScholarshipType == Cash) -->
-                  <div *ngIf="EditDataFormGroup.get('ScholarshipType')?.value === '1'">
+                  <div *ngIf="EditDataFormGroup.get('ScholarshipType')?.value === 1">
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Amount</label>
-                    <input type="text" formControlName="Amount" class="form-control" placeholder="Enter Amount" />
-                    <div *ngIf="isSubmitted && formEditData.Amount?.errors" class="text-danger">
+                    <br/>
+                    <input type="text" formControlName="Amount" class="form-input" placeholder="Enter Amount" />
+                    <div *ngIf="isSubmitted && formEditData.Amount?.errors && formEditData.Amount?.touched " class="text-danger">
                       <p *ngIf="formEditData.Amount.errors.required"><i></i> Amount is required .!</p>
                     </div>
                   </div>
 
                   <!-- Date Field -->
                   <div>
-                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date</label>
-                    <input 
-                      type="date" 
-                      formControlName="ScholarshipDate" 
-                      class="form-control" 
-                      placeholder="Select Date" 
-                    />
-                    <div *ngIf="isSubmitted && formEditData.ScholarshipDate?.errors" class="text-danger">
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date</label><br/>
+                    <div>
+                      <input 
+                        type="date" 
+                        formControlName="ScholarshipDate" 
+                        class="form-input" 
+                        placeholder="Select Date" 
+                      />
+                    </div>
+                    <div *ngIf="isSubmitted && formEditData.ScholarshipDate?.errors && formEditData.ScholarshipDate?.touched" class="text-danger">
                       <p *ngIf="formEditData.ScholarshipDate.errors.required"><i></i> Date is required .!</p>
                     </div>
                   </div>
@@ -240,24 +274,27 @@
                     <table class="table table-border w-full table-auto" cellpadding="5">
                       <thead>
                         <tr>
-                          <th>Stream</th>
-                          <th>Semester</th>
-                          <th>Subject</th>
-                          <th>Staff</th>
-                          <th>Sections</th>
+                          <th>Scheme</th>
+                          <th>Scholarship Type</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <!-- <th>Sections</th> -->
+                           <th>Scholarship Mode</th>
                           <th>Action</th>
+                           
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let row of AddStaffSubjectSectionModelList; let i = index">
-                          <td>{{ row.SemesterName }}</td>
-                          <td>{{ row.StreamName }}</td>
-                          <td>{{ row.SubjectName }}</td>
-                          <td>{{ row.SatffName }}</td>
-                          <td>{{ row.SectionsName }}</td>
+                        <tr *ngFor="let row of AddCollegeWiseScholarshipModelList; let i = index">
+                          <td>{{ row.SchemeName }}</td>
+                          <td>{{ row.ScholarShipTypeName }}</td>
+                          <td>{{ row.ScholarShipAmount }}</td>
+                          <td>{{ row.ScholarShipDate }}</td>
+                          <!-- <td>{{ row.SectionsName }}</td> -->
+                           <td>{{ row.ScholarshipMode}}</td>
                           <td>
                             <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
-                              Delete
+                              <i class="ti ti-trash"></i>
                             </button>
                           </td>
                         </tr>
@@ -268,18 +305,18 @@
                     </table>
                   </div>
                   <div class="text-center flex items-center justify-center mt-3">
-                    <button type="button" id="btnSave" (click)="SaveData_EditDetails()" class="btn bg-info text-white">
+                    <button type="button" id="btnSave" (click)="SaveData_EditDetails()" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" class="btn bg-info text-white">
                       <i class="ti ti-device-floppy"></i> Submit
                     </button>
-                    <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+                    <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
                   </div>
                   <!--{{ApprovedTeacherList|json}}-->
                 </div>
               </div>
-
+            </form>
               
             </div>
-          </form>
+       
 
   </div>
 </ng-template>

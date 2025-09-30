@@ -11,6 +11,7 @@ export class BTER_EM_StaffListSearchModel {
   StaffTypeID: number = 0;
   RoleID: number = 0;
   UserID: number = 0;
+  BranchID: number = 0;
   Name: string = "";
 }
 
@@ -542,4 +543,5 @@ export class OfficeVacancyModel {
   public DesignationName: string = '';
   public InstituteName: string = '';
   public StaffTypeName: string = '';
+  public PostedSeat: number = 0;
 }

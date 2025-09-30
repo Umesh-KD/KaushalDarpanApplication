@@ -1,0 +1,31 @@
+::ng-deep .scrollable-dropdown .ng-dropdown-panel .ng-dropdown-panel-items {
+  max-height: 200px !important; /* Adjust height */
+  overflow-y: auto !important; /* Enable vertical scroll */
+}
+/*ScholarShip details Overflow*/
+
+
+.role-detail-of {
+  overflow-y: auto; /* or overflow: auto; if both x and y scrolling needed */
+  max-height: 100px; /* Example height */
+  padding-right: 6px; 
+}
+
+  /* WebKit Scrollbar Styling (Chrome, Safari, Edge) */
+  .role-detail-of::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .role-detail-of::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .role-detail-of::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+    .role-detail-of::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }

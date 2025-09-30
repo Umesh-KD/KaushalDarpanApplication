@@ -17,6 +17,7 @@ import { DTEEquipmentsMasterService } from '../../../../../Services/DTEInventory
 import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInventory/DTEItemCategoriesMaster/dteItemcategories-master.service';
 import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
+import { DteItemUnitMasterService } from '../../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
 
 @Component({
   selector: 'app-dteadd-items-master',
@@ -46,8 +47,10 @@ export class DteAddItemsMasterComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
+  public UnitMasterList: any = [];
   constructor(
     private toastr: ToastrService,
+    private dteItemUnitMasterService: DteItemUnitMasterService,
     private commonFunctionService: CommonFunctionService,
     private ItiTradeService: ItiTradeService,
     private itemService: DteItemsMasterService,
@@ -79,7 +82,9 @@ export class DteAddItemsMasterComponent {
       CampanyName: ['', Validators.required],
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['', [DropdownValidators]],
-      IsConsume: ['']
+      IsConsume: [''],
+      UnitId: [0],
+      voucherdate: ['', Validators.required]
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -93,6 +98,7 @@ export class DteAddItemsMasterComponent {
       this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
       
     }
+    await this.GetAllUnitData();
   }
 
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -301,8 +307,10 @@ export class DteAddItemsMasterComponent {
       const parsedData = JSON.parse(JSON.stringify(data))?.Data || [];
 
       this.EquipmentsDDLList = [defaultOption, ...parsedData];
-      if (parsedData.length === 1) {
-        this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(parsedData[0].EquipmentsId);
+      if (this.EquipmentsDDLList.length === 1) {
+   
+        this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(this.EquipmentsDDLList[0].EquipmentsId);
+        this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.EquipmentsDDLList[0].IsConsume);
       }
     } catch (ex) {
       console.error('ddlEquipment_Change error:', ex);
@@ -312,7 +320,9 @@ export class DteAddItemsMasterComponent {
   }
 
   async DGET_Details() {
-    
+    debugger
+    this.request.IsConsume = this.EquipmentsDDLList.find((item: any) => item.ID == this.request.EquipmentsId)?.IsConsume || 0;
+    this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.request.IsConsume);
     await this.updateTable();
     this.showDetailsTable = true;
     this.EquimentsWiseQty();
@@ -388,56 +398,7 @@ export class DteAddItemsMasterComponent {
     this.request.Quantity = numericValue;
     this.calculateTotalPrice();
   }
-  //onQuantityChange(newQuantity: number) {
-  //  debugger
-  //  // Check if the input quantity is greater than maxQty
-  //  if (newQuantity > this.maxQty) {
-  //    this.request.Quantity = this.maxQty; // Limit the quantity to maxQty
-  //    alert(`Quantity cannot exceed ${this.maxQty}`); // Optional alert
-  //  }
-  //}
-  //async GetEquipmentDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.equipmentsService.GetAllData()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-  //        this.EquipmentsDDLList = data['Data'];
-
-  //        console.log(this.EquipmentsDDLList)
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-  //async GetCategoryDDL() {
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.ItemCategoriesService.GetAllData()
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.CategoryDDLList = data['Data'];
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
+  
 
 
   async ResetControl() {
@@ -452,42 +413,15 @@ export class DteAddItemsMasterComponent {
       IdentificationMark: '',
       CampanyName: '',
       ItemCategoryId: null,
-      EquipmentsId: null
+      EquipmentsId: null,
+      UnitId: null,
+      voucherdate: ''
     });
 
     this.EquipmentsDDLList = [];
   }
 
 
-  //onQuantityInput(event: Event): void {
-  //  const input = event.target as HTMLInputElement;
-  //  let value = input.value.replace(/[^0-9]/g, '').slice(0, 4);
-
-  //  const numericValue = Math.max(1, Math.min(Number(value), this.maxQty || Infinity));
-
-  //  input.value = numericValue.toString();
-
-  //  this.AddItemsRequestFormGroup.get('txtQuantity')?.setValue(numericValue, {
-  //    emitEvent: false,
-  //  });
-
-  //  this.calculateTotalPrice(); // if needed
-  //}
-
-
-  //setDefaultQuantity() {
-  //  if (!this.request.Quantity) {
-  //    this.request.Quantity === 1 ;
-  //    this.AddItemsRequestFormGroup.get('txtQuantity')?.setValue(1);
-  //  }
-  //}
-
-  //preventDeleteIfDefault(event: KeyboardEvent): void {
-  //  const currentValue = this.AddItemsRequestFormGroup.get('txtQuantity')?.value;
-  //  if ((event.key === 'Backspace' || event.key === 'Delete') && currentValue === '') {
-  //    event.preventDefault(); // Block backspace/delete
-  //  }
-  //}
 
   validateNumber(event: KeyboardEvent): void {
     const pattern = /[0-9]/;
@@ -497,4 +431,27 @@ export class DteAddItemsMasterComponent {
     }
   }
 
+
+  async GetAllUnitData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.dteItemUnitMasterService.GetAllData()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.UnitMasterList = data['Data'];
+          console.log('Unit Master List ==>', this.UnitMasterList);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

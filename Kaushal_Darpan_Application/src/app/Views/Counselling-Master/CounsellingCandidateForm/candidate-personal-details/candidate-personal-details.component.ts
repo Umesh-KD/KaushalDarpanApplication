@@ -183,7 +183,7 @@ export class CandidatePersonalDetailsComponent {
       await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
+          // this.toastr.success(data.Message);
           this.request = data.Data
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);

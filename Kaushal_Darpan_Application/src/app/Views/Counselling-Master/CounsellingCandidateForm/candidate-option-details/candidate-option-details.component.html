@@ -63,8 +63,8 @@
 
         <tr>
           <th>Priority</th>
-          <th class="text-left">Name of College</th>
           <th class="text-left">Trade Name</th>
+          <th class="text-left">Name of College</th>
           <th>Action</th>
         </tr>
 
@@ -73,26 +73,26 @@
       <tbody>
         <tr *ngFor="let row of AddedChoices; let idx = index">
           <td class="text-center">{{idx+1}}</td>
-          <td class="text-left" >{{row.InstituteName}}</td>
           <td class="text-left">{{row.TradeName}}</td>
+          <td class="text-left" >{{row.InstituteName}}</td>
           <td class="text-center">
-            <!-- <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID(row)">
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID_Counselling(row)">
               <i class="ti ti-trash"></i>
             </button>
             <button class="btn bg-primary text-white"
                     type="button"
                     title="Priority Up"
-                    (click)="PriorityChange(row, 'UP')"
+                    (click)="PriorityChange_Counselling(row, 'UP')"
                     [disabled]="idx === 0">
               <i class="ti ti-arrow-narrow-up"></i>
             </button>
             <button class="btn bg-info text-white"
                     type="button"
                     title="Priority Down"
-                    (click)="PriorityChange(row, 'DOWN')"
+                    (click)="PriorityChange_Counselling(row, 'DOWN')"
                     [disabled]="idx === AddedChoices.length - 1">
               <i class="ti ti-arrow-narrow-down"></i>
-            </button> -->
+            </button>
           </td>
         </tr>
       </tbody>

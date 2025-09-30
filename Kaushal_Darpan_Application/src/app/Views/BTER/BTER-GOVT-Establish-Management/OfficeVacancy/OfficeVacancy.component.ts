@@ -24,6 +24,7 @@ import { BTERCollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDa
 })
 export class OfficeVacancyComponent implements OnInit {
   public AddOfficeVacancyForm!: FormGroup;
+  public groupForm!: FormGroup;
   public formData = new OfficeVacancyModel();
   public SearchData = new OfficeVacancyModel();
   public isSubmitted: boolean = false;
@@ -97,6 +98,16 @@ export class OfficeVacancyComponent implements OnInit {
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
       Comments: ['']
     });
+
+    this.groupForm = this.formBuilder.group({
+      OfficeID: [0, [DropdownValidators]],
+      InstituteID: [0, []],
+      StaffTypeID: [0, [DropdownValidators]],
+      DesignationID: [0, [DropdownValidators]],
+      TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
+      Comments: ['']
+    });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;    
     await this.OfficeVacancyDataList();
@@ -109,7 +120,12 @@ export class OfficeVacancyComponent implements OnInit {
   get _AddOfficeVacancyForm() {
     return this.AddOfficeVacancyForm.controls;
   }
+  get _groupForm() {
+    return this.groupForm.controls;
+  }
 
+
+  
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
@@ -188,6 +204,7 @@ export class OfficeVacancyComponent implements OnInit {
       DesignationName: getdesignation.Name,
       InstituteName: getinstituteName,
       StaffTypeName: getstaffType.Name,
+      PostedSeat:0,
       Index: this.tempIndex++
     };
 
@@ -394,6 +411,105 @@ export class OfficeVacancyComponent implements OnInit {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async Function_UpdateVacancyPost(model: any, userSubmitData: any) {
+    debugger;
+    try {
+      this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
+
+      if (userSubmitData) {
+        this.formData = userSubmitData;
+
+        if (this.formData.PostedSeat !== 0) {
+
+          this.groupForm.get('OfficeID')?.disable();
+          this.groupForm.get('StaffTypeID')?.disable();
+          this.groupForm.get('DesignationID')?.disable();
+          if (this.formData.InstituteID !== 0) {
+            this.groupForm.get('InstituteID')?.disable();
+          }
+        } else {
+          this.groupForm.get('OfficeID')?.enable();
+          this.groupForm.get('StaffTypeID')?.enable();
+          this.groupForm.get('DesignationID')?.enable();
+          if (this.formData.InstituteID !== 0) {
+            this.groupForm.get('InstituteID')?.enable();
+          }
+        }
+
+        // No need to re-assign DesignationID if it's part of userSubmitData
+        // this.formData.DesignationID = userSubmitData.DesignationID;
+      } else {
+        this.formData = new OfficeVacancyModel(); // or initialize with default values if needed
+      }
+
+      // If fillupDesignation is async, await it
+      await this.fillupDesignation();
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }
+
+
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.formData = new OfficeVacancyModel();
+    this.isSubmitted = false;
+  }
+
+
+  async VacancyPostUpdate() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+
+
+      if (this.formData.ID != 0) {
+        await this.BTER_EstablishManagementService.UpdateOfficeVacancy(this.formData).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State === EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.CloseModal();
+            this.OfficeVacancyDataList();
+            this.formData = new OfficeVacancyModel();
+            // Clear array after successful save
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        });
+      }
+      
+
+    } catch (error) {
+      console.error("Error saving data:", error);
+      this.toastr.error("An unexpected error occurred while saving data.");
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async OfficeVacancyActiveDeActive(ID: number, IsActive: boolean) {
+    if (ID != 0) {
+      this.formData.ID = ID;
+      this.formData.ActiveStatus = IsActive;
+      await this.BTER_EstablishManagementService.OfficeVacancyActiveDeActive(this.formData).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.OfficeVacancyDataList();
+          this.formData = new OfficeVacancyModel();
+          // Clear array after successful save
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      });
     }
   }
 }
