@@ -280,7 +280,7 @@
 
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
-              <div>
+              <div *ngIf="approveRequest.InstituteID>0">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
                 <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
                         [(ngModel)]="approveRequest.InstituteID" (change)="getStreamMasterData()">
@@ -477,6 +477,22 @@
 
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
 
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Work Office</label>
+                <select class="form-select " name="WorkOfficeID" id="WorkOfficeID" formControlName="WorkOfficeID"
+                        [(ngModel)]="approveRequest.WorkOfficeID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of OfficeWorkList" [value]="item.ID">{{item.Name}}</option>
+                </select>
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.WorkOfficeID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroup.WorkOfficeID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Extra Working <span class="StarMarking">*</span></label>
 
