@@ -79,7 +79,7 @@ export class BTEREMStaffListComponent {
 
   async ngOnInit() {
     this.StaffMasterFormGroup = this.formBuilder.group({
-      InstituteID: [0, [DropdownValidators]],
+      InstituteID: [0],
       BranchID: [0,],
       DesignationID: [0, [DropdownValidators]],
       Gender: [0, [DropdownValidators]],
