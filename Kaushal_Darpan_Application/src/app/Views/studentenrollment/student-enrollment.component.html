@@ -257,7 +257,7 @@
             <td align="left">{{row.ApplicationNo}}</td>
             <td align="left">
               <!-- {{row.EnrollmentNo}} -->
-               {{ (row.EnrollmentNo == 0 || row.EnrollmentNo == null) ? '' : row.EnrollmentNo }}
+              {{ (row.EnrollmentNo == 0 || row.EnrollmentNo == null) ? '' : row.EnrollmentNo }}
             </td>
             <td align="left">{{row.Dis_DOB}}</td>
             <td align="left">{{row.RollNo}}</td>
@@ -450,7 +450,10 @@
               </table>
             </div>
             <div class="text-center flex items-center justify-center">
-              <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.SelectedForEnrollment && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.VerifiedForEnrollment" class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">Download Enrollment Form<i class="ti ti-download"></i></button>
+              <button type="button" *ngIf="StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForEnrollment"
+                      class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">
+                Download Enrollment Form<i class="ti ti-download"></i>
+              </button>
 
               <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0]['EnrollTransactionId']>0" class="btn bg-success text-white" (click)="GetStudentFeeReceipt(StudentProfileDetailsData[0]['EnrollTransactionId'])">Download Fee Receipt<i class="ti ti-download"></i></button>
 
