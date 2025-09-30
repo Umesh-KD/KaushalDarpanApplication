@@ -288,12 +288,12 @@
                   <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
                 </select>
 
-                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.InstituteID.errors" class="text-danger">
+                <!--<div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.InstituteID.errors" class="text-danger">
                   <p *ngIf="!_StaffMasterFormGroup.InstituteID.errors.DropdownValidators">
                     <i aria-hidden="true"></i>This field is
                     required .!
                   </p>
-                </div>
+                </div>-->
               </div>
 
               <div *ngIf="IsHideShow">
