@@ -214,6 +214,7 @@ SelectedStudent:any = {};
       newItem.CreatedBy = this.sSOLoginDataModel.UserID;
       newItem.ModifyBy = this.sSOLoginDataModel.UserID;
       newItem.StudentID = this.SelectedStudent.StudentID;
+      newItem.ScholarshipMode='Mannual';
 
       const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';

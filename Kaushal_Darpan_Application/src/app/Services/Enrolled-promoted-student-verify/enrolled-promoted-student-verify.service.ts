@@ -100,4 +100,19 @@ export class EnrolledPromotedStudentVerifyService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveEnrolledStudentVerify_ReturnbyExamIncharge(request: StudentMarkedModel[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/SaveEnrolledStudentVerify_ReturnbyExamIncharge`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetEnrolledStudent_ReturnbyExamIncharge(request: EnrolledPromotedStudentModel) {
+    return await this.http.post(this.APIUrl + "/GetEnrolledStudent_ReturnbyExamIncharge", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

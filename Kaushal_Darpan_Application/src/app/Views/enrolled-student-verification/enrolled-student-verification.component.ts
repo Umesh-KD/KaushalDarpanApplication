@@ -152,7 +152,7 @@ export class EnrolledStudentVerificationComponent {
             if (this.ParamTab == 1 && (this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon)) {
               return x.ID === enumExamStudentStatus.VerifyandForwardtoExamIncharge;
             } else if (this.ParamTab == 2 && (this.sSOLoginDataModel.RoleID === EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID === EnumRole.ExaminationIncharge_NonEng)) {
-              return x.ID === enumExamStudentStatus.VerifyandForwardtoRegistrar;
+              return x.ID === enumExamStudentStatus.VerifyandForwardtoRegistrar || x.ID === enumExamStudentStatus.ReturnbyExamIncharge;
             } else if (this.ParamTab == 3 && (this.sSOLoginDataModel.RoleID === EnumRole.Registrar || this.sSOLoginDataModel.RoleID === EnumRole.Registrar_NonEng)) {
               return x.ID === enumExamStudentStatus.ApprovebyRegistrar || x.ID === enumExamStudentStatus.ReturnbyRegistrar;
             } else if (this.ParamTab == 4 && (this.sSOLoginDataModel.RoleID === EnumRole.ACP || this.sSOLoginDataModel.RoleID === EnumRole.ACP_NonEng)) {
@@ -182,8 +182,6 @@ export class EnrolledStudentVerificationComponent {
       await this.GetEnrolledStudent_VerifyandForwardtoExamIncharge();
     } else if (this.ParamTab == 3 && (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng)) {
       await this.GetEnrolledStudent_VerifyandForwardtoRegistrar();
-    } else if (this.ParamTab == 3 && (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng)) {
-      await this.GetEnrolledStudent_ReturnbyRegistrar();
     } else if (this.ParamTab == 4 && (this.sSOLoginDataModel.RoleID == EnumRole.ACP || this.sSOLoginDataModel.RoleID == EnumRole.ACP_NonEng)) {
       await this.GetEnrolledStudent_ApprovebyRegistrar();
     }
@@ -357,6 +355,39 @@ export class EnrolledStudentVerificationComponent {
     }
   }
 
+  async GetEnrolledStudent_ReturnbyExamIncharge() {
+    try {
+      this.isSubmitted = true;
+
+      //session
+      this.enrolledPromotedStudentRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.enrolledPromotedStudentRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.enrolledPromotedStudentRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.enrolledPromotedStudentRequest.RoleID = this.sSOLoginDataModel.RoleID;
+
+      //call
+      await this.enrolledPromotedStudentVerifyService.GetEnrolledStudent_ReturnbyExamIncharge(this.enrolledPromotedStudentRequest)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          //success
+          if (data.State == EnumStatus.Success) {
+            this.AllInTableSelect = false;
+            this.enrolledPromotedStudentList = data['Data'];
+
+            //table feature load
+            this.loadInTable();
+            //end table feature load
+          }
+          else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
   async btn_Clear() {
     //clear
     this.enrolledPromotedStudentRequest = new EnrolledPromotedStudentModel();
@@ -393,6 +424,9 @@ export class EnrolledStudentVerificationComponent {
     } else if (this.ParamTab == 4 && (this.sSOLoginDataModel.RoleID == EnumRole.ACP || this.sSOLoginDataModel.RoleID == EnumRole.ACP_NonEng)
       && this.status == enumExamStudentStatus.SelectedForExamination) {
       await this.SaveEnrolledStudentVerify_SelectedforExamination();
+    } else if (this.ParamTab == 2 && (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)
+      && this.status == enumExamStudentStatus.ReturnbyExamIncharge) {
+      await this.SaveEnrolledStudentVerify_ReturnbyExamIncharge();
     }
     else {
       this.toastr.error("Invalid action!");
@@ -609,6 +643,48 @@ export class EnrolledStudentVerificationComponent {
             console.log(ex);
             console.log(this.ErrorMessage);
           }
+        }
+      });
+  }
+
+  async SaveEnrolledStudentVerify_ReturnbyExamIncharge() {
+
+    this.Swal2.ConfirmationWithRemark("Are you sure to continue?",
+      async (result: any) => {
+        //confirmed
+        try {
+          this.isSubmitted = true;
+          this.loaderService.requestStarted();
+
+          var request: EnrolledPromotedStudentSaveModel[] = [];
+          const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
+          selectedStudents.forEach(x => {
+            request.push({
+              StudentId: x.StudentID,
+              ModifyBy: this.sSOLoginDataModel.UserID,
+              RoleID: this.sSOLoginDataModel.RoleID,
+              DepartmentID: this.sSOLoginDataModel.DepartmentID,
+              Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+              EndTermID: this.sSOLoginDataModel.EndTermID,
+              StudentExamID: x.StudentExamID,
+              Remark: result
+            })
+          });
+          // call
+          await this.enrolledPromotedStudentVerifyService.SaveEnrolledStudentVerify_ReturnbyExamIncharge(request)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State == EnumStatus.Success) {
+                this.AllInTableSelect = false;
+                await this.GetEnrolledPromotedStudentForVerification();
+                this.toastr.success(data.Message)
+              } else {
+                this.toastr.error(data.Message)
+              }
+            })
+        } catch (ex) {
+          console.log(ex);
+          console.log(this.ErrorMessage);
         }
       });
   }
