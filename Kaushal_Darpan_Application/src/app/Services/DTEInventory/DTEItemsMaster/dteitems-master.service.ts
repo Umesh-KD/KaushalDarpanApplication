@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -187,4 +187,38 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetItemListType(searchRequest: DTEItemsSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetItemListType`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAllItemList(searchRequest: DTEItemsSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+  
+  //public async SaveIssueItemsList(request: DTEItemsSaveModel[]) {
+  //  var body = JSON.stringify(request);
+  //  return await this.http.post(`${this.APIUrl}/SaveIssueItemsList`, body)
+  //    .pipe(
+  //      catchError(this.handleErrorObservable)
+  //    ).toPromise();
+  //}
+  public async SaveIssueItemsList(itemsList: any[]) {
+    const body = JSON.stringify(itemsList);
+    return await this.http.post(this.APIUrl + '/SaveIssueItemsList', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -18,14 +16,13 @@ import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItem
 
 
 @Component({
-  selector: 'app-bter-add-items-master',
-  templateUrl: './bter-return-item.component.html',
-  styleUrls: ['./bter-return-item.component.css'],
+  selector: 'app-bter-INV_Issue-report',
+  templateUrl: './bter-INV_Issue-report.component.html',
+  styleUrls: ['./bter-INV_Issue-report.component.css'],
   standalone: false
 })
-export class AddBterReturnItemComponent {
+export class bterINVIssuereportComponent {
   public Searchrequest = new inventoryIssueHistorySearchModel()
-  public returnModel = new itemReturnModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public State: number = 0;
@@ -41,44 +38,10 @@ export class AddBterReturnItemComponent {
   public staffDDLList: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
-  //public StudentReqListList: any = [];
-  public returnItemTypeList: any = [];
-  //public today: Date = new Date();
-  public submitRequest = new ItemsIssueReturnModels();
+  public today: Date = new Date();
 
 
-  //ItemMasterListt = [
-  //  {
-  //    Selected: false,
-  //    Name: 'Ramesh',
-  //    ItemCode: 'ITM001',
-  //    Quantity: 5,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Issued'
-  //  },
-  //  {
-  //    Selected: false,
-  //    Name: 'Suresh',
-  //    ItemCode: 'ITM002',
-  //    Quantity: 2,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Returned'
-  //  },
-  //  {
-  //    Selected: false,
-  //    Name: 'Naresh',
-  //    ItemCode: 'ITM003',
-  //    Quantity: 3,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Issued'
-  //  }
-  //];
+
 
 
 
@@ -100,34 +63,37 @@ export class AddBterReturnItemComponent {
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.UserID = this.sSOLoginDataModel.UserID;
-
+    this.UserID = this.sSOLoginDataModel.UserID;    
+    
     await this.GetAllData();
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
-    await this.GetAllItemTypeList()
   }
 
   async GetAllData() {
+    debugger
     try {
       this.loaderService.requestStarted();
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-      await this.bterInventoryService.GetInventoryIssueItemList(this.Searchrequest)
+     // this.Searchrequest.staffID = 1;
+
+      await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
             this.Message = data.Message;
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
-            // this.ItemMasterList1 = data.Data || [];
+            this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }
         }, error => console.error(error));
+      console.log('Item Master List ',this.ItemMasterList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -140,7 +106,7 @@ export class AddBterReturnItemComponent {
   }
 
   async GetStaffDDL() {
-
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -150,12 +116,12 @@ export class AddBterReturnItemComponent {
 
       if (data && data.State === EnumStatus.Success) {
         this.staffDDLList = [
-          { staffID: 0, staffName: 'Choose Staff' },
+          { staffID: 0, staffName: 'Choose Staff' }, 
           ...data.Data
         ];
 
-        this.Searchrequest.staffID = 0;
-        // console.log('staff list ==>', this.staffDDLList);
+        this.Searchrequest.staffID = 0; 
+       // console.log('staff list ==>', this.staffDDLList);
       } else {
         this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
         this.Searchrequest.staffID = 0;
@@ -169,7 +135,7 @@ export class AddBterReturnItemComponent {
   }
 
   async GetTradeDDL() {
-
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -179,12 +145,12 @@ export class AddBterReturnItemComponent {
 
       if (data && data.State === EnumStatus.Success) {
         this.TradeDDLList = [
-          { TradeId: 0, TradeName: 'Choose Trade' },
+          { TradeId: 0, TradeName: 'Choose Trade' }, 
           ...data.Data
         ];
 
         this.Searchrequest.TradeId = 0;
-        // console.log('Trade list ==>', this.TradeDDLList);
+       // console.log('Trade list ==>', this.TradeDDLList);
       } else {
         this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
         this.Searchrequest.TradeId = 0;
@@ -198,7 +164,7 @@ export class AddBterReturnItemComponent {
   }
 
   async GetCategoryDDL() {
-
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -208,7 +174,7 @@ export class AddBterReturnItemComponent {
 
       if (data && data.State === EnumStatus.Success) {
         this.CategoryDDLList = [
-          { ItemId: 0, ItemCategoryName: 'Choose Category' },
+          { ItemId: 0, ItemCategoryName: 'Choose Category' }, 
           ...data.Data
         ];
 
@@ -225,39 +191,12 @@ export class AddBterReturnItemComponent {
       setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
-
+    
   async ResetControl() {
     this.isSubmitted = false;
     this.Searchrequest = new inventoryIssueHistorySearchModel();
     await this.GetAllData();
   }
-
-
-  //exportToExcel(): void {
-  //  this.ItemMasterList = this.ItemMasterList.map((item: any) => {
-  //    const updatedItem = {
-  //      AvailableQuantity: item.AvailableQuantity,
-  //      CampanyName: item.CampanyName,
-  //      Code: item.Code,
-  //      CollegeName: item.CollegeName ?? "BTER",
-  //      EquipmentsName: item.EquipmentsName,
-  //      IdentificationMark: item.IdentificationMark,
-  //      InitialQuantity: item.InitialQuantity,
-  //      ItemCategoryName: item.ItemCategoryName,
-  //      PricePerUnit: item.PricePerUnit,
-  //      Status: item.Status == 1 ? "Approved" : "Pending",
-  //      TotalPrice: item.TotalPrice,
-  //      VoucherNumber: item.VoucherNumber
-  //    };
-
-  //    return updatedItem;
-  //  });
-
-  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
-  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  //  XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
-  //}
 
   exportToExcel(): void {
     debugger
@@ -292,106 +231,10 @@ export class AddBterReturnItemComponent {
     return `file_${timestamp}.${extension}`;
   }
 
-  toggleAll(event: any) {
-    const checked = event.target.checked;
-    this.ItemMasterList.forEach((item: any) => item.Selected = checked);
-  }
 
-  openReturnModal(content: any) {
-    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
+  
+  
 
-    if (selectedItems.length === 0) {
-      this.toastr.warning("Please select at least one item to return.", "Warning", {
-        toastClass: "ngx-toastr my-warning-toast"
-      });
-      return;
-    }
-    this.returnModel = {
-      ItemCount: selectedItems.length,
-      ItemCondition: 0,
-      staffID: 0,
-      ReturnDate: '',
-      Remarks: '',
-      ItemList: '',
-      ItemDetailsId: 0,
-      TransactionID: 0,
-      Type: ''
-    };
-
-    this.modalService.open(content, { size: 'lg', backdrop: 'static' });
-  }
-
-  async confirmReturn() {
-    debugger;
-
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-
-      this.submitRequest.StaffId = this.Searchrequest.staffID,
-      this.submitRequest.Remarks = this.returnModel.Remarks,
-      this.submitRequest.ItemCategoryId = 0,
-      this.submitRequest.ReturnDate = this.returnModel.ReturnDate,
-      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition,
-
-      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
-
-    try {
-      await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success("Items returned successfully", "", {
-              toastClass: "ngx-toastr my-update-toast"
-            });
-
-            this.GetAllData();
-          } else if (this.State == EnumStatus.Error) {
-            this.toastr.error("Something went wrong.");
-          }
-        });
-
-      this.modalService.dismissAll();
-    } catch (ex) {
-      console.error(ex);
-      this.toastr.error('Something went wrong. Please try again.');
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-      }, 200);
-    }
-  }
-
-
-  async GetAllItemTypeList() {
-    try {
-      this.loaderService.requestStarted();
-
-      const response: any = await this.commonMasterService.GetCommonMasterDDLByType('BterItemConditions');
-
-      if (response && response.Data) {
-        this.returnItemTypeList = response.Data;
-        this.returnModel.ItemCondition = this.returnItemTypeList[0].ID.toString();
-      }
-        
-      console.log('Default selected ==>', this.returnModel.ItemCondition);
-    } catch (ex) {
-      console.error('Error fetching item type list:', ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  openDatePicker(event: any) {
-    event.target.showPicker();
-  }
-
-
+ 
 
 }
-
