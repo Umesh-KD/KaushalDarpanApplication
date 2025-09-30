@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit {
     //await this.GetMasterData();
     //await this.loadDropdownData('Institute');
     //test, replace this sso token with active
-    this.SSOToken = "ZU53bU1vWVF2N1dVOVBBY1FGb290YjFxbmdpazBsVktJcUxRSElMK3JJUEVCTWhrSUFSZnZ6QWJVbnByQ1daMnpvV0tuNnczN3FaOEpzQTlDN1R4QXZiYzdwd0podEF6eWd0cjlTNDVQaDFOQTh0TDFjOU51eStxQ0FUenB5aXA0RXVuWEY2d3JGblpWM3VxeUtyZXoyd2YyM3JXTFhEdFNDREpLMkpOMDBnQ05Qbk1xZHBmTHYwTG5Pa2RXVVpQ";
+    this.SSOToken = "bmtITC9ZK2pYdFpMVExSbFlJTjlobFpxejVhTUdDMXY5enVZSjRwamRNeVdTVmlrSHpzZUdVMTcwbGhxN2lMeUtYY2lPSHFLR3BQb01CZXVhR1lveG5NN3ZaNjZWd1ZFNVVzNklSY3BGcGtmZGlaUTJIZndsUVVqb3UvRmR6Wi9NMjY0ak13Q2I1T2poWkNZb09xcDhmZjFHNWJDVzV2RS91WWd1cFNlc1RjSERFSTloc1VwRFIrQk1wM2cvbUhI";
   }
 
   loadDropdownData(MasterCode: string): void {

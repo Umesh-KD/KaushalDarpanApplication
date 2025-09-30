@@ -112,4 +112,14 @@ export class StudentsJoiningStatusMarksService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetChangeShiftUnitData(searchRequest: StudentsJoiningStatusMarksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetChangeShiftUnitData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

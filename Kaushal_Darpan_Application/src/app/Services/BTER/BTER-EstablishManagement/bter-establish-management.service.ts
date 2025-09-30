@@ -322,5 +322,16 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
+
+  public async GetStaffWorkRegular_ArrangementReort(searchRequest: BTER_EM_StaffListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetStaffWorkRegular_ArrangementReort`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
   
 }

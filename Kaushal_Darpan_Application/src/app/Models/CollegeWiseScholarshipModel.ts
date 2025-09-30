@@ -10,9 +10,11 @@ export class CollegeWiseScholarshipSearchModel {
   public InstituteID:number=0;
   public PageSize: number = 50
   public PageNumber: number = 1
-
+  public ScholarshipMode :  string ='';
   public SortOrder: string = '';
   public SortColumn: string = '';
+  public SchemeName: string='';
+  public CourseType: number=0;
 }
 
 
@@ -58,6 +60,6 @@ export class AddCollegeWiseScholarshipModel{
   public DeleteStatus  :boolean=false;
   public CreatedBy :number=0;
   public ModifyBy :number=0;
-    public InstituteID :number=0;
- 
+  public InstituteID :number=0;
+ public ScholarshipMode : string='';
 }

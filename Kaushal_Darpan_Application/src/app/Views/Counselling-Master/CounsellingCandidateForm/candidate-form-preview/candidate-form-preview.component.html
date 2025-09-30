@@ -1,1 +1,239 @@
-<p>candidate-form-preview works!</p>
+<div class="card tab-panels " id="Preview">
+  <div class="card-body p-5">
+    <div class="mb-6">
+
+      <!-- <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">आवेदन की स्थिति (Application Status)</b>
+      </div>
+      <div class="flex items-center gap-3 mb-2">
+        <p  class="text-sm font-semibold text-gray-700 m-0">
+          <b>Application Status:<span class="text-danger">  </span> </b>
+        </p>
+
+        <button *ngIf="request.Action == _EnumVerfication.Notified"
+                class="btn bg-success text-white btn-sm"
+                (click)="openRevertModal(modal_Open, request.ApplicationID)"
+                type="button">
+          Action
+        </button>
+      </div> -->
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
+      </div>
+
+      <h4 class="flex" *ngIf="request.ApplicationNo!='' && request.ApplicationNo!=null">Application No:{{request.ApplicationNo}}</h4>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div class="col-span-2 text-center" style="text-align:center !important" *ngFor="let item of filteredDocumentDetails;">
+          <img appImageError="assets/images/dummyImg.jpg"
+               [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+               class="imgSignSelf"
+               alt="{{item.ColumnName}}" />
+          <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
+        </div>
+
+        <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+        <div>{{request.CandidateName}}</div>
+
+        <div><b>पिता का नाम (Father's Name):</b></div>
+        <div>{{request.FatherName}}</div>
+
+        <div><b>माता का नाम (Mother's Name):</b></div>
+        <div>{{request.MotherName}}</div>
+
+        <!-- <div><b>लिंग (Gender):</b></div>
+        <div>{{request.Gender}}</div> -->
+
+        <div><b>धर्म  (Religion):</b></div>
+        <div>{{request.Religion}}</div>
+
+        <div><b>वैवाहिक स्थिति(Marital Status):</b></div>
+        <div>{{request.MaritalStatusName}}</div>
+
+        <div><b>जन्म तिथि (Date of Birth):</b></div>
+        <div>{{request.DOB}}</div>
+
+        <div><b>ईमेल (Email Address):</b></div>
+        <div>{{request.Email}}</div>
+
+        <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+        <div>{{request.MobileNo}}</div>
+
+        <div>
+          <b>आरक्षण श्रेणी(Reservation Category):</b>
+        </div>
+        <div>{{request.CategoryA}}</div>
+
+        <div><b>पहचान पत्र नंबर (Number of ID Proof):</b></div>
+        <div>{{request.AadharNo}}</div>
+
+      </div>
+    </div>
+    <!-- <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div><b>पता पंक्ति 1 (Address Line 1):</b></div>
+        <div>{{request.AddressLine1  }}</div>
+
+        <div><b>पता पंक्ति 2 (Address Line 2):</b></div>
+        <div>{{request.AddressLine2}}</div>
+
+        <div><b>पता पंक्ति 3 (Address Line 3):</b></div>
+        <div>{{request.AddressLine3  }}</div>
+
+        <div><b>राज्य (State):</b></div>
+        <div>{{request.StateName  }}</div>
+
+        <div><b>जिला (District):</b></div>
+        <div>{{request.DistrictName  }}</div>
+
+        <div><b>ब्लॉक/तहसील (Block/Tehsil):</b></div>
+        <div>{{request.BlockName    }}</div>
+
+        <div><b>पिन कोड (Pincode):</b></div>
+        <div>{{request.Pincode  }}</div>
+      </div>
+
+    </div> -->
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">विकल्प(Option Form)</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr class="text-left">
+              <th>Priority</th>
+              <th>Branch Name</th>
+              <th>Name of College</th>
+              <!-- <th>college Type</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of request.OptionViewData; let idx = index">
+              <td>{{idx+1}}</td>
+              <td>{{item.TradeName}}</td>
+              <td>{{item.InstituteName}}</td>
+              <!-- <td>{{item.College_TypeName}}</td> -->
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+      <b class="text-1xl-5">
+        <span class="ti ti-download"></span>&nbsp;
+        अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+      </b>
+    </div>
+    <div class="overflow-auto mb-6">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Document Name</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let dOC of request.DocumentDetailList;  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>
+              <a href="javascript:void(0)"
+                 (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + dOC.FolderName + '/' + dOC.FileName)"
+                 class="text-success">
+                {{ dOC.DisplayColumnNameEn }}
+              </a>
+            </td>
+          </tr>
+          <tr *ngIf="request.DocumentDetailList?.length==null">
+            <td colspan="7">No Document Uploaded</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" *ngIf="IsShowIncompleteData">
+      <b class="text-1xl-5">अधूरा डेटा (Incomplete Data)</b>
+    </div>
+
+    <div class="overflow-auto" *ngIf="IsShowIncompleteData">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Pending Data</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of request.PendingDataModel  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>{{item.Pending}}</td>
+            <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">घोषणा (Undertaking)</b>
+      </div>
+      <div class="w-full">
+        <label>
+          <input type="checkbox" class="mb-3 me-3" [(ngModel)]="IsTermAndCondition" />
+          मेरे द्वारा यह प्रमाणित किया जाता है कि मैने आवेदन पत्र भरने से पूर्व प्रवेश के सम्बन्ध में सभी दिशा निर्देश तथा नियम भलीभाँति से पढ़ लिये हैं। ऑनलाइन आवेदन पत्र में मेरे द्वारा भरी गयी सभी सूचनाएं सत्य एवं सही है। मेरे द्वारा यह भी प्रमाणित किया जाता है कि मुझे किसी भी संस्थान द्वारा पूर्व में कभी भी निष्काषित नहीं किया गया है। भविष्य में मेरे द्वारा दी गयी कोई सूचना गलत पाई जाती है तो विभाग द्वारा मेरा प्रवेश निरस्त किया जा सकता है, तथा मेरे विरुद्ध आई.पी.सी. की सम्बन्धित धारा के अंतर्गत नियमानुसार कार्यवाही की जा सकती है, जिसकी सम्पूर्ण जिम्मेवारी मेरी होगी। यदि मुझे प्रवेश प्राप्त होता हैं तो मेरे द्वारा संस्थान के सभी नियमों एवं अनुशासन का पालन करते हुए पूर्ण प्रशिक्षण प्राप्त किया जायेगा। मेरे द्वारा ऐसा कोई कृत्य नहीं किया जावेगा जो की शान्ति एवं
+          अनुशासन के विपरीत हो, अन्यथा मुझे संस्थान से निष्काषित किया जा सकेगा।
+        </label>
+      </div>
+
+    </div> -->
+    <div class="w-full text-center mt-4 flex align-center justify-center">
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
+  <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
+    Header
+    <div class="flex justify-between items-center border-b pb-2">
+      <b class="text-lg"><i class="fa fa-plus"></i>&nbsp;Document Preview</b>
+      <button class="btn bg-info text-white" (click)="ClosePopupAndGenerateAndViewPdf()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+    Preview Content
+    <div class="flex-grow mt-4 overflow-hidden flex justify-center items-center" style="width:100%;height:100%;">
+      <ng-container *ngIf="showPdfModal">
+        PDF Preview
+        <object *ngIf="isPdf && safePdfUrl"
+                [data]="safePdfUrl"
+                type="application/pdf"
+                class="h-full w-full"
+                style="width: 100%; height: 100%;">
+          <p>PDF preview not supported. <a [href]="pdfUrl" target="_blank">Download</a> instead.</p>
+        </object>
+
+        Image Preview
+        <img *ngIf="isImage"
+             [src]="imageSrc"
+             (error)="onImageError($event)"
+             alt="Document preview"
+             class="h-full w-full object-contain rounded-lg" />
+      </ng-container>
+
+      <pdf-viewer [src]="safePdfUrl" [render-text]="true" style="display: block;"></pdf-viewer>
+    </div>
+
+  </div>
+</div>

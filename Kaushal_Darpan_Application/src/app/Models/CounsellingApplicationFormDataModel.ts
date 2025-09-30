@@ -1,3 +1,4 @@
+import { Counselling_DocumentDetailsModel } from "./DocumentDetailsModel";
 import { RequestBaseModel } from "./RequestBaseModel";
 
 export class CounsellingApplicationFormDataModel {
@@ -61,10 +62,21 @@ export class Counselling_OptionFormDataModel extends RequestBaseModel{
     public Priority?: number = 0;
     public CandidateID?: number = 0;
     public TradeId?: number = 0;
+    public TradeName?: string = '';
     public InstituteID?: number = 0;
     public CourseType?: number = 0;
     public ModifyBy?: number = 0;
     public Type?: string = '';
+    public InstituteList?: InstituteListDataModel_Coun[] = [];
+}
+
+export class InstituteListDataModel_Coun {
+  public InstituteOptionID?: number = 0;
+  public InstituteID?: number = 0;
+  public Priority?: number = 0;
+  public InstituteName?: string = '';
+  public OptionID?: number = 0;
+  public Type?: string = '';
 }
 
 export class Counselling_DropdownDataModel extends RequestBaseModel {
@@ -72,3 +84,54 @@ export class Counselling_DropdownDataModel extends RequestBaseModel {
     public TradeID?: number = 0;
     public InstituteID?: number = 0;
 }
+
+export class CounsellingApplicationPreviewDataModel {
+    CandidateID?: number = 0;
+    ApplicationNo?: string = '';
+    CandidateName?: string = '';
+    FatherName?: string = '';
+    MotherName?: string = '';
+    AadharNo?: string = '';
+    MaritalStatusName?: string = '';
+    Religion?: string = '';
+    DOB?: string = '';
+    Email?: string = '';
+    CategoryA?: string = '';
+    MobileNo?: string = '';
+    AddressLine1?: string = '';
+    AddressLine2?: string = '';
+    AddressLine3?: string = '';
+    StateName?: string = '';
+    DistrictName?: string = '';
+    BlockName?: string = '';
+    Pincode?: string = '';
+    Age?: string = '';
+    StudentPhoto?: string = '';
+    SignaturePhoto?: string = '';
+    ProfileStatus?: number = 0;
+    IsfinalSubmit?: number = 0;
+    ServiceID?: number = 0;
+    DepartmentID?: number = 0;
+    CourseTypeID?: number = 0;
+    UniqueServiceID?: number = 0;
+    OptionViewData?: OptionviewData_Counselling[] = [];
+    PendingDataModel?: PendingDataModel_Counselling[] = [];
+    DocumentDetailList?: Counselling_DocumentDetailsModel[] = [];
+    CategoryAId?: number = 0;
+    GenderId?: number = 0;
+    Nationality?: string = '';
+    Category_E?: string = '';
+}
+
+export class OptionviewData_Counselling {
+    InstituteName?: string = '';
+    TradeId?: number = 0;
+    Priority?: number = 0;
+    TradeName?: string = '';
+}
+
+export class PendingDataModel_Counselling {
+    Pending?: string = '';
+    Index?: number = 0;
+}
+

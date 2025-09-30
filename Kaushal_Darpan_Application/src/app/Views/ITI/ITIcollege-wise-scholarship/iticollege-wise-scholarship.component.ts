@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } from '../../../Models/CollegeWiseScholarshipModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AddITICollegeWiseScholarshipModel, ITICollegeWiseScholarshipSearchModel } from '../../../Models/ITICollegeWiseScholarshipModel';
+import { ITICollegeWiseScholarshipService } from '../../../Services/ITICollegeWiseScholarship/iticollege-wise-scholarship.service';
 @Component({
     selector: 'iticollege-wise-scholarship',
     templateUrl: './iticollege-wise-scholarship.component.html',
@@ -21,7 +23,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class ITICollegeWiseScholarshipComponent implements OnInit {
   public StudentList: any = [];
   public Table_SearchText: string = "";
-  public searchRequest = new CollegeWiseScholarshipSearchModel();
+  public searchRequest = new ITICollegeWiseScholarshipSearchModel();
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
@@ -40,9 +42,11 @@ export class ITICollegeWiseScholarshipComponent implements OnInit {
   isSubmitted:boolean =false;
   closeResult:string | undefined;
   EditDataFormGroup!: FormGroup;
-  AddCollegeWiseScholarshipModelList: AddCollegeWiseScholarshipModel[]=[];
-   AddCollegeWiseScholarshipModelList2: AddCollegeWiseScholarshipModel[]=[];
-  AddCollegeWiseScholarshipModel =new AddCollegeWiseScholarshipModel();
+  AddCollegeWiseScholarshipModelList: AddITICollegeWiseScholarshipModel[]=[];
+
+  AddCollegeWiseScholarshipModel =new AddITICollegeWiseScholarshipModel();
+
+  //AddCollegeWiseScholarshipModelList2: any =[];
   CategoryList:any=[];
   scholarshipTypes:any = [
   { id: 1, name: 'Cash' },
@@ -60,7 +64,7 @@ SelectedStudent:any = {};
 
 
 
-  constructor(private commonMasterService: CommonFunctionService, private CollegeWiseScholarshipService: CollegeWiseScholarshipService,
+  constructor(private commonMasterService: CommonFunctionService, private CollegeWiseScholarshipService: ITICollegeWiseScholarshipService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
     private modalService:NgbModal,
     private fb:FormBuilder
@@ -195,7 +199,7 @@ SelectedStudent:any = {};
         new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
       );
       if(filtered.length > 0){
-        alert('Already got scholarship');
+        alert('Already got scholarship !');
         return;
       }
 
@@ -210,40 +214,16 @@ SelectedStudent:any = {};
       newItem.CreatedBy = this.sSOLoginDataModel.UserID;
       newItem.ModifyBy = this.sSOLoginDataModel.UserID;
       newItem.StudentID = this.SelectedStudent.StudentID;
+      newItem.ScholarshipMode='Mannual';
 
       const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
       // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       newItem.SchemeName=selectedScheme;
       newItem.ScholarShipTypeName=selectedScholarship;
-      // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
-  
-      // Save as CSV
-      // newItem.SectionIDs = (formValue.SectionID || []).join(',');
-  
-  
-  
-      // newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
-      // newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
-      // newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
-      // newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
-      // newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
-  
-  
-  
-      //newItem.SemesterName = "";
-      //newItem.StreamName = "";
-      //newItem.SubjectName = "";
-      //newItem.SatffName = "";
-      //newItem.SectionsName = "";
-      // this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
-      // this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-      // this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+    
       this.AddCollegeWiseScholarshipModelList.push(newItem);
-      // this.AddCollegeWiseScholarshipModelList2=this.AddCollegeWiseScholarshipModelList;
-      // remove used sections from dropdown
-      // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
-      // this.refreshAvailableSections();
+      //  this.AddCollegeWiseScholarshipModelList2.push(newItem);
       this.EditDataFormGroup.reset();
       // this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
       // this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
@@ -359,46 +339,7 @@ SelectedStudent:any = {};
     await this.GetEligibleStudentListData(1);
   }
 
-
-
-
-  // async DeleteById(ID: number) {
-  //   this.Swal2.Confirmation("Do you want to delete?",
-  //     async (result: any) => {
-  //       //confirmed
-  //       if (result.isConfirmed) {
-  //         try {
-  //           //Show Loading
-  //           this.loaderService.requestStarted();
-
-  //           await this.companyMasterService.DeleteById(ID, this.sSOLoginDataModel.UserID)
-  //             .then(async (data: any) => {
-  //               data = JSON.parse(JSON.stringify(data));
-  //               console.log(data);
-
-  //               if (!data.State) {
-  //                 this.toastr.success(data.Message)
-  //                 await this.GetEligibleStudentListData(1);
-  //               }
-  //               else {
-  //                 this.toastr.error(data.ErrorMessage)
-  //               }
-
-  //             }, (error: any) => console.error(error)
-  //             );
-  //         }
-  //         catch (ex) {
-  //           console.log(ex);
-  //         }
-  //         finally {
-  //           setTimeout(() => {
-  //             this.loaderService.requestEnded();
-  //           }, 200);
-  //         }
-  //       }
-  //     });
-  // }
-
+ 
 
 
   // pagination start
@@ -463,11 +404,15 @@ SelectedStudent:any = {};
 
 
     DeleteFromList(index:any){
+      debugger;
       this.Swal2.Confirmation("Do you want to delete?",
+
       async (result: any) => {
-        //confirmed
+        //confirmed 
         if (result.isConfirmed) {
           this.AddCollegeWiseScholarshipModelList.splice(index, 1);
+          //this.AddCollegeWiseScholarshipModelList2[index].ActiveStatus=false;
+          //this.AddCollegeWiseScholarshipModelList2[index].DeleteStatus=true;
           console.log('test');
         }
         
@@ -511,7 +456,7 @@ SelectedStudent:any = {};
         this.loaderService.requestStarted();
         this.CollegeWiseScholarshipService.GetDetailsById(this.SelectedStudent.StudentID).then((data:any)=>{
           this.AddCollegeWiseScholarshipModelList = data.Data;
-          
+         // this.AddCollegeWiseScholarshipModelList2 =this.AddCollegeWiseScholarshipModelList ;
         })
       } catch (error) {
         this.AddCollegeWiseScholarshipModelList = [];

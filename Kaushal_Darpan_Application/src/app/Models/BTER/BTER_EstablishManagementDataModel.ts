@@ -11,6 +11,7 @@ export class BTER_EM_StaffListSearchModel {
   StaffTypeID: number = 0;
   RoleID: number = 0;
   UserID: number = 0;
+  BranchID: number = 0;
   Name: string = "";
 }
 
@@ -248,6 +249,7 @@ export class BTER_EM_ApproveStaffDataModel extends RequestBaseModel {
 
   public ModifyBy: number = 0
   public StaffTypeID: number = 0
+  public WorkOfficeID: number = 0
 }
 
 export class BTER_EM_DeleteModel extends RequestBaseModel {

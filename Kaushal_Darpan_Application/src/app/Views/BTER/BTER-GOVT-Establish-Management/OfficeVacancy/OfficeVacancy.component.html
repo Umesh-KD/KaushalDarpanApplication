@@ -63,10 +63,17 @@
           </p>
         </div>
       </div>
-      <div class="form-group">
-        <label for="TotalSeatID">Total Seat:</label>
+      <div>
+        <label for="TotalSeatID">Total Seat<span class="StarMarking">*</span></label>
         <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+
+        <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.TotalSeatID.errors" class="text-danger">
+          <p *ngIf="_AddOfficeVacancyForm.TotalSeatID.errors.DropdownValidators">
+            <i aria-hidden="true"></i>This
+            field is required .!
+          </p>
+        </div>
       </div>
       <div class="form-group">
         <label for="Comments">Comments:</label>
@@ -193,10 +200,16 @@
               </p>
             </div>
           </div>
-          <div class="form-group">
+          <div>
             <label for="TotalSeatID">Total Seat:</label>
             <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
                    [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+            <div *ngIf="isSubmitted&&_groupForm.TotalSeatID.errors" class="text-danger">
+              <p *ngIf="_groupForm.TotalSeatID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This
+                field is required .!
+              </p>
+            </div>
           </div>
 
           <div class="form-group">
