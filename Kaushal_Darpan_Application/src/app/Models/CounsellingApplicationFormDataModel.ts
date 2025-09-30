@@ -41,6 +41,20 @@ export class CounsellingApplicationFormDataModel {
   public IsFinalSubmit: number = 0;
   public DepartmentName?: string = '';
   public SubmittedStep?: string = '';
+
+  public RollNumber?: string = '';
+  public Designation?: string = '';
+  public Trade?: string = '';
+  public MeritNo?: string = '';
+  public SelectionCategoryID?: number = 0;
+  public IsTSP?: boolean = false;
+  public HomeDistrictID?: number = 0;
+  public IsPH?: boolean = false;
+  public IsExServicemen?: boolean = false;
+  public IsSportsPerson?: boolean = false;
+  public IsSpouseInSameService?: boolean = false;
+  public IsShahidDependent?: boolean = false;
+  public IsAnyIncurableDiseases?: boolean = false;
 }
 
 export class CounsellingApplicationSearchModel {

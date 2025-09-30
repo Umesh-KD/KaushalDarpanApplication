@@ -29,6 +29,7 @@ export class CandidatePersonalDetailsComponent {
   public NationalityList: any = []
   public CategoryAlist: any = []
   public maritalList: any = []
+  public DistrictMasterList: any = []
 
   public request = new CounsellingApplicationFormDataModel();
   public appRequest = new CounsellingApplicationSearchModel();
@@ -61,8 +62,19 @@ export class CandidatePersonalDetailsComponent {
       BlockID: [0, [DropdownValidators]],
       Pincode: ['', Validators.required],
       AadharNo: ['', Validators.required],
-      JanAadharNo: ['', Validators.required],
+      // JanAadharNo: ['', Validators.required],
+      RollNumber: ['', Validators.required],
+      Designation: ['', Validators.required],
+      Trade: ['', Validators.required],
+      MeritNo: ['', Validators.required],
+      SelectionCategoryID: [0, [DropdownValidators]],
+      HomeDistrictID: [0, [DropdownValidators]],
       Remark: [''],
+      IsPH: [''],
+      IsSportsPerson: [''],
+      IsExServicemen: [''],
+      IsShahidDependent: [''],
+      IsAnyIncurableDiseases: [''],
       
       ReligionID: [0, [DropdownValidators]],
       NationalityID: [0, [DropdownValidators]],
@@ -71,7 +83,7 @@ export class CandidatePersonalDetailsComponent {
     });
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetMasterDDL();
-
+    await this.GetDistrictList();
     await this.GetApplicationDataByID_Counselling();
   }
 
@@ -194,6 +206,25 @@ export class CandidatePersonalDetailsComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async GetDistrictList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDistrictMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
     }
   }
 }
