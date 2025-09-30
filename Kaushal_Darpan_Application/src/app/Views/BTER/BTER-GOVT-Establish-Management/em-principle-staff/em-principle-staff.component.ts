@@ -69,7 +69,8 @@ export class EMPrincipleStaffComponent {
   public DesignationWiseBranchListRole: any[] = [];
   public DesignationWiseBranchList: any[] = [];
   _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
-
+  public OfficeList: any = [];
+  public OfficeWorkList: any = [];
   public searchRequest1 = new GuestRoomSeatSearchModel();
   _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel;
   _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild;
@@ -178,6 +179,7 @@ export class EMPrincipleStaffComponent {
       EmployeeID: [''],
 
       Experience: ['', [Validators.required]],
+      WorkOfficeID: [0, [DropdownValidators]],
 
       DateOfRetirement: [''],
       Remark: [''],
@@ -195,15 +197,38 @@ export class EMPrincipleStaffComponent {
     await this.GetTechnicianDll();
     await this.StaffLevelType();
     await this.GetAllData();
+    await this.GetOfficeList();
 
     await this.GetDesignationMasterData();
 
-    
+    this.approveRequest.WorkOfficeID = 0;
 
   }
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
+
+  async GetOfficeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          this.OfficeWorkList = data['Data'];
+          console.log(this.OfficeList, "OfficeList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async SSOIDGetSomeDetails(SSOID: string): Promise<any> {    
     if (SSOID == "") {

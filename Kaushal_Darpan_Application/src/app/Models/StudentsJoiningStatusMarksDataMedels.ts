@@ -25,6 +25,7 @@ export class StudentsJoiningStatusMarksSearchModel {
   public PageSize: number = 0;
   public TradeLevel: number = 0
   public FinancialYearID: number = 0
+  public ErrorID: number = 0
   public ReportingStatus:string=''
   public TradeCode:string=''
 }

@@ -10,6 +10,7 @@
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">CollegeWise Scholarship List</a>
     </div>
   </div>
+  
 </div>
 <!-- Page Title End -->
 
@@ -17,11 +18,42 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-6 mb-6 allStatics">
+    <div *ngFor="let stat of SchemeCountList; let i = index">
+      <div class="card">
+        <div class="p-5"> 
+          <h6 class="text-muted text-sm uppercase">{{ stat.schemename }}</h6>
+          <h3 class="text-2xl mb-3" data-plugin="counterup">{{ stat.schemecount }}</h3>  
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
+    <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
+                    <!-- <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown" >
+                      <ng-option [value]="">--Select--</ng-option>
+                     <ng-option *ngFor="let item of schemeTypes" [value]="item.id">
+                        {{ item.name }}
+                      </ng-option>
+                     <ng-option [value]="1">Scheme 1</ng-option>
+                      <ng-option [value]="2">Scheme 2</ng-option>
+                      <ng-option [value]="2">Scheme 2</ng-option>  
+                    </ng-select>
+                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors && formEditData.SchemeID.touched " class="text-danger">
+                      <p *ngIf="formEditData.SchemeID.errors.required"><i></i> This field is required .!</p>
+                    </div> -->
+                     <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.SchemeName" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of schemeTypes" [ngValue]="item.id">{{item.name}}</option>
+            </select>
+              </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
@@ -87,7 +119,7 @@
     </div>
 
     <div class="overflow-auto mt-3">
-      <table class="table table-border w-full" cellpadding="5">
+      <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
@@ -96,9 +128,9 @@
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Category</th>
-            <th class="text-center">MobileNo</th>
+            <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
-            <th class="text-center">Action</th>
+            <th class="text-center">Scholarship Details</th>
           </tr>
         </thead>
         <tbody>
@@ -109,21 +141,11 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
             <!-- <td>{{item.Status}}</td> -->
-             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-              <!-- <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a *ngIf="!item.SSOID || item.SSOID.trim()===''"  [routerLink]="'/StudentPlacementMapping'" [queryParams]="{ID:item.StudentID, key:1}"  title="Edit"><i class="ti ti-check"></i></a>
-                <a href="javascript:void(0);" title="Company On Action" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
-               
-              </div> -->
-
-              <div class="flex align-center justify-center actionBtns w-auto" style="witdh: auto !important">
-                <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View"><i
-                    class="ti ti-eye"></i> </a>
-                <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
-              </div>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6"> 
+               <div [innerHtml]="item.ScholarShipDetails" class="role-detail-of"> </div>
              </td>
               <!-- *ngIf="!item.SSOID || item.SSOID.trim() === ''" -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">

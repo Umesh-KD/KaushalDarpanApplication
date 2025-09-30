@@ -25,6 +25,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+    public mode:string='manual';
 
   // pagination
    pageNo: any = 1;
@@ -35,6 +36,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   TotalPages: any = 0;
   sortColumn: string = "";
   sortOrder: string = "";
+
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
@@ -215,7 +217,8 @@ SelectedStudent:any = {};
       const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
       // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       newItem.SchemeName=selectedScheme;
-      newItem.ScholarShipTypeName=selectedScholarship;
+      newItem.ScholarShipTypeName = selectedScholarship;
+      newItem.ScholarshipMode = 'Mannual';
       // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
   
       // Save as CSV

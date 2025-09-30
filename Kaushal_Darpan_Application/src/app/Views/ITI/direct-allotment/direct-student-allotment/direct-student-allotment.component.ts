@@ -706,6 +706,10 @@ export class VerifyStudentAllotComponent {
     if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
       return;
     }
+    if (this.request.ShiftUnit == 0) {
+      this.toastr.error("Please select shift unit ")
+      return
+    }
 
     this.childComponent.MobileNo = this.requestReporting.MobileNo;
     this.CloseModal();

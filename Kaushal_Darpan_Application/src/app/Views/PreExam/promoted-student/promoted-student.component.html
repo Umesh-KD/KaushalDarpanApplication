@@ -50,7 +50,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester (Prev.)</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester </label>
           <select class="form-select" id="StudentExamYear" [(ngModel)]="request.SemesterID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>

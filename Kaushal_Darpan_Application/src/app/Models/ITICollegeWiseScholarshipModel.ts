@@ -13,6 +13,7 @@ export class ITICollegeWiseScholarshipSearchModel {
 
   public SortOrder: string = '';
   public SortColumn: string = '';
+  public ScholarshipMode : string='';
 }
 
 
@@ -32,5 +33,6 @@ export class AddITICollegeWiseScholarshipModel{
   public CreatedBy :number=0;
   public ModifyBy :number=0;
     public InstituteID :number=0;
+    public ScholarshipMode : string='';
  
 }
