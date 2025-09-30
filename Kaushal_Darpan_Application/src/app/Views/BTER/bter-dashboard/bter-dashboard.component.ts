@@ -74,6 +74,7 @@ export class BterDashboardComponent {
     try {
 
       this.loaderService.requestStarted();
+      debugger;
       await this.AdminDashDataService.GetAdminDashData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
