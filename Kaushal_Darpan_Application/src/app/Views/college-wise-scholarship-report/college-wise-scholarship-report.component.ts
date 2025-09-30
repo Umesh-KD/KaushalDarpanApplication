@@ -87,7 +87,7 @@ SelectedStudent:any = {};
         Amount: [''] , // will validate only if Cash is selected
         ScholarshipDate: ['', Validators.required]   // 👈 new field
       });
- await this.GetCategoryMatserDDL()
+      await this.GetCategoryMatserDDL()
       // Add dynamic validator
       this.EditDataFormGroup.get('ScholarshipType')?.valueChanges.subscribe(val => {
         const amountCtrl = this.EditDataFormGroup.get('Amount');
@@ -176,91 +176,6 @@ SelectedStudent:any = {};
     }
   }
 
-
-    // AddToList() {
-    //   debugger
-    //   this.isSubmitted = true;
-    //   if (this.EditDataFormGroup.invalid) return;
-    //   // if(this.availSectionData.length>0){
-    //   //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
-    //   //    if(existAssignedTeacherData){
-    //   //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
-    //   //     return;
-    //   //    }
-    //   // }
-
-    //   const filtered = this.AddCollegeWiseScholarshipModelList.filter(s => 
-    //     s.ScholarShipTypeID == this.EditDataFormGroup.get('ScholarshipType')?.value &&
-    //     s.SchemeID == this.EditDataFormGroup.get('SchemeID')?.value &&
-    //     new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
-    //   );
-    //   if(filtered.length > 0){
-    //     alert('Already got scholarship');
-    //     return;
-    //   }
-
-    //   const formValue = this.EditDataFormGroup.value;
-  
-    //   const newItem = new AddCollegeWiseScholarshipModel();
-    //   newItem.ID = 0;
-    //   newItem.ScholarShipTypeID = this.EditDataFormGroup.get('ScholarshipType')?.value;
-    //   newItem.SchemeID = this.EditDataFormGroup.get('SchemeID')?.value;
-    //   newItem.ScholarShipAmount = this.EditDataFormGroup.get('Amount')?.value;
-    //   newItem.ScholarShipDate = this.EditDataFormGroup.get('ScholarshipDate')?.value;
-    //   newItem.CreatedBy = this.sSOLoginDataModel.UserID;
-    //   newItem.ModifyBy = this.sSOLoginDataModel.UserID;
-    //   newItem.StudentID = this.SelectedStudent.StudentID;
-
-    //   const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
-    //   const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
-    //   // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
-    //   newItem.SchemeName=selectedScheme;
-    //   newItem.ScholarShipTypeName=selectedScholarship;
-    //   // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
-  
-    //   // Save as CSV
-    //   // newItem.SectionIDs = (formValue.SectionID || []).join(',');
-  
-  
-  
-    //   // newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
-    //   // newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
-    //   // newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
-    //   // newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
-    //   // newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
-  
-  
-  
-    //   //newItem.SemesterName = "";
-    //   //newItem.StreamName = "";
-    //   //newItem.SubjectName = "";
-    //   //newItem.SatffName = "";
-    //   //newItem.SectionsName = "";
-    //   // this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
-    //   // this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-    //   // this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
-    //   this.AddCollegeWiseScholarshipModelList.push(newItem);
-    //   // this.AddCollegeWiseScholarshipModelList2=this.AddCollegeWiseScholarshipModelList;
-    //   // remove used sections from dropdown
-    //   // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
-    //   // this.refreshAvailableSections();
-    //   this.EditDataFormGroup.reset();
-    //   // this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
-    //   // this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
-    //   // this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
-  
-    //   // reset form
-    //   //this.EditDataFormGroup.reset({
-    //   //  SubjectID: 0,
-    //   //  UserID: 0,
-    //   //  SectionID: []
-    //   //});
-  
-    //   this.isSubmitted = false;
-  
-  
-    // }
-
   async GetEligibleStudentListData(i:any) {
     debugger
     console.log(i);
@@ -282,18 +197,18 @@ SelectedStudent:any = {};
     }
 
     try {
-
+debugger;
       this.searchRequest.PageNumber=this.pageNo
       this.searchRequest.PageSize=this.pageSize
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder 
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
         console.log(this.searchRequest.Category);
       this.loaderService.requestStarted();
-      await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipList(this.searchRequest).then((data: any) => {
+      await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipListReport(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudentList = data.Data;
 
@@ -474,7 +389,7 @@ SelectedStudent:any = {};
     //   });
     // }
 
-      async GetCategoryMatserDDL() {
+    async GetCategoryMatserDDL() {
     try {
       this.AddCollegeWiseScholarshipModel.InstituteID = this.sSOLoginDataModel.DepartmentID
 
@@ -496,15 +411,15 @@ SelectedStudent:any = {};
     }
   }
 
-    SaveData_EditDetails(){
-      console.log(this.AddCollegeWiseScholarshipModelList);
-      console.log(this.SelectedStudent);
+    // SaveData_EditDetails(){
+    //   console.log(this.AddCollegeWiseScholarshipModelList);
+    //   console.log(this.SelectedStudent);
 
-      this.CollegeWiseScholarshipService.SaveCollegeWiseScholarshipDetails(this.AddCollegeWiseScholarshipModelList).then((data:any)=>{
-        console.log(data);
-        this.CloseModal1();
-      })
-    }
+    //   this.CollegeWiseScholarshipService.SaveCollegeWiseScholarshipDetails(this.AddCollegeWiseScholarshipModelList).then((data:any)=>{
+    //     console.log(data);
+    //     this.CloseModal1();
+    //   })
+    // }
 
     async fetchById(){
       try {

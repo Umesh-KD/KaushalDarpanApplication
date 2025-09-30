@@ -38,7 +38,15 @@
             </select>
         
         </div>
+         <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
+            <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
+              <option value="0">Choose Option</option>
+              <option value="Mannual">Mannual</option>
+              <option value="API">API</option>
+            </select>
         
+        </div>
            <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category</label>   
           <input type="text" class="form-input" placeholder="Category" id="Category" [(ngModel)]="searchRequest.Category">
@@ -96,7 +104,7 @@
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Category</th>
-            <th class="text-center">MobileNo</th>
+            <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
             <th class="text-center">Action</th>
           </tr>
@@ -109,7 +117,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
             <!-- <td>{{item.Status}}</td> -->
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -271,7 +279,9 @@
                           <th>Amount</th>
                           <th>Date</th>
                           <!-- <th>Sections</th> -->
+                           <th>Scholarship Mode</th>
                           <th>Action</th>
+                           
                         </tr>
                       </thead>
                       <tbody>
@@ -281,6 +291,7 @@
                           <td>{{ row.ScholarShipAmount }}</td>
                           <td>{{ row.ScholarShipDate }}</td>
                           <!-- <td>{{ row.SectionsName }}</td> -->
+                           <td>{{ row.ScholarshipMode}}</td>
                           <td>
                             <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
                               <i class="ti ti-trash"></i>

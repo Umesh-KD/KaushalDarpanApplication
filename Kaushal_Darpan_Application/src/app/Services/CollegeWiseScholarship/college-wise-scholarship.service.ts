@@ -109,6 +109,13 @@ export class CollegeWiseScholarshipService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+ public async GetCollegeWiseScholarshipListReport(searchRequest: CompanyMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCollegeWiseScholarshipListReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetSchemeType(){
     return await this.http.get(`${this.APIUrl}/GetSchemeList`,this.headersOptions).pipe(catchError(this.handleErrorObservable)).toPromise();

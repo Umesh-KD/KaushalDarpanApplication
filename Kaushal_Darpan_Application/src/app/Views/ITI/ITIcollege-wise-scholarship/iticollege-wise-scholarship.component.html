@@ -96,7 +96,7 @@
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
             <th class="text-left">Category</th>
-            <th class="text-center">MobileNo</th>
+            <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
             <th class="text-center">Action</th>
           </tr>
@@ -109,7 +109,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
             <!-- <td>{{item.Status}}</td> -->
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -270,8 +270,10 @@
                           <th>Scholarship Type</th>
                           <th>Amount</th>
                           <th>Date</th>
+                          <!-- <th>Mode</th> -->
                           <!-- <th>Sections</th> -->
                           <th>Action</th>
+                          
                         </tr>
                       </thead>
                       <tbody>
@@ -280,12 +282,14 @@
                           <td>{{ row.ScholarShipTypeName }}</td>
                           <td>{{ row.ScholarShipAmount }}</td>
                           <td>{{ row.ScholarShipDate }}</td>
+                          <!-- <td>Manual</td> -->
                           <!-- <td>{{ row.SectionsName }}</td> -->
                           <td>
                             <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
                               <i class="ti ti-trash"></i>
                             </button>
                           </td>
+                         
                         </tr>
                         <!-- <tr *ngIf="AddStaffSubjectSectionModelList.length === 0">
                           <td colspan="7" class="text-center">No records found.</td>

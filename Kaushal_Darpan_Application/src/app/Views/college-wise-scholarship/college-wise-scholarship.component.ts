@@ -25,6 +25,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+    public mode:string='manual';
 
   // pagination
    pageNo: any = 1;
@@ -35,6 +36,7 @@ export class CollegeWiseScholarshipComponent implements OnInit {
   TotalPages: any = 0;
   sortColumn: string = "";
   sortOrder: string = "";
+
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
