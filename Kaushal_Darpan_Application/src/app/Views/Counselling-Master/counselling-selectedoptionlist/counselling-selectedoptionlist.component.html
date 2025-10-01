@@ -64,7 +64,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ExcelExport()"><i class="ti ti-download"></i> Download</a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -88,6 +88,14 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
+            <th align="left">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
+                     #checkboxSeletedAll >
+            </th>
+             <!-- <th align="left">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
+                     #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
+            </th> -->
             <th class="text-left">Name</th>
             <th class="text-left">DOB</th>
             <th class="text-left">SSOID</th>
@@ -101,6 +109,13 @@
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+             <td>
+              <input type="checkbox" name="MarkCheck" [checked]="true"/>
+            </td>
+            <!-- <td>
+              <input type="checkbox" name="MarkCheck" [checked]="true"
+                     [(ngModel)]="item.Marked" />
+            </td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
@@ -162,6 +177,7 @@
                     <table class="table table-border w-full table-auto" cellpadding="5">
                       <thead>
                         <tr>
+                          <th>Sr. No.</th>
                           <th>Institue Name</th>
                           <!-- <th>Scholarship Type</th>
                           <th>Amount</th>
@@ -174,6 +190,7 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let row of StudentOptionList; let i = index">
+                          <td>{{i+1}}</td>
                           <td>{{ row.instituteName }}</td>
                           <!-- <td>{{ row.ScholarShipTypeName }}</td>
                           <td>{{ row.ScholarShipAmount }}</td>

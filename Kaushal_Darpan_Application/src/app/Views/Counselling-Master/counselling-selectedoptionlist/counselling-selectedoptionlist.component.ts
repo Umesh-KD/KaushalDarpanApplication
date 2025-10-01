@@ -14,6 +14,8 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMasterModel';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
+
+declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
     selector: 'counselling-selectedoptionlist',
     templateUrl: './counselling-selectedoptionlist.component.html',
@@ -24,6 +26,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   public StudentList: any = [];
   public StudentOptionList: any = [];
   public Table_SearchText: string = "";
+  public AllSelect: boolean = false;
   public searchRequest = new CounsellingAllotmentListModel();
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -44,6 +47,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
 
   public TradeDDLList: any = [];
 
+  
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
@@ -128,6 +132,15 @@ SelectedStudent:any = {};
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StudentListData.xlsx');
   }
+
+
+    //
+  public async ExcelExport() {
+    if (this.StudentList.length > 0) {
+      tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
+    }
+  }
+
    
    get formEditData(){return this.EditDataFormGroup.controls;}
 
@@ -297,6 +310,14 @@ SelectedStudent:any = {};
 
   async Back() {
     this.routers.navigate(['/CounsellingAllotmentList'])
+  }
+
+
+    checkboxthView_checkboxchange(isChecked: boolean) {
+    this.AllSelect = isChecked;
+    for (let item of this.StudentList) {
+      item.Marked = this.AllSelect;
+    }
   }
 
   // get all data
