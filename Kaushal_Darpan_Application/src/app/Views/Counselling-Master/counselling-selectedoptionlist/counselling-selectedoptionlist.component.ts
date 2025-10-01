@@ -42,6 +42,8 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
 
   public TradeID: number = 0;
 
+  public TradeDDLList: any = [];
+
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
@@ -73,14 +75,20 @@ SelectedStudent:any = {};
     private fb:FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
+    
   ){}
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    // this.searchRequest.TradeID=
      if (this.activatedRoute.snapshot.queryParamMap.get('Id') != null) {
-      this.TradeID = Number(this.activatedRoute.snapshot.queryParamMap.get('Id')?.toString());
+      if(this.searchRequest.TradeID==0){
+        this.TradeID = Number(this.activatedRoute.snapshot.queryParamMap.get('Id')?.toString());
+      }
       // await this.GetByID(this.PostID);
     }
+    //  await this.EditData(0,0);
+    await this.GetTradeDDL();
     await this.GetCandidateList(1);
   await this.GetCategoryMatserDDL()
       // Add dynamic validator
@@ -101,6 +109,7 @@ SelectedStudent:any = {};
 
 
   exportToExcel(): void {
+    debugger
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
@@ -121,6 +130,33 @@ SelectedStudent:any = {};
   }
    
    get formEditData(){return this.EditDataFormGroup.controls;}
+
+
+     async GetTradeDDL() {
+    try {
+      this.loaderService.requestStarted();
+      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
+      //await this.commonFunctionService.StreamMaster()
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          //this.TradeDDLList = data['Data'];
+          //console.log(this.TradeDDLList)
+          // const selectOption = { ID: -1, Name: '--Select--' };
+          // this.TradeDDLList = [selectOption, ...data['Data']];  
+          this.TradeDDLList = data['Data'];  
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 
@@ -235,7 +271,7 @@ SelectedStudent:any = {};
       this.searchRequest.PageSize=this.pageSize
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder 
-      this.searchRequest.TradeID=this.TradeID
+      this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:this.TradeID;
       this.searchRequest.action="_GetcandidateList"
       this.loaderService.requestStarted();
       await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
@@ -273,6 +309,7 @@ SelectedStudent:any = {};
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
     await this.GetCandidateList(1);
+   
   }
 
 
