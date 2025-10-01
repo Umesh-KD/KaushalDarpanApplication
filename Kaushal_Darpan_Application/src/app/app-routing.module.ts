@@ -205,6 +205,9 @@ const routes: Routes = [
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
       { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
       { path: 'CollegeWiseScholarshipReport', loadChildren: () => import('./Views/college-wise-scholarship-report/college-wise-scholarship-report.module').then(m => m.CollegeWiseScholarshipReportModule), title: 'CollegeWise Scholarship Report' },
+      { path: 'CounsellingAllotmentList', loadChildren: () => import('./Views/Counselling-Master/counselling-allotment-list/counselling-allotment-list.module').then(m => m.CounsellingAllotmentListModule), title: 'Counselling Allotment Report' },
+      { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
+      { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
 
 
 
@@ -1408,7 +1411,8 @@ const routes: Routes = [
 
         { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
         { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
-        { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
+      { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
       
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },

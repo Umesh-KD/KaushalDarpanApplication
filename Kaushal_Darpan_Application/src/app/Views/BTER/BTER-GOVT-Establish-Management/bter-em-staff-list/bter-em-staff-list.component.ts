@@ -27,6 +27,7 @@ export class BTEREMStaffListComponent {
   StaffMasterFormGroup!: FormGroup;
   public StaffTypeList: any = [];
   public OfficeList: any = [];
+  public OfficeWorkList: any = [];
   public LevelList: any = [];
   public Table_SearchText: string = '';
   public StaffList: any = [];
@@ -115,6 +116,7 @@ export class BTEREMStaffListComponent {
 
       DateOfRetirement: [''],
       Remark: [''],
+      WorkOfficeID: [0, [DropdownValidators]],
     });
     this.groupForm = this.formBuilder.group({
       ddlStatus: [0, [DropdownValidators]],
@@ -125,11 +127,15 @@ export class BTEREMStaffListComponent {
     await this.GetStatusList();
     await this.BTER_EM_GetStaffList();
     await this.GetOfficeList();
+
     await this.GetInstituteMaster();
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
     await this.getInstituteMasterList();
+    this.approveRequest.WorkOfficeID = 0;
   }
+
+  get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls }
 
   async GetOfficeList() {
     try {
@@ -138,6 +144,7 @@ export class BTEREMStaffListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
+          this.OfficeWorkList = data['Data'];
           console.log(this.OfficeList, "OfficeList")          
         }, error => console.error(error));
     }

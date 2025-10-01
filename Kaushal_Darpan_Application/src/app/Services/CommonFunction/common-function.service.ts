@@ -1927,4 +1927,11 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async DDL_OfficeMasterList(DepartmentID: number): Promise<any> {
+    return await this.http.get(`${this.APIUrl}/DDL_OfficeMaster/${DepartmentID}`,this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      )
+      .toPromise();
+  }
 }

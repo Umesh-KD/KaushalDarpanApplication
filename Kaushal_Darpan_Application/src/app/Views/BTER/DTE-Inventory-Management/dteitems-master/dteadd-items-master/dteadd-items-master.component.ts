@@ -48,6 +48,8 @@ export class DteAddItemsMasterComponent {
   public maxQty: number = 0;
   _EnumRole = EnumRole;
   public UnitMasterList: any = [];
+
+
   constructor(
     private toastr: ToastrService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
@@ -84,7 +86,8 @@ export class DteAddItemsMasterComponent {
       EquipmentsId: ['', [DropdownValidators]],
       IsConsume: [''],
       UnitId: [0],
-      voucherdate: ['', Validators.required]
+      voucherdate: ['', Validators.required],
+      abbreviation: [''],
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -93,12 +96,13 @@ export class DteAddItemsMasterComponent {
     //await this.GetEquipmentDDL();
     await this.ddlCategory_Change();
     await this.GetTradeDDL();
+    await this.GetAllUnitData();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
       this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
       
     }
-    await this.GetAllUnitData();
+    
   }
 
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -124,6 +128,7 @@ export class DteAddItemsMasterComponent {
     debugger
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.request.batchId = this.request.abbreviation + '/' + this.request.VoucherNumber;
     this.isSubmitted = true;
     if (this.AddItemsRequestFormGroup.invalid) {
       /*return console.log("Form is invalid, cannot submit")*/
@@ -204,8 +209,7 @@ export class DteAddItemsMasterComponent {
       await this.itemService.GetByID(id)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          /*this.request.TradeId = data['Data']["TradeId"];*/
-
+          console.log('bind data ==>',data)
           this.ddlCategory_Change();
           this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
           this.AddItemsRequestFormGroup.patchValue({
@@ -213,6 +217,7 @@ export class DteAddItemsMasterComponent {
           })
           await this.ddlEquipment_Change();
           this.request.EquipmentsId = data['Data']['EquipmentsId'];
+          
           this.request.CampanyName = data['Data']["CampanyName"];
 
           this.request.IdentificationMark = data['Data']["IdentificationMark"];
@@ -223,8 +228,17 @@ export class DteAddItemsMasterComponent {
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
           this.request.IsConsume = data['Data']["IsConsume"];
-          console.log('GetByID',data)
-          // Update UI elements if necessary
+         
+          const rawDate = data['Data']["voucherdate"];
+
+          if (rawDate) {
+            const dateObj = new Date(rawDate);
+            this.request.voucherdate = dateObj.toISOString().substring(0, 10);
+          } else {
+            this.request.voucherdate = '';
+          }
+          this.request.UnitId = data['Data']["unitId"];
+          this.request.abbreviation = data['Data']["abbreviation"];
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
 
@@ -290,28 +304,37 @@ export class DteAddItemsMasterComponent {
     }
   }
 
+ 
+
   async ddlEquipment_Change() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
       const selectedCategoryId = this.AddItemsRequestFormGroup.value.ItemCategoryId;
-      const defaultOption = { EquipmentsId: 0, Name: '--Select--' };
+
+      const defaultEquipment = { ID: 0, Name: '-- Select Equipment --', IsConsume: 0, UnitId: 0 };
+
       if (!selectedCategoryId || selectedCategoryId === 0) {
-        this.EquipmentsDDLList = [defaultOption];
+        this.EquipmentsDDLList = [defaultEquipment];
         this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(0);
+        this.AddItemsRequestFormGroup.controls['UnitId'].setValue(0);
+        this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
+        this.request.UnitId = 0;
+        this.request.IsConsume = 0;
         return;
       }
-      this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(null);
-      this.EquipmentsDDLList = [];
+
+      this.EquipmentsDDLList = [defaultEquipment];
+      this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(0);
+      this.AddItemsRequestFormGroup.controls['UnitId'].setValue(0);
+      this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
+      this.request.UnitId = 0;
+      this.request.IsConsume = 0;
+
       const data = await this.commonFunctionService.GetDteEquipment_Branch_Wise_CategoryWise(selectedCategoryId);
       const parsedData = JSON.parse(JSON.stringify(data))?.Data || [];
 
-      this.EquipmentsDDLList = [defaultOption, ...parsedData];
-      if (this.EquipmentsDDLList.length === 1) {
-   
-        this.AddItemsRequestFormGroup.controls['EquipmentsId'].setValue(this.EquipmentsDDLList[0].EquipmentsId);
-        this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.EquipmentsDDLList[0].IsConsume);
-      }
+      this.EquipmentsDDLList = [defaultEquipment, ...parsedData];
     } catch (ex) {
       console.error('ddlEquipment_Change error:', ex);
     } finally {
@@ -319,14 +342,31 @@ export class DteAddItemsMasterComponent {
     }
   }
 
+
   async DGET_Details() {
-    debugger
-    this.request.IsConsume = this.EquipmentsDDLList.find((item: any) => item.ID == this.request.EquipmentsId)?.IsConsume || 0;
+    debugger;
+    const selectedEquipment = this.EquipmentsDDLList.find(
+      (item: any) => item.ID == this.request.EquipmentsId
+    );
+
+    if (selectedEquipment) {
+      this.request.IsConsume = selectedEquipment.IsConsume || 0;
+      this.request.UnitId = selectedEquipment.UnitId || 0;
+    } else {
+      this.request.IsConsume = 0;
+      this.request.UnitId = 0;
+    }
+
     this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.request.IsConsume);
+    this.AddItemsRequestFormGroup.controls['UnitId'].setValue(this.request.UnitId);
+
     await this.updateTable();
     this.showDetailsTable = true;
     this.EquimentsWiseQty();
   }
+
+
+
   EquimentsWiseQty() {
 
     const selectedItem = this.EquipmentsDDLList.find((item: any) => item.ID == this.request.EquipmentsId);
@@ -415,7 +455,8 @@ export class DteAddItemsMasterComponent {
       ItemCategoryId: null,
       EquipmentsId: null,
       UnitId: null,
-      voucherdate: ''
+      voucherdate: '',
+      Abbreviation: ''
     });
 
     this.EquipmentsDDLList = [];
@@ -435,23 +476,34 @@ export class DteAddItemsMasterComponent {
   async GetAllUnitData() {
     try {
       this.loaderService.requestStarted();
-      await this.dteItemUnitMasterService.GetAllData()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.UnitMasterList = data['Data'];
-          console.log('Unit Master List ==>', this.UnitMasterList);
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
+
+      const data: any = await this.dteItemUnitMasterService.GetAllData();
+
+      if (data && data.State === EnumStatus.Success) {
+        this.UnitMasterList = [
+          { UnitId: 0, UnitName: '--Select Unit--' },
+          ...data.Data
+        ];
+        this.request.UnitId = 0;
+      } else {
+        this.UnitMasterList = [{ UnitId: 0, UnitName: '--Select Unit--' }];
+        this.request.UnitId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No Unit data found.');
+      }
+
+      console.log('Unit Master List ==>', this.UnitMasterList);
+    } catch (Ex) {
+      console.log('Error in GetAllUnitData:', Ex);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+
+  openDatePicker(event: any) {
+    event.target.showPicker();
+  }
+
 }
