@@ -147,6 +147,8 @@ export class PreExamStudentExaminationComponent {
   public IsYearly: boolean = false;
   public _enumStudentType = EnumStudentType;
 
+  public PromoteStatusList: any[] = [];
+
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
     private loaderService: LoaderService,
@@ -224,7 +226,8 @@ export class PreExamStudentExaminationComponent {
         ddlExamCategoryID: [''],
         txtStudentName: [''],
         txtMobileNo: [''],
-        SessionType: ['']
+        SessionType: [''],
+        PromoteStatus: ['']
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
@@ -343,7 +346,7 @@ export class PreExamStudentExaminationComponent {
   }
 
   async GetMasterData() {
-    debugger
+    //debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
@@ -450,6 +453,12 @@ export class PreExamStudentExaminationComponent {
           this.SessionTypeList = data['Data'];
           console.log("this.SessionTypeList", this.SessionTypeList);
         }, error => console.error(error));
+
+      await this.commonMasterService.GetCommonMasterDDLByType('PromoteStudentStatus')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PromoteStatusList = data['Data'];
+        }, (error: any) => console.error(error));
     }
     catch (Ex) {
       console.log(Ex);

@@ -80,16 +80,12 @@ export class DteItemsMasterComponent {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
+
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
-      //if (this.sSOLoginDataModel.RoleID != EnumRole.Admin) {        
-      //  this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
-      //} else {
-      //  this.Searchrequest.CollegeId = 0
-      //}
-      
+           
       await this.dteItemsMasterService.GetAllData(this.Searchrequest)
         .then((data: any) => {
 

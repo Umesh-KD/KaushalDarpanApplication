@@ -178,7 +178,7 @@
 
           <div>
             <label class="block text-sm font-medium text-gray-600 mb-1">Return Date</label>
-            <input type="date"
+            <input (click)="openDatePicker($event)" type="date"
                    [(ngModel)]="returnModel.ReturnDate"
                    name="ReturnDate"
                    required

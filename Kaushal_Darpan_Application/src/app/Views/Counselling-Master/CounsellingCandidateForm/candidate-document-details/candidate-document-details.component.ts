@@ -9,12 +9,12 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { UploadCounsellingFileModel } from '../../../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel_Counselling } from '../../../../Models/DeleteDocumentDetailsModel';
-import { CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
 @Component({
   selector: 'app-candidate-document-details',
@@ -27,6 +27,7 @@ export class CandidateDocumentDetailsComponent {
   public deleteRequest = new Counselling_DocumentDetailsModel()
   public _GlobalConstants: any = GlobalConstants;
   public searchReq = new CounsellingApplicationSearchModel();
+  public appRequest = new CounsellingApplicationSearchModel();
 
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
@@ -34,8 +35,10 @@ export class CandidateDocumentDetailsComponent {
   public documentDetails: Counselling_DocumentDetailsModel[] = []  
   filteredDocumentsGroup1: any[] = [];
   filteredDocumentsGroup2: any[] = [];
+  PersonalDetailsData = new CounsellingApplicationFormDataModel();
 
   public isSubmitted: boolean = false;
+  public CandidateID: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -52,6 +55,8 @@ export class CandidateDocumentDetailsComponent {
 
   async ngOnInit() { 
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+    await this.GetApplicationDataByID_Counselling();
     await this.GetById();
   }
 
@@ -59,7 +64,7 @@ export class CandidateDocumentDetailsComponent {
     try {
       this.isSubmitted = false;
 
-      this.searchReq.CandidateId = 1  //this.SSOLoginDataModel.CandidateID
+      this.searchReq.CandidateId = this.CandidateID  //this.SSOLoginDataModel.CandidateID
 
       this.loaderService.requestStarted();
       await this.counsellingApplicationFormService.GetDocumentDatabyID_Counselling(this.searchReq)
@@ -93,7 +98,50 @@ export class CandidateDocumentDetailsComponent {
   }
 
   filteredDocumentDetails(groupNo: number): any[] {
+    
+    if (groupNo !== 2) {
+      return this.documentDetails.filter((x) => x.GroupNo === groupNo);
+    }
     let filtered = this.documentDetails.filter((x) => x.GroupNo === groupNo);
+
+    if (!this.PersonalDetailsData.IsPH) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "PH_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsExServicemen) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Ex_Servicemen_PPO_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsExServicemen) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Ex_Servicemen_Discharge_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsSportsPerson) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "SportsQuotaCertificate");
+    }
+    if (!this.PersonalDetailsData.IsShahidDependent) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Shahid_Dependent_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsSpouseInSameService) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Spouse_Govt_Service_Doc");
+    }
+    if (!this.PersonalDetailsData.IsAnyIncurableDiseases) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Incure_Dis_Doc");
+    }
+    
+    if(this.PersonalDetailsData.GenderId == 98) {
+      if (this.PersonalDetailsData.CategoryB_ID !== 1) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Widow_Certificate");
+      } 
+      if (this.PersonalDetailsData.CategoryB_ID !== 2) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Divorcee_Certificate");
+      }
+      if (this.PersonalDetailsData.CategoryB_ID !== 3) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Single_Mother_Certificate");
+      }
+    } else {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Widow_Certificate");
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Divorcee_Certificate");
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Single_Mother_Certificate");
+    }
+
     return filtered;
   }
 
@@ -101,7 +149,7 @@ export class CandidateDocumentDetailsComponent {
     try {
       //upload model
       let uploadModel: UploadCounsellingFileModel = {
-        CandidateID: '1',   //this.SSOLoginDataModel.ApplicationID.toString() ?? "0",
+        CandidateID: this.CandidateID.toString(),   //this.SSOLoginDataModel.ApplicationID.toString() ?? "0",
         AcademicYear: this.SSOLoginDataModel.FinancialYearID.toString() ?? "0",
         DepartmentID: this.SSOLoginDataModel.DepartmentID.toString() ?? "0",
         EndTermID: this.SSOLoginDataModel.EndTermID.toString() ?? "0",
@@ -160,7 +208,7 @@ export class CandidateDocumentDetailsComponent {
               this.documentDetails[index].Dis_FileName = '';
             }
 
-            // await this.DeleteApplicationDocument_FromTable(item);
+            await this.DeleteApplicationDocument_FromTable(item);
           }
           if (data.State == EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage)
@@ -172,32 +220,31 @@ export class CandidateDocumentDetailsComponent {
     }
   }
 
-  // async DeleteApplicationDocument_FromTable(item: any) {
+  async DeleteApplicationDocument_FromTable(item: any) {
+    try {
+      this.deleteRequest.CandidateID = item.CandidateID;
+      this.deleteRequest.CandidateDocumentID = item.CandidateDocumentID;
+      this.deleteRequest.ModifyBy = this.SSOLoginDataModel.UserID;
 
-  //   try {
-  //     this.deleteRequest.CandidateID = item.CandidateID;
-  //     this.deleteRequest.CandidateDocumentID = item.CandidateDocumentID;
-  //     this.deleteRequest.ModifyBy = this.SSOLoginDataModel.UserID;
-
-  //     this.loaderService.requestStarted();
-  //     await this.ApplicationService.DeleteDocumentById(this.deleteRequest)
-  //       .then((data: any) => {
-  //         if (data.State == EnumStatus.Success) {
-  //           this.toastr.success(data.Message)
-  //         } 
-  //         // else {
-  //         //   this.toastr.error(data.ErrorMessage)
-  //         // }
-  //       });
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   } finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200)
-  //   }
-  // }
+      this.loaderService.requestStarted();
+      await this.counsellingApplicationFormService.DeleteDocumentById_Counselling(this.deleteRequest)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
+          } 
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
 
   async SaveData() {
     this.Swal2.Confirmation("Are you sure you want to upload this document ?",
@@ -205,9 +252,9 @@ export class CandidateDocumentDetailsComponent {
         if (result.isConfirmed) {
           try {
             //document required
-            if (this.documentDetailsService.HasRequiredDocument(this.documentDetails)) {
-              return;
-            }
+            // if (this.documentDetailsService.HasRequiredDocument(this.documentDetails)) {
+            //   return;
+            // }
 
             const filteredDocuments1 = this.filteredDocumentsGroup1.filter((e) => e.DocumentMasterID != 20)
             filteredDocuments1.forEach(e => e.IsMandatory = 1)
@@ -215,18 +262,18 @@ export class CandidateDocumentDetailsComponent {
             const filteredDocuments2 = this.filteredDocumentsGroup2.filter((e) => e.DocumentMasterID != 20)
             filteredDocuments2.forEach(e => e.IsMandatory = 1)
 
-            if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
-              return;
-            }
+            // if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
+            //   return;
+            // }
 
-            if (this.documentDetailsService.HasRequiredDocument(filteredDocuments2)) {
-              return;
-            }
-            debugger
+            // if (this.documentDetailsService.HasRequiredDocument(filteredDocuments2)) {
+            //   return;
+            // }
+            // debugger
 
             this.documentDetails.forEach(e => {
               e.ModifyBy = this.SSOLoginDataModel.UserID;
-              e.CandidateID = 1    //this.request.ApplicationID;
+              e.CandidateID = this.CandidateID    //this.request.ApplicationID;
             })
 
             this.loaderService.requestStarted();
@@ -235,7 +282,7 @@ export class CandidateDocumentDetailsComponent {
               if (data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);
                 this.formSubmitSuccess.emit(true);
-                this.tabChange.emit(3);
+                this.tabChange.emit(2);
               }else if (data.State === EnumStatus.Warning) {
                 this.toastr.warning(data.ErrorMessage);
               } else {
@@ -250,6 +297,25 @@ export class CandidateDocumentDetailsComponent {
 
         }
       });
+  }
+
+  async GetApplicationDataByID_Counselling() {
+    try {
+      this.appRequest.CandidateId = this.CandidateID;
+      await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          // this.toastr.success(data.Message);
+          this.PersonalDetailsData = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async ResetData() {}

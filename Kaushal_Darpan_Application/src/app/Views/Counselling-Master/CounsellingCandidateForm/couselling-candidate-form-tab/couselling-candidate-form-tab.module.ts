@@ -21,7 +21,7 @@ import { CousellingCandidateFormTabRoutingModule } from './couselling-candidate-
     CandidatePersonalDetailsComponent,
     CandidateDocumentDetailsComponent,
     CandidateOptionDetailsComponent,
-    CandidateFormPreviewComponent,
+    // CandidateFormPreviewComponent,
   ],
   imports: [
     CommonModule,

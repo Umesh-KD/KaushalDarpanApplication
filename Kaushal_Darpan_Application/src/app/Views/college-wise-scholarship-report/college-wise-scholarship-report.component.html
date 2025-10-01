@@ -34,21 +34,9 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
       </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
-                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label>
-                    <!-- <ng-select formControlName="SchemeID" [clearable]="false" class="scrollable-dropdown" >
-                      <ng-option [value]="">--Select--</ng-option>
-                     <ng-option *ngFor="let item of schemeTypes" [value]="item.id">
-                        {{ item.name }}
-                      </ng-option>
-                     <ng-option [value]="1">Scheme 1</ng-option>
-                      <ng-option [value]="2">Scheme 2</ng-option>
-                      <ng-option [value]="2">Scheme 2</ng-option>  
-                    </ng-select>
-                    <div *ngIf="isSubmitted && formEditData.SchemeID.errors && formEditData.SchemeID.touched " class="text-danger">
-                      <p *ngIf="formEditData.SchemeID.errors.required"><i></i> This field is required .!</p>
-                    </div> -->
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scheme</label> 
                      <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.SchemeName" >
               <option value="0">Choose Option</option>
               <option *ngFor="let item of schemeTypes" [ngValue]="item.id">{{item.name}}</option>
@@ -67,6 +55,14 @@
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category" >
               <option value="0">Choose Option</option>
               <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+            </select>
+        
+        </div>
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender : <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementGenderID" name="PlacementGenderID" [(ngModel)]="searchRequest.GenderID" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of GenderList" [ngValue]="item.ID">{{item.Name}}</option>
             </select>
         
         </div>
@@ -127,6 +123,7 @@
             <th class="text-left">EnrollmentNo</th>
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
+            <th class="text-left">Gender</th>
             <th class="text-left">Category</th>
             <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
@@ -140,6 +137,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.EnrollmentNo}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Gender}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td>
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->

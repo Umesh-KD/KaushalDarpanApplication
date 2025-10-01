@@ -376,7 +376,7 @@ export class AddBterReturnItemComponent {
         this.returnItemTypeList = response.Data;
         this.returnModel.ItemCondition = this.returnItemTypeList[0].ID.toString();
       }
-
+        
       console.log('Default selected ==>', this.returnModel.ItemCondition);
     } catch (ex) {
       console.error('Error fetching item type list:', ex);
@@ -385,6 +385,10 @@ export class AddBterReturnItemComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  openDatePicker(event: any) {
+    event.target.showPicker();
   }
 
 

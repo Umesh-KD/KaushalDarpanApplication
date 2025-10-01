@@ -152,6 +152,70 @@
             IsMinority
           </label>
         </div> -->
+        <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            रोल नंबर (Roll Number):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="AadharNo"
+                 formControlName="RollNumber" [(ngModel)]="request.RollNumber" />
+          <div *ngIf="isSubmitted && _PersonalDetailForm.RollNumber.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.RollNumber.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            पद (Designation):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Designation"
+                 formControlName="Designation" [(ngModel)]="request.Designation" />
+          <div *ngIf="isSubmitted && _PersonalDetailForm.Designation.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.Designation.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+        <!-- <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            व्यवसाय (Trade):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Trade"
+                 formControlName="Trade" [(ngModel)]="request.Trade" />
+          <div *ngIf="isSubmitted && _PersonalDetailForm.Trade.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.Trade.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div> -->
+        <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            मेरिट नंबर (Merit Number):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="MeritNo"
+                 formControlName="MeritNo" [(ngModel)]="request.MeritNo" />
+          <div *ngIf="isSubmitted && _PersonalDetailForm.MeritNo.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.MeritNo.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            गृह जिला (Home District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="HomeDistrictID" name="HomeDistrictID" formControlName="HomeDistrictID"
+                  [(ngModel)]="request.HomeDistrictID">
+            <option value="0">Select District</option>
+            <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.HomeDistrictID.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.HomeDistrictID.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
 
       </div>
 
@@ -162,7 +226,7 @@
         <div>
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
-        </label>
+          </label>
           <select class="form-select" formControlName="CategoryA_ID" [(ngModel)]="request.CategoryA_ID">
             <option value="0">--Select--</option>
             <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
@@ -173,13 +237,184 @@
             </p>
           </div>
         </div>
+        <div *ngIf="request.GenderId == 98">
+          <label for="CategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            श्रेणी बी(Category B)(Widow/Divorcee/Single Mother) :<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" formControlName="CategoryB_ID" [(ngModel)]="request.CategoryB_ID">
+            <option value="0">--Select--</option>
+            <option value="1">Widow</option>
+            <option value="2">Divorcee</option>
+            <option value="3">Single Mother</option>
+            <!-- <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option> -->
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryB_ID.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.CategoryB_ID.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" formControlName="SelectionCategoryID" [(ngModel)]="request.SelectionCategoryID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.SelectionCategoryID.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.SelectionCategoryID.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsPH" [value]="true" formControlName="IsPH"
+                      [(ngModel)]="request.IsPH" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsPH" [value]="false" formControlName="IsPH"
+                      [(ngModel)]="request.IsPH" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsPH.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsPH.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsExServicemen" [value]="true" formControlName="IsExServicemen"
+                      [(ngModel)]="request.IsExServicemen" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsExServicemen" [value]="false" formControlName="IsExServicemen"
+                      [(ngModel)]="request.IsExServicemen" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsExServicemen.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsExServicemen.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSportsPerson" [value]="true" formControlName="IsSportsPerson"
+                      [(ngModel)]="request.IsSportsPerson" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSportsPerson" [value]="false" formControlName="IsSportsPerson"
+                      [(ngModel)]="request.IsSportsPerson" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsSportsPerson.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsSportsPerson.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsShahidDependent" [value]="true" formControlName="IsShahidDependent"
+                      [(ngModel)]="request.IsShahidDependent" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsShahidDependent" [value]="false" formControlName="IsShahidDependent"
+                      [(ngModel)]="request.IsShahidDependent" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsShahidDependent.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsShahidDependent.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To Mother/Father/Spouse) <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsAnyIncurableDiseases" [value]="true" formControlName="IsAnyIncurableDiseases"
+                      [(ngModel)]="request.IsAnyIncurableDiseases" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsAnyIncurableDiseases" [value]="false" formControlName="IsAnyIncurableDiseases"
+                      [(ngModel)]="request.IsAnyIncurableDiseases" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsAnyIncurableDiseases.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsAnyIncurableDiseases.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsSpouseInSameService.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsSpouseInSameService.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
       </div>
     </form>
   </div>
-  <div class="card-footer text-center">
+  <div class="card-footer text-center" *ngIf="request.IsFinalSubmit !== 2">
     <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
     <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
-    <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+    <!-- <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button> -->
   </div>
 </div>
 
