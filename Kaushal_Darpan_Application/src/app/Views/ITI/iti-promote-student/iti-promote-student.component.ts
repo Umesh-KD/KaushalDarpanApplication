@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants, PromoteStatus } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -58,6 +58,8 @@ export class ItiPromoteStudentComponent {
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
 
+  public _PromoteStatus = PromoteStatus;
+
   //end table feature default
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -85,7 +87,7 @@ export class ItiPromoteStudentComponent {
     await this.GetDateConfig();
     await this.checkspecialendterm()
     if (this.isspecialendterm == true) {
-      this.request.StudentTypeId=2
+      this.request.PromoteStatusID = this._PromoteStatus.Reg;
     }
   }
 
@@ -137,7 +139,7 @@ export class ItiPromoteStudentComponent {
   async GetPromotedStudent() {
     try {
       //session
-      if (this.request.StudentTypeId == 0) {
+      if (this.request.PromoteStatusID == 0) {
         this.toastr.warning("Please Select Student Type")
         return
       }

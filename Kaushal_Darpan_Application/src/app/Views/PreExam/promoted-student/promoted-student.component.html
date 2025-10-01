@@ -21,12 +21,9 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Student Status </label>
-          <select class="form-select" id="StudentType" [(ngModel)]="request.StudentTypeId" (change)="onChangeStudentType()">
+          <select class="form-select" id="StudentType" [(ngModel)]="request.PromoteStatusID" (change)="onChangeStudentType()">
             <option value="0">--Select--</option>
-            <option value="{{_EnumStudentType.Reg}}"> Reg. </option>
-            <option value="{{_EnumStudentType.Ex}}"> Ex. </option>
-            <option value="{{_EnumStudentType.NotFormFilled}}"> Exam. Form Not Filled </option>
-            <option value="{{_EnumStudentType.Detained}}"> Detained </option>
+            <option *ngFor="let item of PromoteStatusList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
         </div>
 
