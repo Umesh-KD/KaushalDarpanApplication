@@ -52,6 +52,7 @@ export class CandidatePersonalDetailsComponent {
       GenderId: [0, [DropdownValidators]],
       DOB: ['', Validators.required],
       CategoryA_ID: [0, [DropdownValidators]],
+      CategoryB_ID: [0, [DropdownValidators]],
       MobileNo: ['', Validators.required],
       Email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
       Address1: ['', Validators.required],
@@ -75,6 +76,7 @@ export class CandidatePersonalDetailsComponent {
       IsExServicemen: [''],
       IsShahidDependent: [''],
       IsAnyIncurableDiseases: [''],
+      IsSpouseInSameService: [''],
       
       ReligionID: [0, [DropdownValidators]],
       NationalityID: [0, [DropdownValidators]],
@@ -166,6 +168,10 @@ export class CandidatePersonalDetailsComponent {
   }
 
   async SaveData() {
+    if(this.PersonalDetailForm.invalid){
+      this.toastr.error("Please fill all the required fields");
+      return;
+    }
     try {
       this.request.CandidateID = this.CandidateID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {

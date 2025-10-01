@@ -12,7 +12,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { UploadCounsellingFileModel } from '../../../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel_Counselling } from '../../../../Models/DeleteDocumentDetailsModel';
-import { CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
@@ -27,6 +27,7 @@ export class CandidateDocumentDetailsComponent {
   public deleteRequest = new Counselling_DocumentDetailsModel()
   public _GlobalConstants: any = GlobalConstants;
   public searchReq = new CounsellingApplicationSearchModel();
+  public appRequest = new CounsellingApplicationSearchModel();
 
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
@@ -34,6 +35,7 @@ export class CandidateDocumentDetailsComponent {
   public documentDetails: Counselling_DocumentDetailsModel[] = []  
   filteredDocumentsGroup1: any[] = [];
   filteredDocumentsGroup2: any[] = [];
+  PersonalDetailsData = new CounsellingApplicationFormDataModel();
 
   public isSubmitted: boolean = false;
   public CandidateID: number = 0;
@@ -54,6 +56,7 @@ export class CandidateDocumentDetailsComponent {
   async ngOnInit() { 
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+    await this.GetApplicationDataByID_Counselling();
     await this.GetById();
   }
 
@@ -95,7 +98,44 @@ export class CandidateDocumentDetailsComponent {
   }
 
   filteredDocumentDetails(groupNo: number): any[] {
+    
+    if (groupNo !== 2) {
+      return this.documentDetails.filter((x) => x.GroupNo === groupNo);
+    }
     let filtered = this.documentDetails.filter((x) => x.GroupNo === groupNo);
+
+    if (!this.PersonalDetailsData.IsPH) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "PH_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsExServicemen) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Ex_Servicemen_PPO_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsExServicemen) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Ex_Servicemen_Discharge_Certificate");
+    }
+    if (!this.PersonalDetailsData.IsSportsPerson) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "SportsQuotaCertificate");
+    }
+    if (!this.PersonalDetailsData.IsShahidDependent) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Shahid_Dependent_Certificate");
+    }
+    
+    if(this.PersonalDetailsData.GenderId == 98) {
+      if (this.PersonalDetailsData.CategoryB_ID !== 1) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Widow_Certificate");
+      } 
+      if (this.PersonalDetailsData.CategoryB_ID !== 2) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Divorcee_Certificate");
+      }
+      if (this.PersonalDetailsData.CategoryB_ID !== 3) {
+        filtered = filtered.filter((x: any) => x.ColumnName !== "Single_Mother_Certificate");
+      }
+    } else {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Widow_Certificate");
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Divorcee_Certificate");
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Single_Mother_Certificate");
+    }
+
     return filtered;
   }
 
@@ -252,6 +292,25 @@ export class CandidateDocumentDetailsComponent {
 
         }
       });
+  }
+
+  async GetApplicationDataByID_Counselling() {
+    try {
+      this.appRequest.CandidateId = this.CandidateID;
+      await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          // this.toastr.success(data.Message);
+          this.PersonalDetailsData = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async ResetData() {}
