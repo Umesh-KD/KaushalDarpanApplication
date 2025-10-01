@@ -1417,7 +1417,7 @@ const routes: Routes = [
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
       
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
-
+      { path: 'candidate-details', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/candidate-form-preview/candidate-form-preview.module').then(m => m.CandidateFormPreviewModule), title: 'Candidate Details' },
 
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },

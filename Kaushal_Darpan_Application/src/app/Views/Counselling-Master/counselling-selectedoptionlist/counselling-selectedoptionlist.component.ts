@@ -14,6 +14,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMasterModel';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
+import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
@@ -79,6 +80,7 @@ SelectedStudent:any = {};
     private fb:FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
+    private encryptionService: EncryptionService,
     
   ){}
 
@@ -505,6 +507,13 @@ SelectedStudent:any = {};
         this.loaderService.requestEnded();
       }, 200);
     }
+  }
+
+  async redirectToPreview(row: any) {
+    debugger
+    this.routers.navigate(['/candidate-details'],{
+      queryParams: { AppID: this.encryptionService.encryptData(row.CandidateID) }
+    });
   }
 
 }
