@@ -75,6 +75,7 @@ export class inventoryIssueHistorySearchModel {
   public departmentID: number = 0;
   public itemCategoryId: number = 0;
   public ItemType: number = 0;
+  public EquipmentsId: number = 0;
 }
 
 
@@ -102,6 +103,7 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public ReturnDate: string = '';
   public Remarks: string = '';
   public ConditionAtReturn: number = 0;
+  public SelectedCount: number = 0;
 
   
   public ItemList: ItemsDetails[] = [];

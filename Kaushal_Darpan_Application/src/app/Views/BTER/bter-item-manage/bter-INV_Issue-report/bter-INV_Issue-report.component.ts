@@ -76,12 +76,12 @@ export class bterINVIssuereportComponent {
     try {
       this.loaderService.requestStarted();
 
-      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.TradeId = this.Searchrequest.TradeId;
-      this.Searchrequest.staffID = this.Searchrequest.staffID;
+      //this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      //this.Searchrequest.TradeId = this.Searchrequest.TradeId;
+      //this.Searchrequest.staffID = this.Searchrequest.staffID;
      // this.Searchrequest.staffID = 1;
 
-      await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.bterInventoryService.GetAllinventoryIssueReport(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
