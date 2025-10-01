@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Output, Renderer2 } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { DocumentDetailsService } from '../../../../Common/document-details';
@@ -14,7 +14,7 @@ import { ReportService } from '../../../../Services/Report/report.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel, CounsellingApplicationSearchModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
@@ -31,10 +31,12 @@ export class CandidateFormPreviewComponent {
   public searchReq = new Counselling_OptionFormDataModel();
   public request = new CounsellingApplicationPreviewDataModel();
   public finalSubmitReq = new CounsellingApplicationSearchModel();
+  public insOptionReq = new InstituteListDataModel_Coun();
 
   public documentDetails: Counselling_DocumentDetailsModel[] = []
   public DocumentList: Counselling_DocumentDetailsModel[] = []
   public filteredDocumentDetails: any = []
+  public InstituteOptionList: any = []
 
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
@@ -50,6 +52,11 @@ export class CandidateFormPreviewComponent {
   public isSupp: boolean = false
   imageSrc: string | null = null;
   isError: boolean = false;
+
+  showFinalButton: boolean = true;
+
+  closeResult: string | undefined;
+  modalReference: NgbModalRef | undefined;
 
   constructor(
     private loaderService: LoaderService,
@@ -93,7 +100,7 @@ export class CandidateFormPreviewComponent {
       await this.counsellingApplicationFormService.PreviewData_ByID_Counselling(this.searchReq)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data)); 
-          debugger
+          
           if(data.State === EnumStatus.Success) {
             this.request.CandidateID = data['Data']['CandidateID']
             if (data['Data'] != null) {
@@ -101,6 +108,10 @@ export class CandidateFormPreviewComponent {
               this.request.OptionViewData = data['Data']['OptionViewData']
               this.request.DocumentDetailList = data['Data']['DocumentDetailList']
               this.request.PendingDataModel = data['Data']['PendingDataModel']
+
+              if(this.request.PendingDataModel && this.request.PendingDataModel.length > 0) {
+                this.IsShowIncompleteData = true;
+              }
 
               if (this.request?.DocumentDetailList) {
                 this.documentDetails = this.request.DocumentDetailList;
@@ -180,6 +191,10 @@ export class CandidateFormPreviewComponent {
   }
 
   async FinalSubmit() {
+    if (this.request && this.request.PendingDataModel && this.request.PendingDataModel.length > 0) {
+      this.toastr.error("Please submit all pending data.");
+      return;
+    }
     
 
     this.Swal2.Confirmation(`Are you sure you want to Submit Application? Once You Submit Application then you can't make any changes in Personal Details and Document Details.`,
@@ -209,4 +224,39 @@ export class CandidateFormPreviewComponent {
         }
       });
     }
+
+  async GetInstituteOptionList_Counselling(item: any) {
+    try {
+      this.insOptionReq.CandidateID = this.CandidateID
+      this.insOptionReq.OptionID = item.OptionID
+      await this.counsellingApplicationFormService.GetInstituteOptionList_Counselling(this.insOptionReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.InstituteOptionList = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async ViewDetails(content: any, item: any) {
+    debugger
+    await this.GetInstituteOptionList_Counselling(item)
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+  }
+
+  CloseModal() {
+    this.modalService.dismissAll();
+    this.insOptionReq = new InstituteListDataModel_Coun()
+  }
+
+  Changetab(index: number) {
+    this.formSubmitSuccess.emit(true)
+    this.tabChange.emit(index)
+  }
 }
