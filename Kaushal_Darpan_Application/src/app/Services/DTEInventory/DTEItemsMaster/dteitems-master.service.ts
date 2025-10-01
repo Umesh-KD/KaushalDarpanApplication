@@ -204,15 +204,6 @@ export class DteItemsMasterService {
   }
 
 
-
-  
-  //public async SaveIssueItemsList(request: DTEItemsSaveModel[]) {
-  //  var body = JSON.stringify(request);
-  //  return await this.http.post(`${this.APIUrl}/SaveIssueItemsList`, body)
-  //    .pipe(
-  //      catchError(this.handleErrorObservable)
-  //    ).toPromise();
-  //}
   public async SaveIssueItemsList(itemsList: any[]) {
     const body = JSON.stringify(itemsList);
     return await this.http.post(this.APIUrl + '/SaveIssueItemsList', body, this.headersOptions)
