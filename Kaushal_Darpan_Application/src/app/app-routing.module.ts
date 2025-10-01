@@ -209,6 +209,7 @@ const routes: Routes = [
       { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
       { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
 
+      { path: 'PlacementAllStudentList', loadChildren: () => import('./Views/PlacementStudent/placement-allstudentlist/placement-allstudentlist.module').then(m => m.PlacementAllStudentListMasterModule), title: 'Placement All Student List' },
 
 
 
