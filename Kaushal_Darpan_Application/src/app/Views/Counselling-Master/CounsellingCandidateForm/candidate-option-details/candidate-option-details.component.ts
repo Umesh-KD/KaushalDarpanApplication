@@ -121,6 +121,10 @@ export class CandidateOptionDetailsComponent {
   }
 
   async AddChoice() {
+    if(this.OptionsFormGroup.invalid) {
+      this.toastr.error("Please fill all the required fields");
+      return;
+    }
     try {
       this.formData.CandidateID = this.CandidateID;
       this.formData.Priority = this.AddedChoices.length + 1

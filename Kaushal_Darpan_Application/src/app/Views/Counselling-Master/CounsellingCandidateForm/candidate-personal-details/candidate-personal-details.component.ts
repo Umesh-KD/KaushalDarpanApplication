@@ -168,6 +168,10 @@ export class CandidatePersonalDetailsComponent {
   }
 
   async SaveData() {
+    if(this.PersonalDetailForm.invalid){
+      this.toastr.error("Please fill all the required fields");
+      return;
+    }
     try {
       this.request.CandidateID = this.CandidateID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {
