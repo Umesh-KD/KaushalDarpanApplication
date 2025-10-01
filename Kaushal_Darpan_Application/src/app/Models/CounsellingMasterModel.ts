@@ -2,6 +2,7 @@
 export class CounsellingAllotmentListModel {
  
   public TradeID: number = 0
+  public CandidateID: number = 0
   // public CandidateCount:number=0;
   // public RoleID: number = 0
   // public DepartmentID: number = 0;
@@ -11,6 +12,7 @@ export class CounsellingAllotmentListModel {
   public TradeName :  string ='';
   public SortOrder: string = '';
   public SortColumn: string = '';
+  public action: string = '';
 }
 
 

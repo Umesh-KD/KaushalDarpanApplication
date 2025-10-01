@@ -39,6 +39,7 @@ export class CounsellingAllotmentListComponent implements OnInit {
   sortColumn: string = "";
   sortOrder: string = "";
 
+  public TradeDDLList: any = [];
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
@@ -67,7 +68,8 @@ SelectedStudent:any = {};
   constructor(private commonMasterService: CommonFunctionService, private CounsellingMasterService: CounsellingMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
     private modalService:NgbModal,
-    private fb:FormBuilder
+    private fb:FormBuilder,
+    private commonFunctionService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
@@ -91,9 +93,36 @@ SelectedStudent:any = {};
         }
         amountCtrl?.updateValueAndValidity();
       });
-
+    await this.GetTradeDDL();
     await this.GetCounsellingAllotmentList(1);
        
+  }
+
+
+  async GetTradeDDL() {
+    try {
+      this.loaderService.requestStarted();
+      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
+      //await this.commonFunctionService.StreamMaster()
+      await this.commonFunctionService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          //this.TradeDDLList = data['Data'];
+          //console.log(this.TradeDDLList)
+          // const selectOption = { ID: -1, Name: '--Select--' };
+          // this.TradeDDLList = [selectOption, ...data['Data']];  
+          this.TradeDDLList = data['Data'];  
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 
@@ -231,6 +260,7 @@ SelectedStudent:any = {};
       this.searchRequest.PageSize=this.pageSize
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder 
+      this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:0
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -266,6 +296,7 @@ SelectedStudent:any = {};
     // this.searchRequest.Enrollment = '';
     // this.searchRequest.Category='';
     // this.searchRequest.Status = '';
+    this.searchRequest.TradeID=0;
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
     await this.GetCounsellingAllotmentList(1);

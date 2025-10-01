@@ -105,35 +105,15 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.category}}</td> -->
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
-            <!-- <td>{{item.Status}}</td> -->
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-              <!-- <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a *ngIf="!item.SSOID || item.SSOID.trim()===''"  [routerLink]="'/StudentPlacementMapping'" [queryParams]="{ID:item.StudentID, key:1}"  title="Edit"><i class="ti ti-check"></i></a>
-                <a href="javascript:void(0);" title="Company On Action" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a>
-               
-              </div> -->
 
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh: auto !important">
-                <a href="javascript:void(0)"  title="View"><i
+                <!-- <a href="javascript:void(0)"  title="View"><i class="ti ti-eye"></i> </a> -->
+                    <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View"><i
                     class="ti ti-eye"></i> </a>
-                    <!-- <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View"><i
-                    class="ti ti-eye"></i> </a> -->
                 <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
               </div>
              </td>
-              <!-- *ngIf="!item.SSOID || item.SSOID.trim() === ''" -->
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/AddCompany'" [queryParams]="{CompanyID:company.ID, key:1}" *ngIf="(company.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" *ngIf="(company.Status=='Pending')" (click)="DeleteById(company.ID)">
-                  <i class="ti ti-trash"></i>
-                </a>
-              </div>
-            </td> -->
-            
           </tr>
         </tbody>
       </table>
@@ -163,3 +143,69 @@
 
 
 
+
+<ng-template #MyModel_EdiDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+      
+            <div class="card">
+              <div class="card-header flex justify-between items-center">
+                <b><i class="fa fa-plus"></i>&nbsp;Options List Section</b>
+                <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
+              </div>
+            <!-- <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal"> -->
+              <div class="card-body">
+                <div class="mt-5">
+                  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                    <b class="text-1xl-5">Selected Options List</b>
+                  </div>
+                  <div class="overflow-x-auto mt-3">
+                    <table class="table table-border w-full table-auto" cellpadding="5">
+                      <thead>
+                        <tr>
+                          <th>Institue Name</th>
+                          <!-- <th>Scholarship Type</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                          <th>Sections</th>
+                           <th>Scholarship Mode</th>
+                          <th>Action</th> -->
+                           
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of StudentOptionList; let i = index">
+                          <td>{{ row.instituteName }}</td>
+                          <!-- <td>{{ row.ScholarShipTypeName }}</td>
+                          <td>{{ row.ScholarShipAmount }}</td>
+                          <td>{{ row.ScholarShipDate }}</td>
+                          <td>{{ row.SectionsName }}</td>
+                           <td>{{ row.ScholarshipMode}}</td> -->
+                          <!-- <td>
+                            <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
+                              <i class="ti ti-trash"></i>
+                            </button>
+                          </td> -->
+                        </tr>
+                        <tr *ngIf="StudentOptionList.length === 0">
+                          <td colspan="7" class="text-center">No records found.</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="text-center flex items-center justify-center mt-3">
+                    <!-- <button type="button" id="btnSave" (click)="SaveData_EditDetails()" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" class="btn bg-info text-white">
+                      <i class="ti ti-device-floppy"></i> Submit
+                    </button> -->
+                    <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
+                  </div>
+                  <!--{{ApprovedTeacherList|json}}-->
+                </div>
+              </div>
+            <!-- </form> -->
+              
+            </div>
+       
+
+  </div>
+</ng-template>

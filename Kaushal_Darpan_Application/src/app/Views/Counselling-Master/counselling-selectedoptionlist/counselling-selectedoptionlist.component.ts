@@ -22,6 +22,7 @@ import { CounsellingMasterService } from '../../../Services/CounsellingMaster/co
 })
 export class CounsellingSelectedOptionListComponent implements OnInit {
   public StudentList: any = [];
+  public StudentOptionList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CounsellingAllotmentListModel();
   // public instituteId:int=0;
@@ -104,7 +105,7 @@ SelectedStudent:any = {};
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
     ];
-    const filteredData = this.StudentList.map((item: any) => {
+    const filteredData = this.StudentOptionList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
@@ -235,11 +236,7 @@ SelectedStudent:any = {};
       this.searchRequest.SortColumn=this.sortColumn
       this.searchRequest.SortOrder=this.sortOrder 
       this.searchRequest.TradeID=this.TradeID
-      // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-      //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-      //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      //   console.log(this.searchRequest.Category);
+      this.searchRequest.action="_GetcandidateList"
       this.loaderService.requestStarted();
       await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -263,13 +260,6 @@ SelectedStudent:any = {};
 
 
   async Back() {
-    // if (this.key == 1) {
-    //   this.routers.navigate(['/ItiCompanyMaster'])
-    // }
-    // else if (this.key == 2) {
-    //   this.routers.navigate(['/ItiCompanyMasterValidation'])
-    // }
-
     this.routers.navigate(['/CounsellingAllotmentList'])
   }
 
@@ -314,6 +304,89 @@ SelectedStudent:any = {};
     }
   }
 
+     async EditData(content: any, rowData?: any) {
+    this.isSubmitted = true;
+    this.SelectedStudent = rowData;
+    
+    debugger
+    // Open only once, store reference
+    this.modalRef1 = this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    });
+    // await this.fetchById();
+
+    // Handle result or dismissal
+    this.modalRef1.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    if (rowData != null && rowData != undefined) {
+      // if (rowData.StreamID != null) {
+        // let obj = {
+        //   Action: "GET_BY_ID",
+        //   DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        //   EndTermID: this.sSOLoginDataModel.EndTermID,
+        //   Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        //   StreamID: rowData.StreamID,
+        //   SemesterID: rowData.SemesterID
+        // }
+
+        // await this.staffMasterService.GetBranchSectionData(obj)
+        //   .then((data: any) => {
+        //     data = JSON.parse(JSON.stringify(data));
+        //     this.GetBranchStreamData=data.Data;
+        //     // this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
+        //     this.GetBranchStreamData = this.GetBranchStreamData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)
+        //     // this.GetBranchStreamData = data.Data
+        //     this.totalRecord1 = data['Data'].length;
+        //     console.log(this.GetBranchStreamData)
+        //     this.initTable1(this.GetBranchStreamData);
+        //   }, (error: any) => console.error(error)
+        //   );
+
+        try {
+
+          this.searchRequest.PageNumber=this.pageNo
+          this.searchRequest.PageSize=this.pageSize
+          this.searchRequest.SortColumn=this.sortColumn
+          this.searchRequest.SortOrder=this.sortOrder 
+          this.searchRequest.TradeID=this.TradeID
+          this.searchRequest.CandidateID=rowData.CandidateID
+          this.searchRequest.action="_GetcandidateOptionList"
+          // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
+          //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+          //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+          //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+          //   console.log(this.searchRequest.Category);
+          this.loaderService.requestStarted();
+          await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.StudentOptionList = data.Data;
+
+            this.totalRecord=this.StudentList[0]?.TotalRecords;
+            this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+            console.log(this.StudentList)
+          }, (error: any) => console.error(error))
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+            
+      // }
+    }
+  }
 
   CloseModal1() {
     if (this.modalRef1) {
@@ -321,13 +394,13 @@ SelectedStudent:any = {};
       this.modalRef1 = null;
       this.isSubmitted = false;
       this.SelectedStudent = {};
-      this.EditDataFormGroup.patchValue({
-        SchemeID : '',
-        Amount:'',
-        ScholarshipType:'',
-        ScholarshipDate:''
-      });
-      this.AddCollegeWiseScholarshipModelList = [];
+      // this.EditDataFormGroup.patchValue({
+      //   SchemeID : '',
+      //   Amount:'',
+      //   ScholarshipType:'',
+      //   ScholarshipDate:''
+      // });
+      this.StudentOptionList = [];
     }
   }
   

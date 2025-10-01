@@ -17,27 +17,26 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <!-- <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-      </div> -->
-      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
           <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
-        </div>
+        </div> -->
         <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category" >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
+            <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+              <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
             </select>
-        
         </div>
-        <div>
+        <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
             <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
               <option value="0">Choose Option</option>
@@ -45,16 +44,16 @@
               <option value="API">API</option>
             </select>
         
-        </div>
+        </div> -->
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData(1)">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetCounsellingAllotmentList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
             Reset
           </button>
         </div>
 
-      </div> -->
+      </div>
 
 
     </div>
