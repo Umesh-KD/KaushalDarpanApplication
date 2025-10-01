@@ -42,7 +42,7 @@
             </label>
 
             <div class="flex" *ngIf="item.FileName!=''">
-              <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
+              <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)" *ngIf="PersonalDetailsData.IsFinalSubmit !== 2">
                 <i class="ti ti-trash"></i>
               </a>
             </div>
@@ -80,7 +80,7 @@
           <div class="flex" *ngIf="item.FileName!=''">
             <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
                class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-            <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)">
+            <a href="javascript:void(0);" class="btn bg-danger text-white m-0" (click)="DeleteDocument(item)" *ngIf="PersonalDetailsData.IsFinalSubmit !== 2">
               <i class="ti ti-trash"></i>
             </a>
           </div>

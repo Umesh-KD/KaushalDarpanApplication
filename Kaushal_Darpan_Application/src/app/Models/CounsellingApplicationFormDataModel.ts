@@ -56,6 +56,7 @@ export class CounsellingApplicationFormDataModel {
   public IsSpouseInSameService?: boolean = false;
   public IsShahidDependent?: boolean = false;
   public IsAnyIncurableDiseases?: boolean = false;
+  public AcademicYearID?: number = 0;
 }
 
 export class CounsellingApplicationSearchModel {

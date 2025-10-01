@@ -208,7 +208,7 @@ export class CandidateDocumentDetailsComponent {
               this.documentDetails[index].Dis_FileName = '';
             }
 
-            // await this.DeleteApplicationDocument_FromTable(item);
+            await this.DeleteApplicationDocument_FromTable(item);
           }
           if (data.State == EnumStatus.Error) {
             this.toastr.error(data.ErrorMessage)
@@ -220,32 +220,31 @@ export class CandidateDocumentDetailsComponent {
     }
   }
 
-  // async DeleteApplicationDocument_FromTable(item: any) {
+  async DeleteApplicationDocument_FromTable(item: any) {
+    try {
+      this.deleteRequest.CandidateID = item.CandidateID;
+      this.deleteRequest.CandidateDocumentID = item.CandidateDocumentID;
+      this.deleteRequest.ModifyBy = this.SSOLoginDataModel.UserID;
 
-  //   try {
-  //     this.deleteRequest.CandidateID = item.CandidateID;
-  //     this.deleteRequest.CandidateDocumentID = item.CandidateDocumentID;
-  //     this.deleteRequest.ModifyBy = this.SSOLoginDataModel.UserID;
-
-  //     this.loaderService.requestStarted();
-  //     await this.ApplicationService.DeleteDocumentById(this.deleteRequest)
-  //       .then((data: any) => {
-  //         if (data.State == EnumStatus.Success) {
-  //           this.toastr.success(data.Message)
-  //         } 
-  //         // else {
-  //         //   this.toastr.error(data.ErrorMessage)
-  //         // }
-  //       });
-  //   }
-  //   catch (Ex) {
-  //     console.log(Ex);
-  //   } finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200)
-  //   }
-  // }
+      this.loaderService.requestStarted();
+      await this.counsellingApplicationFormService.DeleteDocumentById_Counselling(this.deleteRequest)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message)
+          } 
+          else {
+            this.toastr.error(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
 
   async SaveData() {
     this.Swal2.Confirmation("Are you sure you want to upload this document ?",
