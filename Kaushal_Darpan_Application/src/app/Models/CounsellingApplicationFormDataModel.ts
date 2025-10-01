@@ -92,6 +92,7 @@ export class InstituteListDataModel_Coun {
   public Priority?: number = 0;
   public InstituteName?: string = '';
   public OptionID?: number = 0;
+  public CandidateID?: number = 0;
   public Type?: string = '';
 }
 

@@ -45,7 +45,7 @@ export class CandidatePersonalDetailsComponent {
   ) {}
   async ngOnInit() {
     this.PersonalDetailForm = this.formBuilder.group({
-      SSOID: ['', Validators.required],
+      // SSOID: ['', Validators.required],
       CandidateName: ['', Validators.required],
       FatherName: ['', Validators.required],
       MotherName: ['', Validators.required],
@@ -55,18 +55,18 @@ export class CandidatePersonalDetailsComponent {
       CategoryB_ID: [0, [DropdownValidators]],
       MobileNo: ['', Validators.required],
       Email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
-      Address1: ['', Validators.required],
-      Address2: ['', Validators.required],
-      Address3: [''],
-      StateID: [0, [DropdownValidators]],
-      DistrictID: [0, [DropdownValidators]],
-      BlockID: [0, [DropdownValidators]],
-      Pincode: ['', Validators.required],
+      // Address1: ['', Validators.required],
+      // Address2: ['', Validators.required],
+      // Address3: [''],
+      // StateID: [0, [DropdownValidators]],
+      // DistrictID: [0, [DropdownValidators]],
+      // BlockID: [0, [DropdownValidators]],
+      // Pincode: ['', Validators.required],
       AadharNo: ['', Validators.required],
       // JanAadharNo: ['', Validators.required],
       RollNumber: ['', Validators.required],
       Designation: ['', Validators.required],
-      Trade: ['', Validators.required],
+      // Trade: ['', Validators.required],
       MeritNo: ['', Validators.required],
       SelectionCategoryID: [0, [DropdownValidators]],
       HomeDistrictID: [0, [DropdownValidators]],
@@ -168,8 +168,20 @@ export class CandidatePersonalDetailsComponent {
   }
 
   async SaveData() {
+    await this.refreshValidators();
     if(this.PersonalDetailForm.invalid){
       this.toastr.error("Please fill all the required fields");
+      Object.keys(this.PersonalDetailForm.controls).forEach(key => {
+          const control = this.PersonalDetailForm.get(key);
+ 
+          if (control && control.invalid) {
+            // this.toastr.error(`Control ${key} is invalid`);
+            console.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
       return;
     }
     try {
@@ -231,6 +243,13 @@ export class CandidatePersonalDetailsComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+  async refreshValidators() {
+    if (this.request.GenderId != 98) {
+      this.PersonalDetailForm.controls['CategoryB_ID'].clearValidators();
+      this.PersonalDetailForm.controls['CategoryB_ID'].updateValueAndValidity();
     }
   }
 }

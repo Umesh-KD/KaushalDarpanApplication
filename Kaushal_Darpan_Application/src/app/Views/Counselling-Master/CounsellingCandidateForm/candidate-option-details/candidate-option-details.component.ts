@@ -125,6 +125,10 @@ export class CandidateOptionDetailsComponent {
       this.toastr.error("Please fill all the required fields");
       return;
     }
+    if(this.formData.InstituteList?.length == 0) {
+      this.toastr.error("Please select at least one Institute");
+      return;
+    }
     try {
       this.formData.CandidateID = this.CandidateID;
       this.formData.Priority = this.AddedChoices.length + 1
@@ -136,7 +140,7 @@ export class CandidateOptionDetailsComponent {
           await this.Counselling_GetOptionDetailsByID();
           this.formData.TradeId = 0;
           this.formData.InstituteID = 0;
-          this.formData.InstituteList = [];
+          window.location.reload();
           this.isSubmitted = false;
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)

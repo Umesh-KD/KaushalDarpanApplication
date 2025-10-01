@@ -118,7 +118,13 @@
             <tr *ngFor="let item of request.OptionViewData; let idx = index">
               <td>{{idx+1}}</td>
               <td>{{item.TradeName}}</td>
-              <td>{{item.InstituteName}}</td>
+              <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
+                  <a href="javascript:void(0)" title="View"
+                    (click)="ViewDetails(MyModel_ViewDetails, item)"><i class="ti ti-eye"></i> 
+                  </a>
+                </div>
+              </td>
               <!-- <td>{{item.College_TypeName}}</td> -->
 
             </tr>
@@ -203,7 +209,8 @@
   </div>
 </div>
 <div class="card-footer text-center" *ngIf="request.IsFinalSubmit !== 2">
-  <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()" ><i class="ti ti-lock"></i>Submit & Lock</button>
+  <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()"><i class="ti ti-lock"></i>Submit & Lock
+  </button>
 </div>
 
 <div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
@@ -240,3 +247,48 @@
 
   </div>
 </div>
+
+<ng-template #MyModel_ViewDetails let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+      
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp; Selected Institute List</b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mt-5">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Selected Institute List</b>
+          </div>
+          <div class="overflow-x-auto mt-3">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead>
+                <tr>
+                  <th>Priority</th>
+                  <th>Institue Name</th>                    
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of InstituteOptionList; let i = index">
+                  <td class="text-center">{{ row.Priority }}</td>
+                  <td class="text-center">{{ row.InstituteName }}</td>                  
+                </tr>
+                <!-- <tr *ngIf="InstituteOptionList.length === 0">
+                  <td colspan="7" class="text-center">No records found.</td>
+                </tr> -->
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <!-- <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button> -->
+          </div>
+        </div>
+      </div>
+      
+    </div>
+       
+
+  </div>
+</ng-template>

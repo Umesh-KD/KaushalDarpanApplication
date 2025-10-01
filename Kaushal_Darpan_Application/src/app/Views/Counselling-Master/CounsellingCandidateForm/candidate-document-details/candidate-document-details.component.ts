@@ -119,6 +119,12 @@ export class CandidateDocumentDetailsComponent {
     if (!this.PersonalDetailsData.IsShahidDependent) {
       filtered = filtered.filter((x: any) => x.ColumnName !== "Shahid_Dependent_Certificate");
     }
+    if (!this.PersonalDetailsData.IsSpouseInSameService) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Spouse_Govt_Service_Doc");
+    }
+    if (!this.PersonalDetailsData.IsAnyIncurableDiseases) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "Incure_Dis_Doc");
+    }
     
     if(this.PersonalDetailsData.GenderId == 98) {
       if (this.PersonalDetailsData.CategoryB_ID !== 1) {
@@ -247,9 +253,9 @@ export class CandidateDocumentDetailsComponent {
         if (result.isConfirmed) {
           try {
             //document required
-            if (this.documentDetailsService.HasRequiredDocument(this.documentDetails)) {
-              return;
-            }
+            // if (this.documentDetailsService.HasRequiredDocument(this.documentDetails)) {
+            //   return;
+            // }
 
             const filteredDocuments1 = this.filteredDocumentsGroup1.filter((e) => e.DocumentMasterID != 20)
             filteredDocuments1.forEach(e => e.IsMandatory = 1)
@@ -257,14 +263,14 @@ export class CandidateDocumentDetailsComponent {
             const filteredDocuments2 = this.filteredDocumentsGroup2.filter((e) => e.DocumentMasterID != 20)
             filteredDocuments2.forEach(e => e.IsMandatory = 1)
 
-            if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
-              return;
-            }
+            // if (this.documentDetailsService.HasRequiredDocument(filteredDocuments1)) {
+            //   return;
+            // }
 
-            if (this.documentDetailsService.HasRequiredDocument(filteredDocuments2)) {
-              return;
-            }
-            debugger
+            // if (this.documentDetailsService.HasRequiredDocument(filteredDocuments2)) {
+            //   return;
+            // }
+            // debugger
 
             this.documentDetails.forEach(e => {
               e.ModifyBy = this.SSOLoginDataModel.UserID;
@@ -277,7 +283,7 @@ export class CandidateDocumentDetailsComponent {
               if (data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);
                 this.formSubmitSuccess.emit(true);
-                this.tabChange.emit(3);
+                this.tabChange.emit(2);
               }else if (data.State === EnumStatus.Warning) {
                 this.toastr.warning(data.ErrorMessage);
               } else {
