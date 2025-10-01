@@ -21,27 +21,26 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <!-- <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-      </div> -->
-      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
           <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
-        </div>
+        </div> -->
         <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category" >
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
+            <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
+              <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
             </select>
-        
         </div>
-         <div>
+        <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
             <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
               <option value="0">Choose Option</option>
@@ -49,8 +48,7 @@
               <option value="API">API</option>
             </select>
         
-        </div>
-         
+        </div> -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetCandidateList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -59,13 +57,14 @@
           </button>
         </div>
 
-      </div> -->
+      </div>
+
 
 
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ExcelExport()"><i class="ti ti-download"></i> Download</a>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -89,6 +88,14 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
+            <th align="left">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
+                     #checkboxSeletedAll >
+            </th>
+             <!-- <th align="left">
+              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
+                     #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
+            </th> -->
             <th class="text-left">Name</th>
             <th class="text-left">DOB</th>
             <th class="text-left">SSOID</th>
@@ -102,6 +109,13 @@
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+             <td>
+              <input type="checkbox" name="MarkCheck" [checked]="true"/>
+            </td>
+            <!-- <td>
+              <input type="checkbox" name="MarkCheck" [checked]="true"
+                     [(ngModel)]="item.Marked" />
+            </td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
@@ -163,6 +177,7 @@
                     <table class="table table-border w-full table-auto" cellpadding="5">
                       <thead>
                         <tr>
+                          <th>Sr. No.</th>
                           <th>Institue Name</th>
                           <!-- <th>Scholarship Type</th>
                           <th>Amount</th>
@@ -175,6 +190,7 @@
                       </thead>
                       <tbody>
                         <tr *ngFor="let row of StudentOptionList; let i = index">
+                          <td>{{i+1}}</td>
                           <td>{{ row.instituteName }}</td>
                           <!-- <td>{{ row.ScholarShipTypeName }}</td>
                           <td>{{ row.ScholarShipAmount }}</td>
