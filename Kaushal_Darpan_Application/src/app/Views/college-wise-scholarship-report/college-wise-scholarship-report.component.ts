@@ -56,6 +56,7 @@ schemeTypes:any = [
   { id: 2, name: 'Scheme 2' },
   { id: 3, name: 'Scheme 3' }
 ];
+GenderList:any = [];
 
 SelectedStudent:any = {};
 
@@ -88,7 +89,8 @@ SelectedStudent:any = {};
         Amount: [''] , // will validate only if Cash is selected
         ScholarshipDate: ['', Validators.required]   // 👈 new field
       });
-      await this.GetCategoryMatserDDL()
+      await this.genderData();
+      await this.GetCategoryMatserDDL();
       // Add dynamic validator
       this.EditDataFormGroup.get('ScholarshipType')?.valueChanges.subscribe(val => {
         const amountCtrl = this.EditDataFormGroup.get('Amount');
@@ -104,7 +106,26 @@ SelectedStudent:any = {};
     await this.GetEligibleStudentListData(1);
        
   }
-
+ async genderData(){
+  try{
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterDDLByType('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+          console.log("GenderList", this.GenderList);
+        }, (error: any) => console.error(error)
+        );
+        }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+ }
 
   exportToExcel(): void {
     const unwantedColumns = [
@@ -209,7 +230,7 @@ debugger;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.CourseType=this.sSOLoginDataModel.Eng_NonEng;
         console.log(this.searchRequest.Category);
-        
+        console.log(this.searchRequest.GenderID);
         console.log(this.searchRequest.SchemeName);
       this.loaderService.requestStarted();
       await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipListReport(this.searchRequest).then((data: any) => {
