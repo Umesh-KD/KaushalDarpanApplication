@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMasterModel';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
 
-declare function tableToExcel(table: any, name: any, fileName: any): any;
+// declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
     selector: 'counselling-selectedoptionlist',
     templateUrl: './counselling-selectedoptionlist.component.html',
@@ -25,6 +25,7 @@ declare function tableToExcel(table: any, name: any, fileName: any): any;
 export class CounsellingSelectedOptionListComponent implements OnInit {
   public StudentList: any = [];
   public StudentOptionList: any = [];
+   public StudentOptionListToExport: any = [];
   public Table_SearchText: string = "";
   public AllSelect: boolean = false;
   public searchRequest = new CounsellingAllotmentListModel();
@@ -91,7 +92,7 @@ SelectedStudent:any = {};
       }
       // await this.GetByID(this.PostID);
     }
-    //  await this.EditData(0,0);
+   await this.getcandidateOptionList();
     await this.GetTradeDDL();
     await this.GetCandidateList(1);
   await this.GetCategoryMatserDDL()
@@ -115,10 +116,10 @@ SelectedStudent:any = {};
   exportToExcel(): void {
     debugger
     const unwantedColumns = [
-      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+      'Instituteid', 'CandidateID'
+      
     ];
-    const filteredData = this.StudentOptionList.map((item: any) => {
+    const filteredData = this.StudentOptionListToExport.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
@@ -135,11 +136,11 @@ SelectedStudent:any = {};
 
 
     //
-  public async ExcelExport() {
-    if (this.StudentList.length > 0) {
-      tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
-    }
-  }
+  // public async ExcelExport() {
+  //   if (this.StudentOptionList.length > 0) {
+  //     tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
+  //   }
+  // }
 
    
    get formEditData(){return this.EditDataFormGroup.controls;}
@@ -362,6 +363,45 @@ SelectedStudent:any = {};
     }
   }
 
+  async getcandidateOptionList(){
+    try {
+
+          this.searchRequest.PageNumber=this.pageNo
+          this.searchRequest.PageSize=this.pageSize
+          this.searchRequest.SortColumn=this.sortColumn
+          this.searchRequest.SortOrder=this.sortOrder 
+          this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:this.TradeID;
+          this.searchRequest.CandidateID=0
+
+          
+          this.searchRequest.action="_GetcandidateOptionList"
+          // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
+          //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+          //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+          //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+          //   console.log(this.searchRequest.Category);
+          this.loaderService.requestStarted();
+          await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.StudentOptionListToExport = data.Data;
+
+            // this.totalRecord=this.StudentOptionList[0]?.TotalRecords;
+            // this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+            console.log(this.StudentOptionList)
+          }, (error: any) => console.error(error))
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+            
+  }
+
      async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
     this.SelectedStudent = rowData;
@@ -415,7 +455,14 @@ SelectedStudent:any = {};
           this.searchRequest.SortColumn=this.sortColumn
           this.searchRequest.SortOrder=this.sortOrder 
           this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:this.TradeID;
-          this.searchRequest.CandidateID=rowData.CandidateID
+          if(rowData.CandidateID>0)
+          {
+            this.searchRequest.CandidateID=rowData.CandidateID
+          }
+          else{
+            this.searchRequest.CandidateID=0
+          }
+          
           this.searchRequest.action="_GetcandidateOptionList"
           // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
           //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
@@ -427,10 +474,10 @@ SelectedStudent:any = {};
             data = JSON.parse(JSON.stringify(data));
             this.StudentOptionList = data.Data;
 
-            this.totalRecord=this.StudentList[0]?.TotalRecords;
+            this.totalRecord=this.StudentOptionList[0]?.TotalRecords;
             this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
 
-            console.log(this.StudentList)
+            console.log(this.StudentOptionList)
           }, (error: any) => console.error(error))
         }
         catch (ex) {
