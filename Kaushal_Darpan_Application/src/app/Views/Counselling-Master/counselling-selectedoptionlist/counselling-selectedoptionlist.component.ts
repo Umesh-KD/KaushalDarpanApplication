@@ -146,19 +146,13 @@ SelectedStudent:any = {};
    get formEditData(){return this.EditDataFormGroup.controls;}
 
 
-     async GetTradeDDL() {
+    async GetTradeDDL() {
     try {
       this.loaderService.requestStarted();
-      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
-      //await this.commonFunctionService.StreamMaster()
       await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          //this.TradeDDLList = data['Data'];
-          //console.log(this.TradeDDLList)
-          // const selectOption = { ID: -1, Name: '--Select--' };
-          // this.TradeDDLList = [selectOption, ...data['Data']];  
           this.TradeDDLList = data['Data'];  
         }, error => console.error(error));
     }
@@ -178,14 +172,6 @@ SelectedStudent:any = {};
       debugger
       this.isSubmitted = true;
       if (this.EditDataFormGroup.invalid) return;
-      // if(this.availSectionData.length>0){
-      //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
-      //    if(existAssignedTeacherData){
-      //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
-      //     return;
-      //    }
-      // }
-
       const filtered = this.AddCollegeWiseScholarshipModelList.filter(s => 
         s.ScholarShipTypeID == this.EditDataFormGroup.get('ScholarshipType')?.value &&
         s.SchemeID == this.EditDataFormGroup.get('SchemeID')?.value &&
@@ -213,45 +199,10 @@ SelectedStudent:any = {};
       // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
       newItem.SchemeName=selectedScheme;
       newItem.ScholarShipTypeName=selectedScholarship;
-      // const selectedScheme = this.schemeTypes.find(x => x.id === newItem.SchemeID);
-  
-      // Save as CSV
-      // newItem.SectionIDs = (formValue.SectionID || []).join(',');
-  
-  
-  
-      // newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
-      // newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
-      // newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
-      // newItem.SatffName = this.ApprovedTeacherList.find((x: any) => x.StaffID == newItem.StaffID)?.Name || "";
-      // newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
-  
-  
-  
-      //newItem.SemesterName = "";
-      //newItem.StreamName = "";
-      //newItem.SubjectName = "";
-      //newItem.SatffName = "";
-      //newItem.SectionsName = "";
-      // this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
-      // this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
-      // this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+     
       this.AddCollegeWiseScholarshipModelList.push(newItem);
-      // this.AddCollegeWiseScholarshipModelList2=this.AddCollegeWiseScholarshipModelList;
-      // remove used sections from dropdown
-      // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
-      // this.refreshAvailableSections();
+
       this.EditDataFormGroup.reset();
-      // this.AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
-      // this.AddStaffSubjectSectionModel.SemesterID = this.oldSemesterID;
-      // this.AddStaffSubjectSectionModel.StreamID = this.oldStreamID;
-  
-      // reset form
-      //this.EditDataFormGroup.reset({
-      //  SubjectID: 0,
-      //  UserID: 0,
-      //  SectionID: []
-      //});
   
       this.isSubmitted = false;
   
