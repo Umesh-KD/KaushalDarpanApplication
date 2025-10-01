@@ -14,7 +14,7 @@ import { ReportService } from '../../../../Services/Report/report.service';
 import { SMSMailService } from '../../../../Services/SMSMail/smsmail.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
@@ -30,6 +30,7 @@ export class CandidateFormPreviewComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchReq = new Counselling_OptionFormDataModel();
   public request = new CounsellingApplicationPreviewDataModel();
+  public finalSubmitReq = new CounsellingApplicationSearchModel();
 
   public documentDetails: Counselling_DocumentDetailsModel[] = []
   public DocumentList: Counselling_DocumentDetailsModel[] = []
@@ -177,4 +178,35 @@ export class CandidateFormPreviewComponent {
 
     this.showPdfModal = true;
   }
+
+  async FinalSubmit() {
+    
+
+    this.Swal2.Confirmation(`Are you sure you want to Submit Application? Once You Submit Application then you can't make any changes in Personal Details and Document Details.`,
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          this.loaderService.requestStarted();
+          this.finalSubmitReq.CandidateId = this.CandidateID
+          this.finalSubmitReq.ModifyBy = this.sSOLoginDataModel.UserID
+
+          try {
+            await this.counsellingApplicationFormService.ApplicationFinalSubmit_Counselling(this.finalSubmitReq)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if (data.State === EnumStatus.Success) {
+                  this.toastr.success(data.Message);
+                  await this.GetById();
+                } else if (data.State === EnumStatus.Warning) {
+                  this.toastr.warning(data.Message);
+                } else {
+                  this.toastr.error(data.ErrorMessage);
+                }
+              }, error => console.error(error));
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+    }
 }

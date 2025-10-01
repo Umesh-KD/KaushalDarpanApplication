@@ -94,9 +94,9 @@
 
   </div>
 
-  <div class="card-footer text-center">
+  <div class="card-footer text-center" *ngIf="PersonalDetailsData.IsFinalSubmit !== 2">
     <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
     <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
-    <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+    <!-- <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button> -->
   </div>
 </div>

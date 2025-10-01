@@ -202,6 +202,9 @@
     </div>
   </div>
 </div>
+<div class="card-footer text-center" *ngIf="request.IsFinalSubmit !== 2">
+  <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()" ><i class="ti ti-lock"></i>Submit & Lock</button>
+</div>
 
 <div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
   <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">

@@ -10,6 +10,7 @@ export class CounsellingApplicationFormDataModel {
   public GenderId: number = 0;
   public DOB?: string = '';
   public CategoryA_ID: number = 0;
+  public CategoryB_ID: number = 0;
   public MobileNo?: string = '';
   public Email?: string = '';
   public Address1?: string = '';
@@ -69,6 +70,7 @@ export class CounsellingApplicationSearchModel {
   public AadharNo?: string = '';
   public DOB?: string = '';
   public Action?: string = '';
+  public ModifyBy?: number = 0;
 }
 
 export class Counselling_OptionFormDataModel extends RequestBaseModel{
@@ -123,7 +125,6 @@ export class CounsellingApplicationPreviewDataModel {
     StudentPhoto?: string = '';
     SignaturePhoto?: string = '';
     ProfileStatus?: number = 0;
-    IsfinalSubmit?: number = 0;
     ServiceID?: number = 0;
     DepartmentID?: number = 0;
     CourseTypeID?: number = 0;
@@ -133,6 +134,7 @@ export class CounsellingApplicationPreviewDataModel {
     DocumentDetailList?: Counselling_DocumentDetailsModel[] = [];
     CategoryAId?: number = 0;
     GenderId?: number = 0;
+    IsFinalSubmit?: number = 0;
     Nationality?: string = '';
     Category_E?: string = '';
 }
@@ -140,6 +142,7 @@ export class CounsellingApplicationPreviewDataModel {
 export class OptionviewData_Counselling {
     InstituteName?: string = '';
     TradeId?: number = 0;
+    OptionID?: number = 0;
     Priority?: number = 0;
     TradeName?: string = '';
 }

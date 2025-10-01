@@ -224,7 +224,6 @@
       </div>
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
         <div>
-
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
           </label>
@@ -234,6 +233,23 @@
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryA_ID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailForm.CategoryA_ID.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
+        <div *ngIf="request.GenderId == 98">
+          <label for="CategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            श्रेणी बी(Category B)(Widow/Divorcee/Single Mother) :<span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" formControlName="CategoryB_ID" [(ngModel)]="request.CategoryB_ID">
+            <option value="0">--Select--</option>
+            <option value="1">Widow</option>
+            <option value="2">Divorcee</option>
+            <option value="3">Single Mother</option>
+            <!-- <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option> -->
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryB_ID.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.CategoryB_ID.errors.DropdownValidators">
               <i aria-hidden="false"></i>This field is required.!
             </p>
           </div>
@@ -369,13 +385,36 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsSpouseInSameService.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsSpouseInSameService.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
       </div>
     </form>
   </div>
-  <div class="card-footer text-center">
+  <div class="card-footer text-center" *ngIf="request.IsFinalSubmit !== 2">
     <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
     <button type="button" class="btn bg-primary text-white" (click)="SaveData()"><i class="ti ti-device-floppy"></i>Save & Next</button>
-    <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button>
+    <!-- <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button> -->
   </div>
 </div>
 
