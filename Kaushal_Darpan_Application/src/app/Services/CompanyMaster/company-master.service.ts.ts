@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { CommonSubjectMasterSearchModel } from '../../Models/CommonSubjectMasterSearchModel';
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { HrMasterDataModel, HrMasterSearchModel } from '../../Models/HrMasterDataModel';
-import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action } from '../../Models/CompanyMasterDataModel';
+import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action, PlacementStudentListSearchModel } from '../../Models/CompanyMasterDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 
 
@@ -104,6 +104,15 @@ export class CompanyMasterService {
   public async GetEligibleStudentListData(searchRequest: CompanyMasterSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetEligibleStudentListData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+      //Get studetn list eligible for placement all data
+  public async GetPlacementAllStudentList(searchRequest: PlacementStudentListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetPlacementAllStudentList`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

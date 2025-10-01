@@ -100,3 +100,21 @@ export class EligibleStudentListMasterSearchModel {
   public SortOrder: string = '';
   public SortColumn: string = '';
 }
+
+
+export class PlacementStudentListSearchModel {
+  public Name: string = '';
+  public Status: string = '';
+  public ModifyBy: number = 0
+  public RoleID: number = 0
+  public DepartmentID: number = 0;
+  public InstituteID:number=0;
+  public FinancialYearID:number=0;
+  public EndTermID:number=0;
+  public PageSize: number = 50
+  public PageNumber: number = 1
+
+  public SortOrder: string = '';
+  public SortColumn: string = '';
+  public action:string='';
+}
