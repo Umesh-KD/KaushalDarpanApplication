@@ -23,7 +23,7 @@ export class StudentSearchModel {
   public TrasactionStatus: number = 0;
   public StudentExamID?: number = 0;
   public CourseTypeID: number = 0;
-
+  public Receipt_Number?: string = '';
 
 
 }
