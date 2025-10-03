@@ -205,13 +205,8 @@ const routes: Routes = [
       { path: 'CollegeWiseScholarship', loadChildren: () => import('./Views/college-wise-scholarship/college-wise-scholarship.module').then(m => m.CollegeWiseScholarshipModule), title: 'CollegeWise Scholarship' },
       { path: 'ITICollegeWiseScholarship', loadChildren: () => import('./Views/ITI/ITIcollege-wise-scholarship/iticollege-wise-scholarship.module').then(m => m.ITICollegeWiseScholarshipModule), title: 'ITI CollegeWise Scholarship' },
       { path: 'CollegeWiseScholarshipReport', loadChildren: () => import('./Views/college-wise-scholarship-report/college-wise-scholarship-report.module').then(m => m.CollegeWiseScholarshipReportModule), title: 'CollegeWise Scholarship Report' },
-      { path: 'CounsellingAllotmentList', loadChildren: () => import('./Views/Counselling-Master/counselling-allotment-list/counselling-allotment-list.module').then(m => m.CounsellingAllotmentListModule), title: 'Counselling Allotment Report' },
-      { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
-      { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
 
       { path: 'PlacementAllStudentList', loadChildren: () => import('./Views/PlacementStudent/placement-allstudentlist/placement-allstudentlist.module').then(m => m.PlacementAllStudentListMasterModule), title: 'Placement All Student List' },
-
-
 
       { path: 'addstaffmaster', loadChildren: () => import('./Views/staffMaster/add-staff-master/add-staff-master.module').then(m => m.AddStaffMasterModule), title: 'Add Staff' },
       { path: 'staffmaster', loadChildren: () => import('./Views/staffMaster/staff-master/staff-master.module').then(m => m.StaffMasterModule), title: 'Staff Master' },
@@ -799,10 +794,6 @@ const routes: Routes = [
 
       { path: 'BlankReport', loadChildren: () => import('./Views/blank-report/blank-report.module').then(m => m.BlankReportModule) },
       { path: 'InstituteDetail', loadChildren: () => import('./Views/BTER/institute-detail/institute-detail.module').then(m => m.InstituteDetailModule) },
-
-
-
-
 
       { path: 'AddItiCampusPost', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post/iticampus-post.module').then(m => m.ItiCampusPostModule) },
       { path: 'AddItiCampusPost/:id', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post/iticampus-post.module').then(m => m.ItiCampusPostModule) },
@@ -1418,9 +1409,13 @@ const routes: Routes = [
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
       
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
-
-
+      { path: 'candidate-details', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/candidate-form-preview/candidate-form-preview.module').then(m => m.CandidateFormPreviewModule), title: 'Candidate Details' },
+      { path: 'CounsellingAllotmentList', loadChildren: () => import('./Views/Counselling-Master/counselling-allotment-list/counselling-allotment-list.module').then(m => m.CounsellingAllotmentListModule), title: 'Counselling Allotment Report' },
+      { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
+      { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
+      { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
+
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
 

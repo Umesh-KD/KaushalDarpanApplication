@@ -44,9 +44,9 @@
               <option value=1>Yearly</option>
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
 
           <div *ngIf="request.SessionType == 51">
@@ -58,9 +58,9 @@
               <option *ngFor="let item of filteredSemesterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
 
           <div *ngIf="request.SessionType == 50">
@@ -75,21 +75,21 @@
 
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
 
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
             <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
-                    formControlName="ddlInstituteID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
-                {{item.InstituteName}}
-              </option>
-            </select>-->
+            formControlName="ddlInstituteID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+        {{item.InstituteName}}
+      </option>
+    </select>-->
             <ng-select [(ngModel)]="request.InstituteID"
                        formControlName="ddlInstituteID"
                        [clearable]="false">
@@ -102,29 +102,29 @@
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
-            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
-              formControlName="ddlFinancialYearID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
-                {{
-                item.FinancialYearName
-                }}
-              </option>
-            </select>
-            <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
-                  aria-hidden="true"></i>This field is required.</p>
-            </div>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
+      formControlName="ddlFinancialYearID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
+        {{
+        item.FinancialYearName
+        }}
+      </option>
+    </select>
+    <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
+      <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
+          aria-hidden="true"></i>This field is required.</p>
+    </div>
+  </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
             <!--<select class="form-select" id="StudentExamStreamId" [(ngModel)]="request.BranchID"
-                    formControlName="ddlStreamID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
-            </select>-->
+            formControlName="ddlStreamID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
+    </select>-->
             <ng-select [(ngModel)]="request.BranchID"
                        formControlName="ddlStreamID" [clearable]="false">
               <ng-option [value]="0" selected>--All--</ng-option>
@@ -133,9 +133,9 @@
               }
             </ng-select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
 
           <div hidden>
@@ -182,22 +182,22 @@
             </select>
           </div>
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Exam Category</label>
-            <select class="form-select" id="StudentExamExamCat" [(ngModel)]="request.ExamCategoryID"
-                    formControlName="ddlExamCategoryID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of ExamCategoryList" value="{{item.ID}}">{{item.Name}}</option>
-            </select>
-          </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Exam Category</label>
+    <select class="form-select" id="StudentExamExamCat" [(ngModel)]="request.ExamCategoryID"
+            formControlName="ddlExamCategoryID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of ExamCategoryList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+  </div> -->
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Optional Subject Status</label>
-            <select class="form-select" id="StudentExamOptionalSubject" [(ngModel)]="request.OptionalSubjectStatus"
-                    formControlName="ddlsubjectstaus">
-              <option value="0">--All--</option>
-              <option value="1">Added</option>
-              <option value="2">Not Added</option>
-            </select>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Optional Subject Status</label>
+    <select class="form-select" id="StudentExamOptionalSubject" [(ngModel)]="request.OptionalSubjectStatus"
+            formControlName="ddlsubjectstaus">
+      <option value="0">--All--</option>
+      <option value="1">Added</option>
+      <option value="2">Not Added</option>
+    </select>
+  </div>-->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Bridge Course</label>
             <select class="form-select" id="StudentExamIsBridgeCourse" [(ngModel)]="request.BridgeCourseID"
@@ -207,9 +207,17 @@
               <option value="0">No</option>
             </select>
           </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Promoted Status </label>
+            <select class="form-select" id="PromoteStatus" formControlName="PromoteStatus" [(ngModel)]="request.PromoteStatus">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of PromoteStatusList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+          </div>
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
             <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
@@ -218,6 +226,7 @@
               <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
+
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
@@ -376,6 +385,10 @@
             <td align="left">{{row.SemesterName}}<br />{{row.StudentExamType}}</td>
             <td align="left">
               {{row.StudentExamStatus}}
+              <span *ngIf="row.PromoteStatus >0"
+                    style="font-size: 11px;position: relative; display: inline-block; font-weight:bold;">
+                ({{ row.PromoteStatusName }})
+              </span>
               <span *ngIf="row.status ==_enumExamStudentStatus.Enrolled && row.st_his_StatusId >0"
                     style="color: green; font-size: 11px; position: relative; display: inline-block; ">
                 ({{ row.st_his_StatusName }})
@@ -510,6 +523,7 @@
                   <img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
                        src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                        class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
+
                   <!--<img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
                        src="{{item.OldFilePath}}"
                        class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">-->
@@ -993,6 +1007,7 @@
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>
+
                   <!--<a href="{{item.OldFilePath}}" class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>-->
@@ -1416,6 +1431,7 @@
                       <input type="checkbox" (change)="onSelectedChange($event,subject)" [(ngModel)]="subject.Selected" [ngModelOptions]="{standalone: true}" />
                     </td>
                     <td>{{ subject.SubjectCode }}</td>
+
                     <!--<td>{{ subject.SubjectName }}</td>-->
 
 

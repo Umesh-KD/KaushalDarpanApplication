@@ -46,42 +46,6 @@ export class AddBterReturnItemComponent {
   //public today: Date = new Date();
   public submitRequest = new ItemsIssueReturnModels();
 
-
-  //ItemMasterListt = [
-  //  {
-  //    Selected: false,
-  //    Name: 'Ramesh',
-  //    ItemCode: 'ITM001',
-  //    Quantity: 5,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Issued'
-  //  },
-  //  {
-  //    Selected: false,
-  //    Name: 'Suresh',
-  //    ItemCode: 'ITM002',
-  //    Quantity: 2,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Returned'
-  //  },
-  //  {
-  //    Selected: false,
-  //    Name: 'Naresh',
-  //    ItemCode: 'ITM003',
-  //    Quantity: 3,
-  //    IssueDate: new Date(),
-  //    DueDate: new Date(),
-  //    ReturnDate: new Date(),
-  //    Status: 'Issued'
-  //  }
-  //];
-
-
-
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
@@ -110,20 +74,19 @@ export class AddBterReturnItemComponent {
   }
 
   async GetAllData() {
+    debugger
     try {
       this.loaderService.requestStarted();
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-      await this.bterInventoryService.GetInventoryIssueItemList(this.Searchrequest)
+      await this.bterInventoryService.GetIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
             this.Message = data.Message;
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
-            // this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }
@@ -155,7 +118,6 @@ export class AddBterReturnItemComponent {
         ];
 
         this.Searchrequest.staffID = 0;
-        // console.log('staff list ==>', this.staffDDLList);
       } else {
         this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
         this.Searchrequest.staffID = 0;
@@ -184,7 +146,6 @@ export class AddBterReturnItemComponent {
         ];
 
         this.Searchrequest.TradeId = 0;
-        // console.log('Trade list ==>', this.TradeDDLList);
       } else {
         this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
         this.Searchrequest.TradeId = 0;
@@ -231,33 +192,6 @@ export class AddBterReturnItemComponent {
     this.Searchrequest = new inventoryIssueHistorySearchModel();
     await this.GetAllData();
   }
-
-
-  //exportToExcel(): void {
-  //  this.ItemMasterList = this.ItemMasterList.map((item: any) => {
-  //    const updatedItem = {
-  //      AvailableQuantity: item.AvailableQuantity,
-  //      CampanyName: item.CampanyName,
-  //      Code: item.Code,
-  //      CollegeName: item.CollegeName ?? "BTER",
-  //      EquipmentsName: item.EquipmentsName,
-  //      IdentificationMark: item.IdentificationMark,
-  //      InitialQuantity: item.InitialQuantity,
-  //      ItemCategoryName: item.ItemCategoryName,
-  //      PricePerUnit: item.PricePerUnit,
-  //      Status: item.Status == 1 ? "Approved" : "Pending",
-  //      TotalPrice: item.TotalPrice,
-  //      VoucherNumber: item.VoucherNumber
-  //    };
-
-  //    return updatedItem;
-  //  });
-
-  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList);
-  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-  //  XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
-  //}
 
   exportToExcel(): void {
     debugger
@@ -322,18 +256,27 @@ export class AddBterReturnItemComponent {
   }
 
   async confirmReturn() {
-    debugger;
 
+    const isConfirmed = confirm("Are you sure you want to save the record?");
+    if (!isConfirmed) {
+      return; 
+    }
     this.loaderService.requestStarted();
     this.isLoading = true;
 
-      this.submitRequest.StaffId = this.Searchrequest.staffID,
-      this.submitRequest.Remarks = this.returnModel.Remarks,
-      this.submitRequest.ItemCategoryId = 0,
-      this.submitRequest.ReturnDate = this.returnModel.ReturnDate,
-      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition,
+    this.submitRequest.StaffId = this.Searchrequest.staffID;
+      this.submitRequest.Remarks = this.returnModel.Remarks;
+      this.submitRequest.ItemCategoryId = 0;
+      this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
+      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
+      debugger
+      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected==true);
 
-      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
+    const selectedCount = this.submitRequest.ItemList.length;
+
+    console.log("Selected Count:", selectedCount);
+
+    this.submitRequest.SelectedCount = selectedCount;
 
     try {
       await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest)

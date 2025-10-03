@@ -25,14 +25,6 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
-          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
-          <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
-        </div> -->
         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
@@ -40,15 +32,6 @@
               <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
             </select>
         </div>
-        <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
-            <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
-              <option value="0">Choose Option</option>
-              <option value="Mannual">Mannual</option>
-              <option value="API">API</option>
-            </select>
-        
-        </div> -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetCandidateList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -122,10 +105,17 @@
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
-                <!-- <a href="javascript:void(0)"  title="View"><i class="ti ti-eye"></i> </a> -->
-                    <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View"><i
+                    <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View Institute Option Details"><i
                     class="ti ti-eye"></i> </a>
-                <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
+
+                    <a href="javascript:void(0)" (click)="redirectToPreview(item)" title="View Candidate Details">
+                      <i class="ti ti-eye"></i>
+                    </a>
+
+                    <a href="javascript:void(0)" *ngIf="item.IsFinalSubmit === 2 && item.IsMeritGenerated === 0"
+                       (click)="UnlockApplication_Counselling(item)" title="Unlock Application">
+                      <i class="ti ti-lock-open"></i>
+                    </a>
               </div>
              </td>
           </tr>
@@ -151,12 +141,6 @@
     <!--end pagination-->
   </div>
 </div>
-<!-- end row -->
-
-
-
-
-
 
 <ng-template #MyModel_EdiDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
@@ -179,12 +163,6 @@
                         <tr>
                           <th>Sr. No.</th>
                           <th>Institue Name</th>
-                          <!-- <th>Scholarship Type</th>
-                          <th>Amount</th>
-                          <th>Date</th>
-                          <th>Sections</th>
-                           <th>Scholarship Mode</th>
-                          <th>Action</th> -->
                            
                         </tr>
                       </thead>
@@ -192,16 +170,6 @@
                         <tr *ngFor="let row of StudentOptionList; let i = index">
                           <td>{{i+1}}</td>
                           <td>{{ row.instituteName }}</td>
-                          <!-- <td>{{ row.ScholarShipTypeName }}</td>
-                          <td>{{ row.ScholarShipAmount }}</td>
-                          <td>{{ row.ScholarShipDate }}</td>
-                          <td>{{ row.SectionsName }}</td>
-                           <td>{{ row.ScholarshipMode}}</td> -->
-                          <!-- <td>
-                            <button class="btn btn-danger btn-sm" (click)="DeleteFromList(i)">
-                              <i class="ti ti-trash"></i>
-                            </button>
-                          </td> -->
                         </tr>
                         <tr *ngIf="StudentOptionList.length === 0">
                           <td colspan="7" class="text-center">No records found.</td>

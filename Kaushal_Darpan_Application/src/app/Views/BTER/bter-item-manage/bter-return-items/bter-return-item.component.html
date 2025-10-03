@@ -30,26 +30,6 @@
             </option>
           </select>
         </div>
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
-          <select class="form-select" id="TradeID" [(ngModel)]="Searchrequest.TradeId"
-                  (change)="GetCategoryDDL()">
-            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
-              {{ item.TradeName }}
-            </option>
-          </select>
-        </div>-->
-
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-          <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-            <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
-              {{ item.ItemCategoryName }}
-            </option>
-          </select>
-        </div>-->
-
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
@@ -97,13 +77,11 @@
               <input type="checkbox" (change)="toggleAll($event)" />  select All
             </th>
             <th class="text-left">SNO</th>
-            <th class="text-left">Name</th>
+            <th class="text-left">Staff Name</th>
             <th class="text-left">Item</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
-            <th class="text-left">Due Date</th>
-            <th class="text-left">Return Date</th>
-            <th class="text-left">Status</th>
+            <th class="text-left">Issue To</th>
           </tr>
         </thead>
         <tbody>
@@ -116,16 +94,9 @@
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">
-              <span [ngClass]="{
-  'InvStatus-issued': item.InvStatus === 1,
-  'InvStatus-returned': item.InvStatus === 2
-}">
-                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
-              </span>
-            </td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+           
+           
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">

@@ -21,14 +21,6 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
-          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
-          <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
-        </div> -->
         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
@@ -36,15 +28,6 @@
               <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
             </select>
         </div>
-        <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Scholarship Mode : <span class="StarMarking">*</span></label>
-            <select class="form-select" id="ScholarshipModeID" name="ScholarshipModeID" [(ngModel)]="searchRequest.ScholarshipMode" >
-              <option value="0">Choose Option</option>
-              <option value="Mannual">Mannual</option>
-              <option value="API">API</option>
-            </select>
-        
-        </div> -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetCounsellingAllotmentList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -85,28 +68,17 @@
             <th>Sr. No.</th>
             <th class="text-left">Trade Name</th>
             <th class="text-left">Total Candidates</th>
-            <!-- <th class="text-left">EnrollmentNo</th>
-            <th class="text-left">FatherName</th>
-            <th class="text-left">DOB</th>
-            <th class="text-left">Category</th> -->
-            <!-- <th class="text-center">MobileNo</th> -->
-            <!-- <th class="text-center">Status</th> -->
-            <!-- <th class="text-center">Action</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.tradeName}}</td>
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.totalCandidate}}</td> -->
-              <!-- Candidate Count (clickable link) -->
             <td>
             <a
               class="btn bg-info btn-sm text-white"
               [routerLink]="['/CounsellingSelectedOptionList']"  
-              [queryParams]="{ Id: item.tradeId }"
-              >{{ item.totalCandidate }}
-              <!-- <span class="ml-1"><i class="ti ti-arrow-right"></i></span> -->
+              [queryParams]="{ Id: item.tradeId }">{{ item.totalCandidate }}
             </a>
               
 

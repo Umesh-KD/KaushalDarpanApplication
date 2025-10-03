@@ -8,6 +8,7 @@ import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompan
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnumRole } from '../../../Common/GlobalConstants';
 @Component({
     selector: 'placement-allstudentlist',
     templateUrl: './placement-allstudentlist.component.html',
@@ -46,7 +47,7 @@ export class PlacementAllStudentListComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','SemesterID'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -96,7 +97,13 @@ export class PlacementAllStudentListComponent implements OnInit {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.action="_GetPlacementListData";
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        if(this.searchRequest.RoleID==5)
+        if(this.searchRequest.DepartmentID==1){
+          this.searchRequest.action="_GetPlacementListData";
+        }
+        else{
+          this.searchRequest.action="_GetITIPlacementListData";
+        }
+        if(this.searchRequest.RoleID==EnumRole.AdminNodel)
         {
             this.searchRequest.InstituteID = 0;
         }     

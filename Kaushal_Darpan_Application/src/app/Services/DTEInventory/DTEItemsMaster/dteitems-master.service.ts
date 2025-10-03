@@ -204,18 +204,43 @@ export class DteItemsMasterService {
   }
 
 
-
-  
-  //public async SaveIssueItemsList(request: DTEItemsSaveModel[]) {
-  //  var body = JSON.stringify(request);
-  //  return await this.http.post(`${this.APIUrl}/SaveIssueItemsList`, body)
-  //    .pipe(
-  //      catchError(this.handleErrorObservable)
-  //    ).toPromise();
-  //}
   public async SaveIssueItemsList(itemsList: any[]) {
     const body = JSON.stringify(itemsList);
     return await this.http.post(this.APIUrl + '/SaveIssueItemsList', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllinventoryIssueReport(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  
+  public async GetIssueItemList(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetIssueItemList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAll_INV_returnItem1(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItem`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetInventoryIssueHistoryList(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInventoryIssueHistoryList`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

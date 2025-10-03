@@ -19,6 +19,7 @@ import { ItiCollegeSearchComponent } from './iti-college-search/iti-college-sear
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { OTPModalModule } from '../otpmodal/otpmodal.module';
 import { ItiVacantSeatDirectAdmissionComponent } from './iti-vacantseatfor-directadmission/iti-vacantseatfor-directadmission.component';
+import { DownloadApplicationFormComponent } from './download-application-form/download-application-form.component';
 //import { AllotmentStatusITIComponent } from '../Emitra/allotment-status-iti/allotment-status-iti.component';
 //import { KnowMeritITIComponent } from '../Emitra/know-merit-iti/know-merit-iti.component';
 //import { UpwardMomentITIComponent } from '../Emitra/upward-moment-iti/upward-moment-iti.component';
@@ -35,7 +36,8 @@ import { ItiVacantSeatDirectAdmissionComponent } from './iti-vacantseatfor-direc
     KnowMeritITIComponent,
     ItiGeneralInstructionsComponent,
     ItiCollegeSearchComponent,
-    ItiVacantSeatDirectAdmissionComponent
+    ItiVacantSeatDirectAdmissionComponent,
+    DownloadApplicationFormComponent
   ],
   imports: [
     CommonModule,
