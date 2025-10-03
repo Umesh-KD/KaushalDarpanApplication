@@ -29,7 +29,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Document <span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDoc')">
+            <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
               <option value=0 selected>--Choose Option--</option>
               <option value="Marksheet" selected>Marksheet</option>
               <option value="Migration" selected>Migration</option>
@@ -60,16 +60,25 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Department <span class="StarMarking">*</span>
             </label>
-            <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID">
+            <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">
               <option value=0 selected>--Choose Option--</option>
               <option value=1 selected>BTER</option>
-              <option value=1 selected>Nodel Center</option>
+              <option value=2 selected>Nodel Center</option>
             </select>
             <div *ngIf="isSubmitted&&form.ddlDepartmentID.errors" class="text-danger">
               <p *ngIf="!form.ddlDepartmentID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required.!
               </p>
             </div>
+          </div>
+
+          
+          <div *ngIf="this.departmentFlag == 'NodalCenter'">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+            <select class="form-select" id="InstituteID" formControlName="InstituteID" [(ngModel)]="request.InstituteID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+            </select>
           </div>
 
           <div>
@@ -83,11 +92,37 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Fees Amount
             </label>
-            <input type="text" class="form-input" formControlName="FeeAmount" [(ngModel)]="request.FeeAmount">
+            <input type="text" [disabled]="true" class="form-input" formControlName="FeeAmount" [(ngModel)]="request.FeeAmount">
           </div>
 
+           <!-- <div>
+            <label>Type</label><span class="StarMarking">*</span>
+            <select class="form-select" name="TypeID" id="ddlType" formControlName="ddlType"
+                    [(ngModel)]="request.TypeID" (change)="GetAllData()">
+              <option value="0">Choose Type</option>
+              @for (item of TypeMasterDDL; track item) {
+              <option [value]="item.ID">
+                {{item.Name}}
+              </option>
+              }
+            </select>
+            @if (isFormSubmitted && _FeeConfigurationFromGroup.ddlType.errors) {
+            <div class="text-danger">
+              @if (!_FeeConfigurationFromGroup.ddlType.errors.DropdownValidators) {
+              <p>
+                <i aria-hidden="true"></i>This field is required.!
+              </p>
+              }
+            </div>
+            }
+          </div> -->
+
+
+
           <div class="card-footer text-center">
-            <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() "><i class="ti ti-currency-rupee"></i> Pay Now</button>
+            <!-- <button type="button" class="btn bg-primary text-white" (click)="PayApplicationFees() " ><i class="ti ti-currency-rupee"></i> Pay Now</button> -->
+            <button type="button" class="btn bg-primary text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,request)" ><i class="ti ti-currency-rupee"></i> Pay Now </button>
+          
           </div>
 
         </div>
@@ -144,3 +179,35 @@
 </div>
 
 <!-- end row -->
+
+
+
+    <!--Start Model Popup-->
+    <ng-template #modal_GenrateOTP let-modal class=" h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+      <div class="modal-content">
+        <div class="card">
+          <div class="card-header flex justify-between  items-center">
+            <b>
+              <i class="fa fa-comment"></i>&nbsp; OTP verification for Payment
+            </b>
+            <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+          </div>
+          <div class="card-body">
+            <p class="text-center">
+              <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+            </p>
+            <div class="mt-4">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
+              <input type="text" (keypress)="numberOnly($event)" maxlength="6" class="form-input" [(ngModel)]="OTP" placeholder="Enter OTP">
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center mt-3">
+            <button (click)="VerifyOTP()" type="button" id="btnSave" class="btn bg-info text-white"><i class="ti ti-device-floppy"></i> Verify OTP</button>
+            <p class="text-danger" *ngIf="!showResendButton">Resend OTP available in: {{ formatTime(timeLeft) }}</p>
+            <button *ngIf="showResendButton" (click)="SendOTP(true)" type="button" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Resend OTP</button>
+          </div>
+          <br />
+        </div>
+      </div>
+    </ng-template>
+    <!--Start Model Popup-->
