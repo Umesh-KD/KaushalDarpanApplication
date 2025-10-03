@@ -22,5 +22,8 @@ export class LeaveMasterSearchModel extends RequestBaseModel{
   Name: string = '';
   InstituteID: number = 0;
   Status: string = '';
-  SSOID:String=''
+  SSOID: String = '';
+  StaffID: number = 0;
+  From_Date: string = '';
+  To_Date: string = '';
   }

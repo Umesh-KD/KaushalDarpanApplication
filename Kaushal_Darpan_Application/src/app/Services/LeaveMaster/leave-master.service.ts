@@ -77,6 +77,16 @@ export class LeaveMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async ByIDStaffLeaveList(searchRequest: LeaveMasterSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/ByIDStaffLeaveList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async Save_HrValidation_NodalAction(request: LeaveMaster) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + "/Save_HrValidation_NodalAction", body, this.headersOptions)
