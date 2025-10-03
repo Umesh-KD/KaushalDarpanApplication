@@ -319,10 +319,10 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
-
   async GetAttendanceTimeTable() {
-    debugger;
     try {
+      debugger;
+
       const rawStart = this.TableForm.value.AttendanceStartDate;
       const rawEnd = this.TableForm.value.AttendanceEndDate;
 
@@ -348,14 +348,15 @@ export class StudentAttendanceComponent implements OnInit {
         AttendanceEndDate: formattedDateEnd,
         StaffID: this.sSOLoginDataModel.StaffID,
         TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
-
       };
 
       this.filterData = [];
-      debugger
+
       await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
+
+        const leaveDates = this.getLeaveDates(this.GetLeaveList); // e.g., ['2025-10-06', '2025-10-09']
 
         if (this.filterData.length > 0) {
           this.dynamicColumns = [];
@@ -368,14 +369,29 @@ export class StudentAttendanceComponent implements OnInit {
               'EndTermID', 'CourseTypeID', 'StudentID'
             ].includes(key))
             .map(key => {
-              const isHoliday = key.toLowerCase().includes('holiday');
-              return { name: key, locked: isHoliday };
+              const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
+              const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
+              return { name: key, locked: isLeaveDate };
             });
-
+            debugger
           this.filterData.forEach(student => {
             this.dynamicColumns.forEach(col => {
-              if (!student[col.name]) {
-                student[col.name] = col.locked ? 'H' : 'A'; // Holiday=H, Working=A
+              const dateMatch = col.name.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
+              if (dateMatch) {
+                const colDate = dateMatch[0];
+                if (leaveDates.includes(colDate)) {
+                  // Freeze the student attendance as Holiday for this leave date
+                  //student[col.name] = 'H';
+                  student[col.name] = 'TL';
+                } else {
+                  if (!student[col.name]) {
+                    student[col.name] = col.locked ? 'H' : 'A';
+                  }
+                }
+              } else {
+                if (!student[col.name]) {
+                  student[col.name] = col.locked ? 'H' : 'A';
+                }
               }
             });
           });
@@ -385,6 +401,8 @@ export class StudentAttendanceComponent implements OnInit {
             ...this.dynamicColumns.map(c => c.name)
           ];
         }
+
+
 
         this.dataSource.data = this.filterData;
         this.dataSource.sort = this.sort;
@@ -398,6 +416,212 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
+  //hasTLInColumn(columnName: string): boolean {
+  //  return this.dataSource?.data?.some(row => row[columnName] === 'TL');
+  //}
+
+  //async GetAttendanceTimeTable() {
+  //  try {
+  //    debugger
+  //    // ... your existing code to get date range and API call
+
+
+  //        const rawStart = this.TableForm.value.AttendanceStartDate;
+  //        const rawEnd = this.TableForm.value.AttendanceEndDate;
+
+  //        // Parse correctly whether string or Date
+  //        const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
+  //        dateStart.setDate(dateStart.getDate() + 1);
+  //        const formattedDateStart = dateStart.toISOString().split('T')[0];
+
+  //        const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
+  //        dateEnd.setDate(dateEnd.getDate() + 1);
+  //        const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+  //        let obj = {
+  //          SemesterID: this.TableForm.value.SemesterID,
+  //          EndTermID: this.sSOLoginDataModel.EndTermID,
+  //          InstituteID: this.sSOLoginDataModel.InstituteID,
+  //          DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //          CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+  //          StreamID: this.TableForm.value.StreamID,
+  //          SectionID: this.TableForm.value.SectionID,
+  //          SubjectID: this.TableForm.value.SubjectID,
+  //          AttendanceStartDate: formattedDateStart,
+  //          AttendanceEndDate: formattedDateEnd,
+  //          StaffID: this.sSOLoginDataModel.StaffID,
+  //          TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+
+  //        };
+
+  //        this.filterData = [];
+
+
+  //    await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data['Data']));
+  //      this.filterData = data;
+
+  //      // Sample leave list (replace with actual leave API call or data)
+      
+  //      debugger
+  //      const leaveDates = this.getLeaveDates(this.GetLeaveList);
+
+  //      if (this.filterData.length > 0) {
+  //        this.dynamicColumns = [];
+  //        this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+  //        this.dynamicColumns = Object.keys(this.filterData[0])
+  //          .filter(key => ![
+  //            'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+  //            'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+  //            'EndTermID', 'CourseTypeID', 'StudentID'
+  //          ].includes(key))
+  //          .map(key => {
+  //            const isHoliday = key.toLowerCase().includes('holiday');
+  //            return { name: key, locked: isHoliday };
+  //          });
+
+  //        // Assuming leaveDates is an array like ['2025-10-06', '2025-10-09']
+  //        const leaveDates = this.getLeaveDates(this.GetLeaveList);
+  //        debugger
+  //        this.filterData.forEach(student => {
+  //          this.dynamicColumns.forEach(col => {
+  //            const dateMatch = col.name.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
+
+  //            if (dateMatch) {
+  //              const colDate = dateMatch[0];
+  //              debugger
+  //              if (leaveDates.includes(colDate)) {
+  //                // Freeze the student attendance as Holiday for this leave date
+  //                student[col.name] = 'H';
+  //              } else {
+  //                // If student attendance not set, use default based on locked column or 'A'
+  //                if (!student[col.name]) {
+  //                  student[col.name] = col.locked ? 'H' : 'A';
+  //                }
+  //              }
+  //            } else {
+  //              // For columns with no date, fallback to default logic
+  //              if (!student[col.name]) {
+  //                student[col.name] = col.locked ? 'H' : 'A';
+  //              }
+  //            }
+  //          });
+  //        });
+
+  //        this.displayedColumns = [
+  //          ...this.displayedColumns,
+  //          ...this.dynamicColumns.map(c => c.name)
+  //        ];
+  //      }
+
+
+  //      this.dataSource.data = this.filterData;
+  //      this.dataSource.sort = this.sort;
+  //      this.totalRecords = this.filterData.length;
+  //      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+  //      this.updateTable();
+  //    }, error => console.error(error));
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
+
+
+  //async GetAttendanceTimeTable() {
+  //  debugger;
+  //  try {
+  //    const rawStart = this.TableForm.value.AttendanceStartDate;
+  //    const rawEnd = this.TableForm.value.AttendanceEndDate;
+
+  //    // Parse correctly whether string or Date
+  //    const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
+  //    dateStart.setDate(dateStart.getDate() + 1);
+  //    const formattedDateStart = dateStart.toISOString().split('T')[0];
+
+  //    const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
+  //    dateEnd.setDate(dateEnd.getDate() + 1);
+  //    const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+  //    let obj = {
+  //      SemesterID: this.TableForm.value.SemesterID,
+  //      EndTermID: this.sSOLoginDataModel.EndTermID,
+  //      InstituteID: this.sSOLoginDataModel.InstituteID,
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //      CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+  //      StreamID: this.TableForm.value.StreamID,
+  //      SectionID: this.TableForm.value.SectionID,
+  //      SubjectID: this.TableForm.value.SubjectID,
+  //      AttendanceStartDate: formattedDateStart,
+  //      AttendanceEndDate: formattedDateEnd,
+  //      StaffID: this.sSOLoginDataModel.StaffID,
+  //      TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+
+  //    };
+
+  //    this.filterData = [];
+  //    debugger
+  //    await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data['Data']));
+  //      this.filterData = data;
+
+  //      if (this.filterData.length > 0) {
+  //        this.dynamicColumns = [];
+  //        this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+  //        this.dynamicColumns = Object.keys(this.filterData[0])
+  //          .filter(key => ![
+  //            'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+  //            'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+  //            'EndTermID', 'CourseTypeID', 'StudentID'
+  //          ].includes(key))
+  //          .map(key => {
+  //            const isHoliday = key.toLowerCase().includes('holiday');
+  //            return { name: key, locked: isHoliday };
+  //          });
+
+  //        this.filterData.forEach(student => {
+  //          this.dynamicColumns.forEach(col => {
+  //            if (!student[col.name]) {
+  //              student[col.name] = col.locked ? 'H' : 'A'; // Holiday=H, Working=A
+  //            }
+  //          });
+  //        });
+
+  //        this.displayedColumns = [
+  //          ...this.displayedColumns,
+  //          ...this.dynamicColumns.map(c => c.name)
+  //        ];
+  //      }
+
+  //      this.dataSource.data = this.filterData;
+  //      this.dataSource.sort = this.sort;
+  //      this.totalRecords = this.filterData.length;
+  //      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+  //      this.updateTable();
+  //    }, error => console.error(error));
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
+
+
+  private getLeaveDates(leaveList: any[]): string[] {
+    const leaveDates: string[] = [];
+
+    leaveList.forEach(leave => {
+      const fromDate = new Date(leave.From_Date);
+      const toDate = new Date(leave.To_Date);
+
+      for (let dt = new Date(fromDate); dt <= toDate; dt.setDate(dt.getDate() + 1)) {
+        leaveDates.push(dt.toISOString().split('T')[0]);
+      }
+    });
+
+    return leaveDates;
+  }
 
   // Method to handle attendance change (can be customized)
   onAttendanceChange(event: any, element: any, column: string) {
