@@ -10,6 +10,7 @@ export class CounsellingApplicationFormDataModel {
   public GenderId: number = 0;
   public DOB?: string = '';
   public CategoryA_ID: number = 0;
+  public CategoryB_ID: number = 0;
   public MobileNo?: string = '';
   public Email?: string = '';
   public Address1?: string = '';
@@ -41,6 +42,21 @@ export class CounsellingApplicationFormDataModel {
   public IsFinalSubmit: number = 0;
   public DepartmentName?: string = '';
   public SubmittedStep?: string = '';
+
+  public RollNumber?: string = '';
+  public Designation?: string = '';
+  public Trade?: string = '';
+  public MeritNo?: string = '';
+  public SelectionCategoryID?: number = 0;
+  public IsTSP?: boolean = false;
+  public HomeDistrictID?: number = 0;
+  public IsPH?: boolean = false;
+  public IsExServicemen?: boolean = false;
+  public IsSportsPerson?: boolean = false;
+  public IsSpouseInSameService?: boolean = false;
+  public IsShahidDependent?: boolean = false;
+  public IsAnyIncurableDiseases?: boolean = false;
+  public AcademicYearID?: number = 0;
 }
 
 export class CounsellingApplicationSearchModel {
@@ -55,6 +71,7 @@ export class CounsellingApplicationSearchModel {
   public AadharNo?: string = '';
   public DOB?: string = '';
   public Action?: string = '';
+  public ModifyBy?: number = 0;
 }
 
 export class Counselling_OptionFormDataModel extends RequestBaseModel{
@@ -62,10 +79,22 @@ export class Counselling_OptionFormDataModel extends RequestBaseModel{
     public Priority?: number = 0;
     public CandidateID?: number = 0;
     public TradeId?: number = 0;
+    public TradeName?: string = '';
     public InstituteID?: number = 0;
     public CourseType?: number = 0;
     public ModifyBy?: number = 0;
     public Type?: string = '';
+    public InstituteList?: InstituteListDataModel_Coun[] = [];
+}
+
+export class InstituteListDataModel_Coun {
+  public InstituteOptionID?: number = 0;
+  public InstituteID?: number = 0;
+  public Priority?: number = 0;
+  public InstituteName?: string = '';
+  public OptionID?: number = 0;
+  public CandidateID?: number = 0;
+  public Type?: string = '';
 }
 
 export class Counselling_DropdownDataModel extends RequestBaseModel {
@@ -98,7 +127,6 @@ export class CounsellingApplicationPreviewDataModel {
     StudentPhoto?: string = '';
     SignaturePhoto?: string = '';
     ProfileStatus?: number = 0;
-    IsfinalSubmit?: number = 0;
     ServiceID?: number = 0;
     DepartmentID?: number = 0;
     CourseTypeID?: number = 0;
@@ -108,6 +136,7 @@ export class CounsellingApplicationPreviewDataModel {
     DocumentDetailList?: Counselling_DocumentDetailsModel[] = [];
     CategoryAId?: number = 0;
     GenderId?: number = 0;
+    IsFinalSubmit?: number = 0;
     Nationality?: string = '';
     Category_E?: string = '';
 }
@@ -115,6 +144,7 @@ export class CounsellingApplicationPreviewDataModel {
 export class OptionviewData_Counselling {
     InstituteName?: string = '';
     TradeId?: number = 0;
+    OptionID?: number = 0;
     Priority?: number = 0;
     TradeName?: string = '';
 }

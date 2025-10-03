@@ -111,17 +111,22 @@ this.itemsFormArray.get('items')?.valueChanges
   //    EquipmentCode: ['']
   //  });
   //}
+
   async GetAllItemDetails() {
     debugger
   if (this.ItemId != null && this.ItemId != undefined && this.ItemId > 0) {
     await this.dteItemsMasterService.GetAllDTEItemDetails(this.ItemId).then((data: any) => {
+      debugger
+      console.log('Item Details List==>', data)
       data = JSON.parse(JSON.stringify(data));
       if (data.State === EnumStatus.Success) {
+        console.log('Item Details List==>', data.data)
         this.ItemDetailsList = data.Data;
 
 
         this.addItemsControls();
       }
+      console.log('Item Details List==>', this.ItemDetailsList)
     });
   }
 }
@@ -220,37 +225,117 @@ addItemsControls() {
 }
 
 
+//  async saveData() {
+//  this.itemDetails.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+//  this.itemDetails.InstituteID = this.sSOLoginDataModel.InstituteID;
+//    this.itemDetails.ItemId = this.ItemId;
+
+//    this.itemsFormArray.controls.forEach(control => {
+//      const code = (control.get('txtEquipmentCode')?.value || '').trim();
+//      if (code === '0') {
+//        control.get('txtEquipmentCode')?.setErrors({ invalidZero: true });
+//      }
+//    });
+
+
+//  this.isSubmitted = true;
+//  if (this.EditeItemsRequestFormGroup.invalid) {
+//    return console.log("Form is invalid, cannot submit");
+//  }
+
+//  let hasError = false;
+//  this.itemsFormArray.controls.forEach((group, index) => {
+//    const equipmentStatus = group.get('equipmentStatus')?.value;
+//    const isOption = group.get('isOption')?.value;
+//  });
+
+//  if (hasError) {
+//    this.toastr.warning("Please check 'Is Auction' for all 'Not Working' items After submitting.");
+//    return;
+//    }
+//    const itemsList: ItemsDetailsInterface[] = this.itemsFormArray.getRawValue().map((item: any, index: number) => ({
+//      EquipmentWorking: item.equipmentStatus,
+//      EquipmentCode: item.txtEquipmentCode,
+//      isOption: item.isOption,
+//      ItemId: this.ItemId,
+//      ItemDetailsId: item.ItemDetailsId,
+//      Item: this.ItemDetailsList[index]?.ItemCode
+//    }));
+
+//  try {
+//    if (this.ItemId) {
+//      this.itemDetails.ItemId = this.ItemId;
+//      this.itemDetails.ModifyBy = this.sSOLoginDataModel.UserID;
+//    } else {
+//      this.itemDetails.CreatedBy = this.sSOLoginDataModel.UserID;
+//    }
+//    await this.dteItemsMasterService.UpdateDTEItemData(itemsList).then((data: any) => {
+//      this.State = data['State'];
+//      this.Message = data['Message'];
+//      this.ErrorMessage = data['ErrorMessage'];
+
+//      if (this.State === EnumStatus.Success) {
+//        this.toastr.success(this.Message);
+//        this.GetAllItemDetails();
+//        this.routers.navigate(['/DteItemsMasterList']);
+//      } else if (this.State === EnumStatus.Error) {
+//        this.toastr.error(this.ErrorMessage);
+//      }
+//    });
+//    this.loaderService.requestStarted();
+//    this.isLoading = true;
+
+//  } catch (ex) {
+//    console.log(ex);
+//  }
+//  finally {
+//    setTimeout(() => {
+//      this.loaderService.requestEnded();
+//      this.isLoading = false;
+//    }, 200);
+//  }
+  //}
+
+
   async saveData() {
-  this.itemDetails.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  this.itemDetails.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.itemDetails.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.itemDetails.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.itemDetails.ItemId = this.ItemId;
 
-    this.itemsFormArray.controls.forEach(control => {
+    this.itemsFormArray.controls.forEach((control, index) => {
       const code = (control.get('txtEquipmentCode')?.value || '').trim();
-      if (code === '0') {
-        control.get('txtEquipmentCode')?.setErrors({ invalidZero: true });
+      const isSerialNo = this.ItemDetailsList[index]?.IsSerialNo;
+
+      if (isSerialNo === 1) {
+        if (!code) {
+          control.get('txtEquipmentCode')?.setErrors({ required: true });
+        } else if (code === '0') {
+          control.get('txtEquipmentCode')?.setErrors({ invalidZero: true });
+        } else {
+          control.get('txtEquipmentCode')?.setErrors(null);
+        }
+      } else {
+        control.get('txtEquipmentCode')?.setErrors(null);
       }
     });
 
-
-  //this.itemDetails.ItemDetailsId = this.ItemDetailsList.ItemDetailsId
-  this.isSubmitted = true;
-  if (this.EditeItemsRequestFormGroup.invalid) {
-    return console.log("Form is invalid, cannot submit");
-  }
-
-  // Step 2: Custom validation for Not Working items (equipmentStatus == 2)
-  let hasError = false;
-  this.itemsFormArray.controls.forEach((group, index) => {
-    const equipmentStatus = group.get('equipmentStatus')?.value;
-    const isOption = group.get('isOption')?.value;
-  });
-
-  if (hasError) {
-    this.toastr.warning("Please check 'Is Auction' for all 'Not Working' items After submitting.");
-    return;
+    this.isSubmitted = true;
+    if (this.EditeItemsRequestFormGroup.invalid) {
+      console.log("Form is invalid, cannot submit");
+      return;
     }
-  // Create a list of ItemsDetailsModel objects from the form data
+
+    let hasError = false;
+    this.itemsFormArray.controls.forEach((group, index) => {
+      const equipmentStatus = group.get('equipmentStatus')?.value;
+      const isOption = group.get('isOption')?.value;
+    });
+
+    if (hasError) {
+      this.toastr.warning("Please check 'Is Auction' for all 'Not Working' items After submitting.");
+      return;
+    }
+
     const itemsList: ItemsDetailsInterface[] = this.itemsFormArray.getRawValue().map((item: any, index: number) => ({
       EquipmentWorking: item.equipmentStatus,
       EquipmentCode: item.txtEquipmentCode,
@@ -260,15 +345,16 @@ addItemsControls() {
       Item: this.ItemDetailsList[index]?.ItemCode
     }));
 
-  try {
-    // Add additional fields to the request if modifying an existing item
-    if (this.ItemId) {
-      this.itemDetails.ItemId = this.ItemId;
-      this.itemDetails.ModifyBy = this.sSOLoginDataModel.UserID;
-    } else {
-      this.itemDetails.CreatedBy = this.sSOLoginDataModel.UserID;
-    }
-    await this.dteItemsMasterService.UpdateDTEItemData(itemsList).then((data: any) => {
+    try {
+      if (this.ItemId) {
+        this.itemDetails.ItemId = this.ItemId;
+        this.itemDetails.ModifyBy = this.sSOLoginDataModel.UserID;
+      } else {
+        this.itemDetails.CreatedBy = this.sSOLoginDataModel.UserID;
+      }
+
+      const data: any = await this.dteItemsMasterService.UpdateDTEItemData(itemsList);
+
       this.State = data['State'];
       this.Message = data['Message'];
       this.ErrorMessage = data['ErrorMessage'];
@@ -280,20 +366,17 @@ addItemsControls() {
       } else if (this.State === EnumStatus.Error) {
         this.toastr.error(this.ErrorMessage);
       }
-    });
-    this.loaderService.requestStarted();
-    this.isLoading = true;
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
 
-  } catch (ex) {
-    console.log(ex);
-  }
-  finally {
-    setTimeout(() => {
-      this.loaderService.requestEnded();
-      this.isLoading = false;
-    }, 200);
-  }
-}
+
 
   async getItemDetails(id: number) {
   try {

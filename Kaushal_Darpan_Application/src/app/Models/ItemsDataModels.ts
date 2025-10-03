@@ -25,6 +25,8 @@ export class ItemsDataModels {
   public StaffID: number = 0;
   public UnitId: number = 0;
   public voucherdate: string = '';
+  public abbreviation: string = '';
+  public batchId: string = '';
   //public Unit: number = 0;
 }
 export class ItemsSearchModel {

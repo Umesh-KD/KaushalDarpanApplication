@@ -9,10 +9,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import { DocumentDetailsService } from '../../../../Common/document-details';
+import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadFileModel';
+import { AppsettingService } from '../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-bter-add-items-master',
@@ -35,13 +39,18 @@ export class AddBterIssueItemComponent {
   public State: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
+  public Dis_FileName: string = '';
+  public FileName: string = '';
+  public EquipmentsId: number = 0;
   public AddItemsRequestFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   modalReference: NgbModalRef | undefined;
   public ItemId: number = 0;
   public Table_SearchText: string = "";
   public ItemsDDLList: any = [];
+  public ItemsDDL: any = [];
   public CatogaryDDLList: any = [];
+  public departmentDDLList: any = [];
   public TradeDDLList: any = [];
   public EquipmentDDLList: any = [];
   public CategoryDDLList: any = [];
@@ -52,9 +61,14 @@ export class AddBterIssueItemComponent {
   public maxQty: number = 0;
   _EnumRole = EnumRole;
   public ItemtypeList: any[] = []
-
+  public OfficeList: any = [];
   public AllInTableSelect: boolean = false;
+  chunkedItems: any[][] = [];
+  SelectedItems: any[] = [];
+  AddItemList: DTEItemsSaveModel[] = [];
+
   constructor(
+    private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
     private bterInventoryService: DteItemsMasterService,
@@ -62,6 +76,8 @@ export class AddBterIssueItemComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
+    private documentDetailsService: DocumentDetailsService,
+    public appsettingConfig: AppsettingService,
     private routers: Router) { }
 
 
@@ -75,18 +91,13 @@ export class AddBterIssueItemComponent {
 
     });
 
-    /*this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());*/
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
-    //await this.ddlStaffMembers();
-    //await this.ddlTradeList();
-
     this.GetStaffDDL()
-   // this.GetTradeDDL()
     this.GetCategoryDDL()
 
-
+    this.prepareChunkedItems();
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -148,64 +159,18 @@ export class AddBterIssueItemComponent {
 
   async GetByID(id: number) {
 
-    //try {
-    //  this.loaderService.requestStarted();
-
-    //  await this.itiInventoryService.GetItemsMasterByID(id)
-    //    .then((data: any) => {
-    //      data = JSON.parse(JSON.stringify(data));
-    //      /*this.request.TradeId = data['Data']["TradeId"];*/
-
-      
-    //      this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
-    //      this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(this.request?.ItemCategoryId);
-        
-
-    //      this.request.EquipmentsId = data['Data']["EquipmentsId"];
-    //      this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(this.request?.EquipmentsId);
-    //      this.request.CampanyName = data['Data']["CampanyName"];
-          
-    //      this.request.IdentificationMark = data['Data']["IdentificationMark"];
-    //      this.request.VoucherNumber = data['Data']["VoucherNumber"];
-    //      this.request.Quantity = data['Data']["Quantity"];
-    //      this.request.PricePerUnit = data['Data']["PricePerUnit"];
-    //      this.request.TotalPrice = data['Data']["TotalPrice"];
-    //      this.request.CreatedBy = data['Data']["CreatedBy"];
-    //      this.request.ModifyBy = data['Data']["ModifyBy"];
-    //      console.log('GetByID',data)
-    //      // Update UI elements if necessary
-    //      const btnSave = document.getElementById('btnSave');
-    //      if (btnSave) btnSave.innerHTML = "Update";
-
-    //      const btnReset = document.getElementById('btnReset');
-    //      if (btnReset) btnReset.innerHTML = "Cancel";
-
-
-    //    }, error => console.error(error));
-    //}
-    //catch (Ex) {
-    //  console.log(Ex);
-    //}
-    //finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
+    
   }
 
 
 
  
-  async DGET_Details() {
+  async DGET_Details1() {
     
     try {
       this.loaderService.requestStarted();
       debugger
-      //if (!TradeId || TradeId === 0) {
-      //  this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
-      //  this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
-      //  return;
-      //}
+     
 
       this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
@@ -219,6 +184,8 @@ export class AddBterIssueItemComponent {
 
 
         }, error => console.error(error));
+
+      console.log('Items DDL List ==>', this.ItemsDDLList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -227,6 +194,33 @@ export class AddBterIssueItemComponent {
       this.loaderService.requestEnded();
     }
   }
+
+
+  async DGET_Details() {
+    try {
+      this.loaderService.requestStarted();
+      debugger;
+
+      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
+
+      {
+        // 🔹 Serial No = No → get items WITHOUT Equipment Code
+        await this.bterInventoryService.GetConsumeItemList(this.searchRequest)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.ItemsDDLList = data.Data || [];
+          }, error => console.error(error));
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
 
 
   getTradeNameById(id: any): string {
@@ -289,10 +283,12 @@ export class AddBterIssueItemComponent {
       return;
     }
 
-  
 
-    this.submitRequest.StaffName = this.staffDDLList.find((x: any) => x.staffID == this.Searchrequests.staffID)?.staffName || '';
+    const selectedStaff = this.staffDDLList.find(
+      (x: any) => x.staffID == this.Searchrequests.staffID || x.StaffID == this.Searchrequests.staffID
+    );
     this.submitRequest.StaffId = this.Searchrequests.staffID;
+    this.submitRequest.StaffName = selectedStaff ? (selectedStaff.staffName || selectedStaff.StaffName) : '';
     this.submitRequest.TradeId = this.Searchrequests.TradeId;
     this.submitRequest.ItemId = this.Searchrequests.ItemId;
     this.submitRequest.Quantity = this.ItemsDDLList.filter((x: any) => x.Selected).length;
@@ -352,35 +348,6 @@ export class AddBterIssueItemComponent {
     }
   }
 
-  //async GetTradeDDL() {
-  //  debugger;
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
-  //    this.Searchrequests.TypeName = 'TradeList';
-
-  //    const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.TradeDDLList = [
-  //        { TradeId: 0, TradeName: 'Choose Trade' },
-  //        ...data.Data
-  //      ];
-
-  //      this.Searchrequests.TradeId = 0;
-  //      console.log('Trade list ==>', this.TradeDDLList);
-  //    } else {
-  //      this.TradeDDLList = [{ TradeId: 0, TradeName: 'Choose Trade' }];
-  //      this.Searchrequests.TradeId = 0;
-  //      this.toastr.error(data?.ErrorMessage || 'No trade found.');
-  //    }
-  //  } catch (Ex) {
-  //    console.log('Error in GetTradeDDL:', Ex);
-  //  } finally {
-  //    setTimeout(() => this.loaderService.requestEnded(), 200);
-  //  }
-  //}
-
   async GetCategoryDDL() {
     debugger;
     try {
@@ -410,5 +377,437 @@ export class AddBterIssueItemComponent {
       setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
+  openDatePicker(event: any) {
+    event.target.showPicker();
+  }
+
+
+
+
+
+  onIssuedToChange() {
+    // Reset dropdowns when Issued To changes
+    this.Searchrequests.staffID = 0;
+    this.Searchrequests.itemCategoryId = 0;
+    this.Searchrequests.ItemId = 0;
+    this.Searchrequests.departmentID = 0;
+    this.ItemsDDL = [];
+    this.ItemsDDLList = [];
+
+    if (this.Searchrequests.issuedTo == 2) {
+      // Staff → load staff + category
+      this.GetStaffDDL();
+      this.GetCategoryDDL();
+    } else if (this.Searchrequests.issuedTo == 3) {
+      // Department → load department list
+      this.GetDepartmentDDL();
+    } else if (this.Searchrequests.issuedTo == 1) {
+      // Office → no dropdowns, only search
+      this.ItemsDDLList = []; // ready for office search
+    }
+  }
+
+  async GetItemsDDL() {
+    try {
+      this.loaderService.requestStarted();
+      //this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      //this.searchRequest.ItemCategoryId = this.Searchrequests.ItemCategoryId;
+
+      //const data: any = await this.bterInventoryService.GetItemListByCategory(this.searchRequest);
+
+      //if (data && data.State === EnumStatus.Success) {
+      //  this.ItemsDDL = data.Data;
+      //} else {
+      //  this.ItemsDDL = [];
+      //}
+    } catch (ex) {
+      console.log('Error in GetItemsDDL:', ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  async GetDepartmentDDL() {
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.TypeName = 'DepartmentList';
+
+      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.departmentDDLList = data.Data;
+      } else {
+        this.departmentDDLList = [];
+      }
+    } catch (ex) {
+      console.log('Error in GetDepartmentDDL:', ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+  async GetOfficeList() {
+
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMasterList(this.sSOLoginDataModel.DepartmentID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          console.log(this.OfficeList, "OfficeList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  //async GetItemListType() {
+  //  try {
+  //    this.loaderService.requestStarted();
+
+  //    let searchdata = {
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
+  //      EquipmentsId: this.Searchrequests.itemCategoryId || 0,
+  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+  //      OfficeID: 0,
+  //      StatusID: this.Searchrequests.ItemId || 0,
+  //      ItemTypeID: this.Searchrequests.ItemType || 0
+  //    };
+
+  //    const data: any = await this.bterInventoryService.GetItemListType(searchdata);
+
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.CategoryDDLList = data.Data.map((x: any) => ({
+  //        ItemCategoryID: x.ItemCategoryID,
+  //        ItemCategoryName: x.ItemCategoryName
+  //      }));
+
+  //      this.ItemsDDLList = data.Data.map((x: any) => ({
+  //        ItemId: x.ItemId,
+  //        ItemName: x.CampanyName,
+  //        EquipmentsId: x.EquipmentsId,
+  //        EquipmentName: x.EquipmentName
+  //      }));
+  //    } else {
+  //      this.CategoryDDLList = [];
+  //      this.ItemsDDLList = [];
+  //    }
+  //  } catch (Ex) {
+  //    console.log("Error in GetItemListType:", Ex);
+  //  } finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
+
+
+  async GetItemListType() {
+    try {
+      this.loaderService.requestStarted();
+
+      const searchdata: DTEItemsSearchModel = {
+        DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+        EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+        RoleID: this.sSOLoginDataModel.RoleID || 0,
+        CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+
+        EquipmentsId: 0,
+        OfficeID: 0,
+        StatusID: 0
+      };
+
+      const data: any = await this.bterInventoryService.GetItemListType(searchdata);
+
+      if (data && data.State === EnumStatus.Success) {
+        this.CategoryDDLList = data.Data.map((x: any) => ({
+          ItemCategoryID: x.ItemCategoryID,
+          ItemCategoryName: x.ItemCategoryName
+        }));
+
+        this.Searchrequests.itemCategoryId = 0; // reset
+        this.ItemsDDLList = []; // reset
+      } else {
+        this.CategoryDDLList = [];
+        this.ItemsDDLList = [];
+      }
+    } catch (Ex) {
+      console.error("Error in GetItemListType:", Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+  //async BindItem_list1() {
+
+  //  debugger;
+  //  try {
+
+  //    console.log("Bind  Item  list")
+  //    this.loaderService.requestStarted();
+
+  //    const searchdata: DTEItemsSearchModel = {
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
+  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+
+  //      EquipmentsId: 0,
+  //      OfficeID: 0,
+  //      StatusID: 0
+  //    };
+
+  //    const data: any = await this.bterInventoryService.GetAllItemList(searchdata);
+
+  //    if (data && data.State === EnumStatus.Success) {
+  //      this.CategoryDDLList = data.Data.map((x: any) => ({
+  //        ItemCategoryID: x.ItemCategoryID,
+  //        ItemCategoryName: x.ItemCategoryName
+  //      }));
+
+  //      this.Searchrequests.itemCategoryId = 0;
+  //      this.ItemsDDLList = [];
+  //    } else {
+  //      this.CategoryDDLList = [];
+  //      this.ItemsDDLList = [];
+  //    }
+  //    console.log('Item List ==>',this.CategoryDDLList)
+  //  } catch (Ex) {
+  //    console.error("Error :", Ex);
+  //  } finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
+
+
+
+  async BindItem_list() {
+  try {
+    this.loaderService.requestStarted();
+
+    const searchdata: DTEItemsSearchModel = {
+      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+      RoleID: this.sSOLoginDataModel.RoleID || 0,
+      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+
+      EquipmentsId: 0,
+      OfficeID: 0,
+      StatusID: 0
+    };
+    await this.bterInventoryService.GetAllItemList(searchdata)
+    .then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.ItemsDDLList = data['Data'];
+      console.log("Bind  Item  list", this.ItemsDDLList )
+    }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  prepareChunkedItems() {
+    const chunkSize = 4; // 4 items per row
+    this.chunkedItems = [];
+
+    for (let i = 0; i < this.ItemsDDLList.length; i += chunkSize) {
+      this.chunkedItems.push(this.ItemsDDLList.slice(i, i + chunkSize));
+    }
+  }
+
+  onItemSelect(item: any) {
+    console.log("Selected Item:", item);
+  }
+
+
+  onItemToggle(item: any) {
+    debugger
+    if (item.Selected) {
+      // Add if not already present
+      if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
+        this.SelectedItems.push({
+          ItemId: item.ItemId,
+          ItemName: item.CampanyName,
+          ItemCategoryName: item.CategoryName,
+          Quantity: 1, // default,
+          FileName: item.FileName || '',
+          Dis_FileName: item.Dis_FileName || '',
+          EquipmentsId: item.EquipmentsId,
+          issuedTo: item.IssueTo,
+        });
+        this.FileName = ''
+        this.Dis_FileName = ''
+      }
+    } else {
+      // Remove if unchecked
+      this.SelectedItems = this.SelectedItems.filter(x => x.ItemId !== item.ItemId);
+    }
+  }
+
+  removeSelectedItem(index: number) {
+    const removedItem = this.SelectedItems[index];
+    this.SelectedItems.splice(index, 1);
+  }
+
+  async saveSelectedItems() {
+    debugger
+    if (!this.SelectedItems || this.SelectedItems.length === 0) {
+      this.toastr.error("Please select at least one item!");
+      return;
+    }
+
+    this.SelectedItems.forEach((element: any) => {
+      element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
+        element.InstituteID = this.sSOLoginDataModel.InstituteID,
+        element.EndTermID = this.sSOLoginDataModel.EndTermID,
+        element.RoleID = this.sSOLoginDataModel.RoleID,
+        element.StaffId = this.Searchrequests.staffID,
+        
+        element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
+          ? this.Searchrequests.issuedTo
+          : null; 
+        element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
+    });
+
+    this.AddItemList = this.SelectedItems
+     
+    try {
+      this.loaderService.requestStarted();
+
+      await this.bterInventoryService.SaveIssueItemsList(this.AddItemList).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.AddItemList = [];
+
+
+          this.SelectedItems = [];
+          this.AddItemList = [];
+          this.Searchrequests = {
+              staffID: 0
+            , issuedTo: 0
+            , ItemId: 0
+            , ItemType: 0
+            , itemCategoryId: 0
+            , InstituteID: 0
+            , TypeName: ''
+            , TradeId:  0
+            , collageTradeID: 0
+            , serialNo: 0
+            , departmentID: 0
+            , EquipmentsId: 0
+          };
+          this.FileName = '';
+          this.Dis_FileName = '';
+
+          // reset form if using Angular form
+          if (this.AddItemsRequestFormGroup) {
+            this.AddItemsRequestFormGroup.reset();
+          }
+          this.routers.navigate(['/bter-issue-item'], {
+
+          });
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
+
+  cancelSelection() {
+    this.SelectedItems = [];
+  }
+
+
+  async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "50mb",
+        FolderName:"Students",
+   
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          debugger
+          if (this.State == EnumStatus.Success) {
+              this.FileName = data.Data[0].FileName;
+              this.Dis_FileName = data.Data[0].Dis_FileName;
+            console.log(this.SelectedItems)
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async DeleteDocument(item: any) {
+    try {
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName =  "Students";
+      deleteModel.FileName = item;
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State != EnumStatus.Error) {
+            debugger
+              this.FileName = '';
+              this.Dis_FileName = '';
+            console.log(this.SelectedItems)
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+
+
 
 }

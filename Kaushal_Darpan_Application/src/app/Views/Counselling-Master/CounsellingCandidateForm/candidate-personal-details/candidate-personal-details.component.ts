@@ -5,10 +5,11 @@ import { ToastrService } from 'ngx-toastr';
 import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { EncryptionService } from '../../../ITI/idffund-details/idffund-details.component';
 import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-candidate-personal-details',
@@ -22,15 +23,18 @@ export class CandidatePersonalDetailsComponent {
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public errorMessage = '';
   public isSubmitted: boolean = false;
+  public CandidateID: number = 0;
 
   public GenderList: any = []
   public ReligionList: any = []
   public NationalityList: any = []
   public CategoryAlist: any = []
   public maritalList: any = []
+  public DistrictMasterList: any = []
 
   public request = new CounsellingApplicationFormDataModel();
   public appRequest = new CounsellingApplicationSearchModel();
+  public SSOLoginDataModel = new SSOLoginDataModel()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -43,34 +47,48 @@ export class CandidatePersonalDetailsComponent {
   ) {}
   async ngOnInit() {
     this.PersonalDetailForm = this.formBuilder.group({
-      SSOID: ['', Validators.required],
+      // SSOID: ['', Validators.required],
       CandidateName: ['', Validators.required],
       FatherName: ['', Validators.required],
       MotherName: ['', Validators.required],
       GenderId: [0, [DropdownValidators]],
       DOB: ['', Validators.required],
       CategoryA_ID: [0, [DropdownValidators]],
+      CategoryB_ID: [0, [DropdownValidators]],
       MobileNo: ['', Validators.required],
       Email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
-      Address1: ['', Validators.required],
-      Address2: ['', Validators.required],
-      Address3: [''],
-      StateID: [0, [DropdownValidators]],
-      DistrictID: [0, [DropdownValidators]],
-      BlockID: [0, [DropdownValidators]],
-      Pincode: ['', Validators.required],
+      // Address1: ['', Validators.required],
+      // Address2: ['', Validators.required],
+      // Address3: [''],
+      // StateID: [0, [DropdownValidators]],
+      // DistrictID: [0, [DropdownValidators]],
+      // BlockID: [0, [DropdownValidators]],
+      // Pincode: ['', Validators.required],
       AadharNo: ['', Validators.required],
-      JanAadharNo: ['', Validators.required],
+      // JanAadharNo: ['', Validators.required],
+      RollNumber: ['', Validators.required],
+      Designation: ['', Validators.required],
+      // Trade: ['', Validators.required],
+      MeritNo: ['', Validators.required],
+      SelectionCategoryID: [0, [DropdownValidators]],
+      HomeDistrictID: [0, [DropdownValidators]],
       Remark: [''],
+      IsPH: [''],
+      IsSportsPerson: [''],
+      IsExServicemen: [''],
+      IsShahidDependent: [''],
+      IsAnyIncurableDiseases: [''],
+      IsSpouseInSameService: [''],
       
       ReligionID: [0, [DropdownValidators]],
       NationalityID: [0, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
       IsMinority: ['',],
     });
-
+    this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetMasterDDL();
-
+    await this.GetDistrictList();
     await this.GetApplicationDataByID_Counselling();
   }
 
@@ -153,8 +171,25 @@ export class CandidatePersonalDetailsComponent {
   }
 
   async SaveData() {
+    await this.refreshValidators();
+    if(this.PersonalDetailForm.invalid){
+      this.toastr.error("Please fill all the required fields");
+      Object.keys(this.PersonalDetailForm.controls).forEach(key => {
+          const control = this.PersonalDetailForm.get(key);
+ 
+          if (control && control.invalid) {
+            // this.toastr.error(`Control ${key} is invalid`);
+            console.error(`Control ${key} is invalid`);
+            Object.keys(control.errors!).forEach(errorKey => {
+              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+            });
+          }
+        });
+      return;
+    }
     try {
-      this.request.CandidateID = 1
+      this.request.CandidateID = this.CandidateID
+      this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -179,7 +214,7 @@ export class CandidatePersonalDetailsComponent {
 
   async GetApplicationDataByID_Counselling() {
     try {
-      this.appRequest.CandidateId = 1
+      this.appRequest.CandidateId = this.CandidateID;
       await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
@@ -193,6 +228,32 @@ export class CandidatePersonalDetailsComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async GetDistrictList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDistrictMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async refreshValidators() {
+    if (this.request.GenderId != 98) {
+      this.PersonalDetailForm.controls['CategoryB_ID'].clearValidators();
+      this.PersonalDetailForm.controls['CategoryB_ID'].updateValueAndValidity();
     }
   }
 }

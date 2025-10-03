@@ -224,6 +224,9 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
                 this.sSOLoginDataModel.CandidateID = this.searchRequest.CandidateId;
                 localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
                 this.cookieService.set('LoginStatus', "OK");
+                setTimeout(() => {
+                  this.router.navigate(['/CandidateApplicationList']);
+                }, 1000);
               }
               else
               {

@@ -19,9 +19,6 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<a routerLink="/AddUserRequest" class="btn bg-success btn-sm text-white">
-        <i class="ti ti-plus"></i> Add Request
-      </a>-->
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -36,15 +33,6 @@
           </select>
         </div>
 
-        <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Level:
-        </label>
-        <select (change)="GetOfficeList()" class="form-select" id="ddlLevelID" [(ngModel)]="searchRequest.LevelID">
-          <option value="0">Choose Option</option>
-          <option *ngFor="let item of LevelList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-      </div>-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -76,15 +64,6 @@
           </select>
         </div>
 
-        <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Order No:
-        </label>
-        <input type="text" class="form-input" placeholder="Enter Order No:" [(ngModel)]="searchRequest.OrderNo">
-
-      </div>-->
-
-
       </div>
       <div class="text-center mb-2">
         <button type="button" class="btn bg-info text-white mt-6" (click)="getlist()">Search</button>
@@ -97,8 +76,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Execl</a>-->
-        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"><i class="ti ti-download"></i> Download Reports in PDF</a> -->
+
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -138,8 +116,6 @@
             <th class="text-left">Post</th>
             <th class="text-left">Office</th>
             <th class="text-left">Institute</th>
-            <!--<th class="text-left">Order No</th>-->
-            <!--<th class="text-left">Order Date</th>-->
             <th class="text-left">Last Working Date</th>
             <th class="text-left">Joining Date</th>
             <th class="text-left">Request Date</th>
@@ -162,8 +138,6 @@
             <td align="left">{{ row.PostName }}</td>
             <td align="left">{{ row.OfficeName }}</td>
             <td align="left">{{ row.InstituteName }}</td>
-            <!--<td align="left">{{ row.OrderNo }}</td>
-  <td align="left">{{ row.OrderDate }}</td>-->
             <td align="left">{{ row.LastWorkingDate }}</td>
             <td align="left">{{ row.JoiningDate }}</td>
             <td align="left">{{ row.RequestDate }}</td>
@@ -193,10 +167,10 @@
 
                 <!-- Accountant Approval -->
                 <a *ngIf="row.StaffRequestType != 'Transfer'
-         && row.IsAccount == false
-         && (sSOLoginDataModel.RoleID == 51 || sSOLoginDataModel.RoleID == 58)
-         && row.RelievingStatusId == 247
-         && row.RequestTypeID == 2"
+                         && row.IsAccount == false
+                         && (sSOLoginDataModel.RoleID == 51 || sSOLoginDataModel.RoleID == 58)
+                         && row.RelievingStatusId == 247
+                         && row.RequestTypeID == 2"
                    href="javascript:void(0);"
                    title="VRS Approve By Account"
                    (click)="onSubmitModel_VRSAccountant(MyModel_VRSAccountant, row)">
@@ -205,12 +179,12 @@
 
                 <!-- DTE Admin Approval -->
                 <a *ngIf=" row.RelievingStatusId == 247  && row.StaffRequestType != 'Transfer'  && row.RequestTypeID == 2  && row.RequestStatusId == 0 && (sSOLoginDataModel.RoleID != 2 || sSOLoginDataModel.RoleID != 12
-|| sSOLoginDataModel.RoleID == 17
-|| sSOLoginDataModel.RoleID == 18
-|| sSOLoginDataModel.RoleID == 33
-|| sSOLoginDataModel.RoleID == 80
-|| sSOLoginDataModel.RoleID == 81
-|| sSOLoginDataModel.RoleID == 180 )"
+                          || sSOLoginDataModel.RoleID == 17
+                          || sSOLoginDataModel.RoleID == 18
+                          || sSOLoginDataModel.RoleID == 33
+                          || sSOLoginDataModel.RoleID == 80
+                          || sSOLoginDataModel.RoleID == 81
+                          || sSOLoginDataModel.RoleID == 180 )"
                    href="javascript:void(0);"
                    title="VRS Approve By DTE Admin"
                    (click)="onSubmitModel_VRSApproveDTE(MyModel_VRSDTEApprove, row)">

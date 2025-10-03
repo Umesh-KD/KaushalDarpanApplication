@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, EnumStudentType, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants, PromoteStatus } from '../../../Common/GlobalConstants';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -57,7 +57,9 @@ export class PromotedStudentComponent {
   public totalInTableRecord: number = 0;
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
-  public _EnumStudentType = EnumStudentType;
+  public _PromoteStatus = PromoteStatus;
+
+  public PromoteStatusList: any[] = [];
 
   //end table feature default
 
@@ -88,6 +90,17 @@ export class PromotedStudentComponent {
 
   async GetMasterData() {
     try {
+      await this.commonMasterService.GetCommonMasterDDLByType('PromoteStudentStatus')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PromoteStatusList = data['Data'];
+
+          //filter
+          this.PromoteStatusList = this.PromoteStatusList.filter((x: any) => {
+            return x.ID == this._PromoteStatus.Reg || x.ID == this._PromoteStatus.Ex;
+          });
+        }, (error: any) => console.error(error));
+
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           this.InstituteMasterList = data['Data'];
@@ -108,7 +121,7 @@ export class PromotedStudentComponent {
   async GetPromotedStudent() {
     try {
       // validation
-      if (this.request.StudentTypeId <= 0) {
+      if (this.request.PromoteStatusID <= 0) {
         this.toastr.error("Please select 'Student Status'!.");
         return;
       }
@@ -318,13 +331,13 @@ export class PromotedStudentComponent {
               FinancialYearID: this.sSOLoginDataModel.FinancialYearID,
               InstituteId: x.InstituteId,
               SessionTypeID: 0,
-              StudentTypeId: x.StudentTypeId,
+              StudentTypeId: x.StudentTypeId,//PromoteStatusID
               StudentExamID: x.StudentExamID,
               IsYearly: x.IsYearly
             })
           });
 
-          if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
+          if (this.request.PromoteStatusID == this._PromoteStatus.Reg) {
             // Call service to save student exam status
             await this.promotedstudentservice.SavePromotedStudent(request)
               .then(async (data: any) => {
@@ -344,7 +357,7 @@ export class PromotedStudentComponent {
                   console.log(this.ErrorMessage);
                 }
               })
-          } else if (this.request.StudentTypeId == this._EnumStudentType.Ex) { // ex
+          } else if (this.request.PromoteStatusID == this._PromoteStatus.Ex) { // ex
             // Call service to save student exam status
             await this.promotedstudentservice.SaveExPromotedStudent(request)
               .then(async (data: any) => {
@@ -364,7 +377,7 @@ export class PromotedStudentComponent {
                   console.log(this.ErrorMessage);
                 }
               })
-          } else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled) { // Form not Filled
+          } else if (this.request.PromoteStatusID == this._PromoteStatus.NotFormFilled) { // Form not Filled
             // Call service to save student exam status
             await this.promotedstudentservice.SaveFormNotFilledPromotedStudent(request)
               .then(async (data: any) => {
@@ -384,7 +397,7 @@ export class PromotedStudentComponent {
                   console.log(this.ErrorMessage);
                 }
               })
-          } else if (this.request.StudentTypeId == this._EnumStudentType.Detained) { // Detained
+          } else if (this.request.PromoteStatusID == this._PromoteStatus.Detained) { // Detained
             // Call service to save student exam status
             await this.promotedstudentservice.SaveDetainedPromotedStudent(request)
               .then(async (data: any) => {
@@ -461,18 +474,18 @@ export class PromotedStudentComponent {
       let EndTermID = this.sSOLoginDataModel.EndTermID;
       let IsWithNotYearly = 1;
       let IsPromote = 0;
-      let IsForEx = this.request.StudentTypeId == this._EnumStudentType.Reg ? 0 : 1;
+      let IsForEx = this.request.PromoteStatusID == this._PromoteStatus.Reg ? 0 : 1;
       let IsWithNot6thSem = 0;
       this.SemesterMasterList = [];// reset
-      if (this.request.StudentTypeId == this._EnumStudentType.Reg) {
+      if (this.request.PromoteStatusID == this._PromoteStatus.Reg) {
         IsPromote = 1;
         IsWithNot6thSem = 1;
       }
-      else if (this.request.StudentTypeId == this._EnumStudentType.Ex) {
+      else if (this.request.PromoteStatusID == this._PromoteStatus.Ex) {
         IsPromote = 0;
       }
-      else if (this.request.StudentTypeId == this._EnumStudentType.NotFormFilled ||
-        this.request.StudentTypeId == this._EnumStudentType.Detained) {
+      else if (this.request.PromoteStatusID == this._PromoteStatus.NotFormFilled ||
+        this.request.PromoteStatusID == this._PromoteStatus.Detained) {
         IsPromote = 0;
         IsWithNot6thSem = 1;
       }

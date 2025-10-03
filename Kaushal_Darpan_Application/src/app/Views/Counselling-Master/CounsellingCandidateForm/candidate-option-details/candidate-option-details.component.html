@@ -8,7 +8,7 @@
       <div class="grid xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 gap-6">
         <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full"
              role="alert" id="WihoutJanadharAlert">
-          <b>Note:</b> अभ्यर्थी Option Form में ज्यादा से ज्यादा Option भरने का प्रयास करें जिससे आपका प्रवेश सुनिश्चित हो सके I
+          <!-- <b>Note:</b> अभ्यर्थी Option Form में ज्यादा से ज्यादा Option भरने का प्रयास करें जिससे आपका प्रवेश सुनिश्चित हो सके I -->
         </div>
         <div>
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">व्यवसाय का नाम (Trade): <span class="StarMarking">*</span></label>
@@ -26,7 +26,7 @@
           </div>
         </div>
 
-        <div>
+        <!-- <div>
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">संस्थान का नाम (Name of Institute): <span class="StarMarking">*</span></label>
           <select class="form-select" name="InstituteID" id="InstituteID" formControlName="InstituteID"
                   [(ngModel)]="formData.InstituteID">
@@ -37,6 +37,27 @@
           </select>
           <div *ngIf="isSubmitted&&_OptionsFormGroup.InstituteID.errors" class="text-danger">
             <p *ngIf="!_OptionsFormGroup.InstituteID.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div> -->
+
+        <div class="mb-8">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">संस्थान का नाम (Name of Institute):<span class="text-danger">*</span></label>
+          <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
+                                  [settings]="settingsMultiselect"
+                                  [data]="InstituteList"
+                                  [disabled]="false"
+                                  (onFilterChange)="onFilterChange($event)"
+                                  (onDropDownClose)="onDropDownClose($event)"
+                                  (onSelect)="onItemSelect($event)"
+                                  (onDeSelect)="onDeSelect($event)"
+                                  (onSelectAll)="onSelectAll($event)"
+                                  (onDeSelectAll)="onDeSelectAll($event)"
+                                  formControlName="InstituteList">
+          </ng-multiselect-dropdown>
+          <div *ngIf="isSubmitted&&_OptionsFormGroup.InstituteList.errors" class="text-danger">
+            <p *ngIf="!_OptionsFormGroup.InstituteList.errors.DropdownValidators">
               <i aria-hidden="true"></i>This field is required .!
             </p>
           </div>
@@ -60,26 +81,54 @@
   <div class="overflow-auto">
     <table class="w-full table-border" cellpadding="5">
       <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
-
         <tr>
           <th>Priority</th>
           <th class="text-left">Trade Name</th>
           <th class="text-left">Name of College</th>
           <th>Action</th>
         </tr>
-
       </thead>
       
       <tbody>
         <tr *ngFor="let row of AddedChoices; let idx = index">
           <td class="text-center">{{idx+1}}</td>
           <td class="text-left">{{row.TradeName}}</td>
-          <td class="text-left" >{{row.InstituteName}}</td>
+
+          <td class="text-left" >
+
+            <table class="w-full table-border">
+              <tbody>
+                <tr *ngFor="let item of row.InstituteList; let idx = index">
+                  <td class="text-center">{{item.Priority}}</td>
+                  <td class="text-left">{{item.InstituteName}}</td>
+                  <td class="text-center">
+                    <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteChildOptionByID_Counselling(item)">
+                      <i class="ti ti-trash"></i>
+                    </button>
+                    <button class="btn bg-primary text-white"
+                            type="button"
+                            title="Priority Up"
+                            (click)="ChildPriorityChange_Counselling(item, 'UP')"
+                            [disabled]="idx === 0">
+                      <i class="ti ti-arrow-narrow-up"></i>
+                    </button>
+                    <button class="btn bg-info text-white"
+                            type="button"
+                            title="Priority Down"
+                            (click)="ChildPriorityChange_Counselling(item, 'DOWN')"
+                            [disabled]="idx === row.InstituteList.length - 1">
+                      <i class="ti ti-arrow-narrow-down"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
           <td class="text-center">
             <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteOptionByID_Counselling(row)">
               <i class="ti ti-trash"></i>
             </button>
-            <button class="btn bg-primary text-white"
+            <!-- <button class="btn bg-primary text-white"
                     type="button"
                     title="Priority Up"
                     (click)="PriorityChange_Counselling(row, 'UP')"
@@ -92,7 +141,7 @@
                     (click)="PriorityChange_Counselling(row, 'DOWN')"
                     [disabled]="idx === AddedChoices.length - 1">
               <i class="ti ti-arrow-narrow-down"></i>
-            </button>
+            </button> -->
           </td>
         </tr>
       </tbody>

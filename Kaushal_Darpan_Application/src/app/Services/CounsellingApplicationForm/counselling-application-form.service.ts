@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel, InstituteListDataModel_Coun } from '../../Models/CounsellingApplicationFormDataModel';
 import { Counselling_DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 
 @Injectable({
@@ -119,6 +119,45 @@ export class CounsellingApplicationFormService {
   public async PreviewData_ByID_Counselling(request: CounsellingApplicationSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/PreviewData_ByID_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteChildOptionByID_Counselling(request: InstituteListDataModel_Coun) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteChildOptionByID_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async ChildPriorityChange_Counselling(request: InstituteListDataModel_Coun) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ChildPriorityChange_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ApplicationFinalSubmit_Counselling(request: CounsellingApplicationSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/ApplicationFinalSubmit_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetInstituteOptionList_Counselling(request: InstituteListDataModel_Coun) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetInstituteOptionList_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteDocumentById_Counselling(request: Counselling_DocumentDetailsModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeleteDocumentById_Counselling`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
