@@ -91,7 +91,7 @@
         <mat-date-range-picker-actions>
           <button mat-button matDateRangePickerCancel>Cancel</button>
           <button mat-raised-button matDateRangePickerApply>Apply</button>
-        </mat-date-range-picker-actions>  
+        </mat-date-range-picker-actions>
       </mat-date-range-picker>
     </mat-form-field>
 
@@ -114,6 +114,20 @@
                    [min]="minEndDate" />
           </div>
         </div>
+        <!--{{GetLeaveList|json}}-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
+          <ng-select formControlName="AttandanceTimeID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StudentAttandanceTimeDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.AttandanceTimeID.errors" class="text-danger">
+            <p *ngIf="formTable.AttandanceTimeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
 
 
         <div>

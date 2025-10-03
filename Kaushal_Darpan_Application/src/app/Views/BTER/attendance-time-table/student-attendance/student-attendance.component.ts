@@ -17,6 +17,9 @@ import { StaffMasterService } from '../../../../Services/StaffMaster/staff-maste
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ChangeDetectorRef } from '@angular/core';
+import { LeaveMasterSearchModel } from '../../../../Models/LeaveMasterDataModel';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { LeaveMasterService } from '../../../../Services/LeaveMaster/leave-master.service';
 
 
 @Component({
@@ -40,6 +43,9 @@ export class StudentAttendanceComponent implements OnInit {
   SemesterMasterDDL: any[] = [];
   SubjectMasterDDL: any[] = [];
   GetSectionData: any[] = [];
+  StudentAttandanceTimeDDL: any[] = [];
+  public GetLeaveList: any = [];
+  public searchRequest = new LeaveMasterSearchModel();
   TableForm!: FormGroup;
   sSOLoginDataModel = new SSOLoginDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
@@ -74,7 +80,11 @@ export class StudentAttendanceComponent implements OnInit {
     private http: HttpClient, private route: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
-    public appsettingConfig: AppsettingService) {
+    public appsettingConfig: AppsettingService,
+    private loaderService: LoaderService,
+    private HrMasterService: LeaveMasterService,
+
+  ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
@@ -98,6 +108,7 @@ export class StudentAttendanceComponent implements OnInit {
     
     this.TableForm = this.fb.group({
       SubjectID: ['', Validators.required],
+      AttandanceTimeID: ['', Validators.required],
       StreamID: ['', Validators.required],
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
@@ -106,6 +117,8 @@ export class StudentAttendanceComponent implements OnInit {
     });
 
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
+    this.GetStudentAttandanceTimeDDL();
+    this.GetStaffLeaveAllData();
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
@@ -157,6 +170,18 @@ export class StudentAttendanceComponent implements OnInit {
     } catch (error) {
       console.error(error);
     }
+  }
+
+
+  async GetStudentAttandanceTimeDDL() {
+    
+    await this.commonMasterService.GetStudentAttandanceTimeDDL(this.sSOLoginDataModel.StaffID, this.TableForm.value.SubjectID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+
+      debugger
+      this.StudentAttandanceTimeDDL = data.Data;
+    })
+
   }
 
   getSubjectMasterDDL(ID: any, SemesterID: any) {
@@ -246,6 +271,54 @@ export class StudentAttendanceComponent implements OnInit {
   //}
 
 
+  async GetStaffLeaveAllData() {
+    try {
+      debugger
+      const rawStart = this.TableForm.value.AttendanceStartDate;
+      const rawEnd = this.TableForm.value.AttendanceEndDate;
+
+      // Parse correctly whether string or Date
+      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
+      dateStart.setDate(dateStart.getDate() + 1);
+      const formattedDateStart = dateStart.toISOString().split('T')[0];
+
+      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
+      dateEnd.setDate(dateEnd.getDate() + 1);
+      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
+      this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      this.searchRequest.From_Date = formattedDateStart;
+      this.searchRequest.To_Date = formattedDateEnd;
+     
+
+      this.loaderService.requestStarted();
+      await this.HrMasterService.ByIDStaffLeaveList(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.GetLeaveList = data['Data'];
+
+          console.log(this.GetLeaveList, "Get Leave List")
+
+        }, (error: any) => console.error(error)
+        );
+
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async GetAttendanceTimeTable() {
     debugger;
@@ -272,11 +345,14 @@ export class StudentAttendanceComponent implements OnInit {
         SectionID: this.TableForm.value.SectionID,
         SubjectID: this.TableForm.value.SubjectID,
         AttendanceStartDate: formattedDateStart,
-        AttendanceEndDate: formattedDateEnd
+        AttendanceEndDate: formattedDateEnd,
+        StaffID: this.sSOLoginDataModel.StaffID,
+        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+
       };
 
       this.filterData = [];
-
+      debugger
       await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         this.filterData = data;
@@ -340,7 +416,12 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
   getData() {
+    debugger
     this.isSubmitted = true;
+
+    this.GetStudentAttandanceTimeDDL();
+    this.GetStaffLeaveAllData();
+
     if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
       this.GetAttendanceTimeTable();
     }

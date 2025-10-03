@@ -306,6 +306,7 @@ export class DteItemsMasterComponent {
       const updatedItem = {
         AvailableQuantity: item.AvailableQuantity,
         CampanyName: item.CampanyName,
+        batchId: item.batchId,
         Code: item.Code,
         CollegeName: item.CollegeName ?? "BTER",
         EquipmentsName: item.EquipmentsName,

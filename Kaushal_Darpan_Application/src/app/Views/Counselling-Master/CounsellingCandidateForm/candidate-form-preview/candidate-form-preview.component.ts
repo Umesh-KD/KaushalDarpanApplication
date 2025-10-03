@@ -16,7 +16,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { Counselling_OptionFormDataModel, CounsellingApplicationPreviewDataModel, CounsellingApplicationSearchModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { Counselling_DocumentDetailsModel } from '../../../../Models/DocumentDetailsModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 
@@ -40,6 +40,7 @@ export class CandidateFormPreviewComponent {
 
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
+  _EnumRole = EnumRole;
 
   public CandidateID: number = 0;
   public IsShowIncompleteData: boolean = false;
@@ -245,7 +246,7 @@ export class CandidateFormPreviewComponent {
   }
 
   async ViewDetails(content: any, item: any) {
-    debugger
+    
     await this.GetInstituteOptionList_Counselling(item)
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
   }
