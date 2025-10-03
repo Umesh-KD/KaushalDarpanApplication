@@ -101,7 +101,10 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
-            <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== 201">College Name</th>
+            <th class="text-left" *ngIf="sSOLoginDataModel.RoleID !== 201">
+              College Name
+            </th>
+
             <th class="text-left">Batch ID</th>
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
@@ -118,10 +121,8 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
-            <td align="left">
-              <span *ngIf="sSOLoginDataModel.RoleID !== 201">
-                {{ item.CollegeName ?? "BTER" }}
-              </span>
+            <td align="left" *ngIf="sSOLoginDataModel.RoleID !== 201">
+              {{ item.CollegeName ?? "BTER" }}
             </td>
             <td align="left">{{item.batchId}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
