@@ -66,6 +66,7 @@ export class AddBterIssueItemComponent {
   chunkedItems: any[][] = [];
   SelectedItems: any[] = [];
   AddItemList: DTEItemsSaveModel[] = [];
+  public StreamMasterList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -98,6 +99,7 @@ export class AddBterIssueItemComponent {
     this.GetCategoryDDL()
 
     this.prepareChunkedItems();
+    this.GetMasterData()
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -717,6 +719,7 @@ export class AddBterIssueItemComponent {
             , serialNo: 0
             , departmentID: 0
             , EquipmentsId: 0
+            , IssuedId: 0
           };
           this.FileName = '';
           this.Dis_FileName = '';
@@ -807,6 +810,28 @@ export class AddBterIssueItemComponent {
     }
   }
 
+
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      console.log('Stream Master List',this.StreamMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 

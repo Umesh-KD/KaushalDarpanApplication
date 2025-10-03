@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -13,7 +13,6 @@ import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
-
 
 @Component({
   selector: 'app-bter-INV_Issue-report',
@@ -40,6 +39,8 @@ export class bterINVIssuereportComponent {
   public UserID: number = 0;
   public today: Date = new Date();
 
+  public InventoryIssueHistoryList: any[] = [];
+  modalReference: NgbModalRef | undefined;
 
 
 
@@ -66,9 +67,6 @@ export class bterINVIssuereportComponent {
     this.UserID = this.sSOLoginDataModel.UserID;    
     
     await this.GetAllData();
-    await this.GetTradeDDL();
-    await this.GetCategoryDDL();
-    await this.GetStaffDDL();
   }
 
   async GetAllData() {
@@ -231,9 +229,37 @@ export class bterINVIssuereportComponent {
     return `file_${timestamp}.${extension}`;
   }
 
+  async GetInventoryIssueHistoryList(model: any, IssuedId: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.Searchrequest.IssuedId = IssuedId;
+      await this.bterInventoryService.GetInventoryIssueHistoryList(this.Searchrequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.InventoryIssueHistoryList = data.Data;
+          
 
+        }, (error: any) => console.error(error))
+
+      console.log(IssuedId, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   
-  
+  CloseModalRequestHistorylist() {
+    
+    this.modalReference?.close();
+    this.isSubmitted = false;
+  }
 
  
 
