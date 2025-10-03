@@ -162,4 +162,12 @@ export class CounsellingApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async UnlockApplication_Counselling(request: CounsellingApplicationSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UnlockApplication_Counselling`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

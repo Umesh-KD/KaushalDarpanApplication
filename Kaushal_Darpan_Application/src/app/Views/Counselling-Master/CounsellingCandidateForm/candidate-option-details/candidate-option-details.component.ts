@@ -138,9 +138,10 @@ export class CandidateOptionDetailsComponent {
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message)
           await this.Counselling_GetOptionDetailsByID();
+          this.OptionsFormGroup.reset();
           this.formData.TradeId = 0;
           this.formData.InstituteID = 0;
-          window.location.reload();
+          this.formData.InstituteList = [];
           this.isSubmitted = false;
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
@@ -255,6 +256,10 @@ export class CandidateOptionDetailsComponent {
   }
 
   async SaveAndNext() {
+    if(this.AddedChoices.length == 0){
+      this.toastr.error ("Please add at least one option");
+      return;
+    }
     this.formSubmitSuccess.emit(true);
     this.tabChange.emit(3)
   }

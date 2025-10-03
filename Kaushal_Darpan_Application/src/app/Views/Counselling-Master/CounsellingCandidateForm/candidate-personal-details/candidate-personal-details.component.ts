@@ -189,7 +189,7 @@ export class CandidatePersonalDetailsComponent {
     }
     try {
       this.request.CandidateID = this.CandidateID
-      this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID
+      this.request.AcademicYearID = 9 //this.SSOLoginDataModel.FinancialYearID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {

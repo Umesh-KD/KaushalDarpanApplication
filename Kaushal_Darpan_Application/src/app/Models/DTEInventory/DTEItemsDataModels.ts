@@ -73,9 +73,10 @@ export class inventoryIssueHistorySearchModel {
   public issuedTo: number = 0;
   public serialNo: number = 0;
   public departmentID: number = 0;
-  public itemCategoryId: number = 0;
+  public ItemCategoryId: number = 0;
   public ItemType: number = 0;
   public EquipmentsId: number = 0;
+  public IssuedId: number = 0;
 }
 
 

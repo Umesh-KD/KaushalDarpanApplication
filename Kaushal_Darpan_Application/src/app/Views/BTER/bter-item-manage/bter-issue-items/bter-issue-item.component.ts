@@ -66,6 +66,7 @@ export class AddBterIssueItemComponent {
   chunkedItems: any[][] = [];
   SelectedItems: any[] = [];
   AddItemList: DTEItemsSaveModel[] = [];
+  public StreamMasterList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -98,6 +99,7 @@ export class AddBterIssueItemComponent {
     this.GetCategoryDDL()
 
     this.prepareChunkedItems();
+    this.GetMasterData()
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -388,7 +390,7 @@ export class AddBterIssueItemComponent {
   onIssuedToChange() {
     // Reset dropdowns when Issued To changes
     this.Searchrequests.staffID = 0;
-    this.Searchrequests.itemCategoryId = 0;
+    this.Searchrequests.ItemCategoryId = 0;
     this.Searchrequests.ItemId = 0;
     this.Searchrequests.departmentID = 0;
     this.ItemsDDL = [];
@@ -536,7 +538,7 @@ export class AddBterIssueItemComponent {
           ItemCategoryName: x.ItemCategoryName
         }));
 
-        this.Searchrequests.itemCategoryId = 0; // reset
+        this.Searchrequests.ItemCategoryId = 0; // reset
         this.ItemsDDLList = []; // reset
       } else {
         this.CategoryDDLList = [];
@@ -595,6 +597,7 @@ export class AddBterIssueItemComponent {
 
 
   async BindItem_list() {
+    debugger
   try {
     this.loaderService.requestStarted();
 
@@ -655,6 +658,7 @@ export class AddBterIssueItemComponent {
           Dis_FileName: item.Dis_FileName || '',
           EquipmentsId: item.EquipmentsId,
           issuedTo: item.IssueTo,
+          ItemCategoryId: item.ItemCategoryId,
         });
         this.FileName = ''
         this.Dis_FileName = ''
@@ -683,6 +687,10 @@ export class AddBterIssueItemComponent {
         element.EndTermID = this.sSOLoginDataModel.EndTermID,
         element.RoleID = this.sSOLoginDataModel.RoleID,
         element.StaffId = this.Searchrequests.staffID,
+      //element.itemCategoryId = this.Searchrequests.itemCategoryId,
+        element.itemCategoryId = this.Searchrequests.ItemCategoryId
+        || 0;
+
         
         element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
           ? this.Searchrequests.issuedTo
@@ -709,7 +717,7 @@ export class AddBterIssueItemComponent {
             , issuedTo: 0
             , ItemId: 0
             , ItemType: 0
-            , itemCategoryId: 0
+            , ItemCategoryId: 0
             , InstituteID: 0
             , TypeName: ''
             , TradeId:  0
@@ -717,6 +725,7 @@ export class AddBterIssueItemComponent {
             , serialNo: 0
             , departmentID: 0
             , EquipmentsId: 0
+            , IssuedId: 0
           };
           this.FileName = '';
           this.Dis_FileName = '';
@@ -808,6 +817,40 @@ export class AddBterIssueItemComponent {
   }
 
 
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
 
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      console.log('Stream Master List',this.StreamMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  onStaffChange() {
+    // ✅ Reset ItemType, Category, Items when staff changes
+    this.Searchrequests.ItemType = 0; // reset
+    this.Searchrequests.ItemCategoryId = 0; // reset category
+    this.CategoryDDLList = [];
+
+    this.ItemsDDLList = [];
+
+    console.log("Staff changed => reset ItemType & Category");
+
+    // If you want to auto reload item types after staff change:
+    this.GetItemListType();
+  }
 
 }
