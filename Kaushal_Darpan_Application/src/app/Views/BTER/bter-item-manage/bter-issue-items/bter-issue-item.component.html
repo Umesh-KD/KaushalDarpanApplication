@@ -23,20 +23,6 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Serial No:</label>
-        <div class="flex items-center gap-4">
-          <label class="inline-flex items-center">
-            <input type="radio" class="form-radio" name="issuedTo" [(ngModel)]="Searchrequests.issuedTo" [value]="1">
-            <span class="ml-2">Yes</span>
-          </label>
-          <label class="inline-flex items-center">
-            <input type="radio" class="form-radio" name="issuedTo" [(ngModel)]="Searchrequests.issuedTo" [value]="2">
-            <span class="ml-2">No</span>
-          </label>
-        </div>
-      </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issued To:</label>
           <select class="form-select" id="issuedTo" [(ngModel)]="Searchrequests.issuedTo" (change)="onIssuedToChange()">
@@ -57,33 +43,7 @@
           </select>
         </div>
 
-        <!--<div *ngIf="Searchrequests.issuedTo == 2">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-        <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequests.ItemCategoryId" (change)="GetItemsDDL()">
-          <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
-            {{ item.ItemCategoryName }}
-          </option>
-        </select>
-      </div>
-
-      <div *ngIf="Searchrequests.issuedTo == 2">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item List:</label>
-        <select class="form-select" id="ItemID" [(ngModel)]="Searchrequests.ItemId">
-          <option *ngFor="let item of ItemsDDL" [value]="item.ItemId">
-            {{ item.ItemName }}
-          </option>
-        </select>
-      </div>-->
-        <!-- Department Dropdown -->
-        <!--<div *ngIf="Searchrequests.issuedTo == 3">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department List:</label>
-        <select class="form-select" id="DepartmentID" [(ngModel)]="Searchrequests.DepartmentID">
-          <option *ngFor="let dept of departmentDDLList" [value]="dept.DepartmentID">
-            {{ dept.DepartmentName }}
-          </option>
-        </select>
-      </div>-->
-
+       
         <div *ngIf="Searchrequests.issuedTo == 3">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Department List:</label>
           <select class="form-select" id="ddlOfficeID" [(ngModel)]="searchRequest.OfficeID">
@@ -123,24 +83,14 @@
         </div>
 
 
-        <!-- Item List -->
-        <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item List:</label>
-          <select class="form-select" [(ngModel)]="Searchrequests.ItemId">
-            <option *ngFor="let item of ItemsDDLList" [value]="item.ItemId">
-              {{ item.ItemName }} ({{ item.EquipmentName }})
-            </option>
-          </select>
-        </div>-->
-
       </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
+      <!--<div class="flex justify-end flex-wrap items-center">
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ShowSubmit(Submit_Details)">Issue Items</a>
 
-      </div>
+      </div>-->
 
     </div>
     <!--{{ItemsDDLList | json}}-->
@@ -181,7 +131,7 @@
             <th>Item Category</th>
             <th>Item Name</th>
             <th>Quantity/Unit</th>
-            <th>Action</th>
+            <!--<th>Action</th>-->
           </tr>
         </thead>
         <tbody>
@@ -195,25 +145,7 @@
                      min="1"
                      placeholder="Enter Qty">
             </td>
-            <!--<td>
-    <div class="flex fileUploader">
-      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-             id="filepanPhoto_{{i+1}}" type="file" (change)="UploadDocument($event,item)" />
-      <label for="filepanPhoto_{{i+1}}">
-
-        <span>Choose File</span>
-        {{ item.Dis_FileName === '' ? 'No File Chosen' : item.Dis_FileName }}
-      </label>
-      <div class="flex" *ngIf="item.FileName !== ''">
-        <a href="{{appsettingConfig.StaticFileRootPathURL}}/Students/{{item.FileName}}"
-           class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-        <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-           (click)="DeleteDocument(item)">
-          <i class="ti ti-trash"></i>
-        </a>
-      </div>
-    </div>
-  </td>-->
+            
           </tr>
           <tr *ngIf="SelectedItems?.length === 0" class="text-center">
             <td colspan="4">No Items Selected</td>
@@ -234,12 +166,6 @@
           <div class="flex">
             <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + FileName}}"
                *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-            <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-     (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
-    <i class="ti ti-trash"></i>
-  </a>-->
-
-
             <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
               *ngIf="this.FileName!=''"  (click)="DeleteDocument(FileName)">
               <i class="ti ti-trash"></i>
@@ -255,8 +181,6 @@
       <button class="btn bg-info text-white me-2" (click)="saveSelectedItems()">Save</button>
       <button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button>
     </div>
-
-
 
   </div>
   </div>

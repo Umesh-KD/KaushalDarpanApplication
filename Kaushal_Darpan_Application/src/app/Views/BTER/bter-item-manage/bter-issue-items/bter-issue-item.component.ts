@@ -41,6 +41,7 @@ export class AddBterIssueItemComponent {
   public ErrorMessage: string = '';
   public Dis_FileName: string = '';
   public FileName: string = '';
+  public EquipmentsId: number = 0;
   public AddItemsRequestFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   modalReference: NgbModalRef | undefined;
@@ -652,6 +653,8 @@ export class AddBterIssueItemComponent {
           Quantity: 1, // default,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
+          EquipmentsId: item.EquipmentsId,
+          issuedTo: item.IssueTo,
         });
         this.FileName = ''
         this.Dis_FileName = ''
@@ -664,30 +667,31 @@ export class AddBterIssueItemComponent {
 
   removeSelectedItem(index: number) {
     const removedItem = this.SelectedItems[index];
-    // Uncheck in the main list also
-    //const mainItem = this.ItemsDDLList.find(x => x.ItemId === removedItem.ItemId);
-    //if (mainItem) {
-    //  mainItem.Selected = false;
-    //}
     this.SelectedItems.splice(index, 1);
   }
 
   async saveSelectedItems() {
     debugger
+    if (!this.SelectedItems || this.SelectedItems.length === 0) {
+      this.toastr.error("Please select at least one item!");
+      return;
+    }
 
     this.SelectedItems.forEach((element: any) => {
       element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
         element.InstituteID = this.sSOLoginDataModel.InstituteID,
         element.EndTermID = this.sSOLoginDataModel.EndTermID,
-        element.RoleID = this.sSOLoginDataModel.RoleID
+        element.RoleID = this.sSOLoginDataModel.RoleID,
+        element.StaffId = this.Searchrequests.staffID,
+        
+        element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
+          ? this.Searchrequests.issuedTo
+          : null; 
+        element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
     });
 
     this.AddItemList = this.SelectedItems
-    this.AddItemList.forEach((element: any) => {
-      //element.EquipmentsId = this.EquipmentsId;
-    })
-
-   
+     
     try {
       this.loaderService.requestStarted();
 
@@ -696,6 +700,31 @@ export class AddBterIssueItemComponent {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.AddItemList = [];
+
+
+          this.SelectedItems = [];
+          this.AddItemList = [];
+          this.Searchrequests = {
+              staffID: 0
+            , issuedTo: 0
+            , ItemId: 0
+            , ItemType: 0
+            , itemCategoryId: 0
+            , InstituteID: 0
+            , TypeName: ''
+            , TradeId:  0
+            , collageTradeID: 0
+            , serialNo: 0
+            , departmentID: 0
+            , EquipmentsId: 0
+          };
+          this.FileName = '';
+          this.Dis_FileName = '';
+
+          // reset form if using Angular form
+          if (this.AddItemsRequestFormGroup) {
+            this.AddItemsRequestFormGroup.reset();
+          }
           this.routers.navigate(['/bter-issue-item'], {
 
           });
@@ -710,25 +739,16 @@ export class AddBterIssueItemComponent {
         this.loaderService.requestEnded();
       }, 200)
     }
-
-
   }
 
   cancelSelection() {
     this.SelectedItems = [];
-   // this.ItemsDDLList.forEach(x => (x.Selected = false));
   }
 
 
   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
     try {
-      //upload model
-
-
       let uploadModel: UploadFileModel = {
-       
-       
-
         FileName: FileName ?? "",
         FileExtention: "",
         MinFileSize: "20kb",
@@ -736,8 +756,6 @@ export class AddBterIssueItemComponent {
         FolderName:"Students",
    
       }
-      //call
-
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           this.State = data['State'];
@@ -746,15 +764,9 @@ export class AddBterIssueItemComponent {
           //
           debugger
           if (this.State == EnumStatus.Success) {
-            //add/update document in js list
-
-           
               this.FileName = data.Data[0].FileName;
               this.Dis_FileName = data.Data[0].Dis_FileName;
-      
-            
             console.log(this.SelectedItems)
-            //reset file type
             event.target.value = null;
           }
           if (this.State == EnumStatus.Error) {
@@ -771,23 +783,18 @@ export class AddBterIssueItemComponent {
   }
   async DeleteDocument(item: any) {
     try {
-      // delete from server folder
       let deleteModel = new DeleteDocumentDetailsModel()
       deleteModel.FolderName =  "Students";
       deleteModel.FileName = item;
-      //call
       await this.documentDetailsService.DeleteDocument(deleteModel)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            //add/update document in js list
             debugger
-       
               this.FileName = '';
               this.Dis_FileName = '';
-      
             console.log(this.SelectedItems)
           }
           if (this.State == EnumStatus.Error) {

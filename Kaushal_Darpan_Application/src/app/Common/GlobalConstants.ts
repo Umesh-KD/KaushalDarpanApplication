@@ -751,6 +751,20 @@ export enum PromoteStatus {
   NotFormFilled = 1324,
   Detained = 1330
 }
+export enum EnumLeaveTypeFSFDay {
+    FirstHalf = 235,
+    SecondHalf = 236,
+    FullDay = 237
+}
+
+
+export enum EnumLeaveType {
+    BereavementLeave = 1,
+    BirthdayLeave = 2,
+    SickLeave = 3,
+    CasualLeave = 4,
+    PrivilegeLeave = 5
+}
 
 
 
