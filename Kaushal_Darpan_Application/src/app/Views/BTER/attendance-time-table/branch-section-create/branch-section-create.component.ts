@@ -188,8 +188,9 @@ export class BranchSectionCreateComponent {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       RoleID: this.sSOLoginDataModel.RoleID,
+      WorkInstituteID: this.sSOLoginDataModel.InstituteID,
     }
-    this.commonMasterService.GetStaff_InstituteWise(obj).then((data: any) => {
+    this.commonMasterService.GetStaff_InstituteAndWorkWise(obj).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ApprovedTeacherList = data['Data'];
     });
