@@ -122,14 +122,17 @@
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
-                <!-- <a href="javascript:void(0)"  title="View"><i class="ti ti-eye"></i> </a> -->
                     <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View Institute Option Details"><i
                     class="ti ti-eye"></i> </a>
 
                     <a href="javascript:void(0)" (click)="redirectToPreview(item)" title="View Candidate Details">
                       <i class="ti ti-eye"></i>
                     </a>
-                <!--<a href="javascript:void(0)" (click)="delete(element.SectionID)" title="Delete"><i class="ti ti-trash"></i> </a>-->
+
+                    <a href="javascript:void(0)" *ngIf="item.IsFinalSubmit === 2 && item.IsMeritGenerated === 0"
+                       (click)="UnlockApplication_Counselling(item)" title="Unlock Application">
+                      <i class="ti ti-lock-open"></i>
+                    </a>
               </div>
              </td>
           </tr>

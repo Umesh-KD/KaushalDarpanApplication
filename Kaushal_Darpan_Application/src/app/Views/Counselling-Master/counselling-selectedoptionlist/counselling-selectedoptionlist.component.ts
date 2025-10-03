@@ -15,6 +15,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMasterModel';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
+import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 // declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
@@ -32,6 +35,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   public searchRequest = new CounsellingAllotmentListModel();
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public unlockRequest = new CounsellingApplicationSearchModel();
   public ApprovedStatus: string = "0";
     public mode:string='manual';
 
@@ -75,14 +79,20 @@ SelectedStudent:any = {};
 
 
 
-  constructor(private commonMasterService: CommonFunctionService, private CounsellingMasterService: CounsellingMasterService,
-    private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private CounsellingMasterService: CounsellingMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private Router: Router, 
+    private router: ActivatedRoute,
     private modalService:NgbModal,
     private fb:FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
     private encryptionService: EncryptionService,
-    
+    private counsellingApplicationFormService: CounsellingApplicationFormService,
   ){}
 
   async ngOnInit() {
@@ -512,6 +522,32 @@ SelectedStudent:any = {};
     this.routers.navigate(['/candidate-details'],{
       queryParams: { AppID: this.encryptionService.encryptData(row.CandidateID) }
     });
+  }
+
+  async UnlockApplication_Counselling(item: any) {
+    this.Swal2.Confirmation(`Are you sure you want to Unlock Application for Candidate!`,
+      async (result: any) => {
+        //confirmed
+        if (result.isConfirmed) {
+          try {
+            this.unlockRequest.CandidateId = item.CandidateID;
+            await this.counsellingApplicationFormService.UnlockApplication_Counselling(this.unlockRequest)
+              .then(async (data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                if(data.State === EnumStatus.Success){
+                  this.toastr.success(data.Message);
+                  await this.GetCandidateList(1);
+                } else if(data.State === EnumStatus.Warning){
+                  this.toastr.warning(data.Message);
+                } else {
+                  this.toastr.error(data.ErrorMessage);
+                }
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });    
   }
 
 }

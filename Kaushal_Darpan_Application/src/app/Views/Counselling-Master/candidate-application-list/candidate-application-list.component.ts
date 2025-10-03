@@ -5,6 +5,7 @@ import { CounsellingApplicationFormService } from '../../../Services/Counselling
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { Router } from '@angular/router';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-candidate-application-list',
@@ -12,8 +13,14 @@ import { EncryptionService } from '../../../Services/EncryptionService/encryptio
   templateUrl: './candidate-application-list.component.html',
   styleUrl: './candidate-application-list.component.css'
 })
-export class CandidateApplicationListComponent implements OnInit
-{
+export class CandidateApplicationListComponent implements OnInit{
+
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public searchRequest = new CounsellingApplicationSearchModel();
+
+  public StudentDetailsModelList: any[] = [];
+
+  isShowGrid: boolean = false;
 
   constructor(
     private loaderService: LoaderService,
@@ -21,22 +28,15 @@ export class CandidateApplicationListComponent implements OnInit
     private router: Router,
     private encryptionService: EncryptionService, 
   ) { }
-
-
-
-  public searchRequest = new CounsellingApplicationSearchModel();
-
-  public StudentDetailsModelList: any[] = [];
-
-  isShowGrid: boolean = false;
-  async ngOnInit()
-  {
+  async ngOnInit()  {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetAllDataActionWise();
   }
 
   async GetAllDataActionWise() {   
     this.searchRequest.Action = '_GetCandidateApplication';
     this.StudentDetailsModelList = [];
+    this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
     try {
       this.loaderService.requestStarted();
       await this.counsellingApplicationFormService.MapCandidateSSO(this.searchRequest)

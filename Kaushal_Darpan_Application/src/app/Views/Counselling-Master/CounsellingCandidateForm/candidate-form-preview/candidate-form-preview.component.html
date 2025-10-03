@@ -41,8 +41,8 @@
         <div><b>माता का नाम (Mother's Name):</b></div>
         <div>{{request.MotherName}}</div>
 
-        <!-- <div><b>लिंग (Gender):</b></div>
-        <div>{{request.Gender}}</div> -->
+        <div><b>लिंग (Gender):</b></div>
+        <div>{{request.GenderName}}</div>
 
         <div><b>धर्म  (Religion):</b></div>
         <div>{{request.Religion}}</div>
@@ -64,8 +64,34 @@
         </div>
         <div>{{request.CategoryA}}</div>
 
+        <div>
+          <b>श्रेणी बी(Category B):</b>
+        </div>
+        <div>{{request.CategoryB}}</div>
+
         <div><b>पहचान पत्र नंबर (Number of ID Proof):</b></div>
         <div>{{request.AadharNo}}</div>
+
+        <div><b>चयन श्रेणी (Selection Category):</b></div>
+        <div>{{request.SelectionCategory}}</div>
+
+        <div><b>TSP है(Is TSP):</b></div>
+        <div>{{request.IsTSP == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>Ex-Servicemen है(Is Ex Servicemen):</b></div>
+        <div>{{request.IsExServicemen == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>Sports Person है(Is Sports Person):</b></div>
+        <div>{{request.IsSportsPerson == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>क्या पति/पत्नी एक ही सेवा में हैं?(Is Spouse In Same Service):</b></div>
+        <div>{{request.IsSpouseInSameService == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>शहीद आश्रित हैं?(Is Shahid Dependent):</b></div>
+        <div>{{request.IsShahidDependent == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>क्या माता/पिता/जीवनसाथी को कोई असाध्य रोग है?(Is Any Incurable Diseases to Mother/Father/Spouse):</b></div>
+        <div>{{request.IsAnyIncurableDiseases == true ? 'Yes' : 'No'}}</div>
 
       </div>
     </div>
@@ -208,11 +234,12 @@
     </div>
   </div>
 </div>
-<div class="card-footer text-center" *ngIf="request.IsFinalSubmit !== 2">
+<div class="card-footer text-center"
+   *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))">
   <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()"><i class="ti ti-lock"></i>Submit & Lock
   </button>
 </div>
-
+ <!-- && sSOLoginDataModel.RoleID == _EnumRole.Admin && sSOLoginDataModel.RoleID == _EnumRole.AdminNon -->
 <div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
   <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">
     Header
