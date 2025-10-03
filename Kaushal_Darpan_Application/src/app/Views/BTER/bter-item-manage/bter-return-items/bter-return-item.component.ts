@@ -256,8 +256,11 @@ export class AddBterReturnItemComponent {
   }
 
   async confirmReturn() {
-    //debugger;
 
+    const isConfirmed = confirm("Are you sure you want to save the record?");
+    if (!isConfirmed) {
+      return; 
+    }
     this.loaderService.requestStarted();
     this.isLoading = true;
 
@@ -273,7 +276,6 @@ export class AddBterReturnItemComponent {
 
     console.log("Selected Count:", selectedCount);
 
-    // Example: set into submitRequest if needed
     this.submitRequest.SelectedCount = selectedCount;
 
     try {

@@ -60,24 +60,23 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   closeResult:string | undefined;
   EditDataFormGroup!: FormGroup;
   AddCollegeWiseScholarshipModelList: AddCollegeWiseScholarshipModel[]=[];
-   AddCollegeWiseScholarshipModelList2: AddCollegeWiseScholarshipModel[]=[];
+  AddCollegeWiseScholarshipModelList2: AddCollegeWiseScholarshipModel[]=[];
   AddCollegeWiseScholarshipModel =new AddCollegeWiseScholarshipModel();
   CategoryList:any=[];
-  scholarshipTypes:any = [
-  { id: 1, name: 'Cash' },
-  { id: 2, name: 'Scooty' },
-  { id: 3, name: 'Laptop' }
-];
+  SelectedStudent:any = {};
 
-schemeTypes:any = [
-  { id: 1, name: 'Scheme 1' },
-  { id: 2, name: 'Scheme 2' },
-  { id: 3, name: 'Scheme 3' }
-];
-
-SelectedStudent:any = {};
-
-
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -177,49 +176,6 @@ SelectedStudent:any = {};
       }, 200);
     }
   }
-
-
-
-    AddToList() {
-      debugger
-      this.isSubmitted = true;
-      if (this.EditDataFormGroup.invalid) return;
-      const filtered = this.AddCollegeWiseScholarshipModelList.filter(s => 
-        s.ScholarShipTypeID == this.EditDataFormGroup.get('ScholarshipType')?.value &&
-        s.SchemeID == this.EditDataFormGroup.get('SchemeID')?.value &&
-        new Date(s.ScholarShipDate).getFullYear() === new Date(this.EditDataFormGroup.get('ScholarshipDate')?.value).getFullYear()
-      );
-      if(filtered.length > 0){
-        alert('Already got scholarship');
-        return;
-      }
-
-      const formValue = this.EditDataFormGroup.value;
-  
-      const newItem = new AddCollegeWiseScholarshipModel();
-      newItem.ID = 0;
-      newItem.ScholarShipTypeID = this.EditDataFormGroup.get('ScholarshipType')?.value;
-      newItem.SchemeID = this.EditDataFormGroup.get('SchemeID')?.value;
-      newItem.ScholarShipAmount = this.EditDataFormGroup.get('Amount')?.value;
-      newItem.ScholarShipDate = this.EditDataFormGroup.get('ScholarshipDate')?.value;
-      newItem.CreatedBy = this.sSOLoginDataModel.UserID;
-      newItem.ModifyBy = this.sSOLoginDataModel.UserID;
-      newItem.StudentID = this.SelectedStudent.StudentID;
-
-      const selectedScholarship = this.scholarshipTypes.find((x:any) => x.id === newItem.ScholarShipTypeID)?.name ?? '';
-      const selectedScheme = this.schemeTypes.find((x:any) => x.id === newItem.SchemeID)?.name ?? '';
-      // const selectedScheme = this.scholarshipTypes.find(x => x.id === newItem.ScholarShipTypeID)?.name ?? '';
-      newItem.SchemeName=selectedScheme;
-      newItem.ScholarShipTypeName=selectedScholarship;
-     
-      this.AddCollegeWiseScholarshipModelList.push(newItem);
-
-      this.EditDataFormGroup.reset();
-  
-      this.isSubmitted = false;
-  
-  
-    }
 
   async GetCandidateList(i:any) {
     debugger
@@ -550,4 +506,101 @@ SelectedStudent:any = {};
       });    
   }
 
+  //table feature
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org.list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.StudentList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org.list here)
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.StudentList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main 
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.StudentList.length;
+  }
+  // (replace org.list here)
+  get totalInTableSelected(): number {
+    return this.StudentList.filter((x: any) => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.StudentList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
+  }
+  // end table feature
 }

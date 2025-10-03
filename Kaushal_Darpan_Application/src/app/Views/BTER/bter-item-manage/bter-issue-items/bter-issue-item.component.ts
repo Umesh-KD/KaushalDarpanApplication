@@ -839,6 +839,17 @@ export class AddBterIssueItemComponent {
     }
   }
 
+  onStaffChange() {
+    // ✅ Reset ItemType, Category, Items when staff changes
+    this.Searchrequests.ItemType = 0; // reset
+    this.Searchrequests.ItemCategoryId = 0; // reset category
+    this.CategoryDDLList = [];
+    this.ItemsDDLList = [];
 
+    console.log("Staff changed => reset ItemType & Category");
+
+    // If you want to auto reload item types after staff change:
+    this.GetItemListType();
+  }
 
 }
