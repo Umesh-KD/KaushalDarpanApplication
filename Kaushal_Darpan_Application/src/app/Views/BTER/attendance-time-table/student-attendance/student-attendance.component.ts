@@ -373,7 +373,7 @@ export class StudentAttendanceComponent implements OnInit {
               const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
               return { name: key, locked: isLeaveDate };
             });
-
+            debugger
           this.filterData.forEach(student => {
             this.dynamicColumns.forEach(col => {
               const dateMatch = col.name.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
@@ -381,7 +381,8 @@ export class StudentAttendanceComponent implements OnInit {
                 const colDate = dateMatch[0];
                 if (leaveDates.includes(colDate)) {
                   // Freeze the student attendance as Holiday for this leave date
-                  student[col.name] = 'H';
+                  //student[col.name] = 'H';
+                  student[col.name] = 'TL';
                 } else {
                   if (!student[col.name]) {
                     student[col.name] = col.locked ? 'H' : 'A';
@@ -401,6 +402,8 @@ export class StudentAttendanceComponent implements OnInit {
           ];
         }
 
+
+
         this.dataSource.data = this.filterData;
         this.dataSource.sort = this.sort;
         this.totalRecords = this.filterData.length;
@@ -413,6 +416,9 @@ export class StudentAttendanceComponent implements OnInit {
     }
   }
 
+  //hasTLInColumn(columnName: string): boolean {
+  //  return this.dataSource?.data?.some(row => row[columnName] === 'TL');
+  //}
 
   //async GetAttendanceTimeTable() {
   //  try {

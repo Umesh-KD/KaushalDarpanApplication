@@ -145,29 +145,65 @@
             <th mat-header-cell *matHeaderCellDef> Section Name </th>
             <td mat-cell *matCellDef="let element">{{ element.SectionName }}</td>
           </ng-container>
+          <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
+            <th mat-header-cell *matHeaderCellDef style="width:130px !important">
+              <mat-checkbox [disabled]="column.locked"
+                            (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
+                {{ column.name }}
+              </mat-checkbox>
 
-        <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
-          <th mat-header-cell *matHeaderCellDef style="width:130px !important">
-            <mat-checkbox [disabled]="column.locked"
-                          (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
-              {{ column.name }}
-            </mat-checkbox>
+              <!-- Toggle lock/unlock button -->
+              <button *ngIf="column.locked"
+                      mat-mini-button color="primary"
+                      (click)="unlockColumn(column.name)">
+                Unlock
+              </button>
+              <button *ngIf="!column.locked"
+                      mat-mini-button color="warn"
+                      (click)="lockColumn(column.name)">
+                Lock
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let element"
+                [ngClass]="{'present-cell': element[column.name] === 'P'}">
 
-            <!-- Toggle lock/unlock button -->
-            <button *ngIf="column.locked"
-                    mat-mini-button color="primary"
-                    (click)="unlockColumn(column.name)">
-              Unlock
-            </button>
-            <button *ngIf="!column.locked"
-                    mat-mini-button color="warn"
-                    (click)="lockColumn(column.name)">
-              Lock
-            </button>
-          </th>
-          <td mat-cell *matCellDef="let element"
-              [ngClass]="{'present-cell': element[column.name] === 'P'}">
-            <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+              <mat-slide-toggle [checked]="element[column.name] === 'P'"
+                                [disabled]="isColumnLocked(column.name)"
+                                (change)="onAttendanceChange($event, element, column.name)">
+                {{
+        element[column.name] === 'TL'
+          ? 'Leave (TL)'
+          : (element[column.name] === 'H'
+              ? 'Holiday'
+              : (element[column.name] === 'P'
+                  ? 'Present'
+                  : 'Absent'))
+                }}
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!--<ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
+    <th mat-header-cell *matHeaderCellDef style="width:130px !important">
+      <mat-checkbox [disabled]="column.locked"
+                    (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
+        {{ column.name }}
+      </mat-checkbox>-->
+          <!-- Toggle lock/unlock button -->
+          <!--<button *ngIf="column.locked"
+            mat-mini-button color="primary"
+            (click)="unlockColumn(column.name)">
+      Unlock
+    </button>
+    <button *ngIf="!column.locked"
+            mat-mini-button color="warn"
+            (click)="lockColumn(column.name)">
+      Lock
+    </button>
+  </th>
+  <td mat-cell *matCellDef="let element"
+      [ngClass]="{'present-cell': element[column.name] === 'P'}">-->
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
                           [disabled]="column.locked"
                           (change)="onAttendanceChange($event, element, column.name)">
           {{
@@ -176,18 +212,17 @@
     : (element[column.name] === 'P' ? 'Present' : 'Absent')
           }}
         </mat-slide-toggle>-->
-
-            <mat-slide-toggle [checked]="element[column.name] === 'P'"
-                              [disabled]="isColumnLocked(column.name)"
-                              (change)="onAttendanceChange($event, element, column.name)">
-              {{
-    element[column.name] === 'H'
-      ? 'Holiday'
-      : (element[column.name] === 'P' ? 'Present' : 'Absent')
-              }}
-            </mat-slide-toggle>
-          </td>
-        </ng-container>
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+                            [disabled]="isColumnLocked(column.name)"
+                            (change)="onAttendanceChange($event, element, column.name)">
+            {{
+  element[column.name] === 'H'
+    ? 'Holiday'
+    : (element[column.name] === 'P' ? 'Present' : 'Absent')
+            }}
+          </mat-slide-toggle>
+        </td>
+      </ng-container>-->
 
 
 
