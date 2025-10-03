@@ -96,6 +96,12 @@ export class PlacementAllStudentListComponent implements OnInit {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.action="_GetPlacementListData";
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        if(this.searchRequest.DepartmentID==1){
+          this.searchRequest.action="_GetPlacementListData";
+        }
+        else{
+          this.searchRequest.action="_GetITIPlacementListData";
+        }
         if(this.searchRequest.RoleID==5)
         {
             this.searchRequest.InstituteID = 0;

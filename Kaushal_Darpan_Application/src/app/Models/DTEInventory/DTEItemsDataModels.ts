@@ -76,6 +76,7 @@ export class inventoryIssueHistorySearchModel {
   public itemCategoryId: number = 0;
   public ItemType: number = 0;
   public EquipmentsId: number = 0;
+  public IssuedId: number = 0;
 }
 
 

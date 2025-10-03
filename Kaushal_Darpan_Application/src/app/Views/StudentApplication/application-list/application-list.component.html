@@ -114,10 +114,16 @@
                 {{ row.DepartmentID == 2 ? row.LastUpdated : '' }}
               </td>
               <td>
-                <!--<a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true" (click)="DownloadApplicationForm(row.ApplicationID)" href="javascript:void(0);" title="Download"><i class="ti ti-download"></i></a>-->
+
+                <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important;">
+                  
+                  <a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true" (click)="DownloadApplicationForm(row.ApplicationID)" href="javascript:void(0);" title="Download"><i class="ti ti-download"></i></a>
+                </div>
+
+                
                 <!--<a *ngIf="row.DepartmentID == 2 && row.IsFinalSubmit === 2 && row.IsPaymentSuccess == true"
-                   (click)="DownloadApplicationForm(row.ApplicationID)"
-                   class="btn bg-info text-white btn-sm"> Download </a>-->
+     (click)="DownloadApplicationForm(row.ApplicationID)"
+     class="btn bg-info text-white btn-sm"> Download </a>-->
 
               </td>
 
