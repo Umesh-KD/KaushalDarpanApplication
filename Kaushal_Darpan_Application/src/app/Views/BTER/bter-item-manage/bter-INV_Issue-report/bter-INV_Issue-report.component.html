@@ -98,9 +98,7 @@
               </td>
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-
-                  <!--<a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.ServiceRequestId)"><i class="ti ti-eye"></i></a>-->
-                  <a href="javascript:void(0);" title="History" (click)="GetInventoryIssueHistoryList(MyModel_UserRequestHistory, item.IssuedId)"><i class="ti ti-eye"></i></a>
+                  <a href="javascript:void(0);" title="History" (click)="GetInventoryIssueHistoryList(MyModel_UserRequestHistory, item.staffId)"><i class="ti ti-eye"></i></a>
                 </div>
               </td>
             </tr>
@@ -131,31 +129,26 @@
             <div class="flex justify-end flex-wrap items-center">
             </div>
           </div>
-          <!--{{UserRequestHistoryList|json}}-->
+          <!--{{InventoryIssueHistoryList|json}}-->
           <div class="overflow-x-auto mt-3">
             <table class="table table-border w-full table-auto" cellpadding="5">
               <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                 <tr>
                   <th class="text-left">S No</th>
-                  <th class="text-left">Request Type</th>
-                  <th class="text-left">Relieving Status</th>
-                  <th class="text-left">Joining Status</th>
-                  <th class="text-left">
-                    Request Status
-                  </th>
-                  <th class="text-left">Remark</th>
-                  <th class="text-left">Date</th>
+                  <th class="text-left">Category</th>
+                  <th class="text-left">Item Name</th>
+                  <th class="text-left">Quantity</th>
+                  <th class="text-left">Issue Date</th>
+
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let row of UserRequestHistoryList; let idx=index;  ">
+                <tr *ngFor="let row of InventoryIssueHistoryList; let idx=index;  ">
                   <td align="left">{{idx+1}}</td>
-                  <td align="left">{{ row.ServiceRequestName }}</td>
-                  <td align="left">{{ row.RelievingStatusName }}</td>
-                  <td align="left">{{ row.JoiningStatusName }}</td>
-                  <td align="left">{{ row.RequestStatusName }}</td>
-                  <td align="left">{{ row.Remarks}}</td>
-                  <td align="left">{{ row.ActionDate }}</td>
+                  <td align="left">{{ row.ItemCategoryName }}</td>
+                  <td align="left">{{ row.Name }}</td>
+                  <td align="left">{{ row.IssueQuantity }}</td>
+                  <td align="left">{{ row.IssueDate }}</td>
                 </tr>
                 <tr *ngIf="UserRequestHistoryList?.length==0">
                   <td colspan="10" class="text-center">No Record Found </td>

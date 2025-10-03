@@ -84,7 +84,7 @@
         <div *ngIf="CategoryDDLList?.length > 0">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select"
-                  [(ngModel)]="Searchrequests.ItemCategoryID"
+                  [(ngModel)]="Searchrequests.ItemCategoryId"
                   (change)="BindItem_list()">
             <option [value]="0">-- Select Category --</option>
             <option *ngFor="let item of CategoryDDLList" [value]="item.ItemCategoryID">

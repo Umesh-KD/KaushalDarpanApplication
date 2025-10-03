@@ -229,11 +229,11 @@ export class bterINVIssuereportComponent {
     return `file_${timestamp}.${extension}`;
   }
 
-  async GetInventoryIssueHistoryList(model: any, IssuedId: number) {
+  async GetInventoryIssueHistoryList(model: any, staffId: number) {
     debugger
     try {
       this.loaderService.requestStarted();
-      this.Searchrequest.IssuedId = IssuedId;
+      this.Searchrequest.staffID = staffId;
       await this.bterInventoryService.GetInventoryIssueHistoryList(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -242,7 +242,7 @@ export class bterINVIssuereportComponent {
 
         }, (error: any) => console.error(error))
 
-      console.log(IssuedId, "modal");
+      console.log(staffId, "modal");
       this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
     }
     catch (Ex) {
