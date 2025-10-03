@@ -844,6 +844,7 @@ export class AddBterIssueItemComponent {
     this.Searchrequests.ItemType = 0; // reset
     this.Searchrequests.ItemCategoryId = 0; // reset category
     this.CategoryDDLList = [];
+
     this.ItemsDDLList = [];
 
     console.log("Staff changed => reset ItemType & Category");
