@@ -1056,10 +1056,24 @@ async GetTechnicianDll() {
     try {
      await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfile(this.approveRequest).then(async (data: any) => {
        data = JSON.parse(JSON.stringify(data));
-       if(data.State == EnumStatus.Success) {
+       if (data.State === EnumStatus.Success) {
          this.toastr.success(data.Message);
-         window.location.reload();
+
+         setTimeout(() => {
+           window.location.reload();
+         }, 1500);
+
+       } else if (data.State === EnumStatus.Warning) {
+         this.toastr.warning(data.Message);
+
+         setTimeout(() => {
+           window.location.reload();
+         }, 1500);
+
+       } else {
+         this.toastr.error('Some error! Please check.');
        }
+        
      })
     } catch (error) {
      console.log(error);

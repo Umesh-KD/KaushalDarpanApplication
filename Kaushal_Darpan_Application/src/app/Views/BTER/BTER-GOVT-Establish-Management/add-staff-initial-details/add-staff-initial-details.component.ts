@@ -131,10 +131,12 @@ export class AddStaffInitialDetailsComponent {
     if (this.formData.IsNodal == true) {
       await this.GetInstituteMaster();
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
+      this.formData.RoleID = 7;
     } else {
       this.formData.IsNodal = false;
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].clearValidators();
       this.formData.InstituteID = 0;
+      this.formData.RoleID = 0;
     }
     this.AddStaffBasicDetailFromGroup.controls['InstituteID'].updateValueAndValidity();
 

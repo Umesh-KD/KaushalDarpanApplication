@@ -747,6 +747,20 @@ export enum HostelStatus {
   ReGenerateProvisionalMerit = 15,
 }
 
+export enum EnumLeaveTypeFSFDay {
+  FirstHalf = 235,
+  SecondHalf = 236,
+  FullDay = 237
+}
+
+
+export enum EnumLeaveType {
+  BereavementLeave = 1,
+  BirthdayLeave = 2,
+  SickLeave = 3,
+  CasualLeave = 4,
+  PrivilegeLeave = 5
+}
 
 
 
