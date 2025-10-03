@@ -15,7 +15,20 @@ export class CounsellingAllotmentListModel {
   public action: string = '';
 }
 
-
+export class CounsellingAllottedListSearchModel {
+ 
+  public TradeID?: number = 0
+  public CandidateID?: number = 0
+  public PageSize?: number = 50
+  public PageNumber?: number = 1
+  public TradeName?:  string ='';
+  public SortOrder?: string = '';
+  public SortColumn?: string = '';
+  public action?: string = '';
+  public ApplicationNo?: string = '';
+  public CandidateName?: string = '';
+  public MobileNo?: string = '';
+}
 
 
 export class AddCollegeWiseScholarshipModel{

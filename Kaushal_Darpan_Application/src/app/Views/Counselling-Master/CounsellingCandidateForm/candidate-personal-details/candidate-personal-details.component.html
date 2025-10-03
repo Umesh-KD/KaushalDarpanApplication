@@ -246,6 +246,7 @@
             <option value="1">Widow</option>
             <option value="2">Divorcee</option>
             <option value="3">Single Mother</option>
+            <option value="4">None of above</option>
             <!-- <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option> -->
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryB_ID.errors" class="text-danger">
@@ -385,7 +386,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="request.MaritalID == 62">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
