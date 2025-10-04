@@ -236,7 +236,6 @@ export class CandidateOptionDetailsComponent {
   }
 
   async DeleteChildOptionByID_Counselling(row: any) {
-    debugger
     try {
       this.childDeleteOptionReq.InstituteOptionID = row.InstituteOptionID
       await this.counsellingApplicationFormService.DeleteChildOptionByID_Counselling(this.childDeleteOptionReq).then(async (data: any) => {

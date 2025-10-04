@@ -166,7 +166,8 @@
 
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>
+          <!--<label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Regular Appointment<span class="StarMarking">*</span></label>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of regular appointment (Date of first joining in the department)<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfAppointment" id="DateOfAppointment" [min]="request.DateOfJoining"
                  formControlName="DateOfAppointment" [(ngModel)]="request.DateOfAppointment" (click)="openDatePicker($event)" />
 
