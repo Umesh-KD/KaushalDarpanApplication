@@ -6,6 +6,7 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
 import { CounsellingSelectedOptionListComponent } from './counselling-selectedoptionlist.component';
 import { CounsellingSelectedOptionListRoutingModule } from './counselling-selectedoptionlist.routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     CounsellingSelectedOptionListRoutingModule
     , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,
-    NgSelectModule
+    NgSelectModule,
+    OTPModalModule,
   ]
 })
 export class CounsellingSelectedOptionListModule { }

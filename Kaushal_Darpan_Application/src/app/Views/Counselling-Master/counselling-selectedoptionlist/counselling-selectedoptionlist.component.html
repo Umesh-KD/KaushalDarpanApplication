@@ -44,7 +44,17 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <div>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+
+        <a href="javascript:void(0);"
+           class="btn bg-info btn-sm text-white"
+           (click)="OpenOTPModal_SaveAllotment()">
+          <i class="ti ti-download"></i> Save Allotment
+        </a>
+
+      </div>
+      
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -56,10 +66,10 @@
           <option value="1000">1000</option>
         </select>
 
-        <a (click)="SaveCandidateAllotment_Counselling()"
+        <!-- <a (click)="SaveCandidateAllotment_Counselling()"
            class="inline-flex items-center btn bg-dark text-white btn-sm">
           <i class="ti ti-chevron-left"></i>Save Marked
-        </a>
+        </a> -->
       </div>
       <div class=""></div>
       <div class=""></div>
@@ -176,3 +186,5 @@
     </div>
   </div>
 </ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal>

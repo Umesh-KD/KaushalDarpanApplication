@@ -174,6 +174,13 @@ export class AllotedCandidateListComponent {
   }
 
   async OpenOTPModal_GenerateAllotmentOrder() {
+    
+    let anySelected = this.AllottedCandidateList.some((x: any) => x.Selected == true);
+    if(!anySelected) {
+      this.toastr.error("Please select at least one candidate.");
+      return;
+    }
+
     this.Swal2.Confirmation(`Are you sure you want to Generate Allotment Order for Selected Candidates!`,
       async (result: any) => {
         if (result.isConfirmed) {

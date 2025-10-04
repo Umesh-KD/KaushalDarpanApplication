@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { CompanyMasterService } from '../../../Services/CompanyMaster/company-master.service.ts';
@@ -18,6 +18,7 @@ import { EncryptionService } from '../../../Services/EncryptionService/encryptio
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 // declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
@@ -31,6 +32,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public unlockRequest = new CounsellingApplicationSearchModel();
   public allotmentSaveRequest = new Counselling_AllotmentDataModel();
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public StudentList: any = [];
   public StudentOptionList: any = [];
@@ -561,12 +563,33 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   }
   // end table feature
 
-  async SaveCandidateAllotment_Counselling() {
+  async OpenOTPModal_SaveAllotment() {
     let anySelected = this.StudentList.some((x: any) => x.Marked == true);
     if(!anySelected) {
       this.toastr.error("Please select at least one candidate.");
       return;
     }
+    
+    this.Swal2.Confirmation(`Are you sure you want to Save Allotment!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          await this.SaveCandidateAllotment_Counselling();
+        }
+      }
+    );
+  }
+
+  async SaveCandidateAllotment_Counselling() {
+    
 
     let selected = this.StudentList.filter((x: any) => x.Marked == true);
     selected.forEach((x: any) => {
