@@ -86,8 +86,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
     await this.GetSemesterMatserDDL();
 
     await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-     debugger
+     debugger;
       data = JSON.parse(JSON.stringify(data));
+      console.log(data);
         this.InstituteMasterDDLList = data.Data;
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       })
@@ -114,12 +115,31 @@ export class ApplyDuplicateDocComponent implements OnInit {
   {
     if(this.request.DepartmentID==2){
       this.departmentFlag='NodalCenter';
+      this.GetInstituteMatserDDL(2);
     }
     else{
       this.departmentFlag='BTER';
     }
   }
-
+  async GetInstituteMatserDDL(DeptId: number) {
+    try {
+      this.loaderService.requestStarted();
+     await this.commonMasterService.InstituteMaster(DeptId, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.InstituteMasterDDLList = data.Data;
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   FeeAmount(MasterCode: string): void {
     debugger
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
@@ -149,7 +169,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
       //  this.request.CasteCategoryID.
       //}
       this.OTP = '';
-      this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '8334874706';//this.sSOLoginDataModel.Mobileno;
+      this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '9460476972';//this.sSOLoginDataModel.Mobileno;
       this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
         this.closeResult = `Closed with: ${result}`;
       }, (reason) => {
@@ -277,7 +297,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
     this.modalService.dismissAll();
   }
-
+ 
 
   async GetSemesterMatserDDL() {
     try {
@@ -318,12 +338,11 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.emitraRequest.CourseTypeID = this.request.CourseTypeID;
     this.emitraRequest.TypeID = EnumConfigurationType.DuplicateDocument;
     this.emitraRequest.FeeFor = EnumFeeFor.DuplicateDocument;
-
-    this.emitraRequest.DepartmentID = this.request.DepartmentID;;
+    
     if (this.sSOLoginDataModel.RoleID == EnumRole.Student || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK) {
       this.emitraRequest.IsKiosk = true;
     }
-
+     
 
 
     this.loaderService.requestStarted();
