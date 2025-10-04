@@ -6,9 +6,10 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { enumExamStudentStatus, EnumStatus, EnumVerificationAction } from '../../../Common/GlobalConstants';
+import { EnumDepartment, enumExamStudentStatus, EnumRole, EnumStatus, EnumVerificationAction, GlobalConstants } from '../../../Common/GlobalConstants';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { ApplicationStatusService } from '../../../Services/ApplicationStatus/EmitraApplicationStatus.service';
 import { ToastrService } from 'ngx-toastr';
 import { StudentService } from '../../../Services/Student/student.service';
 import { DocumentDetailsService } from '../../../Common/document-details';
@@ -18,6 +19,11 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { UploadFileModel } from '../../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
 import { ITIStudentMeritInfoModel } from '../../../Models/ITI/ITIStudentMeritInfoDataModel';
+import { EmitraApplicationstatusModel } from '../../../Models/EmitraApplicationstatusDataModel';
+import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { ItiApplicationSearchmodel } from '../../../Models/ItiApplicationPreviewDataModel';
+import { ReportService } from '../../../Services/Report/report.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-download-application-form',
@@ -48,7 +54,10 @@ export class DownloadApplicationFormComponent {
   public MobileNo: string = '';
   sSOLoginDataModel = new SSOLoginDataModel();
   public StudenetTranList: [] = [];
+  encryptedRows: any[] = [];
+  public IsAlloted:boolean=false;
   studentDetailsModel = new StudentDetailsModel();
+  public StudentDetailsModelList: EmitraApplicationstatusModel[] = []
   //Modal Boostrap.
   public searchssoform!: FormGroup
   closeResult: string | undefined;
@@ -60,19 +69,25 @@ export class DownloadApplicationFormComponent {
   public isSubmitted: boolean = false
   public isShowSelected: boolean = false;
   public IsdocumentShow: boolean = false
+   public downloadRequest = new ItiApplicationSearchmodel()
   public isOnStatus = false;
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
-    private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
+    private studentService: StudentService,private ApplicationStatusService:ApplicationStatusService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,
     private sweetAlert2: SweetAlert2, private formBuilder: FormBuilder,
-    private appsettingConfig: AppsettingService
+    private appsettingConfig: AppsettingService,
+    private encryptionService: EncryptionService, 
+      private reportService: ReportService,
+      private http: HttpClient, 
   ) { }
 
   async ngOnInit() {
 
     this.searchssoform = this.formBuilder.group({
-      txtApplicationNo: ['', Validators.required],
-      MobileNumber: ['', Validators.required],
+      txtApplicationNo: [''],
+      MobileNumber: [''],
+      DOB: ['', Validators.required],
+      Receipt_Number: [''],
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -108,7 +123,7 @@ export class DownloadApplicationFormComponent {
   get _searchssoform() { return this.searchssoform.controls; }
 
 
-  async onSearchClick() { await this.GetAllDataActionWise(); }
+  async onSearchClick() { await this.GetAllDataActionWiseFilter(); }
 
   async ResetControl() {
     this.SemesterID = 0;
@@ -119,6 +134,165 @@ export class DownloadApplicationFormComponent {
     this.studentDetailsModel = new StudentDetailsModel();
   }
 
+
+   async GetAllDataActionWiseFilter() {
+      debugger
+    //  if(this.searchssoform.invalid) 
+    //  {
+    //    this.toastrService.error("Please enter DOB ");
+    //    return;
+    //  }
+      this.isShowGrid = true;
+      
+      this.StudentDetailsModelList = [];
+      if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
+      {
+        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+        this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
+        this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID
+        if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+          || this.sSOLoginDataModel.RoleID == EnumRole.Principle_NonEng_Degree1Year || this.sSOLoginDataModel.RoleID == EnumRole.Principle_NonEng_Degree2YearLateral
+        ) {
+          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+          //this.searchRequest.action = "_GetApplicationListForPrinciple_BTER";
+          this.searchRequest.action = "_GetDirectApplicationListForPrinciple_BTER";
+        }
+        else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
+        {
+          this.searchRequest.InstituteID = 0
+          this.searchRequest.DepartmentID = EnumDepartment.BTER;
+          this.searchRequest.action = "_GetDownloadAppliation_ITI";
+        }
+        else
+        {
+          this.searchRequest.InstituteID = 0
+          this.searchRequest.action = "_GetDownloadAppliation_ITI";
+        }
+      }
+      else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
+      {
+        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+        this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
+        this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID
+        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+        if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal ||
+          this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT)
+        {
+          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+          this.searchRequest.action = "_GetApplicationListForPrinciple_ITI";
+        }
+        else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
+        {
+          this.searchRequest.InstituteID = 0
+          this.searchRequest.DepartmentID = EnumDepartment.ITI;
+          this.searchRequest.action = "_GetApplicationList";
+        }
+  
+        else {
+          this.searchRequest.InstituteID = 0
+          this.searchRequest.action = "_GetApplicationList";
+        }
+      }
+      else
+      {
+        this.searchRequest.InstituteID = 0
+        this.searchRequest.action = "_GetApplicationList";
+      }
+      // if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
+      //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      //   this.searchRequest.action = "_GetApplicationListForPrinciple";
+      // } else {
+      //   this.searchRequest.InstituteID = 0
+      //   this.searchRequest.action = "_GetApplicationList";
+      // }
+      try {
+        this.loaderService.requestStarted();
+        await this.ApplicationStatusService.StudentApplicationStatus(this.searchRequest)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State == EnumStatus.Success) {
+              this.StudentDetailsModelList = data['Data'];
+              console.log("StudentDetailsModelList", this.StudentDetailsModelList)
+              // Precompute encrypted values for each row
+              this.encryptedRows = this.StudentDetailsModelList.map(row => {
+                return {
+                  ...row,  // Copy existing row data
+                  encryptedApplicationID: this.encryptParameter(row.ApplicationID)  // Add the encrypted ApplicationID
+                };
+              });
+              debugger
+              var isaLLOT = this.StudentDetailsModelList.find((x) => x.AllotmentStatus == 4)
+              if (isaLLOT && this.sSOLoginDataModel.RoleID==3) {
+                this.IsAlloted=true
+              }
+  
+              console.log(this.StudentDetailsModelList)
+            }
+  
+  
+          }, (error: any) => console.error(error)
+          );
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+
+
+
+     async DownloadApplicationForm(ApplicationID:number) {
+      debugger
+        try {
+          this.loaderService.requestStarted();
+          this.downloadRequest.DepartmentID = EnumDepartment.ITI;
+          this.downloadRequest.ApplicationID = ApplicationID;
+          console.log("searchrequest", this.downloadRequest)
+          await this.reportService.GetITIApplicationForm(this.downloadRequest)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if (data.State == EnumStatus.Success) {
+                this.DownloadFileApplicationForm(data.Data, 'file download');
+              }
+              else {
+                this.toastrService.error(data.ErrorMessage)
+              }
+            }, (error: any) => console.error(error)
+            );
+        }
+        catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+
+    DownloadFileApplicationForm(FileName: string, DownloadfileName: any): void {
+  
+      const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;
+  
+      this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
+        const downloadLink = document.createElement('a');
+        const url = window.URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = this.generateFileNameApplicationForm('pdf');
+        downloadLink.click();
+        window.URL.revokeObjectURL(url);
+      });
+    }
+
+  generateFileNameApplicationForm(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
+    return `file_${timestamp}.${extension}`;
+  }
 
 
   async GetAllDataActionWise() {
@@ -277,6 +451,10 @@ export class DownloadApplicationFormComponent {
 
   }
 
+
+  encryptParameter(param: any) {
+    return this.encryptionService.encryptData(param);
+  }
 
   numberOnly(event: KeyboardEvent): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;

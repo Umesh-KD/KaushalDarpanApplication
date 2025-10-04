@@ -1,6 +1,6 @@
 import { QualificationViewDetails } from "../ItiApplicationPreviewDataModel";
 
-export class ITIStudentMeritInfoModel {
+export class BTERStudentMeritInfoDataModel {
 
   public ApplicationID: number = 0;
   public AllotmentMasterId: number = 0;
@@ -95,12 +95,4 @@ export class ITICollegeSearchModel
   //public Remark: string = ''
   //public UpdatedBy: string = ''
   
-}
-export class bterCollegeSearchModel
-{
-    public SearchText: string = ''
-    public DivisionId: number = 0
-    public DistrictId: number = 0
-    public PageNumber: number = 0;
-    public PageSize: number = 0;
 }

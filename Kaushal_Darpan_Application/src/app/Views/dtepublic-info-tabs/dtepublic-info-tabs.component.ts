@@ -24,6 +24,7 @@ import { CorrectionMeritComponent } from '../Emitra/merit-correction/merit-corre
 import { PublicInfoDataModel } from '../../Models/PublicInfoDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import { bterCollegeSearchComponent } from '../BTER/bter-college-search/bter-college-search.component';
 
 @Component({
   selector: 'app-dtepublic-info-tabs',
@@ -208,16 +209,8 @@ export class DTEPublicInfoTabsComponent implements OnInit {
     this.tabs.push({ TabName: 'Allotment Status', TabNameHI: 'आवंटन स्थिति', TabIcon: 'ti ti-exchange', component: AllotStatusComponent, DepartmentID: 1, CourseTypeId: 1, HasLink: false });
     this.tabs.push({ TabName: 'Update Options', TabNameHI: 'विकल्पों में बदलाव करें', TabIcon: 'ti ti-exchange', component: EditOptionFormComponent, DepartmentID: 1, CourseTypeId: 1, HasLink: false});
     this.tabs.push({ TabName: 'Know Your Deficiency', TabNameHI: 'कमी पूर्ति करें', TabIcon: 'ti ti-exchange', component: DifferenceFormComponent, DepartmentID: 1, CourseTypeId: 1, HasLink: false});
+    this.tabs.push({ TabName: 'Polytechnic College Search', TabNameHI: 'पोलीटेकनिक कॉलेज खोज', TabIcon: 'ti ti-exchange', component: bterCollegeSearchComponent, DepartmentID: 1, CourseTypeId: 1, HasLink: false});
     
-    // this.tabs.push({ TabName: 'Upload Deficiency', TabNameHI: 'Deficiency अपलोड करें', TabIcon: 'ti ti-exchange', component: UploadDeficiencyComponent, DepartmentID: 1, HasLink: false});
-    //this.tabs.push({ TabName: 'Placement', TabNameHI: 'प्लेसमेंट', TabIcon: 'ti ti-exchange', component: AllotmentStatusITIComponent, DepartmentID: 2, HasLink: true, Link:"index" });
-
-    //EnumEmitraService.BTER_DeplomaENG_Emitra_AppplicationFeeService.toString() == this.sSOLoginDataModel.ServiceID ||
-    //EnumEmitraService.BTER_DeplomaNonENG_Emitra_AppplicationFeeService.toString() == this.sSOLoginDataModel.ServiceID ||
-    //EnumEmitraService.BTER_DeplomaLateral_2ENG_Emitra_AppplicationFeeService.toString() == this.sSOLoginDataModel.ServiceID ||
-    //EnumEmitraService.BTER_DegreeNonENG_Emitra_AppplicationFeeService.toString() == this.sSOLoginDataModel.ServiceID ||
-    //EnumEmitraService.BTER_DegreeLateral_2Year_Emitra_AppplicationFeeService.toString() == this.sSOLoginDataModel.ServiceID 
-
 
   }
   public ngAfterViewInit(): void {

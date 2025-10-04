@@ -188,8 +188,9 @@ export class BranchSectionCreateComponent {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       RoleID: this.sSOLoginDataModel.RoleID,
+      WorkInstituteID: this.sSOLoginDataModel.InstituteID,
     }
-    this.commonMasterService.GetStaff_InstituteWise(obj).then((data: any) => {
+    this.commonMasterService.GetStaff_InstituteAndWorkWise(obj).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ApprovedTeacherList = data['Data'];
     });
@@ -541,17 +542,40 @@ export class BranchSectionCreateComponent {
         this.Message = data['Message'];
         this.ErrorMessage = data['ErrorMessage'];
 
-        if (this.State == 1) {
+        //if (this.State == 1) {
+        //  this.toastr.success('Section data saved successfully!');
+        //  this.isSubmitted = false;
+        //  this.reset();
+        //  this.getData();
+        //  this.GetBranchHODApplyList();
+        //}
+
+        //else {
+        //  this.toastr.error(this.ErrorMessage)
+        //}
+
+        if (data.State === EnumStatus.Success) {
           this.toastr.success('Section data saved successfully!');
           this.isSubmitted = false;
           this.reset();
           this.getData();
           this.GetBranchHODApplyList();
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else {
+          this.toastr.error('Some error! Please check.');
         }
 
-        else {
-          this.toastr.error(this.ErrorMessage)
-        }
 
       }, (error: any) => console.error(error)
       );
