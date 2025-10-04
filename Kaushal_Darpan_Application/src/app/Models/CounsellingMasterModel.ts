@@ -19,6 +19,7 @@ export class CounsellingAllottedListSearchModel {
  
   public TradeID?: number = 0
   public CandidateID?: number = 0
+  public InstituteID?: number = 0
   public PageSize?: number = 50
   public PageNumber?: number = 1
   public TradeName?:  string ='';
@@ -47,4 +48,20 @@ export class AddCollegeWiseScholarshipModel{
   public ModifyBy :number=0;
   public InstituteID :number=0;
  public ScholarshipMode : string='';
+}
+
+export class Counselling_AllotmentDataModel {
+    public TradeID?: number = 0;
+    public CandidateID?: number = 0;
+    public OptionID?: number = 0;
+    public ModifyBy?: number = 0;
+}
+
+export class EditInstituteDataModel_Counselling {
+  public TradeID?: number = 0;
+  public InstituteID?: number = 0;
+  public CandidateID?: number = 0;
+  public ModifyBy?: number = 0;
+  public OptionID?: number = 0;
+  public AllotmentID?: number = 0;
 }

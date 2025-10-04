@@ -5,6 +5,7 @@ import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.modu
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AllotedCandidateListComponent } from './alloted-candidate-list.component';
 import { AllotedCandidateListRoutingModule } from './alloted-candidate-list-routing.module';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { AllotedCandidateListRoutingModule } from './alloted-candidate-list-rout
     LoaderModule,
     FormsModule, 
     TableSearchFilterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OTPModalModule,
   ]
 })
 export class AllotedCandidateListModule { }
