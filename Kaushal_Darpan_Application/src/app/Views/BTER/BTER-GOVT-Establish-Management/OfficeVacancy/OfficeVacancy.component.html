@@ -36,7 +36,7 @@
       </div>
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Staff Type <span class="StarMarking">*</span>
+          Staff Type<span class="StarMarking">*</span>
         </label>
         <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
           <option value="0">Choose Option</option>
@@ -101,8 +101,8 @@
             <th>Institute Name</th>
             <th>Designation Name</th>
             <th>Total Seat</th>
-            <th>Remaining Seat</th>
             <th>Posted Seat</th>
+            <th>Remaining Seat</th>
             <th>Comments</th>
             <th>Actions</th>
           </tr>
@@ -115,15 +115,15 @@
             <td>{{ leave.InstituteName }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
-            <td>{{ leave.RemainingSeatID }}</td>
             <td>{{ leave.PostedSeat }}</td>
+            <td>{{ leave.RemainingSeatID }}</td>
             <td>{{ leave.Comments }}</td>
             <td>
               <!--<button class="btn btn-sm"
-          [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
-          (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
-    {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
-  </button>-->
+            [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
+            (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
+      {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
+    </button>-->
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -172,7 +172,7 @@
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Staff Type <span class="StarMarking">*</span>
+              Staff Type<span class="StarMarking">*</span>
             </label>
             <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
               <option value="0">Choose Option</option>
