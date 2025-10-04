@@ -114,12 +114,7 @@ export class BranchSectionCreateComponent {
     // this.IIPMasterFormGroup.value.streamID=0;
     // this.IIPMasterFormGroup.value.SemesterID=0;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.StreamMasterDDL = data.Data;
-      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)
-      console.log('data ==>',this.StreamMasterDDL)
-    })
+   
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
@@ -239,6 +234,18 @@ export class BranchSectionCreateComponent {
     return this.sectionForm.get('sections') as FormArray;
   }
 
+
+
+  async SemeIDAcStream() {
+    const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
+
+    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StreamMasterDDL = data.Data;
+      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+      console.log('data ==>', this.StreamMasterDDL)
+    })
+  }
 
 
 
