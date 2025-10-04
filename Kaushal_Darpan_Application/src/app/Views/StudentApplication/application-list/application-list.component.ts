@@ -624,7 +624,8 @@ export class ApplicationListComponent {
   }
 
 
-  async DownloadApplicationForm(ApplicationID:number) {
+  async DownloadApplicationForm(ApplicationID: number)
+  {
     try {
       this.loaderService.requestStarted();
       this.downloadRequest.DepartmentID = EnumDepartment.ITI;

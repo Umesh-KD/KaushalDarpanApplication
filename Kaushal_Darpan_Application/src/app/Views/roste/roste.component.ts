@@ -156,9 +156,10 @@ export class RosteComponent implements OnInit {
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      RoleID: this.sSOLoginDataModel.RoleID
+      RoleID: this.sSOLoginDataModel.RoleID,
+      WorkInstituteID: this.sSOLoginDataModel.InstituteID,
     }
-    this.commonMasterService.GetStaff_InstituteWise(obj).then((data: any) => {
+    this.commonMasterService.GetStaff_InstituteAndWorkWise(obj).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ExaminerDDL = data.Data;
     })

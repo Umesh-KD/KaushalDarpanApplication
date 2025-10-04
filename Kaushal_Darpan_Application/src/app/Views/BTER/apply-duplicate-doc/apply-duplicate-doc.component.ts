@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { EnumConfigurationType, EnumFeeFor, EnumRole, EnumStatus, EnumUserType } from '../../../Common/GlobalConstants';
+import { EnumConfigurationType, EnumFeeFor, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { GrievanceDataModel, GrivienceReopenModelsDataModel, GrivienceSearchModel, GrivienceResponseDataModel } from '../../../Models/GrievanceData/GrievanceDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -15,6 +15,7 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ApplyDuplicateDocument } from '../../../Models/BTER/ApplyDuplicateDocDataModel';
 import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 
 @Component({
   selector: 'app-apply-duplicate-doc',
@@ -39,6 +40,18 @@ export class ApplyDuplicateDocComponent implements OnInit {
   public PaymentDetailtList: any = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   emitraRequest = new EmitraRequestDetails();
+  public isFormSubmitted: boolean = false;
+  public OTP: string = '';
+  public MobileNo: string = '';
+  public GeneratedOTP:string='';
+  public showResendButton: boolean = false; // Whether to show the "Resend OTP" button
+  timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
+  // showResendButton: boolean = false; // Whether to show the "Resend OTP" button
+  private interval: any; // Holds the interval reference
+  public InstituteMasterDDLList: any = [];
+  public departmentFlag: string = 'BTER';
+
+
   constructor(private fb: FormBuilder,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
@@ -49,7 +62,8 @@ export class ApplyDuplicateDocComponent implements OnInit {
     private routers: Router,
     private commonFunctionService: CommonFunctionService,
     private modalService: NgbModal,
-    private Swal2: SweetAlert2) {
+    private Swal2: SweetAlert2,
+    private sMSMailService: SMSMailService,) {
 
   }
 
@@ -65,10 +79,18 @@ export class ApplyDuplicateDocComponent implements OnInit {
         SemesterID: ['', [DropdownValidators]],
         ddlDepartmentID: ['', [DropdownValidators]],
         ApplicationNo: [''],
-        FeeAmount: [''],
+        FeeAmount: [ { value: '', disabled: true }],
+        InstituteID: [0],
       })
     //this.loadDropdownData('QueryFor');
     await this.GetSemesterMatserDDL();
+
+    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+     debugger
+      data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data.Data;
+        console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+      })
     //this.ShowAllData();
   }
 
@@ -86,20 +108,176 @@ export class ApplyDuplicateDocComponent implements OnInit {
     });
   }
 
+
+
+  ondepartmentChange()
+  {
+    if(this.request.DepartmentID==2){
+      this.departmentFlag='NodalCenter';
+    }
+    else{
+      this.departmentFlag='BTER';
+    }
+  }
+
   FeeAmount(MasterCode: string): void {
-    
+    debugger
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       
       switch (MasterCode) {
-        case 'DuplicateDoc':
+        case 'DuplicateDocStudentWise':
           this.FeesAmount = data['Data'];
           this.request.FeeAmount = this.FeesAmount[0].FeeAmount;
+          this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
+          this.request.SemesterID=this.FeesAmount[0].SemesterID;
           break;
         default:
           break;
       }
     });
   }
+
+    async openModalGenerateOTP(content: any, item: ApplyDuplicateDocument) {
+      debugger
+      // this.refreshValidation();// refresh validation
+      this.isFormSubmitted = true;
+      // if (this.GrievanceFormGroup.invalid) {
+      //   return
+      // }
+      //category validation
+      //if ([1, 111, 152].includes(this.request.TypeID)) {
+      //  this.request.CasteCategoryID.
+      //}
+      this.OTP = '';
+      this.MobileNo = GlobalConstants.DefaultMobileNo.length > 0 ? GlobalConstants.DefaultMobileNo : '8334874706';//this.sSOLoginDataModel.Mobileno;
+      this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      }, (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
+      this.MobileNo = this.MobileNo;
+      this.request = item;
+      await this.SendOTP();
+    }
+  
+
+    async VerifyOTP() {
+        debugger
+        if (this.OTP.length > 0) {
+          if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
+    
+            // await this.nonItiValidator();
+            const errors: any[] = [];
+            // Object.keys(this.FeeConfigurationFromGroup.controls).forEach((key) => {
+            //   const controlErrors = this.FeeConfigurationFromGroup.get(key)?.errors;
+            //   if (controlErrors) {
+            //     Object.keys(controlErrors).forEach((errorKey) => {
+            //       errors.push({ control: key, error: errorKey, value: controlErrors[errorKey] });
+            //     });
+            //   }
+            // });
+            try {
+              if (this.GrievanceFormGroup.invalid) {
+                return
+              }
+    
+    
+              const formValues = this.GrievanceFormGroup.value;
+  
+    
+              this.isLoading = true;
+              this.loaderService.requestStarted();
+              await this.PayApplicationFees();
+              this.isLoading = false;
+              this.loaderService.requestEnded();
+              this.isFormSubmitted = false;    
+              this.CloseModal()
+            }
+            catch (ex) {
+              console.log(ex);
+            }
+          }
+          else {
+            this.toastr.warning('Invalid OTP Please Try Again');
+          }
+        }
+        else {
+          this.toastr.warning('Please Enter OTP');
+        }
+      }
+    
+
+    async SendOTP(isResend?: boolean) {
+    try {
+      //category validation
+
+
+      this.GeneratedOTP = "";
+      await this.sMSMailService.SendMessage(this.MobileNo, "OTP")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.startTimer();
+            this.GeneratedOTP = data['Data'];
+            if (isResend) {
+              this.toastr.success('OTP resent successfully');
+            }
+          }
+          else {
+            this.toastr.warning('Something went wrong');
+          }
+        }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
+    startTimer(): void {
+    this.showResendButton = false;
+    this.timeLeft = GlobalConstants.DefaultTimerOTP * 60;
+
+    this.interval = setInterval(() => {
+      if (this.timeLeft > 0) {
+        this.timeLeft--;
+      } else {
+        clearInterval(this.interval);
+        this.showResendButton = true; // Show the button when time is up
+      }
+    }, 1000); // Update every second
+  }
+
+
+    numberOnly(event: KeyboardEvent): boolean {
+    const charCode = (event.which) ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
+
+  }
+
+    formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
+
+ private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+  CloseModal() {
+
+    this.modalService.dismissAll();
+  }
+
 
   async GetSemesterMatserDDL() {
     try {

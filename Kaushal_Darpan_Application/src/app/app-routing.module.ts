@@ -1414,7 +1414,7 @@ const routes: Routes = [
       { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
-
+      {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
 

@@ -368,13 +368,34 @@ export class OfficeVacancyComponent implements OnInit {
     }
   }
 
+  //async GetInstitute() {
+  //  await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    this.InstituteMasterDDLList = data.Data;
+  //    console.log("Institute Master List ==>", this.InstituteMasterDDLList);
+  //  })
+  //}
+
+
   async GetInstitute() {
-    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.InstituteMasterDDLList = data.Data;
-      console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-    })
+    await this.commonMasterService
+      .InstituteMaster(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        //  Filter only InstitutionManagementTypeID = 1
+        this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstitutionManagementTypeID === 1
+        );
+
+        console.log("Filtered Institute Master List ==>", this.InstituteMasterDDLList);
+      });
   }
+
 
   async GetStaffTypeData() {
 

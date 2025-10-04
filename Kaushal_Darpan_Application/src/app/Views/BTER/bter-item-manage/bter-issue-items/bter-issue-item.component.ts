@@ -95,7 +95,7 @@ export class AddBterIssueItemComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.GetStaffDDL()
+    //this.GetStaffDDL()
     this.GetCategoryDDL()
 
     this.prepareChunkedItems();
@@ -527,7 +527,8 @@ export class AddBterIssueItemComponent {
 
         EquipmentsId: 0,
         OfficeID: 0,
-        StatusID: 0
+        StatusID: 0,
+
       };
 
       const data: any = await this.bterInventoryService.GetItemListType(searchdata);
@@ -730,7 +731,6 @@ export class AddBterIssueItemComponent {
           this.FileName = '';
           this.Dis_FileName = '';
 
-          // reset form if using Angular form
           if (this.AddItemsRequestFormGroup) {
             this.AddItemsRequestFormGroup.reset();
           }
@@ -840,15 +840,13 @@ export class AddBterIssueItemComponent {
   }
 
   onStaffChange() {
-    // ✅ Reset ItemType, Category, Items when staff changes
-    this.Searchrequests.ItemType = 0; // reset
-    this.Searchrequests.ItemCategoryId = 0; // reset category
+    debugger
+    this.Searchrequests.ItemType = 0; 
+    this.Searchrequests.ItemCategoryId = 0; 
     this.CategoryDDLList = [];
     this.ItemsDDLList = [];
-
     console.log("Staff changed => reset ItemType & Category");
 
-    // If you want to auto reload item types after staff change:
     this.GetItemListType();
   }
 
