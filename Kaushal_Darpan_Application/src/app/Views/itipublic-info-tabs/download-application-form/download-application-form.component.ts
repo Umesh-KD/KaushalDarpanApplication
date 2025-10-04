@@ -145,67 +145,13 @@ export class DownloadApplicationFormComponent {
       this.isShowGrid = true;
       
       this.StudentDetailsModelList = [];
-      if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
-      {
-        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      // if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.BTER)
+      // {
+        this.searchRequest.DepartmentID = EnumDepartment.ITI;
         this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
         this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
-        this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID
-        if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-          || this.sSOLoginDataModel.RoleID == EnumRole.Principle_NonEng_Degree1Year || this.sSOLoginDataModel.RoleID == EnumRole.Principle_NonEng_Degree2YearLateral
-        ) {
-          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-          //this.searchRequest.action = "_GetApplicationListForPrinciple_BTER";
-          this.searchRequest.action = "_GetDirectApplicationListForPrinciple_BTER";
-        }
-        else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
-        {
-          this.searchRequest.InstituteID = 0
-          this.searchRequest.DepartmentID = EnumDepartment.BTER;
-          this.searchRequest.action = "_GetDownloadAppliation_ITI";
-        }
-        else
-        {
-          this.searchRequest.InstituteID = 0
-          this.searchRequest.action = "_GetDownloadAppliation_ITI";
-        }
-      }
-      else if (this.sSOLoginDataModel.DepartmentID == EnumDepartment.ITI)
-      {
-        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
-        this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
-        this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID
-        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
-        if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal ||
-          this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT)
-        {
-          this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-          this.searchRequest.action = "_GetApplicationListForPrinciple_ITI";
-        }
-        else if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra)
-        {
-          this.searchRequest.InstituteID = 0
-          this.searchRequest.DepartmentID = EnumDepartment.ITI;
-          this.searchRequest.action = "_GetApplicationList";
-        }
-  
-        else {
-          this.searchRequest.InstituteID = 0
-          this.searchRequest.action = "_GetApplicationList";
-        }
-      }
-      else
-      {
-        this.searchRequest.InstituteID = 0
-        this.searchRequest.action = "_GetApplicationList";
-      }
-      // if(this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
-      //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-      //   this.searchRequest.action = "_GetApplicationListForPrinciple";
-      // } else {
-      //   this.searchRequest.InstituteID = 0
-      //   this.searchRequest.action = "_GetApplicationList";
-      // }
+        this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID;
+       this.searchRequest.action = "_GetDownloadAppliation_ITI";
       try {
         this.loaderService.requestStarted();
         await this.ApplicationStatusService.StudentApplicationStatus(this.searchRequest)
@@ -242,7 +188,8 @@ export class DownloadApplicationFormComponent {
           this.loaderService.requestEnded();
         }, 200);
       }
-    }
+    
+  }
 
 
 
