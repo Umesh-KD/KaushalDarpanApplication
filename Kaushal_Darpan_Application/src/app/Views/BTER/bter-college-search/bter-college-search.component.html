@@ -24,16 +24,14 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Search.</label>
-        <!--<input type="text" class="form-control" placeholder="Search Code/Name/Division/District.."
-               [(ngModel)]="request.SearchText">-->
         <input type="text" class="form-control" placeholder="Search Code/Name/Division/District.."
-              >
+               [(ngModel)]="request.SearchText">
       </div>
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Division</label>
-        <!--<select (change)="ddlDivision_Change()" [(ngModel)]="request.DivisionId" [ngModelOptions]="{standalone: true}" class="form-select" id="DivisionId">-->
-        <select (change)="ddlDivision_Change()"   class="form-select" id="DivisionId">
+        <select (change)="ddlDivision_Change()" [(ngModel)]="request.DivisionId"  class="form-select" id="DivisionId">
+        
           <option value="0">--Select--</option>
           <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
         </select>
@@ -41,13 +39,12 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">District</label>
-        <!--<select [ngModelOptions]="{standalone: true}" class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"-->
-        <select  class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
-                >
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
-            {{item.Name}}
-          </option>
+        <select  class="form-select" id="DistrictId" (change)="ddlDistrict_Change()">
+
+        <option value="0">--Select--</option>
+        <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+          {{item.Name}}
+        </option>
         </select>
 
       </div>

@@ -10,7 +10,6 @@ import { bterCollegeSearchComponent } from './bter-college-search.component';
 
 @NgModule({
   declarations: [
-    /*    KnowMeritITIComponent*/
     bterCollegeSearchComponent
   ],
   imports: [

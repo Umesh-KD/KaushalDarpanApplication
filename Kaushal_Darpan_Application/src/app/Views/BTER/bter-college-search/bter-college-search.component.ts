@@ -4,7 +4,7 @@ import { StudentSearchModel } from '../../../Models/StudentSearchModel';
 import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { enumExamStudentStatus, EnumRole, EnumStatus, EnumVerificationAction } from '../../../Common/GlobalConstants';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -20,6 +20,7 @@ import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetail
 import { bterCollegeSearchModel, ITICollegeSearchModel } from '../../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ITIsService } from '../../../Services/ITIs/itis.service';
 import { ITI_PlanningCollegesModel, ItiAffiliationList } from '../../../Models/ItiPlanningDataModel';
+import { CommonModule } from '@angular/common';
 
 
 
@@ -28,7 +29,8 @@ import { ITI_PlanningCollegesModel, ItiAffiliationList } from '../../../Models/I
   selector: 'app-bter-college-search',
   templateUrl: './bter-college-search.component.html',
   styleUrl: './bter-college-search.component.css',
-  standalone: false
+  imports: [CommonModule, FormsModule],
+  standalone: true
 })
 export class bterCollegeSearchComponent {
   public Message: string = '';
@@ -188,9 +190,9 @@ export class bterCollegeSearchComponent {
       await this.commonMasterService.GetStateMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log(data['Data']);
+          
           this.StateMasterList = data['Data'];
-          console.log(this.StateMasterList);
+          
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -225,6 +227,8 @@ export class bterCollegeSearchComponent {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList = data['Data'];
         }, error => console.error(error));
+
+      console.log('District Master List ==>',this.DistrictMasterList)
     }
     catch (Ex) {
       console.log(Ex);
@@ -287,21 +291,21 @@ export class bterCollegeSearchComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.SubDivisionMasterList = data['Data'];
-          console.log(this.SubDivisionMasterList, "SubDivisionMasterList")
+         
         }, error => console.error(error));
 
       await this.commonMasterService.AssemblyMaster_DistrictIDWise(this.request.DistrictId)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AssemblyMasterList = data['Data'];
-          console.log(this.AssemblyMasterList, "AssemblyMasterList")
+          
         }, error => console.error(error));
 
       await this.commonMasterService.CityMasterDistrictWise(this.request.DistrictId)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CityMasterDDLList = data['Data'];
-          console.log(this.CityMasterDDLList, "CityMasterDDLList")
+          
         }, error => console.error(error));
 
       await this.commonMasterService.PanchayatSamiti(this.request.DistrictId)
@@ -311,7 +315,6 @@ export class bterCollegeSearchComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           this.PanchayatSamitiList = data['Data'];
-          console.log(this.ParliamentMasterList)
         }, error => console.error(error));
 
     }
@@ -541,7 +544,7 @@ export class bterCollegeSearchComponent {
       await this.commonMasterService.GetCommonMasterDDLByType('Residence')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          console.log(data, 'ggg');
+          
           this.ResidenceList = data['Data'];
 
         }, (error: any) => console.error(error)
@@ -585,7 +588,7 @@ export class bterCollegeSearchComponent {
           data = JSON.parse(JSON.stringify(data));
 
           this.ParliamentMasterList = data['Data'];
-          console.log(this.ParliamentMasterList)
+         
           // console.log(this.DivisionMasterList)
         }, error => console.error(error));
     }
@@ -758,7 +761,7 @@ export class bterCollegeSearchComponent {
           data = JSON.parse(JSON.stringify(data));
           this.ITICollegeSearchList = data['Data'];
           this.loadInTable();
-          console.log(this.ITICollegeSearchList, "ITICollegeSearchList")
+         
         }, error => console.error(error));
     }
     catch (Ex) {

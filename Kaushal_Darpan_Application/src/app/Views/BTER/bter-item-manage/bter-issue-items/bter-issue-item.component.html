@@ -35,13 +35,13 @@
 
         <!-- Staff Dropdowns -->
         <!--<div *ngIf="Searchrequests.issuedTo == 2">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-    <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID">
-      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-        {{ item.staffName }}
-      </option>
-    </select>
-  </div>-->
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
+          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID">
+            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+              {{ item.staffName }}
+            </option>
+          </select>
+        </div>-->
 
         <div *ngIf="Searchrequests.issuedTo == 2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Category List -->
-        <div *ngIf="CategoryDDLList?.length > 0">
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select"
                   [(ngModel)]="Searchrequests.ItemCategoryId"
