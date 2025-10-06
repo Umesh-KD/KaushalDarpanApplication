@@ -1934,4 +1934,20 @@ export class CommonFunctionService {
       )
       .toPromise();
   }
+
+  public async GetStudentAttandanceTimeDDL(StaffID: number, SubjectID: number) {
+
+    return await this.http.get(`${this.APIUrl}/GetStudentAttandanceTimeDDL/${StaffID}/${SubjectID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStaff_InstituteAndWorkWise(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetStaff_InstituteAndWorkWise', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

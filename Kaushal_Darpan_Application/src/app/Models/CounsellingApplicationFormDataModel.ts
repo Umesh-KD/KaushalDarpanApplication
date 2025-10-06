@@ -56,6 +56,7 @@ export class CounsellingApplicationFormDataModel {
   public IsSpouseInSameService?: boolean = false;
   public IsShahidDependent?: boolean = false;
   public IsAnyIncurableDiseases?: boolean = false;
+  public AcademicYearID?: number = 0;
 }
 
 export class CounsellingApplicationSearchModel {
@@ -138,6 +139,16 @@ export class CounsellingApplicationPreviewDataModel {
     IsFinalSubmit?: number = 0;
     Nationality?: string = '';
     Category_E?: string = '';
+
+    CategoryB?: string = '';
+    IsTSP?: boolean = false;
+    IsExServicemen?: boolean = false;
+    IsSportsPerson?: boolean = false;
+    IsSpouseInSameService?: boolean = false;
+    IsShahidDependent?: boolean = false;
+    IsAnyIncurableDiseases?: boolean = false;
+    GenderName?: string = '';
+    SelectionCategory?: string = '';
 }
 
 export class OptionviewData_Counselling {

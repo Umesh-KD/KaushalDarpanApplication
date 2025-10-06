@@ -9,6 +9,7 @@ import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel 
 import { CounsellingApplicationFormService } from '../../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-candidate-personal-details',
@@ -33,6 +34,7 @@ export class CandidatePersonalDetailsComponent {
 
   public request = new CounsellingApplicationFormDataModel();
   public appRequest = new CounsellingApplicationSearchModel();
+  public SSOLoginDataModel = new SSOLoginDataModel()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,6 +85,7 @@ export class CandidatePersonalDetailsComponent {
       MaritalID: [0, [DropdownValidators]],
       IsMinority: ['',],
     });
+    this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetMasterDDL();
     await this.GetDistrictList();
@@ -186,6 +189,7 @@ export class CandidatePersonalDetailsComponent {
     }
     try {
       this.request.CandidateID = this.CandidateID
+      this.request.AcademicYearID = 9 //this.SSOLoginDataModel.FinancialYearID
       await this.counsellingApplicationFormService.SavePersonalDetails(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {

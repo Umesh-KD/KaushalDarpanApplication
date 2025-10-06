@@ -20,6 +20,8 @@ export class PreExamStudentDataModel extends RequestBaseModel {
   public SessionType: number = 51;
   public IsYearly?:number = 0;
   public AdmittStatus?: string = '-1';
+  public PromoteStatus?: number = 0;
+
   public TradeSchemeID:number=0
 }
 

@@ -15,6 +15,8 @@ export class CollegeWiseScholarshipSearchModel {
   public SortColumn: string = '';
   public SchemeName: string='';
   public CourseType: number=0;
+  public GenderName: string='';
+  public GenderID: number=0;
 }
 
 

@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
@@ -41,6 +41,7 @@ export class AddBterIssueItemComponent {
   public ErrorMessage: string = '';
   public Dis_FileName: string = '';
   public FileName: string = '';
+  public EquipmentsId: number = 0;
   public AddItemsRequestFormGroup!: FormGroup;
   public sSOLoginDataModel = new SSOLoginDataModel();
   modalReference: NgbModalRef | undefined;
@@ -65,6 +66,7 @@ export class AddBterIssueItemComponent {
   chunkedItems: any[][] = [];
   SelectedItems: any[] = [];
   AddItemList: DTEItemsSaveModel[] = [];
+  public StreamMasterList: any = [];
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -85,7 +87,7 @@ export class AddBterIssueItemComponent {
     this.AddItemsRequestFormGroup = this.formBuilder.group({
 
      
-      ItemType: ['0', [DropdownValidators]],
+     // ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
 
     });
@@ -93,10 +95,8 @@ export class AddBterIssueItemComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.GetStaffDDL()
-    this.GetCategoryDDL()
-
     this.prepareChunkedItems();
+    this.GetMasterData()
 
   }
   get _AddItemsRequestFormGroup() { return this.AddItemsRequestFormGroup.controls; }
@@ -162,39 +162,6 @@ export class AddBterIssueItemComponent {
   }
 
 
-
- 
-  async DGET_Details1() {
-    
-    try {
-      this.loaderService.requestStarted();
-      debugger
-     
-
-      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
-      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
-
-      await this.bterInventoryService.GetConsumeItemList(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-
-          this.ItemsDDLList = data.Data;
-
-
-
-        }, error => console.error(error));
-
-      console.log('Items DDL List ==>', this.ItemsDDLList)
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-
   async DGET_Details() {
     try {
       this.loaderService.requestStarted();
@@ -204,7 +171,7 @@ export class AddBterIssueItemComponent {
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
 
       {
-        // 🔹 Serial No = No → get items WITHOUT Equipment Code
+        //  Serial No = No → get items WITHOUT Equipment Code
         await this.bterInventoryService.GetConsumeItemList(this.searchRequest)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -385,9 +352,8 @@ export class AddBterIssueItemComponent {
 
 
   onIssuedToChange() {
-    // Reset dropdowns when Issued To changes
     this.Searchrequests.staffID = 0;
-    this.Searchrequests.itemCategoryId = 0;
+    this.Searchrequests.ItemCategoryId = 0;
     this.Searchrequests.ItemId = 0;
     this.Searchrequests.departmentID = 0;
     this.ItemsDDL = [];
@@ -469,62 +435,22 @@ export class AddBterIssueItemComponent {
   }
 
 
-  //async GetItemListType() {
-  //  try {
-  //    this.loaderService.requestStarted();
-
-  //    let searchdata = {
-  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
-  //      EquipmentsId: this.Searchrequests.itemCategoryId || 0,
-  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-  //      OfficeID: 0,
-  //      StatusID: this.Searchrequests.ItemId || 0,
-  //      ItemTypeID: this.Searchrequests.ItemType || 0
-  //    };
-
-  //    const data: any = await this.bterInventoryService.GetItemListType(searchdata);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.CategoryDDLList = data.Data.map((x: any) => ({
-  //        ItemCategoryID: x.ItemCategoryID,
-  //        ItemCategoryName: x.ItemCategoryName
-  //      }));
-
-  //      this.ItemsDDLList = data.Data.map((x: any) => ({
-  //        ItemId: x.ItemId,
-  //        ItemName: x.CampanyName,
-  //        EquipmentsId: x.EquipmentsId,
-  //        EquipmentName: x.EquipmentName
-  //      }));
-  //    } else {
-  //      this.CategoryDDLList = [];
-  //      this.ItemsDDLList = [];
-  //    }
-  //  } catch (Ex) {
-  //    console.log("Error in GetItemListType:", Ex);
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-
   async GetItemListType() {
+    debugger
     try {
       this.loaderService.requestStarted();
 
-      const searchdata: DTEItemsSearchModel = {
+      const searchdata: DTEItemsSearchModel1 = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
         RoleID: this.sSOLoginDataModel.RoleID || 0,
         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
+        ItemType: this.Searchrequests.ItemType || 0,
         EquipmentsId: 0,
         OfficeID: 0,
-        StatusID: 0
+        StatusID: 0,
+
       };
 
       const data: any = await this.bterInventoryService.GetItemListType(searchdata);
@@ -535,7 +461,7 @@ export class AddBterIssueItemComponent {
           ItemCategoryName: x.ItemCategoryName
         }));
 
-        this.Searchrequests.itemCategoryId = 0; // reset
+        this.Searchrequests.ItemCategoryId = 0; // reset
         this.ItemsDDLList = []; // reset
       } else {
         this.CategoryDDLList = [];
@@ -549,61 +475,18 @@ export class AddBterIssueItemComponent {
   }
 
 
-  //async BindItem_list1() {
-
-  //  debugger;
-  //  try {
-
-  //    console.log("Bind  Item  list")
-  //    this.loaderService.requestStarted();
-
-  //    const searchdata: DTEItemsSearchModel = {
-  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
-  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
-  //      EquipmentsId: 0,
-  //      OfficeID: 0,
-  //      StatusID: 0
-  //    };
-
-  //    const data: any = await this.bterInventoryService.GetAllItemList(searchdata);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.CategoryDDLList = data.Data.map((x: any) => ({
-  //        ItemCategoryID: x.ItemCategoryID,
-  //        ItemCategoryName: x.ItemCategoryName
-  //      }));
-
-  //      this.Searchrequests.itemCategoryId = 0;
-  //      this.ItemsDDLList = [];
-  //    } else {
-  //      this.CategoryDDLList = [];
-  //      this.ItemsDDLList = [];
-  //    }
-  //    console.log('Item List ==>',this.CategoryDDLList)
-  //  } catch (Ex) {
-  //    console.error("Error :", Ex);
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-
-
   async BindItem_list() {
+    debugger
   try {
     this.loaderService.requestStarted();
 
-    const searchdata: DTEItemsSearchModel = {
+    const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
       RoleID: this.sSOLoginDataModel.RoleID || 0,
       CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
+      ItemType: this.Searchrequests.ItemType || 0,
       EquipmentsId: 0,
       OfficeID: 0,
       StatusID: 0
@@ -652,6 +535,9 @@ export class AddBterIssueItemComponent {
           Quantity: 1, // default,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
+          EquipmentsId: item.EquipmentsId,
+          issuedTo: item.IssueTo,
+          ItemCategoryId: item.ItemCategoryId,
         });
         this.FileName = ''
         this.Dis_FileName = ''
@@ -664,30 +550,35 @@ export class AddBterIssueItemComponent {
 
   removeSelectedItem(index: number) {
     const removedItem = this.SelectedItems[index];
-    // Uncheck in the main list also
-    //const mainItem = this.ItemsDDLList.find(x => x.ItemId === removedItem.ItemId);
-    //if (mainItem) {
-    //  mainItem.Selected = false;
-    //}
     this.SelectedItems.splice(index, 1);
   }
 
   async saveSelectedItems() {
     debugger
+    if (!this.SelectedItems || this.SelectedItems.length === 0) {
+      this.toastr.error("Please select at least one item!");
+      return;
+    }
 
     this.SelectedItems.forEach((element: any) => {
       element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
         element.InstituteID = this.sSOLoginDataModel.InstituteID,
         element.EndTermID = this.sSOLoginDataModel.EndTermID,
-        element.RoleID = this.sSOLoginDataModel.RoleID
+        element.RoleID = this.sSOLoginDataModel.RoleID,
+        element.StaffId = this.Searchrequests.staffID,
+      //element.itemCategoryId = this.Searchrequests.itemCategoryId,
+        element.itemCategoryId = this.Searchrequests.ItemCategoryId
+        || 0;
+
+        
+        element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
+          ? this.Searchrequests.issuedTo
+          : null; 
+        element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
     });
 
     this.AddItemList = this.SelectedItems
-    this.AddItemList.forEach((element: any) => {
-      //element.EquipmentsId = this.EquipmentsId;
-    })
-
-   
+     
     try {
       this.loaderService.requestStarted();
 
@@ -696,6 +587,31 @@ export class AddBterIssueItemComponent {
         if (data.State == EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.AddItemList = [];
+
+
+          this.SelectedItems = [];
+          this.AddItemList = [];
+          this.Searchrequests = {
+              staffID: 0
+            , issuedTo: 0
+            , ItemId: 0
+            , ItemType: 0
+            , ItemCategoryId: 0
+            , InstituteID: 0
+            , TypeName: ''
+            , TradeId:  0
+            , collageTradeID: 0
+            , serialNo: 0
+            , departmentID: 0
+            , EquipmentsId: 0
+            , IssuedId: 0
+          };
+          this.FileName = '';
+          this.Dis_FileName = '';
+
+          if (this.AddItemsRequestFormGroup) {
+            this.AddItemsRequestFormGroup.reset();
+          }
           this.routers.navigate(['/bter-issue-item'], {
 
           });
@@ -710,25 +626,16 @@ export class AddBterIssueItemComponent {
         this.loaderService.requestEnded();
       }, 200)
     }
-
-
   }
 
   cancelSelection() {
     this.SelectedItems = [];
-   // this.ItemsDDLList.forEach(x => (x.Selected = false));
   }
 
 
   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
     try {
-      //upload model
-
-
       let uploadModel: UploadFileModel = {
-       
-       
-
         FileName: FileName ?? "",
         FileExtention: "",
         MinFileSize: "20kb",
@@ -736,8 +643,6 @@ export class AddBterIssueItemComponent {
         FolderName:"Students",
    
       }
-      //call
-
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           this.State = data['State'];
@@ -746,15 +651,9 @@ export class AddBterIssueItemComponent {
           //
           debugger
           if (this.State == EnumStatus.Success) {
-            //add/update document in js list
-
-           
               this.FileName = data.Data[0].FileName;
               this.Dis_FileName = data.Data[0].Dis_FileName;
-      
-            
             console.log(this.SelectedItems)
-            //reset file type
             event.target.value = null;
           }
           if (this.State == EnumStatus.Error) {
@@ -771,23 +670,18 @@ export class AddBterIssueItemComponent {
   }
   async DeleteDocument(item: any) {
     try {
-      // delete from server folder
       let deleteModel = new DeleteDocumentDetailsModel()
       deleteModel.FolderName =  "Students";
       deleteModel.FileName = item;
-      //call
       await this.documentDetailsService.DeleteDocument(deleteModel)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            //add/update document in js list
             debugger
-       
               this.FileName = '';
               this.Dis_FileName = '';
-      
             console.log(this.SelectedItems)
           }
           if (this.State == EnumStatus.Error) {
@@ -801,6 +695,37 @@ export class AddBterIssueItemComponent {
   }
 
 
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
 
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      console.log('Stream Master List',this.StreamMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  onStaffChange() {
+    debugger
+    this.Searchrequests.ItemType = 0; 
+    this.Searchrequests.ItemCategoryId = 0; 
+    this.CategoryDDLList = [];
+    this.ItemsDDLList = [];
+    console.log("Staff changed => reset ItemType & Category");
+
+    this.GetItemListType();
+  }
 
 }

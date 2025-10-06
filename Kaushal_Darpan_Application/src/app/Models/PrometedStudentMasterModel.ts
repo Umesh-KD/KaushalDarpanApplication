@@ -62,6 +62,6 @@ export class PromotedStudentSearchModel extends RequestBaseModel {
   public SemesterID: string = '0';   // default value is empty string
   public StreamID: string = '0';     // default value is empty string
   public IsBridge: string = '';
-  public StudentTypeId: number = 0;
+  public PromoteStatusID: number = 0;
 }
 

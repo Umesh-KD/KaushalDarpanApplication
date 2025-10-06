@@ -368,13 +368,34 @@ export class OfficeVacancyComponent implements OnInit {
     }
   }
 
+  //async GetInstitute() {
+  //  await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    this.InstituteMasterDDLList = data.Data;
+  //    console.log("Institute Master List ==>", this.InstituteMasterDDLList);
+  //  })
+  //}
+
+
   async GetInstitute() {
-    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.InstituteMasterDDLList = data.Data;
-      console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-    })
+    await this.commonMasterService
+      .InstituteMaster(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+
+        //  Filter only InstitutionManagementTypeID = 1
+        this.InstituteMasterDDLList = data.Data.filter(
+          (x: any) => x.InstitutionManagementTypeID === 1
+        );
+
+        console.log("Filtered Institute Master List ==>", this.InstituteMasterDDLList);
+      });
   }
+
 
   async GetStaffTypeData() {
 
@@ -429,14 +450,14 @@ export class OfficeVacancyComponent implements OnInit {
 
           this.groupForm.get('OfficeID')?.disable();
           this.groupForm.get('StaffTypeID')?.disable();
-          this.groupForm.get('DesignationID')?.disable();
+         /* this.groupForm.get('DesignationID')?.disable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.disable();
           }
         } else {
           this.groupForm.get('OfficeID')?.enable();
           this.groupForm.get('StaffTypeID')?.enable();
-          this.groupForm.get('DesignationID')?.enable();
+         /* this.groupForm.get('DesignationID')?.enable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.enable();
           }
@@ -475,15 +496,31 @@ export class OfficeVacancyComponent implements OnInit {
       if (this.formData.ID != 0) {
         await this.BTER_EstablishManagementService.UpdateOfficeVacancy(this.formData).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
+         
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
+
             this.CloseModal();
             this.OfficeVacancyDataList();
             this.formData = new OfficeVacancyModel();
-            // Clear array after successful save
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+
+          } else if (data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+
           } else {
-            this.toastr.error(data.ErrorMessage);
+            this.toastr.error('Some error! Please check.');
           }
+
+
+
         });
       }
       
