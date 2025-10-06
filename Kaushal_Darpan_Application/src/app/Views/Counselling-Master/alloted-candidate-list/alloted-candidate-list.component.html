@@ -26,7 +26,7 @@
             </select>
         </div>
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllottedCandidateList_Counselling()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
             Reset
@@ -42,6 +42,17 @@
              class="btn bg-info text-white inline-block"
              (click)="OpenOTPModal_GenerateAllotmentOrder()">Generate Allotment Order
         </button>
+        <!-- <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select> -->
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="flex justify-between flex-wrap items-center">
         <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>
@@ -49,10 +60,7 @@
           <option value="1000">1000</option>
         </select>
       </div>
-    </div>
-
-    <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="flex">
+      <!-- <div class="flex">
         <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
           <option value="0">Choose Mark As (*)</option>
           <option *ngFor="let item of ExamStudentStatusDDLList" [value]="item.Id">{{item.Name}}</option>
@@ -64,9 +72,9 @@
       </div>
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
-      </div>
+      </div> -->
 
-    </div> -->
+    </div>
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
@@ -142,7 +150,7 @@
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
                 <select class="form-select" id="InstituteID" name="InstituteID" [(ngModel)]="editInstituteReq.InstituteID" >
                     <option value="0">--- Choose Option ---</option>
-                    <option *ngFor="let item of InstituteList" [ngValue]="item.InstituteID">{{item.InstituteName}}</option>
+                    <option *ngFor="let item of InstituteList" [ngValue]="item.InstituteID">{{item.InstituteName}} - ({{item.VacantSeats}})</option>
                 </select>
             </div>
         </div>

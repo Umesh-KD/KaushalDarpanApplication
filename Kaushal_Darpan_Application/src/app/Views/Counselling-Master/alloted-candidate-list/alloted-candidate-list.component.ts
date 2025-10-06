@@ -106,13 +106,15 @@ export class AllotedCandidateListComponent {
           data = JSON.parse(JSON.stringify(data));
           if(data.State === EnumStatus.Success) {
             this.AllottedCandidateList = data.Data;
-            
             this.loadInTable();
-
           } else if(data.State === EnumStatus.Warning) {
             this.toastr.warning(data.Message);
+            this.AllottedCandidateList = data.Data;
+            this.loadInTable();
           } else {
             this.toastr.error(data.ErrorMessage);
+            this.AllottedCandidateList = data.Data;
+            this.loadInTable();
           }
           
       })
