@@ -52,12 +52,20 @@
 
           <!-- Admin Menu: Submenu Items (visible when no search term is entered) -->
           <ul class="admin-menu  flex w-full flex-col gap-1.5" *ngIf="!searchTerm != null && searchTerm == ''">
-            <li class="menu-item">
+            <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID!=_EnumRole.CandidateRole">
               <a routerLink="/dashboard" (click)="js_SubMenu($event)" class="active group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
                 <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">dashboard</i>
                 <span class="menu-text"> Dashboard</span>
               </a>
             </li>
+
+          <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.CandidateRole">
+              <a routerLink="/CandidateApplicationList" (click)="js_SubMenu($event)" class="active group flex items-center gap-x-3.5 rounded-e-full px-4 py-2 text-sm font-medium text-default-700 transition-all hover:bg-default-100 hs-accordion-active:bg-default-100">
+                <i class="material-symbols-rounded font-light text-2xl transition-all group-hover:fill-1">dashboard</i>
+                <span class="menu-text"> Application List</span>
+              </a>
+            </li>
+
 
             <li class="menu-item" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Student">
 

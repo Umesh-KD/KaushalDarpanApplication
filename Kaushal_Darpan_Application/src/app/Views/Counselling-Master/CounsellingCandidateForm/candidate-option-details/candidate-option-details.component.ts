@@ -107,6 +107,8 @@ export class CandidateOptionDetailsComponent {
   async GetInstituteList() {
     try {
       this.tradeRequest.Action = 'GetCollegeList'
+      this.tradeRequest.TradeID = this.formData.TradeId
+      debugger
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteList = data.Data;
@@ -236,7 +238,6 @@ export class CandidateOptionDetailsComponent {
   }
 
   async DeleteChildOptionByID_Counselling(row: any) {
-    debugger
     try {
       this.childDeleteOptionReq.InstituteOptionID = row.InstituteOptionID
       await this.counsellingApplicationFormService.DeleteChildOptionByID_Counselling(this.childDeleteOptionReq).then(async (data: any) => {
