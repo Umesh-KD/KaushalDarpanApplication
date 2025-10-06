@@ -29,13 +29,17 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div *ngIf="sSOLoginDataModel.RoleID !== 201">
+        <div *ngIf="sSOLoginDataModel.RoleID !== 201 || sSOLoginDataModel.RoleID !== 7 || sSOLoginDataModel.RoleID !== 13">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             College
           </label>
-          <select class="form-select" [(ngModel)]="Searchrequest.CollegeId">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          <select class="form-select"
+                  [(ngModel)]="Searchrequest.CollegeId"
+                  [disabled]="sSOLoginDataModel.RoleID === 13 || sSOLoginDataModel.RoleID === 7 || sSOLoginDataModel.RoleID !== 2">
+            <option [value]="0">Choose Option</option>
+            <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">
+              {{ item.InstituteName }}
+            </option>
           </select>
         </div>
 
