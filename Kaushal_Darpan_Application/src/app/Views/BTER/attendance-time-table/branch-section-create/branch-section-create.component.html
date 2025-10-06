@@ -28,7 +28,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-            <ng-select formControlName="SemesterID" [clearable]="false">
+            <ng-select formControlName="SemesterID" [clearable]="false" (change)="SemeIDAcStream()">
               <ng-option [value]="0">--Select--</ng-option>
               @for (item of SemesterMasterDDL; track item.SemesterID) {
               <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
