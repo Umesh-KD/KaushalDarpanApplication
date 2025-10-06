@@ -63,7 +63,7 @@
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+      <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a> -->
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
@@ -97,7 +97,7 @@
             </th> -->
             <th class="text-left">Name</th>
             <!-- <th class="text-left">DOB</th> -->
-            <th class="text-left">SSOID</th>
+            <th class="text-left">MobileNo</th>
             <!-- <th class="text-left">DOB</th>
             <th class="text-left">Category</th> -->
             <!-- <th class="text-center">MobileNo</th> -->
@@ -117,7 +117,7 @@
             </td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td> -->
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
              <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
@@ -186,11 +186,11 @@
                   <!--<th class="text-left">CenterCode</th>-->
                   <th class="text-left">Candidate Name</th>
                   <th class="text-left">Father Name</th>
-                  <!-- <th class="text-left">SSOID</th>
-                  <th class="text-left">MobileNumber</th>
-                  <th class="text-left">Email</th> -->
-                  <!--<th class="text-left">EndTermID</th>
-                  <th class="text-left"> CCCode</th>-->
+                  <th class="text-left">MobileNo</th>
+                  <!-- <th class="text-left">MobileNumber</th>
+                  <th class="text-left">Email</th> 
+                  <th class="text-left">EndTermID</th>
+                  <th class="text-left"> CCCode</th> -->
 
                 </tr>
               </thead>
@@ -200,9 +200,9 @@
    
                   <td align="left">{{row.CandidateName}}</td>
                   <td align="left">{{row.CandidateFatherName}}</td>
-                  <!-- <td align="left">{{row.SSOID}}</td>
-                  <td align="left">{{row.MobileNumber}}</td>
-                  <td align="left">{{row.Email}}</td> -->
+                  <td align="left">{{row.MobileNo}}</td>
+                  <!-- <td align="left">{{row.MobileNumber}}</td>
+                  <td align="left">{{row.Email}}</td>  -->
                 </tr>
               </tbody>
 
@@ -213,7 +213,7 @@
         <div>
           <button type="submit"
                   id="btnSave"
-                  class="btn bg-info text-white mt-6" (click)="SaveCBTImportExcelData()">
+                  class="btn bg-info text-white mt-6" (click)="SaveDataInDB()">
             Submit
           </button>
         </div>

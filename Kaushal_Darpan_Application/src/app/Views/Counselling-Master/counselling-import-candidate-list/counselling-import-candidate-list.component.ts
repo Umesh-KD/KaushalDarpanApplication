@@ -119,11 +119,13 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     }
 
     SaveDataInDB(): void {
+      debugger
         this.counsellingImportCandidateListService.SaveImportExcelData(this.ImportExcelList).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
             this.ImportExcelList = [];
+             this.GetCandidateList(1);
           }
         });
     }
@@ -169,23 +171,9 @@ export class CounsellingImportCandidateListComponent implements OnInit {
       // await this.GetByID(this.PostID);
     }
   
-    await this.GetTradeDDL();
+    // await this.GetTradeDDL();
     await this.GetCandidateList(1);
-  await this.GetCategoryMatserDDL()
-      // Add dynamic validator
-      this.EditDataFormGroup.get('ScholarshipType')?.valueChanges.subscribe(val => {
-        const amountCtrl = this.EditDataFormGroup.get('Amount');
-        if (val === 'Cash') {
-          amountCtrl?.setValidators([Validators.required]);
-        } else {
-          amountCtrl?.clearValidators();
-          amountCtrl?.setValue('');
-        }
-        amountCtrl?.updateValueAndValidity();
-      });
-
-  // await this.GetCandidateList(1);
-       
+  
   }
 
 
