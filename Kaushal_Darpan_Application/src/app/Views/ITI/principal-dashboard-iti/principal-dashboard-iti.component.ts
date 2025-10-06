@@ -53,7 +53,8 @@ export class PrincipalDashboardITIComponent implements OnInit
 
   //Data Load
   async ngOnInit() {
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT)) {
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT))
+    {
       await this.CheckProfileStatus();
 
       if (this.sSOLoginDataModel.EmTypeId == 1) {
