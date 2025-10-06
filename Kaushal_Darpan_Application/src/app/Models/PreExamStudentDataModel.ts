@@ -19,7 +19,8 @@ export class PreExamStudentDataModel extends RequestBaseModel {
   public BridgeCourseID: string = '-1';
   public SessionType: number = 51;
   public IsYearly?:number = 0;
-  public AdmittStatus?:string = '-1';
+  public AdmittStatus?: string = '-1';
+  public TradeSchemeID:number=0
 }
 
 export class PreExam_UpdateEnrollmentNoModel extends RequestBaseModel {
