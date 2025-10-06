@@ -44,6 +44,7 @@ export class DownloadApplicationFormComponent {
   public SemesterID: number = 0;
   public ApplicationNo: string = '';
   public request = new ITIStudentMeritInfoModel();
+  maxDate:string='';
 
   public requestData: any;
 
@@ -91,6 +92,8 @@ export class DownloadApplicationFormComponent {
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+     const today = new Date();
+    this.maxDate = today.toISOString().split('T')[0];  
     //
     await this.GetPublicInfoStatus();
   }
@@ -125,14 +128,20 @@ export class DownloadApplicationFormComponent {
 
   async onSearchClick() { await this.GetAllDataActionWiseFilter(); }
 
-  async ResetControl() {
-    this.SemesterID = 0;
-    this.StreamID = 0;
-    this.ApplicationNo = '';
-    this.isShowGrid = false;
-    this.request = new ITIStudentMeritInfoModel();
-    this.studentDetailsModel = new StudentDetailsModel();
-  }
+ 
+  onReset() {
+    debugger
+   this.searchssoform.reset();
+
+  // Also reset your bound model object if you want to clear those too:
+    this.searchRequest.ApplicationNo='';
+    this.searchRequest.Receipt_Number='';
+    this.searchRequest.MobileNumber='';
+    this.searchRequest.DOB='';
+
+  // Reset any submission flags
+  this.isSubmitted = false;
+}
 
 
    async GetAllDataActionWiseFilter() {
