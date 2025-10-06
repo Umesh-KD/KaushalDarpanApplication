@@ -33,16 +33,6 @@
           </select>
         </div>
 
-        <!-- Staff Dropdowns -->
-        <!--<div *ngIf="Searchrequests.issuedTo == 2">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-          <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID">
-            <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-              {{ item.staffName }}
-            </option>
-          </select>
-        </div>-->
-
         <div *ngIf="Searchrequests.issuedTo == 2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
           <select class="form-select" id="staffID" [(ngModel)]="Searchrequests.staffID"
@@ -66,18 +56,16 @@
         </div>
 
 
-        <!-- Item Type -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>
           <select class="form-select"
                   [(ngModel)]="Searchrequests.ItemType"
                   (change)="GetItemListType()">
-            <option [value]="1">Permanent</option>
             <option [value]="0">Consumable</option>
+            <option [value]="1">Permanent</option>
           </select>
         </div>
 
-        <!-- Category List -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
           <select class="form-select"
@@ -91,7 +79,7 @@
         </div>
 
         <div>
-          <button type="button" (click)="DGET_Details()" class="btn bg-info text-white mt-6">Items Search</button>
+          <button type="button"  class="btn bg-info text-white mt-6">Items Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>
       </div>

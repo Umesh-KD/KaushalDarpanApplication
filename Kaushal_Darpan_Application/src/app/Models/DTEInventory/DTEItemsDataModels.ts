@@ -27,10 +27,19 @@ export class DTEItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
-  
-
 }
 
+export class DTEItemsSearchModel1 {
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public Eng_NonEng: number = 0;
+  public RoleID: number = 0;
+  public EquipmentsId: number = 0;
+  public CollegeId: number = 0;
+  public OfficeID: number = 0;
+  public StatusID: number = 0;
+  public ItemType: number = 0;
+}
 
 export class ItemsDetailsModel {
   public Item: string = '';
