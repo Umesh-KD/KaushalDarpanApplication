@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling Candidate List </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling Import Candidate List </a>
     </div>
   </div>
     <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
@@ -22,9 +22,25 @@
   <div class="card-body p-5">
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <div class="flex justify-between items-center" style="margin-left:1000px">
+          <div class="flex items-center me-3">
+            <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                   for="fileStudentPhoto">Import Excel</label>
+            <div class="flex fileUploader bg-gray-100">
+
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+              <label for="fileStudentPhoto">
+                <span>Choose File</span>
+                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+              </label>
+            </div>
+          </div>
+          <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="DownloadExcelSample()"><i class="ti ti-download"></i> Sample Format</a>
+        </div>
+        <!-- <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b> -->
       </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
@@ -40,7 +56,7 @@
           </button>
         </div>
 
-      </div>
+      </div> -->
 
 
 
@@ -71,38 +87,38 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-            <th align="left">
+            <!-- <th align="left">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
                      #checkboxSeletedAll >
-            </th>
+            </th> -->
              <!-- <th align="left">
               <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
                      #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
             </th> -->
             <th class="text-left">Name</th>
-            <th class="text-left">DOB</th>
+            <!-- <th class="text-left">DOB</th> -->
             <th class="text-left">SSOID</th>
             <!-- <th class="text-left">DOB</th>
             <th class="text-left">Category</th> -->
             <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
-            <th class="text-center">Action</th>
+            <!-- <th class="text-center">Action</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
-             <td>
+             <!-- <td>
               <input type="checkbox" name="MarkCheck" [checked]="true"/>
-            </td>
+            </td> -->
             <!-- <td>
               <input type="checkbox" name="MarkCheck" [checked]="true"
                      [(ngModel)]="item.Marked" />
             </td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
-             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
                     <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View Institute Option Details"><i
@@ -117,7 +133,7 @@
                       <i class="ti ti-lock-open"></i>
                     </a>
               </div>
-             </td>
+             </td> -->
           </tr>
         </tbody>
       </table>
@@ -140,56 +156,71 @@
 
     <!--end pagination-->
   </div>
+  <!-- <div>
+    <button class="btn btn-primary" (click)="DownloadExcelSample()">Save</button>
+    <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+  </div> -->
 </div>
 
-<ng-template #MyModel_EdiDetails let-modal
+<ng-template #MyModel_ViewDetails let-modal
   class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="modal-content">
-      
-            <div class="card">
-              <div class="card-header flex justify-between items-center">
-                <b><i class="fa fa-plus"></i>&nbsp;Options List Section</b>
-                <button class="btn bg-info text-white" (click)="CloseModal1()"><i class="ti ti-x"></i></button>
-              </div>
-            <!-- <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal"> -->
-              <div class="card-body">
-                <div class="mt-5">
-                  <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-                    <b class="text-1xl-5">Selected Options List</b>
-                  </div>
-                  <div class="overflow-x-auto mt-3">
-                    <table class="table table-border w-full table-auto" cellpadding="5">
-                      <thead>
-                        <tr>
-                          <th>Sr. No.</th>
-                          <th>Institue Name</th>
-                           
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let row of StudentOptionList; let i = index">
-                          <td>{{i+1}}</td>
-                          <td>{{ row.instituteName }}</td>
-                        </tr>
-                        <tr *ngIf="StudentOptionList.length === 0">
-                          <td colspan="7" class="text-center">No records found.</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="text-center flex items-center justify-center mt-3">
-                    <!-- <button type="button" id="btnSave" (click)="SaveData_EditDetails()" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" class="btn bg-info text-white">
-                      <i class="ti ti-device-floppy"></i> Submit
-                    </button> -->
-                    <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
-                  </div>
-                  <!--{{ApprovedTeacherList|json}}-->
-                </div>
-              </div>
-            <!-- </form> -->
-              
-            </div>
-       
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <div class="text-center">
+          <b><i class="ti ti-plus"></i>Excel Data</b>
+        </div>
+        <a href="javascript:void(0);" style="display:none" class="btn bg-info text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export To Excel</a>
+        <button class="btn bg-info text-white" (click)="CloseModalPopupimport()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="mb-8">
 
+          <div class="overflow-x-auto mt-3">
+
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                <tr>
+                  <th class="text-left">Sr No</th>
+                  <!--<th class="text-left">CenterCode</th>-->
+                  <th class="text-left">Candidate Name</th>
+                  <th class="text-left">Father Name</th>
+                  <!-- <th class="text-left">SSOID</th>
+                  <th class="text-left">MobileNumber</th>
+                  <th class="text-left">Email</th> -->
+                  <!--<th class="text-left">EndTermID</th>
+                  <th class="text-left"> CCCode</th>-->
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let row of ImportExcelList; let idx = index;">
+                  <td class="text-left">{{idx+1}}</td>
+   
+                  <td align="left">{{row.CandidateName}}</td>
+                  <td align="left">{{row.CandidateFatherName}}</td>
+                  <!-- <td align="left">{{row.SSOID}}</td>
+                  <td align="left">{{row.MobileNumber}}</td>
+                  <td align="left">{{row.Email}}</td> -->
+                </tr>
+              </tbody>
+
+
+            </table>
+          </div>
+        </div>
+        <div>
+          <button type="submit"
+                  id="btnSave"
+                  class="btn bg-info text-white mt-6" (click)="SaveCBTImportExcelData()">
+            Submit
+          </button>
+        </div>
+      </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
   </div>
 </ng-template>
+
