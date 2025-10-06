@@ -881,6 +881,14 @@ export class BranchSectionCreateComponent {
         // await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
         //AddStaffSubjectSectionModelList
 
+        await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterDDL = data.Data;
+          this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == this.AddStaffSubjectSectionModel.SemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+          console.log('data ==>', this.StreamMasterDDL)
+        })
+
+
         this.SSOIDExists = true;
         this.AddStaffSubjectSectionModel.SemesterID = rowData.SemesterID;
         this.AddStaffSubjectSectionModel.StreamID = rowData.StreamID;
@@ -889,6 +897,9 @@ export class BranchSectionCreateComponent {
         this.refreshAvailableSections();
         await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
         await this.getupBranchHodData();
+
+
+
         // await this.getSemBranchSectionData();
       }
       /*this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID,this.AddStaffSubjectSectionModel.SemesterID);*/
