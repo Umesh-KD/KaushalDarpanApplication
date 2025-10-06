@@ -461,7 +461,7 @@ const routes: Routes = [
       { path: 'StudentsJoiningStatusMarks12th/:id', loadChildren: () => import('./Views/ITI/students-joining-status-marks/students-joining-status-marks.module').then(m => m.StudentsJoiningStatusMarksModule) },
 
 
-
+        
       { path: 'Verifierdashboard', loadChildren: () => import('./Views/verifier-dashboard/verifier-dashboard.module').then(m => m.VerifierDashboardModule), title: 'verifier Dashboard' },
       { path: 'EnrollmentList', loadChildren: () => import('./Views/enrollment-list/enrollment-list.module').then(m => m.EnrollmentListModule), title: 'Enrollment List' },
 
