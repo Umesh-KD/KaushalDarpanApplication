@@ -11,8 +11,10 @@ import { CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling 
 import { Counselling_DropdownDataModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-alloted-candidate-list',
@@ -58,6 +60,8 @@ export class AllotedCandidateListComponent {
     private activatedRoute: ActivatedRoute,
     private counsellingApplicationFormService: CounsellingApplicationFormService,
     private counsellingMasterService: CounsellingMasterService,
+    private appsettingConfig: AppsettingService,
+    private http: HttpClient,
   ) { }
 
   async ngOnInit() {
@@ -201,19 +205,24 @@ export class AllotedCandidateListComponent {
     );
   }
 
+
   async GenerateAllotmentOrder_Counselling() {
-    debugger
     let selected = this.AllottedCandidateList.filter((x: any) => x.Selected == true);
 
     if(selected.length == 0) {
       this.toastr.error("Please select at least one candidate.");
       return;
     }
+    selected.forEach((x: any) => {
+      x.ModifyBy = this.sSOLoginDataModel.UserID
+    })
     try {
       await this.counsellingMasterService.GenerateAllotmentOrder_Counselling(selected).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
+          await this.DownloadFile(data.Data, 'file download');
+          await this.GetAllottedCandidateList_Counselling();
         } else if(data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -223,6 +232,25 @@ export class AllotedCandidateListComponent {
     } catch (error) {
       console.error(error)
     }
+  }
+
+    DownloadFile(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
   }
 
   //table feature
