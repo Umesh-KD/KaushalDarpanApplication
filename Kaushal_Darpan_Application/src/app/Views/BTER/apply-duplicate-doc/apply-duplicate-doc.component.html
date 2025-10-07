@@ -30,9 +30,12 @@
               Document <span class="StarMarking">*</span>
             </label>
             <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
-              <option value=0 selected>--Choose Option--</option>
-              <option value="Marksheet" selected>Marksheet</option>
-              <option value="Migration" selected>Migration</option>
+              <!-- <select class="form-select" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')"> -->
+              <!-- <option value=0 selected>--Choose Option--</option>
+              <option value="1" selected>Marksheet</option>
+              <option value="2" selected>Migration</option> -->
+               <option value=0>--Choose Option--</option>
+              <option *ngFor="let item of DocumentTypeList" [value]="item.DocumentID">{{item.DocumentName}}</option>
             </select>
             <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
               <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
@@ -45,6 +48,7 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
             <select class="form-select" id="SemesterID" name="SemesterID" [(ngModel)]="request.SemesterID" formControlName="SemesterID">
+              <!-- <select class="form-select" id="SemesterID" name="SemesterID" formControlName="SemesterID">  -->
               <option value=0>--Choose Option--</option>
               <option *ngFor="let item of SemesterMasterList" [value]="item.SemesterID">{{item.SemesterName}}</option>
             </select>
@@ -61,6 +65,7 @@
               Department <span class="StarMarking">*</span>
             </label>
             <select class="form-select" [(ngModel)]="request.DepartmentID" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">
+              <!-- <select class="form-select" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">  -->
               <option value=0 selected>--Choose Option--</option>
               <option value=1 selected>BTER</option>
               <option value=2 selected>Nodel Center</option>
@@ -75,7 +80,8 @@
           
           <div *ngIf="this.departmentFlag == 'NodalCenter'">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-            <select class="form-select" id="InstituteID" formControlName="InstituteID" [(ngModel)]="request.InstituteID">
+            <select class="form-select" id="InstituteID" formControlName="ddlInstituteID" [(ngModel)]="request.InstituteID">
+              <!-- <select class="form-select" id="InstituteID" formControlName="ddlInstituteID">  -->
               <option value="0" selected>--Choose Option--</option>
               <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
             </select>
@@ -86,6 +92,7 @@
               Application/Enrollment No.
             </label>
             <input type="text" class="form-input" placeholder="Enter Application/Enrollment No." formControlName="ApplicationNo" [(ngModel)]="request.ApplicationNo">
+            <!-- <input type="text" class="form-input" placeholder="Enter Application/Enrollment No." formControlName="ApplicationNo"> -->
           </div>
 
           <div>
@@ -93,6 +100,7 @@
               Fees Amount
             </label>
             <input type="text" [disabled]="true" class="form-input" formControlName="FeeAmount" [(ngModel)]="request.FeeAmount">
+            <!-- <input type="text" [disabled]="true" class="form-input" formControlName="FeeAmount"> -->
           </div>
 
            <!-- <div>

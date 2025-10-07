@@ -16,6 +16,7 @@ import { ApplyDuplicateDocument } from '../../../Models/BTER/ApplyDuplicateDocDa
 import { EmitraRequestDetails } from '../../../Models/PaymentDataModel';
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
+import { ApplyDuplicateDocService } from '../../../Services/ApplyDuplicateDoc/ApplyDuplicateDoc.service';
 
 @Component({
   selector: 'app-apply-duplicate-doc',
@@ -37,6 +38,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   public DepartmentList: any = [];
   public FeesAmount: any = [];
   public SemesterMasterList: any[] = [];
+  public DocumentTypeList: any[] = [];
   public PaymentDetailtList: any = [];
   public sSOLoginDataModel = new SSOLoginDataModel();
   emitraRequest = new EmitraRequestDetails();
@@ -50,6 +52,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
   private interval: any; // Holds the interval reference
   public InstituteMasterDDLList: any = [];
   public departmentFlag: string = 'BTER';
+  public saveFlag: number=0;
 
 
   constructor(private fb: FormBuilder,
@@ -59,6 +62,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private emitraPaymentService: EmitraPaymentService,
+    private applyDuplicateDocService :  ApplyDuplicateDocService,
     private routers: Router,
     private commonFunctionService: CommonFunctionService,
     private modalService: NgbModal,
@@ -80,11 +84,11 @@ export class ApplyDuplicateDocComponent implements OnInit {
         ddlDepartmentID: ['', [DropdownValidators]],
         ApplicationNo: [''],
         FeeAmount: [ { value: '', disabled: true }],
-        InstituteID: [0],
+        ddlInstituteID: ['', [DropdownValidators]],
       })
     //this.loadDropdownData('QueryFor');
     await this.GetSemesterMatserDDL();
-
+    await this.GetDocumentTypeDDL();
     await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
      debugger;
       data = JSON.parse(JSON.stringify(data));
@@ -93,6 +97,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
         console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
       })
     //this.ShowAllData();
+    await this.GetStudentApplyDuplicateDocumentList();
   }
 
   get form() { return this.GrievanceFormGroup.controls; }
@@ -150,6 +155,9 @@ export class ApplyDuplicateDocComponent implements OnInit {
           this.request.FeeAmount = this.FeesAmount[0].FeeAmount;
           this.request.ApplicationNo=this.FeesAmount[0].ApplicationNo;
           this.request.SemesterID=this.FeesAmount[0].SemesterID;
+          // this.GrievanceFormGroup.get('FeeAmount')?.setValue(this.FeesAmount[0].FeeAmount);
+          // this.GrievanceFormGroup.get('ApplicationNo')?.setValue(this.FeesAmount[0].ApplicationNo);
+          // this.GrievanceFormGroup.get('SemesterID')?.setValue(this.FeesAmount[0].SemesterID);
           break;
         default:
           break;
@@ -197,6 +205,7 @@ export class ApplyDuplicateDocComponent implements OnInit {
             //   }
             // });
             try {
+              console.log(this.GrievanceFormGroup.value);
               if (this.GrievanceFormGroup.invalid) {
                 return
               }
@@ -297,7 +306,25 @@ export class ApplyDuplicateDocComponent implements OnInit {
 
     this.modalService.dismissAll();
   }
- 
+ async GetDocumentTypeDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.applyDuplicateDocService.GetApplyDuplicateDocumentTypeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DocumentTypeList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetSemesterMatserDDL() {
     try {
@@ -318,10 +345,74 @@ export class ApplyDuplicateDocComponent implements OnInit {
       }, 200);
     }
   }
+  async GetStudentApplyDuplicateDocumentList() {
+    try {
+      this.request.StudentID= this.sSOLoginDataModel.StudentID;
+      this.loaderService.requestStarted();
+      debugger;
+      await this.applyDuplicateDocService.GetApplyDuplicateDocumentList(this.request)
+        .then(async (data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          this.DocumentTypeList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async proceedToSave() {
+    this.loaderService.requestStarted();
+    this.isLoading = true; 
+    try {
+        debugger;
+       this.request.StudentID= this.sSOLoginDataModel.StudentID;
+       this.request.DocumentID= this.GrievanceFormGroup.value.ddlDocumentID;
+       this.request.SemesterID= this.GrievanceFormGroup.value.SemesterID;
+       this.request.DepartmentID= this.GrievanceFormGroup.value.ddlDepartmentID;
+       this.request.InstituteID= this.GrievanceFormGroup.value.ddlInstituteID;
+       this.request.ApplicationNo= this.GrievanceFormGroup.value.ApplicationNo;
+       this.request.FeeAmount= this.GrievanceFormGroup.value.FeesAmount;
+       this.request.createdBy= this.sSOLoginDataModel.UserID;
+       this.request.modifyBy= this.sSOLoginDataModel.UserID;
+       this.request.IsActive= true;
+       this.request.IsDelete= false;
+       this.request.IsPayment= false; 
+      await this.applyDuplicateDocService.SaveDuplicateDocumentDetails(this.request)
+        .then(async (data: any) => {
+          debugger;
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State == EnumStatus.Success) {
+            
+            this.saveFlag=1;
+          } 
+        })
+
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
 
 
   async PayApplicationFees() {
-    
+    await this.proceedToSave();
+    if(this.saveFlag == 0){
+      return;
+    }
     this.emitraRequest = new EmitraRequestDetails();
     //Set Parameters for emitra
     this.emitraRequest.Amount = Number(this.request.FeeAmount);
@@ -338,17 +429,18 @@ export class ApplyDuplicateDocComponent implements OnInit {
     this.emitraRequest.CourseTypeID = this.request.CourseTypeID;
     this.emitraRequest.TypeID = EnumConfigurationType.DuplicateDocument;
     this.emitraRequest.FeeFor = EnumFeeFor.DuplicateDocument;
-    
+    this.emitraRequest.InstituteIDEnc= this.GrievanceFormGroup.value.ddlInstituteID;
     if (this.sSOLoginDataModel.RoleID == EnumRole.Student || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK) {
       this.emitraRequest.IsKiosk = true;
     }
      
-
+    debugger;
 
     this.loaderService.requestStarted();
     try {
       await this.emitraPaymentService.EmitraApplicationPayment(this.emitraRequest)
         .then(async (data: any) => {
+          debugger;
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
           this.Message = data['Message'];
