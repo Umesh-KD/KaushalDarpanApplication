@@ -103,7 +103,7 @@ export class DirectAllotmentListComponent {
     await this.commonMasterService.GetDateConfigSetting(data)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        debugger
+        
         this.DateConfigSetting = data['Data'];
         this.isAdmission = this.DateConfigSetting[0]['IsOpenn']
         console.log(this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING']);

@@ -1,4 +1,5 @@
 export class ApplyDuplicateDocument {
+  public ID: number = 0;
   public DocumentID: number = 0;
   public SemesterID: number = 0;
   public DepartmentID: number = 0;
@@ -11,4 +12,10 @@ export class ApplyDuplicateDocument {
   public MobileNo: string = '';
   public StudentName: string = '';
   public ApplicationNo: string = '';
+  public InstituteID: number = 0;
+  public createdBy: number = 0;
+  public modifyBy: number = 0;
+  public IsPayment: boolean = false;
+  public IsActive: boolean = false;
+  public IsDelete: boolean = false;
 }

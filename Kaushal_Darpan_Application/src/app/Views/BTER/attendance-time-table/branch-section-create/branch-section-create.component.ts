@@ -25,6 +25,7 @@ import { EnumStatus } from '../../../../Common/GlobalConstants';
 export class BranchSectionCreateComponent {
   StreamMasterDDL: any = [];
   GetBranchSectionData: any = [];
+  GetBranchStudentList: any = [];
   GetBranchStreamData: any = [];
   resBranchHOD: any = [];
   GetBranchSectionStudentData: any[] = [];
@@ -97,6 +98,7 @@ export class BranchSectionCreateComponent {
   public IsBranch: boolean = false;
   EditDataFormGroup!: FormGroup;
   TableForm!: FormGroup;
+  public StudentList: any[] = [];
 
   constructor(
     private staffMasterService: StaffMasterService,
@@ -114,7 +116,7 @@ export class BranchSectionCreateComponent {
     // this.IIPMasterFormGroup.value.streamID=0;
     // this.IIPMasterFormGroup.value.SemesterID=0;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-   
+
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
@@ -131,7 +133,8 @@ export class BranchSectionCreateComponent {
 
     this.sectionForm = this.formBuilder.group({
       streamName: [''],
-      sections: this.formBuilder.array([this.createSection()])
+      sections: this.formBuilder.array([this.createSection()]),
+      studentids: ['']
     });
 
 
@@ -143,7 +146,7 @@ export class BranchSectionCreateComponent {
       StreamName: ['', Validators.required],
       SectionID: [0, Validators.required],
       AssignbyStaffID: [0, Validators.required],
-      SemesterID: [{value:0 , disabled:true}, Validators.required],
+      SemesterID: [{ value: 0, disabled: true }, Validators.required],
       //  StreamID: [0, Validators.required]
     });
     this.TableForm = this.fb.group({
@@ -156,7 +159,7 @@ export class BranchSectionCreateComponent {
     await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
-      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)
+      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)      
       console.log('data ==>', this.StreamMasterDDL)
     })
     await this.commonMasterService.SemesterMaster().then((data: any) => {
@@ -166,11 +169,11 @@ export class BranchSectionCreateComponent {
     this.IsBranch = false;
 
 
-  await this.getData();
+    await this.getData();
     await this.loadDropdownData();
     await this.GetBranchHODApplyList();
 
-    
+
 
     await this.loadDropdownData();
     await this.GetBranchHODApplyList();
@@ -201,7 +204,7 @@ export class BranchSectionCreateComponent {
   get _IIPMasterFormGroup() {
     return this.IIPMasterFormGroup.controls;
   }
-  
+
   async GetBranchHODApplyList() {
     try {
       this.requestBranchHOD.Action = "GETALL";
@@ -243,6 +246,13 @@ export class BranchSectionCreateComponent {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
       this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+      // split
+      this.StudentList = this.StreamMasterDDL
+        .map((x: any) => x.students)      // Get array of comma-separated strings
+        .filter(Boolean)                  // Remove null/undefined
+        .join(',')                        // Join into one string
+        .split(',')                      // Split by comma into array
+        .map((s: any) => s.trim());             // Trim spaces if needed
       console.log('data ==>', this.StreamMasterDDL)
     })
   }
@@ -265,7 +275,7 @@ export class BranchSectionCreateComponent {
     // }
 
     const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
-    const formSemesterID= Number(this.IIPMasterFormGroup.value.SemesterID);
+    const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
 
     // const streamID = this.GetBranchSectionData.some(
     const exists = this.GetBranchSectionData.some(
@@ -356,14 +366,20 @@ export class BranchSectionCreateComponent {
 
 
     const SemesterName = selectedSemester.SemesterName;
+    debugger
 
-
+    /*this.GetBranchStudnet();*/
     const baseTheory = Math.floor(totalStudents / sectionCount);
     let remTheory = totalStudents % sectionCount;
+    //copy
+    let _studentidList_baseTheory = [...this.StudentList];
 
     for (let i = 0; i < sectionCount; i++) {
       const studentsInSection = baseTheory + (remTheory > 0 ? 1 : 0);
       if (remTheory > 0) remTheory--;
+
+      // get total students values and delete
+      let newStudentsList = _studentidList_baseTheory.splice(0,studentsInSection);
 
       this.sections.push(
         this.formBuilder.group({
@@ -371,6 +387,7 @@ export class BranchSectionCreateComponent {
           // sectionName: [`T-${i + 1}`, Validators.required],
           sectionName: [`${SemesterName}-${StreamName}-T-${i + 1}`, Validators.required],
           studentCount: [studentsInSection, [Validators.required, Validators.min(1)]],
+          studentids: newStudentsList.join(',')
         })
       );
     }
@@ -381,9 +398,15 @@ export class BranchSectionCreateComponent {
     const basePractical = Math.floor(totalStudents / PsectionCount);
     let remPractical = totalStudents % PsectionCount;
 
+    //copy
+    let _studentidList_basePractical = [...this.StudentList];
+
     for (let i = 0; i < PsectionCount; i++) {
       const studentsInSection = basePractical + (remPractical > 0 ? 1 : 0);
       if (remPractical > 0) remPractical--;
+
+      // get total students values and delete
+      let newstudentsList = _studentidList_basePractical.splice(0,studentsInSection);
 
       this.sections.push(
         this.formBuilder.group({
@@ -391,6 +414,7 @@ export class BranchSectionCreateComponent {
           // sectionName: [`P-${i + 1}`, Validators.required],
           sectionName: [`${SemesterName}-${StreamName}-P-${i + 1}`, Validators.required],
           studentCount: [studentsInSection, [Validators.required, Validators.min(1)]],
+          studentids: newstudentsList.join(',')
         })
       );
     }
@@ -401,9 +425,15 @@ export class BranchSectionCreateComponent {
     const baseTutorial = Math.floor(totalStudents / TsectionCount);
     let remTutorial = totalStudents % TsectionCount;
 
+    //copy
+    let _studentidList_baseTutorial = [...this.StudentList];
+
     for (let i = 0; i < TsectionCount; i++) {
       const studentsInSection = baseTutorial + (remTutorial > 0 ? 1 : 0);
       if (remTutorial > 0) remTutorial--;
+
+      // get total students values and delete
+      let newstudentsList = _studentidList_baseTutorial.splice(0,studentsInSection);
 
       this.sections.push(
         this.formBuilder.group({
@@ -411,58 +441,11 @@ export class BranchSectionCreateComponent {
           // sectionName: [`Tu-${i + 1}`, Validators.required],
           sectionName: [`${SemesterName}-${StreamName}-Tu-${i + 1}`, Validators.required],
           studentCount: [studentsInSection, [Validators.required, Validators.min(1)]],
+          studentids: newstudentsList.join(',')
         })
       );
     }
   }
-
-  // generateSections(sectionCount: number, totalStudents: number): void {
-  //   if (sectionCount <= 0 || totalStudents <= 0) {
-  //     return;
-  //   }
-
-
-  //   if (sectionCount > totalStudents) {
-  //     this.toastr.error("Section count cannot be greater than total students");
-  //     return;
-  //   }
-
-  //   const baseSize = Math.floor(totalStudents / sectionCount);
-  //   let remaining = totalStudents % sectionCount;
-
-  //   for (let i = 0; i < sectionCount; i++) {
-  //     const studentsInSection = baseSize + (remaining > 0 ? 1 : 0);
-  //     if (remaining > 0) remaining--;
-
-  //     this.sections.push(
-  //   this.formBuilder.group({
-  //   sectionName: ['Section ' + (this.sections.length + 1), Validators.required],
-  //   studentCount: [studentsInSection, [Validators.required, Validators.min(1)]],
-  //   theoryCount: [0, [Validators.required, Validators.min(0)]],
-  //   practicalCount: [0, [Validators.required, Validators.min(0)]],
-  //   tutorialCount: [0, [Validators.required, Validators.min(0)]]
-  //    })
-  //      );
-
-  //   }
-  // }
-
-  //generateSections(): void {
-  //  const totalSections = Math.ceil(this.totalStudents / this.sectionSize);
-
-  //  for (let i = 0; i < totalSections; i++) {
-  //    const studentsInSection =
-  //      i === totalSections - 1 ? this.totalStudents - this.sectionSize * i : this.sectionSize;
-
-  //    this.sections.push(
-  //      this.formBuilder.group({
-  //        sectionName: [`Section ${i + 1}`, Validators.required],
-  //        studentCount: [studentsInSection, [Validators.required, Validators.min(1)]]
-  //      })
-  //    );
-  //  }
-  //}
-
   addSection(): void {
     let sectionCount = (this.sectionForm.get('sections') as FormArray).controls.length;
     let TutorialSection = (this.sectionForm.get('TutorialSectionCount') as FormArray).controls.length;
@@ -493,7 +476,7 @@ export class BranchSectionCreateComponent {
     // }
 
     const formStreamID = Number(this.IIPMasterFormGroup.value.StreamID);
-    const formSemesterID= Number(this.IIPMasterFormGroup.value.SemesterID);
+    const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
 
 
     const exists = this.GetBranchSectionData.some(
@@ -508,8 +491,8 @@ export class BranchSectionCreateComponent {
       this.toastr.warning("Section for this branch is already created!");
       return
     }
-	
-	
+
+
 
 
     //let obj = {
@@ -538,7 +521,9 @@ export class BranchSectionCreateComponent {
       CreatedBy: this.sSOLoginDataModel.UserID,
       ModifyBy: this.sSOLoginDataModel.UserID,
       CreatedDate: new Date(),
-      SemesterID: this.IIPMasterFormGroup.value.SemesterID
+      SemesterID: this.IIPMasterFormGroup.value.SemesterID,
+      InstituteId: this.sSOLoginDataModel.InstituteID,
+      studentids: this.sectionForm.value.studentids,
     }
 
     debugger
@@ -548,7 +533,7 @@ export class BranchSectionCreateComponent {
         this.State = data['State'];
         this.Message = data['Message'];
         this.ErrorMessage = data['ErrorMessage'];
-
+        debugger
         //if (this.State == 1) {
         //  this.toastr.success('Section data saved successfully!');
         //  this.isSubmitted = false;
@@ -635,7 +620,7 @@ export class BranchSectionCreateComponent {
         data = JSON.parse(JSON.stringify(data));
         this.GetBranchSectionData = data.Data
         debugger
-        this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)
+        this.GetBranchSectionData = this.GetBranchSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
         this.totalRecord = data['Data'].length;
         console.log(this.GetBranchSectionData)
         this.initTable(this.GetBranchSectionData);
@@ -685,9 +670,9 @@ export class BranchSectionCreateComponent {
         await this.staffMasterService.GetBranchSectionData(obj)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
-            this.GetBranchStreamData=data.Data;
+            this.GetBranchStreamData = data.Data;
             // this.GetBranchSectionData=this.GetBranchSectionData.filter((item:any)=>item.createdby==this.sSOLoginDataModel.UserID)
-            this.GetBranchStreamData = this.GetBranchStreamData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)
+            this.GetBranchStreamData = this.GetBranchStreamData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
             // this.GetBranchStreamData = data.Data
             this.totalRecord1 = data['Data'].length;
             console.log(this.GetBranchStreamData)
@@ -809,12 +794,12 @@ export class BranchSectionCreateComponent {
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.GetSectionData = data.Data;
-        this.GetSectionData = this.GetSectionData.filter((item:any)=>item.CreatedBy==this.sSOLoginDataModel.UserID)         
-        this.allSections = this.GetSectionData; 
+        this.GetSectionData = this.GetSectionData.filter((item: any) => item.CreatedBy == this.sSOLoginDataModel.UserID)
+        this.allSections = this.GetSectionData;
         // this.allSections = data.Data;   // all sections
         // this.GetSectionData = [...this.allSections];
-      //  console.log(this.GetBranchSectionData)
-       // this.initTable(this.GetBranchSectionData);
+        //  console.log(this.GetBranchSectionData)
+        // this.initTable(this.GetBranchSectionData);
       }, (error: any) => console.error(error)
       );
   }
@@ -871,8 +856,8 @@ export class BranchSectionCreateComponent {
     await this.GetAssignedTeacherForSubject_BySecctionID(rowData.SectionID)
     this.isSubmitted = true;
     this.AddStaffSubjectSectionModel.SubjectID = 0;
-    this.AddStaffSubjectSectionModel.SemesterID=rowData?.SemesterID || 0;
-    this.AddStaffSubjectSectionModel.StreamID=rowData?.StreamID || 0;
+    this.AddStaffSubjectSectionModel.SemesterID = rowData?.SemesterID || 0;
+    this.AddStaffSubjectSectionModel.StreamID = rowData?.StreamID || 0;
     if (rowData != null && rowData != undefined) {
       if (rowData.StreamID != null) {
 
@@ -1161,17 +1146,68 @@ export class BranchSectionCreateComponent {
       let obj = {
         SectionID: SectionID
       }
-      await this.staffMasterService.GetAssignedTeacherForSubject_BySecctionID(obj).then(async (data: any)=> {
+      await this.staffMasterService.GetAssignedTeacherForSubject_BySecctionID(obj).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data['Data']));
         debugger
-        if(data.length > 0) {
+        if (data.length > 0) {
           // this.toastr.success(data.Message)
           this.AddStaffSubjectSectionModelList = data
-        } 
+        }
       })
     } catch (error) {
       console.error(error)
     }
   }
+
+  //async GetBranchStudnet() {
+
+
+  //  let obj = {
+  //    Action: "SAVE",
+  //    DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //    EndTermID: this.sSOLoginDataModel.EndTermID,
+  //    Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+  //    StreamID: this.IIPMasterFormGroup.value.StreamID,
+  //    Section: this.sectionForm.value.sections,
+  //    ActiveStatus: 1,
+  //    DeleteStatus: 0,
+  //    CreatedBy: this.sSOLoginDataModel.UserID,
+  //    ModifyBy: this.sSOLoginDataModel.UserID,
+  //    CreatedDate: new Date(),
+  //    SemesterID: this.IIPMasterFormGroup.value.SemesterID,
+  //    InstituteId: this.sSOLoginDataModel.InstituteID
+  //  }
+
+  //  await this.staffMasterService.GetBranchStudentData(obj)
+  //    .then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.State = data['State'];
+  //      this.Message = data['Message'];
+  //      this.ErrorMessage = data['ErrorMessage'];
+
+  //      if (data.State === EnumStatus.Success) {
+  //        this.GetBranchStudentList = data;
+
+  //        setTimeout(() => {
+  //          window.location.reload();
+  //        }, 1500);
+
+  //      } else if (data.State === EnumStatus.Warning) {
+  //        this.toastr.warning(data.Message);
+
+  //        setTimeout(() => {
+  //          window.location.reload();
+  //        }, 1500);
+
+  //      } else {
+  //        this.toastr.error('Some error! Please check.');
+  //      }
+
+
+  //    }, (error: any) => console.error(error)
+  //    );
+
+
+  //}
 
 }

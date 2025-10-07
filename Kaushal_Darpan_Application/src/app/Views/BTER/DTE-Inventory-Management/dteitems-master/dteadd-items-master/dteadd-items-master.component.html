@@ -112,7 +112,7 @@
             Voucher Number: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" id="txtVoucherNumber" name="VoucherNumber" formControlName="txtVoucherNumber"
-                 [(ngModel)]="request.VoucherNumber" maxlength="6" (keypress)="validateNumber($event)">
+                 [(ngModel)]="request.VoucherNumber" maxlength="4">
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.txtVoucherNumber.errors" class="text-danger">
             <p *ngIf="_AddItemsRequestFormGroup.txtVoucherNumber.errors.required">
@@ -126,16 +126,36 @@
           </div>
         </div>
 
+        <!--<div>
+    <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+      Voucher Date: <span class="StarMarking">*</span>
+    </label>
+    <input (click)="openDatePicker($event)" type="date" class="form-input" id="voucherdate" name="voucherdate" formControlName="voucherdate"
+           [(ngModel)]="request.voucherdate">
+
+    <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
+      <p *ngIf="!_AddItemsRequestFormGroup.voucherdate.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required.
+      </p>
+    </div>
+  </div>-->
+
         <div>
           <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Voucher Date: <span class="StarMarking">*</span>
           </label>
-          <input (click)="openDatePicker($event)" type="date" class="form-input" id="voucherdate" name="voucherdate" formControlName="voucherdate"
-                 [(ngModel)]="request.voucherdate">
+          <input type="date"
+                 id="voucherdate"
+                 name="voucherdate"
+                 class="form-input"
+                 formControlName="voucherdate"
+                 [(ngModel)]="request.voucherdate"
+                 [min]="todayDate"
+                 [max]="todayDate" />
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
             <p *ngIf="!_AddItemsRequestFormGroup.voucherdate.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required.
+              <i aria-hidden="true"></i> This field is required.
             </p>
           </div>
         </div>
@@ -207,7 +227,7 @@
             Abbreviation: <span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
-          
+
         </div>
 
         <div class="mt-3">
