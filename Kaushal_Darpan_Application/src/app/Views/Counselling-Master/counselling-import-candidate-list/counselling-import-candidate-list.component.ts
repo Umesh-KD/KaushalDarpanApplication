@@ -81,6 +81,24 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   //end table feature default
 
 
+    constructor(
+    private commonMasterService: CommonFunctionService, 
+    private CounsellingMasterService: CounsellingMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private Router: Router, 
+    private router: ActivatedRoute,
+    private modalService:NgbModal,
+    private fb:FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private encryptionService: EncryptionService,
+    private counsellingApplicationFormService: CounsellingApplicationFormService,
+    private counsellingImportCandidateListService: CounsellingImportCandidateListService
+  ){}
+
+
 
 
   //  --------------------------
@@ -129,7 +147,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
              this.GetCandidateList(1);
           }
           else{
-            this.toastr.error(data.ErrorMessage);
+            this.toastr.error(data.Data[0].ErrorMessage);
           }
         });
     }
@@ -165,22 +183,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
   //--------------------
 
-  constructor(
-    private commonMasterService: CommonFunctionService, 
-    private CounsellingMasterService: CounsellingMasterService,
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
-    private Swal2: SweetAlert2, 
-    private Router: Router, 
-    private router: ActivatedRoute,
-    private modalService:NgbModal,
-    private fb:FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private routers: Router,
-    private encryptionService: EncryptionService,
-    private counsellingApplicationFormService: CounsellingApplicationFormService,
-    private counsellingImportCandidateListService: CounsellingImportCandidateListService
-  ){}
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
