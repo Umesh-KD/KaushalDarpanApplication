@@ -79,7 +79,7 @@ export class CounsellingMasterService {
       ).toPromise();
   }
 
-  public async GenerateAllotmentOrder_Counselling(request: any) {
+  public async GenerateAllotmentOrder_Counselling(request: any[]) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GenerateAllotmentOrder_Counselling`, body, this.headersOptions)
       .pipe(

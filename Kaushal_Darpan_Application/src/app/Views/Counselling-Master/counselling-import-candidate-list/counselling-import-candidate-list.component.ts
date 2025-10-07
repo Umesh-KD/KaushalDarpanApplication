@@ -81,6 +81,24 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   //end table feature default
 
 
+    constructor(
+    private commonMasterService: CommonFunctionService, 
+    private CounsellingMasterService: CounsellingMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private Router: Router, 
+    private router: ActivatedRoute,
+    private modalService:NgbModal,
+    private fb:FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private routers: Router,
+    private encryptionService: EncryptionService,
+    private counsellingApplicationFormService: CounsellingApplicationFormService,
+    private counsellingImportCandidateListService: CounsellingImportCandidateListService
+  ){}
+
+
 
 
   //  --------------------------
@@ -96,7 +114,8 @@ export class CounsellingImportCandidateListComponent implements OnInit {
           this.ImportExcelFile(file);
         }
         this.selectedFile = null;
-    
+         // Reset file input so selecting the same file again triggers change
+        event.target.value = null;
       }
     ImportExcelFile(file: File): void {
         let mesg = '';
@@ -127,39 +146,43 @@ export class CounsellingImportCandidateListComponent implements OnInit {
             this.ImportExcelList = [];
              this.GetCandidateList(1);
           }
+          else{
+            this.toastr.error(data.Data[0].ErrorMessage);
+          }
         });
     }
 
      async GetImportExcelDataPopup(content: any) {
 
     /*    this.IsShowViewStudent = true;*/
-    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+    // this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+    //   this.closeResult = `Closed with: ${result}`;
+    // }, (reason) => {
+    //   this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    // });
+
+     this.modalRef1 = this.modalService.open(content, {
+    size: 'xl',
+    ariaLabelledBy: 'modal-basic-title',
+    backdrop: 'static'
+  });
+
+  this.modalRef1.result.then(
+    (result) => {
       this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
+      this.modalRef1 = null; // important
+    },
+    (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+      this.modalRef1 = null; // important
+    }
+  );
   }
 
 
 
   //--------------------
 
-  constructor(
-    private commonMasterService: CommonFunctionService, 
-    private CounsellingMasterService: CounsellingMasterService,
-    private toastr: ToastrService, 
-    private loaderService: LoaderService, 
-    private Swal2: SweetAlert2, 
-    private Router: Router, 
-    private router: ActivatedRoute,
-    private modalService:NgbModal,
-    private fb:FormBuilder,
-    private activatedRoute: ActivatedRoute,
-    private routers: Router,
-    private encryptionService: EncryptionService,
-    private counsellingApplicationFormService: CounsellingApplicationFormService,
-    private counsellingImportCandidateListService: CounsellingImportCandidateListService
-  ){}
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -210,25 +233,25 @@ export class CounsellingImportCandidateListComponent implements OnInit {
    get formEditData(){return this.EditDataFormGroup.controls;}
 
 
-    async GetTradeDDL() {
-    try {
-      this.loaderService.requestStarted();
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
-        .then((data: any) => {
-          console.log(data)
-          data = JSON.parse(JSON.stringify(data));
-          this.TradeDDLList = data['Data'];  
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //   async GetTradeDDL() {
+  //   try {
+  //     this.loaderService.requestStarted();
+  //     await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
+  //       .then((data: any) => {
+  //         console.log(data)
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.TradeDDLList = data['Data'];  
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
 
   async GetCandidateList(i:any) {
     debugger
@@ -282,9 +305,9 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   }
 
 
-  async Back() {
-    this.routers.navigate(['/CounsellingAllotmentList'])
-  }
+  // async Back() {
+  //   this.routers.navigate(['/CounsellingAllotmentList'])
+  // }
 
 
   //   checkboxthView_checkboxchange(isChecked: boolean) {
@@ -295,17 +318,19 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   // }
 
   // get all data
-  async ClearSearchData() {
-    debugger
-    // this.searchRequest.Name = '';
-    // this.searchRequest.Enrollment = '';
-    // this.searchRequest.Category='';
-    // this.searchRequest.Status = '';
-    this.searchRequest.PageNumber = this.pageNo;
-    this.searchRequest.PageSize = this.pageSize;
-    await this.GetCandidateList(1);
+  
+  
+  // async ClearSearchData() {
+  //   debugger
+  //   this.searchRequest.Name = '';
+  //   this.searchRequest.Enrollment = '';
+  //   this.searchRequest.Category='';
+  //   this.searchRequest.Status = '';
+  //   this.searchRequest.PageNumber = this.pageNo;
+  //   this.searchRequest.PageSize = this.pageSize;
+  //   await this.GetCandidateList(1);
    
-  }
+  // }
 
 
 
@@ -356,8 +381,15 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   
 
     CloseModalPopupimport() {
-    this.modalService.dismissAll();
+    // this.modalService.dismissAll();
     //this.ImportExcelList = [];
+
+      if (this.modalRef1) {
+        this.modalRef1.close();  // use close() or dismiss(), not dismissAll()
+        this.modalRef1 = null;
+      }
+      this.ImportExcelList = []; 
+      this.selectedFile = null;
   }
     private getDismissReason(reason: any): string {
       if (reason === ModalDismissReasons.ESC) {
@@ -382,7 +414,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
       });
     }
 
-      async GetCategoryMatserDDL() {
+  async GetCategoryMatserDDL() {
     try {
       this.AddCollegeWiseScholarshipModel.InstituteID = this.sSOLoginDataModel.DepartmentID
 
@@ -411,33 +443,35 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     });
   }
 
-  async UnlockApplication_Counselling(item: any) {
-    this.Swal2.Confirmation(`Are you sure you want to Unlock Application for Candidate!`,
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            this.unlockRequest.CandidateId = item.CandidateID;
-            await this.counsellingApplicationFormService.UnlockApplication_Counselling(this.unlockRequest)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                if(data.State === EnumStatus.Success){
-                  this.toastr.success(data.Message);
-                  await this.GetCandidateList(1);
-                } else if(data.State === EnumStatus.Warning){
-                  this.toastr.warning(data.Message);
-                } else {
-                  this.toastr.error(data.ErrorMessage);
-                }
-            })
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      });    
-  }
+  // async UnlockApplication_Counselling(item: any) {
+  //   this.Swal2.Confirmation(`Are you sure you want to Unlock Application for Candidate!`,
+  //     async (result: any) => {
+  //       //confirmed
+  //       if (result.isConfirmed) {
+  //         try {
+  //           this.unlockRequest.CandidateId = item.CandidateID;
+  //           await this.counsellingApplicationFormService.UnlockApplication_Counselling(this.unlockRequest)
+  //             .then(async (data: any) => {
+  //               data = JSON.parse(JSON.stringify(data));
+  //               if(data.State === EnumStatus.Success){
+  //                 this.toastr.success(data.Message);
+  //                 await this.GetCandidateList(1);
+  //               } else if(data.State === EnumStatus.Warning){
+  //                 this.toastr.warning(data.Message);
+  //               } else {
+  //                 this.toastr.error(data.ErrorMessage);
+  //               }
+  //           })
+  //         } catch (error) {
+  //           console.error(error);
+  //         }
+  //       }
+  //     });    
+  // }
 
   //table feature
+  
+  
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
@@ -519,20 +553,20 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
   //checked all (replace org. list here)
-  selectInTableAllCheckbox() {
-    this.StudentList.forEach((x: any) => {
-      x.Selected = this.AllInTableSelect;
-    });
-  }
+  // selectInTableAllCheckbox() {
+  //   this.StudentList.forEach((x: any) => {
+  //     x.Selected = this.AllInTableSelect;
+  //   });
+  // }
   //checked single (replace org. list here)
-  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
-    data.forEach((x: any) => {
-      x.Selected = isSelected;
-    });
-    //select all(toggle)
-    this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
-  }
+  // selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+  //   const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
+  //   data.forEach((x: any) => {
+  //     x.Selected = isSelected;
+  //   });
+  //   //select all(toggle)
+  //   this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
+  // }
   // end table feature
 
 

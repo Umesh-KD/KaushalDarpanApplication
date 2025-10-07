@@ -76,7 +76,7 @@ export class bterINVIssuereportComponent {
 
       //this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       //this.Searchrequest.TradeId = this.Searchrequest.TradeId;
-      //this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.staffID = this.Searchrequest.staffID;
      // this.Searchrequest.staffID = 1;
 
       await this.bterInventoryService.GetAllinventoryIssueReport(this.Searchrequest)

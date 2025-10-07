@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -41,23 +39,25 @@ export class AddBterReturnItemComponent {
   public staffDDLList: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
-  //public StudentReqListList: any = [];
   public returnItemTypeList: any = [];
-  //public today: Date = new Date();
   public submitRequest = new ItemsIssueReturnModels();
+  public ItemsDDL: any = [];
+  public ItemsDDLList: any = [];
+  public departmentDDLList: any = [];
+  public StreamMasterList: any = [];
+  public ItemDetailsList: any[] = [];
 
   constructor(
     private toastr: ToastrService,
     private http: HttpClient,
-    private commonFunctionService: CommonFunctionService,
     private loaderService: LoaderService,
     public appsettingConfig: AppsettingService,
     private activatedRoute: ActivatedRoute,
-    private routers: Router,
     private Swal2: SweetAlert2,
     private bterInventoryService: DteItemsMasterService,
     private modalService: NgbModal,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
+    private dteItemsMasterService: DteItemsMasterService,
   ) { }
 
   async ngOnInit() {
@@ -70,7 +70,8 @@ export class AddBterReturnItemComponent {
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
-    await this.GetAllItemTypeList()
+    await this.GetAllItemTypeList();
+
   }
 
   async GetAllData() {
@@ -102,33 +103,49 @@ export class AddBterReturnItemComponent {
     }
   }
 
-  async GetStaffDDL() {
+  async GetAllItemDetails() {
+    debugger
+    if (this.ItemId != null && this.ItemId != undefined && this.ItemId > 0) {
+      await this.dteItemsMasterService.GetAllDTEItemDetails(this.ItemId).then((data: any) => {
+        debugger
+        console.log('Item Details List==>', data)
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          console.log('Item Details List==>', data.data)
+          this.ItemDetailsList = data.Data;
 
-    try {
-      this.loaderService.requestStarted();
-      this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-      this.Searchrequest.TypeName = 'staffList';
-
-      const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-
-      if (data && data.State === EnumStatus.Success) {
-        this.staffDDLList = [
-          { staffID: 0, staffName: 'Choose Staff' },
-          ...data.Data
-        ];
-
-        this.Searchrequest.staffID = 0;
-      } else {
-        this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
-        this.Searchrequest.staffID = 0;
-        this.toastr.error(data?.ErrorMessage || 'No staff found.');
-      }
-    } catch (Ex) {
-      console.error('Error in GetStaffDDL:', Ex);
-    } finally {
-      setTimeout(() => this.loaderService.requestEnded(), 200);
+        }
+        console.log('Item Details List==>', this.ItemDetailsList)
+      });
     }
   }
+
+  
+  async GetStaffDDL() {
+  try {
+    this.loaderService.requestStarted();
+    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.Searchrequest.TypeName = 'staffList';
+
+    const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
+
+    if (data && data.State === EnumStatus.Success) {
+      this.staffDDLList = [
+        { staffID: 0, staffName: 'Choose Staff' },
+        ...data.Data
+      ];
+      this.Searchrequest.staffID = 0;
+    } else {
+      this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+      this.Searchrequest.staffID = 0;
+      this.toastr.error(data?.ErrorMessage || 'No staff found.');
+    }
+  } catch (Ex) {
+    console.error('Error in GetStaffDDL:', Ex);
+  } finally {
+    setTimeout(() => this.loaderService.requestEnded(), 200);
+  }
+}
 
   async GetTradeDDL() {
 
@@ -159,7 +176,6 @@ export class AddBterReturnItemComponent {
   }
 
   async GetCategoryDDL() {
-
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -174,7 +190,6 @@ export class AddBterReturnItemComponent {
         ];
 
         this.Searchrequest.ItemId = 0;
-        //console.log('category list ==>', this.CategoryDDLList);
       } else {
         this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
         this.Searchrequest.ItemId = 0;
@@ -215,7 +230,7 @@ export class AddBterReturnItemComponent {
       const downloadLink = document.createElement('a');
       const url = window.URL.createObjectURL(blob);
       downloadLink.href = url;
-      downloadLink.download = this.generateFileName(DownloadfileName); // Use DownloadfileName
+      downloadLink.download = this.generateFileName(DownloadfileName);
       downloadLink.click();
       window.URL.revokeObjectURL(url);
     });
@@ -255,66 +270,117 @@ export class AddBterReturnItemComponent {
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
 
+  //async confirmReturn() {
+  //  debugger
+  //  this.Swal2.Confirmation("Are you sure you want to return this item ?", async (result: any) => {
+  //    if (result.isConfirmed) {
+  //      try {
+  //        this.loaderService.requestStarted();
+  //        this.isLoading = true;
+  //        this.submitRequest.StaffId = this.Searchrequest.staffID;
+  //        this.submitRequest.Remarks = this.returnModel.Remarks;
+  //        this.submitRequest.ItemCategoryId = 0;
+  //        this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
+  //        this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
+  //        this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected === true);
+  //        const selectedCount = this.submitRequest.ItemList.length;
+  //        this.submitRequest.SelectedCount = selectedCount;
+  //        console.log("Selected Count:", selectedCount);
+
+  //        await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest)
+  //          .then((data: any) => {
+  //            data = JSON.parse(JSON.stringify(data));
+  //            this.State = data['State'];
+  //            this.Message = data['Message'];
+  //            this.ErrorMessage = data['ErrorMessage'];
+
+  //            if (this.State === EnumStatus.Success) {
+  //              this.toastr.success("Items returned successfully", "", {
+  //                toastClass: "ngx-toastr my-update-toast"
+  //              });
+  //              this.GetAllData();
+  //              this.modalService.dismissAll();
+  //            } else {
+  //              this.toastr.error(this.ErrorMessage || "Something went wrong.");
+  //            }
+  //          }, (error: any) => console.error(error)
+  //          );
+
+  //      } catch (ex) {
+  //        console.error("Error in confirmReturn:", ex);
+  //        this.toastr.error("Something went wrong. Please try again.");
+  //      } finally {
+  //        setTimeout(() => {
+  //          this.loaderService.requestEnded();
+  //          this.isLoading = false;
+  //        }, 200);
+  //      }
+  //    }
+  //  });
+  //}
+
   async confirmReturn() {
-
-    const isConfirmed = confirm("Are you sure you want to save the record?");
-    if (!isConfirmed) {
-      return; 
-    }
-    this.loaderService.requestStarted();
-    this.isLoading = true;
-
-    this.submitRequest.StaffId = this.Searchrequest.staffID;
-      this.submitRequest.Remarks = this.returnModel.Remarks;
-      this.submitRequest.ItemCategoryId = 0;
-      this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
-      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
-      debugger
-      this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected==true);
-
-    const selectedCount = this.submitRequest.ItemList.length;
-
-    console.log("Selected Count:", selectedCount);
-
-    this.submitRequest.SelectedCount = selectedCount;
-
-    try {
-      await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success("Items returned successfully", "", {
-              toastClass: "ngx-toastr my-update-toast"
-            });
-
-            this.GetAllData();
-          } else if (this.State == EnumStatus.Error) {
-            this.toastr.error("Something went wrong.");
+    debugger;
+    this.Swal2.Confirmation("Are you sure you want to return the selected items?", async (result: any) => {
+      if (result.isConfirmed) {
+        try {
+          debugger
+          if (!this.returnModel.ItemCondition || this.returnModel.ItemCondition === 0) {
+            this.toastr.warning("Please select Equipment Working status.");
+            return;
           }
-        });
 
-      this.modalService.dismissAll();
-    } catch (ex) {
-      console.error(ex);
-      this.toastr.error('Something went wrong. Please try again.');
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-      }, 200);
-    }
+          const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected === true);
+          if (selectedItems.length === 0) {
+            this.toastr.warning("Please select at least one item to return.");
+            return;
+          }
+
+          this.loaderService.requestStarted();
+          this.isLoading = true;
+
+          this.submitRequest.StaffId = this.Searchrequest.staffID;
+          this.submitRequest.Remarks = this.returnModel.Remarks || "";
+          this.submitRequest.ItemCategoryId = 0;
+          this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
+          this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
+          this.submitRequest.ItemList = selectedItems;
+          this.submitRequest.SelectedCount = selectedItems.length;
+
+          console.log("Returning items:", this.submitRequest);
+
+          const data: any = await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest);
+          const state = data?.State;
+          const message = data?.Message;
+          const errorMessage = data?.ErrorMessage;
+
+          if (state === EnumStatus.Success) {
+            this.toastr.success(message || "Items returned successfully", "", {
+              toastClass: "ngx-toastr my-update-toast",
+            });
+            this.GetAllData();
+            this.modalService.dismissAll();
+          } else {
+            this.toastr.error(errorMessage || "Something went wrong while returning items.");
+          }
+        } catch (ex) {
+          console.error("Error in confirmReturn:", ex);
+          this.toastr.error("Unexpected error. Please try again later.");
+        } finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+            this.isLoading = false;
+          }, 200);
+        }
+      }
+    });
   }
 
 
   async GetAllItemTypeList() {
     try {
       this.loaderService.requestStarted();
-
       const response: any = await this.commonMasterService.GetCommonMasterDDLByType('BterItemConditions');
-
       if (response && response.Data) {
         this.returnItemTypeList = response.Data;
         this.returnModel.ItemCondition = this.returnItemTypeList[0].ID.toString();
@@ -335,6 +401,45 @@ export class AddBterReturnItemComponent {
   }
 
 
+  onIssuedToChange() {
+    this.Searchrequest.staffID = 0;
+    this.Searchrequest.ItemCategoryId = 0;
+    this.Searchrequest.ItemId = 0;
+    this.Searchrequest.departmentID = 0;
+
+    if (this.Searchrequest.IssuedId == 2) {
+      this.GetStaffDDL();
+    }
+    else if (this.Searchrequest.IssuedId == 3) {
+      this.GetMasterData();
+    }
+    else if (this.Searchrequest.IssuedId == 1) {
+      this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
+    }
+  }
+
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      this.Searchrequest.StreamID = 0;
+      console.log('Stream Master List', this.StreamMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
 
