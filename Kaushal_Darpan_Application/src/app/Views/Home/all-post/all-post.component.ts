@@ -131,7 +131,7 @@ export class AllPostComponent implements OnInit {
   }
 
   async GetAllData() {
-    debugger
+     
     console.log('Selected Stream ID ==>',this.SelectedStreamID);  
     console.log('Selected Institute ID ==>',this.SelectedInstituteId);  
     this.StreamID = this.SelectedStreamID.length > 0 ? this.SelectedStreamID.map((item: any) => item.StreamID).join(',') : 0;
@@ -217,7 +217,7 @@ export class AllPostComponent implements OnInit {
   onSearch() {
     const fromDate = this.CampusFromDate ? this.stripTime(new Date(this.CampusFromDate)) : null;
     const toDate = this.CampusToDate ? this.stripTime(new Date(this.CampusToDate)) : null;
-    debugger;
+     ;
     this.CampusPostList = this.OriginalCampusPostList.filter(item => {
       const itemDate = this.stripTime(new Date(item.PostDate));
 
@@ -240,7 +240,7 @@ export class AllPostComponent implements OnInit {
   }
 
   async DownloadPdf(FileName: string) {
-    debugger;
+     ;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
     try {
@@ -259,6 +259,11 @@ export class AllPostComponent implements OnInit {
       this.toastr.error('Failed to download file.', 'Error');
     }
 
+  }
+
+  async DownloadFile(FileName: string){
+    await this.DownloadPdf(FileName); // Download using actual file path
+    this.toastr.success("PDF Genetrated Successfully");
   }
 
 

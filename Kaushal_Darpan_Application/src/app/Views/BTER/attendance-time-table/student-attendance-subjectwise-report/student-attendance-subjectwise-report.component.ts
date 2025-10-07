@@ -15,18 +15,21 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { AttendanceServiceService } from '../../../../Services/AttendanceServices/attendance-service.service';
 import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
-  selector: 'student-attendance-reports',
-  templateUrl: './student-attendance-reports-component.html',
-  styleUrl: './student-attendance-reports-component.css',
+  selector: 'student-attendance-subjectwise-report', 
+  templateUrl: './student-attendance-subjectwise-report.component.html',
+  styleUrl: './student-attendance-subjectwise-report.component.css',
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentAttendanceReportsComponent implements OnInit {
-  displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
+export class StudentAttendanceSubjectwiseReportComponent {
+displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName','SemesterName','YearName','ActionName'];
   dynamicColumns: string[] = [];
+  displayedColumnsData: string[] = ['SrNo', 'SubjectName', 'Present', 'Absent','Holiday','PresentPercent'];
+  dynamicColumnsData: string[] = [];
   filterData: any[] = [];
+  attData: any[] = [];
   EditDataFormGroup!: FormGroup;
   isSubmitted: boolean = false;
   StreamMasterDDL: any[] = [];
@@ -37,6 +40,7 @@ export class StudentAttendanceReportsComponent implements OnInit {
   sSOLoginDataModel = new SSOLoginDataModel();
   private _liveAnnouncer = inject(LiveAnnouncer);
   dataSource = new MatTableDataSource<any>([]);
+  attDataSource = new MatTableDataSource<any>([]);
   checkedAll: boolean = false;
   // Pagination related variables
   totalRecords: number = 0;
@@ -45,19 +49,31 @@ export class StudentAttendanceReportsComponent implements OnInit {
   totalPages: number = 0;
   startInTableIndex: number = 1;
   endInTableIndex: number = 10;
+  // Pagination related variables
+  totalRecordsData: number = 0;
+  pageSizeData: number = 500;
+  currentPageData: number = 1;
+  totalPagesData: number = 0;
+  startInTableIndexData: number = 1;
+  endInTableIndexData: number = 10;
   streamId!: number;
   semesterId!: number;
   sectionId!: number;
   subjectId!: number;
-  today: Date = new Date();
-  yesterdayDate: string;
-  sevenDaysLater: Date = new Date();
-  selectedRange: { start: Date, end: Date } | null = null;
-
+  EnrollmentNo!: string;
+  actionName!: string;  
+  mEnrollmentNo!: string;  
+  mStudentName!: string;  
+  mStreamName!: string;  
+  mSemesterName!: string;  
+  mYearName!: string;   
+  modalRef1: NgbModalRef | null=null;
+  SelectedStudent:any = {};
+  //isSubmitted:boolean =false;
+  closeResult:string | undefined;
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  minEndDate: string | null = null;
+  @ViewChild(MatPaginator) paginator!: MatPaginator; 
 
   constructor(
     private attendanceServiceService: AttendanceServiceService,
@@ -66,25 +82,15 @@ export class StudentAttendanceReportsComponent implements OnInit {
     private http: HttpClient, private route: ActivatedRoute,
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
-    public appsettingConfig: AppsettingService) {
+    public appsettingConfig: AppsettingService,private modalService:NgbModal,) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // Access the route parameters
     this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
-    this.getMasterData();
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
-    this.yesterdayDate = yesterday.toISOString().split('T')[0]; 
-    this.sevenDaysLater.setDate(this.today.getDate() - 7);
-    this.selectedRange = {
-      start: this.sevenDaysLater,
-      end: this.today
-    };
+    this.getMasterData(); 
   }
-
   ngOnInit() {
     
     
@@ -93,8 +99,7 @@ export class StudentAttendanceReportsComponent implements OnInit {
       StreamID: ['', Validators.required],
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
-      AttendanceStartDate: [this.selectedRange?.start],
-      AttendanceEndDate: [this.selectedRange?.end]
+      EnrollmentNo:['']
     });
 
     /*this.getSubjectMasterDDL(this.streamId, this.semesterId);*/
@@ -103,21 +108,8 @@ export class StudentAttendanceReportsComponent implements OnInit {
       StreamID: this.streamId,
       SemesterID: this.semesterId,
       SectionID: this.sectionId,
-    });
-    setTimeout(()=> {
-      if (this.semesterId > 0) {
-        this.TableForm.patchValue({
-          SubjectID: this.subjectId
-        });
-        this.getData();
-      }
-    }, 1000);
-
-    const today = new Date();
-    today.setDate(today.getDate() - 1);
-    this.yesterdayDate = today.toISOString().split('T')[0];
-    this.minEndDate = null;
-    
+    }); 
+    this.GetAttendanceTimeTable(); 
   }
   get formTable() { return this.TableForm.controls; }
 
@@ -130,9 +122,8 @@ export class StudentAttendanceReportsComponent implements OnInit {
       await this.commonMasterService.SemesterMaster().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterDDL = data.Data;
-      })
-    
-      
+      }) 
+
       //await this.commonMasterService.GetSubjectMaster(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.SubjectMasterDDL = data.Data;
@@ -141,7 +132,6 @@ export class StudentAttendanceReportsComponent implements OnInit {
       console.error(error);
     }
   }
-
   async GetBranchSectionData(streamId: any) {
     let obj = {
       Action: "GET_BY_ID",
@@ -170,45 +160,48 @@ export class StudentAttendanceReportsComponent implements OnInit {
     }
 
   }
-
+  getData() {
+    this.isSubmitted = true;
+    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+      this.GetAttendanceTimeTable();
+    }
+  }
   async GetAttendanceTimeTable() {
     
     try {
-      const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
-      const dateEnd = new Date(this.TableForm.value.AttendanceEndDate.toLocaleDateString());
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+        debugger;
       let obj = {
-        SemesterID: this.TableForm.value.SemesterID,
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        InstituteID: this.sSOLoginDataModel.InstituteID,
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
-        SectionID: this.TableForm.value.SectionID,
-        SubjectID: this.TableForm.value.SubjectID,
-        AttendanceStartDate: formattedDateStart,
-        AttendanceEndDate: formattedDateEnd
+        SemesterID: this.TableForm.value.SemesterID || 0,
+        EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+        InstituteID: this.sSOLoginDataModel.InstituteID || 0,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng || 0,
+        StreamID: this.TableForm.value.StreamID || 0,
+        SectionID: this.TableForm.value.SectionID || 0,
+        SubjectID: this.TableForm.value.SubjectID || 0,
+        EnrollmentNo: this.TableForm.value.EnrollmentNo || '',
+        StudentId:0,
+        ActionName:'_GetStudentAttendance'
       };
 
       this.filterData = [];
 
-      await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+      await this.attendanceServiceService.GetStudentAttendanceSubjectWise(obj).then((data: any) => {
+        debugger;
         data = JSON.parse(JSON.stringify(data['Data']));
+        console.log(data);
         this.filterData = data;
         if (this.filterData.length > 0) {
           // ✅ Reset dynamic columns and static columns
           this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName','SectionName'];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'StreamName','SemesterName','YearName','ActionName'];
 
           // ✅ Extract dynamic columns from the first row of data
-          this.dynamicColumns = Object.keys(this.filterData[0])
-            .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
+          // this.dynamicColumns = Object.keys(this.filterData[0])
+          //   .filter(key => key !== 'SectionID' && key !== 'SectionName' && key !== 'EnrollmentNo' && key !== 'SemesterName' && key !== 'StreamName' && key !== 'StudentName' && key !== 'SubjectName' && key !== 'SemesterID' && key !== 'StreamID' && key !== 'SubjectID' && key !== 'SubjectID1' && key !== 'InstituteID' && key !== 'AttendanceDate' && key !== 'Attendance' && key !== 'EndTermID' && key !== 'CourseTypeID' && key !== 'StudentID' );
 
           // ✅ Add dynamic columns to displayedColumns
-          this.displayedColumns = [...this.displayedColumns, ...this.dynamicColumns];
+         // this.displayedColumns = [...this.displayedColumns, ...this.dynamicColumns];
         }
 
         this.dataSource.data = this.filterData;
@@ -236,22 +229,6 @@ export class StudentAttendanceReportsComponent implements OnInit {
       row[column] = checked ? 'P' : 'A'; // Set all attendance to 'P' or 'A'
     });
   }
-
-  getData() {
-    this.isSubmitted = true;
-    if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
-      this.GetAttendanceTimeTable();
-    }
-  }
-
-  onPaginationChange(event: PageEvent): void {
-    this.pageSize = event.pageSize;
-    this.currentPage = event.pageIndex + 1;
-    if (this.currentPage < 1) this.currentPage = 1;
-    else if (this.currentPage > this.totalPages) this.currentPage = this.totalPages;
-    this.updateTable();  // Update table when pagination changes
-  }
-
   updateTable(): void {
     const startIndex = (this.currentPage - 1) * this.pageSize;
     const endIndex = Math.min(startIndex + this.pageSize, this.totalRecords);
@@ -286,66 +263,89 @@ export class StudentAttendanceReportsComponent implements OnInit {
     this.currentPage = 1; // Reset to the first page after filtering
     this.updateTable();  // Update table with filtered data
   }
-
-  exportToExcel(): void {
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filterData);
-    const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Student_Attendance_Reports.xlsx');
-  }
-
-  public downloadPDF() {
-    const margin = 10;
-    const pageWidth = 210 - 2 * margin;
-    const pageHeight = 200 - 2 * margin;
-
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'mm',
-      format: [210, 300],
+  async EditData(content: any, rowData?: any) {
+    this.isSubmitted = true;
+    this.SelectedStudent = rowData;
+    
+    debugger
+    // Open only once, store reference
+    this.modalRef1 = this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
     });
+    //await this.fetchById();
 
-    const pdfTable = this.pdfTable.nativeElement;
-
-    doc.html(pdfTable, {
-      callback: function (doc) {
-        doc.save('Report.pdf');
+    // Handle result or dismissal
+    this.modalRef1.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
       },
-      x: margin,
-      y: margin,
-      width: pageWidth,
-      windowWidth: pdfTable.scrollWidth,
-    });
-  }
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    if (rowData != null && rowData != undefined) {
+      console.log(rowData); 
+      if (rowData.StudentID != null) {
+        let obj = {
+          DepartmentID: this.sSOLoginDataModel.DepartmentID,
+          EndTermID: this.sSOLoginDataModel.EndTermID,
+          Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng, 
+          StudentId:rowData.StudentID,
+          ActionName:'_GetStudentAttendanceByStudentID'
+        }
+        this.mEnrollmentNo=rowData.EnrollmentNo;
+        this.mStudentName=rowData.StudentName; 
+        this.mSemesterName=rowData.SemesterName;
+        this.mStreamName=rowData.StreamName;
+        this.mYearName=rowData.YearName;
+        this.attData = [];
 
-  DownloadFile(FileName: string, DownloadfileName: string): void {
-    const fileUrl = `${this.appsettingConfig.StaticFileRootPathURL}/${GlobalConstants.ReportsFolder}/${FileName}`;
+      await this.attendanceServiceService.GetStudentAttendanceSubjectWise(obj).then((data: any) => {
+        debugger;
+        data = JSON.parse(JSON.stringify(data['Data']));
+        console.log(data);
+        this.attData = data;
+        if (this.attData.length > 0) {
+          // ✅ Reset dynamic columns and static columns
+          this.dynamicColumnsData = [];
+          this.displayedColumnsData = ['SrNo', 'SubjectName', 'Present', 'Absent','Holiday','PresentPercent'];
+ 
+        }
 
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName(DownloadfileName); // Use DownloadfileName
-      downloadLink.click();
-      window.URL.revokeObjectURL(url);
-    });
-  }
+        this.attDataSource.data = this.attData;
+        this.attDataSource.sort = this.sort;
+        this.totalRecordsData = this.attData.length;
+        this.totalPagesData = Math.ceil(this.totalRecordsData / this.pageSizeData);
 
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
-    return `file_${timestamp}.${extension}`;
-  }
-
-  onStartDateChange(event: any) {
-    const startDate = event.target.value;
-    if (startDate) {
-      this.minEndDate = startDate; // set EndDate minimum = StartDate
-
-      const endDate = this.TableForm.value.AttendanceEndDate;
-      if (endDate && endDate < startDate) {
-        // reset end date if it's before new start date
-        this.TableForm.patchValue({ AttendanceEndDate: '' });
+        this.updateTable(); // ✅ Update table after loading data
+      }, error => console.error(error));
       }
     }
   }
+  CloseModal1() {
+    if (this.modalRef1) {
+      this.modalRef1.dismiss();
+      this.modalRef1 = null;
+      this.isSubmitted = false;
+      this.SelectedStudent = {}; 
+    }
+  }
+  
+    private getDismissReason(reason: any): string {
+      if (reason === ModalDismissReasons.ESC) {
+        return 'by pressing ESC';
+      } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
+     exportToExcel(): void {
+        const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.filterData);
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, 'Student_Attendance_SubjectWise_Reports.xlsx');
+      }
 }

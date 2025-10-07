@@ -96,6 +96,7 @@ export class EligibleStudentListMasterSearchModel {
   public InstituteID:number=0;
   public PageSize: number = 50
   public PageNumber: number = 1
+  public AcademicYearID: number = 0
 
   public SortOrder: string = '';
   public SortColumn: string = '';

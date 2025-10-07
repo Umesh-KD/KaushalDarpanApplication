@@ -102,7 +102,7 @@ export class ITIPendingFeesComponent implements OnInit {
     this.StudentDetailsModelList = [];
     try {
       this.loaderService.requestStarted();
-      this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
+      this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
       this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
       this.searchRequest.roleId = this.sSOLoginDataModel.RoleID;
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
