@@ -48,7 +48,7 @@ export class DteAddItemsMasterComponent {
   public maxQty: number = 0;
   _EnumRole = EnumRole;
   public UnitMasterList: any = [];
-
+  todayDate: string = new Date().toISOString().split('T')[0];
 
   constructor(
     private toastr: ToastrService,
@@ -76,7 +76,7 @@ export class DteAddItemsMasterComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(/^\d{4,}$/) // At least 4 digits
+          Validators.pattern(/^\d{6,}$/) // At least 6 digits
         ]
       ],
 
@@ -102,6 +102,7 @@ export class DteAddItemsMasterComponent {
       this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
       
     }
+    this.request.voucherdate = this.todayDate;
     
   }
 

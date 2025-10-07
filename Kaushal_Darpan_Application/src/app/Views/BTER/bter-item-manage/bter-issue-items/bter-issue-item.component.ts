@@ -85,9 +85,7 @@ export class AddBterIssueItemComponent {
   async ngOnInit() {
 
     this.AddItemsRequestFormGroup = this.formBuilder.group({
-
-     
-     // ItemType: ['0', [DropdownValidators]],
+      ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
 
     });
@@ -362,7 +360,7 @@ export class AddBterIssueItemComponent {
     if (this.Searchrequests.issuedTo == 2) {
       // Staff → load staff + category
       this.GetStaffDDL();
-      this.GetCategoryDDL();
+      //this.GetCategoryDDL();
     } else if (this.Searchrequests.issuedTo == 3) {
       // Department → load department list
       this.GetDepartmentDDL();
@@ -605,6 +603,7 @@ export class AddBterIssueItemComponent {
             , departmentID: 0
             , EquipmentsId: 0
             , IssuedId: 0
+            ,StreamID: 0
           };
           this.FileName = '';
           this.Dis_FileName = '';
@@ -705,6 +704,7 @@ export class AddBterIssueItemComponent {
           this.StreamMasterList = data['Data'];
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
+      this.Searchrequests.StreamID = 0;
       console.log('Stream Master List',this.StreamMasterList)
     }
     catch (Ex) {

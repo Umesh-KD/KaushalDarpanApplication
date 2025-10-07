@@ -108,15 +108,21 @@
       </div>
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="">
-        <select id="ddlConter" class="form-select  couterDropDown">
+      <div class="flex items-center gap-4">
+        <!-- Dropdown -->
+        <select id="ddlConter"
+                class="form-select couterDropDown">
           <option value="50">50</option>
           <option value="100">100</option>
           <option value="500">500</option>
           <option value="1000">1000</option>
         </select>
+
+        <!-- Text -->
+        <span class="StarMarking">Show only “Permanent” items</span>
       </div>
       <div class="">
+          
       </div>
       <div class="">
       </div>
@@ -152,8 +158,6 @@
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-           
-           
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">
