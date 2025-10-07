@@ -48,7 +48,8 @@
 
           <ng-select [(ngModel)]="request.BranchID"
                      [clearable]="false">
-            <ng-option [value]="0" selected>--All--</ng-option>
+            <!--<ng-option [value]="0" selected>--All--</ng-option>-->
+            <ng-option [ngValue]="0">-- Select Department --</ng-option>
             @for (item of StreamMasterList; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
             }

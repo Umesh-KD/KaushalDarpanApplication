@@ -1,15 +1,13 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute } from '@angular/router';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { inventoryIssueHistorySearchModel, itemReturnModel, DTEItemsSearchModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -73,7 +71,7 @@ export class AddBterReturnItemComponent {
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
     await this.GetAllItemTypeList();
-    //await this.GetDepartmentDDL();
+
   }
 
   async GetAllData() {
@@ -116,42 +114,13 @@ export class AddBterReturnItemComponent {
           console.log('Item Details List==>', data.data)
           this.ItemDetailsList = data.Data;
 
-
-         // this.addItemsControls();
         }
         console.log('Item Details List==>', this.ItemDetailsList)
       });
     }
   }
 
-  //async GetStaffDDL() {
-
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-  //    this.Searchrequest.TypeName = 'staffList';
-
-  //    const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequest);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.staffDDLList = [
-  //        { staffID: 0, staffName: 'Choose Staff' },
-  //        ...data.Data
-  //      ];
-
-  //      this.Searchrequest.staffID = 0;
-  //    } else {
-  //      this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
-  //      this.Searchrequest.staffID = 0;
-  //      this.toastr.error(data?.ErrorMessage || 'No staff found.');
-  //    }
-  //  } catch (Ex) {
-  //    console.error('Error in GetStaffDDL:', Ex);
-  //  } finally {
-  //    setTimeout(() => this.loaderService.requestEnded(), 200);
-  //  }
-  //}
-
+  
   async GetStaffDDL() {
   try {
     this.loaderService.requestStarted();
@@ -356,24 +325,20 @@ export class AddBterReturnItemComponent {
       if (result.isConfirmed) {
         try {
           debugger
-          // 🔹 Validate condition selection
           if (!this.returnModel.ItemCondition || this.returnModel.ItemCondition === 0) {
             this.toastr.warning("Please select Equipment Working status.");
             return;
           }
 
-          // 🔹 Validate selected items
           const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected === true);
           if (selectedItems.length === 0) {
             this.toastr.warning("Please select at least one item to return.");
             return;
           }
 
-          // 🔹 Start loader
           this.loaderService.requestStarted();
           this.isLoading = true;
 
-          // 🔹 Prepare request object
           this.submitRequest.StaffId = this.Searchrequest.staffID;
           this.submitRequest.Remarks = this.returnModel.Remarks || "";
           this.submitRequest.ItemCategoryId = 0;
@@ -384,13 +349,11 @@ export class AddBterReturnItemComponent {
 
           console.log("Returning items:", this.submitRequest);
 
-          // 🔹 Await API response directly
           const data: any = await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest);
           const state = data?.State;
           const message = data?.Message;
           const errorMessage = data?.ErrorMessage;
 
-          // 🔹 Handle response
           if (state === EnumStatus.Success) {
             this.toastr.success(message || "Items returned successfully", "", {
               toastClass: "ngx-toastr my-update-toast",
@@ -404,7 +367,6 @@ export class AddBterReturnItemComponent {
           console.error("Error in confirmReturn:", ex);
           this.toastr.error("Unexpected error. Please try again later.");
         } finally {
-          // 🔹 Stop loader
           setTimeout(() => {
             this.loaderService.requestEnded();
             this.isLoading = false;
@@ -418,9 +380,7 @@ export class AddBterReturnItemComponent {
   async GetAllItemTypeList() {
     try {
       this.loaderService.requestStarted();
-
       const response: any = await this.commonMasterService.GetCommonMasterDDLByType('BterItemConditions');
-
       if (response && response.Data) {
         this.returnItemTypeList = response.Data;
         this.returnModel.ItemCondition = this.returnItemTypeList[0].ID.toString();
@@ -442,23 +402,18 @@ export class AddBterReturnItemComponent {
 
 
   onIssuedToChange() {
-    // Reset dependent fields
     this.Searchrequest.staffID = 0;
     this.Searchrequest.ItemCategoryId = 0;
     this.Searchrequest.ItemId = 0;
     this.Searchrequest.departmentID = 0;
 
-    // ✅ Use IssuedId (not issuedTo)
     if (this.Searchrequest.IssuedId == 2) {
-      // When 'Staff' is selected
       this.GetStaffDDL();
     }
     else if (this.Searchrequest.IssuedId == 3) {
-      // When 'Department' is selected
       this.GetMasterData();
     }
     else if (this.Searchrequest.IssuedId == 1) {
-      // When 'Office' is selected
       this.staffDDLList = [{ staffID: 0, staffName: 'Choose Staff' }];
     }
   }
@@ -473,6 +428,7 @@ export class AddBterReturnItemComponent {
           this.StreamMasterList = data['Data'];
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
+      this.Searchrequest.StreamID = 0;
       console.log('Stream Master List', this.StreamMasterList)
     }
     catch (Ex) {
