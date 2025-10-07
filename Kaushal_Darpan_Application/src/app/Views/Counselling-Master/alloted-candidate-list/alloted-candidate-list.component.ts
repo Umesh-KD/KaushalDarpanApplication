@@ -1,13 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { CounsellingAllottedListSearchModel } from '../../../Models/CounsellingMasterModel';
+import { CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../../Models/CounsellingMasterModel';
+import { Counselling_DropdownDataModel } from '../../../Models/CounsellingApplicationFormDataModel';
+import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
+import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
+import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-alloted-candidate-list',
@@ -18,10 +25,17 @@ import { CounsellingAllottedListSearchModel } from '../../../Models/CounsellingM
 export class AllotedCandidateListComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   request = new CounsellingAllottedListSearchModel();
+  public tradeRequest = new Counselling_DropdownDataModel();
+  public editInstituteReq = new EditInstituteDataModel_Counselling();
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public AllottedCandidateList: any[] = [];
+  public TradeDDLList: any = [];
+  public InstituteList: any = [];
 
   public isSubmitted: boolean = false
+  closeResult: string | undefined;
+  modalReference: NgbModalRef | undefined;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -44,10 +58,199 @@ export class AllotedCandidateListComponent {
     private toastr: ToastrService,
     private Swal2: SweetAlert2,
     private activatedRoute: ActivatedRoute,
+    private counsellingApplicationFormService: CounsellingApplicationFormService,
+    private counsellingMasterService: CounsellingMasterService,
+    private appsettingConfig: AppsettingService,
+    private http: HttpClient,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+
+    await this.GetTradeList();
+  }
+
+  async GetTradeList() {
+    try {
+      this.tradeRequest.Action = 'GetTradeList'
+      await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.TradeDDLList = data.Data;
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async GetInstituteOptionList() {
+    try {
+      this.tradeRequest.Action = 'ChangeInstituteDDLList'
+      this.tradeRequest.TradeID = this.request.TradeID
+      await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteList = data.Data;
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async ClearSearchData() {
+    this.request.TradeID = 0;
+  }
+
+  async btn_SearchClick() {
+    await this.GetAllottedCandidateList_Counselling();
+  }
+
+  async GetAllottedCandidateList_Counselling() {
+    try {
+      await this.counsellingMasterService.GetAllottedCandidateList_Counselling(this.request)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if(data.State === EnumStatus.Success) {
+            this.AllottedCandidateList = data.Data;
+            this.loadInTable();
+          } else if(data.State === EnumStatus.Warning) {
+            this.toastr.warning(data.Message);
+            this.AllottedCandidateList = data.Data;
+            this.loadInTable();
+          } else {
+            this.toastr.error(data.ErrorMessage);
+            this.AllottedCandidateList = data.Data;
+            this.loadInTable();
+          }
+          
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async editAllottedInstitute(content: any, row: any) {
+    await this.GetInstituteOptionList();
+    this.editInstituteReq.CandidateID = row.CandidateID
+    this.editInstituteReq.OptionID = row.OptionID
+    this.editInstituteReq.AllotmentID = row.AllotmentID
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
+  }
+
+  CloseModal_EditAllottedInstitute() {
+    this.modalService.dismissAll();
+    this.editInstituteReq = new EditInstituteDataModel_Counselling()
+  }
+
+  async OpenOTPModal_EditInstitute() {
+    this.Swal2.Confirmation(`Are you sure you want to Change Allotted Institute!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          await this.SaveData_EditAllottedInstitute();
+        }
+      }
+    );
+  }
+
+  async SaveData_EditAllottedInstitute() {
+    try {
+      this.editInstituteReq.ModifyBy = this.sSOLoginDataModel.UserID
+      await this.counsellingMasterService.SaveFinalInstituteAllotment_Counselling(this.editInstituteReq).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.GetAllottedCandidateList_Counselling();
+          this.CloseModal_EditAllottedInstitute();
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  async OpenOTPModal_GenerateAllotmentOrder() {
+    
+    let anySelected = this.AllottedCandidateList.some((x: any) => x.Selected == true);
+    if(!anySelected) {
+      this.toastr.error("Please select at least one candidate.");
+      return;
+    }
+
+    this.Swal2.Confirmation(`Are you sure you want to Generate Allotment Order for Selected Candidates!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          await this.GenerateAllotmentOrder_Counselling();
+        }
+      }
+    );
+  }
+
+
+  async GenerateAllotmentOrder_Counselling() {
+    let selected = this.AllottedCandidateList.filter((x: any) => x.Selected == true);
+
+    if(selected.length == 0) {
+      this.toastr.error("Please select at least one candidate.");
+      return;
+    }
+    selected.forEach((x: any) => {
+      x.ModifyBy = this.sSOLoginDataModel.UserID
+    })
+    try {
+      await this.counsellingMasterService.GenerateAllotmentOrder_Counselling(selected).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          await this.DownloadFile(data.Data, 'file download');
+          await this.GetAllottedCandidateList_Counselling();
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+    DownloadFile(FileName: string, DownloadfileName: any): void {
+
+    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
+    // Fetch the file as a blob
+    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
+      const downloadLink = document.createElement('a');
+      const url = window.URL.createObjectURL(blob);
+      downloadLink.href = url;
+      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
+      downloadLink.click();
+      // Clean up the object URL
+      window.URL.revokeObjectURL(url);
+    });
+  }
+  generateFileName(extension: string): string {
+    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
+    return `file_${timestamp}.${extension}`;
   }
 
   //table feature
@@ -139,7 +342,7 @@ export class AllotedCandidateListComponent {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.AllottedCandidateList.filter(x => x.StudentID == item.StudentID);
+    const data = this.AllottedCandidateList.filter(x => x.AllotmentID == item.AllotmentID);
     data.forEach(x => {
       x.Selected = isSelected;
     });
@@ -148,8 +351,4 @@ export class AllotedCandidateListComponent {
   }
   // end table feature
 
-  async btn_SearchClick() {}
-  async btn_Clear() {}
-
-  async SaveDataMarked() {}
 }

@@ -43,7 +43,7 @@ export class DirectAllotmentListComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   closeResult: string | undefined;
   public isprofile: number = 0;
-
+  public isAdmission:number=0
   public DateConfigSetting: any = [];
   AllotmentKey: string = "";
   constructor(
@@ -87,7 +87,7 @@ export class DirectAllotmentListComponent {
     //alert(this.searchRequest.TradeLevel);
     await this.getIMCAllotedList();
     await this.GetDateConfig();
-    this.AllotmentKey = 'DIRECT ADDMISSSION';
+    this.AllotmentKey = 'DIRECT ALLOTMENT REPORTING';
   }
 
   async GetDateConfig() {
@@ -96,16 +96,17 @@ export class DirectAllotmentListComponent {
       //CourseTypeId: this.searchRequest.CourseTypeId,
       AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
       EndTermId: this.sSOLoginDataModel.EndTermID,
-      Key: "DIRECT ADDMISSSION",
+      Key: "DIRECT ALLOTMENT REPORTING",
       SSOID: this.sSOLoginDataModel.SSOID
     }
 
     await this.commonMasterService.GetDateConfigSetting(data)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        debugger
         this.DateConfigSetting = data['Data'];
-
-        console.log(this.DateConfigSetting[0]['GENERATE MERIT']);
+        this.isAdmission = this.DateConfigSetting[0]['IsOpenn']
+        console.log(this.DateConfigSetting[0]['DIRECT ALLOTMENT REPORTING']);
 
       }, (error: any) => console.error(error)
       );

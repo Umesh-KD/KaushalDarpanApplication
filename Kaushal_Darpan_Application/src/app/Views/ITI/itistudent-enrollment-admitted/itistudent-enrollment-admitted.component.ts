@@ -145,6 +145,7 @@ export class ITIStudentEnrollmentAdmittedComponent {
         ddlStreamID: [''],
       /*  ddlSemesterID: [''],*/
         ddlManagementID: [''],
+        ddltrdeschemeID: [''],
         txtStudentName: [''],
         txtMobileNo: [''],
         ddlAdmitted:['']
@@ -275,10 +276,11 @@ export class ITIStudentEnrollmentAdmittedComponent {
           this.ExamCategoryList = data['Data'];
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.CasteCategoryA()
+      await this.commonMasterService.GetTradeTypesList()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CasteCategoryAMasterData = data['Data'];
+          console.log(this.CasteCategoryAMasterData,"dsf")
         }, (error: any) => console.error(error));
 
       await this.commonMasterService.CasteCategoryB()

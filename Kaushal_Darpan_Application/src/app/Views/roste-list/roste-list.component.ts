@@ -117,16 +117,16 @@ export class RosteListComponent implements OnInit {
     this.filterModel.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     this.filterModel.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.TableForm = this.fb.group({
-      DayID: [0, [Validators.required, DropdownValidators]],
-      SectionID: [[], Validators.required],
-      SubjectID: [0, [Validators.required, DropdownValidators]],
-      StreamID: [0, [Validators.required, DropdownValidators]],
-      StaffID: [0, [Validators.required, DropdownValidators]],
-      SemesterID: [0, [Validators.required, DropdownValidators]],
-      /* AttendanceDate: [new Date(), Validators.required],*/
-      AttendanceStartTime: ['09:00', Validators.required],
-      AttendanceEndTime: ['10:00', Validators.required]
+      SemesterID: [null, [Validators.required, DropdownValidators]], // initialize with null
+      StreamID: [null, [Validators.required, DropdownValidators]],   // initialize with null
+      DayID: [0, []],
+      SectionID: [[]],
+      SubjectID: [0, []],
+      StaffID: [0, []],
+      AttendanceStartTime: [''],
+      AttendanceEndTime: ['']
     });
+
     
     this.getMasterData();
    /* this.GetAllRosterDisplay();*/
@@ -188,11 +188,46 @@ export class RosteListComponent implements OnInit {
   async GetAllRosterDisplay() {
     try {
       debugger
+      if (this.TableForm.invalid) {
+        this.toastr.warning("Please select Semester or Stream !")
+        return;
+      } 
       this.loaderService.requestStarted();
       const response = await this.staffMasterService.GetAllRosterDisplay(this.filterModel);
       const data = JSON.parse(JSON.stringify(response));
       if (data.State === EnumStatus.Success) {
         this.filterData = data.Data;
+        this.filterData = this.filterData.filter((item: any) => item.SemesterID == this.filterModel.SemesterID && item.StreamID == this.filterModel.StreamID)
+
+        //let filteredData = data.Data;
+
+        //if (
+        //  (this.filterModel.SemesterID && this.filterModel.SemesterID !== 0) ||
+        //  (this.filterModel.StreamID && this.filterModel.StreamID !== 0)
+        //) {
+        //  filteredData = filteredData.filter((item: any) => {
+        //    const semesterMatch =
+        //      !this.filterModel.SemesterID || this.filterModel.SemesterID === 0
+        //        ? true
+        //        : item.SemesterID === this.filterModel.SemesterID;
+
+        //    const streamMatch =
+        //      !this.filterModel.StreamID || this.filterModel.StreamID === 0
+        //        ? true
+        //        : item.StreamID === this.filterModel.StreamID;
+
+        //    return semesterMatch && streamMatch;
+        //  });
+        //} else {
+        
+        //  this.toastr.warning("Please select Semester or Stream !")
+        //}
+
+
+       
+
+
+
         this.buildDynamicColumns();
         this.dataSource = new MatTableDataSource(this.filterData);
         

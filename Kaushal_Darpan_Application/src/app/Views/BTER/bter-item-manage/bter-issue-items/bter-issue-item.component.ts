@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
@@ -85,8 +85,6 @@ export class AddBterIssueItemComponent {
   async ngOnInit() {
 
     this.AddItemsRequestFormGroup = this.formBuilder.group({
-
-     
       ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
 
@@ -95,9 +93,6 @@ export class AddBterIssueItemComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     this.InstituteID = this.sSOLoginDataModel.InstituteID;
-    this.GetStaffDDL()
-    this.GetCategoryDDL()
-
     this.prepareChunkedItems();
     this.GetMasterData()
 
@@ -165,39 +160,6 @@ export class AddBterIssueItemComponent {
   }
 
 
-
- 
-  async DGET_Details1() {
-    
-    try {
-      this.loaderService.requestStarted();
-      debugger
-     
-
-      this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
-      this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
-
-      await this.bterInventoryService.GetConsumeItemList(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-
-          this.ItemsDDLList = data.Data;
-
-
-
-        }, error => console.error(error));
-
-      console.log('Items DDL List ==>', this.ItemsDDLList)
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      this.loaderService.requestEnded();
-    }
-  }
-
-
   async DGET_Details() {
     try {
       this.loaderService.requestStarted();
@@ -207,7 +169,7 @@ export class AddBterIssueItemComponent {
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
 
       {
-        // 🔹 Serial No = No → get items WITHOUT Equipment Code
+        //  Serial No = No → get items WITHOUT Equipment Code
         await this.bterInventoryService.GetConsumeItemList(this.searchRequest)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -388,7 +350,6 @@ export class AddBterIssueItemComponent {
 
 
   onIssuedToChange() {
-    // Reset dropdowns when Issued To changes
     this.Searchrequests.staffID = 0;
     this.Searchrequests.ItemCategoryId = 0;
     this.Searchrequests.ItemId = 0;
@@ -399,7 +360,7 @@ export class AddBterIssueItemComponent {
     if (this.Searchrequests.issuedTo == 2) {
       // Staff → load staff + category
       this.GetStaffDDL();
-      this.GetCategoryDDL();
+      //this.GetCategoryDDL();
     } else if (this.Searchrequests.issuedTo == 3) {
       // Department → load department list
       this.GetDepartmentDDL();
@@ -472,62 +433,22 @@ export class AddBterIssueItemComponent {
   }
 
 
-  //async GetItemListType() {
-  //  try {
-  //    this.loaderService.requestStarted();
-
-  //    let searchdata = {
-  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
-  //      EquipmentsId: this.Searchrequests.itemCategoryId || 0,
-  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-  //      OfficeID: 0,
-  //      StatusID: this.Searchrequests.ItemId || 0,
-  //      ItemTypeID: this.Searchrequests.ItemType || 0
-  //    };
-
-  //    const data: any = await this.bterInventoryService.GetItemListType(searchdata);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.CategoryDDLList = data.Data.map((x: any) => ({
-  //        ItemCategoryID: x.ItemCategoryID,
-  //        ItemCategoryName: x.ItemCategoryName
-  //      }));
-
-  //      this.ItemsDDLList = data.Data.map((x: any) => ({
-  //        ItemId: x.ItemId,
-  //        ItemName: x.CampanyName,
-  //        EquipmentsId: x.EquipmentsId,
-  //        EquipmentName: x.EquipmentName
-  //      }));
-  //    } else {
-  //      this.CategoryDDLList = [];
-  //      this.ItemsDDLList = [];
-  //    }
-  //  } catch (Ex) {
-  //    console.log("Error in GetItemListType:", Ex);
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-
   async GetItemListType() {
+    debugger
     try {
       this.loaderService.requestStarted();
 
-      const searchdata: DTEItemsSearchModel = {
+      const searchdata: DTEItemsSearchModel1 = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
         RoleID: this.sSOLoginDataModel.RoleID || 0,
         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
+        ItemType: this.Searchrequests.ItemType || 0,
         EquipmentsId: 0,
         OfficeID: 0,
-        StatusID: 0
+        StatusID: 0,
+
       };
 
       const data: any = await this.bterInventoryService.GetItemListType(searchdata);
@@ -552,62 +473,18 @@ export class AddBterIssueItemComponent {
   }
 
 
-  //async BindItem_list1() {
-
-  //  debugger;
-  //  try {
-
-  //    console.log("Bind  Item  list")
-  //    this.loaderService.requestStarted();
-
-  //    const searchdata: DTEItemsSearchModel = {
-  //      DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
-  //      EndTermID: this.sSOLoginDataModel.EndTermID || 0,
-  //      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
-  //      RoleID: this.sSOLoginDataModel.RoleID || 0,
-  //      CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
-  //      EquipmentsId: 0,
-  //      OfficeID: 0,
-  //      StatusID: 0
-  //    };
-
-  //    const data: any = await this.bterInventoryService.GetAllItemList(searchdata);
-
-  //    if (data && data.State === EnumStatus.Success) {
-  //      this.CategoryDDLList = data.Data.map((x: any) => ({
-  //        ItemCategoryID: x.ItemCategoryID,
-  //        ItemCategoryName: x.ItemCategoryName
-  //      }));
-
-  //      this.Searchrequests.itemCategoryId = 0;
-  //      this.ItemsDDLList = [];
-  //    } else {
-  //      this.CategoryDDLList = [];
-  //      this.ItemsDDLList = [];
-  //    }
-  //    console.log('Item List ==>',this.CategoryDDLList)
-  //  } catch (Ex) {
-  //    console.error("Error :", Ex);
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-
-
   async BindItem_list() {
     debugger
   try {
     this.loaderService.requestStarted();
 
-    const searchdata: DTEItemsSearchModel = {
+    const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
       RoleID: this.sSOLoginDataModel.RoleID || 0,
       CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-
+      ItemType: this.Searchrequests.ItemType || 0,
       EquipmentsId: 0,
       OfficeID: 0,
       StatusID: 0
@@ -726,11 +603,11 @@ export class AddBterIssueItemComponent {
             , departmentID: 0
             , EquipmentsId: 0
             , IssuedId: 0
+            ,StreamID: 0
           };
           this.FileName = '';
           this.Dis_FileName = '';
 
-          // reset form if using Angular form
           if (this.AddItemsRequestFormGroup) {
             this.AddItemsRequestFormGroup.reset();
           }
@@ -827,6 +704,7 @@ export class AddBterIssueItemComponent {
           this.StreamMasterList = data['Data'];
           this.StreamMasterList = data['Data'];
         }, (error: any) => console.error(error));
+      this.Searchrequests.StreamID = 0;
       console.log('Stream Master List',this.StreamMasterList)
     }
     catch (Ex) {
@@ -840,16 +718,13 @@ export class AddBterIssueItemComponent {
   }
 
   onStaffChange() {
-    // ✅ Reset ItemType, Category, Items when staff changes
-    this.Searchrequests.ItemType = 0; // reset
-    this.Searchrequests.ItemCategoryId = 0; // reset category
+    debugger
+    this.Searchrequests.ItemType = 0; 
+    this.Searchrequests.ItemCategoryId = 0; 
     this.CategoryDDLList = [];
-
     this.ItemsDDLList = [];
-
     console.log("Staff changed => reset ItemType & Category");
 
-    // If you want to auto reload item types after staff change:
     this.GetItemListType();
   }
 

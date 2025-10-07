@@ -14,35 +14,7 @@
   <div class="card-body p-5">
 
     <div class="mb-8">
-      <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-      </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">-->
-      <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-        <select class="form-select" [(ngModel)]="Searchrequest.staffID" name="staffID" (change)="GetAllData()">
-          <option *ngFor="let s of staffDDLList" [value]="s.staffID">
-            {{s.staffName}}
-          </option>
-        </select>
-      </div>
-
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category List:</label>
-        <select class="form-select" id="CategoryID" [(ngModel)]="Searchrequest.ItemId">
-          <option *ngFor="let item of CategoryDDLList" [value]="item.ItemId">
-            {{ item.ItemCategoryName }}
-          </option>
-        </select>
-      </div>
-
-      <div>
-        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-        <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
-      </div>-->
-      <!--</div>
-      </div>-->
-
+      
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Inventory Issue Report List</b>
         <div class="flex gap-2">
@@ -89,7 +61,8 @@
               <td align="left">{{ item.IssueNumber}}</td>
               <td align="left">{{ item.staffName}}</td>
               <!--<td align="left">{{ item.Name}}</td>-->
-              <td align="left">{{ item.IssueDate}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd/MM/yyyy' }}</td>
+
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a href="{{appsettingConfig.StaticFileRootPathURL + '/Students/' +  item.IssueItemDocument}}"
@@ -125,7 +98,7 @@
         </div>
         <div class="card-body">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-list"></i>Request History</b>
+            <b class="text-1xl-5"><i class="ti ti-list"></i>Issue History</b>
             <div class="flex justify-end flex-wrap items-center">
             </div>
           </div>
@@ -148,7 +121,7 @@
                   <td align="left">{{ row.ItemCategoryName }}</td>
                   <td align="left">{{ row.Name }}</td>
                   <td align="left">{{ row.IssueQuantity }}</td>
-                  <td align="left">{{ row.IssueDate }}</td>
+                  <td align="left">{{ row.IssueDate | date:'dd/MM/yyyy' }}</td>
                 </tr>
                 <tr *ngIf="UserRequestHistoryList?.length==0">
                   <td colspan="10" class="text-center">No Record Found </td>

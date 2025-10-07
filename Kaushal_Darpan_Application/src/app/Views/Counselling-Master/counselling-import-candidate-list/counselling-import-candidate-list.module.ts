@@ -3,21 +3,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderModule } from '../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
-import { CounsellingSelectedOptionListComponent } from './counselling-selectedoptionlist.component';
-import { CounsellingSelectedOptionListRoutingModule } from './counselling-selectedoptionlist.routing.module';
+import { CounsellingImportCandidateListComponent } from './counselling-import-candidate-list.component';
+import { CounsellingImportCandidateListRoutingModule } from './counselling-import-candidate-list.routing.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 @NgModule({
   declarations: [
-    CounsellingSelectedOptionListComponent
+    CounsellingImportCandidateListComponent
   ],
   imports: [
     CommonModule,
-    CounsellingSelectedOptionListRoutingModule
+    CounsellingImportCandidateListRoutingModule
     , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,
-    NgSelectModule,
-    OTPModalModule,
+    NgSelectModule
   ]
 })
-export class CounsellingSelectedOptionListModule { }
+export class CounsellingImportCandidateListModule { }

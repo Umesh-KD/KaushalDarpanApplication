@@ -72,12 +72,12 @@
           </div>
 
           <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
-    <select class="form-select" id="StudentExamYear" formControlName="ddlSemesterID"
-            [(ngModel)]="request.Year_SemID">
-      <option value="0">--All--</option>
-      <option value="7">1st Year</option>
-      <option value="8">2nd Year</option>-->
+  <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester</label>
+  <select class="form-select" id="StudentExamYear" formControlName="ddlSemesterID"
+          [(ngModel)]="request.Year_SemID">
+    <option value="0">--All--</option>
+    <option value="7">1st Year</option>
+    <option value="8">2nd Year</option>-->
           <!-- <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option> -->
           <!--</select>-->
           <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
@@ -101,6 +101,22 @@
               </option>
             </select>
           </div>
+
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade Scheme</label>
+            <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="request.TradeSchemeID"
+                    formControlName="ddltrdeschemeID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of CasteCategoryAMasterData" value="{{item.CourseTypeID}}">
+                {{
+item.CourseTypeName
+                }}
+              </option>-->
+              <!--<option value="1">NCVT</option>
+  <option value="2">SCVT</option>-->
+            <!--</select>
+          </div>-->
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Mobile No</label>
             <input class="form-input" type="text" id="StudentExamMobile" placeholder="Search By Mobile No" [(ngModel)]="request.MobileNo"
