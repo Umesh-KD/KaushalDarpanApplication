@@ -282,7 +282,15 @@ export class StaffMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  
+
+
+  public async GetBranchSectionAcRosterData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetBranchSectionAcRosterData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }
 
