@@ -49,6 +49,13 @@ export class ITIGenrateEnrollService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async OnRevert(request:any) {
+    const body = JSON.stringify(request);
 
+    return this.http.post(`${this.APIUrl}/OnRevert`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
 

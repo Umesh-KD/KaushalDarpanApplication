@@ -47,6 +47,8 @@ export class GenerateEnrollmentITIComponent {
   public PublishVisible: boolean = false
   public OTP: string = '';
   public GeneratedOTP: string = '';
+  public Action: string = ''
+  public Status: number=0
   public MobileNo: string = '';
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
@@ -85,6 +87,7 @@ export class GenerateEnrollmentITIComponent {
     this.UserID = this.sSOLoginDataModel.UserID;
 
     this.searchRequest.StreamID = 0;
+    await this.getEnrollStatus()
     this.GetAllData();
 
     
@@ -105,6 +108,25 @@ export class GenerateEnrollmentITIComponent {
       }, 200);
     }
   }
+
+  async getEnrollStatus() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("EnrollStatus", this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        debugger
+        this.Status = data.Data[0]['Status'];
+        
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async getExamMasterList() {
     try {
@@ -155,6 +177,7 @@ export class GenerateEnrollmentITIComponent {
           if (data.State == EnumStatus.Success) {
             this.StudentList = data['Data'];
             console.log(this.StudentList, "Studentlist")
+      
             this.updateButtonStates()
             //table feature load
 /*            this.loadInTable();*/
@@ -278,7 +301,7 @@ export class GenerateEnrollmentITIComponent {
     this.SubjectMasterDDLList = [];
     this.StudentList = [];
     this.AllSelect = false
-
+    this.Action=''
 
   }
 
@@ -303,6 +326,7 @@ export class GenerateEnrollmentITIComponent {
 
       this.StudentList.forEach((item) => {
         item.ModifyBy = this.sSOLoginDataModel.UserID
+        item.EndTermID = this.sSOLoginDataModel.EndTermID
       })
 
       await this.GetEnrollService.OnPublish(this.StudentList)
@@ -317,6 +341,7 @@ export class GenerateEnrollmentITIComponent {
 
             this.CloseModal()
             await this.ResetControl()
+            await this.getEnrollStatus()
             await this.GetAllData();
 
 
@@ -342,14 +367,72 @@ export class GenerateEnrollmentITIComponent {
     }
 
 
-
-
-
-
-
-
   }
 
+
+
+  async OnRevert() {
+
+    this.isSubmitted = true;
+    //
+    /*    this.refreshBranchRefValidation(true);*/
+    //
+    //if (this.PlacementShortListStudentForm.invalid) {CloseViewStudentDetailsEditStudentData
+    //  return console.log("error")
+    //}
+
+
+
+    try {
+      this.loaderService.requestStarted();
+
+
+      var obj: any = {
+        EndTermID : this.sSOLoginDataModel.EndTermID
+      };
+
+      this.StudentList.forEach((item) => {
+        item.ModifyBy = this.sSOLoginDataModel.UserID
+        item.EndTermID = this.sSOLoginDataModel.EndTermID
+      })
+
+      await this.GetEnrollService.OnRevert(obj)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (this.State == EnumStatus.Success) {
+
+            this.toastr.success(this.Message)
+
+
+            this.CloseModal()
+            await this.ResetControl()
+            await  this.getEnrollStatus()
+            await this.GetAllData();
+
+
+          }
+          else {
+
+            this.toastr.error(this.ErrorMessage)
+
+          }
+        })
+        .catch((error: any) => {
+          console.error(error);
+          this.toastr.error('Failed to Action Short List!');
+        });
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 
@@ -357,7 +440,12 @@ export class GenerateEnrollmentITIComponent {
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {
-          this.OnPublish()
+          if (this.Action == 'Publish') {
+            this.OnPublish()
+          } else {
+            this.OnRevert()
+          }
+          
         }
         catch (ex) {
           console.log(ex);
@@ -413,21 +501,25 @@ export class GenerateEnrollmentITIComponent {
 
 
   //Start Section Model
-  async openModalGenerateOTP(content: any) {
+  async openModalGenerateOTP(content: any, Action: any) {
+   
+    this.Action = Action
+    if (Action == 'Publish') {
 
 
-    const IsGenerated = this.StudentList.some((x) => x.temp_Enrollment == '' || x.temp_Enrollment == null)
-    if (IsGenerated) {
-      this.toastr.warning("Generate SRN before publishing.")
-      return
+      const IsGenerated = this.StudentList.some((x) => x.temp_Enrollment == '' || x.temp_Enrollment == null)
+      if (IsGenerated) {
+        this.toastr.warning("Generate SRN before publishing.")
+        return
+      }
+
     }
-
     const isAnySelected = this.StudentList.some(x => x.Marked)
     
 
 
 
-    this.Swal2.Confirmation("Are you sure you want to publish?", async (result: any) => {
+    this.Swal2.Confirmation(`Are you sure you want to ${Action} ?`, async (result: any) => {
       // Check if the user confirmed the action
       if (result.isConfirmed) {
         this.isSubmitted = true;
