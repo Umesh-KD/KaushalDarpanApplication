@@ -332,6 +332,13 @@ export class BTEREstablishManagementService {
       ).toPromise();
   }
 
-  
+  public async BTER_EM_ApproveStaffProfileOterFaculty(searchRequest: BTER_EM_ApproveStaffDataModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/BTER_EM_ApproveStaffProfileOterFaculty`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }

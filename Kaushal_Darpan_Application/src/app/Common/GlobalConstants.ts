@@ -176,7 +176,8 @@ export enum EnumRole {
   ITCell_NonEng = 210, 
   DTEDegreeCourse1stYear = 80,
   DTEDegreeCourse2ndYear = 81,
-
+  GuestFaculty=225,
+  ShikshaSambal = 226,
   CandidateRole=999,
 
 }
