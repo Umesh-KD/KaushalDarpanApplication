@@ -1959,4 +1959,11 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetHostelStatusDDL() {
+    return await this.http.post(this.APIUrl + '/GetHostelStatusDDL', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
