@@ -59,6 +59,7 @@ export class BterEMAddStaffDetailsComponent {
   public GetGenderID: number = 0;
   public IsHideShow: boolean = false
   public IsSubjectlistTech: boolean = false
+  public IsOterFacultyTech: boolean = false
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -178,6 +179,27 @@ export class BterEMAddStaffDetailsComponent {
     this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
 
 
+    if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID == this._EnumRole.ShikshaSambal) {
+      this.IsOterFacultyTech = true
+
+      this.StaffMasterFormGroup.controls['DepartmentJoiningDate'].clearValidators();
+      this.StaffMasterFormGroup.controls['DateOfJoining'].clearValidators();
+      this.StaffMasterFormGroup.controls['CurrentDesignationID'].clearValidators();
+      this.StaffMasterFormGroup.controls['Experience'].clearValidators();
+      this.StaffMasterFormGroup.controls['QualificationAtJoining'].clearValidators();
+      this.StaffMasterFormGroup.controls['QualificationAfterJoining'].clearValidators();
+      this.StaffMasterFormGroup.controls['DateOfRetirement'].clearValidators();
+
+
+      this.StaffMasterFormGroup.controls['DepartmentJoiningDate'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DateOfJoining'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['CurrentDesignationID'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['Experience'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['QualificationAtJoining'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['QualificationAfterJoining'].updateValueAndValidity();
+      this.StaffMasterFormGroup.controls['DateOfRetirement'].updateValueAndValidity();
+    }
+   
     await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
   }
   get _AddsubjectFormGroup() { return this.AddsubjectFormGroup.controls; }
@@ -437,7 +459,7 @@ export class BterEMAddStaffDetailsComponent {
       return;
     }
 
-    if (this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher) {
+    if (this.sSOLoginDataModel.RoleID === this._EnumRole.Teacher || this.sSOLoginDataModel.RoleID === this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID === this._EnumRole.ShikshaSambal) {
       const hasSubjects = this.staffDetailsFormData.StaffSubjectListModel?.length > 0;
       if (!hasSubjects) {
         this.toastr.warning('Please enter subject details for the teacher !');

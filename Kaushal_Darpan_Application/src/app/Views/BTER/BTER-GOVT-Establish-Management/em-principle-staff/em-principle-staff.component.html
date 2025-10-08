@@ -313,13 +313,29 @@
               {{row.ProfileStatus}}
             </td>
             <td>
+
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="row.ProfileStatusID == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
-                <a href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
-                <a *ngIf="row.ProfileStatusID != 247 && row.ProfileStatusID != 249 && row.ProfileStatusID != 288 && row.ProfileStatusID != 0" href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
+                <a href="javascript:void(0);" *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
+                          row.RoleID != _EnumRole.ShikshaSambal" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
+
+                <a *ngIf="row.RoleID != _EnumRole.GuestFaculty && 
+                          row.RoleID != _EnumRole.ShikshaSambal && 
+                          row.ProfileStatusID != 247 &&
+                          row.ProfileStatusID != 249 &&
+                          row.ProfileStatusID != 288 &&
+                          row.ProfileStatusID != 0
+                        " href="javascript:void(0);" title="Approve Profile" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, false)"><i class="ti ti-check"></i></a>
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
                 <a *ngIf="row.RoleID == _EnumRole.HostelWarden" href="javascript:void(0);" title="Edit Hostel" (click)="onEditHostel(Model_EditHostel, row)"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" *ngIf="row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal && row.ProfileStatusID != 0 && row.ProfileStatusID != 288 " title="View" (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
+                  <i class="ti ti-check" *ngIf="row.ProfileStatusID != 247 &&
+                                                row.ProfileStatusID != 249 &&
+                                                row.ProfileStatusID != 288 &&
+                                                row.ProfileStatusID != 0 "></i>
+                  <i class="ti ti-eye" *ngIf="row.ProfileStatusID == 247"></i>
+                </a>
               </div>
             </td>
           </tr>
@@ -1118,5 +1134,160 @@
         </div>
       </form>
     </div>
+  </div>
+</ng-template>
+
+
+<ng-template #Modal_ApproveStaffProfileOterFaculty let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b *ngIf="IsView"><i class="fa fa-eye"></i>&nbsp; View Staff Details</b>
+        <b *ngIf="!IsView"><i class="fa fa-plus"></i>&nbsp; Complete Profile and Approve</b>
+        <button class="btn bg-info text-white" (click)="ClosePopup()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card">
+        <div class="card-body p-5">
+          <form [formGroup]="StaffMasterFormGroupOterFaculty">
+
+            <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Employee Details</b>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+                <select class="form-select " name="InstituteID" id="InstituteID" formControlName="InstituteID"
+                        [(ngModel)]="approveRequest.InstituteID" (change)="getStreamMasterData()">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                </select>
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.InstituteID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupOterFaculty.InstituteID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is
+                    required .!
+                  </p>
+                </div>
+              </div>
+
+              <div *ngIf="IsHideShow">
+                <label class=" text-gray-800 text-sm font-medium inline-block mb-1"> Name of Branch<span class="StarMarking">*</span></label>
+                <select class="form-select" name="BranchID" id="BranchID" formControlName="BranchID"
+                        [(ngModel)]="approveRequest.BranchID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of CourseMasterDDL" [value]="item.StreamID">{{item.StreamName}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.BranchID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupOterFaculty.BranchID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+            
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
+                <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID" id="SSOID"
+                       formControlName="SSOID" [(ngModel)]="approveRequest.SSOID" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.SSOID.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupOterFaculty.SSOID.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span class="StarMarking">*</span></label>
+                <input autocomplete="off" type="text" class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
+                       formControlName="Name" [(ngModel)]="approveRequest.Name" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.Name.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupOterFaculty.Name.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
+                <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
+                        [(ngModel)]="approveRequest.DesignationID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.DesignationID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupOterFaculty.DesignationID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>
+                <select class="form-select" id="Gender" name="Gender" [(ngModel)]="approveRequest.Gender"
+                        formControlName="Gender">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.Gender.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupOterFaculty.Gender.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span class="StarMarking">*</span></label>
+                <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber" id="MobileNumber"
+                       formControlName="MobileNumber" [(ngModel)]="approveRequest.MobileNumber" maxlength="10" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.MobileNumber.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupOterFaculty.MobileNumber.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span> </label>
+                <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
+                       formControlName="EmployeeID" [(ngModel)]="approveRequest.EmployeeID" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.EmployeeID.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupOterFaculty.EmployeeID.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
+                <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
+                       formControlName="DateOfBirth" [(ngModel)]="approveRequest.DateOfBirth" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupOterFaculty.DateOfBirth.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupOterFaculty.DateOfBirth.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Close Button -->
+      <div class="flex justify-center my-2">
+        <button *ngIf="this.isApprove==false" class="btn bg-info text-white" (click)="ApproveStaffProfileOterFaculty()">Submit and Approve Profile</button>
+        <button *ngIf="this.isApprove==false" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopup()">Close</button>
+      </div>
+    </div>
+    <!--</div>-->
   </div>
 </ng-template>
