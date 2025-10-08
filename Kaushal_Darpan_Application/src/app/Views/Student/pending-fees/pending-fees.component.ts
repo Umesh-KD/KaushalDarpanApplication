@@ -215,6 +215,7 @@ export class PendingFeesComponent implements OnInit {
     this.emitraRequest.DepartmentID = EnumDepartment.BTER;
     this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
     this.emitraRequest.ID = item.ID;
+    this.emitraRequest.USEREMAIL = item.Email ?? "";
     //student details
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
 
@@ -228,7 +229,7 @@ export class PendingFeesComponent implements OnInit {
 
     this.loaderService.requestStarted();
     try {
-      await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+      await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -252,9 +253,10 @@ export class PendingFeesComponent implements OnInit {
 
   async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false) {
 
-    //const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
-    if (1==1) {
-
+    const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
+    //if (isValid)
+    if (1) {
+      debugger
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
       this.emitraRequest.Amount = Number(item.FeeAmount);
@@ -268,7 +270,8 @@ export class PendingFeesComponent implements OnInit {
       this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
       this.emitraRequest.DepartmentID = EnumDepartment.BTER;
       this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
-      this.emitraRequest.ID = item?.ID??0;
+      this.emitraRequest.ID = item?.ID ?? 0;
+      this.emitraRequest.USEREMAIL = item.Email ?? "";
       //multiple data handel
       this.emitraRequest.StudentFeesTransactionItems.push({
         itemAmount: Number(item.FeeAmount ?? 0),
@@ -280,7 +283,7 @@ export class PendingFeesComponent implements OnInit {
 
       this.loaderService.requestStarted();
       try {
-        await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+        await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
           .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.State = data['State'];
@@ -312,8 +315,7 @@ export class PendingFeesComponent implements OnInit {
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
-    if (this.StudentDetailsModelList.some(f => f.IsSelected == true))
-    {
+    if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
       this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push({
@@ -327,8 +329,7 @@ export class PendingFeesComponent implements OnInit {
 
       this.studentDetailsModel = this.StudentDetailsModelList.filter(f => f.IsSelected == true)[0];
       const isValid = await this.ValidateExamDate(this.studentDetailsModel.CourseType, this.studentDetailsModel.FinancialYearID, this.studentDetailsModel.EndTermID);
-      if (isValid)
-      {
+      if (isValid) {
 
 
         if (this.totalAmount > 0) {
@@ -378,77 +379,69 @@ export class PendingFeesComponent implements OnInit {
             }
           });
         }
-        else
-        {
+        else {
           this.toastr.warning('Payment amount is greater then 0')
-         
+
         }
       }
-      else
-      {
+      else {
         this.sweetAlert2.Info('Exam Fee Date Is Not Open Yet Please Try Again');
-    
+
       }
     }
-    else
-    {
+    else {
       this.toastr.warning('Please Select One Record ')
 
     }
   }
 
-  async EmitraPaymentCheckStatus(item: StudentDetailsModel)
-  {
+  async EmitraPaymentCheckStatus(item: StudentDetailsModel) {
     {
-    try
-    {
-      
-      let obj: TransactionStatusDataModel =
-      {
-        TransactionID: item.TransactionID,
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        PRN: item.PRN,
-        ServiceID: item.ServiceID,
-        ApplicationID: item.ApplicationID?.toString(),
-        AMOUNT: item.PaidAmount?.toString() ?? "0",
-        RPPTXNID: "",
-        SubOrderID: "",
-        CreatedBy: this.sSOLoginDataModel.UserID,
-        SSOID: this.sSOLoginDataModel.SSOID,
-        ExamStudentStatus: item.ExamStudentStatus
-      }
-      await this.emitraPaymentService.GetTransactionStatus(obj)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          if (data.State == EnumStatus.Success) {
-            if (data.Data?.STATUS == 'SUCCESS' || data.Data?.STATUS == 'Success')
-            {
-              if (data.Data?.PRN)
-              {
-                this.toastr.success('Fee Paid Successfylly ');
-                window.location.reload();
-                // await this.getStudentFeesTransactionHistoryList();
+      try {
+
+        let obj: TransactionStatusDataModel =
+        {
+          TransactionID: item.TransactionID,
+          DepartmentID: this.sSOLoginDataModel.DepartmentID,
+          PRN: item.PRN,
+          ServiceID: item.ServiceID,
+          ApplicationID: item.ApplicationID?.toString(),
+          AMOUNT: item.PaidAmount?.toString() ?? "0",
+          RPPTXNID: "",
+          SubOrderID: "",
+          CreatedBy: this.sSOLoginDataModel.UserID,
+          SSOID: this.sSOLoginDataModel.SSOID,
+          ExamStudentStatus: item.ExamStudentStatus
+        }
+        await this.emitraPaymentService.GetTransactionStatus(obj)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['Message'];
+            if (data.State == EnumStatus.Success) {
+              if (data.Data?.STATUS == 'SUCCESS' || data.Data?.STATUS == 'Success') {
+                if (data.Data?.PRN) {
+                  this.toastr.success('Fee Paid Successfylly ');
+                  window.location.reload();
+                  // await this.getStudentFeesTransactionHistoryList();
+                }
+              }
+              else {
+                this.toastr.error(this.Message)
               }
             }
-            else
-            {
+            else {
               this.toastr.error(this.Message)
             }
-          }
-          else {
-            this.toastr.error(this.Message)
-          }
-        })
+          })
+      }
+      catch (ex) { console.log(ex) }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
     }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
   }
 
   RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
@@ -485,7 +478,7 @@ export class PendingFeesComponent implements OnInit {
 
   async ValidateExamDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
     try {
-      
+
       const data =
       {
         DepartmentID: 1,
