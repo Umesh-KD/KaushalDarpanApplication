@@ -139,6 +139,15 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
     SaveDataInDB(): void {
       debugger
+        console.log(this.ImportExcelList);
+        this.ImportExcelList.forEach((item: any) => {
+          if (!item.ModifyBy || item.ModifyBy === null) {
+            item.ModifyBy = this.sSOLoginDataModel.UserID;
+          }
+          if (!item.DepartmentID || item.DepartmentID === null) {
+            item.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+          }
+        });
         this.counsellingImportCandidateListService.SaveImportExcelData(this.ImportExcelList).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {

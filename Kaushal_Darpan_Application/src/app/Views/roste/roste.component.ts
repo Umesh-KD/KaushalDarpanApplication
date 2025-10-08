@@ -151,17 +151,26 @@ export class RosteComponent implements OnInit {
   }
 
   async GetStaff_InstituteWise() {
+    debugger
+    const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+      const GetstreamId = this.TableForm.get('StreamID')?.value;
+    const GetSubjectIDId = this.TableForm.get('SubjectID')?.value;
+ 
+
     let obj = {
       InstituteID: this.sSOLoginDataModel.InstituteID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
       RoleID: this.sSOLoginDataModel.RoleID,
-      WorkInstituteID: this.sSOLoginDataModel.InstituteID,
+      SemesterID: GetSemesterID,
+      StreamID: GetstreamId,
+      SubjectID: GetSubjectIDId,
     }
-    this.commonMasterService.GetStaff_InstituteAndWorkWise(obj).then((data: any) => {
+    this.commonMasterService.GetStaff_InstituteAcRoster(obj).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
-      this.ExaminerDDL = data.Data;
+      //this.ExaminerDDL = data.Data;
+      this.ExaminerDDL = data?.Data ?? [];
     })
   }
 
@@ -205,6 +214,12 @@ export class RosteComponent implements OnInit {
       { DayID: 7, DayName: 'Saturday' },
       { DayID: 1, DayName: 'Sunday' },
     ];
+    this.TableForm.get('SemesterID')?.setValue(0);
+    this.TableForm.get('StreamID')?.setValue(0);
+    this.TableForm.get('SubjectID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('StaffID')?.setValue(0);
+    this.TableForm.get('SectionID')?.setValue(0);
 
   }
 
@@ -296,6 +311,32 @@ export class RosteComponent implements OnInit {
 
   }
 
+
+  async sectionDDlAcRoster() {
+
+    
+    const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+    const GetstreamId = this.TableForm.get('StreamID')?.value;
+    const GetSubjectID = this.TableForm.get('SubjectID')?.value;
+    const GetStaffID = this.TableForm.get('StaffID')?.value;
+    debugger
+    let obj = {
+      SemesterID: GetSemesterID,
+      StreamID: GetstreamId,
+      SubjectID: GetSubjectID,
+      StaffID: GetStaffID,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+    }
+    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GetSectionData = data.Data;
+        this.allSections = data.Data;
+        this.GetSectionData = [...this.allSections];
+      }, (error: any) => console.error(error)
+      );
+  }
 
 
 
@@ -417,269 +458,403 @@ export class RosteComponent implements OnInit {
       }, error => console.error(error));
   }
 
- async AddMore() {
-  
-  this.isSubmitted = true;
+// async AddMore() {
+//  debugger
+//  this.isSubmitted = true;
 
-  if (this.TableForm.invalid) {
-    this.toastr.warning('Please fill all required fields!');
-    return;
+//  if (this.TableForm.invalid) {
+//    this.toastr.warning('Please fill all required fields!');
+//    return;
+//  }
+
+//  const formValue = this.TableForm.value;
+
+//  const newSection = new BTERSectionAddDataModel();
+//  newSection.DayID = formValue.DayID;
+//  newSection.SemesterID = formValue.SemesterID;
+//  newSection.StreamID = formValue.StreamID;
+//  newSection.SubjectID = formValue.SubjectID;
+//   newSection.StaffID = formValue.StaffID;
+//  newSection.SectionID = Array.isArray(formValue.SectionID) ? formValue.SectionID : [formValue.SectionID];
+//   newSection.AttendanceStartTime = formValue.AttendanceStartTime;
+//   newSection.AttendanceEndTime = formValue.AttendanceEndTime;
+//   newSection.RoomNo = formValue.RoomNo;
+
+
+
+//  // --- VALIDATION CHECKS ---
+
+//   const startNum = this.convertTo24Hour(newSection.AttendanceStartTime);
+//   const endNum = this.convertTo24Hour(newSection.AttendanceEndTime);
+//   const durationMinutes = this.getMinutesDiff(newSection.AttendanceStartTime, newSection.AttendanceEndTime);
+
+//   // 1. Lunch time block
+//   if (startNum === 1300 && endNum === 1400) {
+//     this.toastr.warning('Entries are not allowed during lunch time (1 PM - 2 PM).');
+//     return;
+//   }
+
+//   // 2. No classes after 5 PM
+//   //if (startNum >= 1700 || endNum > 1700) {
+//   //  this.toastr.warning('Entries are not allowed after 5 PM.');
+//   //  return;
+//   //}
+
+//   // 3. End time cannot be before start time
+//   if (durationMinutes < 0) {
+//     this.toastr.warning('End time cannot be earlier than start time.');
+//     return;
+//   }
+
+//   // 4. Class cannot exceed 1 hour
+//   if (durationMinutes > 60) {
+//     this.toastr.warning('Class duration cannot be more than 1 hour.');
+//     return;
+//   }
+
+//   if (durationMinutes < 45) {
+//     this.toastr.warning(`Class duration must be at least 45 minutes.`);
+//     return;
+//   }
+//   // 5. Teacher conflict check
+//   const teacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+//     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+//     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+
+//     const timeOverlap =
+//       (startNum < existingEnd && endNum > existingStart);
+
+//     return (
+//       element.StaffID === newSection.StaffID &&
+//       element.SemesterID === newSection.SemesterID &&
+//       element.StreamID === newSection.StreamID &&
+//       element.SectionID.some(id => newSection.SectionID.includes(id)) &&
+//       timeOverlap
+//     );
+//   });
+
+//   if (teacherConflict) {
+//     this.toastr.warning('This teacher already has a class in the same semester, branch, section, and time.');
+//     return;
+//   }
+
+//   // 6. Section conflict check (ANY teacher, same section/subject/time)
+//   const sectionConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+//     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+//     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+
+//     const timeOverlap =
+//       (startNum < existingEnd && endNum > existingStart);
+
+//     return (
+//       element.SemesterID === newSection.SemesterID &&
+//       element.StreamID === newSection.StreamID &&
+//       element.SubjectID === newSection.SubjectID &&
+//       element.SectionID.some(id => newSection.SectionID.includes(id)) &&
+//       timeOverlap
+//     );
+//   });
+
+//   if (sectionConflict) {
+//     this.toastr.warning('Another teacher is already assigned for the same subject, section, and time.');
+//     return;
+//   }
+
+
+//   // 7. Global teacher time conflict (across all semesters/streams/sections)
+//   const globalTeacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+//     if (element.StaffID !== newSection.StaffID) return false;
+
+//     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+//     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+
+//     const timeOverlap =
+//       (startNum < existingEnd && endNum > existingStart); // overlap check
+
+//     return timeOverlap;
+//   });
+
+//   if (globalTeacherConflict) {
+//     this.toastr.warning('This teacher is already assigned in another slot at the same time.');
+//     return;
+//   }
+//  // 8. Full row duplicate check
+//  const isDuplicate = this.AddedSectionList.some(
+//    (element: BTERSectionAddDataModel) =>
+//      element.DayID === newSection.DayID &&
+//      element.SemesterID === newSection.SemesterID &&
+//      element.StreamID === newSection.StreamID &&
+//      element.SubjectID === newSection.SubjectID &&
+//      element.StaffID === newSection.StaffID &&
+//      element.AttendanceStartTime === newSection.AttendanceStartTime &&
+//      element.AttendanceEndTime === newSection.AttendanceEndTime &&
+//      JSON.stringify(element.SectionID) === JSON.stringify(newSection.SectionID)
+//  );
+
+//  if (isDuplicate) {
+//    this.toastr.warning('This roster entry already exists!');
+//    return;
+//  }
+
+//  // --- NAME BINDING ---
+//  newSection.DayName = this.DayList.find((x: any) => x.DayID == newSection.DayID)?.DayName || '';
+//  newSection.SectionName = this.GetSectionData
+//    .filter((x: any) => newSection.SectionID.includes(x.SectionID))
+//    .map((x: any) => x.SectionName)
+//    .join(', ');
+//  newSection.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newSection.SubjectID)?.Name || '';
+//  newSection.BranchName = this.StreamMasterDDL.find((x: any) => x.StreamID == newSection.StreamID)?.StreamName || '';
+//   newSection.TeacherName = this.ExaminerDDL.find((x: any) => x.StaffID == newSection.StaffID)?.Name || '';
+//  newSection.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newSection.SemesterID)?.SemesterName || '';
+
+//  //newSection.StartTime = this.formatTime(formValue.AttendanceStartTime);
+//  //newSection.EndTime = this.formatTime(formValue.AttendanceEndTime);
+
+//  this.AddedSectionList.push(newSection);
+
+//  this.toastr.success('Roster entry added successfully.');
+
+//  // Reset form fields
+//  this.TableForm.patchValue({
+//    DayID: 0,
+//    SectionID: 0,
+//    SubjectID: 0,
+//    StreamID: 0,
+//    StaffID: 0,
+//    SemesterID: 0,
+//    AttendanceStartTime: '09:00 AM',
+//    AttendanceEndTime: '10:00 AM',
+//    RoomNo: ''
+//  });
+
+//  this.isSubmitted = false;
+//}
+
+  async AddMore() {
+    debugger
+    this.isSubmitted = true;
+
+    if (this.TableForm.invalid) {
+      this.toastr.warning('Please fill all required fields!');
+      return;
+    }
+
+    const formValue = this.TableForm.value;
+
+    const newSection = new BTERSectionAddDataModel();
+    newSection.DayID = formValue.DayID;
+    newSection.SemesterID = formValue.SemesterID;
+    newSection.StreamID = formValue.StreamID;
+    newSection.SubjectID = formValue.SubjectID;
+    newSection.StaffID = formValue.StaffID;
+    newSection.SectionID = Array.isArray(formValue.SectionID) ? formValue.SectionID : [formValue.SectionID];
+    newSection.AttendanceStartTime = formValue.AttendanceStartTime;
+    newSection.AttendanceEndTime = formValue.AttendanceEndTime;
+    newSection.RoomNo = formValue.RoomNo;
+
+    // Helper to check if semester is 1 or 2
+    const isSemesterOneOrTwo = (semesterID: number): boolean => {
+      return semesterID === 1 || semesterID === 2;
+    };
+
+    // --- VALIDATION CHECKS ---
+
+    const startNum = this.convertTo24Hour(newSection.AttendanceStartTime);
+    const endNum = this.convertTo24Hour(newSection.AttendanceEndTime);
+    const durationMinutes = this.getMinutesDiff(newSection.AttendanceStartTime, newSection.AttendanceEndTime);
+
+    // 1. Lunch time block
+    if (startNum === 1300 && endNum === 1400) {
+      this.toastr.warning('Entries are not allowed during lunch time (1 PM - 2 PM).');
+      return;
+    }
+
+    // 2. End time cannot be before start time
+    if (durationMinutes < 0) {
+      this.toastr.warning('End time cannot be earlier than start time.');
+      return;
+    }
+
+    // 3. Class cannot exceed 1 hour
+    if (durationMinutes > 60) {
+      this.toastr.warning('Class duration cannot be more than 1 hour.');
+      return;
+    }
+
+    // 4. Class must be at least 45 minutes
+    if (durationMinutes < 45) {
+      this.toastr.warning(`Class duration must be at least 45 minutes.`);
+      return;
+    }
+
+    // 5. Teacher conflict check
+    const teacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+      if (isSemesterOneOrTwo(newSection.SemesterID)) return false; // Skip for semesters 1 & 2
+
+      const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+      const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+
+      const timeOverlap = (startNum < existingEnd && endNum > existingStart);
+
+      return (
+        element.StaffID === newSection.StaffID &&
+        element.SemesterID === newSection.SemesterID &&
+        element.StreamID === newSection.StreamID &&
+        element.SectionID.some(id => newSection.SectionID.includes(id)) &&
+        timeOverlap
+      );
+    });
+
+    if (teacherConflict) {
+      this.toastr.warning('This teacher already has a class in the same semester, branch, section, and time.');
+      return;
+    }
+
+    // 6. Section conflict check
+    const sectionConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+      const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+      const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+      const timeOverlap = (startNum < existingEnd && endNum > existingStart);
+
+      if (
+        timeOverlap &&
+        element.SemesterID === newSection.SemesterID &&
+        element.StreamID === newSection.StreamID
+      ) {
+        if (isSemesterOneOrTwo(newSection.SemesterID)) {
+          // For semesters 1 or 2, allow ONLY if room is the SAME for same subject & overlapping section
+          if (
+            element.SubjectID === newSection.SubjectID &&
+            element.SectionID.some(id => newSection.SectionID.includes(id))
+          ) {
+            if (element.RoomNo !== newSection.RoomNo) {
+              // Different rooms → conflict exists → reject
+              return true;
+            } else {
+              // Same room → allow conflict (skip)
+              return false;
+            }
+          }
+        }
+
+        // For other semesters or cases, normal conflict check
+        return (
+          element.SubjectID === newSection.SubjectID &&
+          element.SectionID.some(id => newSection.SectionID.includes(id))
+        );
+      }
+
+      return false;
+    });
+
+    if (sectionConflict) {
+      this.toastr.warning('Another teacher is already assigned for the same subject, section, and time.');
+      return;
+    }
+
+    // 7. Global teacher time conflict
+    const globalTeacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+      if (isSemesterOneOrTwo(newSection.SemesterID)) return false; // Skip for semesters 1 & 2
+
+      if (element.StaffID !== newSection.StaffID) return false;
+
+      const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+      const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+
+      const timeOverlap = (startNum < existingEnd && endNum > existingStart);
+
+      return timeOverlap;
+    });
+
+    if (globalTeacherConflict) {
+      this.toastr.warning('This teacher is already assigned in another slot at the same time.');
+      return;
+    }
+
+    // 8. Room conflict check
+    const roomConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
+      const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
+      const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
+      const timeOverlap = (startNum < existingEnd && endNum > existingStart);
+
+      if (
+        timeOverlap &&
+        element.SemesterID === newSection.SemesterID &&
+        element.StreamID === newSection.StreamID
+      ) {
+        if (isSemesterOneOrTwo(newSection.SemesterID)) {
+          // For semesters 1 or 2, allow only if subject AND room both match
+          if (element.SubjectID === newSection.SubjectID && element.RoomNo === newSection.RoomNo) {
+            return false; // allow conflict
+          } else {
+            return true; // reject conflict if room or subject differ
+          }
+        }
+
+        // For other semesters or cases, reject if room matches and overlapping time
+        return element.RoomNo === newSection.RoomNo;
+      }
+
+      return false;
+    });
+
+    if (roomConflict) {
+      this.toastr.warning('This room is already assigned for the same time slot.');
+      return;
+    }
+
+    // 9. Full row duplicate check
+    const isDuplicate = this.AddedSectionList.some(
+      (element: BTERSectionAddDataModel) =>
+        element.DayID === newSection.DayID &&
+        element.SemesterID === newSection.SemesterID &&
+        element.StreamID === newSection.StreamID &&
+        element.SubjectID === newSection.SubjectID &&
+        element.StaffID === newSection.StaffID &&
+        element.AttendanceStartTime === newSection.AttendanceStartTime &&
+        element.AttendanceEndTime === newSection.AttendanceEndTime &&
+        JSON.stringify(element.SectionID) === JSON.stringify(newSection.SectionID)
+    );
+
+    if (isDuplicate) {
+      this.toastr.warning('This roster entry already exists!');
+      return;
+    }
+
+    // --- NAME BINDING ---
+    newSection.DayName = this.DayList.find((x: any) => x.DayID == newSection.DayID)?.DayName || '';
+    newSection.SectionName = this.GetSectionData
+      .filter((x: any) => newSection.SectionID.includes(x.SectionID))
+      .map((x: any) => x.SectionName)
+      .join(', ');
+    newSection.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newSection.SubjectID)?.Name || '';
+    newSection.BranchName = this.StreamMasterDDL.find((x: any) => x.StreamID == newSection.StreamID)?.StreamName || '';
+    newSection.TeacherName = this.ExaminerDDL.find((x: any) => x.StaffID == newSection.StaffID)?.Name || '';
+    newSection.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newSection.SemesterID)?.SemesterName || '';
+
+    this.AddedSectionList.push(newSection);
+
+    this.toastr.success('Roster entry added successfully.');
+
+    // Reset form fields
+    this.TableForm.patchValue({
+      DayID: 0,
+      SectionID: 0,
+      SubjectID: 0,
+      StreamID: 0,
+      StaffID: 0,
+      SemesterID: 0,
+      AttendanceStartTime: '09:00 AM',
+      AttendanceEndTime: '10:00 AM',
+      RoomNo: ''
+    });
+
+    this.isSubmitted = false;
   }
 
-  const formValue = this.TableForm.value;
-
-  const newSection = new BTERSectionAddDataModel();
-  newSection.DayID = formValue.DayID;
-  newSection.SemesterID = formValue.SemesterID;
-  newSection.StreamID = formValue.StreamID;
-  newSection.SubjectID = formValue.SubjectID;
-   newSection.StaffID = formValue.StaffID;
-  newSection.SectionID = Array.isArray(formValue.SectionID) ? formValue.SectionID : [formValue.SectionID];
-   newSection.AttendanceStartTime = formValue.AttendanceStartTime;
-   newSection.AttendanceEndTime = formValue.AttendanceEndTime;
-   newSection.RoomNo = formValue.RoomNo;
 
 
 
-  // --- VALIDATION CHECKS ---
-
-   const startNum = this.convertTo24Hour(newSection.AttendanceStartTime);
-   const endNum = this.convertTo24Hour(newSection.AttendanceEndTime);
-   const durationMinutes = this.getMinutesDiff(newSection.AttendanceStartTime, newSection.AttendanceEndTime);
-
-   // 1. Lunch time block
-   if (startNum === 1300 && endNum === 1400) {
-     this.toastr.warning('Entries are not allowed during lunch time (1 PM - 2 PM).');
-     return;
-   }
-
-   // 2. No classes after 5 PM
-   //if (startNum >= 1700 || endNum > 1700) {
-   //  this.toastr.warning('Entries are not allowed after 5 PM.');
-   //  return;
-   //}
-
-   // 3. End time cannot be before start time
-   if (durationMinutes < 0) {
-     this.toastr.warning('End time cannot be earlier than start time.');
-     return;
-   }
-
-   // 4. Class cannot exceed 1 hour
-   if (durationMinutes > 60) {
-     this.toastr.warning('Class duration cannot be more than 1 hour.');
-     return;
-   }
-
-   if (durationMinutes < 45) {
-     this.toastr.warning(`Class duration must be at least 45 minutes.`);
-     return;
-   }
-   // 5. Teacher conflict check
-   const teacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
-     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
-     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
-
-     const timeOverlap =
-       (startNum < existingEnd && endNum > existingStart);
-
-     return (
-       element.StaffID === newSection.StaffID &&
-       element.SemesterID === newSection.SemesterID &&
-       element.StreamID === newSection.StreamID &&
-       element.SectionID.some(id => newSection.SectionID.includes(id)) &&
-       timeOverlap
-     );
-   });
-
-   if (teacherConflict) {
-     this.toastr.warning('This teacher already has a class in the same semester, branch, section, and time.');
-     return;
-   }
-
-   // 6. Section conflict check (ANY teacher, same section/subject/time)
-   const sectionConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
-     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
-     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
-
-     const timeOverlap =
-       (startNum < existingEnd && endNum > existingStart);
-
-     return (
-       element.SemesterID === newSection.SemesterID &&
-       element.StreamID === newSection.StreamID &&
-       element.SubjectID === newSection.SubjectID &&
-       element.SectionID.some(id => newSection.SectionID.includes(id)) &&
-       timeOverlap
-     );
-   });
-
-   if (sectionConflict) {
-     this.toastr.warning('Another teacher is already assigned for the same subject, section, and time.');
-     return;
-   }
-
-
-   // 7. Global teacher time conflict (across all semesters/streams/sections)
-   const globalTeacherConflict = this.AddedSectionList.some((element: BTERSectionAddDataModel) => {
-     if (element.StaffID !== newSection.StaffID) return false;
-
-     const existingStart = this.convertTo24Hour(element.AttendanceStartTime);
-     const existingEnd = this.convertTo24Hour(element.AttendanceEndTime);
-
-     const timeOverlap =
-       (startNum < existingEnd && endNum > existingStart); // overlap check
-
-     return timeOverlap;
-   });
-
-   if (globalTeacherConflict) {
-     this.toastr.warning('This teacher is already assigned in another slot at the same time.');
-     return;
-   }
-  // 8. Full row duplicate check
-  const isDuplicate = this.AddedSectionList.some(
-    (element: BTERSectionAddDataModel) =>
-      element.DayID === newSection.DayID &&
-      element.SemesterID === newSection.SemesterID &&
-      element.StreamID === newSection.StreamID &&
-      element.SubjectID === newSection.SubjectID &&
-      element.StaffID === newSection.StaffID &&
-      element.AttendanceStartTime === newSection.AttendanceStartTime &&
-      element.AttendanceEndTime === newSection.AttendanceEndTime &&
-      JSON.stringify(element.SectionID) === JSON.stringify(newSection.SectionID)
-  );
-
-  if (isDuplicate) {
-    this.toastr.warning('This roster entry already exists!');
-    return;
-  }
-
-  // --- NAME BINDING ---
-  newSection.DayName = this.DayList.find((x: any) => x.DayID == newSection.DayID)?.DayName || '';
-  newSection.SectionName = this.GetSectionData
-    .filter((x: any) => newSection.SectionID.includes(x.SectionID))
-    .map((x: any) => x.SectionName)
-    .join(', ');
-  newSection.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newSection.SubjectID)?.Name || '';
-  newSection.BranchName = this.StreamMasterDDL.find((x: any) => x.StreamID == newSection.StreamID)?.StreamName || '';
-   newSection.TeacherName = this.ExaminerDDL.find((x: any) => x.StaffID == newSection.StaffID)?.Name || '';
-  newSection.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newSection.SemesterID)?.SemesterName || '';
-
-  //newSection.StartTime = this.formatTime(formValue.AttendanceStartTime);
-  //newSection.EndTime = this.formatTime(formValue.AttendanceEndTime);
-
-  this.AddedSectionList.push(newSection);
-
-  this.toastr.success('Roster entry added successfully.');
-
-  // Reset form fields
-  this.TableForm.patchValue({
-    DayID: 0,
-    SectionID: 0,
-    SubjectID: 0,
-    StreamID: 0,
-    StaffID: 0,
-    SemesterID: 0,
-    AttendanceStartTime: '09:00 AM',
-    AttendanceEndTime: '10:00 AM',
-    RoomNo: ''
-  });
-
-  this.isSubmitted = false;
-}
-
-
-  //async AddMore() {
-  //  debugger
-  //  this.isSubmitted = true;
-
-
-  //  if (this.TableForm.invalid) {
-  //    this.toastr.error('Please Fill All Star mark details!');
-  //    return;
-  //  }
-
-
-  //  const formValue = this.TableForm.value;
-
-
-  //  const newSection = new BTERSectionAddDataModel();
-  //  newSection.DayID = formValue.DayID;
-  //  newSection.SemesterID = formValue.SemesterID;
-  //  newSection.StreamID = formValue.StreamID;
-  //  newSection.SubjectID = formValue.SubjectID;
-  //  newSection.TeacherID = formValue.StaffID;
-  //  newSection.SectionID = Array.isArray(formValue.SectionID) ? formValue.SectionID : [formValue.SectionID];
-  //  newSection.StartTime = formValue.AttendanceStartTime;
-  //  newSection.EndTime = formValue.AttendanceEndTime;
-   
-   
-
-  //  const isDuplicate = this.AddedSectionList.some(
-  //    (element: BTERSectionAddDataModel) =>
-  //      element.DayID === newSection.DayID &&
-  //      element.SemesterID === newSection.SemesterID &&
-  //      element.StreamID === newSection.StreamID &&
-  //      element.SubjectID === newSection.SubjectID &&
-  //      element.TeacherID === newSection.TeacherID &&
-  //      element.StartTime === newSection.StartTime &&
-  //      element.EndTermID === newSection.EndTermID
-  //  );
-
-  //  if (isDuplicate) {
-  //    this.toastr.error('This roster entry already exists!');
-  //    return;
-  //  }
-
-  //  newSection.DayName = this.DayList.find(
-  //    (x: any) => x.DayID == newSection.DayID
-  //  )?.DayName || '';
-
-  //  newSection.SectionName = this.GetSectionData
-  //    .filter((x: any) => newSection.SectionID.includes(x.SectionID))
-  //    .map((x: any) => x.SectionName)
-  //    .join(', ');
-  //  newSection.SubjectName = this.SubjectMasterDDL.find(
-  //    (x: any) => x.ID == newSection.SubjectID
-  //  )?.Name || '';
-
-  //  newSection.BranchName = this.StreamMasterDDL.find(
-  //    (x: any) => x.StreamID == newSection.StreamID
-  //  )?.StreamName || '';
-   
-
-  //  newSection.TeacherName = this.ExaminerDDL.find(
-  //    (x: any) => x.StaffID == newSection.TeacherID
-  //  )?.Name || '';
-
-  //  newSection.SemesterName = this.SemesterMasterDDL.find(
-  //    (x: any) => x.SemesterID == newSection.SemesterID
-  //  )?.SemesterName || '';
-
-
-  //  newSection.StartTime = this.formatTime(formValue.AttendanceStartTime);
-  //  newSection.EndTime = this.formatTime(formValue.AttendanceEndTime);
-
-
-  //  this.AddedSectionList.push(newSection);
-   
-  //  this.toastr.success('Roster entry added successfully');
-
-  //  // Reset form fields
-  //  this.TableForm.patchValue({
-  //    DayID: 0,
-  //    SectionID: 0,
-  //    SubjectID: 0,
-  //    StreamID: 0,
-  //    StaffID: 0,
-  //    SemesterID: 0,
-  //    AttendanceStartTime: '09:00',
-  //    AttendanceEndTime: '10:00'
-  //  });
-
-  //  this.isSubmitted = false;
-  //}
 
   getMinutesDiff(start: string, end: string): number {
     const startNum = this.convertTo24Hour(start);

@@ -23,19 +23,23 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search </label>   
-          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>   
+          <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
-            <option value="">--All--</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Hold">Hold</option>
+        <div *ngIf="sSOLoginDataModel.RoleID === _EnumRole.AdminNodel">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+          <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>
-        </div> -->
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
+          <select class="form-select" id="AcademicYearID" [(ngModel)]="searchRequest.AcademicYearID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}</option>
+          </select>
+        </div>
         <div>
           
 
@@ -78,6 +82,7 @@
             <th>Sr. No.</th>
             <th class="text-left">Name</th>
             <th class="text-left">EnrollmentNo</th>
+            <th class="text-left">Branch Name</th>
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
             <th class="text-center">MobileNo</th>
@@ -90,6 +95,7 @@
             <td>{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.EnrollmentNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StreamName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>

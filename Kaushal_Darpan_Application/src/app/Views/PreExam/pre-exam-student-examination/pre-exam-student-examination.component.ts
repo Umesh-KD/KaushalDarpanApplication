@@ -338,7 +338,7 @@ export class PreExamStudentExaminationComponent {
   }
 
   showImageDeleteButton() {
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
       this.isShowImageDeleteButton = true
     } else {
       this.isShowImageDeleteButton = false
