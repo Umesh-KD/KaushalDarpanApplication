@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling Import Candidate List </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Import Candidate List </a>
     </div>
   </div>
     <!-- <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
@@ -22,7 +22,7 @@
   <div class="card-body p-5">
     <div class="mb-8">
       <div class="flex justify-end flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <div class="flex justify-between items-center space-x-4" >
+        <div class="flex justify-between items-center " >
           <div class="flex items-center me-3">
             <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
                    for="fileStudentPhoto">Import Excel</label>
@@ -87,53 +87,56 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-            <!-- <th align="left">
-              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
-                     #checkboxSeletedAll >
-            </th> -->
-             <!-- <th align="left">
-              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
-                     #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
-            </th> -->
             <th class="text-left">Name</th>
-            <!-- <th class="text-left">DOB</th> -->
-            <th class="text-left">MobileNo</th>
+            <th class="text-left">Father Name</th>
+            <!-- <th class="text-left">MobileNo</th> -->
+            <!-- <th class="text-left">SSOID</th> -->
             <!-- <th class="text-left">DOB</th>
             <th class="text-left">Category</th> -->
             <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
-            <!-- <th class="text-center">Action</th> -->
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
-             <!-- <td>
-              <input type="checkbox" name="MarkCheck" [checked]="true"/>
-            </td> -->
-            <!-- <td>
-              <input type="checkbox" name="MarkCheck" [checked]="true"
-                     [(ngModel)]="item.Marked" />
-            </td> -->
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateFatherName}}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td> -->
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td> -->
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
-             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
-                    <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View Institute Option Details"><i
-                    class="ti ti-eye"></i> </a>
+                    <!-- key=1 for add  -->
+                    <!-- key=2 for edit -->
+                    <!-- key=3 for view -->
+                 <a [routerLink]="['/EditImportedCandidateList']"
+                  [queryParams]="{Id:item.CandidateID,key:2}" title="Edit Data"><i class="ti ti-pencil"></i>
+                </a>
 
-                    <a href="javascript:void(0)" (click)="redirectToPreview(item)" title="View Candidate Details">
+                <a [routerLink]="['/EditImportedCandidateList']"
+                  [queryParams]="{Id:item.CandidateID,key:3}" title="See Details"><i class="ti ti-eye"></i>
+                </a>
+
+                 <!-- <a [routerLink]="'/AddCompany'" [queryParams]="{CompanyID:company.ID, key:1}" *ngIf="(company.Status=='Pending')" title="Edit"><i class="ti ti-pencil"></i></a> -->
+                
+                    <!-- <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,item)" title="View Institute Option Details"><i
+                      class="ti ti-eye"></i> </a> -->
+
+                    <!-- <a href="javascript:void(0)" (click)="redirectToPreview(item)" title="View Candidate Details">
                       <i class="ti ti-eye"></i>
-                    </a>
+                    </a> -->
 
-                    <a href="javascript:void(0)" *ngIf="item.IsFinalSubmit === 2 && item.IsMeritGenerated === 0"
+                    <!-- <a href="javascript:void(0)" *ngIf="item.IsFinalSubmit === 2 && item.IsMeritGenerated === 0"
                        (click)="UnlockApplication_Counselling(item)" title="Unlock Application">
                       <i class="ti ti-lock-open"></i>
-                    </a>
+                    </a> -->
               </div>
-             </td> -->
+            </td>
+         
           </tr>
         </tbody>
       </table>

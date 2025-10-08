@@ -108,7 +108,7 @@ export class CandidateOptionDetailsComponent {
     try {
       this.tradeRequest.Action = 'GetCollegeList'
       this.tradeRequest.TradeID = this.formData.TradeId
-      debugger
+      
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteList = data.Data;

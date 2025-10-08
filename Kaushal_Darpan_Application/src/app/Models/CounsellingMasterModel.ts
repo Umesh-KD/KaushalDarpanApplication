@@ -65,3 +65,24 @@ export class EditInstituteDataModel_Counselling {
   public OptionID?: number = 0;
   public AllotmentID?: number = 0;
 }
+
+
+export class CounsellingEditImportedCandidateListModel {
+ 
+  public CandidateName: string = '';
+  public CandidateID: number = 0
+  public MobileNo: string = ''
+  public SSOID: string = ''
+  public Email: string = ''
+  public CandidateFatherName: string = ''
+
+  public DepartmentID: number = 0;
+  public ModifyBy: number = 0;
+ 
+  public PageSize: number = 50
+  public PageNumber: number = 1
+  public TradeName :  string ='';
+  public SortOrder: string = '';
+  public SortColumn: string = '';
+  public action: string = '';
+}

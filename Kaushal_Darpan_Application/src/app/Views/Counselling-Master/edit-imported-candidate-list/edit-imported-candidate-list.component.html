@@ -1,0 +1,135 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Candidate Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Import Candidate List </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Candidate Details</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+
+
+<form [formGroup]="CandidateFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b  class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Add Candidate Details': key==2? 'Edit Candidate Details' : 'See Candidate Details'}}</b>
+          <!-- <b *ngIf="key==2" class="text-1xl-5"><i class="ti ti-plus"></i> Edit Company Details</b> -->
+        </div>
+        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="CandidateName" name="CandidateName"
+                   [(ngModel)]="request.CandidateName" formControlName="CandidateName">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateName.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.CandidateName.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Father's Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Father's Name" id="CandidateFatherName" name="CandidateFatherName"
+                   [(ngModel)]="request.CandidateFatherName" formControlName="CandidateFatherName">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateFatherName.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.CandidateFatherName.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+               Mobile Number <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.MobileNo.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                <!-- <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.required">Mobile number is required!</p> -->
+                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.pattern">Only digits allowed!</p>
+                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.minlength">Mobile number must be 10 digits!</p>
+                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.maxlength">Mobile number must be 10 digits!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Email <span class="StarMarking">*</span>
+            </label>
+            <input type="email" class="form-input" placeholder="Enter Email" id="Email" name="Email" 
+               [(ngModel)]="request.Email" formControlName="Email">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.Email.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.Email.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_CandidateFormGroup.Email.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+            </div>
+          </div>
+
+           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              SSOID <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter SSOID" id="SSOID" name="SSOID"
+                   [(ngModel)]="request.SSOID" formControlName="SSOID">
+            <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
+                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
+                  <i aria-hidden="true"></i> This field is required!
+                </p>
+              </div> -->
+          </div>
+
+
+          <!-- <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Address <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
+                   [(ngModel)]="request.Address" formControlName="Address">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.Address.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.Address.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div> -->
+   
+
+        </div>
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+          <div class="text-center">
+            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Submit':'Edit'}}</button>          
+            <button *ngIf="key==1 || key==2" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+              <i class="ti ti-refresh"></i> Reset
+            </button>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </div>
+</form>

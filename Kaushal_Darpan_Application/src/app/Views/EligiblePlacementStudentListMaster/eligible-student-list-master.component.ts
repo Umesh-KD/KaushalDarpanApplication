@@ -8,6 +8,7 @@ import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompan
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnumRole } from '../../Common/GlobalConstants';
 @Component({
     selector: 'eligible-student-list-master',
     templateUrl: './eligible-student-list-master.component.html',
@@ -16,11 +17,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EligibleStudentListMasterComponent implements OnInit {
   public StudentList: any = [];
+  public SessionYearList: any = [];
+  public InstituteMasterDDLList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new EligibleStudentListMasterSearchModel();
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+  _EnumRole = EnumRole;
 
   // pagination
    pageNo: any = 1;
@@ -32,13 +36,21 @@ export class EligibleStudentListMasterComponent implements OnInit {
   sortColumn: string = "";
   sortOrder: string = "";
 
-  constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
-    private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute) {
-
-  }
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private companyMasterService: CompanyMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private Swal2: SweetAlert2, 
+    private Router: Router, 
+    private router: ActivatedRoute
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetSessionYear();
+    await this.GetInstituteList();
+    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     await this.GetEligibleStudentListData(1);
   }
 
@@ -91,9 +103,12 @@ export class EligibleStudentListMasterComponent implements OnInit {
       this.searchRequest.SortOrder=this.sortOrder
 
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-        this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      
+      if(this.sSOLoginDataModel.RoleID === EnumRole.TPO) {
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      }
       this.loaderService.requestStarted();
       await this.companyMasterService.GetEligibleStudentListData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -119,6 +134,8 @@ export class EligibleStudentListMasterComponent implements OnInit {
   async ClearSearchData() {
     this.searchRequest.Name = '';
     this.searchRequest.Status = '';
+    this.searchRequest.InstituteID = 0;
+    this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
     await this.GetEligibleStudentListData(1);
@@ -190,6 +207,28 @@ export class EligibleStudentListMasterComponent implements OnInit {
     if (this.pageNo > 1) {
       //this.pageNo = this.pageNo - 1;
       this.GetEligibleStudentListData(3)
+    }
+  }
+
+  async GetSessionYear() {
+    try {
+      await this.commonMasterService.GetFinancialYear().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SessionYearList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetInstituteList() {
+    try {
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, 0, 0).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 
