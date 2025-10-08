@@ -46,7 +46,7 @@
   </div>-->
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issued From:</label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Return From:</label>
           <select class="form-select"
                   id="issuedFrom"
                   [(ngModel)]="Searchrequest.IssuedId"
@@ -100,8 +100,13 @@
         <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
         </a>
-        <a href="javascript:void(0);"
+        <!-- <a href="javascript:void(0);"
            (click)="openReturnModal(returnModal)"
+           class="btn bg-warning btn-sm text-white">
+          <i class="ti ti-rotate-ccw"></i> Return
+        </a> -->
+        <a href="javascript:void(0);"
+           (click)="confirmReturnNew()"
            class="btn bg-warning btn-sm text-white">
           <i class="ti ti-rotate-ccw"></i> Return
         </a>
@@ -145,6 +150,7 @@
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issue To</th>
+            <th class="text-left">Equipment Working</th> 
           </tr>
         </thead>
         <tbody>
@@ -158,6 +164,24 @@
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <td class="border p-2">
+               <div *ngIf="item.Selected; else notSelected">
+                  <label>Equipment Working: <span class="StarMarking">*</span></label>
+                  <!--{{ItemDetailsList[i]?.AuctionStatus |json}}-->
+
+                     <!-- [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"  -->
+                        <!-- [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}"> -->
+                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                  <option value="1">Working</option>
+                  <option value="2">Not Working</option>
+                  </select>
+
+                  <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
+                  <p>Please select a status.</p>
+                  </div>
+                </div>
+                   
+              </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">
