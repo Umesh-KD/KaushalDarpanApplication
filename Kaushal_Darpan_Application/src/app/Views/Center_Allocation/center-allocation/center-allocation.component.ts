@@ -231,7 +231,6 @@ export class CenterAllocationComponent implements OnInit {
 
   async saveData() {
     try {
-      debugger
       this.loaderService.requestStarted();
       // Collect data from the CenterMasterList and flatten it to process the institutes
       const centersData = this.CenterMasterList.filter(f => f.Marked == 1).flatMap((center: any) => {
