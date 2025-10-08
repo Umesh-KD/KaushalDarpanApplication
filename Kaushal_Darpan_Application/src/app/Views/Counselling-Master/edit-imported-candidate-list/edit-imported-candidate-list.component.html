@@ -63,7 +63,7 @@
             <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
             <div *ngIf="isSubmitted && _CandidateFormGroup.MobileNo.errors" class="text-danger">
               <p *ngIf="_CandidateFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.required">Mobile number is required!</p>
+                <!-- <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.required">Mobile number is required!</p> -->
                 <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.pattern">Only digits allowed!</p>
                 <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.minlength">Mobile number must be 10 digits!</p>
                 <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.maxlength">Mobile number must be 10 digits!</p>
