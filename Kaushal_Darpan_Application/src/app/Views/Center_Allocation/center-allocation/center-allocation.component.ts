@@ -127,10 +127,10 @@ export class CenterAllocationComponent implements OnInit {
 
       //Center ID
       await this.centerAllocationService.GetInstituteByCenterID(this.searchRequest)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.FilteredInstituteList = data.Data;
-          this.checkCentersIfExists()
+          await this.checkCentersIfExists()
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);
@@ -231,7 +231,6 @@ export class CenterAllocationComponent implements OnInit {
 
   async saveData() {
     try {
-      debugger
       this.loaderService.requestStarted();
       // Collect data from the CenterMasterList and flatten it to process the institutes
       const centersData = this.CenterMasterList.filter(f => f.Marked == 1).flatMap((center: any) => {
@@ -365,7 +364,7 @@ export class CenterAllocationComponent implements OnInit {
 
   @ViewChild('content') content: ElementRef | any;
 
-  checkCentersIfExists() {
+  async checkCentersIfExists() {
     this.FilteredInstituteList = this.FilteredInstituteList.filter((institute: any) =>
       !this.assignedInstitutes.includes(institute.InstituteID)
     );
@@ -447,8 +446,6 @@ export class CenterAllocationComponent implements OnInit {
   }
 
   MapInsitute() {
-    
-
     try {
       if (this.SelectedInstituteList.length > 0) {
         const commaSeparatedNames = Array.from(
@@ -463,7 +460,7 @@ export class CenterAllocationComponent implements OnInit {
 
         // Find the object based on InstituteID
         const center = this.CenterMasterList.find(
-          (center) => center.InstituteID === this.SelectedInstituteID
+          (center) => center.InstituteID === this.SelectedInstituteID && center.CenterID === this.SelectedCenterID
         );
 
         if (center) {
@@ -529,7 +526,7 @@ export class CenterAllocationComponent implements OnInit {
 
   exportToExcel(): void {
     const unwantedColumns = [
-      'EndTermID', 'InstituteID', 'InstituteIDs', 'CenterID', 'DistrictID', 'InstituteNames', 'UserID'
+      'EndTermID', 'InstituteID', 'InstituteIDs', 'CenterID', 'DistrictID', 'InstituteNames', 'UserID', 'Marked',
     ];
     const filteredData = this.CenterMasterList.map(item => {
       const filteredItem: any = {};

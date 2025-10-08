@@ -67,11 +67,12 @@
           <!--<label for="initial value">Initial value</label>-->
           <!--<input class="form-input" style="width:100px" maxlength="4" type="text"
           id="LandlineStd" placeholder="Initial value" [(ngModel)]="InitialValue" title="Please Enter Starting Value of Roll No." >-->
-          <button type="button" class="btn bg-info text-white" (click)="SaveAllData()">Generate Enrollment/SRN No</button>
+          <button *ngIf="Status!=11" type="button" class="btn bg-info text-white" (click)="SaveAllData()">Generate Enrollment/SRN No</button>
 
         </div>
         <div class="">
-          <button class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP)" type="button">Publish (Generate Enrollment/SRN No)</button>
+          <button *ngIf="Status!=11" class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,'Publish')" type="button">Publish (Generate Enrollment/SRN No)</button>
+          <button *ngIf="Status==11" class="btn bg-info text-white" (click)="openModalGenerateOTP(modal_GenrateOTP,'Revert')" type="button">Revert (Enrollment/SRN No)</button>
 
         </div>
 
