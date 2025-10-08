@@ -256,6 +256,7 @@ export class CenterAllotmentComponent implements OnInit {
   }
 
   async OnSubmit() {
+    debugger
     try {
       this.isSubmitted = true;
       this.IsCheck = this.CenterAllotList.some(x => x.Marked && x.Capacity == 0 || x.Marked && x.Capacity == null)
