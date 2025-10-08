@@ -27,6 +27,7 @@ import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterData
 export class EMPrincipleStaffComponent {
   AddStaffBasicDetailFromGroup!: FormGroup;
   StaffMasterFormGroup!: FormGroup;
+  StaffMasterFormGroupOterFaculty!: FormGroup;
   groupForm!: FormGroup;
   public formData = new BTER_EM_AddStaffBasicDetailDataModel();
   public searchRequest = new BTER_EM_StaffMasterSearchModel();
@@ -84,6 +85,7 @@ export class EMPrincipleStaffComponent {
   public staffHostelIDs: string = ''
   public StaffIDforHostel: number = 0
   public isLoading: boolean = false;
+  public isApprove: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -184,6 +186,27 @@ export class EMPrincipleStaffComponent {
       DateOfRetirement: [''],
       Remark: [''],
     });
+
+
+
+    this.StaffMasterFormGroupOterFaculty = this.formBuilder.group({
+      InstituteID: [0, [DropdownValidators]],
+      BranchID: [0,],
+      DesignationID: [0, [DropdownValidators]],
+      Gender: [0, [DropdownValidators]],
+      EmpInstituteID: [0, ],
+      EmpDeputatedInstituteID: [0,],
+      Name: ['', [Validators.required]],
+      DateOfBirth: ['', [Validators.required]],
+      MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      SSOID: ['', [Validators.required]],
+      EmployeeID: [''],
+
+      
+      Remark: [''],
+    });
+
+
     this.groupForm = this.formBuilder.group({
       ddlStatus: [0, [DropdownValidators]],
       txtRemark: ['', Validators.required]
@@ -207,6 +230,7 @@ export class EMPrincipleStaffComponent {
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
+  get _StaffMasterFormGroupOterFaculty() { return this.StaffMasterFormGroupOterFaculty.controls; }
 
   async GetOfficeList() {
     try {
@@ -1374,6 +1398,67 @@ async GetTechnicianDll() {
       // If salary is drawn from same post 'No', working on post should be 'Yes'
       this.approveRequest.IsSalaryDrawnFromSamePost = true;
       this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+    }
+  }
+
+  async openModal_ApproveStaffProfileOterFaculty(content: any, StaffUserID: number, SSOID: any, type: boolean) {
+    debugger
+    this.IsView = type;
+    await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
+
+    if (this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
+      this.isApprove = true;
+    } else {
+      this.isApprove = false;
+    }
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  async ApproveStaffProfileOterFaculty() {
+    debugger
+    
+    this.isApproveSubmitted = true;
+
+    if (this.StaffMasterFormGroupOterFaculty.invalid) {
+      return; 
+    }
+
+    this.loaderService.requestStarted();
+    this.approveRequest.StaffUserID = this.requestUser.StaffUserID;
+    this.approveRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.approveRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.approveRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.approveRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+
+    try {
+      await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfileOterFaculty(this.approveRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else {
+          this.toastr.error('Some error! Please check.');
+        }
+
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
     }
   }
 

@@ -10,6 +10,7 @@ export class StudentRequestDataModal {
   public ReqId: any[] = [];
   public RoleID: number = 0;
   public status?: number = 0;
+  public HostelStatus?: number = 0;
   public Gender?: number = 0;
   
   public Action: string = '';

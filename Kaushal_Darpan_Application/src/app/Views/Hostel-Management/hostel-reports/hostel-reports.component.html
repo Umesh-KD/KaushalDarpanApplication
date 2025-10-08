@@ -45,6 +45,15 @@
         </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+          <select class="form-select" id="status"
+                  [(ngModel)]="Searchrequest.status" (change)="GetReportData()">
+            <option value="0">--- All ---</option>
+            <option *ngFor="let item of HostelStatusList" [value]="item.StatusID">{{item.StatusName}}</option>
+          </select>
+        </div>
+
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
         </div>

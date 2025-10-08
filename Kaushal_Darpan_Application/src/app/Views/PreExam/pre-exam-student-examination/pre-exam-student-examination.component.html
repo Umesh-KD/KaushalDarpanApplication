@@ -995,10 +995,12 @@
               <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="{{item.ColumnName}}">
                 {{item.DisplayColumnNameEn}}
               </label>
+              <!-- [disabled]="item.FileName != ''" -->
               <div class="flex fileUploader">
                 <input [ngModelOptions]="{standalone: true}"
                        class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="{{item.ColumnName}}" type="file" (change)="UploadDocument($event,item)" [disabled]="item.FileName!=''">
+                       id="{{item.ColumnName}}" type="file" (change)="UploadDocument($event,item)"
+                       [disabled]="!(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">
                 <label for="{{item.ColumnName}}">
                   <span>Choose File</span>{{item.Dis_FileName == '' ? 'No File Choosen' : item.Dis_FileName}}
                 </label>
