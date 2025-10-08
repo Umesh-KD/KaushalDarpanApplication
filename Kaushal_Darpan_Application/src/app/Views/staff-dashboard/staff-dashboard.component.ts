@@ -82,6 +82,8 @@ export class StaffDashboardComponent implements OnInit {
       || (this.sSOLoginDataModel.RoleID == EnumRole.TPO)
       || (this.sSOLoginDataModel.RoleID == EnumRole.StoreKeeper)
       || (this.sSOLoginDataModel.RoleID == EnumRole.BterStaff)
+      || (this.sSOLoginDataModel.RoleID == EnumRole.GuestFaculty)
+      || (this.sSOLoginDataModel.RoleID == EnumRole.ShikshaSambal)
       
 
     )

@@ -151,7 +151,7 @@
         </div>
         <!--{{request.DepartmentJoiningDate|json}}
         {{request.DateOfAppointment|json}}-->
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining in Department<span class="StarMarking">*</span></label>
           <input autocomplete="off" class="form-input" type="date" name="DepartmentJoiningDate" id="DepartmentJoiningDate"
                  formControlName="DepartmentJoiningDate" [(ngModel)]="request.DepartmentJoiningDate" /> <!--(click)="openDatePicker($event)"-->
@@ -178,7 +178,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false"> 
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Joining in the College<span class="StarMarking">*</span></label>
           <input class="form-input" type="date" name="DateOfJoining" id="DateOfJoining" [max]="request.DateOfRetirement"
                  formControlName="DateOfJoining" [(ngModel)]="request.DateOfJoining" (click)="openDatePicker($event)" />
@@ -227,13 +227,13 @@
 
       </div>
 
-      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+      <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf=" this.IsOterFacultyTech == false">
         <b class="text-1xl-5"><i class="ti ti-plus"></i> Employment Details</b>
       </div>
 
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3" >
 
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Current Designation <span class="StarMarking">*</span> </label>
           <select class="form-select " name="CurrentDesignationID" id="CurrentDesignationID" formControlName="CurrentDesignationID"
                   [(ngModel)]="request.CurrentDesignationID">
@@ -248,7 +248,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Work Experience(In Years)
             <span class="StarMarking">*</span>
@@ -263,7 +263,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification as per Service Book at the time of joining<span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Qualification At Joining" name="QualificationAtJoining" id="QualificationAtJoining"
                  formControlName="QualificationAtJoining" [(ngModel)]="request.QualificationAtJoining" />
@@ -275,7 +275,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualifications as per Service Book gained after joining <span class="StarMarking">*</span></label>
           <input class="form-input" placeholder="Qualification After Joining" name="TotalExperience" id="QualificationAfterJoining"
                  formControlName="QualificationAfterJoining" [(ngModel)]="request.QualificationAfterJoining" />
@@ -287,7 +287,7 @@
           </div>
         </div>
         <!--{{request.DateOfRetirement|json}}-->
-        <div>
+        <div *ngIf=" this.IsOterFacultyTech == false">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Retirement</label>
           <input autocomplete="off" class="form-input" type="date" name="DateOfRetirement" id="DateOfRetirement"
                  formControlName="DateOfRetirement" [(ngModel)]="request.DateOfRetirement" />
@@ -305,7 +305,7 @@
       <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Teacher">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Staff Subjects</b>
       </div>
-      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher">
+      <form [formGroup]="AddsubjectFormGroup" *ngIf="sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Type<span class="StarMarking">*</span></label>
@@ -403,12 +403,12 @@
           </div>
         </div>
       </form>
-      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
+      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light" >
         <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
         <b class="text-1xl-5">Staff Subject List </b>
       </div>
      
-      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher" class="overflow-auto">
+      <div *ngIf="staffDetailsFormData.StaffSubjectListModel.length>0 && sSOLoginDataModel.RoleID== _EnumRole.Teacher || sSOLoginDataModel.RoleID== _EnumRole.GuestFaculty || sSOLoginDataModel.RoleID== _EnumRole.ShikshaSambal " class="overflow-auto">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 

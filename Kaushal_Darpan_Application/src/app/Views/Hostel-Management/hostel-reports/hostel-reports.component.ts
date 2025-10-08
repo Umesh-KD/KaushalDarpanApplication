@@ -39,6 +39,7 @@ export class HostelReportsComponent {
   public ReportList: any = [];
   public SemesterDDLList: any = [];
   public BrachDDLList: any = [];
+  public HostelStatusList: any = [];
   public titleDDLBranchTrade: string = ''
   public status: number = 0
   public deallocateRequest = new DeallocateRoomDataModel();
@@ -80,10 +81,21 @@ export class HostelReportsComponent {
     //  ClassPercentage: [''],
     //  StreamName: ['']
     //});
-    
+    await this.GetHostelStatusDDL();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
     await this.GetReportData();
+  }
+
+  async GetHostelStatusDDL() {
+    try {
+      await this.commonFunctionService.GetHostelStatusDDL().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.HostelStatusList = data['Data'];
+      })
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async GetReportData() {

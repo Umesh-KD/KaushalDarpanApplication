@@ -85,7 +85,7 @@ export class DteItemsMasterComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
-           
+           debugger;
       await this.dteItemsMasterService.GetAllData(this.Searchrequest)
         .then((data: any) => {
 
