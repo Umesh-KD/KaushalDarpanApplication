@@ -61,6 +61,7 @@ export class GuestRoomSeatMasterComponent {
     this.groupForm = this.fb.group({
       ddlGuestHouseID: [0, [DropdownValidators]],
       txtRoomType: [0, [DropdownValidators]],
+      RoomStatus: [0, [DropdownValidators]],
       txtRoomFee: [null,
         [
           Validators.required,
