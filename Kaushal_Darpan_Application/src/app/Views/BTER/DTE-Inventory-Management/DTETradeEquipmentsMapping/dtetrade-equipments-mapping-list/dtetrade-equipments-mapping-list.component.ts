@@ -275,7 +275,7 @@ export class DteTradeEquipmentsMappingListComponent {
             this.request.ModifyBy = this.sSOLoginDataModel.UserID;
             this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
             this.request.Status = 1;
-
+debugger;
             try {
               await this.tradeEquipmentsMappingService.UpdateStatusData(this.request)
                 .then((data: any) => {

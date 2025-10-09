@@ -46,6 +46,7 @@ export class AddBterReturnItemComponent {
   public departmentDDLList: any = [];
   public StreamMasterList: any = [];
   public ItemDetailsList: any[] = [];
+  public selectedItemMasterList: any[] = [];
 
   constructor(
     private toastr: ToastrService,
@@ -269,7 +270,31 @@ export class AddBterReturnItemComponent {
 
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
+async confirmReturnNew() {
+  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
+    if (selectedItems.length === 0) {
+      this.toastr.warning("Please select at least one item to return.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
+      return;
+    }
+      this.selectedItemMasterList = this.ItemMasterList.filter((item:any) => item.Selected);
+    console.table(this.selectedItemMasterList);
+    await this.confirmReturn(this.selectedItemMasterList);
+    // this.loaderService.requestStarted();
+    //       this.isLoading = true;
+
+    //       this.submitRequest.StaffId = this.Searchrequest.staffID;
+    //       this.submitRequest.Remarks = this.returnModel.Remarks || "";
+    //       this.submitRequest.ItemCategoryId = 0;
+    //       this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
+    //       //this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
+    //       this.submitRequest.ItemList = this.selectedItemMasterList;
+    //       this.submitRequest.SelectedCount = this.selectedItemMasterList.length;
+
+    //       console.log("Returning items:", this.submitRequest);
+}
   //async confirmReturn() {
   //  debugger
   //  this.Swal2.Confirmation("Are you sure you want to return this item ?", async (result: any) => {
@@ -319,22 +344,22 @@ export class AddBterReturnItemComponent {
   //  });
   //}
 
-  async confirmReturn() {
+  async confirmReturn(arr: any) {
     debugger;
     this.Swal2.Confirmation("Are you sure you want to return the selected items?", async (result: any) => {
       if (result.isConfirmed) {
         try {
-          debugger
-          if (!this.returnModel.ItemCondition || this.returnModel.ItemCondition === 0) {
-            this.toastr.warning("Please select Equipment Working status.");
-            return;
-          }
+          // debugger
+          // if (!this.returnModel.ItemCondition || this.returnModel.ItemCondition === 0) {
+          //   this.toastr.warning("Please select Equipment Working status.");
+          //   return;
+          // }
 
-          const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected === true);
-          if (selectedItems.length === 0) {
-            this.toastr.warning("Please select at least one item to return.");
-            return;
-          }
+          // const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected === true);
+          // if (selectedItems.length === 0) {
+          //   this.toastr.warning("Please select at least one item to return.");
+          //   return;
+          // }
 
           this.loaderService.requestStarted();
           this.isLoading = true;
@@ -343,10 +368,10 @@ export class AddBterReturnItemComponent {
           this.submitRequest.Remarks = this.returnModel.Remarks || "";
           this.submitRequest.ItemCategoryId = 0;
           this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
-          this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
-          this.submitRequest.ItemList = selectedItems;
-          this.submitRequest.SelectedCount = selectedItems.length;
-
+          this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition || 0;
+          this.submitRequest.ItemList = arr;
+          this.submitRequest.SelectedCount = arr.length;
+          debugger
           console.log("Returning items:", this.submitRequest);
 
           const data: any = await this.bterInventoryService.GetAll_INV_returnItem(this.submitRequest);

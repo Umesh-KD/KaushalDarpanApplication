@@ -62,7 +62,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SubjectID" [clearable]="false">
+          <ng-select formControlName="SubjectID" [clearable]="false" (change)="GetStaff_InstituteWise()">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of SubjectMasterDDL; track item.ID) {
             <ng-option [value]="item.ID">{{item.Name}}</ng-option>
@@ -74,9 +74,10 @@
           </div>
         </div>
 
+        <!--{{ExaminerDDL|json}}-->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block"> Teachers<span class="StarMarking">*</span></label>
-          <ng-select formControlName="StaffID" [clearable]="false">
+          <ng-select formControlName="StaffID" [clearable]="false" (change)="sectionDDlAcRoster()">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of ExaminerDDL; track item.StaffID) {
             <ng-option [value]="item.StaffID">{{item.Name}}</ng-option>
@@ -91,12 +92,12 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block"> Section <span class="StarMarking">*</span></label>
-          <ng-select formControlName="SectionID" [items]="GetSectionData" bindLabel="SectionName"
-                     bindValue="SectionID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+          <ng-select formControlName="SectionID" [items]="GetSectionData" bindLabel="Name"
+                     bindValue="ID" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
                      placeholder="--Select Branch--">
             <ng-template ng-option-tmp let-item="item" let-item$="item$">
               <input type="checkbox" [checked]="item$.selected" class="me-2" />
-              {{ item.SectionName }}
+              {{ item.Name }}
             </ng-template>
           </ng-select>
           <!--<div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
@@ -137,7 +138,7 @@
                  class="form-input"
                  formControlName="AttendanceStartTime"
                  [ngxTimepicker]="startTimePicker"
-                 readonly style="width:100%"/>
+                 readonly style="width:100%" />
 
           <ngx-material-timepicker #startTimePicker
                                    [min]="minTime"

@@ -135,7 +135,8 @@ addItemsControls() {
     this.ItemDetailsList.forEach((item, index) => {
       this.itemsFormArray.push(this.formBuilder.group({
         txtEquipmentCode: [item.EquipmentCode ?? 0, [Validators.required]],
-        equipmentStatus: [item.EquipmentWorking ?? 0, [DropdownValidators]],
+        //equipmentStatus: [item.EquipmentWorking ?? 0, [DropdownValidators]],
+        equipmentStatus: [item.EquipmentWorking && item.EquipmentWorking !== 0 ? item.EquipmentWorking : '1', [DropdownValidators]],
         isOption: [item.isOption],
         ItemDetailsId: [item.ItemDetailsId],
         EquipmentCode: [item.EquipmentsCode],

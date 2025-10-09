@@ -110,7 +110,7 @@
                         [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"
                         [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}">
                   <option value="0">-- Select Status --</option>
-                  <option value="1">Working</option>
+                  <option selected value="1">Working</option>
                   <option value="2">Not Working</option>
                 </select>
 

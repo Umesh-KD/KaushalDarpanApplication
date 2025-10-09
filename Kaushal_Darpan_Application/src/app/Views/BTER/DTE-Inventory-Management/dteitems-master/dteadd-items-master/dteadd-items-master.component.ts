@@ -72,14 +72,20 @@ export class DteAddItemsMasterComponent {
       txtPricePerUnit: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
       txtQuantity: ['', [Validators.required]],
       //txtVoucherNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.AllowNumbersPattern),]],
+      // txtVoucherNumber: [
+      //   '',
+      //   [
+      //     Validators.required,
+      //     Validators.pattern(/^\d{6,}$/) // At least 6 digits
+      //   ]
+      // ],
       txtVoucherNumber: [
         '',
         [
           Validators.required,
-          Validators.pattern(/^\d{6,}$/) // At least 6 digits
+          Validators.pattern(/^\d+$/) // fewer than 6 digits
         ]
       ],
-
       IdentificationMark: ['', Validators.required],
       CampanyName: ['', Validators.required],
       ItemCategoryId: ['', [DropdownValidators]],
@@ -126,7 +132,8 @@ export class DteAddItemsMasterComponent {
   }
 
   async saveData() {
-    debugger
+    debugger;
+    console.log(this.AddItemsRequestFormGroup.value);
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.request.batchId = this.request.abbreviation + '/' + this.request.VoucherNumber;

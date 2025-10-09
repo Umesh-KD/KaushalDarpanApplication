@@ -1950,4 +1950,20 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetStaff_InstituteAcRoster(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetStaff_InstituteAcRoster', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetHostelStatusDDL() {
+    return await this.http.post(this.APIUrl + '/GetHostelStatusDDL', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
