@@ -23,6 +23,7 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public PostID: number = 0;
   public IsHod: boolean = false;
   public IsNodal: boolean = false;
+  public IsGuestStaff: boolean = false;
   public SSOID: string = '';
   public OfficeName: string = ''
   public InstituteName: string = ''
@@ -38,7 +39,10 @@ export class BTER_EM_AddStaffDataModel extends RequestBaseModel {
   public DistrictID: number=0
 
   public ModifyBy: number=0
-  public CourseTypeID: number=0
+  public CourseTypeID: number = 0;
+  public GuestHouseID: number = 0;
+
+
 }
 
 export class BTER_EM_AddStaffBasicDetailDataModel extends RequestBaseModel {
