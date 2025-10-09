@@ -76,11 +76,11 @@ export class GuestRoomRequestComponent {
     this.searchRequest.Status = this.GetStatusID;
 
     if (this.GetStatusID != 0) {
-      this.GuestRequestList();
+      await this.GuestRequestList();
     }
 
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID !== 215 && item.ID !== 219 && item.ID !== 220);
+    this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID === 217 || item.ID === 218);
   }
   
   async commonMaster() {
@@ -89,9 +89,6 @@ export class GuestRoomRequestComponent {
       await this.commonMasterService.GetCommonMasterDDLByType("GuestRoomStatus")
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.statusList = data['Data'];
         }, error => console.error(error));
     }

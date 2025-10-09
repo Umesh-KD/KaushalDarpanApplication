@@ -60,7 +60,8 @@ export class ItiCampusValidationComponent {
     
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+      debugger
+      await this.commonMasterService.Iticollege(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.InstituteMasterList = data['Data'];

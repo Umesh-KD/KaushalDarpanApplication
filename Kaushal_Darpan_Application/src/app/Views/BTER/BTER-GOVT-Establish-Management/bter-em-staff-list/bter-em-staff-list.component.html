@@ -122,9 +122,21 @@
               <div class="flex align-center justify-center actionBtns">
                 <a *ngIf="row.ProfileStatusID === _EnumEMProfileStatus.Pending" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID, row.StaffID, row.SSOID)"><i class="ti ti-trash"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
-                <a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Pending || row.ProfileStatusID == 289 " href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"><i class="ti ti-eye"></i></a>
+                <a href="javascript:void(0);" title="View" (click)="openModal_ApproveStaffProfile(Modal_ApproveStaffProfile, row.StaffUserID, row.SSOID, true)"
+                   *ngIf="
+     row.RoleID != _EnumRole.GuestHouseAdmin &&
+     row.RoleID != _EnumRole.GuestHouseIncharge &&
+     row.RoleID != _EnumRole.GuestRoomWarden &&
+     row.ProfileStatusID != 0 &&
+     row.ProfileStatusID != 288
+   " ><i class="ti ti-eye"></i></a>
+
+
+
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
-                <!--<a *ngIf="row.ProfileStatusID !== _EnumEMProfileStatus.Approve || row.ProfileStatusID !== _EnumEMProfileStatus.LockAndSubmit" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
+                <a href="javascript:void(0);" *ngIf="row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden" title="View" (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true)">
+                  <i class="ti ti-eye"></i>
+                </a>
               </div>
             </td>
           </tr>
@@ -183,8 +195,9 @@
               </div>
             </div>
           </div>
-        </div>--> <!-- Close this div here for card-body -->
-        <!--<div class="card-footer text-right">
+        </div>-->
+ <!-- Close this div here for card-body -->
+<!--<div class="card-footer text-right">
           <button type="button" (click)="updateReqStatus()" class="btn bg-success text-white btn-sm">
             Submit
           </button>
@@ -311,58 +324,58 @@
               </div>
 
               <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Posts Sanctioned<span class="StarMarking">*</span></label>
-            <input autocomplete="off" type="text" class="form-input" placeholder="No. of Posts Sanctioned" name="SanctionedPosts" id="SanctionedPosts"
-                   formControlName="SanctionedPosts" [(ngModel)]="approveRequest.SanctionedPosts" />
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">No. of Posts Sanctioned<span class="StarMarking">*</span></label>
+                <input autocomplete="off" type="text" class="form-input" placeholder="No. of Posts Sanctioned" name="SanctionedPosts" id="SanctionedPosts"
+                       formControlName="SanctionedPosts" [(ngModel)]="approveRequest.SanctionedPosts" />
 
-            <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SanctionedPosts.errors" class="text-danger">
-              <p *ngIf="_StaffMasterFormGroup.SanctionedPosts.errors.required">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div>
-          </div>-->
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SanctionedPosts.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.SanctionedPosts.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>-->
               <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Working <span class="StarMarking">*</span></label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Working <span class="StarMarking">*</span></label>
 
-            <div class="flex gap-4">
-              <label class="flex items-center space-x-2">
-                <input type="radio" name="IsWorking" [value]="true" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking" />
-                <span>Yes</span>
-              </label>
+                <div class="flex gap-4">
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="IsWorking" [value]="true" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking" />
+                    <span>Yes</span>
+                  </label>
 
-              <label class="flex items-center space-x-2">
-                <input type="radio" name="IsWorking" [value]="false" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking" />
-                <span>No</span>
-              </label>
-            </div>
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="IsWorking" [value]="false" formControlName="IsWorking" [(ngModel)]="approveRequest.IsWorking" />
+                    <span>No</span>
+                  </label>
+                </div>
 
-            <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsWorking.errors" class="text-danger">
-              <p *ngIf="_StaffMasterFormGroup.IsWorking.errors.required">
-                <i aria-hidden="true"></i> This field is required.!
-              </p>
-            </div>
-          </div>-->
+                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsWorking.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.IsWorking.errors.required">
+                    <i aria-hidden="true"></i> This field is required.!
+                  </p>
+                </div>
+              </div>-->
               <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-2">Vacant <span class="StarMarking">*</span></label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-2">Vacant <span class="StarMarking">*</span></label>
 
-            <div class="flex gap-4">
-              <label class="flex items-center space-x-2">
-                <input type="radio" name="IsVacant" [value]="true" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant" />
-                <span>Yes</span>
-              </label>
+                <div class="flex gap-4">
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="IsVacant" [value]="true" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant" />
+                    <span>Yes</span>
+                  </label>
 
-              <label class="flex items-center space-x-2">
-                <input type="radio" name="IsVacant" [value]="false" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant" />
-                <span>No</span>
-              </label>
-            </div>
+                  <label class="flex items-center space-x-2">
+                    <input type="radio" name="IsVacant" [value]="false" formControlName="IsVacant" [(ngModel)]="approveRequest.IsVacant" />
+                    <span>No</span>
+                  </label>
+                </div>
 
-            <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsVacant.errors" class="text-danger">
-              <p *ngIf="_StaffMasterFormGroup.IsVacant.errors.required">
-                <i aria-hidden="true"></i> This field is required.!
-              </p>
-            </di
-          </div>-->
+                <div *ngIf="isApproveSubmitted &&_StaffMasterFormGroup.IsVacant.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroup.IsVacant.errors.required">
+                    <i aria-hidden="true"></i> This field is required.!
+                  </p>
+                </di
+              </div>-->
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
@@ -778,10 +791,10 @@
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection</label>
                 <!-- <select class="form-select " name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory"
-            [(ngModel)]="approveRequest.SelectionCategory">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-    </select> -->
+                        [(ngModel)]="approveRequest.SelectionCategory">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                </select> -->
 
                 <input class="form-input" placeholder="Higher Education Institute" name="SelectionCategory" id="SelectionCategory"
                        formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" />
@@ -850,9 +863,9 @@
           <div class="flex justify-center flex-wrap items-centermt-3">
             <div>
               <!-- <button class="btn bg-success text-white mt-3" type="button" (click)="SaveData()">
-            Submit
-          </button>
-          <button class="btn bg-danger text-white mt-3" type="button" (click)="CancelData()">Cancel</button> -->
+                Submit
+              </button>
+              <button class="btn bg-danger text-white mt-3" type="button" (click)="CancelData()">Cancel</button> -->
               <!-- <button  type="button" class="btn bg-info text-white" (click)="OnConfirm(SttafModelPriview)">Lock Profile</button> -->
 
             </div>
@@ -861,7 +874,7 @@
       </div>
       <!-- Close Button -->
       <!--{{IsView|json}}
-  {{approveRequest|json}}-->
+      {{approveRequest|json}}-->
       <!--{{approveRequest|json}}-->
       <div class="flex justify-center my-2">
         <button *ngIf="IsView==true && approveRequest.ProfileStatusID==_EnumEMProfileStatus.LockAndSubmit"
@@ -920,5 +933,127 @@
         </div>
       </form>
     </div>
+  </div>
+</ng-template>
+
+
+<ng-template #Modal_ApproveStaffProfileGuestHouse let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b *ngIf="IsView"><i class="fa fa-eye"></i>&nbsp; View Staff Details</b>
+        <b *ngIf="!IsView"><i class="fa fa-plus"></i>&nbsp; Complete Profile and Approve</b>
+        <button class="btn bg-info text-white" (click)="ClosePopupGuest()"><i class="ti ti-x"></i></button>
+      </div>
+
+      <div class="card">
+        <div class="card-body p-5">
+          <form [formGroup]="StaffMasterFormGroupGuestHouse">
+
+            <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light mt-3">
+              <b class="text-1xl-5"><i class="ti ti-plus"></i>Institute & Employee Details</b>
+            </div>
+
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID <span class="StarMarking">*</span> </label>
+                <input autocomplete="off" class="form-input " placeholder="Enter SSO ID" value="12dfgdf" name="SSOID" id="SSOID"
+                       formControlName="SSOID" [(ngModel)]="approveRequest.SSOID" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.SSOID.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupGuestHouse.SSOID.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name of Employee<span class="StarMarking">*</span></label>
+                <input autocomplete="off" type="text" class="form-input" placeholder="Enter Full Name" name="Name" id="Name"
+                       formControlName="Name" [(ngModel)]="approveRequest.Name" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.Name.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupGuestHouse.Name.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
+                <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
+                        [(ngModel)]="approveRequest.DesignationID">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let item of DesignationMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.DesignationID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupGuestHouse.DesignationID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>
+                <select class="form-select" id="Gender" name="Gender" [(ngModel)]="approveRequest.Gender"
+                        formControlName="Gender">
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.Gender.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroupGuestHouse.Gender.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No <span class="StarMarking">*</span></label>
+                <input autocomplete="off" class="form-input" placeholder="Enter Mobile Number" name="MobileNumber" id="MobileNumber"
+                       formControlName="MobileNumber" [(ngModel)]="approveRequest.MobileNumber" maxlength="10" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.MobileNumber.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupGuestHouse.MobileNumber.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Employee ID <span class="StarMarking">*</span> </label>
+                <input autocomplete="off" class="form-input " placeholder="Enter Employee ID" value="12dfgdf" name="EmployeeID" id="EmployeeID"
+                       formControlName="EmployeeID" [(ngModel)]="approveRequest.EmployeeID" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.EmployeeID.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupGuestHouse.EmployeeID.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth <span class="StarMarking">*</span></label>
+                <input autocomplete="off" type="date" class="form-input" placeholder="" name="DateOfBirth" id="DateOfBirth"
+                       formControlName="DateOfBirth" [(ngModel)]="approveRequest.DateOfBirth" />
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroupGuestHouse.DateOfBirth.errors" class="text-danger">
+                  <p *ngIf="_StaffMasterFormGroupGuestHouse.DateOfBirth.errors.required">
+                    <i aria-hidden="true"></i>This field is required .!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- Close Button -->
+      <div class="flex justify-center my-2">
+        <button *ngIf="this.isApprove==false" class="btn bg-info text-white" (click)="ApproveStaffProfileGuestHouse()">Submit and Approve Profile</button>
+        <button *ngIf="this.isApprove==false" class="btn bg-info text-white" (click)="RevertStaffProfile(modal_SubmitReq,approveRequest)">Revert Profile</button>
+        <button class="btn bg-danger text-white" (click)="ClosePopupGuest()">Close</button>
+      </div>
+    </div>
+    <!--</div>-->
   </div>
 </ng-template>
