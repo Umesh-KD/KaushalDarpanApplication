@@ -98,24 +98,31 @@
               <button type="button"
                  class="bg-info btn text-white btn-sm" 
                  (click)="onSubmit(modal_SubmitReq, item)" 
-                 *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID ==_EnumRole.Admin || sSOLoginDataModel.RoleID ==_EnumRole.AdminNon)">
+                 *ngIf="item.Status < 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseIncharge)">
+                 Approve/Reject
+              </button>
+
+              <button type="button"
+                 class="bg-info btn text-white btn-sm" 
+                 (click)="onSubmit(modal_SubmitReq, item)" 
+                 *ngIf="item.Status === 217 && (sSOLoginDataModel.RoleID ==_EnumRole.GuestHouseAdmin)">
                  Approve/Reject
               </button>
 
               <button type="button"
                  class="bg-success btn text-white btn-sm" 
                  (click)="CheckIn(item)" 
-                 *ngIf="item.Status === 217 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
+                 *ngIf="item.Status === 1339 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                  Check In
               </button>
 
               <button type="button" 
                  class="bg-warning btn text-dark btn-sm" 
                  (click)="CheckIn(item)" 
-                 *ngIf="item.Status === 220">
+                 *ngIf="item.Status === 220 && sSOLoginDataModel.RoleID==_EnumRole.GuestRoomWarden">
                  Check Out
               </button>
-              
+
             </td>
           </tr>
         </tbody>
