@@ -62,7 +62,7 @@ export class InspectionDeploymentComponent {
      
     console.log('Received ID in InspectionDeploymentComponent:', this.tabId);
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.getMasterData();
+
     this.InspectionTeamID = this.activatedRoute.snapshot.queryParams['id'];
     console.log("this.InspectionTeamID",this.InspectionTeamID)
     if(this.InspectionTeamID != 0) {
@@ -76,7 +76,7 @@ export class InspectionDeploymentComponent {
       //DeploymentDateFrom: ['', Validators.required],
       //DeploymentDateTo: ['', Validators.required],
     })
-
+    await this.getMasterData();
     this.DeploymentTypeList = Object.keys(EnumInspectionDeploymentType)
     .filter(key => !isNaN(Number(EnumInspectionDeploymentType[key as any])))
     .map(key => ({
@@ -104,6 +104,7 @@ export class InspectionDeploymentComponent {
       await this.itiInspectionService.GetDistrictMaster(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DistrictMasterDDL = data.Data;
+        console.log(this.DistrictMasterDDL,"district")
       })
 
       await this.commonMasterService.GetExamShift().then((data: any) => {
