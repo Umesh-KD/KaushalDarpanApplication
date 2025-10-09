@@ -34,6 +34,7 @@ export class AddStaffInitialDetailsComponent {
   public IsNodalOfficer: boolean = false;
   public IsGuestStaffoffice: boolean = false;
   public IsAddasPrincipal: boolean = false;
+  public IsGuestHouseAdmin: boolean = false;
 
 
   public OfficeList: any[] = [];
@@ -82,11 +83,19 @@ export class AddStaffInitialDetailsComponent {
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+
+    
+
     await this.GetOfficeList();
     
    
     await this.GetStaffTypeData();
+
+    
   }
+
+
+
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
@@ -145,6 +154,8 @@ export class AddStaffInitialDetailsComponent {
     debugger
     this.formData.IsGuestStaff = false;
     this.formData.GuestHouseID = 0;
+    this.GetRoleMasterData();
+
     if (this.formData.IsNodal == true) {
       await this.GetInstituteMaster();
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
@@ -236,7 +247,14 @@ export class AddStaffInitialDetailsComponent {
      
         data = JSON.parse(JSON.stringify(data));
         this.RoleMasterList = data.Data;
-        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID);
+        
+
+        if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
+        } else {
+          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID);
+        }
+
         //if (this.formData.InstituteID == Number( "10001")) {
         //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.DTE || item.ID == this._EnumRole.Principal )
         //}
@@ -374,6 +392,32 @@ export class AddStaffInitialDetailsComponent {
             this.formData.EmailID = parsedData.mailPersonal;
             this.formData.SSOID = parsedData.SSOID;
             this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
+
+
+            if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+              this.IsGuestHouseAdmin = true;
+              this.IsGuestStaffoffice = true;
+              this.AddStaffBasicDetailFromGroup.controls['Office'].clearValidators();
+              this.AddStaffBasicDetailFromGroup.controls['StaffType'].clearValidators();
+              this.AddStaffBasicDetailFromGroup.controls['ddlPost'].clearValidators();
+             
+              this.GetRoleMasterData();
+             
+
+              
+             
+
+            } else {
+              this.AddStaffBasicDetailFromGroup.controls['Office'].setValidators([DropdownValidators]);
+              this.AddStaffBasicDetailFromGroup.controls['StaffType'].setValidators([DropdownValidators]);
+              this.AddStaffBasicDetailFromGroup.controls['ddlPost'].setValidators([DropdownValidators]);
+
+              this.IsGuestHouseAdmin = false;
+            }
+            this.AddStaffBasicDetailFromGroup.controls['Office'].updateValueAndValidity();
+            this.AddStaffBasicDetailFromGroup.controls['StaffType'].updateValueAndValidity();
+            this.AddStaffBasicDetailFromGroup.controls['ddlPost'].updateValueAndValidity();
+
             if (parsedData.designation != null) {
               this.GetDesignationID = this.PostList.find((item: any) =>
                 item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
@@ -543,13 +587,20 @@ export class AddStaffInitialDetailsComponent {
     if (this.formData.IsGuestStaff == true) {
       await this.GetGuestHouseNameList();
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].setValidators([DropdownValidators]);
-      this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseAdmin || item.ID == EnumRole.GuestHouseIncharge)
+
+      if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
+      }
+      else {
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) =>  item.ID == EnumRole.GuestHouseAdmin )
+      }
+     
 
     } else {
       this.formData.IsGuestStaff = false;
       this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].clearValidators();
       this.formData.GuestHouseID = 0;
-
+      this.GetRoleMasterData();
     }
     this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].updateValueAndValidity();
 
