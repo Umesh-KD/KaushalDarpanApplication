@@ -59,7 +59,7 @@ export class ItiHrMasterService {
   //delete
   public async DeleteById(HRManagerID: number, userId: number) {
     var body = JSON.stringify({ "HRManagerID": HRManagerID, "ModifyBy": userId });
-    return await this.http.delete(`${this.APIUrl}/DeleteByID/${HRManagerID}/${userId}`, this.headersOptions)
+    return await this.http.post(`${this.APIUrl}/DeleteByID/${HRManagerID}/${userId}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
