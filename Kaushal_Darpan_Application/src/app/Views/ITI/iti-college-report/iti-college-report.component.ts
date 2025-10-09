@@ -152,7 +152,7 @@ export class ItiCollegeReportComponent {
     if (this.request.CollegeID > 0) {
       this.GetById(this.request.CollegeID)
     }
-    this.request.IsNewCollege=1
+/*    this.request.IsNewCollege=1*/
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
