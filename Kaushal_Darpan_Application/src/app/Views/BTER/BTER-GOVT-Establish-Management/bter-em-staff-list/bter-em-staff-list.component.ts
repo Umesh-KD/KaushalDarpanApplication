@@ -5,7 +5,7 @@ import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { EnumEMProfileStatus, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumEMProfileStatus, EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
@@ -25,6 +25,7 @@ export class BTEREMStaffListComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public deleteRequest = new BTER_EM_DeleteModel();
   StaffMasterFormGroup!: FormGroup;
+  StaffMasterFormGroupGuestHouse!: FormGroup;
   public StaffTypeList: any = [];
   public OfficeList: any = [];
   public OfficeWorkList: any = [];
@@ -67,6 +68,8 @@ export class BTEREMStaffListComponent {
   public GenderList: any = [];
   public InstituteMasterDDLList: any[] = [];
   public unlockRequest = new BTER_EM_UnlockProfileDataModel();
+  public isApprove: boolean = false;
+  _EnumRole = EnumRole;
   constructor(
     private loaderService: LoaderService,
     private bterEstablishManagementService: BTEREstablishManagementService,
@@ -118,10 +121,30 @@ export class BTEREMStaffListComponent {
       Remark: [''],
       WorkOfficeID: [0, [DropdownValidators]],
     });
+
+
     this.groupForm = this.formBuilder.group({
       ddlStatus: [0, [DropdownValidators]],
       txtRemark: ['', Validators.required]
     });
+
+
+    this.StaffMasterFormGroupGuestHouse = this.formBuilder.group({
+      DesignationID: [0, [DropdownValidators]],
+      Gender: [0, [DropdownValidators]],
+      EmpInstituteID: [0,],
+      EmpDeputatedInstituteID: [0,],
+      Name: ['', [Validators.required]],
+      DateOfBirth: ['', [Validators.required]],
+      MobileNumber: ['', [Validators.required, Validators.pattern(/^[6-9]\d{9}$/)]],
+      SSOID: ['', [Validators.required]],
+      EmployeeID: [''],
+
+
+      Remark: [''],
+    });
+
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
     await this.GetStatusList();
@@ -136,6 +159,7 @@ export class BTEREMStaffListComponent {
   }
 
   get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls }
+  get _StaffMasterFormGroupGuestHouse() { return this.StaffMasterFormGroupGuestHouse.controls }
 
   async GetOfficeList() {
     try {
@@ -784,4 +808,74 @@ export class BTEREMStaffListComponent {
       this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
     }
   }
+
+
+  async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean) {
+    debugger
+    this.IsView = type;
+    await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
+
+    if (this.approveRequest.ProfileStatusID == EnumEMProfileStatus.Approve) {
+      this.isApprove = true;
+    } else {
+      this.isApprove = false;
+    }
+
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
+  }
+
+  async ApproveStaffProfileGuestHouse() {
+    debugger
+
+    this.isApproveSubmitted = true;
+
+    if (this.StaffMasterFormGroupGuestHouse.invalid) {
+      return;
+    }
+
+    this.loaderService.requestStarted();
+    this.approveRequest.StaffUserID = this.requestUser.StaffUserID;
+    this.approveRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    this.approveRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.approveRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.approveRequest.ModifyBy = this.sSOLoginDataModel.UserID;
+
+    try {
+      await this.bterEstablishManagementService.BTER_EM_ApproveStaffProfileOterFaculty(this.approveRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+
+        } else {
+          this.toastr.error('Some error! Please check.');
+        }
+
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200)
+    }
+  }
+
+  ClosePopupGuest(): void {
+    this.modalReference?.close();  // Close the modal
+    this.IsView = false
+    /*window.location.reload();*/
+  }
+
+
 }

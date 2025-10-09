@@ -13,6 +13,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-AddGuestApplyForGuestRoom',
@@ -48,7 +49,7 @@ export class AddGuestApplyForGuestRoomComponent {
   public RoomAvailablity: number = 0;
   displayedColumns: string[] = [
     'SNo', 'RequestName', 'InstituteName', 'DepartmentName',
-    'FromDateTime', 'ToDateTime', 'Reason', 'StatusName',
+    'FromDateTime', 'ToDateTime', 'Purpose_str', 'StatusName',
     'Remark', 'GuestHouseName', 'RoomQuantity', 'RoomType',
     'RoomFee', 'CheckinCheckout', 'Action'
   ];
@@ -56,10 +57,16 @@ export class AddGuestApplyForGuestRoomComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private appsettingConfig: AppsettingService,private commonMasterService: CommonFunctionService, private guestRoomManagmentService: GuestRoomManagmentService,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private Swal2: SweetAlert2, private routers: Router) {
-  }
+  constructor(
+    private appsettingConfig: AppsettingService,
+    private commonMasterService: CommonFunctionService, 
+    private guestRoomManagmentService: GuestRoomManagmentService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder,
+    private Swal2: SweetAlert2, 
+    private routers: Router,
+  ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -85,11 +92,12 @@ export class AddGuestApplyForGuestRoomComponent {
         Reason: [''],
         txtRoomFee: [{ value: '', disabled: true }, Validators.required],
         ddlGuestHouseID: ['', Validators.required],
+        Purpose: ['', [DropdownValidators]],
         txtRoomType: ['', Validators.required],
         txtSeatCapacity: ['', Validators.required],
         txtRoomQuantity: ['', Validators.required]
       });
-    
+    await this.PostUserExists();
     await this.loadData();
     await this.GetGuestRoomApplyList();
     await this.GetAllRoomSeatList();
@@ -136,34 +144,45 @@ export class AddGuestApplyForGuestRoomComponent {
   }
 
   async PostUserExists() {
-    if (this.SSOIDExists) {    
-      await this.loadData();
-      await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.request.CollegeID = data['Data'];
-          this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
-          this.request.InstituteName = data['Data'][0]['InstituteName'];
-          this.request.CollegeID = data['Data'][0]['InstituteID'];
-          this.request.DisplayName = data['Data'][0]['DisplayName'];
-          this.request.FirstName = data['Data'][0]['DisplayName'];
-          this.request.State = data['Data'][0]['StateName'];
-          this.request.PostalCode = data['Data'][0]['Pincode'];
-          this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
-          this.request.MailPersonal = data['Data'][0]['Email'];
-          this.request.MobileNo = data['Data'][0]['MobileNumber'];
-          this.request.PostalAddress = data['Data'][0]['Address'];
-        }, error => console.error(error));
-      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
-      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    } else {
-      this.toastr.warning("Not Exists SSOID");
-    }
-  
-}
+    // if (this.SSOIDExists) {    
+    //   await this.loadData();
+    //   await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
+    //     .then((data: any) => {
+    //       data = JSON.parse(JSON.stringify(data));
+    //       this.State = data['State'];
+    //       this.Message = data['Message'];
+    //       this.ErrorMessage = data['ErrorMessage'];
+    //       this.request.CollegeID = data['Data'];
+    //       this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
+    //       this.request.InstituteName = data['Data'][0]['InstituteName'];
+    //       this.request.CollegeID = data['Data'][0]['InstituteID'];
+    //       this.request.DisplayName = data['Data'][0]['DisplayName'];
+    //       this.request.FirstName = data['Data'][0]['DisplayName'];
+    //       this.request.State = data['Data'][0]['StateName'];
+    //       this.request.PostalCode = data['Data'][0]['Pincode'];
+    //       this.request.TelephoneNumber = data['Data'][0]['MobileNumber'];
+    //       this.request.MailPersonal = data['Data'][0]['Email'];
+    //       this.request.MobileNo = data['Data'][0]['MobileNumber'];
+    //       this.request.PostalAddress = data['Data'][0]['Address'];
+    //     }, error => console.error(error));
+    //   this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+    //   this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    // } else {
+    //   this.toastr.warning("Not Exists SSOID");
+    // }  
+
+    this.request.DepartmentName = this.sSOLoginDataModel.DepartmentName;
+    this.request.CollegeID = this.sSOLoginDataModel.InstituteID;
+    this.request.InstituteName = this.sSOLoginDataModel.InstituteName;
+    this.request.DisplayName = this.sSOLoginDataModel.DisplayName;
+    this.request.FirstName = this.sSOLoginDataModel.DisplayName;
+    this.request.State = this.sSOLoginDataModel.State;
+    this.request.PostalCode = this.sSOLoginDataModel.Postalcode;
+    this.request.TelephoneNumber = this.sSOLoginDataModel.Telephonenumber;
+    this.request.MailPersonal = this.sSOLoginDataModel.Mailpersonal;
+    this.request.MobileNo = this.sSOLoginDataModel.Mobileno;
+    this.request.PostalAddress = this.sSOLoginDataModel.Postaladdress;
+  }
 
   onFromDateChange() {
     const fromDate = new Date(this.request.FromDate);
@@ -284,7 +303,6 @@ export class AddGuestApplyForGuestRoomComponent {
 
   // get detail by id
   async SaveData() {
-    debugger
     try {
       this.isSubmitted = true;
       if (this.IIPMasterFormGroup.invalid) {
@@ -310,7 +328,7 @@ export class AddGuestApplyForGuestRoomComponent {
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.Status = 215;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
-      this.request.RequestSSOID = this.SSOIDFormGroup.value.SSOID;
+      this.request.RequestSSOID = this.sSOLoginDataModel.SSOID;
 
       //save
       await this.guestRoomManagmentService.GuestApplyForGuestRoomSaveData(this.request)

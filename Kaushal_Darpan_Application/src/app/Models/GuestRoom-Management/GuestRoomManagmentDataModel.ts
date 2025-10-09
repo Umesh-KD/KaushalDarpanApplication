@@ -65,7 +65,7 @@ export class CreateGuestRoomSeatDataModel {
   public DeleteStatus: boolean = false;
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
-
+  public RoomStatus: number = 0;
 }
 
 export class GuestRoomSeatSearchModel {
@@ -142,6 +142,7 @@ export class GuestApplyForGuestRoomDataModel {
   public RoleID: number = 0;
   public EndTermID: number = 0;
   public RequestSSOID: string = '';
+  public Purpose: number = 0;
 }
 
 export class GuestApplyForGuestRoomSearchModel {
