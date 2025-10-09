@@ -234,5 +234,11 @@ export class GuestRoomManagmentService {
       ).toPromise();
   }
   
-
+  public async ReqApproveByAdmin(request: GuestApplyForGuestRoomDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/ReqApproveByAdmin', request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

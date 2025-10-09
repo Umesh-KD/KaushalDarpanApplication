@@ -145,6 +145,7 @@ export class CreateGuestRoomComponent {
     this.isUpdate = false;
     this.request = new CreateGuestRoomDataModel();
     this.groupForm.reset();
+    this.GuestHouseID = 0;
     // Reset form values if necessary
     this.groupForm.patchValue({
       GuestHouseName:''
