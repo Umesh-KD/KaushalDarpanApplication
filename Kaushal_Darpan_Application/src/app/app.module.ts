@@ -28,6 +28,7 @@ import { DTEApplicationLayoutComponent } from './Views/Shared/dte-application-la
 import { Home2LayoutComponent } from './Views/Shared/home2-layout/home2-layout.component';
 import { EmitraLayoutComponent } from './Views/Shared/emitra-layout/emitra-layout.component';
 import { BterPublicInfoLayoutComponent } from './Views/Shared/bter-publicinfo-layout/bter-publicinfo-layout.component';
+import { ITIHomeLayoutComponent } from './Views/Shared/itihome-layout/itihome-layout.component';
 
 
 
@@ -45,6 +46,7 @@ export function initializeApp(appsettingService: AppsettingService): () => any {
     AppComponent,
     MasterLayoutComponent,
     HomeLayoutComponent,
+    ITIHomeLayoutComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
     Home2LayoutComponent,

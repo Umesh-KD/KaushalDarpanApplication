@@ -229,7 +229,8 @@ export class PendingFeesComponent implements OnInit {
 
     this.loaderService.requestStarted();
     try {
-      await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
+      // old EmitraPayment
+      await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -283,7 +284,8 @@ export class PendingFeesComponent implements OnInit {
 
       this.loaderService.requestStarted();
       try {
-        await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
+        // old EmitraPayment
+        await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
           .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.State = data['State'];

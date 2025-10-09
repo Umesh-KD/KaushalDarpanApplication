@@ -12,20 +12,23 @@ import { ITIHomeService } from '../../../Services/ITI/ITIHome/itihome.service';
 
 
 @Component({
-  selector: 'app-single-post',
-  templateUrl: './single-post.component.html',
-  styleUrls: ['./single-post.component.css'],
-  standalone: false
+    selector: 'app-single-post',
+    templateUrl: './single-post.component.html',
+    styleUrls: ['./single-post.component.css'],
+    standalone: false
 })
 export class SinglePostComponent implements OnInit {
   public _GlobalConstants: any = GlobalConstants;
   public PostId: number = 0;
   public CampusPostDetail: any = null;
-  public hasShortlisted: boolean = false
+  public hasShortlisted:boolean=false
   public PlacementCompanyList: any[] = [];
   public searchRequest = new CampusDetailsWebSearchModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-
+  // --- new changes ---
+  public hasShortList:boolean = false;
+  public hasSelected:boolean = false;
+  // -------------------
   constructor(private commonMasterService: CommonFunctionService,
     private homeService: ITIHomeService, private toastr: ToastrService,
     private loaderService: LoaderService, private activatedRoute: ActivatedRoute,
@@ -36,7 +39,7 @@ export class SinglePostComponent implements OnInit {
 
   async ngOnInit() {
     this.PostId = Number(this.activatedRoute.snapshot.queryParamMap.get('post')?.toString());
-    //  this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));.
+  //  this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));.
     this.sSOLoginDataModel.DepartmentID = 2;
     //edit
     if (this.PostId > 0) {
@@ -47,21 +50,23 @@ export class SinglePostComponent implements OnInit {
 
   // get detail by id
   async GetAllPost() {
-
+    
     try {
       this.loaderService.requestStarted();
-      await this.homeService.GetITIAllPost(this.PostId, this.sSOLoginDataModel.DepartmentID)
+      await this.homeService.GetITIAllPost(this.PostId,this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
           if (data['Data'].length > 0) {
             this.CampusPostDetail = data['Data'][0];
-            // Check if any IsShortListed is true
-            //  this.hasShortlisted = data['Data'].some((item: any) => item.IsShortListed === true);
+            
+              // Check if any IsShortListed is true
+             this.hasShortList = data['Data'].some((item: any) => item.IsShortListed === true);
+             this.hasSelected = data['Data'].some((item: any) => item.IsPlaced === true);
 
             // this.CampusPostDetail = data['Data'];
           }
-          console.log(this.CampusPostDetail, "CampusPostDetail");
+          console.log(this.CampusPostDetail,"CampusPostDetail");
         }, (error: any) => console.error(error)
         );
     }
