@@ -29,7 +29,7 @@
       <b class="text-1xl-5"><i class="ti ti-plus"></i>{{ItemId>0?'Edit':'Add'}} Item</b>
     </div>
     <form [formGroup]="AddItemsRequestFormGroup" (ngSubmit)="saveData()">
-      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-4">
 
         <!--<div>
     <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -114,7 +114,25 @@
           </div>
         </div>
 
-
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Unit: <span class="StarMarking">*</span>
+          </label>
+          <ng-select formControlName="UnitId"
+                     [(ngModel)]="request.UnitId"
+                     [items]="UnitMasterList"
+                     bindLabel="UnitName"
+                     bindValue="UnitId"
+                     placeholder="--Select Unit--"
+                     [searchable]="true"
+                     [clearable]="false" readonly>
+          </ng-select>
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.UnitId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.UnitId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div>
 
         <div>
           <label for="IdentificationMark" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -155,7 +173,25 @@
             </p>
           </div>
         </div>
+        <div>
+          <label for="voucherdate" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Voucher Date: <span class="StarMarking">*</span>
+          </label>
+          <input type="date"
+                 id="voucherdate"
+                 name="voucherdate"
+                 class="form-input"
+                 formControlName="voucherdate"
+                 [(ngModel)]="request.voucherdate"
+                 [min]="todayDate"
+                 [max]="todayDate" />
 
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.voucherdate.errors.DropdownValidators">
+              <i aria-hidden="true"></i> This field is required.
+            </p>
+          </div>
+        </div>
         <div>
           <label for="Quantity" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Quantity: <span class="StarMarking">*</span>
@@ -257,9 +293,16 @@
       </p>
     </div>
   </div>-->
+        <div>
+          <label for="TotalPrice" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Abbreviation: <span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
 
+        </div>
 
-        <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">
+        <!-- <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> -->
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> 
           <label class="block">IsConsumable </label>
           <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
             <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"

@@ -18,7 +18,7 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!--<div *ngIf="(sSOLoginDataModel.RoleID === EnumRole.StoreKeeper || sSOLoginDataModel.RoleID === EnumRole.Admin || sSOLoginDataModel.RoleID === EnumRole.Principal) && this.sSOLoginDataModel.InstituteID === 0">-->
-        <div>
+        <div style="display: none;">
           <a [routerLink]="['/iti-add-item-master']"
              class="btn bg-success btn-sm text-white">
             <i class="ti ti-plus"></i> Add New
@@ -29,7 +29,7 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div *ngIf="this.sSOLoginDataModel.RoleID != EnumRole.DTETraing">
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Institute / Building Name:
           </label>
@@ -85,9 +85,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
-             @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <th class="text-left">Institute / Building Name</th>
-             }
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">IsConsumable</th>
@@ -98,30 +96,16 @@
             <th class="text-left">Auctioned</th>
             <th class="text-left">Working</th>
             <th class="text-left">Not Working</th>
-            <th class="text-center">Action</th>
+            <th class="text-center">Status</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
-            <!--@if(item.InstituteID == 0 && item.OfficeID == 2){
-            <td align="left">
-              DTE training: T2 (establishment)
-            </td>
-            }
-            @if(item.InstituteID == 0 && item.OfficeID == 1){
-            <td align="left">
-              RCVT ADMIN
-            </td>
-            }
-            @else if(item.InstituteID > 0){-->
-            @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
+           
             <td align="left">
               {{item.CollegeName}}
-            </td>
-            }
-            
-            <!--}-->
+            </td> 
 
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
@@ -160,24 +144,15 @@
             <td align="left">{{item.Actioned}}</td>
             <td align="left">{{item.Working}}</td>
             <td align="left">{{item.NotWorking}}</td>
+            
             <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                
-                <button class="btn btn-sm text-white"  *ngIf="sSOLoginDataModel.RoleID != EnumRole.StoreKeeper_NCVT"
-                        (click)="item.Status <= 0 && item.InstituteID == sSOLoginDataModel.InstituteID ? btnEquipmentsStatus_OnClick(item) : null"
-                        [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"
-                        [title]="item.Status == 1 ? 'Approved' : 'Accept'">
+              <!-- <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">  -->
+                <span class="btn btn-sm text-white"  [ngClass]="{'bg-info': item.Status == '0' || item.Status == null, 'bg-success': item.Status != '0' && item.Status != null}"> 
                   {{ item.Status == 0 || item.Status == '0' || item.Status == null ? 'Pending' : item.Status == 1 ? 'Approved' : 'Pending' }}
-                </button>
-
-
-
-                @if(item.Status == 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT)){
-                <a [routerLink]="['/iti-add-item-master']" [queryParams]="{ id: item.ItemId }" title="Edit"><i class="ti ti-pencil"></i></a>
-                <!--<a href="javascript:void(0)" (click)="btnDelete_OnClick(item.ItemId)" title="Delete"><i class="ti ti-trash"></i> </a>-->
-                }
-              </div>
+                </span> 
+              <!-- </div> -->
             </td>
+              <!--<a href="javascript:void(0)" (click)="btnDelete_OnClick(item.ItemId)" title="Delete"><i class="ti ti-trash"></i> </a>-->
           </tr>
         </tbody>
       </table>

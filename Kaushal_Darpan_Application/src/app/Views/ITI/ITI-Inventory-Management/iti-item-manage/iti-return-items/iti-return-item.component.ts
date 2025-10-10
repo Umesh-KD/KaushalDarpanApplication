@@ -43,6 +43,7 @@ export class AddItiReturnItemComponent {
   public UserID: number = 0;
   //public StudentReqListList: any = [];
   public returnItemTypeList: any = [];
+  public selectedItemMasterList: any[] = [];
   //public today: Date = new Date();
   public submitRequest = new ItemsIssueReturnModels();
   
@@ -116,6 +117,7 @@ export class AddItiReturnItemComponent {
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.TypeName='getReturnItem';
       await this.itiInventoryService.GetInventoryIssueItemList(this.Searchrequest)
         .then((data: any) => {
           if (data) {
@@ -320,19 +322,44 @@ export class AddItiReturnItemComponent {
 
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
+async confirmReturnNew() {
+  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
-  async confirmReturn() {
+    if (selectedItems.length === 0) {
+      this.toastr.warning("Please select at least one item to return.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
+      return;
+    }
+      this.selectedItemMasterList = this.ItemMasterList.filter((item:any) => item.Selected);
+    console.table(this.selectedItemMasterList);
+    await this.confirmReturn(this.selectedItemMasterList);
+    // this.loaderService.requestStarted();
+    //       this.isLoading = true;
+
+    //       this.submitRequest.StaffId = this.Searchrequest.staffID;
+    //       this.submitRequest.Remarks = this.returnModel.Remarks || "";
+    //       this.submitRequest.ItemCategoryId = 0;
+    //       this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
+    //       //this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
+    //       this.submitRequest.ItemList = this.selectedItemMasterList;
+    //       this.submitRequest.SelectedCount = this.selectedItemMasterList.length;
+
+    //       console.log("Returning items:", this.submitRequest);
+}
+  async confirmReturn(arr: any) {
     debugger;
 
     this.loaderService.requestStarted();
     this.isLoading = true;
 
     this.submitRequest.StaffId = this.Searchrequest.staffID,
-      this.submitRequest.Remarks = this.returnModel.Remarks,
+      this.submitRequest.Remarks = this.returnModel.Remarks || '',
       this.submitRequest.ItemCategoryId = 0,
       this.submitRequest.ReturnDate = this.returnModel.ReturnDate,
-      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition,
-    this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
+      this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition || 0,
+      this.submitRequest.ItemList = arr;
+    //this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
    
     try {
       await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
