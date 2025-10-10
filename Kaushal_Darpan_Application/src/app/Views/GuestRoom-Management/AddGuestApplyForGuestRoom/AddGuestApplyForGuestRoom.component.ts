@@ -540,12 +540,10 @@ export class AddGuestApplyForGuestRoomComponent {
   async GetAllRoomSeatList() {
     try {
       this.loaderService.requestStarted();
-      await this.guestRoomManagmentService.GetAllRoomSeatList(this.searchRequest1)
+      await this.guestRoomManagmentService.GuestHouseRoomListForApply(this.searchRequest1)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
+          
           this.GuestRoomList = data['Data'];
         }, error => console.error(error));
     }
