@@ -9,8 +9,9 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { ItiCampusPostService } from '../../../../Services/ITI/ITICampusPost/iticampus-post.service';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { PlacementStudentService } from '../../../../Services/PlacementStudent/placement-student.service';
+
 import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { ITIPlacementStudentService } from '../../../../Services/ITI/ITIPlacementStudent/iti-placement-student.service';
 
 @Component({
     selector: 'app-iticampus-post-list',
@@ -43,7 +44,7 @@ export class ItiCampusPostListComponent {
   public TodayDate = new Date()
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ItiCampusPostService, private loaderService: LoaderService,
-    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: PlacementStudentService) {
+    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: ITIPlacementStudentService) {
   }
 
   async ngOnInit() {
@@ -54,11 +55,8 @@ export class ItiCampusPostListComponent {
   async GetMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.InstituteMasterList = data['Data'];
-        }, error => console.error(error));
+    
+        debugger;
       await this.commonMasterService.ITIPlacementCompanyMaster(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

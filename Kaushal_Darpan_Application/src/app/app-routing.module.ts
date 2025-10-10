@@ -9,6 +9,7 @@ import { AuthGuard } from './Common/auth.guard.ts';
 import { DTEApplicationLayoutComponent } from './Views/Shared/dte-application-layout/dte-application-layout.component';
 import { Home2LayoutComponent } from './Views/Shared/home2-layout/home2-layout.component';
 import { BterPublicInfoLayoutComponent } from './Views/Shared/bter-publicinfo-layout/bter-publicinfo-layout.component';
+import { ITIHomeLayoutComponent } from './Views/Shared/itihome-layout/itihome-layout.component';
 const routes: Routes = [
   //{ path: '**', component: PageNotFoundComponent },// create not found component
   {
@@ -70,16 +71,16 @@ const routes: Routes = [
       { path: 'SearchResult', loadChildren: () => import('./Views/Home/search-result/search-result.module').then(m => m.SearchResultModule), title: 'Search Result' },
 
 
-      {
-        path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
-      },
+      // {
+      //   path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
+      // },
 
-      {
-        path: 'ITIsinglepost', loadChildren: () => import('./Views/ITI/single-post/single-post.module').then(m => m.SinglePostModule), title: 'Campus Details'
-      },
-      {
-        path: 'ITIViewplacedStudent', loadChildren: () => import('./Views/ITI/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
-      },
+      // {
+      //   path: 'ITIsinglepost', loadChildren: () => import('./Views/ITI/single-post/single-post.module').then(m => m.SinglePostModule), title: 'Campus Details'
+      // },
+      // {
+      //   path: 'ITIViewplacedStudent', loadChildren: () => import('./Views/ITI/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
+      // },
 
 
       {
@@ -102,6 +103,45 @@ const routes: Routes = [
       }
     ]
   },
+
+
+  
+    {
+    //front web - ITI home
+    path: '', component: ITIHomeLayoutComponent,
+    children: [
+      {
+        path: 'index', loadChildren: () => import('./Views/Home/home/home.module').then(m => m.HomeModule), title: 'Main'
+      },
+      //{
+      //  path: 'placement', loadChildren: () => import('./Views/Home/home/home.module').then(m => m.HomeModule), title: 'Placement'
+      //},
+      {
+        path: 'index', loadChildren: () => import('./Views/Home/home/home.module').then(m => m.HomeModule), title: 'Placement'
+      },
+
+      // divya 
+      {
+        path: 'ITIallpost', loadChildren: () => import('./Views/Home/iti-all-post/iti-all-post.module').then(m => m.ITIAllPostModule), title: 'All Campus List'
+      },
+
+      {
+        path: 'ITIsinglepost', loadChildren: () => import('./Views/ITI/single-post/single-post.module').then(m => m.SinglePostModule), title: 'Campus Details'
+      },
+      {
+        path: 'ITIViewplacedStudent', loadChildren: () => import('./Views/ITI/view-placed-student/view-placed-student.routing.module').then(m => m.ViewPlacedStudentRoutingModule), title: 'Placed Student Details'
+      },
+
+      {
+        path: 'citizensuggestion', loadChildren: () => import('./Views/Citizen-Suggestion/citizen-suggestion/citizen-suggestion-routing.module').then(m => m.CitizenSuggestionRoutingModule), title: 'Citizen Suggetion'
+      },
+      {
+        path: 'citizensuggestionTrack', loadChildren: () => import('./Views/Citizen-Suggestion/citizen-suggestion-track/citizen-suggestion-track.module').then(m => m.CitizenSuggestionTrackModule), title: 'Citizen Suggetion Track'
+      },
+    ]
+  },
+
+
   {
     //admin
     path: '', component: MasterLayoutComponent, canActivate: [AuthGuard],
@@ -805,6 +845,7 @@ const routes: Routes = [
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },
       { path: 'SchlorshipList', loadChildren: () => import('./Views/scholarship-list/scholarship-list.module').then(m => m.ScholarshipListModule) },
       { path: 'AddSchlorship', loadChildren: () => import('./Views/add-scholarship-list/add-scholarship-list.module').then(m => m.AddScholarshipListModule) },
+      
       { path: 'create-guest-house', loadChildren: () => import('./Views/GuestRoom-Management/Create-GuestRoom/Create-GuestRoom.module').then(m => m.CreateGuestRoomModule), title: 'Create GuestRoom' },
       { path: 'guest-room-details', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-details/guest-room-details.module').then(m => m.GuestRoomDetailsModule) },
       { path: 'guest-room-details/:id', loadChildren: () => import('./Views/GuestRoom-Management/guest-room-details/guest-room-details.module').then(m => m.GuestRoomDetailsModule) },

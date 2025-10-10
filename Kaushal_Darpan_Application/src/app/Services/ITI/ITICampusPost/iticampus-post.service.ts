@@ -62,7 +62,7 @@ export class ItiCampusPostService {
   }
   public async DeleteDataByID(PK_ID: number, ModifyBy: number) {
 
-    return await this.http.delete(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
+    return await this.http.post(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -82,6 +82,19 @@ export class ItiCampusPostService {
       ).toPromise();
   }
 
+  public async GetHiringRoleMaster() {
 
+    return await this.http.get(this.APIUrl + '/GetHiringRoleMaster/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
+  public async Iticollege(DepartmentID: number = 0, EndTermId: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/Iticollege/' + DepartmentID + '/' + EndTermId , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

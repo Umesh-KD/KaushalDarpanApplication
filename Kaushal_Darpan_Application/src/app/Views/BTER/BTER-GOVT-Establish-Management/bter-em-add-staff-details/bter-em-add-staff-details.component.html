@@ -20,7 +20,7 @@
         <!--{{request.OfficeID}}-->
         <!--{{request.OfficeID}}
   {{request.IsNodal|json}}-->
-        <div>
+        <div *ngIf="this.IsGuestHouse != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="request.OfficeID" formControlName="Office">
             <option value="0">--Select--</option>
@@ -76,7 +76,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="this.IsGuestHouse != true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
           <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
                   [(ngModel)]="request.DesignationID">

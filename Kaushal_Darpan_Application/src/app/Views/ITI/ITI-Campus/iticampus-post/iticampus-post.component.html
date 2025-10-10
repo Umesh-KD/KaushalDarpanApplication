@@ -1,3 +1,4 @@
+
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6" *ngIf="this.initialState == undefined">
   <div>
@@ -106,7 +107,7 @@
 
 
 
-
+         
 
 
           <div>
@@ -160,7 +161,7 @@
             </tbody>
           </table>
         </div>
-
+       
 
 
         <form [formGroup]="EligibilityCriteriaForm" class="form-horizontal">
@@ -211,21 +212,41 @@
 
             <!--<div *ngIf="request_EligibilityCriteriaModel.ToPassingYear < request_EligibilityCriteriaModel.PassingYear">
 
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Semester<span class="StarMarking">*</span>
+    </label>
+    <select formControlName="ddlSemesterID" class="form-select" id="ddlSemesterID"
+            [(ngModel)]="request_EligibilityCriteriaModel.SemesterID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of filteredSortedSemesters" [value]="item.SemesterID">{{item.SemesterName}}</option>
+    </select>
+    <div *ngIf="isSubmittedItemDetails && form_Eligibility.ddlSemesterID.errors" class="text-danger">
+      <p *ngIf="!form_Eligibility.ddlSemesterID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This
+        field is required .!
+      </p>
+    </div>
+  </div>-->
+
+
+              <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Semester<span class="StarMarking">*</span>
+                8th Percentage(minimum)
               </label>
-              <select formControlName="ddlSemesterID" class="form-select" id="ddlSemesterID"
-                      [(ngModel)]="request_EligibilityCriteriaModel.SemesterID">
+              <select formControlName="ddlMinPre_8" class="form-select" id="ddlMinPre_8"
+                      [(ngModel)]="request_EligibilityCriteriaModel.MinPre_8">
                 <option value="0">--Select--</option>
-                <option *ngFor="let item of filteredSortedSemesters" [value]="item.SemesterID">{{item.SemesterName}}</option>
+                <option value="1">Any(%)</option>
+                <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
               </select>
-              <div *ngIf="isSubmittedItemDetails && form_Eligibility.ddlSemesterID.errors" class="text-danger">
-                <p *ngIf="!form_Eligibility.ddlSemesterID.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
+              <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_8.errors" class="text-danger">
+                <p *ngIf="!form_Eligibility.ddlMinPre_8.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field
+                  is required .!
                 </p>
               </div>
-            </div>-->
+            </div>
+
 
 
 
@@ -258,8 +279,8 @@
                 <option *ngFor="let item of NoRangeList; let i = index" [value]="item">{{item}}</option>
               </select>
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlMinPre_12.errors" class="text-danger">
-                <p *ngIf="!form_Eligibility.ddlMinPre_12.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>-->
+      <p *ngIf="!form_Eligibility.ddlMinPre_12.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
             </div>
 
             <div>
@@ -293,8 +314,8 @@
                 <option value="6">6</option>
               </select>
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlNoofBackPapersAllowed.errors" class="text-danger">
-                <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>-->
+      <p *ngIf="!form_Eligibility.ddlNoofBackPapersAllowed.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>-->
             </div>
             <div>
               <div class="grid 2xl:grid-cols-2 2xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-1 grid-cols-1 gap-3">
@@ -365,10 +386,10 @@
                      formControlName="txtNoofPositions" [(ngModel)]="request_EligibilityCriteriaModel.NoofPositions"
                      (input)="checkValue($event)">
               <!--<div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
-                <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
-                  <i aria-hidden="true"></i> This field is required .!
-                </p>
-              </div>-->
+              <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
+                <i aria-hidden="true"></i> This field is required .!
+              </p>
+            </div>-->
 
               <div *ngIf="isSubmittedItemDetails&&form_Eligibility.txtNoofPositions.errors" class="text-danger">
                 <p *ngIf="!form_Eligibility.txtNoofPositions.errors.required">
@@ -421,7 +442,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Remark About Salary
+                Remark About Salary 
               </label>
               <select class="form-select" id="txtSalaryRemark" formControlName="txtSalaryRemark"
                       [(ngModel)]="request_EligibilityCriteriaModel.SalaryRemark">
@@ -437,18 +458,17 @@
             </div>
 
             <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender</label>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>
               <select class="form-select" id="ddlGender" name="ddlGender" [(ngModel)]="request_EligibilityCriteriaModel.Gender"
                       formControlName="ddlGender">
                 <option value="">-- Select --</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Male and Female Both">Male and Female Both</option>
+                <option value="Male and Female Both">Both</option>
               </select>
               <div *ngIf="isSubmittedItemDetails&&form_Eligibility.ddlGender.errors" class="text-danger">
                 <p *ngIf="!form_Eligibility.ddlGender.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
+                  <i aria-hidden="true"></i>This field is required .!
                 </p>
               </div>
             </div>
@@ -472,7 +492,7 @@
                 Campus Type<span class="StarMarking">*</span>
               </label>
               <select formControlName="ddlCampusType" class="form-select" id="ddlCampusType"
-                      [(ngModel)]="request_EligibilityCriteriaModel.CampusType">
+                      [(ngModel)]="request_EligibilityCriteriaModel.CampusType" (change)="onChange_ddlCampusType()">
                 <option value="0">--Select--</option>
                 <option value="State Level Pool Campus">State Level Pool Campus</option>
                 <option value="Division Level Pool Campus">Division Level Pool Campus</option>
@@ -484,15 +504,46 @@
               </div>
             </div>
 
+            
+            <!-- if user select division pool campus  -->
+            <div *ngIf="request_EligibilityCriteriaModel.CampusType =='Division Level Pool Campus'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Division<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="divisionId" class="form-select" id="ddlCampusType"
+                      [(ngModel)]="request_EligibilityCriteriaModel.divisionId" (change)="ddlDivision_Change()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of divisionList;" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&request_EligibilityCriteriaModel.divisionId=='0'" class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
+            <!-- if user select Institute pool campus  -->
+                <div *ngIf="request_EligibilityCriteriaModel.CampusType =='Institute Level Campus'">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Institue<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="instituteId" class="form-select" id="ddlCampusType"
+                      [(ngModel)]="request_EligibilityCriteriaModel.InstituteId" (change)="ddlInstitue_Change()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of institueList;" [value]="item.InstituteID">{{item.InstituteName}}</option>
+              </select>
+              <div *ngIf="isSubmittedItemDetails&&request_EligibilityCriteriaModel.InstituteId=='0'" class="text-danger">
+                This field is required .!
+              </div>
+            </div>
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Selection Process
+                Selection Process 
               </label>
               <select formControlName="ddlInterviewType" class="form-select" id="ddlInterviewType"
                       [(ngModel)]="request_EligibilityCriteriaModel.InterviewType">
                 <option value=''>-- Select --</option>
                 <option value="GD">Group Discussion</option>
-                <option value="Retrun">Written</option>
+                <option value="Written">Written</option>
                 <option value="Interview">Interview</option>
                 <option value="Written And Interview">Written And Interview</option>
               </select>
@@ -500,7 +551,7 @@
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                No Of Interview Round
+                No Of Interview Round 
               </label>
               <select formControlName="ddlNoOfInterviewRound" class="form-select" id="ddlNoOfInterviewRound"
                       [(ngModel)]="request_EligibilityCriteriaModel.NoOfInterviewRound">
@@ -519,7 +570,7 @@
                 Eligible Institutes<span class="StarMarking">*</span>
               </label>
               <select formControlName="ddlEligibleInstitutes" class="form-select" id="ddlEligibleInstitutes"
-                      [(ngModel)]="request_EligibilityCriteriaModel.EligibleInstitutesID">
+                      [(ngModel)]="request_EligibilityCriteriaModel.EligibleInstitutesID" (change)="changeEligibleInstitute()">
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of EligibleInstitutesList;" [value]="item.ID">{{item.Name}}</option>
               </select>
@@ -569,7 +620,7 @@
               </div>
             </div>-->
 
-            <div>
+             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Trade<span class="StarMarking">*</span>
               </label>
@@ -579,12 +630,12 @@
                 <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">{{item.StreamName}}</option>
               </select> -->
 
-              <ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="StreamMasterList"
-                                       [(ngModel)]="BranchList" [settings]="settingsMultiselect" [ngModelOptions]="{standalone: true}"
-                                       [disabled]="false" (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
-                                       (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
-                                       (onDeSelectAll)="onDeSelectAll($event)">
-              </ng-multiselect-dropdown>
+               <ng-multiselect-dropdown #multiSelect [placeholder]="'--Select--'" [data]="StreamMasterList"
+                                                  [(ngModel)]="BranchList" [settings]="settingsMultiselect" [ngModelOptions]="{standalone: true}"
+                                                [disabled]="false" (onFilterChange)="onFilterChange($event)" (onDropDownClose)="onDropDownClose($event)"
+                                                (onSelect)="onItemSelect($event)" (onDeSelect)="onDeSelect($event)" (onSelectAll)="onSelectAll($event)"
+                                                (onDeSelectAll)="onDeSelectAll($event)">
+                       </ng-multiselect-dropdown>
               <div *ngIf="isSubmittedItemDetails" class="text-danger">
                 <!-- <p *ngIf="!form_Eligibility.ddlBranch.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This field is
@@ -607,8 +658,10 @@
 
                   <th class="text-left">Sr.No.</th>
                   <th class="text-left">Branch</th>
-                  <th class="text-left">Passing Year</th>
+                  <th class="text-left">Passing Year From</th>
+                   <th class="text-left">Passing Year To</th>
                   <!--<th class="text-left">Semester</th>-->
+                  <th class="text-left">8<sup>th</sup>%(min)</th>
                   <th class="text-left">10<sup>th</sup>%(min)</th>
                   <th class="text-left">12<sup>th</sup>%(min)</th>
                   <th class="text-left">Diploma%(min)</th>
@@ -633,10 +686,11 @@
                   <td>{{idx+1}}</td>
                   <td>{{row.BranchName}}</td>
                   <td>{{row.PassingYear}}</td>
-
+                  <td>{{row.ToPassingYear}}</td>
 
 
                   <!--<td>{{row.SemesterName}}</td>-->
+                  <td>{{ row.MinPre_8 == 1 ? 'Any (%)' : row.MinPre_8}}</td>
                   <td>{{ row.MinPre_10 == 1 ? 'Any (%)' : row.MinPre_10 }}</td>
                   <td>{{ row.MinPre_12 == 1 ? 'Any (%)' : row.MinPre_12 }}</td>
                   <td>{{ row.MinPre_Diploma == 1 ? 'Any (%)' : row.MinPre_Diploma }}</td>
@@ -692,7 +746,7 @@
               Campus From Date : <span class="StarMarking">*</span>
             </label>
             <input formControlName="txtCampusFromDate" class="form-input" placeholder="txtCampusFromDate" type="date"
-                   id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate" (change)="onStartCampusDateChange()">
+                   id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate" (change)="onStartCampusDateChange()" [min]="campusDateStartfrom">
             <div *ngIf="isSubmitted&&form.txtCampusFromDate.errors" class="text-danger">
               <p *ngIf="form.txtCampusFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
             </div>
@@ -711,7 +765,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Campus Time :
+              Campus Time : 
             </label>
             <input formControlName="txtCampusFromTime" class="form-input" placeholder="txtCampusFromTime" type="time"
                    id="txtCampusFromTime" [(ngModel)]="request.CampusFromTime">
@@ -722,19 +776,19 @@
 
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Campus To Time : <span class="StarMarking">*</span>
-            </label>
-            <input formControlName="txtCampusToTime" class="form-input" placeholder="txtCampusToTime" type="time"
-                   id="txtCampusToTime" [(ngModel)]="request.CampusToTime">
-            <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
-              <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-            </div>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Campus To Time : <span class="StarMarking">*</span>
+    </label>
+    <input formControlName="txtCampusToTime" class="form-input" placeholder="txtCampusToTime" type="time"
+           id="txtCampusToTime" [(ngModel)]="request.CampusToTime">
+    <div *ngIf="isSubmitted&&form.txtCampusToDate.errors" class="text-danger">
+      <p *ngIf="form.txtCampusToDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>
+  </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Campus Venue Location Link:
+              Campus Venue Location Link: 
             </label>
             <input formControlName="txtCampusVenueLocation" class="form-input" maxlength="200" placeholder="Campus Venue Location Link"
                    type="text" id="txtCampusVenueLocation" [(ngModel)]="request.CampusVenueLocation">
@@ -754,30 +808,30 @@
             </div>
           </div>
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"
-                   for="fileStudentPhoto">
-              Upload Job Description :
-            </label>
-            <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
-              <label for="fileStudentPhoto">
-                <span>Choose File</span>
-                {{request.Dis_JobDiscription === '' ? 'No File Choosen' : request.Dis_JobDiscription}}
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"
+                     for="fileStudentPhoto">
+                Upload Job Description :
               </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.JobDiscription}}" *ngIf="this.request.JobDiscription !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-
-                <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
-                 *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
-                <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                <label for="fileStudentPhoto">
+                  <span>Choose File</span>
+                  {{request.Dis_JobDiscription === '' ? 'No File Choosen' : request.Dis_JobDiscription}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.JobDiscription}}" *ngIf="this.request.JobDiscription !=''"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+  
+                  <!--<a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                   *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
                    (click)="DeleteImage(request.Dis_JobDiscription,'Photo')" *ngIf="this.request.Dis_JobDiscription !=''">
                   <i class="ti ti-trash"></i>
                 </a>-->
+                </div>
               </div>
             </div>
-          </div>
         </div>
         <div>
           <input formControlName="txtMarked" type="checkbox"
