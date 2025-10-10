@@ -56,6 +56,8 @@ export class DteEditeItemMasterComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
+    debugger;
+    console.log(this.ItemId);
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
       await this.getItemDetails(this.ItemId);
