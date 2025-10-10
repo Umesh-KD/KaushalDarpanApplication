@@ -180,7 +180,7 @@ export enum EnumRole {
   ShikshaSambal = 226,
   CandidateRole = 999,
   GuestHouseAdmin = 227,
-  GuestHouseIncharge = 228
+  GuestHouseIncharge = 228,
 
 
   

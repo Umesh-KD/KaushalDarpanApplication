@@ -80,12 +80,13 @@
     <div class="table-container">
       <!-- Table Filter Input -->
       <!--<div class="search-container mt-2">
-        <mat-form-field appearance="fill">
-          <mat-label>Filter</mat-label>
-          <input matInput (input)="applyFilter($event)" placeholder="Filter table" />
-        </mat-form-field>
-      </div>-->
+    <mat-form-field appearance="fill">
+      <mat-label>Filter</mat-label>
+      <input matInput (input)="applyFilter($event)" placeholder="Filter table" />
+    </mat-form-field>
+  </div>-->
       <!-- Table -->
+      <!--{{this.filterData|json}}-->
       <div class="mat-elevation-z8 table-responsive" #pdfTable>
         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
           <!-- ID Column -->
