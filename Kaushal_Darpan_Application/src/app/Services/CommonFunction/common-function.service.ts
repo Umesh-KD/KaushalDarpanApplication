@@ -525,7 +525,6 @@ export class CommonFunctionService {
     formData.append("FileExtention", model?.FileExtention ?? "");
     formData.append("MinFileSize", model?.MinFileSize ?? "");
     formData.append("MaxFileSize", model?.MaxFileSize ?? "");
-    debugger
     return await this.http.post(this.APIUrl + "/UploadDocument", formData)
       .pipe(
         catchError(this.handleErrorObservable)

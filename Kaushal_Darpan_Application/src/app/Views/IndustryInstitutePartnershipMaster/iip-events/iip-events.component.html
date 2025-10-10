@@ -65,19 +65,22 @@
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
                 <a [routerLink]="'/add-iip-events'" [queryParams]="{id:row.CompanyID, event:row.EventID}"
-                    title="Edit"><i class="ti ti-pencil"></i></a>
+                    title="Edit"
+                    *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                      row.CompanyStatus != 1">
+                    <i class="ti ti-pencil"></i></a>
 
                 <a href="javascript:void(0);" title="Delete"
-                   (click)="DeleteEvent_ById(row.EventID)">
+                   (click)="DeleteEvent_ById(row.EventID)"
+                   *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                      row.CompanyStatus != 1">
                   <i class="ti ti-trash"></i></a>
-
-                <!-- <a href="javascript:void(0);" title="Add Event"
-                   [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}">
-                  <i class="ti ti-calendar-week"></i></a>
-
-                <a href="javascript:void(0);" title="View Company Events"
-                   [routerLink]="'/iip-events'" [queryParams]="{id:item.CompanyID}">
-                  <i class="ti ti-eye"></i></a> -->
 
               </div>
             </td>

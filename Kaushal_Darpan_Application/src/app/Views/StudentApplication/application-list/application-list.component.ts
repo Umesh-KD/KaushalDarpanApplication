@@ -726,7 +726,7 @@ export class ApplicationListComponent {
         this.DateConfigSetting_Direct = data['Data'][0];
         // this.DirectAdmissionMapKey = 1
         this.DirectAdmissionMapKey = this.DateConfigSetting_Direct['DIRECT ADDMISSSION'];        
-
+        console.log(this.DirectAdmissionMapKey)
       }, (error: any) => console.error(error)
       );
   }

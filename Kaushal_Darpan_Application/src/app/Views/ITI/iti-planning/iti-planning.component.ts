@@ -293,7 +293,7 @@ export class ItiPlanningComponent {
   get minValidUpToDate(): string | null {
     if (this.request.AgreementLeaseDate) {
       const agreementDate = new Date(this.request.AgreementLeaseDate);
-      agreementDate.setFullYear(agreementDate.getFullYear() + 5);
+      agreementDate.setFullYear(agreementDate.getFullYear() + 3);
       return agreementDate.toISOString().split('T')[0]; // Format: yyyy-MM-dd
     }
     return null;
@@ -1392,10 +1392,10 @@ export class ItiPlanningComponent {
       const validUptoDate = new Date(this.request.ValidUpToLeaseDate);
 
       const minRequiredDate = new Date(agreementDate);
-      minRequiredDate.setFullYear(minRequiredDate.getFullYear() + 5);
+      minRequiredDate.setFullYear(minRequiredDate.getFullYear() + 3);
 
       if (validUptoDate < minRequiredDate) {
-        this.toastr.error('Valid Agreement Up To date should be at least 5 years from Agreement Date.', 'Validation Error');
+        this.toastr.error('Valid Agreement Up To date should be at least 3 years from Agreement Date.', 'Validation Error');
         return false;
       }
 

@@ -41,7 +41,9 @@ export class ITIAddItemsMasterComponent {
   showDetailsTable: boolean = false;
   public maxQty: number = 0;
   _EnumRole = EnumRole;
-  public ItemtypeList:any[]=[]
+  public ItemtypeList:any[]=[];
+    public UnitMasterList: any = [];
+  todayDate: string = new Date().toISOString().split('T')[0];
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -67,7 +69,10 @@ export class ITIAddItemsMasterComponent {
       EquipmentsId: ['0', [DropdownValidators]],
       ItemType: ['0', [DropdownValidators]],
       TradeId: ['-1', [DropdownValidators]],
-      IsConsume:['']
+      IsConsume:[''],
+      UnitId: [0],
+      voucherdate: ['', Validators.required],
+      abbreviation: [''],
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -76,10 +81,12 @@ export class ITIAddItemsMasterComponent {
     //await this.GetEquipmentDDL();
     await this.ddlCategory_Change();
     await this.GetTradeDDL();
+    await this.GetAllUnitData();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
     }
-    this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}]
+    this.ItemtypeList = [{ID:0,Name:'Select'}, { ID: 1, Name: 'Building' }, {ID:2,Name:'Trade'}];
+    this.request.voucherdate = this.todayDate;
 
   }
 
@@ -121,6 +128,7 @@ export class ITIAddItemsMasterComponent {
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
     this.request.RoleID = this.sSOLoginDataModel.RoleID;
+     this.request.batchId = this.request.abbreviation + '/' + this.request.VoucherNumber;
     this.isSubmitted = true;
 
     this.RefereshValoidators()
@@ -142,7 +150,7 @@ export class ITIAddItemsMasterComponent {
     }
     if (this.request.ItemType == 1) {
       this.request.TradeId = 0
-      this.request.IsConsume=0
+     // this.request.IsConsume=0
     }
     //Show Loading
     this.loaderService.requestStarted();
@@ -367,6 +375,7 @@ export class ITIAddItemsMasterComponent {
           
           const selectOption = { EquipmentsId: 0, Name: '--Select--' };
           this.EquipmentsDDLList = [selectOption, ...data['Data']];
+          console.log(this.EquipmentsDDLList);
           this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0); 
         }, error => console.error(error));
     }
@@ -408,7 +417,20 @@ export class ITIAddItemsMasterComponent {
 
 
   async DGET_Details() {
-    
+     const selectedEquipment = this.EquipmentsDDLList.find(
+      (item: any) => item.ID == this.request.EquipmentsId
+    );
+
+    if (selectedEquipment) {
+      this.request.IsConsume = selectedEquipment.IsConsume || 0;
+      this.request.UnitId = selectedEquipment.UnitId || 0;
+    } else {
+      this.request.IsConsume = 0;
+      this.request.UnitId = 0;
+    }
+
+    this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.request.IsConsume);
+    this.AddItemsRequestFormGroup.controls['UnitId'].setValue(this.request.UnitId);
     await this.updateTable();
     this.showDetailsTable = true;
     this.EquimentsWiseQty();
@@ -541,6 +563,32 @@ export class ITIAddItemsMasterComponent {
       ItemCategoryId: 0
     });
   }
+  async GetAllUnitData() {
+    try {
+      this.loaderService.requestStarted();
 
+      const data: any = await this.itiInventoryService.GetAllItemUnitMaster();
+
+      if (data && data.State === EnumStatus.Success) {
+        this.UnitMasterList = [
+          { UnitId: 0, UnitName: '--Select Unit--' },
+          ...data.Data
+        ];
+        this.request.UnitId = 0;
+      } else {
+        this.UnitMasterList = [{ UnitId: 0, UnitName: '--Select Unit--' }];
+        this.request.UnitId = 0;
+        this.toastr.error(data?.ErrorMessage || 'No Unit data found.');
+      }
+
+      console.log('Unit Master List ==>', this.UnitMasterList);
+    } catch (Ex) {
+      console.log('Error in GetAllUnitData:', Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
