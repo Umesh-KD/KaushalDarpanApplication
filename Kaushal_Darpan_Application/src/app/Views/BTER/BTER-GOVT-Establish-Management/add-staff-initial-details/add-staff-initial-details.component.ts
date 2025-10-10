@@ -12,6 +12,8 @@ import { Toast, ToastrService } from 'ngx-toastr';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { Router } from '@angular/router';
 import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
+import { GuestRoomManagmentService } from '../../../../Services/GuestRoomManagment/GuestRoomManagment.service';
+import { GuestRoomSeatSearchModel } from '../../../../Models/GuestRoom-Management/GuestRoomManagmentDataModel';
 
 @Component({
   selector: 'app-add-staff-initial-details',
@@ -30,7 +32,10 @@ export class AddStaffInitialDetailsComponent {
   public isSSOVisible: boolean = false;
   public isSubmitted: boolean = false;
   public IsNodalOfficer: boolean = false;
+  public IsGuestStaffoffice: boolean = false;
   public IsAddasPrincipal: boolean = false;
+  public IsGuestHouseAdmin: boolean = false;
+
 
   public OfficeList: any[] = [];
   public LevelList: any[] = [];
@@ -41,8 +46,13 @@ export class AddStaffInitialDetailsComponent {
   public PostList: any[] = [];
   public AddedZonalList: any[] = [];
   public InstituteMasterDDL: any[] = [];
+  public GuestHouseNameList: any = [];
+  public GetDesignationID: number = 0;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
+  public searchRequest1 = new GuestRoomSeatSearchModel();
 
-  public GetDesignationID: number = 0
 
   constructor(
     private loaderService: LoaderService,
@@ -52,11 +62,13 @@ export class AddStaffInitialDetailsComponent {
     private toastr: ToastrService,
     private router: Router,
     private bterEstablishManagementService: BTEREstablishManagementService,
+    private guestRoomManagmentService: GuestRoomManagmentService
   ) {}
 
   async ngOnInit() {
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
       InstituteID: ['', []],
+      GuestHouseID: ['', []],
       RoleID: ['', [DropdownValidators]],
       StaffType: ['', [DropdownValidators]],
       SSOID: ['',],
@@ -64,17 +76,26 @@ export class AddStaffInitialDetailsComponent {
       Mobile: [{ value: '', disabled: true }],
       EmailID: [{ value: '', disabled: true }],
       IsNodal: [false],
+      IsGuestStaff: [false],
       ddlPost: ['', [DropdownValidators]],
       Office: ['', [DropdownValidators]]
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+
+    
+
     await this.GetOfficeList();
     
    
     await this.GetStaffTypeData();
+
+    
   }
+
+
+
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
 
@@ -118,16 +139,23 @@ export class AddStaffInitialDetailsComponent {
   async GetOfficeWiselogic() {
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
+      this.IsGuestStaffoffice = true;
     }
     else {
       this.IsNodalOfficer = false;
+      this.IsGuestStaffoffice = false;
       this.formData.IsNodal = false;
+      this.formData.IsGuestStaff = false;
     }
     await this.GetRoleMasterData();
   }
 
   async InstituteMasterWiselogic() {
     debugger
+    this.formData.IsGuestStaff = false;
+    this.formData.GuestHouseID = 0;
+    this.GetRoleMasterData();
+
     if (this.formData.IsNodal == true) {
       await this.GetInstituteMaster();
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
@@ -219,7 +247,14 @@ export class AddStaffInitialDetailsComponent {
      
         data = JSON.parse(JSON.stringify(data));
         this.RoleMasterList = data.Data;
-        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID);
+        
+
+        if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
+        } else {
+          this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.OfficeTypeID == this.formData.OfficeID);
+        }
+
         //if (this.formData.InstituteID == Number( "10001")) {
         //  this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == this._EnumRole.DTE || item.ID == this._EnumRole.Principal )
         //}
@@ -357,6 +392,32 @@ export class AddStaffInitialDetailsComponent {
             this.formData.EmailID = parsedData.mailPersonal;
             this.formData.SSOID = parsedData.SSOID;
             this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
+
+
+            if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+              this.IsGuestHouseAdmin = true;
+              this.IsGuestStaffoffice = true;
+              this.AddStaffBasicDetailFromGroup.controls['Office'].clearValidators();
+              this.AddStaffBasicDetailFromGroup.controls['StaffType'].clearValidators();
+              this.AddStaffBasicDetailFromGroup.controls['ddlPost'].clearValidators();
+             
+              this.GetRoleMasterData();
+             
+
+              
+             
+
+            } else {
+              this.AddStaffBasicDetailFromGroup.controls['Office'].setValidators([DropdownValidators]);
+              this.AddStaffBasicDetailFromGroup.controls['StaffType'].setValidators([DropdownValidators]);
+              this.AddStaffBasicDetailFromGroup.controls['ddlPost'].setValidators([DropdownValidators]);
+
+              this.IsGuestHouseAdmin = false;
+            }
+            this.AddStaffBasicDetailFromGroup.controls['Office'].updateValueAndValidity();
+            this.AddStaffBasicDetailFromGroup.controls['StaffType'].updateValueAndValidity();
+            this.AddStaffBasicDetailFromGroup.controls['ddlPost'].updateValueAndValidity();
+
             if (parsedData.designation != null) {
               this.GetDesignationID = this.PostList.find((item: any) =>
                 item.Name?.toLowerCase().trim() === parsedData.designation?.toLowerCase().trim()
@@ -517,5 +578,57 @@ export class AddStaffInitialDetailsComponent {
    
 
   }
+
+  async GuestHouseMasterWiselogic() {
+    debugger
+
+    this.formData.IsNodal = false;
+    this.formData.InstituteID = 0;
+    if (this.formData.IsGuestStaff == true) {
+      await this.GetGuestHouseNameList();
+      this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].setValidators([DropdownValidators]);
+
+      if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) => item.ID == EnumRole.GuestRoomWarden || item.ID == EnumRole.GuestHouseIncharge)
+      }
+      else {
+        this.RoleMasterList = this.RoleMasterList.filter((item: any) =>  item.ID == EnumRole.GuestHouseAdmin )
+      }
+     
+
+    } else {
+      this.formData.IsGuestStaff = false;
+      this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].clearValidators();
+      this.formData.GuestHouseID = 0;
+      this.GetRoleMasterData();
+    }
+    this.AddStaffBasicDetailFromGroup.controls['GuestHouseID'].updateValueAndValidity();
+
+
+  }
+
+  async GetGuestHouseNameList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.GuestHouseNameList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  
 
 }

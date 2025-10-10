@@ -148,21 +148,43 @@ export class StudentAttendanceComponent implements OnInit {
         this.SemesterMasterDDL = data.Data;
       })
     
-      let obj = {
-        Action: "GET_BY_ID",
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.streamId,
-      }
-
-      await this.staffMasterService.GetBranchSectionData(obj)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.GetSectionData = data.Data
-        }, (error: any) => console.error(error)
+    let obj = {
+      SemesterID: this.semesterId,
+      StreamID: this.streamId,
+      SubjectID: this.subjectId,
+      StaffID: this.sSOLoginDataModel.StaffID,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+    }
+    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.GetSectionData = data.Data;
+       
+      }, (error: any) => console.error(error)
       );
-      console.log('Get Section all Data ==>', this.GetSectionData)
+
+
+
+
+      //let obj = {
+      //  Action: "GET_BY_ID",
+      //  DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      //  EndTermID: this.sSOLoginDataModel.EndTermID,
+      //  Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      //  StreamID: this.streamId,
+      //}
+
+      //await this.staffMasterService.GetBranchSectionData(obj)
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.GetSectionData = data.Data
+      //  }, (error: any) => console.error(error)
+      //);
+
+
+
+      //console.log('Get Section all Data ==>', this.GetSectionData)
       //await this.commonMasterService.GetSubjectMaster(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
       //  data = JSON.parse(JSON.stringify(data));
       //  this.SubjectMasterDDL = data.Data;
@@ -881,23 +903,61 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
 
-  ChangeStreamDDL(StreamID: number) {
+  async ChangeStreamDDL(StreamID: number) {
+
+    debugger
+    const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+    const GetstreamId = this.TableForm.get('StreamID')?.value;
+    const GetSubjectID = this.TableForm.get('SubjectID')?.value;
+    
+    debugger
     let obj = {
-      Action: "GET_BY_ID",
+      SemesterID: GetSemesterID,
+      StreamID: GetstreamId,
+      SubjectID: GetSubjectID,
+      StaffID: this.sSOLoginDataModel.StaffID,
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      EndTermID: this.sSOLoginDataModel.EndTermID,
       Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      StreamID: StreamID,
     }
-     this.staffMasterService.GetBranchSectionData(obj)
+    await this.staffMasterService.GetBranchSectionAcRosterData(obj)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.GetSectionData = data.Data
+        this.GetSectionData = data.Data;
+       
       }, (error: any) => console.error(error)
       );
+
+
+    //let obj = {
+    //  Action: "GET_BY_ID",
+    //  DepartmentID: this.sSOLoginDataModel.DepartmentID,
+    //  EndTermID: this.sSOLoginDataModel.EndTermID,
+    //  Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+    //  StreamID: StreamID,
+    //}
+    // this.staffMasterService.GetBranchSectionData(obj)
+    //  .then((data: any) => {
+    //    data = JSON.parse(JSON.stringify(data));
+    //    this.GetSectionData = data.Data
+    //  }, (error: any) => console.error(error)
+    //);
+
+
+
+
+
+
   }
 
-  
+
+  async sectionDDlAcRoster() {
+
+
+    
+  }
+
+
+
   lockColumn(columnName: string) {
     this.swat.Confirmation("Are you sure you want to lock this column?", (result: any) => {
       if (!result.isConfirmed) return;

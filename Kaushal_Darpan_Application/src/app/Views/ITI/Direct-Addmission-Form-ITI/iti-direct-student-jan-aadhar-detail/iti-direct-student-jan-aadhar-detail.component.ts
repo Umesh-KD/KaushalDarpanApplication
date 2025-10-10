@@ -730,11 +730,11 @@ export class ITIDirectStudentJanAadharDetailComponent {
             this.ApplicationID = 0;
             if (this.DataResult == '-5') //check module list
             {
-              this.toastr.warning('An application with this mobile number already exists.');
+              this.toastr.warning('An application with this mobile number or email already exists.');
             }
             else if (this.DataResult == '-6')//check module list
             {
-              this.toastr.warning('You’ve already applied for this course.');
+              this.toastr.warning('You’ve already Alloted.');
             }
             else {
               this.toastr.error(this.ErrorMessage)

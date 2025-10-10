@@ -29,7 +29,7 @@
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        <div>
+        <div *ngIf="this.sSOLoginDataModel.RoleID != EnumRole.DTETraing">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Institute / Building Name:
           </label>
@@ -85,9 +85,12 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">SNO</th>
+             @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <th class="text-left">Institute / Building Name</th>
+             }
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
+            <th class="text-left">IsConsumable</th>
             <th class="text-left">Initial Quantity</th>
             <th class="text-left">Available Quantity</th>
             <th class="text-left">Price Per Unit</th>
@@ -112,13 +115,21 @@
             </td>
             }
             @else if(item.InstituteID > 0){-->
+            @if(this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
             <td align="left">
               {{item.CollegeName}}
             </td>
+            }
+            
             <!--}-->
 
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
+             <td align="left">
+              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+              </span>
+            </td>
             <td align="left">{{item.InitialQuantity}}</td>
             <td align="left">
               @if (item.Status != 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT) && sSOLoginDataModel.InstituteID == item.InstituteID)

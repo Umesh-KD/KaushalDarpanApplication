@@ -60,6 +60,7 @@ export class BterEMAddStaffDetailsComponent {
   public IsHideShow: boolean = false
   public IsSubjectlistTech: boolean = false
   public IsOterFacultyTech: boolean = false
+  public IsGuestHouse: boolean = false
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -179,7 +180,7 @@ export class BterEMAddStaffDetailsComponent {
     this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
 
 
-    if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID == this._EnumRole.ShikshaSambal) {
+    if (this.sSOLoginDataModel.RoleID == this._EnumRole.GuestFaculty || this.sSOLoginDataModel.RoleID == this._EnumRole.ShikshaSambal || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin) {
       this.IsOterFacultyTech = true
 
       this.StaffMasterFormGroup.controls['DepartmentJoiningDate'].clearValidators();
@@ -198,7 +199,37 @@ export class BterEMAddStaffDetailsComponent {
       this.StaffMasterFormGroup.controls['QualificationAtJoining'].updateValueAndValidity();
       this.StaffMasterFormGroup.controls['QualificationAfterJoining'].updateValueAndValidity();
       this.StaffMasterFormGroup.controls['DateOfRetirement'].updateValueAndValidity();
+
+
+      if (
+        this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseIncharge ||
+        this.sSOLoginDataModel.RoleID == this._EnumRole.GuestRoomWarden
+        || this.sSOLoginDataModel.RoleID == this._EnumRole.GuestHouseAdmin
+      ) {
+        this.IsGuestHouse = true;
+        this.IsHideShow = false;
+        this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
+        this.StaffMasterFormGroup.controls['Office'].clearValidators();
+        this.StaffMasterFormGroup.controls['DesignationID'].clearValidators();
+
+        this.StaffMasterFormGroup.controls['BranchID'].clearValidators();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].clearValidators();
+        this.StaffMasterFormGroup.controls['Office'].clearValidators();
+        this.StaffMasterFormGroup.controls['DesignationID'].clearValidators();
+
+        this.StaffMasterFormGroup.controls['Office'].updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['ServiceBookBranchID'].updateValueAndValidity();
+        this.StaffMasterFormGroup.controls['DesignationID'].updateValueAndValidity();
+      }
+
+
     }
+
+    
+
+
    
     await this.SSOIDGetSomeDetails(this.sSOLoginDataModel.SSOID);
   }

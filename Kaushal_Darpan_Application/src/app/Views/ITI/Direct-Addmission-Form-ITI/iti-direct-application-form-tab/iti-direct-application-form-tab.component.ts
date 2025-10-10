@@ -67,7 +67,8 @@ export class ITIDirectApplicationFormTabComponent {
   {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log("SSOLoginDataModel",this.SSOLoginDataModel)
-    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0")) 
+    this.ApplicationID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+    debugger
     if (!this.ApplicationID)
     {
       window.open(`/StudentJanAadharDetail`, "_self");

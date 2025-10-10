@@ -17,10 +17,10 @@ import { error } from 'highcharts';
 
 
 @Component({
-  selector: 'app-iticampus-post',
-  templateUrl: './iticampus-post.component.html',
-  styleUrls: ['./iticampus-post.component.css'],
-  standalone: false
+    selector: 'app-iticampus-post',
+    templateUrl: './iticampus-post.component.html',
+    styleUrls: ['./iticampus-post.component.css'],
+    standalone: false
 })
 export class ItiCampusPostComponent implements OnInit {
   CampusForm!: FormGroup;
@@ -65,6 +65,9 @@ export class ItiCampusPostComponent implements OnInit {
   public SemesterMasterList: any = []
   public HiringRoleMasterList: any = []
   public EligibleInstitutesList: any = []
+  public divisionList:any=[]
+  public institueList:any=[]
+  public copyOfinstitueList:any=[]
   public CompanyTypeList: any = []
 
   public HRDetailsList: any = []
@@ -74,10 +77,12 @@ export class ItiCampusPostComponent implements OnInit {
   public maxDate: string = '';
   public mincampusDate: string = '';
   public calculatedAge: string = '';
-  public MinAge: number = 0
-  public MaxAge: number = 0
+  public MinAge:number=0
+  public MaxAge:number=0
   public CampusPostTypeList: any = [];
   public settingsMultiselect: object = {};
+
+  public campusDateStartfrom : string = '';
 
 
   constructor(
@@ -97,6 +102,7 @@ export class ItiCampusPostComponent implements OnInit {
 
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
+    this.campusDateStartfrom = today.toISOString().split('T')[0];
 
     this.settingsMultiselect = {
       singleSelection: false,
@@ -116,16 +122,24 @@ export class ItiCampusPostComponent implements OnInit {
       showSelectedItemsAtTop: false,
       defaultOpen: false,
     };
-
+ 
 
     this.CampusForm = this.formBuilder.group({
       ddlCompanyID: ['', [DropdownValidators]],
       ddlCompanyType: [{ value: '', disabled: true }],
+     
+      txtWebsite: [{value:'',disabled:true}],
+      ddlState: [{value:'',disabled:true}],
+      ddlDistrict: [{value:'',disabled:true}],
+      txtAddress: [{value:'',disabled:true}],
 
-      txtWebsite: ['', Validators.required],
-      ddlState: ['', [DropdownValidators]],
-      ddlDistrict: ['', [DropdownValidators]],
-      txtAddress: ['', Validators.required],
+      // ddlCompanyID: ['', [DropdownValidators]],
+      // txtWebsite: ['', Validators.required],
+      // ddlState: ['', [DropdownValidators]],
+      // ddlDistrict: ['', [DropdownValidators]],
+      // txtAddress: ['', Validators.required],
+
+
       //txtHR_Name: ['', Validators.required],
       //txtHR_MobileNo: ['', Validators.required],
       //txtHR_Email: ['', Validators.required],
@@ -147,8 +161,9 @@ export class ItiCampusPostComponent implements OnInit {
       ddlCampusPostType: [''],
       ddlToPassingYear: ['', [DropdownValidators]],
       /*ddlSemesterID: ['', [DropdownValidators]],*/
+      ddlMinPre_8: [''],
       ddlMinPre_10: [''],
-      SalaryTypeID: ['', [DropdownValidators]],
+       SalaryTypeID: ['', [DropdownValidators]],
       ddlMinPre_12: [''],
       ddlMinPre_Diploma: [''],
       //ddlNoofBackPapersAllowed: ['', [DropdownValidators]],
@@ -161,10 +176,11 @@ export class ItiCampusPostComponent implements OnInit {
       txtNoofPositions: ['', Validators.required],
       txtCTC: ['', Validators.required],
       txtSalaryRemark: [''],
-      ddlGender: [''],
+      ddlGender: ['',Validators.required],
       txtOtherBenefit: [''],
       ddlCampusType: [''],
-
+      divisionId: ['0'],
+      instituteId:['0'],
       ddlInterviewType: [''],
       ddlEligibleInstitutes: ['', [DropdownValidators]],
       ddlNoOfInterviewRound: [''],
@@ -200,7 +216,8 @@ export class ItiCampusPostComponent implements OnInit {
 
   onStartCampusDateChange(): void {
     // Ensure the "minDate" is set to the "AgeAllowedFrom" date value
-    this.mincampusDate = this.request.CampusFromDate
+    this.mincampusDate = this.request.CampusFromDate;
+    this.request.CampusToDate = this.mincampusDate; // Reset Campus To Date to the same value
   }
 
   onPassingYearChange() {
@@ -227,17 +244,17 @@ export class ItiCampusPostComponent implements OnInit {
   checkValue(event: any) {
     const value = event.target.value;
     if (value <= 0) {
-      event.target.value = '';
+      event.target.value = '';  
     }
   }
 
-
+  
 
   CampusPostTypechange() {
-
+    
     console.log(this.request.CampusPostType)
   }
-
+  
 
   CloseModalPopup() {
     this.modalService.dismissAll();
@@ -264,10 +281,10 @@ export class ItiCampusPostComponent implements OnInit {
           this.StateMasterList = data['Data'];
         }, error => console.error(error));
 
-      debugger
+debugger
       // await this.commonMasterService.StreamMaster()
-      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, 2, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
-        // await this.commonMasterService.GetITITradeList()
+       await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2,this.sSOLoginDataModel.EndTermID,this.sSOLoginDataModel.InstituteID)
+      // await this.commonMasterService.GetITITradeList()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterList = data['Data'];
@@ -285,7 +302,7 @@ export class ItiCampusPostComponent implements OnInit {
           this.SemesterMasterList = data['Data'];
         }, error => console.error(error));
 
-      await this.commonMasterService.GetHiringRoleMaster()
+      await this.CampusPostService.GetHiringRoleMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.HiringRoleMasterList = data['Data'];
@@ -297,14 +314,29 @@ export class ItiCampusPostComponent implements OnInit {
           this.EligibleInstitutesList = data['Data'];
         }, error => console.error(error));
 
-
-      await this.commonMasterService.GetCommonMasterDDLByType('SalaryType')
+      await this.commonMasterService.GetDivisionMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.SalaryListList = data['Data'];
+          this.divisionList = data['Data'];
         }, error => console.error(error));
 
-      await this.commonMasterService.DDL_CampusPostTypeMaster('CampusPostType')
+        debugger
+      await this.CampusPostService.Iticollege(this.sSOLoginDataModel.DepartmentID,this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.institueList = data['Data'];
+          this.copyOfinstitueList=data['Data'];
+        }, error => console.error(error));
+
+
+
+        await this.commonMasterService.GetCommonMasterDDLByType('SalaryType')
+        .then((data:any)=>{
+          data=JSON.parse(JSON.stringify(data));
+          this.SalaryListList=data['Data'];
+        },error=>console.error(error));
+
+        await this.commonMasterService.DDL_CampusPostTypeMaster('CampusPostType')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusPostTypeList = data['Data'];
@@ -350,12 +382,12 @@ export class ItiCampusPostComponent implements OnInit {
   }
 
   async GetStreamType() {
-
+   
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetStreamType()
-        // debugger
-        //  await this.commonMasterService.GetTradeTypesList()
+      // debugger
+      //  await this.commonMasterService.GetTradeTypesList()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -378,25 +410,26 @@ export class ItiCampusPostComponent implements OnInit {
   async GetNameWiseData(id: number) {
     debugger
     try {
-      this.request.Website = ''
-      this.request.StateID = 0
-      this.request.DistrictID = 0
-      this.request.Address = ''
-      this.request.CompanyTypeID = 0
+       this.request.Website = ''
+       this.request.StateID = 0
+       this.request.DistrictID = 0
+       this.request.Address = ''
+       this.request.CompanyTypeID=0
       this.loaderService.requestStarted();
       debugger;
       await this.CampusPostService.GetNameWiseData(id, this.sSOLoginDataModel.DepartmentID)
-        .then(async (data: any) => {
+        .then(async (data: any) =>
+        {
           data = JSON.parse(JSON.stringify(data));
-
-          this.HRDetailsList = data['Data'];
-          if (data['Data']?.length > 0)
-            if (data['Data'][0]["Website"] != null || data['Data'][0]["Website"] != undefined) {
-              this.request.Website = data['Data'][0]["Website"];
-            }
+         
+         this.HRDetailsList = data['Data'];
+         if(data['Data']?.length>0)
+          if(data['Data'][0]["Website"]!=null || data['Data'][0]["Website"] != undefined){
+            this.request.Website = data['Data'][0]["Website"];
+          }
           //this.request.Website = data['Data'][0]["Website"];
           this.request.StateID = data['Data'][0]["StateID"];
-          this.request.CompanyTypeID = data['Data'][0]["CompanyID"];
+          this.request.CompanyTypeID=data['Data'][0]["CompanyID"];
           await this.ddlState_Change();
           this.request.DistrictID = data['Data'][0]["DistrictID"];
           this.request.Address = data['Data'][0]["Address"];
@@ -412,7 +445,7 @@ export class ItiCampusPostComponent implements OnInit {
     }
   }
 
-
+  
   async loadDropdownData(MasterCode: string) {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {
@@ -426,7 +459,8 @@ export class ItiCampusPostComponent implements OnInit {
     });
   }
 
-  toggleIsMainRole(row: ItiCampusPostMasterModel): void {
+  toggleIsMainRole(row: ItiCampusPostMasterModel): void
+  {
     ;
     // Set IsMainRole to false for all rows
     this.HRDetailsList.forEach((r: any) => r.IsMainRole = 0);
@@ -442,7 +476,7 @@ export class ItiCampusPostComponent implements OnInit {
   }
 
   async GetByID(id: number) {
-
+    
     try {
       ;
       this.loaderService.requestStarted();
@@ -470,7 +504,7 @@ export class ItiCampusPostComponent implements OnInit {
           this.request.CampusVenueLocation = data['Data']["CampusVenueLocation"];
           this.request.CampusPostType = data['Data']["CampusPostType"];
           this.request.DistrictID = data['Data']["DistrictID"];
-
+          
 
 
           this.request.CampusFromDate = this.dateSetter(data['Data']['CampusFromDate']); //new Date(data['Data']['CampusFromDate']).toISOString().split('T').shift().toString();
@@ -482,14 +516,15 @@ export class ItiCampusPostComponent implements OnInit {
           this.request.ActionRemarks = data['Data']["ActionRemarks"];
           this.request.ActionBy = data['Data']["ActionBy"];
           this.request.ActionRTS = data['Data']["ActionRTS"];
-          /*     this.HRDetailsList = data['Data'];*/
+     /*     this.HRDetailsList = data['Data'];*/
           this.request.EligibilityCriteriaModel = data['Data']["EligibilityCriteriaModel"];
           let indexToUpdate = this.HRDetailsList.findIndex((f: any) => f.HR_MobileNo == this.request.HR_MobileNo && f.HR_Name == this.request.HR_Name);
           this.HRDetailsList[indexToUpdate].IsMainRole = true;
 
           this.request_EligibilityCriteriaModel.PassingYear = data['Data']["EligibilityCriteriaModel"][0]["PassingYear"];
-          await this.onPassingYearChange();
+           await this.onPassingYearChange();
           this.request_EligibilityCriteriaModel.ToPassingYear = data['Data']["EligibilityCriteriaModel"][0]["ToPassingYear"];
+          this.request_EligibilityCriteriaModel.MinPre_8 = data['Data']["EligibilityCriteriaModel"][0]["MinPre_8"];
           this.request_EligibilityCriteriaModel.MinPre_10 = data['Data']["EligibilityCriteriaModel"][0]["MinPre_10"];
           this.request_EligibilityCriteriaModel.MinPre_12 = data['Data']["EligibilityCriteriaModel"][0]["MinPre_12"];
           this.request_EligibilityCriteriaModel.MinPre_Diploma = data['Data']["EligibilityCriteriaModel"][0]["MinPre_Diploma"];
@@ -512,7 +547,7 @@ export class ItiCampusPostComponent implements OnInit {
           this.request_EligibilityCriteriaModel.AgeAllowedTo = this.dateSetter(data['Data']["EligibilityCriteriaModel"][0]["AgeAllowedTo"]);
           this.onAgeRangeChange();
           this.request_EligibilityCriteriaModel.Dis_AgeAllowedTo = data['Data']["EligibilityCriteriaModel"][0]["Dis_AgeAllowedTo"];
-
+          
 
 
           const btnSave = document.getElementById('btnSave');
@@ -536,7 +571,7 @@ export class ItiCampusPostComponent implements OnInit {
   get form_Eligibility() { return this.EligibilityCriteriaForm.controls; }
 
   async saveData() {
-
+    
     ;
     this.isSubmitted = true;
     const mainRoleSelected = this.HRDetailsList.some((r: any) => r.IsMainRole == 1);
@@ -546,9 +581,9 @@ export class ItiCampusPostComponent implements OnInit {
       this.toastr.warning('Please Select HR Detail.');
     }
     if (this.CampusForm.invalid) {
-      return
+      return 
     }
-
+    
     if (this.request.EligibilityCriteriaModel.length == 0) {
       this.toastr.error("Add Eligibility Criteria Details");
       return;
@@ -563,7 +598,8 @@ export class ItiCampusPostComponent implements OnInit {
 
 
       this.request.PostSSOID = this.sSOLoginDataModel.SSOID;
-      this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
+      // this.request.PostCollegeID = this.sSOLoginDataModel.InstituteID;
+      this.request.PostCollegeID = 1;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
@@ -601,22 +637,34 @@ export class ItiCampusPostComponent implements OnInit {
   }
 
   async AddNewRole() {
-
+    
     this.isSubmittedItemDetails = true;
     if (this.BranchList.length < 1) {
       this.toastr.error("Please Select Branch")
     }
     if (this.EligibilityCriteriaForm.invalid) {
-      return
+      return 
     }
     if (this.MinAge < 18) {
       this.toastr.error("Age should be more than 18 years")
 
-      return
+        return
     }
 
     if (this.MaxAge < 18) {
       this.toastr.error("Age should be more than 18 years")
+
+      return
+    }
+
+    if(this.request_EligibilityCriteriaModel.CampusType == 'Division Level Pool Campus' && this.request_EligibilityCriteriaModel.divisionId == 0){
+      this.toastr.error("Select division")
+
+      return
+    }
+
+    if(this.request_EligibilityCriteriaModel.CampusType == 'Institute Level Campus' && this.request_EligibilityCriteriaModel.InstituteId == 0){
+      this.toastr.error("Select institute")
 
       return
     }
@@ -665,6 +713,7 @@ export class ItiCampusPostComponent implements OnInit {
             BranchName: branch.Name,
             PassingYear: this.request_EligibilityCriteriaModel.PassingYear,
             ToPassingYear: this.request_EligibilityCriteriaModel.ToPassingYear,
+            MinPre_8:this.request_EligibilityCriteriaModel.MinPre_8,
             MinPre_10: this.request_EligibilityCriteriaModel.MinPre_10,
             MinPre_12: this.request_EligibilityCriteriaModel.MinPre_12,
             MinPre_Diploma: this.request_EligibilityCriteriaModel.MinPre_Diploma,
@@ -688,17 +737,23 @@ export class ItiCampusPostComponent implements OnInit {
             ActiveStatus: this.request_EligibilityCriteriaModel.ActiveStatus,
             DeleteStatus: this.request_EligibilityCriteriaModel.DeleteStatus,
             SalaryName: this.request_EligibilityCriteriaModel.SalaryName,
-            SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID
+            SalaryTypeID: this.request_EligibilityCriteriaModel.SalaryTypeID,
+            divisionId : this.request_EligibilityCriteriaModel.divisionId,
+            InstituteId:this.request_EligibilityCriteriaModel.InstituteId,
+            // SelectedInstituteID:this.request_EligibilityCriteriaModel.InstituteId,
+            // SelectedDivisionID:this.request_EligibilityCriteriaModel.divisionId
           }
         );
-
+        this.BranchList = [];
+        this.request_EligibilityCriteriaModel.divisionId=0;
+        this.request_EligibilityCriteriaModel.InstituteId=0;
       })
 
       console.log("this.request_EligibilityCriteriaModel", this.request_EligibilityCriteriaModel)
-
+     
       return
       //const branch = this.StreamMasterList.find((x: any) => x.StreamID == this.request_EligibilityCriteriaModel.BranchID);
-
+     
     }
     catch (ex) { console.log(ex) }
     finally {
@@ -713,9 +768,10 @@ export class ItiCampusPostComponent implements OnInit {
     this.loaderService.requestStarted();
     this.request_EligibilityCriteriaModel.AID = 0;
     this.request_EligibilityCriteriaModel.PostID = 0;
-    // this.request_EligibilityCriteriaModel.BranchID = 0;
+   // this.request_EligibilityCriteriaModel.BranchID = 0;
     this.request_EligibilityCriteriaModel.BranchName = '';
     this.request_EligibilityCriteriaModel.PassingYear = 0;
+    this.request_EligibilityCriteriaModel.MinPre_8=0;
     this.request_EligibilityCriteriaModel.MinPre_10 = 0;
     this.request_EligibilityCriteriaModel.MinPre_12 = 0;
     this.request_EligibilityCriteriaModel.MinPre_Diploma = 0;
@@ -799,12 +855,14 @@ export class ItiCampusPostComponent implements OnInit {
   }
 
   async btnRowDelete_OnClick(item: ItiCampusPostMaster_EligibilityCriteriaModel) {
+    debugger
     try {
       this.loaderService.requestStarted();
       if (confirm("Are you sure you want to delete this ?")) {
         const index: number = this.request.EligibilityCriteriaModel.indexOf(item);
         if (index != -1) {
-          this.request.EligibilityCriteriaModel.splice(index, 1)
+          this.request.EligibilityCriteriaModel.splice(index, 1);
+          await this.GetMaterData();
         }
       }
     }
@@ -819,7 +877,7 @@ export class ItiCampusPostComponent implements OnInit {
   }
 
 
-  public file!: File;
+    public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
       this.file = event.target.files[0];
@@ -883,7 +941,7 @@ export class ItiCampusPostComponent implements OnInit {
     }
   }
 
-
+  
   //  finally {
   //    setTimeout(() => {
   //      this.loaderService.requestEnded();
@@ -916,10 +974,10 @@ export class ItiCampusPostComponent implements OnInit {
   //}
 
   onAgeRangeChange() {
-    this.MinAge = 0
+    this.MinAge=0
     const fromDateStr = this.request_EligibilityCriteriaModel.AgeAllowedFrom;
     const toDateStr = this.request_EligibilityCriteriaModel.AgeAllowedTo;
-    console.log('fromDateStr:', fromDateStr, 'toDateStr:', toDateStr); // Debug
+    // console.log('fromDateStr:', fromDateStr, 'toDateStr:', toDateStr); // Debug
 
     const today = new Date();
 
@@ -985,13 +1043,14 @@ export class ItiCampusPostComponent implements OnInit {
     console.log('Calculated Age Range:', this.calculatedAge);
 
     // Optional
-    this.minDate = fromDateStr;
+    this.minDate = this.request_EligibilityCriteriaModel.AgeAllowedFrom;
+    console.log('Min Date: ------------ ', this.minDate); // Debug
 
 
   }
 
 
-
+  
   dateSetter(date: any) {
     const Dateformat = new Date(date);
     const year = Dateformat.getFullYear();
@@ -1001,7 +1060,7 @@ export class ItiCampusPostComponent implements OnInit {
     return formattedDate
   }
 
-  // multiselect events
+   // multiselect events
   public onFilterChange(item: any) {
     console.log(item);
   }
@@ -1023,4 +1082,77 @@ export class ItiCampusPostComponent implements OnInit {
     console.log(items);
   }
 
+  async ddlDivision_Change(){
+    debugger
+    this.loaderService.requestStarted();
+    await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2,this.sSOLoginDataModel.EndTermID,0, this.request_EligibilityCriteriaModel.divisionId)
+      // await this.commonMasterService.GetITITradeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+        }, error => console.error(error));
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+
+    async ddlInstitue_Change(){
+    debugger
+    this.loaderService.requestStarted();
+    await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2,this.sSOLoginDataModel.EndTermID, this.request_EligibilityCriteriaModel.InstituteId)
+      // await this.commonMasterService.GetITITradeList()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BranchList = [];
+          this.StreamMasterList = data['Data'];
+        }, error => console.error(error));
+    setTimeout(() => {
+      this.loaderService.requestEnded();
+    }, 200);
+  }
+
+
+  async onChange_ddlCampusType(){
+    this.StreamMasterList=[];
+    this.BranchList=[];
+    debugger
+   if(this.request_EligibilityCriteriaModel.CampusType==="State Level Pool Campus"){
+      this.loaderService.requestStarted();
+      await this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID,2)
+      .then((data:any)=>{
+        data=JSON.parse(JSON.stringify(data));
+        this.StreamMasterList=data['Data'];
+      },error=> console.error(error));
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+   }
+   else if (this.request_EligibilityCriteriaModel.CampusType==="Division Level Pool Campus") {
+     this.request_EligibilityCriteriaModel.divisionId=0;
+    //  this.BranchList=[];
+   } else {
+     this.request_EligibilityCriteriaModel.InstituteId=0;
+    //  this.BranchList=[];
+   }
+  }
+
+
+
+
+  changeEligibleInstitute(){
+    // this.BranchList = [];
+    this.request_EligibilityCriteriaModel.InstituteId=0;
+    let typeId = this.request_EligibilityCriteriaModel.EligibleInstitutesID;
+    this.institueList = this.copyOfinstitueList.filter((ins:any)=>{
+      debugger
+      if(typeId == 95){
+        return ins.managementtypeid == '1';
+      }
+      if(typeId == 96){
+        return true;
+      }
+      return false;
+    })
+  }
 }
+

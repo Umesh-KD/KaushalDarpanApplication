@@ -115,18 +115,18 @@
             </div>
           </div>
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
                    for="fileStudentPhoto">Logo</label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
-                {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
+                {{request.Dis_Logo === '' ? 'No File Choosen' : request.Dis_Logo}}
               </label>
               <div class="flex">
                 <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.Logo}}"
-                   *ngIf="this.request.Dis_CompanyName !=''"
+                   *ngIf="this.request.Dis_Logo !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
               </div>
             </div>

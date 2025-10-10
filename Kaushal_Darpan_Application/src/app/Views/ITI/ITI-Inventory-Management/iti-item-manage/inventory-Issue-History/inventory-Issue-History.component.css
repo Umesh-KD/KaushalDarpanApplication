@@ -102,3 +102,38 @@ textarea.form-control {
   font-size: 12px;
   display: inline-block;
 }
+.badge-consumable {
+  background-color: #28a745; /* green */
+  color: white;
+   padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-permanent {
+  background-color: #007bff; /* blue */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-working {
+  background-color: #28a745; /* green */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-notworking {
+  background-color: #ff0000; /* blue */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}

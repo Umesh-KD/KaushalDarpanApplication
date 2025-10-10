@@ -15,31 +15,6 @@
 
     <form [formGroup]="TableForm" (ngSubmit)="getData()">
       <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
-          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamDDL(TableForm.value.StreamID)">
-            <ng-option [value]="0">--Select--</ng-option>
-            @for (item of StreamMasterDDL; track item.StreamID) {
-            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
-            }
-          </ng-select>
-          <div *ngIf="isSubmitted && formTable.StreamID.errors" class="text-danger">
-            <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>
-        </div>
-        <!--{{GetSectionData|json}}-->
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SectionID" [clearable]="false">
-            <ng-option [value]="0">--Select--</ng-option>
-            @for (item of GetSectionData; track item.SectionID) {
-            <ng-option [value]="item.SectionID">{{item.SectionName}}</ng-option>
-            }
-          </ng-select>
-          <div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
-            <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-          </div>
-        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
@@ -53,8 +28,19 @@
             <p *ngIf="formTable.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
         </div>
-
-
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
+          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamDDL(TableForm.value.StreamID)">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StreamMasterDDL; track item.StreamID) {
+            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.StreamID.errors" class="text-danger">
+            <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <!--{{GetSectionData|json}}-->
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
@@ -69,6 +55,18 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
+          <ng-select formControlName="SectionID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of GetSectionData; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
+            <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
 
       </div>
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 mb-6">

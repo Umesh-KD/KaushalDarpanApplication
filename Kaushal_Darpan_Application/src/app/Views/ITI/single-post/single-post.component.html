@@ -62,13 +62,17 @@
                           </div>
                         </td>
                         <td>
-                          <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:2}" class="btn btn-outline-primary btn-sm d-block mb-2" *ngIf="CampusPostDetail.IsShortListed==true"><i class="fa fa-eye"></i>&nbsp;First Shortlist Candidates</a>
-                          <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:3}" class="btn btn-outline-primary btn-sm d-block" *ngIf="CampusPostDetail.IsPlaced==true"><i class="fa fa-eye"></i>&nbsp;Final Candidates</a>
+                          <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:2}" class="btn btn-outline-primary btn-sm d-block mb-2" *ngIf="hasShortList==true"><i class="fa fa-eye"></i>&nbsp;First Shortlist Candidates</a>
+                          <a [routerLink]="'/ITIViewplacedStudent'" [queryParams]="{post:CampusPostDetail.PostID,key:3}" class="btn btn-outline-primary btn-sm d-block" *ngIf="hasSelected==true"><i class="fa fa-eye"></i>&nbsp;Final Candidates</a>
                         </td>
                         <td> {{CampusPostDetail.CampusModeType}}</td>
                         <td>
                           <!--{{CampusPostDetail.JobDiscription|json}}-->
-                          <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+                          <!-- <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a> -->
+                          <!-- <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a> -->
+                           <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{CampusPostDetail.StaticFiles}}/{{CampusPostDetail.JobDiscription}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+                                           
+                          <!-- D:\KAUSHAL-DARPAN\Api\Kaushal_Darpan.Api\StaticFiles\Oct092025055814598655.jpeg -->
                         </td>
                       </tr>
 

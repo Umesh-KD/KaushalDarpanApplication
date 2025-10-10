@@ -37,12 +37,12 @@
             <option value="Hold">Hold</option>
           </select>
         </div>
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>
-          <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
-          </select>-->
+          </select>
 
           <ng-select [(ngModel)]="InstituteID"formControlName="StudentExamInstituteId">
             <ng-option [value]="0" selected>--All--</ng-option>
@@ -50,7 +50,7 @@
             <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
             }
           </ng-select>
-        </div>
+        </div> -->
 
 
         <div>
@@ -130,7 +130,7 @@
             <td align="center">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                 <a href="javascript:void(0);" title="Campus On Action" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="CampusOnPostAction(MyModel_Action,row.PostID)"><i class="ti ti-check"></i></a>
-                <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a>
+                <!-- <a href="javascript:void(0);" title="View & Update Campus" *ngIf="(row.Status=='Pending' || row.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,row.PostID)"><i class="ti ti-eye"></i></a> -->
               </div>
             </td>
           </tr>

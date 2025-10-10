@@ -178,7 +178,14 @@ export enum EnumRole {
   DTEDegreeCourse2ndYear = 81,
   GuestFaculty=225,
   ShikshaSambal = 226,
-  CandidateRole=999,
+  CandidateRole = 999,
+  GuestHouseAdmin = 227,
+  GuestHouseIncharge = 228,
+
+
+  
+  
+
 
 }
 

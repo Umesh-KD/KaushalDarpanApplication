@@ -36,6 +36,7 @@ export class GuestRoomRequestComponent {
   isLoading: boolean = false;
   isSubmitted: boolean = false;
   request = new GuestApplyForGuestRoomDataModel()
+  approveRequest = new GuestApplyForGuestRoomDataModel()
   searchRequest = new GuestApplyForGuestRoomSearchModel();
   RequestList: any = [];
   statusList: any = [];
@@ -69,18 +70,18 @@ export class GuestRoomRequestComponent {
       txtRemark: ['', Validators.required]
     });
 
+    
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GuestRequestList();
     await this.commonMaster();
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetStatusID = Number(this.route.snapshot.paramMap.get('Status')) || 0;
     this.searchRequest.Status = this.GetStatusID;
-
     if (this.GetStatusID != 0) {
-      this.GuestRequestList();
+      await this.GuestRequestList();
     }
 
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID !== 215 && item.ID !== 219 && item.ID !== 220);
+    
   }
   
   async commonMaster() {
@@ -89,10 +90,13 @@ export class GuestRoomRequestComponent {
       await this.commonMasterService.GetCommonMasterDDLByType("GuestRoomStatus")
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
           this.statusList = data['Data'];
+          if(this.sSOLoginDataModel.RoleID === EnumRole.GuestHouseIncharge) {
+            this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID === 217 || item.ID === 218);
+          } else if (this.sSOLoginDataModel.RoleID === EnumRole.GuestHouseAdmin) {
+            this.filteredStatusList = this.statusList.filter((item: { ID: number; }) => item.ID === 1339 || item.ID === 218);
+          }
+          
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -108,6 +112,9 @@ export class GuestRoomRequestComponent {
   async GuestRequestList() {
     try {
       this.loaderService.requestStarted();
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       await this._GuestRoomManagmentService.GuestRequestList(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -147,11 +154,12 @@ export class GuestRoomRequestComponent {
     try {
       this.request = { ...userSubmitData };
 
-      if (this.request.Status === 217) {
+      if (this.request.Status === 1339) {
         this.request.Status = 220;
-      }
-      else {
+      } else if(this.request.Status === 220) {
         this.request.Status = 219;
+      } else {
+        this.toastr.error("Invalid Action")
       }
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -221,6 +229,41 @@ export class GuestRoomRequestComponent {
           }
           else {
             this.toastr.error(this.ErrorMessage)
+          }
+        })
+    }
+    catch (ex) { console.log(ex) }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+
+      }, 200);
+    }
+  }
+
+  async ReqApproveByAdmin() {
+    this.isSubmitted = true;
+    if (this.groupForm.invalid) {
+      return console.log("error")
+    }
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+
+    try {
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+      await this._GuestRoomManagmentService.ReqApproveByAdmin(this.request)
+        .then(async (data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.CloseModal();
+            this.GuestRequestList();
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          }
+          else {
+            this.toastr.error(data.ErrorMessage)
           }
         })
     }

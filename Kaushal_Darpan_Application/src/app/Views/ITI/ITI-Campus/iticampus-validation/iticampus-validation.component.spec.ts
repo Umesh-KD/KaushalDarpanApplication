@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampusValidationComponent } from './iticampus-validation.component';
+import { ItiCampusValidationComponent } from './iticampus-validation.component';
 
-describe('CampusValidationComponent', () => {
-  let component: CampusValidationComponent;
-  let fixture: ComponentFixture<CampusValidationComponent>;
+describe('ItiCampusValidationComponent', () => {
+  let component: ItiCampusValidationComponent;
+  let fixture: ComponentFixture<ItiCampusValidationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CampusValidationComponent]
+      declarations: [ItiCampusValidationComponent]
     });
-    fixture = TestBed.createComponent(CampusValidationComponent);
+    fixture = TestBed.createComponent(ItiCampusValidationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

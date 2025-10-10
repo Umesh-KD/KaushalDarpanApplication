@@ -61,6 +61,7 @@ export class ITIItemsMasterComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
+    console.log('Role:'+this.sSOLoginDataModel.RoleID)
     await this.GetEquipmentDDL();
     await this.GetAllData();
     await this.GetTradeDDL();
@@ -77,7 +78,8 @@ export class ITIItemsMasterComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
-      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
+      //this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
+      this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID == 0 ? this.Searchrequest.CollegeId :  this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID
       //if (this.sSOLoginDataModel.RoleID != EnumRole.Admin) {        
       //  this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
@@ -302,23 +304,54 @@ export class ITIItemsMasterComponent {
   }
 
   exportToExcel(): void {
-    this.ItemMasterList1 = this.ItemMasterList1.map((item: any) => {
-      const updatedItem = {
-        AvailableQuantity: item.AvailableQuantity,
-        CampanyName: item.CampanyName,
-        Code: item.Code,
-        CollegeName: item.CollegeName ?? "BTER",
-        EquipmentsName: item.EquipmentsName,
-        IdentificationMark: item.IdentificationMark,
-        InitialQuantity: item.InitialQuantity,
-        ItemCategoryName: item.ItemCategoryName,
-        PricePerUnit: item.PricePerUnit,
-        Status: item.Status == 1 ? "Approved" : "Pending",
-        TotalPrice: item.TotalPrice,
-        VoucherNumber: item.VoucherNumber
-      };
+    this.ItemMasterList1 = this.ItemMasterList1.map((item: any,index: number) => {
+      if (this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
+        const updatedItem = {
+          SNo: index + 1, // ✅ Add serial number (starts from 1)
+          CollegeName: item.CollegeName ?? "BTER",
+          ItemCategoryName: item.ItemCategoryName,
+          EquipmentsName: item.EquipmentsName,
+          CampanyName: item.CampanyName,
+          Code: item.Code,
+          VoucherNumber: item.VoucherNumber,
+          IdentificationMark: item.IdentificationMark,
+          IsConsumable:item.IsConsumable == 1 ? "Consumable" : "Permanent",
+          InitialQuantity: item.InitialQuantity,
+          AvailableQuantity: item.AvailableQuantity,
+          PricePerUnit: item.PricePerUnit,
+          TotalPrice: item.TotalPrice,      
+          Auctioned:item.Actioned,
+          Working:item.Working,
+          NotWorking:item.NotWorking,
+          Status: item.Status == 1 ? "Approved" : "Pending", 
+        };
+        return updatedItem;
+      }
+      else{
+        const updatedItem = {
+          SNo: index + 1, // ✅ Add serial number (starts from 1)
+         // CollegeName: item.CollegeName ?? "BTER",
+          ItemCategoryName: item.ItemCategoryName,
+          EquipmentsName: item.EquipmentsName,
+          CampanyName: item.CampanyName,
+          Code: item.Code,
+          VoucherNumber: item.VoucherNumber,
+          IdentificationMark: item.IdentificationMark,
+          IsConsumable:item.IsConsumable == 1 ? "Consumable" : "Permanent",
+          InitialQuantity: item.InitialQuantity,
+          AvailableQuantity: item.AvailableQuantity,
+          PricePerUnit: item.PricePerUnit,
+          TotalPrice: item.TotalPrice,      
+          Auctioned:item.Actioned,
+          Working:item.Working,
+          NotWorking:item.NotWorking,
+          Status: item.Status == 1 ? "Approved" : "Pending",    
+        };
+        return updatedItem;
+      }
+      
 
-      return updatedItem;
+      
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);

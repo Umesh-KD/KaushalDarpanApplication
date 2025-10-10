@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Issue History</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Inventory Return Item</a>
     </div>
   </div>
 </div>
@@ -64,7 +64,7 @@
           <i class="ti ti-excel"></i> Export Excel
         </a>
         <a href="javascript:void(0);"
-           (click)="openReturnModal(returnModal)"
+           (click)="confirmReturnNew()"
            class="btn bg-warning btn-sm text-white">
           <i class="ti ti-rotate-ccw"></i> Return
         </a>
@@ -104,6 +104,7 @@
             <th class="text-left">Due Date</th>
             <th class="text-left">Return Date</th>
             <th class="text-left">Status</th>
+            <th class="text-left">Equipment Working</th> 
           </tr>
         </thead>
         <tbody>
@@ -120,12 +121,30 @@
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
             <td align="left">
               <span [ngClass]="{
-  'InvStatus-issued': item.InvStatus === 1,
-  'InvStatus-returned': item.InvStatus === 2
-}">
-                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
+                  'InvStatus-issued': item.InvStatus === 1,
+                  'InvStatus-returned': item.InvStatus === 2
+                  }">
+                  {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
               </span>
             </td>
+            <td class="border p-2">
+               <div *ngIf="item.Selected; else notSelected">
+                  <label>Equipment Working: <span class="StarMarking">*</span></label>
+                  <!--{{ItemDetailsList[i]?.AuctionStatus |json}}-->
+
+                     <!-- [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"  -->
+                        <!-- [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}"> -->
+                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                  <option value="1">Working</option>
+                  <option value="2">Not Working</option>
+                  </select>
+
+                  <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
+                  <p>Please select a status.</p>
+                  </div>
+                </div>
+                   
+              </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { IndustryInstitutePartnershipMasterSearchModel, IIndustryInstitutePartnershipMasterDataModel, IndustryTrainingMaster, IndustryInstitutePartnershipMasterDataModels } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder,FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
@@ -41,6 +41,7 @@ export class IndustryInstitutePartnershipMasterComponent {
   public isLoading: boolean = false;
   public IndID: number = 0;
   public deleteReq = new IndustryInstitutePartnershipMasterDataModels()
+  _enumRole = EnumRole;
   constructor(
     private fb: FormBuilder, 
     private commonMasterService: CommonFunctionService, 

@@ -52,6 +52,8 @@ export class ItiCampusPostMaster_EligibilityCriteriaModel {
   public SalaryTypeID: number = 0;
   //public SemesterID: number = 0;
   //public SemesterName: string = '';
+  
+  public MinPre_8: number = 0;
   public MinPre_10: number = 0;
   public MinPre_12: number = 0;
   public MinPre_Diploma: number = 0;
@@ -66,6 +68,8 @@ export class ItiCampusPostMaster_EligibilityCriteriaModel {
   public Gender: string = '';
   public OtherBenefit: string = '';
   public CampusType: string = '0';
+  public divisionId: number = 0;
+  public InstituteId: number = 0;
   public InterviewType: string = 'Both';
   public NoOfInterviewRound: number = 0;
   public ActiveStatus: boolean = true;

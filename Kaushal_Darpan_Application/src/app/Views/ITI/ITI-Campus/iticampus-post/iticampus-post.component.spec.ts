@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CampusPostComponent } from './iticampus-post.component';
+import { ItiCampusPostComponent } from './iticampus-post.component';
 
 describe('CampusPostComponent', () => {
-  let component: CampusPostComponent;
-  let fixture: ComponentFixture<CampusPostComponent>;
+  let component: ItiCampusPostComponent;
+  let fixture: ComponentFixture<ItiCampusPostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CampusPostComponent]
+      declarations: [ItiCampusPostComponent]
     });
-    fixture = TestBed.createComponent(CampusPostComponent);
+    fixture = TestBed.createComponent(ItiCampusPostComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

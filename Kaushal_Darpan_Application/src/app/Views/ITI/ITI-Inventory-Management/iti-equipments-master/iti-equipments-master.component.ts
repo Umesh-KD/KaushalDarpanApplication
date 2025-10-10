@@ -58,6 +58,8 @@ export class ITIEquipmentsMasterComponent {
       Specification: ['', Validators.required],
       UnitId: ['', [DropdownValidators]],
       itemCategoryId: ['', [DropdownValidators]],
+      IsConsumable: [false],
+      IsSerialNo: [false]
     });
 
     this.EquipmentsId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -101,6 +103,8 @@ export class ITIEquipmentsMasterComponent {
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+       this.request.IsConsumable = this.EquipmentsRequestFormGroup.value.IsConsumable ? 1 : 0;
+      this.request.IsSerialNo = this.EquipmentsRequestFormGroup.value.IsSerialNo ? 1 : 0;
       await this.itiInventoryService.SaveEquipmentsMasterData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -141,13 +145,36 @@ export class ITIEquipmentsMasterComponent {
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          this.request.Name = data['Data']["Name"];
-          this.request.Specification = data['Data']["Specification"];
-          this.request.UnitId = data['Data']["UnitId"];
-          this.request.CreatedBy = data['Data']["CreatedBy"];
-          this.request.ModifyBy = data['Data']["ModifyBy"];
-          this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
-          console.log(data)
+          const equipment = data['Data'];
+
+          this.EquipmentsRequestFormGroup.patchValue({
+            txtName: equipment["Name"],
+            Specification: equipment["Specification"],
+            UnitId: equipment["UnitId"],
+            itemCategoryId: equipment["ItemCategoryId"],
+            IsConsumable: equipment["IsConsumable"] == 1,
+            IsSerialNo: equipment["IsSerialNo"] == 1
+          });
+
+          this.request = {
+            ...this.request,
+            EquipmentsId: id,
+            Name: equipment["Name"],
+            Specification: equipment["Specification"],
+            UnitId: equipment["UnitId"],
+            ItemCategoryId: equipment["ItemCategoryId"],
+            CreatedBy: equipment["CreatedBy"],
+            ModifyBy: equipment["ModifyBy"],
+            IsConsumable: equipment["IsConsumable"] == 1 ? 1 : 0,
+            IsSerialNo: equipment["IsSerialNo"] == 1 ? 1 : 0
+          };
+          // this.request.Name = data['Data']["Name"];
+          // this.request.Specification = data['Data']["Specification"];
+          // this.request.UnitId = data['Data']["UnitId"];
+          // this.request.CreatedBy = data['Data']["CreatedBy"];
+          // this.request.ModifyBy = data['Data']["ModifyBy"];
+          // this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
+          // console.log(data)
           // Update UI elements if necessary
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
@@ -278,7 +305,9 @@ export class ITIEquipmentsMasterComponent {
       itemCategoryId: 0,
       txtName: '',
       UnitId: 0,
-      Specification: ''
+      Specification: '',
+      IsSerialNo:0,
+      IsConsumable:0,
     });
 
     await this.GetAllData();

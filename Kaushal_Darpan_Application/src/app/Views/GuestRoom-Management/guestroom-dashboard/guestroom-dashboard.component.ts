@@ -69,7 +69,7 @@ export class GuestRoomDashboardComponent {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetGuestRoomDashboard();
     await this.CheckProfileStatus();
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.GuestRoomWarden)) {
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.GuestRoomWarden || this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseAdmin || this.sSOLoginDataModel.RoleID == EnumRole.GuestHouseIncharge)) {
 
       let status = this.StaffMasterList[0].ProfileStatus;
       if (status == this._EnumEMProfileStatus.Pending || status == this._EnumEMProfileStatus.Completed || status == this._EnumEMProfileStatus.Revert) {
