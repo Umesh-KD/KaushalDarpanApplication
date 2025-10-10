@@ -99,11 +99,12 @@ export class AddIndustryInstitutePartnershipMasterComponent {
   }
   async GetComapnyDetailsByID() {
     try {
-      await this.commonMasterService.PlacementCompanyMaster_IDWise(this.request.CompanyID, this.sSOLoginDataModel.DepartmentID)
+      let companyID = this.request.PlacementCompanyID ?? 0
+
+      await this.commonMasterService.PlacementCompanyMaster_IDWise(companyID, this.sSOLoginDataModel.DepartmentID)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.CompanyDetails = data['Data'][0];
-        debugger
         this.request.Website = this.CompanyDetails.Website
         this.request.StateID = this.CompanyDetails.StateID
         await this.ddlState_Change()
@@ -184,9 +185,8 @@ export class AddIndustryInstitutePartnershipMasterComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
-          debugger
           this.request = data['Data'];
-          this.request.Dis_CompanyName = data['Data']['Dis_Name'];
+          this.request.Dis_Logo = data['Data']['Logo'];
           this.request.Logo = data['Data']['Logo'];
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
@@ -266,7 +266,7 @@ export class AddIndustryInstitutePartnershipMasterComponent {
   public file!: File;
   async onFilechange(event: any, Type: string) {
     try {
-
+      debugger
       this.file = event.target.files[0];
       if (this.file) {
         if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png') {
@@ -275,10 +275,6 @@ export class AddIndustryInstitutePartnershipMasterComponent {
             this.toastr.error('Select less then 2MB File')
             return
           }
-          //if (this.file.size < 100000) {
-          //  this.toastr.error('Select more then 100kb File')
-          //  return
-          //}
         }
         else {// type validation
           this.toastr.error('Select Only jpeg/jpg/png file')
@@ -291,28 +287,19 @@ export class AddIndustryInstitutePartnershipMasterComponent {
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
 
-            this.State = data['State'];
-            this.Message = data['Message'];
-            this.ErrorMessage = data['ErrorMessage'];
-
-            if (this.State == EnumStatus.Success) {
+            if (data.State == EnumStatus.Success) {
               if (Type == "Photo") {
                 this.request.Dis_Logo = data['Data'][0]["Dis_FileName"];
                 this.request.Logo = data['Data'][0]["FileName"];
 
               }
-              //else if (Type == "Sign") {
-              //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-              //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-              //}
-              /*              item.FilePath = data['Data'][0]["FilePath"];*/
               event.target.value = null;
             }
-            if (this.State == EnumStatus.Error) {
-              this.toastr.error(this.ErrorMessage)
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
             }
-            else if (this.State == EnumStatus.Warning) {
-              this.toastr.warning(this.ErrorMessage)
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
             }
           });
       }
