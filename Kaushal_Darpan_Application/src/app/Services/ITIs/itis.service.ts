@@ -179,6 +179,15 @@ export class ITIsService {
       ).toPromise();
   }
 
+  public async PolotechnincSearchCollege(request: bterCollegeSearchModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/PolotechnicSearchCollege`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async ITIAllInstituteList_NCVT(searchRequest: ITIsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ITIAllInstituteList_NCVT`, body, this.headersOptions)
