@@ -329,11 +329,11 @@
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
                 <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.StaffUserID)"><i class="ti ti-list"></i></a>
                 <a *ngIf="row.RoleID == _EnumRole.HostelWarden" href="javascript:void(0);" title="Edit Hostel" (click)="onEditHostel(Model_EditHostel, row)"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" *ngIf="row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal && row.ProfileStatusID != 0 && row.ProfileStatusID != 288 " title="View" (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
-                  <i class="ti ti-check" *ngIf="row.ProfileStatusID != 247 &&
-                                                row.ProfileStatusID != 249 &&
-                                                row.ProfileStatusID != 288 &&
-                                                row.ProfileStatusID != 0 "></i>
+                <a href="javascript:void(0);" *ngIf="(row.RoleID == _EnumRole.GuestFaculty || row.RoleID == _EnumRole.ShikshaSambal) && !(row.ProfileStatusID == 0|| row.ProfileStatusID == 288 || row.ProfileStatusID == 429) " title="View" (click)="openModal_ApproveStaffProfileOterFaculty(Modal_ApproveStaffProfileOterFaculty, row.StaffUserID, row.SSOID, true)">
+                  <i class="ti ti-check" *ngIf="(row.ProfileStatusID != 247 ||
+                                                row.ProfileStatusID != 249 ||
+                                                row.ProfileStatusID != 288 ||
+                                                row.ProfileStatusID != 0) "></i>
                   <i class="ti ti-eye" *ngIf="row.ProfileStatusID == 247"></i>
                 </a>
               </div>
