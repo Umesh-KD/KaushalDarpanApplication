@@ -119,7 +119,9 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_Subjects?: string;
   public Tech_Year?: string;
   public Tech_Percentage?: number;
+  public Tech_CGPA?: number;
   public TechDocument?: string = '';
+  public MarksType?: string = '';
 }
 
 

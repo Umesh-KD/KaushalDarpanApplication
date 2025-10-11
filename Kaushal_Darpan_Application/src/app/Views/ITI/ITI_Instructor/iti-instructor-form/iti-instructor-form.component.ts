@@ -157,6 +157,7 @@ export class ItiInstructorFormComponent {
   public formData8th = new Qualification8thDetailsDataModel()
   public formData10th = new Qualification10thDetailsDataModel()
   public formData12th = new Qualification12thDetailsDataModel()
+  public ExaminationPassed: any = [];
  
 
   constructor(
@@ -180,10 +181,16 @@ export class ItiInstructorFormComponent {
   ) { }
 
   async ngOnInit() {
-    this.EducationForm = this.formBuilder.group({
-      MarksType: [''],
-      Education_Percentage: [null],
-      Education_CGPA: [null]
+    //this.EducationForm = this.formBuilder.group({
+    //  MarksType: [''],
+    //  Education_Percentage: [null],
+    //  Education_CGPA: [null]
+    //});
+
+    this.InstructorForm = this.formBuilder.group({
+      pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
+      Correspondence_pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
+      // other controls...
     });
 
     this.route.paramMap.subscribe(params => {
@@ -290,7 +297,10 @@ export class ItiInstructorFormComponent {
       Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
       Education_Subjects: [''],
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      EducationDocument: ['']
+      Education_CGPA: [''],
+      EducationDocument: [''],
+      MarksType: ['', Validators.required]
+     
     });
 
 
@@ -300,7 +310,9 @@ export class ItiInstructorFormComponent {
       Tech_Subjects: [''],
       Tech_Year: ['', [Validators.pattern('^[0-9]{4}$')]],
       Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      TechDocument: ['']
+      Tech_CGPA: [''],
+      TechDocument: [''],
+      MarksType: ['']
     });
 
 
@@ -329,6 +341,7 @@ export class ItiInstructorFormComponent {
     this.GetLateralCourse();
     this.GetPassingYearDDL();
     this.BoardDropdownData('Board');
+    this.GetcOmmonData();
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
@@ -368,7 +381,8 @@ export class ItiInstructorFormComponent {
     try {
       this.loaderService.requestStarted();
 
-      await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
+
+      await this.commonMasterService.TehsilMaster_DistrictIDWise(Number(this.request.ddlDistrict))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.TehsilMasterList2 = data['Data'];
@@ -564,56 +578,145 @@ export class ItiInstructorFormComponent {
   }
 
 
+  //async onSubmit() {
+
+  //  debugger;
+
+  //  console.log('Form submitted:iinstructor', this.InstructorForm.value);
+  //  this.isLoading = true;
+  //  this.isSubmitted = true;
+  //  this.loaderService.requestStarted();
+
+  //  try {
+
+
+  //    if (this.InstructorForm.valid) {
+
+  //      var ssoid = this.request.Uid
+  //      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+  //      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
+  //      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+  //      this.request.Uid = ssoid
+  //      this.request.EmploymentDetails = this.employeeRequestList;
+  //      this.request.TechnicalQualifications = this.techRequestList;
+  //      this.request.EducationalQualifications = this.educationList;
+
+  //      await this.ItiInstructorService.SaveInstructorData(this.request)
+  //        .then((response: any) => {
+  //          this.State = response['State'];
+  //          this.Message = response['Message'];
+  //          this.ErrorMessage = response['ErrorMessage'];
+
+  //          if (this.State == EnumStatus.Success) {
+  //            this.toastr.success(this.Message);
+  //          }
+  //          else {
+  //            this.toastr.error(this.ErrorMessage)
+  //          }
+  //          console.log('Response from service:', response);
+  //        });
+  //      console.log('Request Data:', this.request);
+  //    } else {
+  //      console.log('Form is invalid');
+  //      console.log(this.InstructorForm.errors);
+  //      this.InstructorForm.markAllAsTouched();
+  //    }
+  //  }
+  //  catch (ex) { console.log(ex) }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+
+  //    }, 200);
+  //  }
+  //}
+
+
+  //async onSubmit() {
+  //  debugger;
+  //  this.isSubmitted = true;
+  //  this.isLoading = true;
+  //  this.loaderService.requestStarted();
+
+  //  try {
+  //    if (this.InstructorForm.valid) {
+  //      const ssoid = this.request.Uid;
+
+  //      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+  //      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
+  //      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+  //      this.request.Uid = ssoid;
+  //      this.request.EmploymentDetails = this.employeeRequestList;
+  //      this.request.TechnicalQualifications = this.techRequestList;
+  //      this.request.EducationalQualifications = this.educationList;
+
+  //      console.log('Final Request Data:', this.request);
+
+  //      const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
+  //      this.State = response['State'];
+  //      this.Message = response['Message'];
+  //      this.ErrorMessage = response['ErrorMessage'];
+
+  //      if (this.State === EnumStatus.Success) {
+  //        this.toastr.success(this.Message);
+  //        this.InstructorForm.reset();
+  //      } else {
+  //        this.toastr.error(this.ErrorMessage);
+  //      }
+
+  //    } else {
+  //      console.warn('Form invalid:', this.InstructorForm.errors);
+  //      this.InstructorForm.markAllAsTouched();
+  //    }
+  //  } catch (ex) {
+  //    console.error('Error:', ex);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+  //    }, 200);
+  //  }
+  //}
+
+
+
   async onSubmit() {
-
     debugger;
-
-    console.log('Form submitted:iinstructor', this.InstructorForm.value);
-    this.isLoading = true;
     this.isSubmitted = true;
+    this.isLoading = true;
     this.loaderService.requestStarted();
 
     try {
+      const ssoid = this.request.Uid;
 
+      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+      this.request.Uid = ssoid;
+      this.request.EmploymentDetails = this.employeeRequestList;
+      this.request.TechnicalQualifications = this.techRequestList;
+      this.request.EducationalQualifications = this.educationList;
 
-      if (this.InstructorForm.valid) {
+      console.log('Final Request Data (No Validation):', this.request);
 
-        var ssoid = this.request.Uid
-        this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
-        this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-        this.request.Uid = ssoid
-        this.request.EmploymentDetails = this.employeeRequestList;
-        this.request.TechnicalQualifications = this.techRequestList;
-        this.request.EducationalQualifications = this.educationList;
+      const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
+      this.State = response['State'];
+      this.Message = response['Message'];
+      this.ErrorMessage = response['ErrorMessage'];
 
-        await this.ItiInstructorService.SaveInstructorData(this.request)
-          .then((response: any) => {
-            this.State = response['State'];
-            this.Message = response['Message'];
-            this.ErrorMessage = response['ErrorMessage'];
-
-            if (this.State == EnumStatus.Success) {
-              this.toastr.success(this.Message);
-            }
-            else {
-              this.toastr.error(this.ErrorMessage)
-            }
-            console.log('Response from service:', response);
-          });
-        console.log('Request Data:', this.request);
+      if (this.State === EnumStatus.Success) {
+        this.toastr.success(this.Message);
+        this.InstructorForm.reset();
       } else {
-        console.log('Form is invalid');
-        console.log(this.InstructorForm.errors);
-        this.InstructorForm.markAllAsTouched();
+        this.toastr.error(this.ErrorMessage);
       }
-    }
-    catch (ex) { console.log(ex) }
-    finally {
+    } catch (ex) {
+      console.error('Error:', ex);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
         this.isLoading = false;
-
       }, 200);
     }
   }
@@ -770,39 +873,86 @@ export class ItiInstructorFormComponent {
   }
 
 
-  async GetDetailsByJanAadhaar() {
+  //async GetDetailsByJanAadhaar() {
 
-    if (this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
-      this.toastr.error("Invalid Janadhar Details")
+  //  if (this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
+  //    this.toastr.error("Invalid Janadhar Details")
+  //  }
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.StudentJanAadharDetailService.JanAadhaarMembersList(this.request.JanAadhar)
+
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if (data.State === EnumStatus.Success) {
+  //          this.AdharMemberList = data.Data;
+  //          console.log('Jan adhar Details ==>',this.AdharMemberList);
+  //          this.request.Name = data['Data']['NAME'];
+  //          console.log(this.request, "request");
+  //        } else if (data.State === EnumStatus.Warning) {
+  //          this.toastr.warning(data.Message + " Please check Janadhar/ Adhar Number again")
+  //        } else {
+  //          this.toastr.error(data.ErrorMessage)
+  //        }
+  //      }, (error: any) => console.error(error)
+  //      );
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+  async GetDetailsByJanAadhaar() {
+    if (!this.request.JanAadhar || this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
+      this.toastr.error("Invalid Jan Aadhaar Number");
+      return;
     }
+
     try {
       this.loaderService.requestStarted();
-      await this.StudentJanAadharDetailService.JanAadhaarMembersList(this.request.JanAadhar)
 
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State === EnumStatus.Success) {
-            this.AdharMemberList = data.Data;
-            console.log(this.AdharMemberList, "adhar");
-            this.request.Name = data['Data']['NAME'];
-            console.log(this.request, "request");
-          } else if (data.State === EnumStatus.Warning) {
-            this.toastr.warning(data.Message + " Please check Janadhar/ Adhar Number again")
-          } else {
-            this.toastr.error(data.ErrorMessage)
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      const data: any = await this.StudentJanAadharDetailService.JanAadhaarMembersList(this.request.JanAadhar);
+
+      if (data.State === EnumStatus.Success) {
+        this.AdharMemberList = data.Data;
+        console.log("Jan Aadhaar Details =>", this.AdharMemberList);
+
+        if (this.AdharMemberList && this.AdharMemberList.length > 0) {
+          const member = this.AdharMemberList[0];
+         
+          this.request.Name = member.NAME || '';
+          this.request.Mobile = member.MOBILE_NO || '';
+          this.request.Aadhar = member.AADHAR_REF_NO || '';
+          
+          this.InstructorForm.patchValue({
+            Name: this.request.Name,
+            FatherOrHusbandName: this.request.FatherOrHusbandName,
+            MotherName: this.request.MotherName,
+            Mobile: this.request.Mobile,
+            Aadhar: this.request.Aadhar,
+            Dob: this.request.Dob,
+            Gender: this.request.Gender
+          });
+        }
+      }
+      else if (data.State === EnumStatus.Warning) {
+        this.toastr.warning(data.Message + " Please check Jan Aadhaar number again");
+      }
+      else {
+        this.toastr.error(data.ErrorMessage);
+      }
+    } catch (error) {
+      console.error("Error fetching Jan Aadhaar details", error);
+    } finally {
+      setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
+
 
   async SendJanaadharOTP(row: IStudentJanAadharDetailModel) {
     try {
@@ -1146,17 +1296,7 @@ export class ItiInstructorFormComponent {
 
 
 
-  onMarksTypeChange(): void {
-    debugger
-    const selectedType = this.EducationForm.get('MarksType')?.value;
-
-    if (selectedType === 'Percentage') {
-      this.EducationForm.patchValue({ Education_CGPA: null });
-    } else if (selectedType === 'CGPA') {
-      this.EducationForm.patchValue({ Education_Percentage: null });
-    }
-  }
-
+  
   sameAsPermanent: boolean = true;
 
   //onCopyCorrespondenceToggle() {
@@ -1191,7 +1331,6 @@ export class ItiInstructorFormComponent {
     debugger;
 
     if (this.sameAsPermanent) {
-      //  Copy all permanent address fields to correspondence
       this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
       this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
       this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
@@ -1234,6 +1373,39 @@ export class ItiInstructorFormComponent {
   }
 
 
+
+
+  onMarksTypeChange() {
+    debugger
+    const selectedType = this.EducationForm.get('MarksType')?.value;
+
+    if (selectedType == '0') {
+      this.EducationForm.get('Education_CGPA')?.reset();
+    } else if (selectedType == '1') {
+      this.EducationForm.get('Education_Percentage')?.reset();
+    }
+  }
+
+
+  async GetcOmmonData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterDDLByType('ExamOfLevel')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ExaminationPassed = data['Data'];
+          console.log('Examination Passed ==> ', this.ExaminationPassed);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }
 
 
