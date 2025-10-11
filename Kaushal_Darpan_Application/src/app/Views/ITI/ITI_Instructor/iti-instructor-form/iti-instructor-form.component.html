@@ -79,7 +79,7 @@
 
               <div *ngIf="showJanAadhaar">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Aadhar No<span class="StarMarking">*</span></label>
-                <input class="form-input" type="text" [(ngModel)]="this.request.Aadhar" formControlName="Aadhar" placeholder="Enter Aadhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                <input class="form-input" type="text" maxlength="12" (keypress)="validateNumber($event)" [(ngModel)]="this.request.Aadhar" formControlName="Aadhar" placeholder="Enter Aadhar No" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.Aadhar.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -305,7 +305,7 @@
                 <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
                   District:<span class="StarMarking">*</span>
                 </label>
-                <select class="form-select" id="ddlDistrict" name="District" [(ngModel)]="this.request.ddlDistrict" formControlName="ddlDistrict" (change)="ddlDistrict_Change()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+                <select class="form-select" id="ddlDistrict" name="District" (change)="ddlDistrict_Change2()" [(ngModel)]="this.request.ddlDistrict" formControlName="ddlDistrict" (change)="ddlDistrict_Change()" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
                   <option *ngIf="InstructorForm.controls['ddlDistrict'].value === '' || InstructorForm.controls['ddlDistrict'].value === '0' || InstructorForm.controls['ddlDistrict'].value === 'undefined'" value="0">--Select--</option>
                   <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
@@ -314,26 +314,18 @@
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
 
-
               </div>
 
+
               <div *ngIf="isSSOVisible">
-                <label *ngIf="this.request.IsDomicile == true" class="text-gray-800 text-sm font-medium inline-block mb-2">Tehsil Name<span class="StarMarking">*</span></label>
-                <select *ngIf="this.request.IsDomicile == true" [(ngModel)]="this.request.PropTehsilID" formControlName="PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
+                <label>Tehsil<span class="StarMarking">*</span></label>
+                <select formControlName="PropTehsilID" [(ngModel)]="this.request.PropTehsilID" class="form-select" id="TehsilId" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
                   <option *ngIf="InstructorForm.controls['PropTehsilID'].value === '' || InstructorForm.controls['PropTehsilID'].value === '0'" value="0">--Select--</option>
-                  <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+                  <option *ngFor="let item of TehsilMasterList2" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.PropTehsilID.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
-                </div>
-
-                <div *ngIf="this.request.IsDomicile == false">
-                  <label for="TehsilName" class="text-gray-800 text-sm font-medium inline-block mb-2">Tehsil Name :<span class="StarMarking">*</span></label>
-                  <input type="text" class="form-input" [(ngModel)]="this.request.TehsilName" id="TehsilText" formControlName="TehsilName" placeholder=" Enter Tehsil Name :" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-                  <div *ngIf="isSubmitted && _InstructorForm.TehsilName.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
                 </div>
 
               </div>
@@ -351,7 +343,7 @@
 
               <div *ngIf="isSSOVisible">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pin Code:<span class="StarMarking">*</span></label>
-                <input class="form-input" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.pincode" formControlName="pincode" placeholder="Enter Mobile number" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                <input class="form-input" maxlength="6" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.pincode" formControlName="pincode" placeholder="Enter Mobile number" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                 <div *ngIf="isSubmitted && _InstructorForm.pincode.errors" class="text-danger">
                   <p>
                     <i aria-hidden="true"></i>Enter Valid Pincode .!
@@ -361,21 +353,34 @@
             </div>
 
             <!-- Address Details (Correspondence) -->
+
             <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details (Correspondence)</b>
+
+              <div *ngIf="isSSOVisible" class="flex items-center gap-2 mt-4">
+                <input id="sameAsPermanent"
+                       type="checkbox"
+                       class="form-checkbox"
+                       [(ngModel)]="sameAsPermanent"
+                       (change)="onCopyCorrespondenceToggle()" />
+                <label for="sameAsPermanent" class="text-sm">Same as Permanent Address</label>
+              </div>
             </div>
+
+
             <div *ngIf="isSSOVisible" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
               <div>
-                <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Plot/House/Building No<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_PlotHouseBuildingNo" formControlName="Correspondence_PlotHouseBuildingNo" placeholder="Enter Plot/House/Building No" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-                <div *ngIf="isSubmitted && _InstructorForm.Correspondence_PlotHouseBuildingNo.errors" class="text-danger">
-                  <p><i aria-hidden="true"></i>This field is required.!</p>
-                </div>
+                <label>Plot/House/Building No<span class="StarMarking">*</span></label>
+                <input type="text" class="form-input"
+                       [(ngModel)]="request.Correspondence_PlotHouseBuildingNo"
+                       formControlName="Correspondence_PlotHouseBuildingNo"
+                       [disabled]="sameAsPermanent || isViewMode"
+                       placeholder="Enter Plot/House/Building No" />
               </div>
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_StreetRoadLane" formControlName="Correspondence_StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                <input [disabled]="sameAsPermanent" type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_StreetRoadLane" formControlName="Correspondence_StreetRoadLane" placeholder="Enter Street/Road/Lane" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_StreetRoadLane.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -383,7 +388,7 @@
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_AreaLocalitySector" formControlName="Correspondence_AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                <input [disabled]="sameAsPermanent" type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_AreaLocalitySector" formControlName="Correspondence_AreaLocalitySector" placeholder=" Enter Area/Locality/Sector" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_AreaLocalitySector.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -391,7 +396,7 @@
 
               <div>
                 <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark: <span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_LandMark" formControlName="Correspondence_LandMark" placeholder="Enter LandMark" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                <input [disabled]="sameAsPermanent" type="text" class="form-input" id="ApplicationId" [(ngModel)]="this.request.Correspondence_LandMark" formControlName="Correspondence_LandMark" placeholder="Enter LandMark" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_LandMark.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required.!</p>
                 </div>
@@ -444,21 +449,22 @@
 
               <div>
                 <label for="Correspondence_City" class="text-gray-800 text-sm font-medium inline-block mb-2">City / Village :<span class="StarMarking">*</span></label>
-                <input type="text" class="form-input" id="Correspondence_City" [(ngModel)]="this.request.Correspondence_City" formControlName="Correspondence_City" placeholder=" Enter City / Village" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                <input [disabled]="sameAsPermanent" type="text" class="form-input" id="Correspondence_City" [(ngModel)]="this.request.Correspondence_City" formControlName="Correspondence_City" placeholder=" Enter City / Village" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
                 <div *ngIf="isSubmitted && _InstructorForm.Correspondence_City.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
               </div>
 
               <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Pin Code:<span class="StarMarking">*</span></label>
-                <input class="form-input" (keypress)="numberOnly($event)" type="number" [(ngModel)]="this.request.Correspondence_pincode" formControlName="Correspondence_pincode" placeholder="Enter Pincode" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                <div *ngIf="isSubmitted&&_InstructorForm.Correspondence_pincode.errors" class="text-danger">
-                  <p>
-                    <i aria-hidden="true"></i>Enter Valid Pincode .!
-                  </p>
-                </div>
+
+                <label>Pin Code:<span class="StarMarking">*</span></label>
+                <input type="number" class="form-input"
+                       [(ngModel)]="request.Correspondence_pincode"
+                       formControlName="Correspondence_pincode"
+                       [disabled]="sameAsPermanent || isViewMode"
+                       placeholder="Enter Pin Code" maxlength="6" />
               </div>
+
             </div>
 
             <form [formGroup]="EducationForm">
@@ -475,22 +481,63 @@
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
+                <!--<div>
+        <label>School/Board</label>
+        <input class="form-input" [(ngModel)]="this.educationRequest.Education_Board" formControlName="Education_Board" placeholder=" Enter School board" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isSubmitted && EducationForm.controls.Education_Board.errors" class="text-danger">
+          <p><i aria-hidden="true"></i>This field is required .!</p>
+        </div>
+      </div>-->
+                <!--<div>
+        <label>Year Of Passing<span class="StarMarking">*</span></label>
+        <input class="form-input" type="number" [(ngModel)]="this.educationRequest.Education_Year" formControlName="Education_Year" placeholder=" Enter Education Year" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isSubmitted && EducationForm.controls.Education_Year.errors" class="text-danger">
+          <p>
+            <i aria-hidden="true"></i>Enter Valid Year .!
+          </p>
+        </div>
+      </div>-->
+
                 <div>
-                  <label>School/Board</label>
-                  <input class="form-input" [(ngModel)]="this.educationRequest.Education_Board" formControlName="Education_Board" placeholder=" Enter School board" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <label for="Education_Board" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    School/Board<span class="StarMarking">*</span>
+                  </label>
+
+                  <select class="form-select"
+                          id="Education_Board"
+                          formControlName="Education_Board"
+                          [(ngModel)]="educationRequest.Education_Board"
+                          [disabled]="isViewMode"
+                          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+
+                    <option [ngValue]="0">---Select Board---</option>
+                    <option *ngFor="let item of BoardList" [ngValue]="item.Name">{{ item.Name }}</option>
+                  </select>
+
                   <div *ngIf="isSubmitted && EducationForm.controls.Education_Board.errors" class="text-danger">
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
+
                 <div>
-                  <label>Year Of Passing<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.educationRequest.Education_Year" formControlName="Education_Year" placeholder=" Enter Education Year" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <label for="Education_Year" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Year of Passing:<span class="StarMarking">*</span>
+                  </label>
+                  <select class="form-select" id="Education_Year"
+                          formControlName="Education_Year"
+                          [(ngModel)]="educationRequest.Education_Year"
+                          [disabled]="isViewMode"
+                          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+
+                    <option value="" selected>Select Year of Passing</option>
+                    <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+                  </select>
+
                   <div *ngIf="isSubmitted && EducationForm.controls.Education_Year.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>Enter Valid Year .!
-                    </p>
+                    <p><i aria-hidden="true"></i>Enter Valid Year .!</p>
                   </div>
                 </div>
+
                 <div>
                   <label>Subjects<span class="StarMarking">*</span></label>
                   <input class="form-input" [(ngModel)]="this.educationRequest.Education_Subjects" formControlName="Education_Subjects" placeholder=" Enter Education Subject" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
@@ -501,15 +548,59 @@
                   </div>
                 </div>
 
-                <div>
+                <!--vivek-->
+
+                <div class="mb-3">
+                  <label>Marks Type<span class="StarMarking">*</span></label>
+                  <select class="form-select"
+                          formControlName="MarksType"
+                          (change)="onMarksTypeChange()">
+                    <option value="">-- Select Type --</option>
+                    <option value="Percentage">Percentage</option>
+                    <option value="CGPA">CGPA</option>
+                  </select>
+                </div>
+
+                 
+                <div *ngIf="EducationForm.get('MarksType')?.value === 'Percentage'">
                   <label>Percentage<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="this.educationRequest.Education_Percentage" formControlName="Education_Percentage" placeholder=" Enter Percentage" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                  <div *ngIf="isSubmitted&& EducationForm.controls.Education_Percentage.errors" class="text-danger">
-                    <p>
-                      <i aria-hidden="true"></i>This field is required .!
-                    </p>
+                  <input class="form-input"
+                         type="number"
+                         formControlName="Education_Percentage"
+                         placeholder="Enter Percentage"
+                         [readonly]="isViewMode"
+                         [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <div *ngIf="isSubmitted && EducationForm.get('Education_Percentage')?.errors" class="text-danger">
+                    <p>This field is required .!</p>
                   </div>
                 </div>
+
+               
+                <div *ngIf="EducationForm.get('MarksType')?.value === 'CGPA'">
+                  <label>CGPA<span class="StarMarking">*</span></label>
+                  <input class="form-input"
+                         type="number"
+                         formControlName="Education_CGPA"
+                         placeholder="Enter CGPA"
+                         [readonly]="isViewMode"
+                         [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <div *ngIf="isSubmitted && EducationForm.get('Education_CGPA')?.errors" class="text-danger">
+                    <p>This field is required .!</p>
+                  </div>
+                </div>
+
+
+
+
+                <!--<div>
+        <label>Percentage<span class="StarMarking">*</span></label>
+        <input class="form-input" type="number" [(ngModel)]="this.educationRequest.Education_Percentage" formControlName="Education_Percentage" placeholder=" Enter Percentage" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isSubmitted&& EducationForm.controls.Education_Percentage.errors" class="text-danger">
+          <p>
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
+      </div>-->
 
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -595,16 +686,43 @@
                   </div>
 
                 </div>
+                <!--<div>
+        <label>University/Board/Council<span class="StarMarking">*</span></label>
+        <input class="form-input" [(ngModel)]="techRequest.Tech_Board" placeholder=" Enter Tech Board" formControlName="Tech_Board" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Exam.errors" class="text-danger">
+          <p>
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div>
+
+      </div>-->
+
+
                 <div>
-                  <label>University/Board/Council<span class="StarMarking">*</span></label>
-                  <input class="form-input" [(ngModel)]="techRequest.Tech_Board" placeholder=" Enter Tech Board" formControlName="Tech_Board" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                  <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Exam.errors" class="text-danger">
+                  <label for="Tech_Board" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    University/Board/Council:<span class="StarMarking">*</span>
+                  </label>
+
+                  <select class="form-select"
+                          id="Tech_Board"
+                          formControlName="Tech_Board"
+                          [(ngModel)]="techRequest.Tech_Board"
+                          [disabled]="isViewMode"
+                          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+
+                    <option [ngValue]="0">---Select Board---</option>
+                    <option *ngFor="let item of BoardList" [value]="item.Name">{{ item.Name }}</option>
+                  </select>
+
+                  <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Board.errors" class="text-danger">
                     <p>
                       <i aria-hidden="true"></i>This field is required .!
                     </p>
                   </div>
-
                 </div>
+
+
+
                 <div>
                   <label>Subjects<span class="StarMarking">*</span></label>
                   <input class="form-input" [(ngModel)]="techRequest.Tech_Subjects" placeholder=" Enter Technical Subject" formControlName="Tech_Subjects" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
@@ -615,15 +733,38 @@
                   </div>
 
                 </div>
+                <!--<div>
+        <label>Year Of Passing<span class="StarMarking">*</span></label>
+        <input class="form-input" type="number" [(ngModel)]="techRequest.Tech_Year" placeholder=" Enter Tech Year" formControlName="Tech_Year" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Year.errors" class="text-danger">
+          <p>
+            <i aria-hidden="true"></i>Enter Valid Year .!
+          </p>
+        </div>
+      </div>-->
+
                 <div>
-                  <label>Year Of Passing<span class="StarMarking">*</span></label>
-                  <input class="form-input" type="number" [(ngModel)]="techRequest.Tech_Year" placeholder=" Enter Tech Year" formControlName="Tech_Year" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <label for="Tech_Year" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Year of Passing:<span class="StarMarking">*</span>
+                  </label>
+                  <select class="form-select"
+                          id="Tech_Year"
+                          formControlName="Tech_Year"
+                          [(ngModel)]="techRequest.Tech_Year"
+                          [disabled]="isViewMode"
+                          [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+
+                    <option value="0" selected>Select Year of Passing</option>
+                    <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+                  </select>
+
                   <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Year.errors" class="text-danger">
                     <p>
                       <i aria-hidden="true"></i>Enter Valid Year .!
                     </p>
                   </div>
                 </div>
+
                 <div>
                   <label>Percentage<span class="StarMarking">*</span></label>
                   <input class="form-input" type="number" [(ngModel)]="techRequest.Tech_Percentage" placeholder=" Enter Tech Percentage" formControlName="Tech_Percentage" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
