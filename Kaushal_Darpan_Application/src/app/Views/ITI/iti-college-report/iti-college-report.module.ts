@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ItiCollegeReportRoutingModule } from './iti-college-report-routing.module';
 import { ItiCollegeReportComponent } from './iti-college-report.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { OTPModalModule } from '../../otpmodal/otpmodal.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     ItiCollegeReportRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OTPModalModule
   ]
 })
 export class ItiCollegeReportModule { }

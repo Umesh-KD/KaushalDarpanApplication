@@ -30,7 +30,7 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
-          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamDDL(TableForm.value.StreamID)">
+          <ng-select formControlName="StreamID" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of StreamMasterDDL; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
@@ -44,7 +44,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
-          <ng-select formControlName="SubjectID" [clearable]="false">
+          <ng-select formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of SubjectMasterDDL; track item.ID) {
             <ng-option [value]="item.ID">{{item.Name}}</ng-option>

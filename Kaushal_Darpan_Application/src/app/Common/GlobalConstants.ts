@@ -182,7 +182,8 @@ export enum EnumRole {
   GuestHouseAdmin = 227,
   GuestHouseIncharge = 228,
 
-
+  ITIPlanningAdmin = 231,
+  ITIBuildingAdmin=232
   
   
 
