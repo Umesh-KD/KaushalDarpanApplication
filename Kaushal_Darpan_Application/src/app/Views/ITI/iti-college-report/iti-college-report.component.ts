@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -7,15 +7,16 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { BterApplicationForm } from '../../../Services/BterApplicationForm/bterApplication.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TspAreasService } from '../../../Services/Tsp-Areas/Tsp-Areas.service';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { ItiReportDataModel } from '../../../Models/ITI/ItiReportDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { ITIsService } from '../../../Services/ITIs/itis.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
+import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 @Component({
   selector: 'app-iti-college-report',
   standalone: false,
@@ -23,10 +24,13 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2'
   styleUrl: './iti-college-report.component.css'
 })
 export class ItiCollegeReportComponent {
+  public isAddrequest: boolean=false
   public ReportForm!: FormGroup
   public NewReportFormGroup!: FormGroup
-
+  public AddReportFormGroup1!: FormGroup
+  public _enumRole = EnumRole
   public CompanyMasterDDLList: any[] = [];
+  public ItiDDLlist: any[] = [];
   public BoardList: any = []
   public request = new ItiReportDataModel()
   /*  public addrequest = new SupplementaryDataModel()*/
@@ -52,7 +56,7 @@ export class ItiCollegeReportComponent {
   public ApplicationID: number = 0;
   public searchrequest = new BterSearchmodel()
   public GenderList: any = ''
-
+  @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
 
   constructor(
@@ -64,7 +68,8 @@ export class ItiCollegeReportComponent {
     private dataService: DataServiceService,
     private activatedRoute: ActivatedRoute,
     private appsettingConfig: AppsettingService,
-    private swat: SweetAlert2
+    private swat: SweetAlert2,
+    private routers: Router
   ) { }
 
 
@@ -75,7 +80,7 @@ export class ItiCollegeReportComponent {
     // form group
     this.ReportForm = this.formBuilder.group(
       {
-        txtName: [{ value: '', disabled: true }, Validators.required],
+        txtName: [{ value: ''}, Validators.required],
         Loksabha: ['', Validators.required],
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
@@ -100,7 +105,9 @@ export class ItiCollegeReportComponent {
         BuildShortage: [''],
         IsHostel: ['', Validators.required],
         txtYear: ['', [DropdownValidators]],
+        CollegeID: ['',],
         Remarks: [''],
+     
         //FrontPhoto: [''],
         //SidePhoto: [''],
         //InteriorPhoto: [''],
@@ -118,6 +125,27 @@ export class ItiCollegeReportComponent {
       IsDispute: ['', Validators.required],
       AdministrativeeOrderNo: ['', Validators.required],
       AdministrativeOrderDate: ['', Validators.required],
+      //FinancialSanction: ['', Validators.required],
+      //PercentCivilWork: ['', Validators.required],
+      //PercentCivilDate: ['', Validators.required],
+      //IsPurposeHall: ['', Validators.required],
+      //IsMainITI: ['', Validators.required],
+      //IsBuildingTaken: ['', Validators.required],
+      //TakenOverDate: ['', Validators.required],
+      IsOperatingOwn: ['', Validators.required],
+      ShilanyasDate: ['', Validators.required],
+      LokarpanDate: ['', Validators.required],
+      LokarpanName: ['', Validators.required],
+      LokarpanPost: ['', Validators.required],
+      ShilanyasPost: ['', Validators.required],
+      ShilanyasName: ['', Validators.required]
+   
+
+    })
+
+
+    this.AddReportFormGroup1 = this.formBuilder.group({
+
       FinancialSanction: ['', Validators.required],
       PercentCivilWork: ['', Validators.required],
       PercentCivilDate: ['', Validators.required],
@@ -125,38 +153,159 @@ export class ItiCollegeReportComponent {
       IsMainITI: ['', Validators.required],
       IsBuildingTaken: ['', Validators.required],
       TakenOverDate: ['', Validators.required],
-      IsOperatingOwn: ['', Validators.required],
-      ShilanyasDate: ['', Validators.required],
-      LokarpanDate: ['', Validators.required],
-      LokarpanName: ['', Validators.required],
-      LokarpanPost: ['', Validators.required],
-      ShilanyasPost: ['', Validators.required],
-      ShilanyasName: ['', Validators.required],
+      //IsOperatingOwn: ['', Validators.required],
+     
 
     })
+
 
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.searchrequest.SSOID = this.sSOLoginDataModel.SSOID
     //this.searchrequest.DepartmentID = EnumDepartment.BTER;
     //this.request.DepartmentID = EnumDepartment.BTER;
-    /*    this.HRManagerID = Number(this.activatedRoute.snapshot.queryParamMap.get('HRManagerID')?.toString());*/
+    this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
 
     //await this.loadDropdownData('Board')
     //await this.GetStateMatserDDL()
     //await this.GetPassingYearDDL()
 
-    this.request.CollegeName = this.sSOLoginDataModel.InstituteName
-    this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+    //this.request.CollegeName = this.sSOLoginDataModel.InstituteName
+    //this.request.CollegeID = this.sSOLoginDataModel.InstituteID
 
-    if (this.request.CollegeID > 0) {
-      this.GetById(this.request.CollegeID)
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
+      const controlsToFreeze = [
+        'txtName',
+        'Loksabha',
+        'LandAvailable',
+        'Vidhansabha',
+        'PanchayatDis',
+        'SanctionOrderNo',
+        'SanctionOrderDate',
+
+        'CollegeID',
+        'txtYear'
+        
+      ];
+
+      controlsToFreeze.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.disable();  // ❄️ Freeze input
+        }
+      });
+
+    } else {
+      const controlsToUnfreeze = [
+        'txtName',
+        'Loksabha',
+        'LandAvailable',
+        'Vidhansabha',
+        'PanchayatDis',
+        'SanctionOrderNo',
+        'SanctionOrderDate',
+   
+        'CollegeID',
+        'txtYear'
+      ];
+
+      controlsToUnfreeze.forEach(controlName => {
+        const control = this.NewReportFormGroup.get(controlName);
+        if (control) {
+          control.enable();  // 🔓 Allow editing
+        }
+      });
     }
-/*    this.request.IsNewCollege=1*/
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
+      const controlsToFreeze = [
+        // Existing fields
+
+        // Newly added fields
+        'ConstructionAgency',
+        'PDName',
+        'ContractorName',
+        'PDMobile',
+        'ContractorMobile',
+        'IsDispute',
+        'AdministrativeeOrderNo',
+        'AdministrativeOrderDate'
+      ];
+
+      controlsToFreeze.forEach(controlName => {
+        const control = this.NewReportFormGroup.get(controlName);
+        if (control) {
+          control.disable(); // ❄️ Freeze input
+        }
+      });
+
+    } else {
+      const controlsToUnfreeze = [
+
+        'ConstructionAgency',
+        'PDName',
+        'ContractorName',
+        'PDMobile',
+        'ContractorMobile',
+        'IsDispute',
+        'AdministrativeeOrderNo',
+        'AdministrativeOrderDate'
+      ];
+
+      controlsToUnfreeze.forEach(controlName => {
+        const control = this.NewReportFormGroup.get(controlName);
+        if (control) {
+          control.enable(); // 🔓 Allow editing
+        }
+      });
+    }
+
+
+
+   
+    if (this.ApplicationID > 0) {
+      await this.GetById(this.ApplicationID)
+    }
+    /*    this.request.IsNewCollege=1*/
+    await this.GetGovtITI()
+    
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
   get _NewReportForm() { return this.NewReportFormGroup.controls; }
+  get AddReportFormGroup() { return this.AddReportFormGroup1.controls; }
+
+
+
+  async GetGovtITI() {
+    try {
+
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("GovtIti")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.ItiDDLlist = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+
+
 
 
   public file!: File;
@@ -278,6 +427,17 @@ export class ItiCollegeReportComponent {
 
     this.nonItiValidator()
 
+    if (this.request.IsNewCollege == 0 && this.request.CollegeID == 0) {
+      this.toastr.warning("Please Select Iti")
+      return
+    }
+
+
+    if (this.request.IsNewCollege == 1 && this.request.CollegeName == '') {
+      this.toastr.warning("Please Enter Iti Name")
+      return
+    }
+
     if (this.request.IsSolarPanel == 'No')
     {
       this.request.PanelCapacity = ''
@@ -288,10 +448,12 @@ export class ItiCollegeReportComponent {
     }
 
     try {
+      debugger
       this.isSubmitted = true;
       if (this.ReportForm.invalid) {
         return
       }
+
       if (this.request.IsNewCollege == 1) {
         if (this.NewReportFormGroup.invalid) {
 
@@ -300,8 +462,12 @@ export class ItiCollegeReportComponent {
 
       }
 
+      if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.FinancialSanctionList.length < 1 && this.request.IsNewCollege == 1) {
+        this.toastr.warning("Please Add Financials sanction Details")
+        return
+      }
 
-
+   
 
 
       console.log(this.request)
@@ -313,7 +479,7 @@ export class ItiCollegeReportComponent {
 
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
 
-      this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+      this.request.RoleID = this.sSOLoginDataModel.RoleID
       //save
       await this.ApplicationService.SaveDataReport(this.request)
         .then((data: any) => {
@@ -326,7 +492,7 @@ export class ItiCollegeReportComponent {
             this.toastr.success(this.Message)
 
 
-            /* this.routers.navigate(['/Hrmaster']);*/
+            this.routers.navigate(['/ItiEstablishmentList']);
 
           }
           else {
@@ -354,7 +520,8 @@ export class ItiCollegeReportComponent {
 
   nonItiValidator() {
 
-    if (this.request.IsSolarPanel == 'No') {
+
+    if (this.request.IsSolarPanel == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
 
       this.ReportForm.controls['PanelCapacity'].clearValidators();
     }
@@ -364,14 +531,115 @@ export class ItiCollegeReportComponent {
 
     this.ReportForm.controls['PanelCapacity'].updateValueAndValidity();
 
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
 
-    if (this.request.IsBuildingTaken == 'Yes') {
-      this.NewReportFormGroup.controls['TakenOverDate'].clearValidators();
-    } else {
-      this.NewReportFormGroup.controls['TakenOverDate'].setValidators(Validators.required);
     }
 
-    this.NewReportFormGroup.controls['TakenOverDate'].updateValueAndValidity();
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+
+      const controlsToClear = [
+        'TradeOrderNo',
+        'TradeOrderDate',
+        'ApproachRoad',
+        'InternalRoad',
+        'Harvesting',
+        'ElectPhase',
+        'IsSolarPanel',
+        'IsBoundaryWall',
+        'WaterSupply',
+        'ElectConnection',
+     
+        'HostelUtilized',
+        'NoOfTree',
+        'ElectPhaserequired',
+        'ContractLoad',
+        'BuildShortage',
+        'IsHostel',
+        'IsOperatingOwn'
+     
+      ];
+
+      controlsToClear.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      });
+
+    } else {
+      // If the user IS ITIBuildingAdmin — reapply required validators
+      const requiredControls = [
+        'TradeOrderNo',
+        'TradeOrderDate',
+        'ApproachRoad',
+        'InternalRoad',
+        'Harvesting',
+        'ElectPhase',
+        'IsSolarPanel',
+        'IsBoundaryWall',
+        'WaterSupply',
+        'ElectConnection',
+       
+        'HostelUtilized',
+        'NoOfTree',
+        'ElectPhaserequired',
+        'IsHostel',
+        'IsOperatingOwn'
+ 
+      ];
+
+      requiredControls.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.setValidators(Validators.required);
+          control.updateValueAndValidity();
+        }
+      });
+    }
+    if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+
+      const controlsToClear = [
+        'ShilanyasDate',
+        'LokarpanDate',
+        'LokarpanName',
+        'LokarpanPost',
+        'ShilanyasPost',
+        'ShilanyasName',
+        'IsOperatingOwn'
+     
+      ];
+
+      controlsToClear.forEach(controlName => {
+        const control = this.NewReportFormGroup.get(controlName);
+        if (control) {
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      });
+
+    } else {
+
+      const requiredControls = [
+        'ShilanyasDate',
+        'LokarpanDate',
+        'LokarpanName',
+        'LokarpanPost',
+        'ShilanyasPost',
+        'ShilanyasName',
+    '[IsOperatingOwn'
+      ];
+
+      requiredControls.forEach(controlName => {
+        const control = this.NewReportFormGroup.get(controlName);
+        if (control) {
+          control.setValidators(Validators.required);
+          control.updateValueAndValidity();
+        }
+      });
+    }
+
+
   }
 
 
@@ -380,7 +648,7 @@ export class ItiCollegeReportComponent {
       this.loaderService.requestStarted();
       const data: any = await this.ApplicationService.Get_ITIsReportData_ByID(ID);
       const parsedData = JSON.parse(JSON.stringify(data));
-
+      debugger
       if (parsedData['Data'] != null) {
           this.request = parsedData['Data'];
       }
@@ -462,6 +730,94 @@ export class ItiCollegeReportComponent {
   }
 
 
+  AddChoice() {
+
+    this.isAddrequest = true;
+
+    debugger
+    if (this.request.IsBuildingTaken != 'Yes') {
+      this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
+    } else {
+      this.AddReportFormGroup1.controls['TakenOverDate'].setValidators(Validators.required);
+    }
+
+    this.AddReportFormGroup1.controls['TakenOverDate'].updateValueAndValidity();
 
 
+
+    if (this.AddReportFormGroup1.invalid) {
+      /*this.OptionsFormGroup.markAllAsTouched();*/
+      return;
+    }
+
+
+    // Get the selected values
+
+
+
+
+
+    if (!this.request.FinancialSanctionList) {
+      this.request.FinancialSanctionList = [];
+    }
+
+    if (this.request.FinancialCopy == '') {
+      this.toastr.error("Please Upload File")
+      return
+    }
+
+    //if (this.request.PostID != 7 && this.request.PostID != 8) {
+    //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
+    //  if (Exist) {
+    //    this.toastr.warning("Already Have request with selected Post ID")
+    //    return
+    //  }
+    //}
+
+
+    this.request.FinancialSanctionList.push({
+      FinancialSanction: this.request.FinancialSanction,
+      FinancialCopy: this.request.FinancialCopy,
+      PercentCivilWork: this.request.PercentCivilWork,
+      IsPurposeHall: this.request.IsPurposeHall,
+      IsMainITI: this.request.IsMainITI,
+      IsBuildingTaken: this.request.IsBuildingTaken,
+      TakenOverDate: this.request.TakenOverDate,
+      CollegeID: this.request.CollegeID,
+      IsOperatingOwn: ''
+    });
+
+
+    this.request.FinancialSanction = '';
+    this.request.FinancialCopy = '';
+    this.request.PercentCivilWork = '';
+    this.request.IsPurposeHall = '';
+    this.request.IsMainITI = '';
+    this.request.IsBuildingTaken = '';
+    this.request.TakenOverDate = '';
+    this.request.CollegeID = 0;
+
+
+    // Reset other unrelated fields (if required)
+    
+
+    this.isAddrequest = false
+
+  }
+
+
+  deleteRow(index: number): void {
+    this.request.FinancialSanctionList.splice(index, 1);
+  }
+
+
+  openOTP() {
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    this.childComponent.OpenOTPPopup();
+
+    this.childComponent.onVerified.subscribe(() => {
+      //this.PublishTimeTable();
+      this.SaveData();
+    })
+  }
 }
