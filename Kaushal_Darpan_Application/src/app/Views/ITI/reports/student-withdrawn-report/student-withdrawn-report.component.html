@@ -115,12 +115,13 @@
             <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
             <td>
               <!--<button class="btn bg-info text-white" type="button"
-                  (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
-                Withdrawn
-              </button>-->
+      (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
+    Withdrawn
+  </button>-->
+      
 
               <button class="btn bg-info text-white" type="button"
-                      *ngIf="item.AllotmentStatus != 9"
+                      *ngIf="item.AllotmentStatus != 9 && SeatWithDrawl==1"
                       (click)="SavestudentWithdrawnRequest(MyModel_ReplayQuery, item)">
                 Withdrawn
               </button>

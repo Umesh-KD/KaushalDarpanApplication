@@ -1,4 +1,6 @@
 export class ItiReportDataModel {
+  public Eid:number=0
+  public RoleID:number=0
   public CollegeID: number = 0
   public CollegeName: string = ''
   public Loksabha:string=''
@@ -59,5 +61,8 @@ export class ItiReportDataModel {
   public ShilanyasName: string = ''
   public IsNewCollege: number = 0
   public ModifyBy:number=0
-  public Esttablishment_Year:number=0
+  public Esttablishment_Year: number = 0
+ public  FinancialSanctionList:any[]=[]
 }
+
+
