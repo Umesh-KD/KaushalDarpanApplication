@@ -903,7 +903,7 @@ export class StudentAttendanceComponent implements OnInit {
   }
 
 
-  async ChangeStreamDDL(StreamID: number) {
+  async ChangeSubjectDDL() {
 
     debugger
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
