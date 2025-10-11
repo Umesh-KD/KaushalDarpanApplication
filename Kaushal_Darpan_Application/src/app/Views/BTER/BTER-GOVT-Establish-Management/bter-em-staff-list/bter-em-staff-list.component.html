@@ -129,14 +129,21 @@
      row.RoleID != _EnumRole.GuestRoomWarden &&
      row.ProfileStatusID != 0 &&
      row.ProfileStatusID != 288
-   " ><i class="ti ti-eye"></i></a>
+   "><i class="ti ti-eye"></i></a>
 
 
 
                 <a *ngIf="row.ProfileStatusID == 289" href="javascript:void(0);" id="btnDelete" title="Unlock Profile" (click)="UnlockProfile(row.StaffUserID, row.SSOID, row.StaffID)"><i class="ti ti-lock-open"></i></a>
-                <a href="javascript:void(0);" *ngIf="row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden" title="View" (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true)">
+                <a href="javascript:void(0);"
+                   *ngIf="(row.RoleID == _EnumRole.GuestHouseAdmin || row.RoleID == _EnumRole.GuestHouseIncharge || row.RoleID == _EnumRole.GuestRoomWarden)
+          && !(row.ProfileStatusID == 0
+          || row.ProfileStatusID == 288
+          || row.ProfileStatusID == 429)"
+                   title="View"
+                   (click)="openModal_ApproveStaffProfileGuestHouse(Modal_ApproveStaffProfileGuestHouse, row.StaffUserID, row.SSOID, true,row.RoleID)">
                   <i class="ti ti-eye"></i>
                 </a>
+
               </div>
             </td>
           </tr>
@@ -979,7 +986,7 @@
                 </div>
               </div>
 
-              <div>
+              <!--<div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation as per Service Book <span class="StarMarking">*</span> </label>
                 <select class="form-select " name="DesignationID" id="DesignationID" formControlName="DesignationID"
                         [(ngModel)]="approveRequest.DesignationID">
@@ -992,7 +999,7 @@
                     <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
-              </div>
+              </div>-->
 
               <div>
                 <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Gender <span class="StarMarking">*</span></label>

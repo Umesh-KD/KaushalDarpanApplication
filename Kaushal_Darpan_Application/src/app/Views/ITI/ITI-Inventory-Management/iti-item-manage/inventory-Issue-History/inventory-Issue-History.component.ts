@@ -89,6 +89,7 @@ export class inventoryIssueHistoryComponent {
             this.ErrorMessage = data.ErrorMessage;
             this.ItemMasterList = data.Data || [];
             this.ItemMasterList1 = data.Data || [];
+            console.log(this.ItemMasterList);
           } else {
             console.error("No data returned from API");
           }

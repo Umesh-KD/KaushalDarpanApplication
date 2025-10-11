@@ -554,6 +554,7 @@ const routes: Routes = [
 
       /*ITI-Inventory-Management-START*/
       { path: 'iti-items-master-list', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-items-master.module').then(m => m.ITIItemsMasterModule) },
+      { path: 'iti-items-master-list-report', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-items-master-report/iti-items-master-report.module').then(m => m.ITIItemsMasterReportModule) },
       { path: 'iti-add-item-master', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-add-items-master/iti-add-items-master.module').then(m => m.ITIAddItemsMasterModule) },
       { path: 'iti-add-item-master/:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-add-items-master/iti-add-items-master.module').then(m => m.ITIAddItemsMasterModule) },
       { path: 'iti-item-categories-master', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-categories-master/iti-categories-master.module').then(m => m.ITICategoriesMasterModule) },
@@ -1466,7 +1467,8 @@ const routes: Routes = [
         path: 'teacher-higher-education-application', loadChildren: () => import('./Views/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)
       },
       {
-        path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
+        // path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
+        path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
       },
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
 

@@ -28,6 +28,7 @@ import { ITI_InstructorDataModel, ITI_InstructorEducationalQualification, ITI_In
 import { ITI_InstructorService } from '../../../../Services/ITI/ITI_Instructor/ITI_Instructor.Service';
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
+import { Qualification10thDetailsDataModel, Qualification12thDetailsDataModel, Qualification8thDetailsDataModel } from '../../../../Models/ITIFormDataModel';
 
 @Component({
   selector: 'app-iti-instructor',
@@ -144,6 +145,19 @@ export class ItiInstructorFormComponent {
   showOnlyUidField: boolean = false;
   // @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
 
+  @ViewChild('modal_Acknowledgement') modal_Acknowledgement: any;
+  public box8Checked: boolean = false;
+  public box10Checked: boolean = false;
+  public box12Checked: boolean = false;
+
+  public QualificationForm8th!: FormGroup;
+  public QualificationForm10th!: FormGroup;
+  public QualificationForm12th!: FormGroup;
+
+  public formData8th = new Qualification8thDetailsDataModel()
+  public formData10th = new Qualification10thDetailsDataModel()
+  public formData12th = new Qualification12thDetailsDataModel()
+ 
 
   constructor(
     private formBuilder: FormBuilder,
@@ -166,6 +180,11 @@ export class ItiInstructorFormComponent {
   ) { }
 
   async ngOnInit() {
+    this.EducationForm = this.formBuilder.group({
+      MarksType: [''],
+      Education_Percentage: [null],
+      Education_CGPA: [null]
+    });
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -189,7 +208,7 @@ export class ItiInstructorFormComponent {
       {
         // Personal Details
         Uid: ['', Validators.required],
-        IsDomicile: [false] ,
+        IsDomicile: [false],
         Name: ['', Validators.required],
         FatherOrHusbandName: ['', Validators.required],
         MotherName: ['', Validators.required],
@@ -204,7 +223,7 @@ export class ItiInstructorFormComponent {
         BankAccountNumber: ['', Validators.required],
         IFSCCode: ['', Validators.required],
         BankName: ['', Validators.required],
-        ConsentToAssignAsExaminer : [false],
+        ConsentToAssignAsExaminer: [false],
 
         // Permanent Address
         PlotHouseBuildingNo: ['', Validators.required],
@@ -226,7 +245,7 @@ export class ItiInstructorFormComponent {
         Correspondence_AreaLocalitySector: ['', Validators.required],
         Correspondence_LandMark: ['', Validators.required],
         Correspondence_ddlState: ['', [DropdownValidators]],
-        Correspondence_ddlDistrict: ['', [DropdownValidators] ],
+        Correspondence_ddlDistrict: ['', [DropdownValidators]],
         Correspondence_PropTehsilID: ['', [DropdownValidators]],
         Correspondence_PropUrbanRural: [''],
         Correspondence_City: ['', Validators.required],
@@ -280,13 +299,13 @@ export class ItiInstructorFormComponent {
       Tech_Board: [''],
       Tech_Subjects: [''],
       Tech_Year: ['', [Validators.pattern('^[0-9]{4}$')]],
-      Tech_Percentage: ['', [ Validators.min(0), Validators.max(100)]],
+      Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
       TechDocument: ['']
     });
 
 
     this.EmploymentForm = this.formBuilder.group({
-      Pan_No: ['', [ Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      Pan_No: ['', [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
       Employee_Type: [''],
       Employer_Name: [''],
       Employer_Address: [''],
@@ -307,7 +326,9 @@ export class ItiInstructorFormComponent {
     this.GetInstituteCategoryList();
     this.GetManagmentType();
     this.GetStateMaterData()
-    this.GetLateralCourse()
+    this.GetLateralCourse();
+    this.GetPassingYearDDL();
+    this.BoardDropdownData('Board');
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
@@ -675,7 +696,7 @@ export class ItiInstructorFormComponent {
   }
 
 
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> { 
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
     if (SSOID == "") {
       this.toastr.error("Please Enter SSOID");
       return;
@@ -943,9 +964,9 @@ export class ItiInstructorFormComponent {
       if (result != null || result != undefined) {
         this.model.CategoryA = result.CasteCategoryID;
       }
-      const dateStr = this.janaadharMemberDetails.dob;   
+      const dateStr = this.janaadharMemberDetails.dob;
       const [day = '', month = '', year = ''] = dateStr?.split('/') ?? [];
-      const formattedDate = new Date(`${year}-${month}-${day}`).toISOString().split('T')[0]; 
+      const formattedDate = new Date(`${year}-${month}-${day}`).toISOString().split('T')[0];
       this.model.DOB = formattedDate;
     }
     catch (ex) {
@@ -1015,6 +1036,203 @@ export class ItiInstructorFormComponent {
     this.EmploymentForm.reset();
     this.InstructorForm.controls['Uid'].enable();
   }
+
+  openDatePicker(event: any) {
+    event.target.showPicker();
+  }
+
+
+  validateNumber(event: KeyboardEvent): void {
+    const pattern = /[0-9]/;
+    const inputChar = String.fromCharCode(event.keyCode);
+    if (!pattern.test(inputChar)) {
+      event.preventDefault();
+    }
+  }
+
+  async GetPassingYearDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.AdmissionPassingYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.PassingYearList = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+      console.log('Passing Year List ==>', this.PassingYearList)
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  onClick8thCheckbox() {
+    this.box8Checked = !this.box8Checked;
+    if (!this.box8Checked) {
+      this.QualificationForm8th.reset();
+      this.formData8th = new Qualification8thDetailsDataModel()
+    } else {
+      // alert("यदि आप आठवीं(8th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(10th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
+      this.openModalAcknowledgement(this.modal_Acknowledgement);
+    }
+  }
+
+  onClick10thCheckbox() {
+    this.box10Checked = !this.box10Checked;
+    if (!this.box10Checked) {
+      this.QualificationForm10th.reset();
+      this.formData10th = new Qualification10thDetailsDataModel()
+    } else {
+      // alert("यदि आप आठवीं(8th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(10th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
+      this.openModalAcknowledgement(this.modal_Acknowledgement);
+    }
+  }
+
+  onClick12thCheckbox() {
+    this.box12Checked = !this.box12Checked;
+    if (!this.box12Checked) {
+      this.QualificationForm12th.reset();
+      this.formData12th = new Qualification12thDetailsDataModel()
+    } else {
+      // alert("यदि आप आठवीं(12th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(12th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
+      this.openModalAcknowledgement(this.modal_Acknowledgement);
+      this.box8Checked = true;
+      this.box10Checked = true;
+    }
+  }
+  async openModalAcknowledgement(content: any) {
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+
+  }
+
+  async BoardDropdownData(MasterCode: string) {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'Board':
+          this.BoardList = data['Data'];
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+
+  
+  //onMarksTypeChange(): void {
+  //  debugger
+  //  const selectedType = this.EducationForm.get('MarksType')?.value;
+  //  console.log('Selected Marks Type:', selectedType);
+
+  //  if (selectedType === 'Percentage') {
+  //    // clear CGPA
+  //    this.EducationForm.patchValue({ Education_CGPA: null });
+  //  } else if (selectedType === 'CGPA') {
+  //    // clear Percentage
+  //    this.EducationForm.patchValue({ Education_Percentage: null });
+  //  }
+  //}
+
+
+
+  onMarksTypeChange(): void {
+    debugger
+    const selectedType = this.EducationForm.get('MarksType')?.value;
+
+    if (selectedType === 'Percentage') {
+      this.EducationForm.patchValue({ Education_CGPA: null });
+    } else if (selectedType === 'CGPA') {
+      this.EducationForm.patchValue({ Education_Percentage: null });
+    }
+  }
+
+  sameAsPermanent: boolean = true;
+
+  //onCopyCorrespondenceToggle() {
+  //  debugger
+  //  if (this.sameAsPermanent) {
+  //    // Copy all permanent address fields to correspondence
+  //    this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
+  //    this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
+  //    this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
+  //    this.request.Correspondence_LandMark = this.request.LandMark;
+  //    this.request.Correspondence_ddlState = this.request.ddlState;
+  //    this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+  //    this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
+  //    this.request.Correspondence_City = this.request.City;
+  //    this.request.Correspondence_pincode = this.request.pincode;
+  //  } else {
+  //    // When unchecked, enable and clear correspondence fields
+  //    this.request.Correspondence_PlotHouseBuildingNo = '';
+  //    this.request.Correspondence_StreetRoadLane = '';
+  //    this.request.Correspondence_AreaLocalitySector = '';
+  //    this.request.Correspondence_LandMark = '';
+  //    this.request.Correspondence_ddlState = '';
+  //    this.request.Correspondence_ddlDistrict = '';
+  //    this.request.Correspondence_PropTehsilID = '';
+  //    this.request.Correspondence_City = '';
+  //    this.request.Correspondence_pincode = '';
+  //  }
+  //}
+  
+
+  onCopyCorrespondenceToggle() {
+    debugger;
+
+    if (this.sameAsPermanent) {
+      //  Copy all permanent address fields to correspondence
+      this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
+      this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
+      this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
+      this.request.Correspondence_LandMark = this.request.LandMark;
+      this.request.Correspondence_ddlState = this.request.ddlState;
+      this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+      this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
+      this.request.Correspondence_City = this.request.City;
+      this.request.Correspondence_pincode = this.request.pincode;
+
+      //  Disable all correspondence fields in FormGroup (if reactive)
+      if (this._InstructorForm) {
+        Object.keys(this._InstructorForm.controls).forEach(key => {
+          if (key.startsWith('Correspondence_')) {
+            this.InstructorForm.controls[key].disable({ emitEvent: false });
+          }
+        });
+      }
+    } else {
+      //  Enable all correspondence fields
+      if (this._InstructorForm) {
+        Object.keys(this._InstructorForm.controls).forEach(key => {
+          if (key.startsWith('Correspondence_')) {
+            this.InstructorForm.controls[key].enable({ emitEvent: false });
+          }
+        });
+      }
+
+      //  Clear all correspondence values
+      this.request.Correspondence_PlotHouseBuildingNo = '';
+      this.request.Correspondence_StreetRoadLane = '';
+      this.request.Correspondence_AreaLocalitySector = '';
+      this.request.Correspondence_LandMark = '';
+      this.request.Correspondence_ddlState = '';
+      this.request.Correspondence_ddlDistrict = '';
+      this.request.Correspondence_PropTehsilID = '';
+      this.request.Correspondence_City = '';
+      this.request.Correspondence_pincode = '';
+    }
+  }
+
 
 }
 

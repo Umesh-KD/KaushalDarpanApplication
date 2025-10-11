@@ -92,8 +92,10 @@ export class ITI_InstructorEducationalQualification {
   public Education_Board?: string = '';
   public Education_Year?: string = '';
   public Education_Subjects?: string = '';
-  public Education_Percentage?: number;
+  public Education_Percentage?: string = '';
   public EducationDocument?: string = '';
+  public MarksType?: string = '';
+  public Education_CGPA?: string= '';
 }
 
 export class ITI_InstructorEmploymentDetails {

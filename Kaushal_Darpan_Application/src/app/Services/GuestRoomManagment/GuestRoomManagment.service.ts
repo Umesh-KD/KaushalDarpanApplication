@@ -241,4 +241,12 @@ export class GuestRoomManagmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GuestHouseRoomListForApply(searchRequest: GuestRoomSeatSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GuestHouseRoomListForApply`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

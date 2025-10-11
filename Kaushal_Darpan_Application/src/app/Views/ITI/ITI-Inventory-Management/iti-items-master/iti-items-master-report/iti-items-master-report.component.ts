@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
-import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+import { SweetAlert2 } from '../../../../../Common/SweetAlert2';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { ItemsDataModels, ItemsSearchModel } from '../../../../Models/ItemsDataModels';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { DTEItemsSearchModel } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { LoaderService } from '../../../../../Services/Loader/loader.service';
+import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
+import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
+import { ItemsDataModels, ItemsSearchModel } from '../../../../../Models/ItemsDataModels';
+import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
+import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
-import { AppsettingService } from '../../../../Common/appsetting.service';
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
-import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';
+import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
 
 
 @Component({
-  selector: 'app-iti-items-master',
-  templateUrl: './iti-items-master.component.html',
-  styleUrls: ['./iti-items-master.component.css'],
+  selector: 'app-iti-items-master-report',
+  templateUrl: './iti-items-master-report.component.html',
+  styleUrls: ['./iti-items-master-report.component.css'],
   standalone: false
 })
-export class ITIItemsMasterComponent {
+export class ITIItemsMasterReportComponent {
   public Searchrequest = new DTEItemsSearchModel()
   public searchTradeRequest = new ITITradeSearchModel();
   public isLoading: boolean = false;
@@ -61,7 +61,6 @@ export class ITIItemsMasterComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
-    console.log('Role:'+this.sSOLoginDataModel.RoleID)
     await this.GetEquipmentDDL();
     await this.GetAllData();
     await this.GetTradeDDL();
@@ -78,9 +77,9 @@ export class ITIItemsMasterComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
-      //this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
       this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID == 0 ? this.Searchrequest.CollegeId :  this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID
+ 
       //if (this.sSOLoginDataModel.RoleID != EnumRole.Admin) {        
       //  this.Searchrequest.CollegeId = this.sSOLoginDataModel.InstituteID
       //} else {
@@ -305,9 +304,8 @@ export class ITIItemsMasterComponent {
 
   exportToExcel(): void {
     this.ItemMasterList1 = this.ItemMasterList1.map((item: any,index: number) => {
-      if (this.sSOLoginDataModel.RoleID != EnumRole.DTETraing){
-        const updatedItem = {
-          SNo: index + 1, // ✅ Add serial number (starts from 1)
+      const updatedItem = {
+        SNo: index + 1, // ✅ Add serial number (starts from 1)
           CollegeName: item.CollegeName ?? "BTER",
           ItemCategoryName: item.ItemCategoryName,
           EquipmentsName: item.EquipmentsName,
@@ -324,40 +322,15 @@ export class ITIItemsMasterComponent {
           Working:item.Working,
           NotWorking:item.NotWorking,
           Status: item.Status == 1 ? "Approved" : "Pending", 
-        };
-        return updatedItem;
-      }
-      else{
-        const updatedItem = {
-          SNo: index + 1, // ✅ Add serial number (starts from 1)
-         // CollegeName: item.CollegeName ?? "BTER",
-          ItemCategoryName: item.ItemCategoryName,
-          EquipmentsName: item.EquipmentsName,
-          CampanyName: item.CampanyName,
-          Code: item.Code,
-          VoucherNumber: item.VoucherNumber,
-          IdentificationMark: item.IdentificationMark,
-          IsConsumable:item.IsConsumable == 1 ? "Consumable" : "Permanent",
-          InitialQuantity: item.InitialQuantity,
-          AvailableQuantity: item.AvailableQuantity,
-          PricePerUnit: item.PricePerUnit,
-          TotalPrice: item.TotalPrice,      
-          Auctioned:item.Actioned,
-          Working:item.Working,
-          NotWorking:item.NotWorking,
-          Status: item.Status == 1 ? "Approved" : "Pending",    
-        };
-        return updatedItem;
-      }
-      
+      };
 
-      
+      return updatedItem;
     });
 
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.ItemMasterList1);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Items_Reports.xlsx');
+    XLSX.writeFile(wb, 'Inventory_Item_Report.xlsx');
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
