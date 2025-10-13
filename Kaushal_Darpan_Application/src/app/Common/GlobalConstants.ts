@@ -554,7 +554,11 @@ export enum EnumEmitraService {
 
 
   BTER_CollegeFeeService = 14855,
-  BTER_CollegeFee_Emitra_Service = 14855
+  BTER_CollegeFee_Emitra_Service = 14855,
+  
+  BTER_ExamFees_ENG = 7330,
+  BTER_ExamFees_NonENG = 7350
+
 
 }
 

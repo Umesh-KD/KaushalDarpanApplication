@@ -50,10 +50,17 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   public isShowSelected: boolean = false;
   MapKeyEng: number = 0;
   public DateConfigSetting: any = [];
-  constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
-    private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService,
+  public PDFURL: string = "";
+
+
+  constructor(private loaderService: LoaderService,
+    private commonservice: CommonFunctionService,
+    private studentService: StudentService,
+    private modalService: NgbModal,
+    private toastrService: ToastrService,
     private emitraPaymentService: EmitraPaymentService,
-    private sweetAlert2: SweetAlert2, private formBuilder: FormBuilder,
+    private sweetAlert2: SweetAlert2,
+    private formBuilder: FormBuilder,
     private commonMasterService: CommonFunctionService
   ) { }
 
@@ -78,7 +85,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
       row.IsSelected = true; // Set all checkboxes to be pre-selected
     });
   }
- 
+
 
   get _searchssoform() { return this.searchssoform.controls; }
 
@@ -376,14 +383,13 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   }
 
 
-  async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false)
-  {
+  async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false) {
 
     console.log(item)
+
     //validate function
     const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
-    if (isValid)
-    {
+    if (isValid) {
 
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
@@ -396,6 +402,8 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
       this.emitraRequest.SemesterID = item.SemesterID;
       this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
       this.emitraRequest.DepartmentID = EnumDepartment.BTER;
+      this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
+      this.emitraRequest.FormCommision = item.FormCommision;
 
       //common
       this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
@@ -412,48 +420,60 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
         tranSemesterID: item.SemesterID
       } as StudentFeesTransactionItems);
 
-
       this.loaderService.requestStarted();
       try {
-        await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+        // back to back emitra kiyosk
+        // EmitraApplicationPayment = old
+        await this.emitraPaymentService.EnrollmentExaminationFeePaymentByKiyosk(this.emitraRequest)
           .then(async (data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.State = data['State'];
-            this.Message = data['SuccessMessage'];
+            this.Message = data['Message'];
             this.ErrorMessage = data['ErrorMessage'];
+            this.PDFURL = data['PDFURL'];
+
             if (data.State == EnumStatus.Success) {
-              await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+              this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
+                if (result.isConfirmed) {
+                  try {
+                    //sms code missiog
+                    //await this.SendApplicationMessage();
+                    window.open(this.PDFURL, '_blank');
+                    setTimeout(function () { window.location.reload(); }, 200)
+                  }
+                  catch (ex) {
+                    console.log(ex)
+                  }
+                }
+                else {
+                  let displayMessage = this.Message ?? this.ErrorMessage;
+                  this.toastrService.error(displayMessage);
+                }
+              });
+              //open
             }
             else {
-              this.toastrService.error(this.ErrorMessage)
+              let displayMessage = this.Message ?? this.ErrorMessage;
+              this.toastrService.error(displayMessage)
             }
-          })
+          });
       }
-      catch (ex) { console.log(ex) }
-
-
-      finally {
-        setTimeout(() => {
-          this.loaderService.requestEnded();
-        }, 200);
+      catch (ex) {
+        console.log(ex)
       }
     }
-    else
-    {
-      this.sweetAlert2.Info('Exam Fee Date Is Not Open Yet Please Try Again');
+    else {
+      this.sweetAlert2.Info('Fee Date Is Not Open Yet, Please Try Again');
     }
   }
-  async MultiPayment()
-  {
+  async MultiPayment() {
 
-    
+
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
-    if (this.StudentDetailsModelList.some(f => f.IsSelected == true))
-    {
-      this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item =>
-      {
+    if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
+      this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push
           ({
@@ -466,76 +486,72 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
 
       this.studentDetailsModel = this.StudentDetailsModelList.filter(f => f.IsSelected == true)[0];
       const isValid = await this.ValidateExamDate(this.studentDetailsModel.CourseType, this.studentDetailsModel.FinancialYearID, this.studentDetailsModel.EndTermID);
-      if (isValid)
-      {
+      if (isValid) {
 
-      if (this.totalAmount > 0)
-      {
-        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
-        // confirm
-        this.sweetAlert2.Confirmation(message, async (result: any) => {
-          //confirmed btn click
-          if (result.isConfirmed) {
+        if (this.totalAmount > 0) {
+          var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
+          // confirm
+          this.sweetAlert2.Confirmation(message, async (result: any) => {
+            //confirmed btn click
+            if (result.isConfirmed) {
 
-         
-            //Set Parameters for emitra
-            this.emitraRequest.Amount = Number(this.totalAmount);
-            this.emitraRequest.ApplicationIdEnc = "0";
-            this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID.toString();
-            this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
-            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
-            this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
-            this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
-            this.emitraRequest.ExamStudentStatus = this.studentDetailsModel.ExamStudentStatus;
-            this.emitraRequest.DepartmentID = EnumDepartment.BTER;
-            //common
-            this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-            this.emitraRequest.IsKiosk = true;
-            this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
-            this.emitraRequest.ID = this.studentDetailsModel.ID;
-            this.loaderService.requestStarted();
 
-            try {
-              await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
-                .then(async (data: any) => {
-                  data = JSON.parse(JSON.stringify(data));
-                  this.State = data['State'];
-                  this.Message = data['SuccessMessage'];
-                  this.ErrorMessage = data['ErrorMessage'];
-                  if (data.State == EnumStatus.Success) {
-                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
-                  }
-                  else {
-                    this.toastrService.error(this.ErrorMessage)
-                  }
-                })
+              //Set Parameters for emitra
+              this.emitraRequest.Amount = Number(this.totalAmount);
+              this.emitraRequest.ApplicationIdEnc = "0";
+              this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID.toString();
+              this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
+              this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
+              this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
+              this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
+              this.emitraRequest.ExamStudentStatus = this.studentDetailsModel.ExamStudentStatus;
+              this.emitraRequest.DepartmentID = EnumDepartment.BTER;
+              //common
+              this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
+              this.emitraRequest.IsKiosk = true;
+              this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
+              this.emitraRequest.ID = this.studentDetailsModel.ID;
+              this.loaderService.requestStarted();
+
+              try {
+                await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+                  .then(async (data: any) => {
+                    data = JSON.parse(JSON.stringify(data));
+                    this.State = data['State'];
+                    this.Message = data['SuccessMessage'];
+                    this.ErrorMessage = data['ErrorMessage'];
+                    if (data.State == EnumStatus.Success) {
+                      await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+                    }
+                    else {
+                      this.toastrService.error(this.ErrorMessage)
+                    }
+                  })
+              }
+              catch (ex) { console.log(ex) }
+              finally {
+                setTimeout(() => {
+                  this.loaderService.requestEnded();
+                }, 200);
+              }
+
             }
-            catch (ex) { console.log(ex) }
-            finally {
-              setTimeout(() => {
-                this.loaderService.requestEnded();
-              }, 200);
-            }
 
-          }
-
-        });
+          });
+        }
+        else {
+          this.toastrService.warning('Payment amount is greater then 0')
+        }
       }
       else {
-        this.toastrService.warning('Payment amount is greater then 0')
-      }
-    }
-      else
-      {
         this.sweetAlert2.Info('Exam Fee Date Is Not Open Yet Please Try Again');
-    }
+      }
 
-  }
-  else
-    {
+    }
+    else {
       this.toastrService.warning('Please Select Atleast one record ')
 
-}
+    }
 
   }
   async EmitraPaymentCheckStatus(item: StudentDetailsModel) { console.log(item); }
@@ -571,9 +587,9 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     document.body.removeChild(form);
   }
 
-  async ValidateExamDate(Eng_NonEng: number=0, FinancialYearID: number=0, EndTermID: number=0): Promise<boolean> {
+  async ValidateExamDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
     try {
-      
+
       const data = {
         DepartmentID: 1,
         CourseTypeId: Eng_NonEng,
@@ -592,13 +608,11 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
       if (this.MapKeyEng == 1) {
         return true; // Success case
       }
-      else
-      {
+      else {
         return false; // Success case
       }
-     
-    } catch (error)
-    {
+
+    } catch (error) {
       console.error(error);
       return false; // Failure case
     }
