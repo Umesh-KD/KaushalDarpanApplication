@@ -230,9 +230,9 @@ export class CommonFunctionService {
 
 
 
-  public async StreamMasterwithcount(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0) {
+  public async StreamMasterwithcount(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0, SemesterID: number = 0, InstituteId: number = 0) {
 
-    return await this.http.get(this.APIUrl + '/StreamMasterwithcount/' + DepartmentID + '/' + StreamType + '/' + EndTermId, this.headersOptions)
+    return await this.http.get(this.APIUrl + '/StreamMasterwithcount/' + DepartmentID + '/' + StreamType + '/' + EndTermId + '/' + SemesterID + '/' + InstituteId, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
