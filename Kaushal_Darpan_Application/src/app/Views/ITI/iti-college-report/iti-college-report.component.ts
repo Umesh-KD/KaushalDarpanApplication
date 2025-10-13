@@ -1177,7 +1177,7 @@ export class ItiCollegeReportComponent {
     // Reset other unrelated fields (if required)
 
 
-    this.isAddrequest = false
+    this.isAddrequest1 = false
 
   }
 
