@@ -299,12 +299,12 @@ export class ItiInstructorFormComponent {
       Name: ['', Validators.required],
       FatherOrHusbandName: ['', Validators.required],
       MotherName: ['', Validators.required],
-      Dob: ['', Validators.required],
-      Gender: ['', Validators.required],
-      MaritalStatus: ['', Validators.required],
-      Category: ['', Validators.required],
-      Mobile: ['', [Validators.required, Validators.pattern('^[6-9][0-9]{9}$')]], // 10-digit valid mobile
-      Email: ['', [Validators.required, Validators.email]],
+      Dob: [''],
+      Gender: [''],
+      MaritalStatus: [''],
+      Category: [''],
+      Mobile: [''],
+      Email: [''],
 
       // Bank Details
       BankAccountNumber: [''],
@@ -718,12 +718,11 @@ export class ItiInstructorFormComponent {
   debugger;
     this.isSubmitted = true;
 
-
-    if (this.InstructorForm.invalid) {
-      this.toastr.warning('Please fill all required fields correctly!');
-      this.InstructorForm.markAllAsTouched();
-      return;
-    }
+    //if (this.InstructorForm.invalid) {
+    //  this.toastr.warning('Please fill all required fields correctly!');
+    //  this.InstructorForm.markAllAsTouched();
+    //  return;
+    //}
 
   this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
     if (result.isConfirmed) {
