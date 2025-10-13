@@ -119,6 +119,7 @@ addItemsControls() {
         isOption: [item.isOption],
         ItemDetailsId: [item.ItemDetailsId],
         EquipmentCode: [item.EquipmentsCode],
+        isRepaired:[item.isRepaired],
       }));
     });
   }
@@ -210,6 +211,7 @@ addItemsControls() {
   this.itemDetails.ItemId = this.ItemId;
   //this.itemDetails.ItemDetailsId = this.ItemDetailsList.ItemDetailsId
   this.isSubmitted = true;
+  debugger;
   if (this.EditeItemsRequestFormGroup.invalid) {
     return console.log("Form is invalid, cannot submit");
   }
@@ -219,6 +221,7 @@ addItemsControls() {
   this.itemsFormArray.controls.forEach((group, index) => {
     const equipmentStatus = group.get('equipmentStatus')?.value;
     const isOption = group.get('isOption')?.value;
+    const isRepaired = group.get('isRepaired')?.value;
   });
 
   if (hasError) {
@@ -232,7 +235,8 @@ addItemsControls() {
       isOption: item.isOption,
       ItemId: this.ItemId,
       ItemDetailsId: item.ItemDetailsId,
-      Item: this.ItemDetailsList[index]?.ItemCode
+      Item: this.ItemDetailsList[index]?.ItemCode,
+      isRepaired: item.isRepaired,
     }));
 
   try {
@@ -299,6 +303,7 @@ addItemsControls() {
     EquipmentCode: 0,
     EquipmentWorking: 0,
     isOption: false,
+    isRepaired: false,
   });
   this.itemsFormArray.clear();
 }

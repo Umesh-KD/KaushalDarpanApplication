@@ -19,12 +19,12 @@ import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadF
 import { AppsettingService } from '../../../../Common/appsetting.service';
 
 @Component({
-  selector: 'app-bter-add-items-master',
-  templateUrl: './bter-issue-item.component.html',
-  styleUrls: ['./bter-issue-item.component.css'],
+  selector: 'app-iti-add-items-master',
+  templateUrl: './iti-issue-item.component.html',
+  styleUrls: ['./iti-issue-item.component.css'],
   standalone: false
 })
-export class AddBterIssueItemComponent {
+export class AddITIIssueItemComponent {
   public request = new ItemsDataModels()
   public searchTradeRequest = new ITITradeSearchModel();
   public searchRequest = new DTEItemsSearchModel();
@@ -630,22 +630,7 @@ export class AddBterIssueItemComponent {
   cancelSelection() {
     this.SelectedItems = [];
   }
- validateQuantity(item: any) {
-  // Find the original item from ItemsDDLList
-  const original = this.ItemsDDLList.find((x: any)  => x.ItemId === item.ItemId);
 
-  if (original) {
-    const availableQty = original.Quantity;
-
-    if (item.Quantity > availableQty) {
-      alert(`You can’t enter more than available quantity (${availableQty}).`);
-      item.Quantity = availableQty; // Reset to max allowed
-    } else if (item.Quantity < 1) {
-      alert('Quantity must be at least 1.');
-      item.Quantity = 1;
-    }
-  }
-}
 
   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
     try {
