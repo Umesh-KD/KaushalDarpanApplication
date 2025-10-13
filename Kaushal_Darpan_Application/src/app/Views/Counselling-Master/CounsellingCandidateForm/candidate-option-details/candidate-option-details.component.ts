@@ -95,9 +95,14 @@ export class CandidateOptionDetailsComponent {
   async GetTradeList() {
     try {
       this.tradeRequest.Action = 'GetTradeList'
+            this.tradeRequest.CandidateID = this.CandidateID;
+                console.log('CandidateID check',this.tradeRequest.CandidateID);
+
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
+        console.log('TradeList check',this.TradeList);
+        
       })
     } catch (error) {
       console.error(error)
@@ -108,7 +113,8 @@ export class CandidateOptionDetailsComponent {
     try {
       this.tradeRequest.Action = 'GetCollegeList'
       this.tradeRequest.TradeID = this.formData.TradeId
-      
+      this.tradeRequest.CandidateID = this.CandidateID;
+
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstituteList = data.Data;

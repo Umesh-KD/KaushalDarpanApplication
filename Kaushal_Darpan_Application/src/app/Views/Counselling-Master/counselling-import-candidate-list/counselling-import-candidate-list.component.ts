@@ -107,7 +107,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     public selectedFile: File | null = null;
 
     onFileChange(event: any): void {
-      debugger
         const file: File = event.target.files[0];
         if (file) {
           this.selectedFile = file;
@@ -138,8 +137,8 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     }
 
     SaveDataInDB(): void {
-      debugger
         console.log(this.ImportExcelList);
+        debugger
         this.ImportExcelList.forEach((item: any) => {
           if (!item.ModifyBy || item.ModifyBy === null) {
             item.ModifyBy = this.sSOLoginDataModel.UserID;
@@ -154,9 +153,10 @@ export class CounsellingImportCandidateListComponent implements OnInit {
             this.toastr.success(data.Message);
             this.ImportExcelList = [];
              this.GetCandidateList(1);
+             this.CloseModalPopupimport();
           }
           else{
-            this.toastr.error(data.Data[0].ErrorMessage);
+            this.toastr.error(data.ErrorMessage);
           }
         });
     }
@@ -210,7 +210,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
 
   exportToExcel(): void {
-    debugger
     const unwantedColumns = [
       'Instituteid', 'CandidateID'
       
@@ -263,7 +262,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   // }
 
   async GetCandidateList(i:any) {
-    debugger
     console.log(this.TradeID);
     console.log(i);
     if(i==1){
@@ -446,7 +444,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   }
 
   async redirectToPreview(row: any) {
-    debugger
     this.routers.navigate(['/candidate-details'],{
       queryParams: { AppID: this.encryptionService.encryptData(row.CandidateID) }
     });
@@ -577,17 +574,17 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   //   this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
   // }
   // end table feature
+ 
 
-
-
-
-  DownloadExcelSample(){
+// Inside your component or service
+DownloadExcelSample(){
     this.counsellingImportCandidateListService.GetSampleExcelFile().then((data: any) => {
      data = JSON.parse(JSON.stringify(data));
                console.log("ExportExcelData data", data);
                if (data.State === EnumStatus.Success) {
                  let dataExcel = data.Data;
-     
+                  console.log('dataExcel check',dataExcel);
+                  
                  const unwantedColumns = [
                    "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "TradeId"
                  ];
@@ -636,6 +633,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
                }
     });
   }
+
 
   
 
