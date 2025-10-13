@@ -472,6 +472,9 @@ export class BTEREMStaffListComponent {
       }
       this.StaffMasterFormGroup.controls['BranchID'].updateValueAndValidity();
 
+      
+
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -810,7 +813,7 @@ export class BTEREMStaffListComponent {
   }
 
 
-  async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean) {
+  async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean, RoleID: number) {
     debugger
     this.IsView = type;
     await this.GetPersonalDetailByUserID(StaffUserID, SSOID);
@@ -820,6 +823,14 @@ export class BTEREMStaffListComponent {
     } else {
       this.isApprove = false;
     }
+   
+    if (RoleID == this._EnumRole.GuestHouseAdmin || RoleID == this._EnumRole.GuestHouseIncharge || RoleID == this._EnumRole.GuestRoomWarden) {
+      this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].setValidators([DropdownValidators]);
+      this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].clearValidators();
+      this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].updateValueAndValidity();
+    }
+    
+
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'md', keyboard: true, centered: true });
   }

@@ -9,7 +9,7 @@ import { CommonFunctionService } from '../../../Common/common';
 import { IndustryInstitutePartnershipMasterService } from '../../../Services/IndustryInstitutePartnershipMaster/industryInstitutePartnership-master.service.ts';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CompanyEventSearchModel, IIP_EventDataModel } from '../../../Models/IndustryInstitutePartnershipMasterDataModel';
-import { EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 
 @Component({
@@ -23,6 +23,7 @@ export class IIPEventsComponent {
   public searchRequest = new CompanyEventSearchModel(); 
 
   public deleteReq = new IIP_EventDataModel();
+  _enumRole = EnumRole;
 
   public CompanyEventsList: any = []
 
@@ -58,6 +59,8 @@ export class IIPEventsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.CompanyEventsList = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning("Event not found")
         } else {
           this.toastr.error(data.ErrorMessage)
         }

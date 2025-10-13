@@ -11,13 +11,13 @@
         <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
         <a [routerLink]="['/ITICollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
         <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
-        <div >
+        <div>
         </div>
-      </div>   
+      </div>
     </div>
   </div>
 
-  <div  class="card">
+  <div class="card">
     <div class="card-body p-5">
       <form [formGroup]="ReportForm" id="HrMasterFormGroup" class="form-horizontal">
         <div class="mb-8">
@@ -198,7 +198,7 @@
 
 
       </form>
-      <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4 hide-in-pdf ">
         <b class="text-1xl-5"><i class="ti ti-plus"></i>Member Of Trust/Society</b>
       </div>
       <form [formGroup]="NewReportFormGroup" id="HrMasterFormGroup" class="form-horizontal hide-in-pdf">
@@ -285,7 +285,7 @@
           <div class="mt-4">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Upload Document<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
-              <input  [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              <input [disabled]="this.Type==1" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="MemberIdProofName" type="file" (change)="onFilechange($event,'MemberIdProofName')" />
 
               <label for="MemberIdProofName">
@@ -329,7 +329,7 @@
             </tr>
 
           </thead>
-            
+
           <tbody>
             <tr *ngFor="let row of request.ItiMembersModel; let idx = index">
               <td class="text-center">{{idx+1}}</td>
@@ -873,11 +873,11 @@
             <label for="Ward">Sanction load (KW):<span class="StarMarking">*</span></label>
             <input (keypress)="numberOnly($event)" formControlName="SanctionLoad" class="form-input" type="text" id="Ward" placeholder="Enter Sanction load"
                    [(ngModel)]="request.SanctionLoad" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-             <div *ngIf="isSubmitted&&_AddressFormGroup.SanctionLoad.errors" class="text-danger">
+            <div *ngIf="isSubmitted&&_AddressFormGroup.SanctionLoad.errors" class="text-danger">
               <p *ngIf="_AddressFormGroup.SanctionLoad.errors.required">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
-            </div> 
+            </div>
           </div>
 
           <div>
@@ -1087,71 +1087,71 @@
       <div class="text-center">
         <button *ngIf="request.Status==0 || request.Status==4" type="submit" (click)="SaveData(1)" class="btn bg-info text-white mt-6 me-1">Save</button>
         <button *ngIf="request.Status==1" type="submit" (click)="openOTP()" class="btn bg-info text-white mt-6 me-1">Lock & submit</button>
-      
+
 
         <!--<button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">-->
         <!--<i class="ti ti-refresh"></i> Reset-->
         <!--</button>-->
       </div>
     </div>
- 
+
     <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf " *ngIf="request.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
       <div class="text-center mb-2">
         <button *ngIf="request.Status==2 && sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT" type="submit" (click)="ViewandUpdate(MyModel_Action)" class="btn bg-info text-white mt-6 me-1">Click for Approve</button>
-        </div>
       </div>
-
     </div>
 
   </div>
 
-  <app-otpmodal #otpModal></app-otpmodal>
+</div>
 
-  <ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-    <div class="modal-content">
-      <form [formGroup]="formAction" id="formAction" class="form-horizontal">
-        <div class="card">
-          <div class="card-header flex justify-between  items-center">
-            <b><i class="fa fa-plus"></i>ITI Planning Action</b>
-            <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
-          </div>
-          <div class="card-body">
-            <div class="mb-8">
+<app-otpmodal #otpModal></app-otpmodal>
 
-              <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>ITI Planning Action</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
 
-                <div>
-                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
-                  <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Status">
-                    <option value="0">--Select--</option>
-                    <option value="3">Approved</option>
-                    <option value="4">Rejected</option>
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
-                  </select>
-                  <div *ngIf="isSubmitted&&requestAction.Status=='0'" class="text-danger">
-                    This field is required .!
-                  </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Action<span class="StarMarking">*</span></label>
+                <select class="form-select" id="ddlAction" formControlName="ddlAction" [(ngModel)]="requestAction.Status">
+                  <option value="0">--Select--</option>
+                  <option value="3">Approved</option>
+                  <option value="4">Rejected</option>
+
+                </select>
+                <div *ngIf="isSubmitted&&requestAction.Status=='0'" class="text-danger">
+                  This field is required .!
                 </div>
               </div>
-              <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
-                <div>
-                  <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
-                  <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.Remarks"></textarea>
-                  <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
-                    <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-                  </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.Remarks"></textarea>
+                <div *ngIf="isSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
               </div>
+            </div>
 
-              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-                <div class="text-center">
-                  <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
-                  <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>-->
-                </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData_ApprovedCampus()">Submit</button>
+                <!--<button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>-->
               </div>
             </div>
           </div>
         </div>
-      </form>
-    </div>
-  </ng-template>
+      </div>
+    </form>
+  </div>
+</ng-template>

@@ -7,6 +7,7 @@ import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
 import { ITI_PlanningCollegesModel, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
 import { ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
+import { ItiPlanningSearchModel } from '../../Models/SSOLoginDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -178,6 +179,15 @@ export class ITIsService {
       ).toPromise();
   }
 
+  public async PolotechnincSearchCollege(request: bterCollegeSearchModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/PolotechnicSearchCollege`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async ITIAllInstituteList_NCVT(searchRequest: ITIsSearchModel) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/ITIAllInstituteList_NCVT`, body, this.headersOptions)
@@ -194,6 +204,15 @@ export class ITIsService {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/ItiVacantSeatForDirectAdmission`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAllEstablishmentIti(searchRequest: ItiPlanningSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllEstablishmentIti`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -1471,6 +1471,9 @@ const routes: Routes = [
         // path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
         path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
       },
+      { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
+
+
 
     ]
   },
@@ -1575,7 +1578,6 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-
 
 
 

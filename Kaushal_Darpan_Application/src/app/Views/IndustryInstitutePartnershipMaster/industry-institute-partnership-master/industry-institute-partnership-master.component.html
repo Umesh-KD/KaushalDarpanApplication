@@ -19,7 +19,14 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{key:1}"
+           class="btn bg-success btn-sm text-white"
+           *ngIf="sSOLoginDataModel.RoleID == _enumRole.TPO || 
+           sSOLoginDataModel.RoleID == _enumRole.Principal ||
+           sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+           sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree" >
+           <i class="ti ti-plus"></i>Add New
+        </a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
@@ -89,17 +96,34 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Address}}</td>
             <td>{{item.Status}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
 
                 <a [routerLink]="'/Add-IndustryInstitutePartnership'" [queryParams]="{IndustryInstitutePartnershipID:item.CompanyID, key:1}"
-                    title="Edit"><i class="ti ti-pencil"></i></a>
+                    title="Edit"
+                    *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) && 
+                      item.CompanyStatus == 0">
+                    <i class="ti ti-pencil"></i></a>
 
                 <a href="javascript:void(0);" title="Delete"
-                   (click)="DeleteById(item.CompanyID)">
+                   (click)="DeleteById(item.CompanyID)"
+                   *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                      sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                      sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                      item.CompanyStatus == 0">
                   <i class="ti ti-trash"></i></a>
 
                 <a href="javascript:void(0);" title="Add Event"
-                   [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}">
+                   [routerLink]="'/add-iip-events'" [queryParams]="{id:item.CompanyID}"
+                   *ngIf="(sSOLoginDataModel.RoleID == _enumRole.TPO || 
+                    sSOLoginDataModel.RoleID == _enumRole.Principal ||
+                    sSOLoginDataModel.RoleID == _enumRole.PrincipalNon ||
+                    sSOLoginDataModel.RoleID == _enumRole.PrincipalNonDegree) &&
+                    item.CompanyStatus == 0">
                   <i class="ti ti-calendar-week"></i></a>
 
                 <a href="javascript:void(0);" title="View Company Events"

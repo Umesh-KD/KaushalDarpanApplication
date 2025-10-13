@@ -107,6 +107,8 @@ export class ApproveCompanyEventComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.CompanyEventsList = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning("Event not found")
         } else {
           this.toastr.error(data.ErrorMessage)
         }
@@ -122,7 +124,6 @@ export class ApproveCompanyEventComponent {
   }
 
   async ApproveCompanyEvents() {
-    debugger
     const anySelected = this.IndustryInstitutePartnershipMasterList.some((item: any) => item.Selected);
     if(!anySelected) {
       this.toastr.error('Please select at least one Company to approve.');
@@ -138,8 +139,11 @@ export class ApproveCompanyEventComponent {
       await this.industryInstitutePartnershipMasterService.ApproveCompanyEvents(Selected).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.ErrorMessage);
+          this.toastr.success(data.Message);
+          this.AllInTableSelect = false;
           await this.GetAllData();
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
         } else {
           this.toastr.error(data.ErrorMessage);
         }
