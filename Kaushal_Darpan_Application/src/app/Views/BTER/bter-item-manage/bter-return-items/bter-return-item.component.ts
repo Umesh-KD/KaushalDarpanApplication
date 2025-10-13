@@ -76,7 +76,7 @@ export class AddBterReturnItemComponent {
   }
 
   async GetAllData() {
-    debugger
+    debugger;
     try {
       this.loaderService.requestStarted();
 

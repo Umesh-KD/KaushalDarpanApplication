@@ -33,12 +33,11 @@ import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
   templateUrl: './student-withdrawn-report.component.html',
   styleUrl: './student-withdrawn-report.component.css'
 })
-export class studentwithdrawnreportComponent {
+export class studentwithdrawnreportComponent
+{
 
- 
 
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
-
 
   public isFormSubmitted: boolean = false;
   public isLoading: boolean = false;
@@ -76,7 +75,8 @@ export class studentwithdrawnreportComponent {
   private modalRef!: NgbModalRef;
   public withdrawnFormGroup!: FormGroup;
   public studentWithdrawnRequest = new StudentthdranSeat1Model();
-  
+  public DateConfigSetting_Direct: any = [];
+  SeatWithDrawl: number = 0;
   constructor(
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
@@ -90,7 +90,8 @@ export class studentwithdrawnreportComponent {
     private sMSMailService: SMSMailService,
     private userMasterService: UserMasterService,
     private appsettingConfig: AppsettingService,
-    private itiallotmentStatusService: ITIAllotmentService
+    private itiallotmentStatusService: ITIAllotmentService,
+    private commonservice: CommonFunctionService, 
     
   ) { }
 
@@ -101,6 +102,7 @@ export class studentwithdrawnreportComponent {
     await this.GetAllotedSeatByCollegeList();
     await this.GetTradeListDDL();
 
+    await this.GetSeatWithDrawlConfig()
 
     this.withdrawnFormGroup = this.formBuilder.group({
       Remarks: ['', Validators.required]
@@ -368,16 +370,14 @@ export class studentwithdrawnreportComponent {
     this.modalRef = this.modalService.open(content, { size: 'lg', backdrop: 'static', centered: true });
   }
 
-  async SavestudentWithdrawnRequestData() {
-
+  async SavestudentWithdrawnRequestData()
+  {
     debugger
     this.isSubmitted = true;
-        
     //if (this.withdrawnFormGroup.invalid) {
     //  this.toastr.error('Please fill all required fields.');
     //  return;
     //}
-
     if (!this.studentWithdrawnRequest.DoucmentName || this.studentWithdrawnRequest.DoucmentName === '') {
       this.toastr.error('Please upload the required document.');
       return;
@@ -429,4 +429,24 @@ export class studentwithdrawnreportComponent {
   }
 
 
+  async GetSeatWithDrawlConfig()
+  {
+    var data =
+    {
+      DepartmentID: EnumDepartment.ITI,
+      CourseTypeId: 0,
+      AcademicYearID: this.sSOLoginDataModel.FinancialYearID,
+      Key: "SEAT WITHDRAWAL",
+      SSOID: this.sSOLoginDataModel.SSOID
+    }
+    debugger
+    await this.commonservice.GetDateConfigSetting(data)
+      .then((data: any) =>
+      {
+        data = JSON.parse(JSON.stringify(data));
+        this.DateConfigSetting_Direct = data['Data'][0];
+        this.SeatWithDrawl = this.DateConfigSetting_Direct['SEAT WITHDRAWAL'];
+      }, (error: any) => console.error(error)
+      );
+  }
 }
