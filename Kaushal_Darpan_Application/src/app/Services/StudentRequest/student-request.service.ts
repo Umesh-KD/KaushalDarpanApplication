@@ -264,4 +264,12 @@ export class StudentRequestService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async WithdrawHostelRequest(Request: DeallocateRoomDataModel) {
+    const body = JSON.stringify(Request);
+    return await this.http.post(this.APIUrl + '/WithdrawHostelRequest', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

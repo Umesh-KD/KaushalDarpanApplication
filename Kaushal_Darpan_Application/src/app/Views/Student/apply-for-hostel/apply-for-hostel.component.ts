@@ -14,6 +14,8 @@ import { DownloadMarksheetSearchModel, HostelWardenSomeDetailsModel } from '../.
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { DeallocateRoomDataModel } from '../../../Models/Hostel-Management/StudentRequestDataModal';
 
 @Component({
   selector: 'app-apply-for-hostel',
@@ -30,6 +32,7 @@ export class ApplyForHostelComponent {
   searchrequest = new DownloadMarksheetSearchModel();
   HostelWardenSomeDetails = new HostelWardenSomeDetailsModel();
   HostelDetails = new HostelStudentSearchModel();
+  withdrawRequest = new DeallocateRoomDataModel();
   public Table_SearchText: string = "";
   public tbl_txtSearch: string = '';
   public State: number = -1;
@@ -81,6 +84,7 @@ export class ApplyForHostelComponent {
     public appsettingConfig: AppsettingService,
     private http: HttpClient,
     private studentRequestService: StudentRequestService,
+    private Swal2: SweetAlert2,
   ) { }
 
   async ngOnInit() {
@@ -130,9 +134,7 @@ export class ApplyForHostelComponent {
     this.HostelID = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     // this.ReqId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
 
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-    
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));    
     
     await this.GetStudentDetailsForApply();
     await this.GetMarksDetails();
@@ -1071,6 +1073,33 @@ export class ApplyForHostelComponent {
 //   // this.StreamID = this.SelectedStreamID.length > 0 ? this.SelectedStreamID.map((item: any) => item.StreamID).join(',') : 0;
 //   console.log("Selected IDs =>", this.SelectedRoomTypeID);
 // }
+
+  async WithdrawHostelRequest() {
+    this.Swal2.Confirmation("Are you sure you want to Withdraw Hostel Request ?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            this.withdrawRequest.ReqId = this.StudentDetailsList[0]?.ReqId;
+            this.withdrawRequest.UserID = this.sSOLoginDataModel.UserID;
+            this.withdrawRequest.RoleID = this.sSOLoginDataModel.RoleID;
+
+            await this.studentRequestService.WithdrawHostelRequest(this.withdrawRequest).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              console.log(data);
+              if (data.State == EnumStatus.Success) {
+                this.toastr.success(data.Message);
+                this.router.navigate(['/CollegeHostelDetails'])
+              }
+              else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+  }
 
 }
 

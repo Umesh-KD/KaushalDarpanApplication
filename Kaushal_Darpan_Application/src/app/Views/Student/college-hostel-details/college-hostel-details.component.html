@@ -16,7 +16,7 @@
          {{ hostel?.HostelName }} - {{ hostel?.HostelTypes }}
       </b>
     </div>
-    <div class="card-body p-5" *ngIf="hostel?.Facilities?.length > 0 && hostel?.Fees?.length > 0; else noHostelDetails">
+    <div class="card-body p-5" *ngIf=" hostel?.Fees?.length > 0; else noHostelDetails">
 
       <div class="grid xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 gap-6">
 
