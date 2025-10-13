@@ -6,7 +6,7 @@ import { ITIsDataModels, ITIsSearchModel } from '../../Models/ITIsDataModels';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
 import { ITI_PlanningCollegesModel, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
-import { ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
+import { bterCollegeSearchModel, ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ItiPlanningSearchModel } from '../../Models/SSOLoginDataModel';
 
 @Injectable({
