@@ -25,12 +25,17 @@ import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 })
 export class ItiCollegeReportComponent {
   public isAddrequest: boolean=false
+  public isAddrequest1: boolean=false
   public ReportForm!: FormGroup
+  public BasicReportForm!: FormGroup
   public NewReportFormGroup!: FormGroup
   public AddReportFormGroup1!: FormGroup
   public _enumRole = EnumRole
   public CompanyMasterDDLList: any[] = [];
   public ItiDDLlist: any[] = [];
+  public ParliamentMaster: any[] = [];
+  public AssemblyMaster: any[] = [];
+  public PanchayatSamitiList: any[] = [];
   public BoardList: any = []
   public request = new ItiReportDataModel()
   /*  public addrequest = new SupplementaryDataModel()*/
@@ -89,24 +94,26 @@ export class ItiCollegeReportComponent {
         SanctionOrderDate: ['', Validators.required],
         TradeOrderNo: ['', Validators.required],
         TradeOrderDate: ['', Validators.required],
-        ApproachRoad: ['', Validators.required],
-        InternalRoad: ['', Validators.required],
-        Harvesting: ['', Validators.required],
-        ElectPhase: ['', Validators.required],
-        IsSolarPanel: ['', Validators.required],
-        IsBoundaryWall: ['', Validators.required],
+        //ApproachRoad: ['', Validators.required],
+        //InternalRoad: ['', Validators.required],
+        //Harvesting: ['', Validators.required],
+        //ElectPhase: ['', Validators.required],
+        //IsSolarPanel: ['', Validators.required],
+        //IsBoundaryWall: ['', Validators.required],
         WaterSupply: ['', Validators.required],
-        ElectConnection: ['', Validators.required],
-        PanelCapacity: ['', Validators.required],
-        HostelUtilized: ['', Validators.required],
-        NoOfTree: ['', Validators.required],
-        ElectPhaserequired: ['', Validators.required],
-        ContractLoad: [''],
-        BuildShortage: [''],
-        IsHostel: ['', Validators.required],
+        //ElectConnection: ['', Validators.required],
+        //PanelCapacity: ['', Validators.required],
+        //HostelUtilized: ['', Validators.required],
+        //NoOfTree: ['', Validators.required],
+        //ElectPhaserequired: ['', Validators.required],
+        LandTypeID: ['', Validators.required],
+        //ContractLoad: [''],
+        //BuildShortage: [''],
+        //IsHostel: ['', Validators.required],
         txtYear: ['', [DropdownValidators]],
+        PanchayatId: ['', [DropdownValidators]],
         CollegeID: ['',],
-        Remarks: [''],
+      /*  Remarks: [''],*/
      
         //FrontPhoto: [''],
         //SidePhoto: [''],
@@ -115,6 +122,37 @@ export class ItiCollegeReportComponent {
         //TradeCopy: [''],
 
       });
+
+    this.BasicReportForm = this.formBuilder.group(
+      {
+        
+        ApproachRoad: ['', Validators.required],
+        InternalRoad: ['', Validators.required],
+        Harvesting: ['', Validators.required],
+        ElectPhase: ['', Validators.required],
+        IsSolarPanel: ['', Validators.required],
+        IsBoundaryWall: ['', Validators.required],
+      
+        ElectConnection: ['', Validators.required],
+        PanelCapacity: ['', Validators.required],
+        HostelUtilized: ['', Validators.required],
+        NoOfTree: ['', Validators.required],
+        ElectPhaserequired: ['', Validators.required],
+   
+        ContractLoad: [''],
+        BuildShortage: [''],
+        IsHostel: ['', Validators.required],
+
+        Remarks: [''],
+
+        //FrontPhoto: [''],
+        //SidePhoto: [''],
+        //InteriorPhoto: [''],
+        //SanctionOrderCopy: [''],
+        //TradeCopy: [''],
+
+      });
+
 
     this.NewReportFormGroup = this.formBuilder.group({
       ConstructionAgency: ['', Validators.required],
@@ -182,7 +220,8 @@ export class ItiCollegeReportComponent {
         'PanchayatDis',
         'SanctionOrderNo',
         'SanctionOrderDate',
-
+        'LandTypeID',
+        'PanchayatId',
         'CollegeID',
         'txtYear'
         
@@ -268,12 +307,14 @@ export class ItiCollegeReportComponent {
     }
     /*    this.request.IsNewCollege=1*/
     await this.GetGovtITI()
+    await this.GetParliamentITI()
     
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
   get _NewReportForm() { return this.NewReportFormGroup.controls; }
   get AddReportFormGroup() { return this.AddReportFormGroup1.controls; }
+  get _BasicReportForm() { return this.BasicReportForm.controls; }
 
 
 
@@ -303,8 +344,67 @@ export class ItiCollegeReportComponent {
 
 
 
+  async GetParliamentITI() {
+    try {
 
 
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetParliamentMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.ParliamentMaster = data['Data'];
+          console.log(this.ParliamentMaster)
+
+        
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+
+  async GetAssemblyITI(ID:number=0) {
+    try {
+      
+
+      this.loaderService.requestStarted();
+       this.commonMasterService.AssemblyMaster_DistrictIDWise(ID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.AssemblyMaster = data['Data'];
+        
+             this.commonMasterService.PanchayatSamiti(ID)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+
+              this.PanchayatSamitiList = data['Data'];
+
+            }
+            )
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
 
@@ -467,8 +567,10 @@ export class ItiCollegeReportComponent {
         return
       }
 
-   
 
+      if (this.request.IsNewCollege == 0) {
+        this.resetConstructionDetails()
+      }
 
       console.log(this.request)
 
@@ -521,15 +623,15 @@ export class ItiCollegeReportComponent {
   nonItiValidator() {
 
 
-    if (this.request.IsSolarPanel == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+    //if (this.request.IsSolarPanel == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
 
-      this.ReportForm.controls['PanelCapacity'].clearValidators();
-    }
-    else {
-      this.ReportForm.controls['PanelCapacity'].setValidators(Validators.required);
-    }
+    //  this.ReportForm.controls['PanelCapacity'].clearValidators();
+    //}
+    //else {
+    //  this.ReportForm.controls['PanelCapacity'].setValidators(Validators.required);
+    //}
 
-    this.ReportForm.controls['PanelCapacity'].updateValueAndValidity();
+    //this.ReportForm.controls['PanelCapacity'].updateValueAndValidity();
 
     if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
 
@@ -540,22 +642,22 @@ export class ItiCollegeReportComponent {
       const controlsToClear = [
         'TradeOrderNo',
         'TradeOrderDate',
-        'ApproachRoad',
-        'InternalRoad',
-        'Harvesting',
-        'ElectPhase',
-        'IsSolarPanel',
-        'IsBoundaryWall',
+ /*       'ApproachRoad',*/
+        //'InternalRoad',
+        //'Harvesting',
+        //'ElectPhase',
+        //'IsSolarPanel',
+        //'IsBoundaryWall',
         'WaterSupply',
-        'ElectConnection',
+        //'ElectConnection',
      
-        'HostelUtilized',
-        'NoOfTree',
-        'ElectPhaserequired',
-        'ContractLoad',
-        'BuildShortage',
-        'IsHostel',
-        'IsOperatingOwn'
+        //'HostelUtilized',
+        //'NoOfTree',
+        //'ElectPhaserequired',
+        //'ContractLoad',
+        //'BuildShortage',
+        //'IsHostel',
+    
      
       ];
 
@@ -572,20 +674,20 @@ export class ItiCollegeReportComponent {
       const requiredControls = [
         'TradeOrderNo',
         'TradeOrderDate',
-        'ApproachRoad',
-        'InternalRoad',
-        'Harvesting',
-        'ElectPhase',
-        'IsSolarPanel',
-        'IsBoundaryWall',
+        //'ApproachRoad',
+        //'InternalRoad',
+        //'Harvesting',
+        //'ElectPhase',
+        //'IsSolarPanel',
+        //'IsBoundaryWall',
         'WaterSupply',
-        'ElectConnection',
+        //'ElectConnection',
        
-        'HostelUtilized',
-        'NoOfTree',
-        'ElectPhaserequired',
-        'IsHostel',
-        'IsOperatingOwn'
+        //'HostelUtilized',
+        //'NoOfTree',
+        //'ElectPhaserequired',
+        //'IsHostel',
+     
  
       ];
 
@@ -689,6 +791,8 @@ export class ItiCollegeReportComponent {
         }
       });
 
+      this.GetAssemblyITI()
+
       console.log(parsedData);
     } catch (ex) {
       console.log(ex);
@@ -773,7 +877,10 @@ export class ItiCollegeReportComponent {
     //    return
     //  }
     //}
-
+    if (Number(this.request.PercentCivilWork) > 100) {
+      this.toastr.warning("Percentage of Work cannot be more than 100 %")
+      return
+    }
 
     this.request.FinancialSanctionList.push({
       FinancialSanction: this.request.FinancialSanction,
@@ -812,6 +919,103 @@ export class ItiCollegeReportComponent {
 
 
   openOTP() {
+
+
+    this.nonItiValidator()
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+      if (this.request.SanctionOrderCopy == '') {
+        this.toastr.warning("Please Upload Sanction Copy")
+        return
+      }
+      if (this.request.IsNewCollege == 1 && this.request.AdministrativeCopy == '') {
+        this.toastr.warning("Please Upload Administrative Copy")
+      }
+
+    }
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin) {
+      if (this.request.InteriorPhoto == '') {
+        this.toastr.warning("Please Upload Photo of Interior View of Main Campus")
+        return
+      }
+
+      if (this.request.SidePhoto == '') {
+        this.toastr.warning("Please Upload Photo of Side View of Main Campus")
+        return
+      }
+      if (this.request.FrontPhoto == '') {
+        this.toastr.warning("Please Upload Photo of Front View of Main Campus")
+        return
+      }
+
+      if (this.request.TradeCopy == '') {
+        this.toastr.warning("Please Upload A.s Of Trade Santion Order Copy")
+        return
+      }
+
+
+      if (this.request.IsNewCollege == 1 && this.request.AllotmentLetter == '' && this.request.IsOperatingOwn=='Yes') {
+        this.toastr.warning("Please Upload Allotment Letter Copy")
+      }
+
+      if (this.request.IsNewCollege == 1 && this.request.BuildingPlanCopy == '' && this.request.IsOperatingOwn == 'Yes') {
+        this.toastr.warning("Please Upload Building Plan Copy")
+      }
+
+      if (this.request.IsNewCollege == 1 && this.request.DomeViewCopy == '' ) {
+        this.toastr.warning("Please Upload  Front Dome View Copy")
+      }
+
+    }
+
+    if (this.request.IsNewCollege == 0 && this.request.CollegeID == 0) {
+      this.toastr.warning("Please Select Iti")
+      return
+    }
+
+
+    if (this.request.IsNewCollege == 1 && this.request.CollegeName == '') {
+      this.toastr.warning("Please Enter Iti Name")
+      return
+    }
+
+    if (this.request.IsSolarPanel == 'No') {
+      this.request.PanelCapacity = ''
+    }
+    if (this.request.IsBuildingTaken == 'No') {
+
+      this.request.TakenOverDate = ''
+    }
+
+ 
+   
+      this.isSubmitted = true;
+      if (this.ReportForm.invalid) {
+        return
+      }
+
+      if (this.request.IsNewCollege == 1) {
+        if (this.NewReportFormGroup.invalid) {
+
+          return
+        }
+
+      }
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.BasicDetailsList.length < 1 ) {
+      this.toastr.warning("Please Add ITI Basic Details")
+      return
+    }
+
+      if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.FinancialSanctionList.length < 1 && this.request.IsNewCollege == 1) {
+        this.toastr.warning("Please Add Financials sanction Details")
+        return
+      }
+
+
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     this.childComponent.OpenOTPPopup();
 
@@ -820,4 +1024,171 @@ export class ItiCollegeReportComponent {
       this.SaveData();
     })
   }
+
+  onYearInput(event: any) {
+    if (event.target.value.length > 4) {
+      event.target.value = event.target.value.slice(0, 4);
+      this.request.Esttablishment_Year = event.target.value;
+    }
+  }
+
+
+  resetConstructionDetails() {
+    this.request.ConstructionAgency = '';
+    this.request.PDName = '';
+    this.request.ContractorName = '';
+    this.request.PDMobile = '';
+    this.request.ContractorMobile = '';
+    this.request.IsDispute = '';
+    this.request.FinancialSanction = '';
+    this.request.FinancialCopy = '';
+    this.request.PercentCivilWork = '';
+    this.request.PercentCivilDate = '';
+    this.request.IsPurposeHall = '';
+    this.request.IsMainITI = '';
+    this.request.IsBuildingTaken = '';
+    this.request.TakenOverDate = '';
+    this.request.IsOperatingOwn = '';
+    this.request.ShilanyasDate = '';
+    this.request.LokarpanDate = '';
+    this.request.LokarpanName = '';
+    this.request.LokarpanPost = '';
+    this.request.AllotmentLetter = '';
+    this.request.BuildingPlanCopy = '';
+    this.request.DomeViewCopy = '';
+    this.request.ShilanyasName = '';
+    this.request.CollegeName = ''
+    this.request.FinancialSanctionList = []
+  }
+
+  AddChoice1() {
+
+    this.isAddrequest1 = true;
+
+    debugger
+    //if (this.request.IsBuildingTaken != 'Yes') {
+    //  this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
+    //} else {
+    //  this.AddReportFormGroup1.controls['TakenOverDate'].setValidators(Validators.required);
+    //}
+
+    //this.AddReportFormGroup1.controls['TakenOverDate'].updateValueAndValidity();
+
+    if (this.request.IsSolarPanel == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+
+      this.BasicReportForm.controls['PanelCapacity'].clearValidators();
+    }
+    else {
+      this.BasicReportForm.controls['PanelCapacity'].setValidators(Validators.required);
+    }
+
+    this.BasicReportForm.controls['PanelCapacity'].updateValueAndValidity();
+
+
+    if (this.request.ElectPhase == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+
+      this.BasicReportForm.controls['ElectPhaserequired'].clearValidators();
+    }
+    else {
+      this.BasicReportForm.controls['ElectPhaserequired'].setValidators(Validators.required);
+    }
+
+    this.BasicReportForm.controls['ElectPhaserequired'].updateValueAndValidity();
+
+
+    if (this.request.IsHostel == 'No' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
+
+      this.BasicReportForm.controls['HostelUtilized'].clearValidators();
+    }
+    else {
+      this.BasicReportForm.controls['HostelUtilized'].setValidators(Validators.required);
+    }
+
+    this.BasicReportForm.controls['HostelUtilized'].updateValueAndValidity();
+
+
+    if (this.BasicReportForm.invalid) {
+      /*this.OptionsFormGroup.markAllAsTouched();*/
+      return;
+    }
+      
+
+    // Get the selected values
+
+
+    if (this.request.IsHostel == 'No') {
+      this.request.HostelUtilized='No'
+    }
+
+
+    if (!this.request.BasicDetailsList) {
+      this.request.BasicDetailsList = [];
+    }
+
+  
+    //if (this.request.PostID != 7 && this.request.PostID != 8) {
+    //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
+    //  if (Exist) {
+    //    this.toastr.warning("Already Have request with selected Post ID")
+    //    return
+    //  }
+    //}
+
+
+    this.request.BasicDetailsList.push({
+
+      ApproachRoad:      this.request.ApproachRoad,
+      InternalRoad:    this.request.InternalRoad,
+      Harvesting: this.request.Harvesting,
+      ElectPhase: this.request.ElectPhase,
+      IsSolarPanel: this.request.IsSolarPanel,
+      IsBoundaryWall: this.request.IsBoundaryWall    ,
+                
+      ElectConnection: this.request.ElectConnection,
+      PanelCapacity: this.request.PanelCapacity,
+      HostelUtilized: this.request.HostelUtilized,
+      NoOfTree: this.request.NoOfTree,
+      ElectPhaserequired: this.request.ElectPhaserequired,
+                        
+      ContractLoad: this.request.ContractLoad,
+      BuildShortage: this.request.BuildShortage,
+      IsHostel: this.request.IsHostel,
+                          
+      Remarks: this.request.Remarks
+
+    });
+
+
+    this.request.ApproachRoad = '';
+    this.request.InternalRoad = '';
+    this.request.Harvesting = '';
+    this.request.ElectPhase = '';
+    this.request.IsSolarPanel = '';
+    this.request.IsBoundaryWall = '';
+    this.request.ElectConnection = '';
+    this.request.PanelCapacity = '';
+    this.request.HostelUtilized = '';
+    this.request.NoOfTree = '';
+    this.request.ElectPhaserequired = '';
+    this.request.ContractLoad = '';
+    this.request.BuildShortage = '';
+    this.request.IsHostel = '';
+    this.request.Remarks = '';
+    
+
+
+    // Reset other unrelated fields (if required)
+
+
+    this.isAddrequest1 = false
+
+  }
+
+
+  deleteRow1(index: number): void {
+    this.request.BasicDetailsList.splice(index, 1);
+  }
 }
+
+
+

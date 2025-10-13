@@ -30,8 +30,8 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">Division</label>
-        <select (change)="ddlDivision_Change()" [(ngModel)]="request.DivisionId"  class="form-select" id="DivisionId">
-        
+        <select (change)="ddlDivision_Change()" [(ngModel)]="request.DivisionId" class="form-select" id="DivisionId">
+
           <option value="0">--Select--</option>
           <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
         </select>
@@ -39,12 +39,12 @@
 
       <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
         <label class="form-label">District</label>
-        <select  class="form-select" id="DistrictId" (change)="ddlDistrict_Change()">
+        <select class="form-select" id="DistrictId" (change)="ddlDistrict_Change()">
 
-        <option value="0">--Select--</option>
-        <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
-          {{item.Name}}
-        </option>
+          <option value="0">--Select--</option>
+          <option *ngFor="let item of DistrictMasterList" [value]="item.ID">
+            {{item.Name}}
+          </option>
         </select>
 
       </div>
@@ -226,8 +226,9 @@
     </div>-->
     </div>
 
-    <!--{{paginatedInTableData|json}}-->
-    <div *ngIf="isVisibleList" class="overflow-auto mt-3">
+    <!--{{paginatedInTableData|json}}
+    {{this.isVisibleList|json}}-->
+    <div *ngIf="this.isVisibleList" class="overflow-auto mt-3">
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
@@ -240,7 +241,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
+          <tr *ngFor="let row of paginatedInTableData ;let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.CollegeName}}</td>
             <td>{{row.CollegeCode}}</td>
@@ -260,23 +261,23 @@
     </div>
 
     <div *ngIf="isVisibleList" class="p-3 pe-0 paginationBox d-flex align-items-center justify-content-end">
-     
-        <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-        <div class="pagination pagination-sm bg-white">
-          <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-          <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-          <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-                 [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-          <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-          <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-          <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
-        </div>
-      
+
+      <span class="block pe-2">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="pagination pagination-sm bg-white">
+        <button class="page-link text-dark" (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button class="page-link text-dark" (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input class="page-link text-dark" type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap text-dark page-link">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button class="page-link text-dark" (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button class="page-link text-dark" (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+
     </div>
 
 
 
-  
+
 
 
     <!--DetailsSection-->
@@ -541,7 +542,7 @@
 
 
 
-        
+
 
 
 

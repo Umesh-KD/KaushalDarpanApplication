@@ -156,12 +156,12 @@ export class BranchSectionCreateComponent {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.StreamMasterDDL = data.Data;
-      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)      
-      console.log('data ==>', this.StreamMasterDDL)
-    })
+    //await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+    //  data = JSON.parse(JSON.stringify(data));
+    //  this.StreamMasterDDL = data.Data;
+    //  this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng)      
+    //  console.log('data ==>', this.StreamMasterDDL)
+    //})
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
@@ -240,12 +240,13 @@ export class BranchSectionCreateComponent {
 
 
   async SemeIDAcStream() {
+    debugger
     const formSemesterID = Number(this.IIPMasterFormGroup.value.SemesterID);
 
-    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+    await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, formSemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StreamMasterDDL = data.Data;
-      this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+      //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
       // split
       this.StudentList = this.StreamMasterDDL
         .map((x: any) => x.students)      // Get array of comma-separated strings
@@ -866,12 +867,27 @@ export class BranchSectionCreateComponent {
         // await this.getSubjectMasterDDL(this.AddStaffSubjectSectionModel.StreamID, this.AddStaffSubjectSectionModel.SemesterID);
         //AddStaffSubjectSectionModelList
 
-        await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+
+        await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.AddStaffSubjectSectionModel.SemesterID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StreamMasterDDL = data.Data;
-          this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == this.AddStaffSubjectSectionModel.SemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+          //this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == formSemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+          // split
+          this.StudentList = this.StreamMasterDDL
+            .map((x: any) => x.students)      // Get array of comma-separated strings
+            .filter(Boolean)                  // Remove null/undefined
+            .join(',')                        // Join into one string
+            .split(',')                      // Split by comma into array
+            .map((s: any) => s.trim());             // Trim spaces if needed
           console.log('data ==>', this.StreamMasterDDL)
         })
+
+        //await this.commonMasterService.StreamMasterwithcount(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        //  data = JSON.parse(JSON.stringify(data));
+        //  this.StreamMasterDDL = data.Data;
+        //  this.StreamMasterDDL = this.StreamMasterDDL.filter((item: any) => item.StreamTypeID = this.sSOLoginDataModel.Eng_NonEng && item.SemesterID == this.AddStaffSubjectSectionModel.SemesterID && item.InstituteId == this.sSOLoginDataModel.InstituteID)
+        //  console.log('data ==>', this.StreamMasterDDL)
+        //})
 
 
         this.SSOIDExists = true;

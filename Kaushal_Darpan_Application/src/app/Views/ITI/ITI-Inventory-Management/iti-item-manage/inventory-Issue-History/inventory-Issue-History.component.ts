@@ -81,7 +81,7 @@ export class inventoryIssueHistoryComponent {
       this.Searchrequest.staffID = this.Searchrequest.staffID;
      // this.Searchrequest.staffID = 1;
 
-      await this.itiInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
+      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;

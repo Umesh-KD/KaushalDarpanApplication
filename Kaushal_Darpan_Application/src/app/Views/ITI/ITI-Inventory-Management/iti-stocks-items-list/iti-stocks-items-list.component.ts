@@ -62,7 +62,7 @@ export class ITIStocksItemsListComponent {
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
       this.Searchrequest.OfficeID = this.sSOLoginDataModel.OfficeID;
 
-      await this.itiInventoryService.GetAllStoks(this.Searchrequest)
+      await this.itiInventoryService.GetAllStoksNew(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];

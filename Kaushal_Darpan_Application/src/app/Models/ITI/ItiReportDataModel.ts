@@ -1,8 +1,10 @@
 export class ItiReportDataModel {
   public Eid:number=0
   public RoleID:number=0
+  public PanchayatId:number=0
   public CollegeID: number = 0
   public CollegeName: string = ''
+  public LandTypeID: string = ''
   public Loksabha:string=''
   public Vidhansabha:string=''
   public LandAvailable:string=''
@@ -62,7 +64,8 @@ export class ItiReportDataModel {
   public IsNewCollege: number = 0
   public ModifyBy:number=0
   public Esttablishment_Year: number = 0
- public  FinancialSanctionList:any[]=[]
+  public FinancialSanctionList: any[] = []
+ public BasicDetailsList:any[]=[]
 }
 
 

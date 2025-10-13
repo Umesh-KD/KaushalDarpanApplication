@@ -6,7 +6,7 @@ import { ITIsDataModels, ITIsSearchModel } from '../../Models/ITIsDataModels';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
 import { ITI_PlanningCollegesModel, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
-import { ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
+import { bterCollegeSearchModel, ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ItiPlanningSearchModel } from '../../Models/SSOLoginDataModel';
 
 @Injectable({
@@ -174,6 +174,15 @@ export class ITIsService {
     var body = JSON.stringify(request);
 
     return await this.http.post(`${this.APIUrl}/ItiSearchCollege`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async PolotechnincSearchCollege(request: bterCollegeSearchModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/PolotechnicSearchCollege`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
