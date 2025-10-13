@@ -877,7 +877,10 @@ export class ItiCollegeReportComponent {
     //    return
     //  }
     //}
-
+    if (Number(this.request.PercentCivilWork) > 100) {
+      this.toastr.warning("Percentage of Work cannot be more than 100 %")
+      return
+    }
 
     this.request.FinancialSanctionList.push({
       FinancialSanction: this.request.FinancialSanction,

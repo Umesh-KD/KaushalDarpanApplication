@@ -1155,7 +1155,7 @@
 
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)" [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
+          <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)"  [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
           <div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
             <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
