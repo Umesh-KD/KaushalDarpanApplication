@@ -173,4 +173,12 @@ export class EmitraPaymentService
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async EnrollmentExaminationFeePaymentByKiyosk(request: EmitraRequestDetails) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/EnrollmentExaminationFeePaymentByKiyosk", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

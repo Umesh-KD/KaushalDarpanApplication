@@ -7,6 +7,7 @@ export class RoomDetailsDataModel {
   public AttachedBathFacilities: number = 0;
   public FanFacilities: number = 0;
   public CoolingFacilities: number = 0;
+  public AlmirahFacility: number = 0;
 
   //public StudyTableFacilities: boolean = true;
   //public AttachedBathFacilities: boolean = true;

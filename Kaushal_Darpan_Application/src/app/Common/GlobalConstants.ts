@@ -44,6 +44,12 @@ export class GlobalConstants {
 
   //session
   public static SessionTime: number = 10;
+
+   static readonly designationList: any = [
+     { id: 1, name: 'Degree' },
+  { id: 2, name: 'ITI' },
+  ];
+
 }
 export const SpecialEndTerm = [37,
 ];
@@ -554,7 +560,11 @@ export enum EnumEmitraService {
 
 
   BTER_CollegeFeeService = 14855,
-  BTER_CollegeFee_Emitra_Service = 14855
+  BTER_CollegeFee_Emitra_Service = 14855,
+  
+  BTER_ExamFees_ENG = 7330,
+  BTER_ExamFees_NonENG = 7350
+
 
 }
 

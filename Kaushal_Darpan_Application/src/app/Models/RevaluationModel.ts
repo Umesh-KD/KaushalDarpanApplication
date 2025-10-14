@@ -28,3 +28,7 @@ export class StudentDetailsByRollNoModel {
 }
 
 
+export class ITIRevaluationModel {
+  public RollNo?: number
+  public DOB: string = ''
+}

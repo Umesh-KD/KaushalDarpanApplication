@@ -1452,6 +1452,7 @@ const routes: Routes = [
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
 
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
+      { path: 'edit-counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/edit-counselling-candidate-form/edit-counselling-candidate-form.module').then(m => m.EditCounsellingCandidateFormModule), title: 'Edit Candidate Form' },
       { path: 'candidate-details', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/candidate-form-preview/candidate-form-preview.module').then(m => m.CandidateFormPreviewModule), title: 'Candidate Details' },
       { path: 'CounsellingAllotmentList', loadChildren: () => import('./Views/Counselling-Master/counselling-allotment-list/counselling-allotment-list.module').then(m => m.CounsellingAllotmentListModule), title: 'Counselling Allotment Report' },
       { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
@@ -1459,20 +1460,26 @@ const routes: Routes = [
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
       {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
-      {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list-module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
+      {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
+      { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
+      {path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
       
       
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
       {
-        path: 'teacher-higher-education-application', loadChildren: () => import('./Views/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)
+        path: 'teacher-higher-education-application', loadChildren: () => import('./Views/BTER/THTE/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)
       },
       {
-        // path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
-        path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
+        path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
       },
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
+      { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
 
+      { path: 'pushncvtdatatosdh', loadChildren: () => import('./Views/ITI/NCVTAPI/upload-ncvt-data/upload-ncvt-data.module').then(m => m.UploadNcvtDataModule) },
+      { path: 'NcvtAdmissionStudentList', loadChildren: () => import('./Views/ITI/NCVTAPI/ncvt-admission-student-list/ncvt-admission-student-list.module').then(m => m.NcvtAdmissionStudentListModule) },
+
+      //{ path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
 
 
     ]
@@ -1537,7 +1544,7 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-
+      
 
     ]
   },
@@ -1578,6 +1585,8 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+  
+  
 
 
 

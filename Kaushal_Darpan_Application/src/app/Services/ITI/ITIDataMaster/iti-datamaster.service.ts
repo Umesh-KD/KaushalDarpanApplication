@@ -5,6 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { SeatIntakeDataModel, SeatIntakeSearchModel, ITICollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
 import { SanctionOrderModel } from '../../../Models/ITI/UserRequestModel';
 import { SeatIntakesDataListSearchModel } from '../../../Models/ITI/IITIDataMasterDataModel';
+import { ITIStudentCorrectionMasterSearchModel } from '../../../Models/StudentMasterModels';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +41,36 @@ export class ItiDataMasterService {
       ).toPromise();
   }
 
+
+  
+   //Get iti student list for correction
+    public async GetStudentCorrectionListData(searchRequest: ITIStudentCorrectionMasterSearchModel) {
+      var body = JSON.stringify(searchRequest);
+      return await this.http.post(`${this.APIUrl}/GetStudentCorrectionListData`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+
+  
+         //Get studetn list eligible for placement all data
+    public async GetStudentCorrectionDataByID(searchRequest: ITIStudentCorrectionMasterSearchModel) {
+      var body = JSON.stringify(searchRequest);
+      return await this.http.post(`${this.APIUrl}/GetStudentCorrectionDataByID`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+  
+
+      public async SaveStudentCorrectionData(searchRequest: ITIStudentCorrectionMasterSearchModel) {
+      const body = JSON.stringify(searchRequest);
+      return await this.http.post(this.APIUrl + '/SaveStudentCorrectionData', body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
 
 
 }

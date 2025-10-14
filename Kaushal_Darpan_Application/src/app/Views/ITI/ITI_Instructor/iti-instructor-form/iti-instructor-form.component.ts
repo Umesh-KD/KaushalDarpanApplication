@@ -29,6 +29,8 @@ import { ITI_InstructorService } from '../../../../Services/ITI/ITI_Instructor/I
 import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
 import { Qualification10thDetailsDataModel, Qualification12thDetailsDataModel, Qualification8thDetailsDataModel } from '../../../../Models/ITIFormDataModel';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-iti-instructor',
@@ -210,86 +212,83 @@ export class ItiInstructorFormComponent {
       }
     });
 
+    this.InstructorForm = this.formBuilder.group({
+      // Personal Details
+      Uid: ['', Validators.required],
+      IsDomicile: [false],
+      Name: ['', Validators.required],
+      FatherOrHusbandName: ['', Validators.required],
+      MotherName: ['', Validators.required],
+      Dob: [''],
+      Gender: [''],
+      MaritalStatus: [''],
+      Category: [''],
+      Mobile: [''],
+      Email: [''],
 
-    this.InstructorForm = this.formBuilder.group(
-      {
-        // Personal Details
-        Uid: ['', Validators.required],
-        IsDomicile: [false],
-        Name: ['', Validators.required],
-        FatherOrHusbandName: ['', Validators.required],
-        MotherName: ['', Validators.required],
-        Dob: ['', Validators.required],
-        Gender: ['', Validators.required],
-        MaritalStatus: ['', Validators.required],
-        Category: ['', Validators.required],
-        Mobile: ['', Validators.required],
-        Email: ['', Validators.required],
+      // Bank Details
+      BankAccountNumber: [''],
+      IFSCCode: [''],
+      BankName: [''],
+      ConsentToAssignAsExaminer: [false],
 
-        //Bank Details
-        BankAccountNumber: ['', Validators.required],
-        IFSCCode: ['', Validators.required],
-        BankName: ['', Validators.required],
-        ConsentToAssignAsExaminer: [false],
+      // Permanent Address
+      PlotHouseBuildingNo: [''],
+      StreetRoadLane: [''],
+      AreaLocalitySector: [''],
+      LandMark: [''],
+      ddlState: ['', [DropdownValidators]],
+      ddlDistrict: ['', [DropdownValidators]],
+      PropTehsilID: ['', [DropdownValidators]],
+      PropUrbanRural: [''],
+      City: [''],
+      villageID: [''],
+      pincode: [''],
 
-        // Permanent Address
-        PlotHouseBuildingNo: ['', Validators.required],
-        StreetRoadLane: ['', Validators.required],
-        AreaLocalitySector: ['', Validators.required],
-        LandMark: ['', Validators.required],
-        ddlState: ['', [DropdownValidators]],
-        ddlDistrict: ['', [DropdownValidators]],
-        PropTehsilID: [''],
-        PropUrbanRural: [''],
-        City: ['', Validators.required],
-        villageID: [''],
-        pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-        //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+      // Correspondence Address
+      Correspondence_PlotHouseBuildingNo: [''],
+      Correspondence_StreetRoadLane: [''],
+      Correspondence_AreaLocalitySector: [''],
+      Correspondence_LandMark: [''],
+      Correspondence_ddlState: ['', [DropdownValidators]],
+      Correspondence_ddlDistrict: ['', [DropdownValidators]],
+      Correspondence_PropTehsilID: ['', [DropdownValidators]],
+      Correspondence_PropUrbanRural: [''],
+      Correspondence_City: [''],
+      Correspondence_villageID: [''],
+      Correspondence_pincode: [''],
 
-        // Correspondence Address
-        Correspondence_PlotHouseBuildingNo: ['', Validators.required],
-        Correspondence_StreetRoadLane: ['', Validators.required],
-        Correspondence_AreaLocalitySector: ['', Validators.required],
-        Correspondence_LandMark: ['', Validators.required],
-        Correspondence_ddlState: ['', [DropdownValidators]],
-        Correspondence_ddlDistrict: ['', [DropdownValidators]],
-        Correspondence_PropTehsilID: ['', [DropdownValidators]],
-        Correspondence_PropUrbanRural: [''],
-        Correspondence_City: ['', Validators.required],
-        Correspondence_villageID: [''],
-        Correspondence_pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
+      // Educational Qualification
+      Education_Exam: [''],
+      Education_Board: [''],
+      Education_Year: [''],
+      Education_Subjects: [''],
+      Education_Percentage: [''],
+      QualificationDocument: [''],
 
-        //// Educational Qualification
-        Education_Exam: [''],
-        Education_Board: [''],
-        Education_Year: [''],
-        Education_Subjects: [''],
-        Education_Percentage: [''],
-        QualificationDocument: [''],
+      // Technical Qualification
+      Tech_Exam: [''],
+      Tech_Board: [''],
+      Tech_Subjects: [''],
+      Tech_Year: [''],
+      Tech_Percentage: [''],
+      TechQualificationDocument: [''],
 
-        //// Technical Qualification
-        Tech_Exam: [''],
-        Tech_Board: [''],
-        Tech_Subjects: [''],
-        Tech_Year: [''],
-        Tech_Percentage: [''],
-        TechQualificationDocument: [''],
-
-        // Employment Details
-        Pan_No: ['',],
-        Employee_Type: [''],
-        Employer_Name: [''],
-        Employer_Address: [''],
-        Tan_No: [''],
-        Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
-        JanAadhar: [''],
-        Employment_From: [''],
-        Employment_To: [''],
-        Basic_Pay: [''],
-        EmploymentDocument: [''],
-        TehsilName: ['', Validators.required]
-      });
-
+      // Employment Details
+      //Pan_No: [''],
+      Pan_No: ['', [Validators.required, Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')]],
+      Employee_Type: [''],
+      Employer_Name: [''],
+      Employer_Address: [''],
+      Tan_No: [''],
+      Aadhar: [''],
+      JanAadhar: [''],
+      Employment_From: [''],
+      Employment_To: [''],
+      Basic_Pay: [''],
+      EmploymentDocument: [''],
+      TehsilName: ['']
+    });
 
     this.EducationForm = this.formBuilder.group({
       Education_Exam: [''],
@@ -632,94 +631,66 @@ export class ItiInstructorFormComponent {
   //  }
   //}
 
-
-  //async onSubmit() {
-  //  debugger;
-  //  this.isSubmitted = true;
-  //  this.isLoading = true;
-  //  this.loaderService.requestStarted();
-
-  //  try {
-  //    if (this.InstructorForm.valid) {
-  //      const ssoid = this.request.Uid;
-
-  //      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-  //      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
-  //      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-  //      this.request.Uid = ssoid;
-  //      this.request.EmploymentDetails = this.employeeRequestList;
-  //      this.request.TechnicalQualifications = this.techRequestList;
-  //      this.request.EducationalQualifications = this.educationList;
-
-  //      console.log('Final Request Data:', this.request);
-
-  //      const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
-  //      this.State = response['State'];
-  //      this.Message = response['Message'];
-  //      this.ErrorMessage = response['ErrorMessage'];
-
-  //      if (this.State === EnumStatus.Success) {
-  //        this.toastr.success(this.Message);
-  //        this.InstructorForm.reset();
-  //      } else {
-  //        this.toastr.error(this.ErrorMessage);
-  //      }
-
-  //    } else {
-  //      console.warn('Form invalid:', this.InstructorForm.errors);
-  //      this.InstructorForm.markAllAsTouched();
-  //    }
-  //  } catch (ex) {
-  //    console.error('Error:', ex);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-  //    }, 200);
-  //  }
-  //}
-
-
-
+ 
   async onSubmit() {
-    debugger;
+  debugger;
     this.isSubmitted = true;
-    this.isLoading = true;
-    this.loaderService.requestStarted();
 
-    try {
-      const ssoid = this.request.Uid;
+    //if (!this.InstructorForm.get('Name')?.value || !this.InstructorForm.get('FatherName')?.value) {
+    //  this.toastr.warning('Name and Father Name are required fields!');
+    //  this.InstructorForm.markAllAsTouched();
+    //  return;
+    //}
 
-      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
-      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-      this.request.Uid = ssoid;
-      this.request.EmploymentDetails = this.employeeRequestList;
-      this.request.TechnicalQualifications = this.techRequestList;
-      this.request.EducationalQualifications = this.educationList;
+  this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+    if (result.isConfirmed) {
+      this.isLoading = true;
+      this.loaderService.requestStarted();
+      try {
+        const ssoid = this.request.Uid;
 
-      console.log('Final Request Data (No Validation):', this.request);
+        this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+        this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
+        this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+        this.request.Uid = ssoid;
+        this.request.EmploymentDetails = this.employeeRequestList;
+        this.request.TechnicalQualifications = this.techRequestList;
+        this.request.EducationalQualifications = this.educationList;
+        console.log('Final Request Data:', this.request);
+        const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
+        this.State = response['State'];
+        this.Message = response['Message'];
+        this.ErrorMessage = response['ErrorMessage'];
 
-      const response: any = await this.ItiInstructorService.SaveInstructorData(this.request);
-      this.State = response['State'];
-      this.Message = response['Message'];
-      this.ErrorMessage = response['ErrorMessage'];
+        if (this.State === EnumStatus.Success) {
+          //  Show success alert
+          await this.Swal2.Success(this.Message || 'Instructor data saved successfully!');
+          this.InstructorForm.reset();
+          this.employeeRequestList = [];
+          this.techRequestList = [];
+          this.educationList = [];
+        } else {
+          //  Show error alert
+          await this.Swal2.Error(this.ErrorMessage || 'Something went wrong while saving data!');
+        }
 
-      if (this.State === EnumStatus.Success) {
-        this.toastr.success(this.Message);
-        this.InstructorForm.reset();
-      } else {
-        this.toastr.error(this.ErrorMessage);
+      } catch (ex) {
+        console.error('Error:', ex);
+        await this.Swal2.Error('An unexpected error occurred while submitting the form.');
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+          this.isLoading = false;
+        }, 200);
       }
-    } catch (ex) {
-      console.error('Error:', ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-        this.isLoading = false;
-      }, 200);
+    } 
+    else {
+      //  User clicked Cancel
+      this.toastr.info('Submission cancelled.');
+      return;
     }
-  }
+  });
+}
 
 
   async GetById(ID: string) {
@@ -778,11 +749,6 @@ export class ItiInstructorFormComponent {
       }, 2000);
     }
   }
-
-  //async changeUrbanRural() {
-  //  // this.GetGramPanchayatSamiti()
-  //}
-
 
   numberOnly(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
@@ -957,7 +923,6 @@ export class ItiInstructorFormComponent {
   async SendJanaadharOTP(row: IStudentJanAadharDetailModel) {
     try {
       this.Swal2.Confirmation("Are you sure you want to Generate OTP ?", async (result: any) => {
-        // Check if the user confirmed the action
         if (result.isConfirmed) {
           this.SendOTP(row)
         }
@@ -1131,7 +1096,6 @@ export class ItiInstructorFormComponent {
       debugger;
       this.file = event.target.files[0];
       if (this.file) {
-        // upload to server folder
         this.loaderService.requestStarted();
 
         await this.commonMasterService.UploadDocument(this.file)
@@ -1144,19 +1108,15 @@ export class ItiInstructorFormComponent {
 
             if (this.State == EnumStatus.Success) {
               if (Type == "EducationType") {
-                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
                 this.educationRequest.EducationDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "TechType") {
-                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
                 this.techRequest.TechDocument = data['Data'][0]["FileName"];
               }
               else if (Type == "EmpType") {
-                //this.request.Dis_DocName = data['Data'][0]["Dis_FileName"];
                 this.employeeRequest.EmploymentDocument = data['Data'][0]["FileName"];
               }
 
-              //item.FilePath = data['Data'][0]["FilePath"];
               event.target.value = null;
             }
             if (this.State == EnumStatus.Error) {
@@ -1223,48 +1183,6 @@ export class ItiInstructorFormComponent {
   }
 
 
-  onClick8thCheckbox() {
-    this.box8Checked = !this.box8Checked;
-    if (!this.box8Checked) {
-      this.QualificationForm8th.reset();
-      this.formData8th = new Qualification8thDetailsDataModel()
-    } else {
-      // alert("यदि आप आठवीं(8th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(10th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
-      this.openModalAcknowledgement(this.modal_Acknowledgement);
-    }
-  }
-
-  onClick10thCheckbox() {
-    this.box10Checked = !this.box10Checked;
-    if (!this.box10Checked) {
-      this.QualificationForm10th.reset();
-      this.formData10th = new Qualification10thDetailsDataModel()
-    } else {
-      // alert("यदि आप आठवीं(8th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(10th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
-      this.openModalAcknowledgement(this.modal_Acknowledgement);
-    }
-  }
-
-  onClick12thCheckbox() {
-    this.box12Checked = !this.box12Checked;
-    if (!this.box12Checked) {
-      this.QualificationForm12th.reset();
-      this.formData12th = new Qualification12thDetailsDataModel()
-    } else {
-      // alert("यदि आप आठवीं(12th option) का चयन करेंगे तो केवल आठवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है इसी प्रकार यदि दसवीं(12th option) का चयन करेंगे तो केवल दसवीं प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है तथा यदि आप बाहरवी(12th option) का चयन करेंगे तो केवल बाहरवी प्रवेश योग्यता के व्यवसायों का आवेदन कर सकते है| यदि आप एक से ज्यादा योग्यता के व्यवसाय का चयन करते है तो आपको प्रत्येक व्यवसाय योग्यता के लिए विकल्प पत्र भरना आवश्यक होगा|")
-      this.openModalAcknowledgement(this.modal_Acknowledgement);
-      this.box8Checked = true;
-      this.box10Checked = true;
-    }
-  }
-  async openModalAcknowledgement(content: any) {
-    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-
-  }
 
   async BoardDropdownData(MasterCode: string) {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
@@ -1406,6 +1324,13 @@ export class ItiInstructorFormComponent {
       }, 200);
     }
   }
+
+  onPanInput(event: any) {
+    event.target.value = event.target.value.toUpperCase();
+    this.EmploymentForm.get('Pan_No')?.setValue(event.target.value, { emitEvent: false });
+  }
+
+
 }
 
 

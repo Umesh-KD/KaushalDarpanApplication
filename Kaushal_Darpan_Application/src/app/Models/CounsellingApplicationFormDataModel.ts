@@ -67,7 +67,6 @@ export class CounsellingApplicationSearchModel {
   public JanAadharNo?: string = '';
   public CandidateName?: string = ''; 
   public MobileNo?: string = '';
-  
   public AadharNo?: string = '';
   public DOB?: string = '';
   public Action?: string = '';
@@ -101,6 +100,7 @@ export class Counselling_DropdownDataModel extends RequestBaseModel {
     public Action?: string = '';
     public TradeID?: number = 0;
     public InstituteID?: number = 0;
+    public CandidateID?: number = 0;
 }
 
 export class CounsellingApplicationPreviewDataModel {

@@ -22,12 +22,20 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation :</label>
+            <select class="form-select" id="DesignationID" name="DesignationID" [(ngModel)]="searchRequest.DesignationID" (change)="getTradeByDegree($event.target.value)" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of designations" [value]="item.id"  >{{item.name}}</option>
+            </select>
+        </div>
+        <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
+              <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
             </select>
         </div>
+       
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetCounsellingAllotmentList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -60,12 +68,13 @@
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div> -->
     </div>
-
+    <!-- {{StudentList| json}} -->
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
+            <th class="text-left">Designation</th>
             <th class="text-left">Trade Name</th>
             <th class="text-left">Total Candidates</th>
           </tr>
@@ -73,12 +82,13 @@
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DesignationID}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.tradeName}}</td>
             <td>
             <a
               class="btn bg-info btn-sm text-white"
               [routerLink]="['/CounsellingSelectedOptionList']"  
-              [queryParams]="{ Id: item.tradeId }">{{ item.totalCandidate }}
+              [queryParams]="{ Id: item.tradeId, deg: item.DesignationID }">{{ item.totalCandidate }}
             </a>
               
 

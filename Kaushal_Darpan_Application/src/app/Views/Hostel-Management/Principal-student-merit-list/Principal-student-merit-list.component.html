@@ -41,6 +41,15 @@
             <option *ngFor="let item of BrachDDLList" [value]="item.StreamID">{{item.StreamName}}</option>
           </select>
         </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Status</label>
+          <select class="form-select" id="status"
+                  [(ngModel)]="Searchrequest.status" (change)="GetAllPrincipalstudentmeritlist()">
+            <option value="0">--- All ---</option>
+            <option *ngFor="let item of HostelStatusList" [value]="item.StatusID">{{item.StatusName}}</option>
+          </select>
+        </div>
         
         <!-- <div>
           <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:</label>
@@ -89,13 +98,21 @@
            Generate Merit List({{ getSelectedItems().length }} selected)
         </a> -->
 
-        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="GenerateProvisionalMerit_Hostel()"
-           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && !showRegenerateMerit">
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+           (click)="GenerateProvisionalMerit_Hostel()"
+           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+                  sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && 
+                  StudentReqListList.length > 0 && 
+                  Searchrequest.status == _HostelStatus.Apply">
           Generate Merit List ({{ getSelectedItems().length }} selected)
         </a>
 
-        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white" (click)="ReGenerateProvisionalMerit_Hostel()"
-           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && StudentReqListList.length > 0 && showRegenerateMerit">
+        <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"
+           (click)="ReGenerateProvisionalMerit_Hostel()"
+           *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.Principal || 
+                  sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon) && 
+                  StudentReqListList.length > 0 && 
+                  Searchrequest.status == _HostelStatus.AffidavitApproved">
           Regenerate Merit List ({{ getSelectedItems().length }} selected)
         </a>
 
@@ -114,7 +131,7 @@
             <th class="text-left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <input type="checkbox" [(ngModel)]="meritMultiSelected" (change)="selectAllItems()" />
             </th>
-            <th class="text-left">SR NO</th>
+            <th class="text-left">Merit No</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Hostel Request No</th>
             <!--<th class="text-left">Type</th>-->
@@ -130,7 +147,7 @@
             <td align="left" *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Principal || sSOLoginDataModel.RoleID == _EnumRole.PrincipalNon">
               <input type="checkbox" [(ngModel)]="item.selected" (change)="checkIfAllSelected()" />
             </td>
-            <td align="left">{{idx + 1}}</td>
+            <td align="left">{{item.MeritNo}}</td>
             <td align="left">{{item.StudentName}}</td>
             <td align="left">{{item.HostelRequestNo}}</td>
             <!--<td align="left">{{item.StudentType}}</td>-->
