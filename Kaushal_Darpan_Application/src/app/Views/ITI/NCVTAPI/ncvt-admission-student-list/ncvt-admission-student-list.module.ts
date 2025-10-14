@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { NcvtAdmissionStudentListRoutingModule } from './ncvt-admission-student-list-routing.module';
 import { NcvtAdmissionStudentListComponent } from './ncvt-admission-student-list.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
 
 
 @NgModule({
@@ -11,6 +13,9 @@ import { NcvtAdmissionStudentListComponent } from './ncvt-admission-student-list
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TableSearchFilterModule,
     NcvtAdmissionStudentListRoutingModule
   ]
 })
