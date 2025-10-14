@@ -9,7 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { StudentRequestService } from '../../../Services/StudentRequest/student-request.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, HostelStatus } from '../../../Common/GlobalConstants';
 import { RoomAllotmentDataModel } from '../../../Models/Hostel-Management/RoomAllotmentDataModel';
 import { HostelManagmentService } from '../../../Services/HostelManagment/HostelManagment.service';
 import * as XLSX from 'xlsx';
@@ -48,6 +48,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   public MarksDetailsList: any = [];
   public EditHostelDetailsList: any = [];
   public GenderList: any = []
+  public HostelStatusList: any = []
   public Allotmentrequest = new RoomAllotmentDataModel();
   public titleDDLBranchTrade: string = ''
   meritMultiSelected: boolean = false;
@@ -55,6 +56,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   HostelDetails = new HostelStudentSearchModel();
   EditHostelDetails = new EditHostelStudentSearchModel();
   _EnumRole = EnumRole;
+  _HostelStatus = HostelStatus;
   public showRegenerateMerit: boolean = false;
 
   constructor(
@@ -93,6 +95,7 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       remark: ['', Validators.required],
     });
 
+    await this.GetHostelStatusDDL();
     await this.GetBranchMaster();
     await this.GetSemesterMaster();
     await this.GetGenderList();
@@ -103,7 +106,17 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
   get _RequestFormGroup() { return this.RequestFormGroup.controls; }
   get _CancelRequestFormGroup() { return this.CancelRequestFormGroup.controls; }
 
-  
+  async GetHostelStatusDDL() {
+    try {
+      await this.commonFunctionService.GetHostelStatusDDL().then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.HostelStatusList = data['Data'];
+        this.HostelStatusList = this.HostelStatusList.filter((x: any) => x.StatusID == 1 || x.StatusID == 9 || x.StatusID == 15)
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async GetAllPrincipalstudentmeritlist() {
      
     try {
@@ -111,7 +124,18 @@ export class PrincipalstudentmeritlistComponent implements OnInit {
       this.Searchrequest.HostelID = this.sSOLoginDataModel.HostelID;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      this.Searchrequest.Action ="AllHostelStudentMeritlistShowByPrinciple";
+
+      if(this.Searchrequest.status != HostelStatus.Apply) {
+        this.Searchrequest.Action ="AllHostelStudentMeritlistShowByPrinciple";
+      }
+
+      if (
+        this.Searchrequest.status == HostelStatus.AffidavitApproved
+        || this.Searchrequest.status == HostelStatus.PublishProvisionalMerit
+        || this.Searchrequest.status == HostelStatus.ReGenerateProvisionalMerit
+      ) {
+        this.Searchrequest.Action ="HostelMeritList_Generated";
+      }   
 
       this.loaderService.requestStarted();
       await this.studentRequestService.GetAllPrincipalstudentmeritlist(this.Searchrequest)

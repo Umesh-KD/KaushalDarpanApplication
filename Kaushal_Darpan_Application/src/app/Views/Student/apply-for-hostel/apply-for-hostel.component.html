@@ -7,11 +7,30 @@
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Apply For Hostel</a>
     </div>
   </div>
+  <div>
+    <button 
+      class="btn bg-info text-white" 
+      (click)="WithdrawHostelRequest()"
+      *ngIf="sSOLoginDataModel.RoleID === _EnumRole.Student &&
+        (StudentDetailsList[0]?.AllotmentStatus === 1 ||
+          StudentDetailsList[0]?.AllotmentStatus === 2 ||
+          StudentDetailsList[0]?.AllotmentStatus === 3 ||
+          StudentDetailsList[0]?.AllotmentStatus === 9 ||
+          StudentDetailsList[0]?.AllotmentStatus === 10 || 
+          StudentDetailsList[0]?.AllotmentStatus === 11 || 
+          StudentDetailsList[0]?.AllotmentStatus === 14 || 
+          StudentDetailsList[0]?.AllotmentStatus === 15)">
+      <i class="ti ti-x"></i> Withdraw Hostel Request
+    </button>
+  </div>
 </div>
 <!-- Page Title End -->
 <!--{{StudentDetailsList|json}}-->
 <div class="card">
-  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 || StudentDetailsList[0]?.AllotmentStatus == 12">
+  <div class="card-body p-5"
+     *ngIf="StudentDetailsList[0]?.AllotmentStatus == 0 || 
+            StudentDetailsList[0]?.AllotmentStatus == 12 || 
+            StudentDetailsList[0]?.AllotmentStatus == 13">
 
     <div class="mb-8">
       <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 gap-6 detailsList">
@@ -71,7 +90,12 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
         <b class="text-1xl-5"><i class="ti ti-user"></i> Some Basic Info For Emergency Contact</b>
       </div>
-      <form [formGroup]="groupForm" (ngSubmit)="saveData()" *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 || StudentDetailsList[0]?.AllotmentStatus === 12 ">
+      <form [formGroup]="groupForm"
+         (ngSubmit)="saveData()" 
+         *ngIf="StudentDetailsList[0]?.AllotmentStatus === 0 || 
+                StudentDetailsList[0]?.AllotmentStatus === 12 ||
+                StudentDetailsList[0]?.AllotmentStatus === 13 ">
+
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
 
           <div>
@@ -345,6 +369,12 @@
     <div class="mb-8">
       <h3>Hostel Application Status:</h3>
       <p>Your supporting documents have been submitted. The college will verify them shortly.</p>
+    </div>
+  </div>
+  <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 9">
+    <div class="mb-8">
+      <h3>Hostel Application Status:</h3>
+      <p>Your supporting/Affidavit documents have been Approved. The college will verify them shortly.</p>
     </div>
   </div>
   <div class="card-body p-5" *ngIf="StudentDetailsList[0]?.AllotmentStatus == 4">

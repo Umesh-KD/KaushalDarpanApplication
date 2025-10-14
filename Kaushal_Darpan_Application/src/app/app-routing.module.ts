@@ -571,6 +571,7 @@ const routes: Routes = [
       { path: 'iti-add-issued-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
       { path: 'iti-add-issued-items/:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
       { path: 'iti-issued-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-issued-items-list/iti-issued-items-list.module').then(m => m.ITIIssuedItemsListModule) },
+      //{ path: 'iti-issued-item', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-item-manage/iti-issue-item/iti-issue-item-routing.module').then(m => m.AddITIIssueItemRoutingModule) },
       { path: 'iti-return-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-return-items-list/iti-return-items-list.module').then(m => m.ITIReturnItemsListModule) },
       { path: 'iti-inventory-dashboard', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-inventory-management-dashboard/iti-inventory-management-dashboard.module').then(m => m.ITIInventoryManagementDashboardModule) },
       { path: 'iti-edit-item-master', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-items-master/iti-edit-item-master/iti-edit-item-master.module').then(m => m.ITIEditeItemMasterModule) },
@@ -1473,7 +1474,12 @@ const routes: Routes = [
         path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
       },
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
+      { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
 
+
+      //vivek
+
+      //{ path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
 
 
     ]

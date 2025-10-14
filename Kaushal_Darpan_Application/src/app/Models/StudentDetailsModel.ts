@@ -44,9 +44,8 @@ export class StudentDetailsModel {
   public IsShowAdmitCard: boolean = false;
   public DownloadExaminationForm: boolean = false;
   public Status: number = 0;
-
   public ServiceType?: string = '';
-
+  public FormCommision: number = 0;
 }
 
 
