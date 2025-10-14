@@ -33,7 +33,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Institute / Building Name:
           </label>
-          <select class="form-select" [(ngModel)]="Searchrequest.CollegeId">
+          <select class="form-select" [(ngModel)]="Searchrequest.CollegeId"  [disabled]="Searchrequest.CollegeId != 0">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of CollegeDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
           </select>

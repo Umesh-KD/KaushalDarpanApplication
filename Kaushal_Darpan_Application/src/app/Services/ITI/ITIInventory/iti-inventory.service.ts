@@ -523,4 +523,10 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+   public async GetIssueItemListPermanent(itemId: number) {
+    return await this.http.get(this.APIUrl + "/GetIssueItemListPermanent/" + itemId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
