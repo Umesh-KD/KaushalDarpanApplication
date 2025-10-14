@@ -59,23 +59,25 @@ export class THTEPrincipleApplicationListComponent {
   async ngOnInit () { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    await this.GetMasterData();
+    await this.GetStatusData();
   }
 
-  async GetMasterData() {
+  async GetStatusData() {
     try {
       this.dropdownRequest.action = "GetStatusDDL"
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID !== 1340)
+        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341 || x.ID === 1342)
       })
     } catch (error) {
       console.error(error);
     }
   }
 
-  async btn_Clear() {}
+  async btn_Clear() {
+    this.searchRequest = new PrincipleApplicationListSearchModel();
+  }
 
   async ApplicationList_ForPrinciple_THTE() {
     try {
