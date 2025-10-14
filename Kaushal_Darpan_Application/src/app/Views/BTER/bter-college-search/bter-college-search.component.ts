@@ -737,7 +737,7 @@ export class bterCollegeSearchComponent {
     this.StreamID = 0;
     this.ApplicationNo = '';
     this.isShowGrid = false;
-    this.request = new ITICollegeSearchModel();
+    this.request = new bterCollegeSearchModel();
     this.studentDetailsModel = new StudentDetailsModel();
   }
 
@@ -754,9 +754,9 @@ export class bterCollegeSearchComponent {
 
   async GetList() {
     try {
-      
+      debugger;
       this.loaderService.requestStarted();
-      await this.ApplicationService.ItiSearchCollege(this.request)
+      await this.ApplicationService.PolotechnincSearchCollege(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.ITICollegeSearchList = data['Data'];

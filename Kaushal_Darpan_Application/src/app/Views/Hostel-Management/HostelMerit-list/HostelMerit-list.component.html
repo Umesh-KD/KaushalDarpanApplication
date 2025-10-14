@@ -74,6 +74,7 @@
             <th class="text-left">Semester</th>
             <th class="text-left">Year</th>
             <th class="text-left">Percentage</th>
+            <th class="text-left">Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -86,6 +87,7 @@
             <td align="left">{{item.SemesterName}}</td>
             <td align="left">{{item.EndTermName}}</td>
             <td align="left">{{item.ClassPercentage}}</td>
+            <td align="left">{{item.StatusName}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="item.AllotmentStatus == _EnumHostelStatus.HostelAllotted" href="javascript:void(0)" (click)="onView(modal_ViewDetials, item)" title="View Applicant Details"><i class="ti ti-list"></i></a>

@@ -18,6 +18,7 @@ export class IStudentJanAadharDetailModel {
   public ENR_ID: number = 0;
   public AADHAR_ID: number = 0;
   public Name: string = '';
+  public NAME: string = '';
   public MOBILE_NO: string = '';
   public SRDR_MID: string = '';
   public JAN_MEMBER_ID: string = '';

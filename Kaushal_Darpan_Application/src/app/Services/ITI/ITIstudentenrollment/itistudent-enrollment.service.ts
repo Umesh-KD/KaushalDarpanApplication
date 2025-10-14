@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { ChunksSearchModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
+import { ChunksSearchModel,ITIStudentCorrectionMasterSearchModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
 import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { NCVTChunkInfoDataModelDataPagingList } from '../../../Models/DataPagingListModel';
 
@@ -87,6 +87,7 @@ export class ITIStudentEnrollmentService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
 
 
 

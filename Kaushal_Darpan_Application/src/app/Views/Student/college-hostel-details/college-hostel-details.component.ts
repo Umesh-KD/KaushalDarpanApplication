@@ -74,6 +74,7 @@ export class CollegeHostelDetailsComponent {
   }
 
   async CollegeHostelDetailsList() {
+    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.UserID = this.sSOLoginDataModel.StudentID;

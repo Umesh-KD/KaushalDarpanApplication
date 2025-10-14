@@ -630,7 +630,22 @@ export class AddBterIssueItemComponent {
   cancelSelection() {
     this.SelectedItems = [];
   }
+ validateQuantity(item: any) {
+  // Find the original item from ItemsDDLList
+  const original = this.ItemsDDLList.find((x: any)  => x.ItemId === item.ItemId);
 
+  if (original) {
+    const availableQty = original.Quantity;
+
+    if (item.Quantity > availableQty) {
+      alert(`You can’t enter more than available quantity (${availableQty}).`);
+      item.Quantity = availableQty; // Reset to max allowed
+    } else if (item.Quantity < 1) {
+      alert('Quantity must be at least 1.');
+      item.Quantity = 1;
+    }
+  }
+}
 
   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
     try {

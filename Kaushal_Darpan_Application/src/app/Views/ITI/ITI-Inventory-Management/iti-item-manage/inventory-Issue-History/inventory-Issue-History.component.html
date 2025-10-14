@@ -122,16 +122,16 @@
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td> 
             <td align="left">
-                <span [ngClass]="item.ConditionOnReturn == 1 ? 'badge-working' : 'badge-notworking'">
-                  {{ item.ConditionOnReturn == 1 ? 'Working' : 'Not Working' }}
+                <span [ngClass]="item.ConditionOnReturn == 1 ? 'badge-working' : item.ConditionOnReturn == 2 ? 'badge-notworking' : 'badge-forrepair'">
+                  {{ item.ConditionOnReturn == 1 ? 'Working' : item.ConditionOnReturn == 2 ?  'Not Working' : 'For Repair' }}
                 </span>
             </td> 
             <td align="left">
               <span [ngClass]="{
-                                 'InvStatus-issued': item.InvStatus === 1,
-                                 'InvStatus-returned': item.InvStatus === 2
+                                 'InvStatus-issued': item.InvStatus === 0,
+                                 'InvStatus-returned': item.InvStatus === 1
                                }">
-                {{ item.InvStatus === 1 ? 'Issued' : item.InvStatus === 2 ? 'Returned' : 'Unknown' }}
+                {{ item.InvStatus === 0 ? 'Issued' : item.InvStatus === 1 ? 'Returned' : 'Unknown' }}
               </span>
             </td>
           </tr>

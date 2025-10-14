@@ -113,12 +113,13 @@ export class AddItiReturnItemComponent {
   async GetAllData() {
     try {
       this.loaderService.requestStarted();
-
+debugger;
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
       this.Searchrequest.TypeName='getReturnItem';
-      await this.itiInventoryService.GetInventoryIssueItemList(this.Searchrequest)
+      
+      await this.itiInventoryService.GetInventoryIssueItemListNew(this.Searchrequest)
         .then((data: any) => {
           if (data) {
             this.State = data.State;
@@ -332,6 +333,12 @@ async confirmReturnNew() {
       return;
     }
       this.selectedItemMasterList = this.ItemMasterList.filter((item:any) => item.Selected);
+      this.selectedItemMasterList = this.ItemMasterList
+  .filter((item: any) => item.Selected)
+  .map((item: any) => ({
+    ...item,
+    StaffId: this.Searchrequest.staffID
+  }));
     console.table(this.selectedItemMasterList);
     await this.confirmReturn(this.selectedItemMasterList);
     // this.loaderService.requestStarted();
@@ -362,7 +369,7 @@ async confirmReturnNew() {
     //this.submitRequest.ItemList = this.ItemMasterList.filter((x: any) => x.Selected);
    
     try {
-      await this.itiInventoryService.GetAll_INV_returnItem(this.submitRequest)
+      await this.itiInventoryService.GetAll_INV_returnItemNew(this.submitRequest)
         .then((data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];

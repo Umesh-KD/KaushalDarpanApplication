@@ -10,6 +10,7 @@ import { SSOLoginDataModel } from "../../../Models/SSOLoginDataModel";
 import { CommonFunctionService } from "../../../Services/CommonFunction/common-function.service";
 import { HostelManagmentService } from "../../../Services/HostelManagment/HostelManagment.service";
 import { LoaderService } from "../../../Services/Loader/loader.service";
+import { EnumStatus } from "../../../Common/GlobalConstants";
 
 
 @Component({
@@ -111,7 +112,6 @@ export class CollegeHostelDetailsComponent {
 
 
   async GetStudentDetailsForApply() {
-    //alert(this.sSOLoginDataModel.StudentID);
     try {
       let obj = {
         StudentID: this.sSOLoginDataModel.StudentID,
@@ -121,14 +121,18 @@ export class CollegeHostelDetailsComponent {
       await this._HostelManagmentService.GetStudentDetailsForApply(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.StudentDetailsList = data['Data'];
-          if (!(this.StudentDetailsList[0].AllotmentStatus == 0 || this.StudentDetailsList[0].AllotmentStatus == 12)) {
-            this.router.navigateByUrl('/ApplyForHostel?id=' + this.StudentDetailsList[0].HostelID)
+          
+          if(data.State === EnumStatus.Success) {
+            this.StudentDetailsList = data['Data'];
+            if (
+              !(this.StudentDetailsList[0].AllotmentStatus == 0 || 
+                this.StudentDetailsList[0].AllotmentStatus == 12 || 
+                this.StudentDetailsList[0].AllotmentStatus == 13
+              )
+            ) {
+              this.router.navigateByUrl('/ApplyForHostel?id=' + this.StudentDetailsList[0].HostelID)
+            }
           }
-
           console.log(this.StudentDetailsList, "lo")
         }, error => console.error(error));
     }
