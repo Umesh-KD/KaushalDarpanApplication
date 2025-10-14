@@ -1,0 +1,174 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Higher Technical Education</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Apply Higher Technical Education</a>
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Staff Details</b>
+    </div>
+
+    <form [formGroup]="ApplyTeacherHigerTechnicalEducationFromGroup">
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teacher Name</label>
+          <input class="form-input" name="teacherName" (click)="openDatePicker($event)"
+                 formControlName="teacherName" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.TeacherName" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.teacherName.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.teacherName.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB.</label>
+          <input class="form-input" type="date" name="dOB" (click)="openDatePicker($event)"
+                 formControlName="dOB" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.DOB" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.dOB.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.dOB.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Joining Date</label>
+          <input class="form-input" type="date" name="joiningDate" (click)="openDatePicker($event)"
+                 formControlName="joiningDate" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.JoiningDate" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.joiningDate.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.joiningDate.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Course</label>
+          <select class="form-select" name="appliedCourse" formControlName="appliedCourse"
+                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedCourse">
+            <option value="0">--Select--</option>
+            <option value="1">Higher Technical Education</option>
+            <option value="2">PhD Program</option>
+            <option value="3">Postgraduate Diploma</option>
+            <option value="4">Certification Course</option>
+          </select>
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedCourse.errors" class="text-danger">
+            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedCourse.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute</label>
+          <input class="form-input" type="text" name="appliedInstitute"
+                 formControlName="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">PHD</label>
+
+          <label class="mr-4">
+            <input type="radio"
+                   formControlName="pHDStatus"
+                   name="pHDStatus"
+                   [value]="'Yes'"
+                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.PHDStatusSt" />
+            Yes
+          </label>
+
+          <label>
+            <input type="radio"
+                   formControlName="pHDStatus"
+                   name="pHDStatus"
+                   [value]="'No'"
+                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.PHDStatusSt" />
+            No
+          </label>
+
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.pHDStatus.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.pHDStatus.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute Distance</label>
+          <input class="form-input" type="number" name="appliedInstituteDistance"
+                 formControlName="appliedInstituteDistance" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Apply Course Institute </label>
+          <select class="form-select" name="appliedInstituteCategory" formControlName="appliedInstituteCategory"
+                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CategoryOfApplyCourseInstituteList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors" class="text-danger">
+            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category Of Apply Course Institute(Sub)</label>
+          <select class="form-select" name="appliedInstituteSubCategory" formControlName="appliedInstituteSubCategory"
+                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&ApplyTeacherHigerTechnicalEducationFromGroup.get('appliedInstituteSubCategory').errors" class="text-danger">
+            <p *ngIf="!ApplyTeacherHigerTechnicalEducationFromGroup.get('appliedInstituteSubCategory').errors.DropdownValidators">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>-->
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveTeacherHighEduApp()">
+            Save
+          </button>
+        </div>
+
+      </div>
+    </form>
+
+  </div>
+</div>
+
