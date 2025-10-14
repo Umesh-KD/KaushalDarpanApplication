@@ -24,12 +24,19 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation :</label>
+            <select class="form-select" id="DesignationID" name="DesignationID" [(ngModel)]="searchRequest.DesignationID" (change)="getTradeByDegree($event.target.value)" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of designations" [value]="item.id"  >{{item.name}}</option>
+            </select>
+        </div>
         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
               <option value="0">Choose Option</option>
-              <option *ngFor="let item of TradeDDLList" [ngValue]="item.ID">{{item.Name}}</option>
+              <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
             </select>
         </div>
         <div>
@@ -40,7 +47,7 @@
           </button>
         </div>
 
-      </div>
+      </div> -->
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
@@ -52,6 +59,7 @@
            (click)="OpenOTPModal_SaveAllotment()">
           Save Allotment
         </a>
+     
 
       </div>
       
@@ -109,11 +117,18 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
+               
                 <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,row)" title="View Institute Option Details"><i
                 class="ti ti-eye"></i> </a>
 
+                <a href="javascript:void(0)" (click)="redirectToEdit(row)" title="Edit Details">
+                  <i class="ti ti-pencil"></i>
+                </a>
                 <a href="javascript:void(0)" (click)="redirectToPreview(row)" title="View Candidate Details">
                   <i class="ti ti-eye"></i>
+                </a>
+                <a href="javascript:void(0)" (click)="OpenOTPModal_RejectApplication(row)" title="Reject Application">
+                  <i class="ti ti-x"></i>
                 </a>
 
                 <a href="javascript:void(0)" *ngIf="row.IsFinalSubmit === 2 && row.IsMeritGenerated === 0"
