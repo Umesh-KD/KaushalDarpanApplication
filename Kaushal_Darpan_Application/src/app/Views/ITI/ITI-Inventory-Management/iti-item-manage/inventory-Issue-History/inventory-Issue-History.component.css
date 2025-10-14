@@ -137,3 +137,11 @@ textarea.form-control {
   font-size: 12px;
   font-weight: 500;
 }
+.badge-forrepair {
+  background-color: #ff0000; /* blue */
+  color: white;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}

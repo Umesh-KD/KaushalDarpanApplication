@@ -472,5 +472,55 @@ export class ITIInventoryService {
       ).toPromise();
   }
 
-
+    public async SaveIssueItemsList(itemsList: any[]) {
+    const body = JSON.stringify(itemsList);
+    debugger;
+    return await this.http.post(this.APIUrl + '/SaveIssueItemsList', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAll_INV_GetCommonIssueDDLNew(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAll_INV_GetCommonIssueDDLNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetConsumeItemListNew(searchRequest: DTEItemsSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    debugger;
+    return await this.http.post(`${this.APIUrl}/GetConsumeItemListNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+   public async GetInventoryIssueItemListNew(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetInventoryIssueItemListNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async GetAll_INV_returnItemNew(submitRequest: ItemsIssueReturnModels) {
+      var body = JSON.stringify(submitRequest);
+      return await this.http.post(`${this.APIUrl}/GetAll_INV_returnItemNew`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+     public async GetAllinventoryIssueHistoryNew(searchRequest: inventoryIssueHistorySearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllinventoryIssueHistoryNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+    public async GetAllStoksNew(searchRequest: DTEStoksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllStoksNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

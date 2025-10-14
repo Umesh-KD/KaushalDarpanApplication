@@ -12,6 +12,21 @@ export class DataPagingListModel
   public StudentExamIDs: string = '';
   public DepartmentID: number = 0;
   public Eng_NonEng: number = 0;
-       
   
 }
+
+
+
+
+export class NCVTChunkInfoDataModelDataPagingList
+{
+  public IsSelected: boolean = false;
+  public PageNumber: number = 0;
+  public PageSize: number = 0;
+  public RowCount: number = 0;
+  public MinAID: number = 0;
+  public MaxAID: number = 0;
+  public AIDS: String = '';
+  public TotalRecord: String = '';
+  public TotalPage: String = '';
+ }

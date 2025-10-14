@@ -84,6 +84,11 @@ export class EmitraDashboardComponent implements OnInit {
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.BTER_DegreeNonENG_AllotmentFeeService, DepartmentID: 1 },
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.BTER_DegreeLateral_2Year_AllotmentFeeService, DepartmentID: 1 },
 
+      { TabName: 'Student Exam. fee (engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: StudentEmitraFeePaymentComponent, ServiceID: EnumEmitraService.BTER_ExamFees_ENG, DepartmentID: 1 },
+
+      { TabName: 'Student Exam. fee (non. engineering)', TabNameHI: 'छात्र परीक्षा शुल्क (गैर इंजीनियरिंग)', TabIcon: 'ti ti-exchange', component: StudentEmitraFeePaymentComponent, ServiceID: EnumEmitraService.BTER_ExamFees_NonENG, DepartmentID: 1 },
+
+
     ] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>, ServiceID: number, DepartmentID: number }[];
 
 

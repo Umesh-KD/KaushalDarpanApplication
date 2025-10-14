@@ -183,7 +183,7 @@
                      class="form-input"
                      [(ngModel)]="item.Quantity"
                      min="1"
-                     placeholder="Enter Qty">
+                     placeholder="Enter Qty" (change)="validateQuantity(item)">
             </td>
           </tr>
           <tr *ngIf="SelectedItems?.length === 0" class="text-center">

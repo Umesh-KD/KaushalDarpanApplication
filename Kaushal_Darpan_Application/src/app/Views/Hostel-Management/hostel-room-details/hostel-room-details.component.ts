@@ -73,6 +73,7 @@ export class HostelRoomDetailsComponent {
       attachedBathFacilities: ['', [DropdownValidators]],
       fanFacilities: ['', [DropdownValidators]],
       coolingFacilities: ['', [DropdownValidators]],
+      AlmirahFacility: ['', [DropdownValidators]],
     });
 
 

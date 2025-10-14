@@ -1,0 +1,74 @@
+<!--<table class="table table-bordered table-striped text-sm w-full">
+  <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+    <tr>
+      <th><input type="checkbox" [(ngModel)]="masterSelected" (change)="checkUncheckAll()" /></th>
+      <th>AID</th>
+      <th>Student ID</th>
+      <th>State Reg Number</th>
+      <th>Trainee Name</th>
+      <th>UID Number</th>
+      <th>Date Of Birth</th>
+      <th>Gender</th>
+      <th>Category</th>
+      <th>Father/Guardian Name</th>
+      <th>Mother Name</th>
+      <th>Mobile Number</th>
+      <th>Email ID</th>
+      <th>Session</th>
+      <th>Admission Date</th>
+      <th>Highest Qualification</th>
+      <th>Trade</th>
+      <th>Shift</th>
+      <th>Unit</th>
+      <th>Is Trainee Dual Mode</th>
+      <th>MIS ITI Code</th>
+      <th>Person With Disability</th>
+      <th>PWD Category</th>
+      <th>Economic Weaker Section</th>
+      <th>Trainee Type</th>
+      <th>Error Description</th>
+      <th>Record Status</th>
+      <th>Created Date</th>
+      <th>College ID</th>
+      <th>Academic Year ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of dataList; let i = index">
+      <td><input type="checkbox" [(ngModel)]="item.selected" (change)="isAllSelected()" /></td>
+      <td>{{ item.AID }}</td>
+      <td>{{ item.StudentID }}</td>
+      <td>{{ item.StateRegNumber }}</td>
+      <td>{{ item.TraineeName }}</td>
+      <td>{{ item.UIDNumber }}</td>
+      <td>{{ item.DateOfBirth | date:'dd-MM-yyyy' }}</td>
+      <td>{{ item.Gender }}</td>
+      <td>{{ item.Category }}</td>
+      <td>{{ item.FatherGuardianName }}</td>
+      <td>{{ item.MotherName }}</td>
+      <td>{{ item.MobileNumber }}</td>
+      <td>{{ item.EmailID }}</td>
+      <td>{{ item.Session }}</td>
+      <td>{{ item.AdmissionDate | date:'dd-MM-yyyy' }}</td>
+      <td>{{ item.HighestQualification }}</td>
+      <td>{{ item.Trade }}</td>
+      <td>{{ item.Shift }}</td>
+      <td>{{ item.Unit }}</td>
+      <td>{{ item.IsTraineeDualMode }}</td>
+      <td>{{ item.MISITICode }}</td>
+      <td>{{ item.PersonwithDisability }}</td>
+      <td>{{ item.PWDcategory }}</td>
+      <td>{{ item.EconomicWeakerSection }}</td>
+      <td>{{ item.TraineeType }}</td>
+      <td>{{ item.ErrorDescription }}</td>
+      <td>{{ item.RecordStatus }}</td>
+      <td>{{ item.createddate | date:'dd-MM-yyyy HH:mm' }}</td>
+      <td>{{ item.CollegeID }}</td>
+      <td>{{ item.AcedmicYearID }}</td>
+    </tr>
+
+    <tr *ngIf="dataList?.length === 0">
+      <td colspan="30" class="text-center">No Record Found</td>
+    </tr>
+  </tbody>
+</table>-->
