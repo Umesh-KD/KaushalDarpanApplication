@@ -1452,6 +1452,7 @@ const routes: Routes = [
       { path: 'EditQualification', loadChildren: () => import('./Views/ITI/edit-qualification/edit-qualification.module').then(m => m.EditQualificationModule) },
 
       { path: 'counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/couselling-candidate-form-tab/couselling-candidate-form-tab.module').then(m => m.CousellingCandidateFormTabModule), title: 'Candidate Form' },
+      { path: 'edit-counselling-candidate-form', loadChildren: () => import('./Views/Counselling-Master/edit-counselling-candidate-form/edit-counselling-candidate-form.module').then(m => m.EditCounsellingCandidateFormModule), title: 'Edit Candidate Form' },
       { path: 'candidate-details', loadChildren: () => import('./Views/Counselling-Master/CounsellingCandidateForm/candidate-form-preview/candidate-form-preview.module').then(m => m.CandidateFormPreviewModule), title: 'Candidate Details' },
       { path: 'CounsellingAllotmentList', loadChildren: () => import('./Views/Counselling-Master/counselling-allotment-list/counselling-allotment-list.module').then(m => m.CounsellingAllotmentListModule), title: 'Counselling Allotment Report' },
       { path: 'CounsellingSelectedOptionList', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },

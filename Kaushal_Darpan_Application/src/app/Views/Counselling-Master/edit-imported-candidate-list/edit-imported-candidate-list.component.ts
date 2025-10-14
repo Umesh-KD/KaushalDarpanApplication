@@ -38,7 +38,7 @@ export class EditImportedCandidateListComponent implements OnInit {
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = [];
   public CandidateData:any=[];
-
+isDisabled = true;
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal,
@@ -61,6 +61,9 @@ export class EditImportedCandidateListComponent implements OnInit {
           Validators.minLength(10),        // min 10 digits
           Validators.maxLength(10) ]],        // max 10 digits]],
         SSOID: [''],
+        Trade: [''],
+        Designation: [''],
+        
 
       });
 
@@ -80,6 +83,13 @@ export class EditImportedCandidateListComponent implements OnInit {
     }
     if(this.key==3){
       this.CandidateFormGroup.disable();
+    }else if(this.key==2){
+    const SSOID = this.CandidateFormGroup.get('SSOID');
+SSOID?.disable();
+    const Trade = this.CandidateFormGroup.get('Trade');
+Trade?.disable();
+    const Designation = this.CandidateFormGroup.get('Designation');
+Designation?.disable();
     }
   }
   get _CandidateFormGroup() { return this.CandidateFormGroup.controls; }
@@ -155,6 +165,8 @@ export class EditImportedCandidateListComponent implements OnInit {
               Email: data.Data[0].Email,
               MobileNo: data.Data[0].MobileNo,
               SSOID: data.Data[0].SSOID,
+              Trade: data.Data[0].Trade,
+              Designation: data.Data[0].Designation,
             })
           }
           console.log(this.CandidateFormGroup.value, " check data");

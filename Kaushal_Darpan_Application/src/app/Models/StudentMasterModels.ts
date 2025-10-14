@@ -220,17 +220,14 @@ export interface ForSMSEnrollmentStudentMarkedModel extends RequestBaseModel {
 export class ITIStudentCorrectionMasterSearchModel {
   public Name: string = '';
   public UIDNumber: string = '';
-
- 
   public CandidateID: number = 0
   public MobileNo: string = ''
   public Email: string = ''
   public CandidateFatherName: string = ''
   public CandidateMotherName: string = ''
-  public CandidateGender: string = ''
+  public Gender: number = 0;
   public ModifyBy: number = 0;
  
-
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
    public PageSize: number = 50

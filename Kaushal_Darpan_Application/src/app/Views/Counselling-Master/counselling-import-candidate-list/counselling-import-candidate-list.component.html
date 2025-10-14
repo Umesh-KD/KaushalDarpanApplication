@@ -75,25 +75,34 @@
           <option value="1000">1000</option>
         </select>
       </div>
-      <div class=""></div>
-      <div class=""></div>
+      <div class="">
+     <!-- <input 
+      type="text" 
+      [(ngModel)]="Table_SearchText" 
+      class="form-control" 
+      placeholder="Search..." 
+    /> -->
+  </div>
+       <div class=""></div>
       <!-- <div class="">
         <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
       </div> -->
     </div>
 
     <div class="overflow-auto mt-3">
+    
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
             <th class="text-left">Name</th>
-            <th class="text-left">Father Name</th>
-            <!-- <th class="text-left">MobileNo</th> -->
-            <!-- <th class="text-left">SSOID</th> -->
+            <th class="text-left">Father Name</th> 
+            <th class="text-center">MobileNo</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">Trade</th>
+            <th class="text-left">Designation</th>
             <!-- <th class="text-left">DOB</th>
             <th class="text-left">Category</th> -->
-            <!-- <th class="text-center">MobileNo</th> -->
             <!-- <th class="text-center">Status</th> -->
             <th class="text-center">Action</th>
           </tr>
@@ -103,8 +112,10 @@
             <td>{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateFatherName}}</td>
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td> -->
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TradeName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Designation}}</td>
             <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td> -->
 
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
@@ -189,8 +200,10 @@
                   <!--<th class="text-left">CenterCode</th>-->
                   <th class="text-left">Candidate Name</th>
                   <th class="text-left">Father Name</th>
-                  <th class="text-left">MobileNo</th>
-                  <th class="text-left">SSOID</th>
+                  <th class="text-left">Mobile No</th>
+                  <!-- <th class="text-left">SSOID</th> -->
+                  <th class="text-left">Trade Code</th>
+                  <th class="text-left">Designation</th>
                   <!-- <th class="text-left">DOB</th> -->
                   <!-- <th class="text-left">MobileNumber</th>
                   <th class="text-left">Email</th> 
@@ -206,7 +219,9 @@
                   <td align="left">{{row.CandidateName}}</td>
                   <td align="left">{{row.CandidateFatherName}}</td>
                   <td align="left">{{row.MobileNo}}</td>
-                  <td align="left">{{row.SSOID}}</td>
+                  <!-- <td align="left">{{row.SSOID}}</td> -->
+                  <td align="left">{{row.Trade}}</td>
+                  <td align="left">{{row.Designation}}</td>
                   <!-- <td align="left">{{row.DOB}}</td> -->
                   <!-- <td align="left">{{row.MobileNumber}}</td>
                   <td align="left">{{row.Email}}</td>  -->
