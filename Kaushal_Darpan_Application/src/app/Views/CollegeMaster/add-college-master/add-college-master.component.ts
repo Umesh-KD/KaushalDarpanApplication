@@ -618,14 +618,14 @@ export class AddCollegeMasterComponent implements OnInit {
     this.refreshCourseTypeRefValidation();
     debugger
     // Skip form validation only for Admin roles
-    const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
-    if (!isAdminRole) {
-      this.toastr.warning("Unauthorized role!");
-      return false;
-    }
-    else if (this.instituteForm.invalid) {
-      return false;
-    }
+    //const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
+    //if (!isAdminRole) {
+    //  this.toastr.warning("Unauthorized role!");
+    //  return false;
+    //}
+    //else if (this.instituteForm.invalid) {
+    //  return false;
+    //}
 
    
     this.isLoading = true;
