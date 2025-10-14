@@ -62,10 +62,8 @@
           <select class="form-select" name="appliedCourse" formControlName="appliedCourse"
                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedCourse">
             <option value="0">--Select--</option>
-            <option value="1">Higher Technical Education</option>
-            <option value="2">PhD Program</option>
-            <option value="3">Postgraduate Diploma</option>
-            <option value="4">Certification Course</option>
+            
+            <option *ngFor="let item of GetAllAppliedCoursesDDLList" [value]="item.ID">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedCourse.errors" class="text-danger">
             <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedCourse.errors.DropdownValidators">
@@ -132,7 +130,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Apply Course Institute </label>
-          <select class="form-select" name="appliedInstituteCategory" formControlName="appliedInstituteCategory"
+          <select class="form-select" name="appliedInstituteCategory" formControlName="appliedInstituteCategory" (change)="AC_appliedInstituteCategoryDDl()"
                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory">
             <option value="0">--Select--</option>
             <option *ngFor="let item of CategoryOfApplyCourseInstituteList" [value]="item.ID">{{item.Name}}</option>
@@ -145,24 +143,24 @@
           </div>
         </div>
 
-        <!--<div>
+        <div *ngIf="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory==3">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category Of Apply Course Institute(Sub)</label>
           <select class="form-select" name="appliedInstituteSubCategory" formControlName="appliedInstituteSubCategory"
                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+            <option *ngFor="let item of GetAllInstitutionalsDDLList" [value]="item.ID">{{item.Name}}</option>
           </select>
-          <div *ngIf="isSubmitted&&ApplyTeacherHigerTechnicalEducationFromGroup.get('appliedInstituteSubCategory').errors" class="text-danger">
-            <p *ngIf="!ApplyTeacherHigerTechnicalEducationFromGroup.get('appliedInstituteSubCategory').errors.DropdownValidators">
+          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteSubCategory.errors" class="text-danger">
+            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteSubCategory.errors.DropdownValidators">
               <i aria-hidden="true"></i>
               This field is required!
             </p>
           </div>
-        </div>-->
+        </div>
 
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="SaveTeacherHighEduApp()">
-            Save
+            {{requestSearch}}
           </button>
         </div>
 
@@ -170,5 +168,132 @@
     </form>
 
   </div>
+
+  <!--{{THTE_ApplicationList|json}}-->
+
+  <div class="overflow-x-auto mt-3">
+
+    <table class="table table-border w-full table-auto" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+        <tr>
+          <th class="text-left">S No</th>
+          <th class="text-left">Teacher Name</th>
+          <th class="text-left">DOB</th>
+          <th class="text-left">Joining Date</th>
+          <th class="text-left">Applied Coursename</th>
+          <th class="text-left">Applied Institute Name</th>
+          <th class="text-left">Status Name</th>
+          <th class="text-left">HigherStudyPermissionCategory Name </th>
+          <th class="text-left">Institutional Name</th>
+         
+          <th class="text-center">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of THTE_ApplicationList; let idx=index;  ">
+          <td align="left">{{idx+1}}</td>
+          <td align="left">{{ row.TeacherName }}</td>
+          <td align="left">{{ row.DOB }}</td>
+          <td align="left">{{ row.JoiningDate }}</td>
+          <td align="left">{{ row.AppliedCoursename }}</td>
+          <td align="left">{{ row.AppliedInstitute }}</td>
+          <td align="left">{{ row.StatusName }}</td>
+          <td align="left">{{ row.HigherStudyPermissionCategoryName }}</td>
+          <td align="left">{{ row.AppliedInstituteSubCategoryName }}</td>
+        
+        
+          <td align="left">
+            <a href="javascript:void(0);" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
+            <!--<a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>-->
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
+              <i class="ti ti-trash"></i>
+            </button>
+          </td>
+
+
+        </tr>
+      </tbody>
+
+
+    </table>
+
+  </div>
+
+
+  <div class="p-3 paginationBox flex items-center justify-end w-full">
+    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+    <div class="paginationBoxItems flex items-center">
+      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    </div>
+  </div>
 </div>
 
+<ng-template #MyModel_UserRequestHistory let-modal>
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+
+        <button class="btn bg-info text-white" (click)="CloseModalRequestHistorylist()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+
+
+
+      <div class="card-body">
+
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-list"></i>Request History</b>
+          <div class="flex justify-end flex-wrap items-center">
+          </div>
+        </div>
+
+
+        <!--{{UserRequestHistoryList|json}}-->
+        <div class="overflow-x-auto mt-3">
+
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">S No</th>
+                <th class="text-left">Request Type</th>
+                <th class="text-left">Relieving Status</th>
+                <th class="text-left">Joining Status</th>
+                <th class="text-left">
+                  Request Status
+                </th>
+                <th class="text-left">Remark</th>
+                <th class="text-left">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of UserRequestHistoryList; let idx=index;  ">
+                <td align="left">{{idx+1}}</td>
+                <td align="left">{{ row.ServiceRequestName }}</td>
+                <td align="left">{{ row.RelievingStatusName }}</td>
+                <td align="left">{{ row.JoiningStatusName }}</td>
+                <td align="left">{{ row.RequestStatusName }}</td>
+                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.ActionDate }}</td>
+              </tr>
+              <tr *ngIf="UserRequestHistoryList?.length==0">
+                <td colspan="10" class="text-center">No Record Found </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card-footer text-right">
+        <button type="button" (click)="CloseModalRequestHistorylist()" class="btn bg-success text-white btn-sm">
+          Close
+        </button>
+      </div>
+    </div> 
+  </div>
+
+</ng-template>
