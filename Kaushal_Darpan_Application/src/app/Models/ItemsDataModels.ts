@@ -63,6 +63,7 @@ export interface ItemsDetailsInterface {
   ItemId: number;
   ItemDetailsId: number;
   Item?: string;
+  isRepaired?: boolean;
 }
 
 export class AuctionDetailsModel {

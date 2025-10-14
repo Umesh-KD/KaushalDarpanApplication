@@ -116,10 +116,10 @@ addItemsControls() {
       this.itemsFormArray.push(this.formBuilder.group({
         txtEquipmentCode: [item.EquipmentCode ?? 0, [Validators.required]],
         equipmentStatus: [item.EquipmentWorking ?? 0, [DropdownValidators]],
-        isOption: [item.isOption],
+        isOption: [item.isOption || false],
         ItemDetailsId: [item.ItemDetailsId],
         EquipmentCode: [item.EquipmentsCode],
-        isRepaired:[item.isRepaired],
+        isRepaired:[item.isRepaired || false], 
       }));
     });
   }
@@ -221,7 +221,7 @@ addItemsControls() {
   this.itemsFormArray.controls.forEach((group, index) => {
     const equipmentStatus = group.get('equipmentStatus')?.value;
     const isOption = group.get('isOption')?.value;
-    const isRepaired = group.get('isRepaired')?.value;
+   const isRepaired = group.get('isRepaired')?.value;
   });
 
   if (hasError) {
@@ -303,7 +303,7 @@ addItemsControls() {
     EquipmentCode: 0,
     EquipmentWorking: 0,
     isOption: false,
-    isRepaired: false,
+   isRepaired: false,
   });
   this.itemsFormArray.clear();
 }
