@@ -212,86 +212,6 @@ export class ItiInstructorFormComponent {
       }
     });
 
-
-    //this.InstructorForm = this.formBuilder.group(
-    //  {
-    //    // Personal Details
-    //    Uid: ['', Validators.required],
-    //    IsDomicile: [false],
-    //    Name: ['', Validators.required],
-    //    FatherOrHusbandName: ['', Validators.required],
-    //    MotherName: ['', Validators.required],
-    //    Dob: ['', Validators.required],
-    //    Gender: ['', Validators.required],
-    //    MaritalStatus: ['', Validators.required],
-    //    Category: ['', Validators.required],
-    //    Mobile: ['', Validators.required],
-    //    Email: ['', Validators.required],
-
-    //    //Bank Details
-    //    BankAccountNumber: ['', Validators.required],
-    //    IFSCCode: ['', Validators.required],
-    //    BankName: ['', Validators.required],
-    //    ConsentToAssignAsExaminer: [false],
-
-    //    // Permanent Address
-    //    PlotHouseBuildingNo: ['', Validators.required],
-    //    StreetRoadLane: ['', Validators.required],
-    //    AreaLocalitySector: ['', Validators.required],
-    //    LandMark: ['', Validators.required],
-    //    ddlState: ['', [DropdownValidators]],
-    //    ddlDistrict: ['', [DropdownValidators]],
-    //    PropTehsilID: [''],
-    //    PropUrbanRural: [''],
-    //    City: ['', Validators.required],
-    //    villageID: [''],
-    //    pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-    //    //  pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-
-    //    // Correspondence Address
-    //    Correspondence_PlotHouseBuildingNo: ['', Validators.required],
-    //    Correspondence_StreetRoadLane: ['', Validators.required],
-    //    Correspondence_AreaLocalitySector: ['', Validators.required],
-    //    Correspondence_LandMark: ['', Validators.required],
-    //    Correspondence_ddlState: ['', [DropdownValidators]],
-    //    Correspondence_ddlDistrict: ['', [DropdownValidators]],
-    //    Correspondence_PropTehsilID: ['', [DropdownValidators]],
-    //    Correspondence_PropUrbanRural: [''],
-    //    Correspondence_City: ['', Validators.required],
-    //    Correspondence_villageID: [''],
-    //    Correspondence_pincode: ['', [Validators.required, Validators.pattern('^[0-9]{6}$')]],
-
-    //    //// Educational Qualification
-    //    Education_Exam: [''],
-    //    Education_Board: [''],
-    //    Education_Year: [''],
-    //    Education_Subjects: [''],
-    //    Education_Percentage: [''],
-    //    QualificationDocument: [''],
-
-    //    //// Technical Qualification
-    //    Tech_Exam: [''],
-    //    Tech_Board: [''],
-    //    Tech_Subjects: [''],
-    //    Tech_Year: [''],
-    //    Tech_Percentage: [''],
-    //    TechQualificationDocument: [''],
-
-    //    // Employment Details
-    //    Pan_No: ['',],
-    //    Employee_Type: [''],
-    //    Employer_Name: [''],
-    //    Employer_Address: [''],
-    //    Tan_No: [''],
-    //    Aadhar: ['', [Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)]],
-    //    JanAadhar: [''],
-    //    Employment_From: [''],
-    //    Employment_To: [''],
-    //    Basic_Pay: [''],
-    //    EmploymentDocument: [''],
-    //    TehsilName: ['', Validators.required]
-    //  });
-
     this.InstructorForm = this.formBuilder.group({
       // Personal Details
       Uid: ['', Validators.required],
@@ -369,8 +289,6 @@ export class ItiInstructorFormComponent {
       EmploymentDocument: [''],
       TehsilName: ['']
     });
-
-
 
     this.EducationForm = this.formBuilder.group({
       Education_Exam: [''],
@@ -718,8 +636,8 @@ export class ItiInstructorFormComponent {
   debugger;
     this.isSubmitted = true;
 
-    //if (this.InstructorForm.invalid) {
-    //  this.toastr.warning('Please fill all required fields correctly!');
+    //if (!this.InstructorForm.get('Name')?.value || !this.InstructorForm.get('FatherName')?.value) {
+    //  this.toastr.warning('Name and Father Name are required fields!');
     //  this.InstructorForm.markAllAsTouched();
     //  return;
     //}
