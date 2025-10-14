@@ -64,20 +64,34 @@ export class TeacherHigherEducationApplicationVerificationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
-  public async ApplicationList_ForCommittee_THTE(request: PrincipleApplicationListSearchModel) {
+  public async ApplicationList_ForDTE_THTE(request: PrincipleApplicationListSearchModel) {
     const body = JSON.stringify(request);
-    return this.http.post(`${this.APIUrl}/ApplicationList_ForCommittee_THTE`, body, this.headersOptions)
+    return this.http.post(`${this.APIUrl}/ApplicationList_ForDTE_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async UpdateApplicationStatus_DTE_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_DTE_THTE`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
 
-  public async UpdateApplicationStatus_Committee_THTE(request: UpdateApplicationStatusDataModel_Committee) {
-    const body = JSON.stringify(request);
-    return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Committee_THTE`, body, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
+    public async ApplicationList_ForCommittee_THTE(request: PrincipleApplicationListSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/ApplicationList_ForCommittee_THTE`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+    public async UpdateApplicationStatus_Committee_THTE(request: UpdateApplicationStatusDataModel_Committee) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Committee_THTE`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 }
