@@ -8,7 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
+import { DropdownValidators, DropdownValidatorsString } from '../../Services/CustomValidators/custom-validators.service';
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../Models/CommonMasterDataModel';
 import { EnumStatus, GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
@@ -40,6 +40,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = [];
   public CandidateData:any=[];
+  public GenderList: any = [];  
 
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
@@ -65,7 +66,9 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           Validators.minLength(10),        // min 10 digits
           Validators.maxLength(10) ]],        // max 10 digits]],
           CandidateMotherName:[''],
-          CandidateGender:['',DropdownValidators],
+          CandidateGender:[0, [DropdownValidatorsString]],
+
+          
           UIDNumber:['',Validators.required]
       });
 
@@ -79,16 +82,20 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
     // await this.GetMaterData()
     // await this.loadDropdownData('CompanyType')
     //edit
+    // console.log(this.request.Gender,"gender")
     debugger
+    this.loadDropdownData('Gender');
     if (this.CandidateID > 0) {
       await this.GetById(this.CandidateID);
     }
     if(this.key==3){
       this.CandidateFormGroup.disable();
     }
+
+    // this.loadDropdownData('Gender');
+
   }
   get _CandidateFormGroup() { return this.CandidateFormGroup.controls; }
-
 
 
 
@@ -129,12 +136,15 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           this.CandidateData=data.Data;
           if(data && data.Data){
             this.CandidateFormGroup.patchValue({
-              CandidateName: data.Data[0].CandidateName,
-              CandidateFatherName: data.Data[0].CandidateFatherName,
+              Name: data.Data[0].Name,
+              CandidateFatherName: data.Data[0].FatherGuardianName,
               // Address: data.Data.CandidateName,
-              Email: data.Data[0].Email,
-              MobileNo: data.Data[0].MobileNo,
-              SSOID: data.Data[0].SSOID,
+              Email: data.Data[0].EmailID,
+              MobileNo: data.Data[0].MobileNumber,
+              CandidateMotherName: data.Data[0].MotherName,
+              CandidateGender: data.Data[0].Gender,
+              UIDNumber: data.Data[0].UIDNumber
+  
             })
           }
           console.log(this.CandidateFormGroup.value, " check data");
@@ -152,12 +162,15 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
     }
   } 
 
-   SaveData(): void {
+   async SaveData() {
+
+    try{
+      
       debugger
       this.isSubmitted = true;
-      if(this.CandidateFormGroup.get('SSOID')?.value=='' || this.CandidateFormGroup.get('SSOID')?.value==null){
-        this.CandidateFormGroup.get('SSOID')?.setValue('NA');
-      }
+      // if(this.CandidateFormGroup.get('SSOID')?.value=='' || this.CandidateFormGroup.get('SSOID')?.value==null){
+      //   this.CandidateFormGroup.get('SSOID')?.setValue('NA');
+      // }
       if(this.CandidateFormGroup.invalid){
         return;
       }
@@ -165,21 +178,40 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       // this.request.RoleID=this.sSOLoginDataModel.RoleID;
       this.request.ModifyBy=this.sSOLoginDataModel.UserID;
       // let obj=JSON.parse(this.request);
-      let jsonArray=[this.request];
-        console.log(this.request,"request data");
-        this.counsellingImportCandidateListService.SaveImportExcelData(jsonArray).then((data: any) => {
+      this.request.action="Update_studData"
+      //save
+      await this.ItiDataMasterService.SaveStudentCorrectionData(this.request)
+        .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State === EnumStatus.Success) {
-            this.toastr.success(data.Message);
-            this.isSubmitted = false;
-            // this.CandidateData = [];
-            //  this.GetCandidateList(1);
+          console.log(data);
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State = EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            this.ResetControls();
+            this.routers.navigate(['/StudentCorrectionMaster']);
           }
-          else{
-            this.toastr.error(data.Data[0].ErrorMessage);
+          else {
+            this.toastr.error(this.ErrorMessage)
           }
-        });
+
+        }, (error: any) => console.error(error)
+        );
+
     }
+
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+    }
+
 
   // reset
   ResetControls() {
@@ -187,6 +219,18 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
 
     //this.multiSelect.toggleSelectAll();
   }
+
+
+  async loadDropdownData(type: string) {     
+    debugger     
+   await this.commonMasterService.GetCommonMasterData('Gender')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.GenderList = data['Data'];
+          console.log("GenderList", this.GenderList)
+        }, (error: any) => console.error(error)
+        );
+      }
 
 
 }

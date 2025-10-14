@@ -64,5 +64,13 @@ export class ItiDataMasterService {
     }
   
 
+      public async SaveStudentCorrectionData(searchRequest: ITIStudentCorrectionMasterSearchModel) {
+      const body = JSON.stringify(searchRequest);
+      return await this.http.post(this.APIUrl + '/SaveStudentCorrectionData', body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
 
 }
