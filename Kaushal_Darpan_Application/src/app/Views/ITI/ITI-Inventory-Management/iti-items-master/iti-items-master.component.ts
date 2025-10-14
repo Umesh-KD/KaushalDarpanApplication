@@ -66,6 +66,8 @@ export class ITIItemsMasterComponent {
     await this.GetAllData();
     await this.GetTradeDDL();
     await this.GetCollegeDDL();
+    this.Searchrequest.CollegeId=this.sSOLoginDataModel.InstituteID;
+    
   }
 
   async GetAllData()

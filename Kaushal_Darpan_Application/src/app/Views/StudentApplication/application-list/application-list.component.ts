@@ -276,13 +276,12 @@ export class ApplicationListComponent {
             });
             debugger
             var isaLLOT = this.StudentDetailsModelList.find((x) => x.AllotmentStatus == 4)
-            if (isaLLOT && this.sSOLoginDataModel.RoleID==3) {
-              this.IsAlloted=true
-            }
-
+            //if (isaLLOT && this.sSOLoginDataModel.RoleID == 3)
+            //{
+            //  this.IsAlloted=true
+            //}
             console.log(this.StudentDetailsModelList)
           }
-
 
         }, (error: any) => console.error(error)
         );

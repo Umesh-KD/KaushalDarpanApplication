@@ -106,12 +106,17 @@
           <tr *ngFor="let item of SelectedItems; let i = index">
             <td>{{ item.ItemCategoryName }}</td>
             <td>{{ item.ItemName }}</td>
-            <td>
+            <td *ngIf="Searchrequests.ItemType == 1">
               <input type="number"
                      class="form-input"
                      [(ngModel)]="item.Quantity"
                      min="1"
                      placeholder="Enter Qty" (change)="validateQuantity(item)">
+            </td>
+            <td *ngIf="Searchrequests.ItemType === 0"> 
+                 <span style="cursor: pointer; color: blue;" (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId)">
+                {{item.Quantity}}
+              </span>
             </td>
           </tr>
           <tr *ngIf="SelectedItems?.length === 0" class="text-center">
@@ -119,7 +124,7 @@
           </tr>
         </tbody>
       </table>
-      <div *ngIf="SelectedItems?.length > 0">
+      <div *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                for="fileStudentPhoto">Upload Document</label>
         <div class="flex fileUploader">
@@ -144,14 +149,34 @@
       </div>
     </div>
 
-    <div class="mt-4">
+    <div class="mt-4" *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
        <button class="btn bg-info text-white me-2" (click)="saveSelectedItems()">Save</button>
       <!--<button class="btn bg-danger text-white" (click)="cancelSelection()">Cancel</button> -->
     </div>
   </div>
 </div>
 
+<ng-template #Submit_Details_Issue let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+         <b><i class="fa fa-plus">Issue Items</i> </b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+      </div>
+       <div class="card-body">
+          <div class="mb-8">
+            <form>
 
+            </form>
+            <div class="overflow-x-auto mt-3">
+            </div>
+          </div>
+       </div>
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+      </div>
+    </div>
+  </div>
+</ng-template>
 
 
 <ng-template #Submit_Details let-modal

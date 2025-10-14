@@ -220,6 +220,12 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async ItiTradecouncelling(designationId:any) {
+    return await this.http.get(this.APIUrl + '/ItiTradecouncelling/' + designationId , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async StreamMaster(DepartmentID: number = 0, StreamType: number = 0, EndTermId: number = 0) {
 
@@ -763,7 +769,7 @@ export class CommonFunctionService {
   }
 
   public async DistrictMaster_DivisionIDWise(DivisionID: number) {
-
+    debugger;
     return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

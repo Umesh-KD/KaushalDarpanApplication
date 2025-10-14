@@ -9,10 +9,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
-import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel, DTEItemsSearchModel, DTEItemsDataModels,inventoryIssueHistorySearchModel, inventoryIssueHistoryITISearchModel, ItemsIssueReturnModels } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
-
+import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import { DocumentDetailsService } from '../../../../../Common/document-details';
+import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../../Models/UploadFileModel';
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-iti-add-items-master',
@@ -25,7 +29,7 @@ export class AddItiIssueItemComponent {
   public searchTradeRequest = new ITITradeSearchModel();
   public searchRequest = new DTEItemsSearchModel();
   public submitRequest = new ItemsIssueReturnModels();
-  public Searchrequests = new inventoryIssueHistorySearchModel()
+  public Searchrequests = new inventoryIssueHistoryITISearchModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public showColumn: boolean = false;
@@ -53,6 +57,10 @@ export class AddItiIssueItemComponent {
   _EnumRole = EnumRole;
   public ItemtypeList: any[] = []
   SelectedItems: any[] = [];
+  public Dis_FileName: string = '';
+  public FileName: string = '';
+  public ItemsDataLList: any = [];
+ AddItemList: DTEItemsSaveModel[] = [];
   public AllInTableSelect: boolean = false;
   constructor(
     private toastr: ToastrService,
@@ -208,13 +216,13 @@ export class AddItiIssueItemComponent {
 
       this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
-
-      await this.itiInventoryService.GetConsumeItemList(this.searchRequest)
+      //this.searchRequest.ActionType="GetConsumeItemListNew";
+      await this.itiInventoryService.GetConsumeItemListNew(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
           this.ItemsDDLList = data.Data;
-
+            console.log(this.ItemsDDLList);
 
 
         }, error => console.error(error));
@@ -306,7 +314,7 @@ export class AddItiIssueItemComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
-    this.Searchrequests = new inventoryIssueHistorySearchModel();
+    this.Searchrequests = new inventoryIssueHistoryITISearchModel();
     this.AddItemsRequestFormGroup.reset({
       EquipmentsId: 0,
       ItemCategoryId: 0
@@ -384,9 +392,10 @@ export class AddItiIssueItemComponent {
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      
       this.Searchrequests.TypeName = 'ItemList';
 
-      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
+      const data: any = await this.itiInventoryService.GetAll_INV_GetCommonIssueDDLNew(this.Searchrequests);
 
       if (data && data.State === EnumStatus.Success) {
         this.CategoryDDLList = [
@@ -412,17 +421,18 @@ export class AddItiIssueItemComponent {
     debugger
     if (item.Selected) {
       // Add if not already present
-      if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
+      if (!this.SelectedItems.find(x => x.ItemDetailsId === item.ItemDetailsId)) {
         this.SelectedItems.push({
           ItemId: item.ItemId,
           ItemName: item.CampanyName,
-          ItemCategoryName: item.CategoryName,
+          ItemCategoryName: item.ItemCategoryName,
           Quantity: 1, // default,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
           EquipmentsId: item.EquipmentsId,
           issuedTo: item.IssueTo,
           ItemCategoryId: item.ItemCategoryId,
+          ItemDetailsId: item.ItemDetailsId,
         });
         this.FileName = ''
         this.Dis_FileName = ''
@@ -431,5 +441,131 @@ export class AddItiIssueItemComponent {
       // Remove if unchecked
       this.SelectedItems = this.SelectedItems.filter(x => x.ItemId !== item.ItemId);
     }
+  }
+  validateQuantity(item: any) {
+  // Find the original item from ItemsDDLList
+  const original = this.ItemsDDLList.find((x: any)  => x.ItemId === item.ItemId);
+
+  if (original) {
+    const availableQty = original.Quantity;
+
+    if (item.Quantity > availableQty) {
+      alert(`You can’t enter more than available quantity (${availableQty}).`);
+      item.Quantity = availableQty; // Reset to max allowed
+    } else if (item.Quantity < 1) {
+      alert('Quantity must be at least 1.');
+      item.Quantity = 1;
+    }
+  }
+}
+  async saveSelectedItems() {
+      debugger
+      if (!this.SelectedItems || this.SelectedItems.length === 0) {
+        this.toastr.error("Please select at least one item!");
+        return;
+      }
+  
+      this.SelectedItems.forEach((element: any) => {
+        element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
+          element.InstituteID = this.sSOLoginDataModel.InstituteID,
+          element.EndTermID = this.sSOLoginDataModel.EndTermID,
+          element.RoleID = this.sSOLoginDataModel.RoleID,
+          element.StaffId = this.Searchrequests.staffID,
+          //element.itemCategoryId = this.Searchrequests.itemCategoryId,
+          element.itemCategoryId = this.Searchrequests.ItemCategoryId
+          || 0;
+  
+          
+          element.issuedTo = this.Searchrequests.issuedTo && this.Searchrequests.issuedTo > 0
+            ? this.Searchrequests.issuedTo
+            : null; 
+          element.EquipmentsId = element.EquipmentsId || this.Searchrequests.ItemId || 0;
+          element.ItemDetailsId = element.ItemDetailsId || this.Searchrequests.ItemDetailsId || 0;
+      });
+  
+      this.AddItemList = this.SelectedItems
+       console.log(this.AddItemList);
+      try {
+        this.loaderService.requestStarted();
+  
+        await this.itiInventoryService.SaveIssueItemsList(this.AddItemList).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success(data.Message);
+            this.AddItemList = [];
+  
+  
+            this.SelectedItems = [];
+            this.AddItemList = [];
+            this.Searchrequests = {
+                staffID: 0
+              , issuedTo: 0
+              , ItemId: 0
+              , ItemType: 0
+              , ItemCategoryId: 0
+              , InstituteID: 0
+              , TypeName: ''
+              , TradeId:  0
+              , collageTradeID: 0
+              , serialNo: 0
+              , departmentID: 0
+              , EquipmentsId: 0
+              , IssuedId: 0
+              ,StreamID: 0
+              ,ItemDetailsId:0
+            };
+            this.FileName = '';
+            this.Dis_FileName = '';
+            this.ItemsDDLList = [];
+            if (this.AddItemsRequestFormGroup) {
+              this.AddItemsRequestFormGroup.reset();
+            }
+            this.routers.navigate(['/iti-issue-item'], {
+  
+            });
+          } else {
+            this.toastr.error(data.ErrorMessage);
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200)
+      }
+    }
+   async ShowSubmitIssue(content: any, itemId:any) {
+    debugger;
+
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if (!anyTeamSelected) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+    if (this.Searchrequests.staffID == 0) {
+      this.toastr.error("Please select at least one Staff!");
+      return;
+    }
+
+    console.log('Logs Item ID:'+itemId);
+      await this.itiInventoryService.GetAllItemDetails(this.ItemId).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.ItemsDataLList = data.Data; 
+        }
+      });
+    // this.submitRequest.StaffName = this.staffDDLList.find((x: any) => x.staffID == this.Searchrequests.staffID)?.staffName || '';
+    // this.submitRequest.StaffId = this.Searchrequests.staffID;
+    // this.submitRequest.TradeId = this.Searchrequests.TradeId;
+    // this.submitRequest.ItemId = this.Searchrequests.ItemId;
+    // this.submitRequest.Quantity = this.ItemsDDLList.filter((x: any) => x.Selected).length;
+
+
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
   }
 }

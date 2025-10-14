@@ -2,6 +2,7 @@
 export class CounsellingAllotmentListModel {
  
   public TradeID: number = 0
+  public DesignationID: number = 0
   public CandidateID: number = 0
   // public CandidateCount:number=0;
   // public RoleID: number = 0
@@ -13,6 +14,7 @@ export class CounsellingAllotmentListModel {
   public SortOrder: string = '';
   public SortColumn: string = '';
   public action: string = '';
+  public Designation: string = '';
 }
 
 export class CounsellingAllottedListSearchModel {
@@ -74,6 +76,8 @@ export class CounsellingEditImportedCandidateListModel {
   public MobileNo: string = ''
   public SSOID: string = ''
   public Email: string = ''
+  public Trade: string = ''
+  public Designation: string = ''
   public CandidateFatherName: string = ''
 
   public DepartmentID: number = 0;

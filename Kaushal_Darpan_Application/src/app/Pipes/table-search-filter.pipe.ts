@@ -20,4 +20,16 @@ export class TableSearchFilterPipe implements PipeTransform {
         .includes(args);
     });
   }
+
+  //  transform(items: any[], searchText: string): any[] {
+  // if (!items || !searchText) {
+  //   return items;
+  // }
+  // searchText = searchText.toLowerCase();
+  // return items.filter(item =>
+  //   item.CandidateName.toLowerCase().includes(searchText) ||
+  //   item.MobileNo.toLowerCase().includes(searchText) ||
+  //   item.TradeName.toLowerCase().includes(searchText)
+  // );
+  // }
 }

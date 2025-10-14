@@ -19,6 +19,7 @@ import { CounsellingApplicationFormService } from '../../../Services/Counselling
 import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
+import { GlobalConstants } from '../../../Common/GlobalConstants';
 
 // declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
@@ -28,6 +29,8 @@ import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
     standalone: false
 })
 export class CounsellingSelectedOptionListComponent implements OnInit {
+     designations = GlobalConstants.designationList; // Access the designations constant
+  
   public searchRequest = new CounsellingAllotmentListModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public unlockRequest = new CounsellingApplicationSearchModel();
@@ -53,6 +56,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
   sortOrder: string = "";
 
   public TradeID: number = 0;
+  public Designation: string = '';
 
   public TradeDDLList: any = [];
 
@@ -95,19 +99,27 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
     private routers: Router,
     private encryptionService: EncryptionService,
     private counsellingApplicationFormService: CounsellingApplicationFormService,
+    private commonFunctionService: CommonFunctionService,
   ){}
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     // this.searchRequest.TradeID=
-     if (this.activatedRoute.snapshot.queryParamMap.get('Id') != null) {
+    if (this.activatedRoute.snapshot.queryParamMap.get('Id') != null) {
       if(this.searchRequest.TradeID==0){
         this.TradeID = Number(this.activatedRoute.snapshot.queryParamMap.get('Id')?.toString());
       }
       // await this.GetByID(this.PostID);
     }
+
+    if (this.activatedRoute.snapshot.queryParamMap.get('deg') != null) {
+      this.Designation = this.activatedRoute.snapshot.queryParamMap.get('deg') ?? '';
+
+      this.searchRequest.Designation = this.Designation;
+    }
+
     await this.getcandidateOptionList();
-    await this.GetTradeDDL();
+    // await this.GetTradeDDL();
     await this.GetCandidateList(1);
     await this.GetCategoryMatserDDL()
        
@@ -145,6 +157,29 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
    
    get formEditData(){return this.EditDataFormGroup.controls;}
 
+    getTradeByDegree(designationId:number) {
+                console.log(designationId)
+
+    
+    try {
+      this.loaderService.requestStarted(); 
+        this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeDDLList = data['Data'];  
+          console.log('TradeDDLList',this.TradeDDLList);
+          
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetTradeDDL() {
     try {
@@ -433,6 +468,11 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
     }
   }
 
+  async redirectToEdit(row: any) {
+    this.routers.navigate(['edit-counselling-candidate-form'],{
+      queryParams: { AppID: this.encryptionService.encryptData(row.CandidateID) }
+    });
+  }
   async redirectToPreview(row: any) {
     this.routers.navigate(['/candidate-details'],{
       queryParams: { AppID: this.encryptionService.encryptData(row.CandidateID) }
@@ -588,6 +628,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
     );
   }
 
+ 
   async SaveCandidateAllotment_Counselling() {
     
 
@@ -612,4 +653,52 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
       console.error(error);
     }
   }
+
+   async OpenOTPModal_RejectApplication(row:any) {
+  
+    this.Swal2.Confirmation(`Are you sure you want to Reject Application!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          await this.RejectApplication(row);
+        }
+      }
+    );
+  }
+
+   
+  async RejectApplication(rowData:any) {
+    console.log('rowData ',rowData);
+    
+
+    // let selected = this.StudentList.filter((x: any) => x.Marked == true);
+    // selected.forEach((x: any) => {
+    //   x.ModifyBy = this.sSOLoginDataModel.UserID
+    // })
+    
+    // try {
+    //   await this.CounsellingMasterService.SaveCandidateAllotment_Counselling(0, selected).then(async (data: any) => { 
+    //     data = JSON.parse(JSON.stringify(data));
+    //     if(data.State = EnumStatus.Success) {
+    //       this.toastr.success(data.Message);
+    //       await this.GetCandidateList(1);
+    //     } else if(data.State = EnumStatus.Warning) {
+    //       this.toastr.warning(data.Message);
+    //     } else {
+    //       this.toastr.error(data.ErrorMessage);
+    //     }
+    //   });
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  }
+
 }

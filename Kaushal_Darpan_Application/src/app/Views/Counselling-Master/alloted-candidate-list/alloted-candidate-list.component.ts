@@ -7,7 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
-import { CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../../Models/CounsellingMasterModel';
+import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../../Models/CounsellingMasterModel';
 import { Counselling_DropdownDataModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingMasterService } from '../../../Services/CounsellingMaster/counselling-master.service';
@@ -23,11 +23,14 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './alloted-candidate-list.component.css'
 })
 export class AllotedCandidateListComponent {
+       designations = GlobalConstants.designationList; // Access the designations constant
+
   sSOLoginDataModel = new SSOLoginDataModel();
   request = new CounsellingAllottedListSearchModel();
   public tradeRequest = new Counselling_DropdownDataModel();
   public editInstituteReq = new EditInstituteDataModel_Counselling();
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  public searchRequest = new CounsellingAllotmentListModel();
 
   public AllottedCandidateList: any[] = [];
   public TradeDDLList: any = [];
@@ -51,7 +54,7 @@ export class AllotedCandidateListComponent {
   //end table feature default
 
   constructor(
-    private commonMasterService: CommonFunctionService,
+    private commonFunctionService: CommonFunctionService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -67,8 +70,34 @@ export class AllotedCandidateListComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    await this.GetTradeList();
+    // await this.GetTradeList();
   }
+
+
+    getTradeByDegree(designationId:number) {
+                console.log(designationId)
+
+    
+    try {
+      this.loaderService.requestStarted(); 
+        this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeDDLList = data['Data'];  
+          console.log('TradeDDLList',this.TradeDDLList);
+          
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async GetTradeList() {
     try {

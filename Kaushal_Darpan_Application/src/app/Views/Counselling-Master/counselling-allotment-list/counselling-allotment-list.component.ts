@@ -14,6 +14,9 @@ import { AddCollegeWiseScholarshipModel, CollegeWiseScholarshipSearchModel } fro
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMasterModel';
+import { GlobalConstants } from '../../../Common/GlobalConstants';
+
+
 @Component({
     selector: 'counselling-allotment-list',
     templateUrl: './counselling-allotment-list.component.html',
@@ -21,6 +24,9 @@ import { CounsellingAllotmentListModel } from '../../../Models/CounsellingMaster
     standalone: false
 })
 export class CounsellingAllotmentListComponent implements OnInit {
+   designations = GlobalConstants.designationList; // Access the designations constant
+
+  
   public StudentList: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CounsellingAllotmentListModel();
@@ -40,7 +46,7 @@ export class CounsellingAllotmentListComponent implements OnInit {
   sortOrder: string = "";
 
   public TradeDDLList: any = [];
-
+   
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
   closeResult:string | undefined;
@@ -54,6 +60,7 @@ export class CounsellingAllotmentListComponent implements OnInit {
   { id: 2, name: 'Scooty' },
   { id: 3, name: 'Laptop' }
 ];
+   
 
 schemeTypes:any = [
   { id: 1, name: 'Scheme 1' },
@@ -63,14 +70,15 @@ schemeTypes:any = [
 
 SelectedStudent:any = {};
 
-
-
+ 
   constructor(private commonMasterService: CommonFunctionService, private CounsellingMasterService: CounsellingMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private Swal2: SweetAlert2, private Router: Router, private router: ActivatedRoute,
     private modalService:NgbModal,
     private fb:FormBuilder,
     private commonFunctionService: CommonFunctionService,
-  ){}
+  ){
+    
+  }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -93,11 +101,35 @@ SelectedStudent:any = {};
         }
         amountCtrl?.updateValueAndValidity();
       });
-    await this.GetTradeDDL();
+  //  await this.GetTradeDDL();
     await this.GetCounsellingAllotmentList(1);
        
   }
 
+
+    getTradeByDegree(designationId:number) {
+                console.log(designationId)
+
+    
+    try {
+      this.loaderService.requestStarted(); 
+        this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeDDLList = data['Data'];  
+          console.log('TradeDDLList',this.TradeDDLList);
+          
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
   async GetTradeDDL() {
     try {
@@ -151,7 +183,7 @@ SelectedStudent:any = {};
 
 
     AddToList() {
-      debugger
+      
       this.isSubmitted = true;
       if (this.EditDataFormGroup.invalid) return;
       // if(this.availSectionData.length>0){
@@ -235,7 +267,7 @@ SelectedStudent:any = {};
     }
 
   async GetCounsellingAllotmentList(i:any) {
-    debugger
+    
     console.log(i);
     if(i==1){
       this.pageNo=1;
@@ -291,7 +323,7 @@ SelectedStudent:any = {};
 
   // get all data
   async ClearSearchData() {
-    debugger
+    
     // this.searchRequest.Name = '';
     // this.searchRequest.Enrollment = '';
     // this.searchRequest.Category='';
