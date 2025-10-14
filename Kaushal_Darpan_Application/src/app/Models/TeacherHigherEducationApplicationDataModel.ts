@@ -60,5 +60,28 @@ export class THTE_ApplicationSearchModel {
   public StaffID: number = 0;
 }
 
+export class PrincipleApplicationListSearchModel extends RequestBaseModel {
+  public Id: number = 0;
+  public THTEAppID: number = 0;
+  public Name: string = '';
+  public StaffID: number = 0;
+  public status?: number = 0;
+}
 
+export class THTE_DropdownDataModel{
+  public action?: string = ''
+}
 
+// public class UpdateApplicationStatusDataModel_Principle
+// {
+//     public int? THTEAppID { get; set; }
+//     public int? ModifyBy { get; set; }
+// }
+
+export class UpdateApplicationStatusDataModel_Principle {
+  public THTEAppID?: number = 0;
+  public ModifyBy?: number = 0;
+  public status?: number = 0;
+  public Remark?: string = '';
+  public RoleID?: string = '';
+}

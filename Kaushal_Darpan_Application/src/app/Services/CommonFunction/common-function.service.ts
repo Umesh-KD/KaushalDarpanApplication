@@ -26,6 +26,7 @@ import { NodalDataModel } from '../../Models/VerifierDataModel';
 import { BterAllotmentDocumentListModel } from '../../Models/BterAllotmentReportingDataModel';
 import { StudentAdmitCardDownloadModel } from '../../Models/GenerateRollDataModels';
 import { SSOIDDetailRequestModel } from '../../Models/CampusPostDataModel';
+import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 
 @Injectable({
@@ -768,7 +769,7 @@ export class CommonFunctionService {
   }
 
   public async DistrictMaster_DivisionIDWise(DivisionID: number) {
-
+    debugger;
     return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1967,6 +1968,13 @@ export class CommonFunctionService {
 
   public async GetHostelStatusDDL() {
     return await this.http.post(this.APIUrl + '/GetHostelStatusDDL', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async THTE_StatusDDL(request: THTE_DropdownDataModel) {
+    return await this.http.post(this.APIUrl + '/THTE_StatusDDL', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

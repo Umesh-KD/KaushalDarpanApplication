@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -49,4 +49,19 @@ export class TeacherHigherEducationApplicationVerificationService {
       ).toPromise();
   }
 
+  public async ApplicationList_ForPrinciple_THTE(request: PrincipleApplicationListSearchModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/ApplicationList_ForPrinciple_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateApplicationStatus_Principle_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Principle_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
