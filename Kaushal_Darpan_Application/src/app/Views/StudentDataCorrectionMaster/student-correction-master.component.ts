@@ -110,7 +110,8 @@ export class StudentCorrectionMasterComponent implements OnInit {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       
       // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+        //this.searchRequest.UIDNumber
         this.searchRequest.action="Get_NCVT_studentData";
       // }
       this.loaderService.requestStarted();
