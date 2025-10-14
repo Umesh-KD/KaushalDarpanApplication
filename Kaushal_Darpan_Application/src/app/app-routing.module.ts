@@ -1470,6 +1470,7 @@ const routes: Routes = [
       { path: 'teacher-higher-education-application', loadChildren: () => import('./Views/BTER/THTE/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)},
       { path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views//BTER/THTE/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)},
       { path: 'thte-application-verification', loadChildren: () => import('./Views//BTER/THTE/thte-principle-application-list/thte-principle-application-list.module').then(m => m.THTEPrincipleApplicationListModule), title: 'Application Verify'},
+      { path: 'thte-application-verify-committee', loadChildren: () => import('./Views//BTER/THTE/verify-application-committee/verify-application-committee.module').then(m => m.VerifyApplicationCommitteeModule), title: 'Application Verify'},
       
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
       { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },

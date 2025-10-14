@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Committee, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +60,22 @@ export class TeacherHigherEducationApplicationVerificationService {
   public async UpdateApplicationStatus_Principle_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Principle_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ApplicationList_ForCommittee_THTE(request: PrincipleApplicationListSearchModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/ApplicationList_ForCommittee_THTE`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UpdateApplicationStatus_Committee_THTE(request: UpdateApplicationStatusDataModel_Committee) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Committee_THTE`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
