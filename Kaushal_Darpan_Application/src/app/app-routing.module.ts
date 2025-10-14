@@ -1472,7 +1472,8 @@ const routes: Routes = [
       },
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
 
-
+      { path: 'pushncvtdatatosdh', loadChildren: () => import('./Views/ITI/NCVTAPI/upload-ncvt-data/upload-ncvt-data.module').then(m => m.UploadNcvtDataModule) },
+      { path: 'NcvtAdmissionStudentList', loadChildren: () => import('./Views/ITI/NCVTAPI/ncvt-admission-student-list/ncvt-admission-student-list.module').then(m => m.NcvtAdmissionStudentListModule) },
 
     ]
   },
@@ -1536,7 +1537,7 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-
+      
 
     ]
   },
@@ -1577,6 +1578,8 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+  
+  
 
 
 
