@@ -239,5 +239,17 @@ export class ITIStudentCorrectionMasterSearchModel {
 
 }
 
+export class ChunksSearchModel
+{
+
+  public PageSize: number = 0;
+  public UserID: number = 0;
+  public RoleID: number = 0;
+  public AcedmicYearID: number = 0;
+  public Action: number = 0;
+
+}
+
+
 
 
