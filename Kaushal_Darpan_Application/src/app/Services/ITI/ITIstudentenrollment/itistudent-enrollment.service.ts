@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
+import { ITIStudentCorrectionMasterSearchModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
 import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 
 @Injectable({
@@ -118,5 +118,6 @@ export class ITIStudentEnrollmentService {
   //       catchError(this.handleErrorObservable)
   //     ).toPromise();
   // }
+
 
 }
