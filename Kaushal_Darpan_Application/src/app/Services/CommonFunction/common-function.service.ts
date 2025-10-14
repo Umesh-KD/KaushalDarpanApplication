@@ -768,7 +768,7 @@ export class CommonFunctionService {
   }
 
   public async DistrictMaster_DivisionIDWise(DivisionID: number) {
-
+    debugger;
     return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

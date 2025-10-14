@@ -190,7 +190,7 @@
 
         <div>
           <label>Division<span class="StarMarking">*</span></label>
-          <select formControlName="divisionID" class="form-select" id="divisionId" (change)="ddlDivision_Change()">
+          <select formControlName="divisionID" class="form-select" id="divisionId" (change)="onDivisionChange()">
             <option value="0">--Select--</option>
             <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
 
