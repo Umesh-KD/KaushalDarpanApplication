@@ -261,7 +261,7 @@ export class TeacherHigherEducationApplicationComponent {
      
       this.teacherHigherEducationApplicationSaveRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.teacherHigherEducationApplicationSaveRequest.StaffID = this.sSOLoginDataModel.StaffID;
-      
+      debugger
       //save
       await this.teacherHigherEducationApplicationService.SaveTeacherHighEduApp(this.teacherHigherEducationApplicationSaveRequest)
         .then((data: any) => {
@@ -272,9 +272,10 @@ export class TeacherHigherEducationApplicationComponent {
           if (data.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.teacherHigherEducationApplicationSaveRequest = new TeacherHigherEducationApplicationSaveModel();
-             this.GetTHTE_ApplicationData();
+            this.GetTHTE_ApplicationData();
+            this.ButtonText = "Save";
           } else if (data.State == EnumStatus.Warning) {
-            this.toastr.warning(this.ErrorMessage);
+            this.toastr.warning(this.Message);
           } else {
             this.toastr.error(this.Message);
             console.log(this.ErrorMessage);

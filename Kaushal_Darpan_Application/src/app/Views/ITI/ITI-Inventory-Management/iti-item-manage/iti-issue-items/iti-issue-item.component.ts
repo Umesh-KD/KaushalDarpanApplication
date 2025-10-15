@@ -59,8 +59,11 @@ export class AddItiIssueItemComponent {
   SelectedItems: any[] = [];
   public Dis_FileName: string = '';
   public FileName: string = '';
- AddItemList: DTEItemsSaveModel[] = [];
+  AddItemList: DTEItemsSaveModel[] = [];
   public AllInTableSelect: boolean = false;
+  public ItemsDataList: any = [];
+  public selectedDataList: any[] = [];
+  public staff_ID:number =0;
   constructor(
     private toastr: ToastrService,
     private commonFunctionService: CommonFunctionService,
@@ -69,7 +72,9 @@ export class AddItiIssueItemComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private modalService: NgbModal,
-    private routers: Router) { }
+    private routers: Router,
+    private documentDetailsService: DocumentDetailsService,
+    public appsettingConfig: AppsettingService) { }
 
 
   async ngOnInit() {
@@ -205,6 +210,16 @@ export class AddItiIssueItemComponent {
   async DGET_Details() {
     
     try {
+      const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      if (!anyTeamSelected) {
+        this.toastr.error("Please select at least one Item!");
+        return;
+      }
+
+      if (this.Searchrequests.staffID == 0) {
+        this.toastr.error("Please select at least one Staff!");
+        return;
+      }
       this.loaderService.requestStarted();
       debugger
       //if (!TradeId || TradeId === 0) {
@@ -360,6 +375,7 @@ export class AddItiIssueItemComponent {
   async GetTradeDDL() {
     debugger;
     try {
+      
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequests.TypeName = 'TradeList';
@@ -389,6 +405,16 @@ export class AddItiIssueItemComponent {
   async GetCategoryDDL() {
     debugger;
     try {
+      // const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      // if (!anyTeamSelected) {
+      //   this.toastr.error("Please select at least one Item!");
+      //   return;
+      // }
+
+      // if (this.Searchrequests.staffID == 0) {
+      //   this.toastr.error("Please select at least one Staff!");
+      //   return;
+      // }
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
       
@@ -405,6 +431,7 @@ export class AddItiIssueItemComponent {
         this.Searchrequests.ItemId = 0;
         console.log('category list ==>', this.CategoryDDLList);
         this.ItemsDDLList = [];
+        this.SelectedItems = [];
       } else {
         this.CategoryDDLList = [{ ItemId: 0, ItemCategoryName: 'Choose Category' }];
         this.Searchrequests.ItemId = 0;
@@ -425,7 +452,7 @@ export class AddItiIssueItemComponent {
           ItemId: item.ItemId,
           ItemName: item.CampanyName,
           ItemCategoryName: item.ItemCategoryName,
-          Quantity: 1, // default,
+          Quantity: item.Quantity, // default,
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
           EquipmentsId: item.EquipmentsId,
@@ -534,4 +561,179 @@ export class AddItiIssueItemComponent {
         }, 200)
       }
     }
+    async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
+    debugger;
+      this.staff_ID=staffId;
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if (!anyTeamSelected) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
+
+    if (this.Searchrequests.staffID == 0) {
+      this.toastr.error("Please select at least one Staff!");
+      return;
+    }
+
+    console.log('Logs Item ID:'+itemId);
+      await this.itiInventoryService.GetIssueItemListPermanent(itemId).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.ItemsDataList = data.Data; 
+          console.log(this.ItemsDataList);
+        }
+      }); 
+
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
+  }
+  toggleAll(event: any) {
+    const checked = event.target.checked;
+    this.ItemsDataList.forEach((item: any) => item.Selected = checked);
+  }
+  async confirmSubmitNew() {
+  const selectedItems = this.ItemsDataList.filter((x: any) => x.Selected);
+
+    if (selectedItems.length === 0) {
+      this.toastr.warning("Please select at least one item to return.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
+      return;
+    }
+    this.selectedDataList = this.ItemsDataList.filter((item:any) => item.Selected);
+    this.selectedDataList = this.ItemsDataList .filter((item: any) => item.Selected).map((item: any) => ({
+      ...item,
+      StaffId: this.staff_ID,
+      InstituteID : this.sSOLoginDataModel.InstituteID,
+      EndTermID : this.sSOLoginDataModel.EndTermID,
+      RoleID : this.sSOLoginDataModel.RoleID,  
+      FileName : this.FileName, 
+      Dis_FileName : this.Dis_FileName,
+    }));
+    console.table(this.selectedDataList); 
+    await this.confirmSubmit(this.selectedDataList); 
+  }
+  async confirmSubmit(arr: any,) {
+    debugger;
+
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+    this.submitRequest.TradeId=this.TradeId,
+    this.submitRequest.StaffId = this.staff_ID,
+    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
+    this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
+    this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
+    this.submitRequest.StaffId = this.Searchrequests.staffID, 
+    this.submitRequest.ItemList = arr; 
+    this.submitRequest.FileName = this.FileName;
+
+    console.log('arr: '+arr);
+    try {
+      await this.itiInventoryService.GetIssueSubmitPermanent(this.submitRequest)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success)
+          {
+            this.toastr.success("Items issued successfully", "", {
+              toastClass: "ngx-toastr my-update-toast"
+            });
+
+            //this.GetAllData();
+           // this.CloseModalPopup();
+          } else if (this.State == EnumStatus.Error)
+          {
+            this.toastr.error("Something went wrong.");
+          }
+        });
+
+      this.modalService.dismissAll();
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error('Something went wrong. Please try again.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "50mb",
+        FolderName:"Students",
+   
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          debugger
+          if (this.State == EnumStatus.Success) {
+              this.FileName = data.Data[0].FileName;
+              this.Dis_FileName = data.Data[0].Dis_FileName;
+            console.log(this.SelectedItems)
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async DeleteDocument(item: any) {
+    try {
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName =  "Students";
+      deleteModel.FileName = item;
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State != EnumStatus.Error) {
+            debugger
+              this.FileName = '';
+              this.Dis_FileName = '';
+            console.log(this.SelectedItems)
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  onIssueItemToggle(item: any) {
+  // Only run logic when checkbox is checked
+    if (item.Selected) {
+      // Check both conditions
+      debugger;
+      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
+        console.log('✅ Serial item selected:', item); 
+      }
+      else {
+      console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+      this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+        }
+    }
+  }
 }

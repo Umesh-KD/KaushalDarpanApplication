@@ -6,24 +6,25 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-thte-principle-application-list',
+  selector: 'app-verify-application-committee',
   standalone: false,
-  templateUrl: './thte-principle-application-list.component.html',
-  styleUrl: './thte-principle-application-list.component.css'
+  templateUrl: './verify-application-committee.component.html',
+  styleUrl: './verify-application-committee.component.css'
 })
-export class THTEPrincipleApplicationListComponent {
+export class VerifyApplicationCommitteeComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
+  public request = new UpdateApplicationStatusDataModel_Committee();
 
   public ApplicationListData: any = [];
   public StatusListDDL: any = [];
@@ -66,11 +67,12 @@ export class THTEPrincipleApplicationListComponent {
     try {
       this.dropdownRequest.action = "GetStatusDDL"
       this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
+      
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1340 || x.ID === 1341 || x.ID === 1342)
-        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341 || x.ID === 1342)
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341 || x.ID === 1342 || x.ID === 1343)
+        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1343 || x.ID === 1342)
       })
     } catch (error) {
       console.error(error);
@@ -81,7 +83,7 @@ export class THTEPrincipleApplicationListComponent {
     this.searchRequest = new PrincipleApplicationListSearchModel();
   }
 
-  async ApplicationList_ForPrinciple_THTE() {
+  async ApplicationList_ForCommittee_THTE() {
     try {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
@@ -90,7 +92,7 @@ export class THTEPrincipleApplicationListComponent {
       if(this.sSOLoginDataModel.RoleID === EnumRole.Principal || this.sSOLoginDataModel.RoleID === EnumRole.PrincipalNon) {
         this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
       }
-      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForPrinciple_THTE(this.searchRequest).then(async (data: any) => {
+      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForCommittee_THTE(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.ApplicationListData = data['Data'];
@@ -113,10 +115,14 @@ export class THTEPrincipleApplicationListComponent {
       this.toastr.warning('Please select status.');
       return;
     }
+    if(this.request.CommitteeDocs == '' || this.request.CommitteeDocs == undefined || this.request.CommitteeDocs == null) {
+      this.toastr.warning('Please upload committee document.');
+      return;
+    }
 
     let dyMsg = '';
-    if(this.status == 1341) {
-      dyMsg = "Approve";
+    if(this.status == 1343) {
+      dyMsg = "Accept And Forward To DTE";
     } else {
       dyMsg = "Reject";
     }
@@ -164,24 +170,75 @@ export class THTEPrincipleApplicationListComponent {
   async SaveDataMarked(remark: string) {
     try {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
-      selected.forEach((x: any) => {
-        x.ModifyBy = this.sSOLoginDataModel.UserID,
-        x.status = this.status,
-        x.Remark = remark,
-        x.RoleID = this.sSOLoginDataModel.RoleID
-      })
+      this.request.ApplicationListData = selected
 
-      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Principle_THTE(selected)
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID
+      this.request.status = this.status
+      this.request.Remark = remark
+      this.request.RoleID = this.sSOLoginDataModel.RoleID
+
+      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Committee_THTE(this.request)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.status = 0
-          await this.ApplicationList_ForPrinciple_THTE();
+          this.request = new UpdateApplicationStatusDataModel_Committee();
+          await this.ApplicationList_ForCommittee_THTE();
         }
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    try {
+      this.file = event.target.files[0];
+      if (this.file) {
+        if (this.file.type == 'image/jpeg' || this.file.type == 'image/jpg' || this.file.type == 'image/png' || this.file.type == 'application/pdf') {
+          //size validation
+          if (this.file.size > 2000000) {
+            this.toastr.error('Select less then 2MB File')
+            return
+          }
+        }
+        else {// type validation
+          this.toastr.error('Select Only jpeg/jpg/png file')
+          return
+        }
+        // upload to server folder
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            if (data.State == EnumStatus.Success) {
+              if (Type == "CommitteeDoc") {
+                this.request.Dis_CommitteeDocs = data['Data'][0]["Dis_FileName"];
+                this.request.CommitteeDocs = data['Data'][0]["FileName"];
+
+              }
+              event.target.value = null;
+            }
+            if (data.State == EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage)
+            }
+            else if (data.State == EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
     }
   }
 

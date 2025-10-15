@@ -13,12 +13,12 @@ import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-thte-principle-application-list',
+  selector: 'app-thte-committee-afterprinciple-application-list',
   standalone: false,
-  templateUrl: './thte-principle-application-list.component.html',
-  styleUrl: './thte-principle-application-list.component.css'
+  templateUrl: './thte-committee-afterprinciple-application-list.component.html',
+  styleUrl: './thte-committee-afterprinciple-application-list.component.css'
 })
-export class THTEPrincipleApplicationListComponent {
+export class THTECommitteeafterPrincipleApplicationListComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public searchRequest = new PrincipleApplicationListSearchModel();
@@ -59,27 +59,23 @@ export class THTEPrincipleApplicationListComponent {
   async ngOnInit () { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    await this.GetStatusData();
+    await this.GetMasterData();
   }
 
-  async GetStatusData() {
+  async GetMasterData() {
     try {
       this.dropdownRequest.action = "GetStatusDDL"
-      this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1340 || x.ID === 1341 || x.ID === 1342)
-        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341 || x.ID === 1342)
+        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID !== 1340)
       })
     } catch (error) {
       console.error(error);
     }
   }
 
-  async btn_Clear() {
-    this.searchRequest = new PrincipleApplicationListSearchModel();
-  }
+  async btn_Clear() {}
 
   async ApplicationList_ForPrinciple_THTE() {
     try {
@@ -109,11 +105,6 @@ export class THTEPrincipleApplicationListComponent {
       this.toastr.warning('Please select at least one record.');
       return;
     }
-    if(this.status == 0) {
-      this.toastr.warning('Please select status.');
-      return;
-    }
-
     let dyMsg = '';
     if(this.status == 1341) {
       dyMsg = "Approve";
