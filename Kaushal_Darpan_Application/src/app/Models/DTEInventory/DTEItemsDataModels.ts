@@ -132,7 +132,7 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public Remarks: string = '';
   public ConditionAtReturn: number = 0;
   public SelectedCount: number = 0;
-
+  public FileName: string = '';
   
   public ItemList: ItemsDetails[] = [];
 }
