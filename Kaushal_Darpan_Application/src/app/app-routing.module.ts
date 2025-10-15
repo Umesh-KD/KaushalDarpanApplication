@@ -30,6 +30,7 @@ const routes: Routes = [
       { path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
       { path: 'ItiInstructorForm/:id', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
       { path: 'MainItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/main-iti-instructor-form/main-iti-instructor-form.module').then(m => m.MainItiInstructorFormModule) },
+      { path: 'iti-Examination-public-info', loadChildren: () => import('./Views/iti-Examination-public-info/iti-Examination-public-info.module').then(m => m.ITIExaminationPublicInfoModule) },
 
       /* { path: 'itipublicinfotabs', loadChildren: () => import('./Views/itipublic-info-tabs/itipublic-info-tabs.module').then(m => m.ITIPublicInfoTabsModule) }*/
     ]
@@ -1474,7 +1475,7 @@ const routes: Routes = [
         path: 'teacher-higher-education-application-Verification', loadChildren: () => import('./Views/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.module').then(m => m.TeacherHigherEducationApplicationVerificationModule)
       },
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
-      { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
+       { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
 
 
 
