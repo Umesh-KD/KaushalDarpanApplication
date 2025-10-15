@@ -157,7 +157,8 @@ Designation?.disable();
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
-          if(data && data.Data){
+          if (data && data.Data) {
+            console.log(data.Data[0]);
             this.CandidateFormGroup.patchValue({
               CandidateName: data.Data[0].CandidateName,
               CandidateFatherName: data.Data[0].CandidateFatherName,
@@ -165,7 +166,7 @@ Designation?.disable();
               Email: data.Data[0].Email,
               MobileNo: data.Data[0].MobileNo,
               SSOID: data.Data[0].SSOID,
-              Trade: data.Data[0].Trade,
+              Trade: data.Data[0].TradeName,
               Designation: data.Data[0].Designation,
             })
           }

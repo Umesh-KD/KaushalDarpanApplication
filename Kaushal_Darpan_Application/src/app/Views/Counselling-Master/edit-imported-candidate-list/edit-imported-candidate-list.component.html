@@ -101,9 +101,9 @@
               </div> -->
           </div>
               <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Trade  
-            </label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Trade  {{request.TradeName}}
+                </label>
             <input type="text" class="form-input" placeholder="Enter Trade" id="Trade" name="Trade"
                    [(ngModel)]="request.Trade" formControlName="Trade" disabled>
             <div *ngIf="isSubmitted && _CandidateFormGroup['Trade'].errors" class="text-danger">
