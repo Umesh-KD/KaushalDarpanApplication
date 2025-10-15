@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Committee, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
-import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel    } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 
 @Injectable({

@@ -196,7 +196,7 @@
           </tr>
         </tbody>
       </table>
-      <div *ngIf="SelectedItems?.length > 0">
+      <div *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                for="fileStudentPhoto">Upload Document</label>
         <div class="flex fileUploader">
