@@ -1480,7 +1480,7 @@ const routes: Routes = [
       { path: 'NcvtAdmissionStudentList', loadChildren: () => import('./Views/ITI/NCVTAPI/ncvt-admission-student-list/ncvt-admission-student-list.module').then(m => m.NcvtAdmissionStudentListModule) },
       { path: 'thte-application-verification-dte', loadChildren: () => import('./Views//BTER/THTE/thte-application-dte-list/thte-application-dte-list.module').then(m => m.THTEApplicationDteListModule), title: 'Application Verify For DTE' },
       //{ path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
-
+      { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
 
     ]
   },
@@ -1585,6 +1585,7 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+ 
   
   
 
