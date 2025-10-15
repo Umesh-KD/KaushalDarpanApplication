@@ -70,6 +70,7 @@ export class PrincipleApplicationListSearchModel extends RequestBaseModel {
 
 export class THTE_DropdownDataModel{
   public action?: string = ''
+  public RoleID?: number = 0
 }
 
 // public class UpdateApplicationStatusDataModel_Principle
@@ -84,15 +85,27 @@ export class UpdateApplicationStatusDataModel_Principle {
   public status?: number = 0;
   public Remark?: string = '';
   public RoleID?: string = '';
-  
 }
 
+export class UpdateApplicationStatusDataModel_Committee {
+  public status?: number = 0;
+  public Remark?: string = '';
+  public RoleID?: number = 0;
+  public ModifyBy?: number = 0;
+  public CommitteeDocs?: string = '';
+  public Dis_CommitteeDocs?: string = '';
+  public ApplicationListData?: ApplicationListDataModel_THTE[] = [];
+}
+
+export class ApplicationListDataModel_THTE {
+  public THTEAppID?: number = 0;
+}
 
 export class ApplicationGenrateOrderByDteListSearchModel extends RequestBaseModel {
-  public Id: number = 0;
-  public THTEAppID: number = 0;
-  public Name: string = '';
-  public StaffID: number = 0;
-  public status?: number = 0;
-  public THTEAppIDs?: string = '';
+    public Id: number = 0;
+    public THTEAppID: number = 0;
+    public Name: string = '';
+    public StaffID: number = 0;
+    public status?: number = 0;
+    public THTEAppIDs?: string = '';
 }
