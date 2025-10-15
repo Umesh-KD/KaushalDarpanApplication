@@ -20,6 +20,7 @@ import { StudentDetailsModel } from '../../../../Models/StudentDetailsModel';
 import { DateConfigurationModel } from '../../../../Models/DateConfigurationDataModels';
 import { DateConfigService } from '../../../../Services/DateConfiguration/date-configuration.service';
 import { StudentExaminationITIService } from '../../../../Services/ITI/Examination/student-examination-iti.service';
+import { ITIStudentRevaluationService } from '../../../../Services/ITI/Examination/iti-student-revaluation.service';
 
 @Component({
   selector: 'app-revealuation',
@@ -59,6 +60,7 @@ export class RevealuationComponent {
   constructor(private commonFunctionService: CommonFunctionService,
     private revaluationService: RevaluationService,
     private examinationservice: StudentExaminationITIService,
+    private StudentRevaluation: ITIStudentRevaluationService,
     private loaderService: LoaderService,
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
@@ -80,13 +82,17 @@ export class RevealuationComponent {
 
 
   async submitRollDob(stepper: MatStepper): Promise<void> {
+    debugger
     try {
+
+      this.searchRequest.RollNo = 2881;
+      this.searchRequest.DOB = '2006-10-04';
 
       if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
         this.toastr.error('Please fill in both Roll Number and Date of Birth.');
-        return;  // Exit the function if validation fails
+        return;  
       }
-      await this.examinationservice.GetDetails(this.searchRequest).then((data: any) => {
+      await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest).then((data: any) => {
 
         if (data.State == EnumStatus.Success) {
 
@@ -121,7 +127,7 @@ export class RevealuationComponent {
     try {
       console.log(row, "dadadadadda")
 
-      await this.revaluationService.GetRevalation(row).then((data: any) => {
+      await this.StudentRevaluation.GetRevalation(row).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.state !== EnumStatus.Error) {
 
@@ -396,4 +402,9 @@ export class RevealuationComponent {
     }
   }
 
+
+  async RVLPayment() {
+
+
+  }
 }
