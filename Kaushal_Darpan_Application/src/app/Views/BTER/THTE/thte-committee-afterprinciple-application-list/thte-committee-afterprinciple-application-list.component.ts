@@ -6,29 +6,26 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { ApplicationGenrateOrderByDteListSearchModel, PrincipleApplicationListSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Principle } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-thte-application-dte-list',
+  selector: 'app-thte-committee-afterprinciple-application-list',
   standalone: false,
-  templateUrl: './thte-application-dte-list.component.html',
-  styleUrl: './thte-application-dte-list.component.css'
+  templateUrl: './thte-committee-afterprinciple-application-list.component.html',
+  styleUrl: './thte-committee-afterprinciple-application-list.component.css'
 })
-export class THTEApplicationDteListComponent {
+export class THTECommitteeafterPrincipleApplicationListComponent {
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   public searchRequest = new PrincipleApplicationListSearchModel();
   public dropdownRequest = new THTE_DropdownDataModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
-  public _DTEGenrateOrder = new ApplicationGenrateOrderByDteListSearchModel();
-
 
   public ApplicationListData: any = [];
-  public ApplicationListOrderData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
 
@@ -71,11 +68,7 @@ export class THTEApplicationDteListComponent {
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
-        this.UpdateStatusListDDL = data['Data'];
-
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1343 || x.ID == 1344)
-        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344)
-        
+        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID !== 1340)
       })
     } catch (error) {
       console.error(error);
@@ -90,8 +83,10 @@ export class THTEApplicationDteListComponent {
       this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
 
-      
-      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForDTE_THTE(this.searchRequest).then(async (data: any) => {
+      if(this.sSOLoginDataModel.RoleID === EnumRole.Principal || this.sSOLoginDataModel.RoleID === EnumRole.PrincipalNon) {
+        this.searchRequest.InstituteId = this.sSOLoginDataModel.InstituteID
+      }
+      await this.teacherHigherEducationApplicationVerificationService.ApplicationList_ForPrinciple_THTE(this.searchRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.ApplicationListData = data['Data'];
@@ -110,8 +105,6 @@ export class THTEApplicationDteListComponent {
       this.toastr.warning('Please select at least one record.');
       return;
     }
-
-
     let dyMsg = '';
     if(this.status == 1341) {
       dyMsg = "Approve";
@@ -164,22 +157,17 @@ export class THTEApplicationDteListComponent {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
       selected.forEach((x: any) => {
         x.ModifyBy = this.sSOLoginDataModel.UserID,
-          x.status = this.status,
-          x.Remark = remark,
-          x.RoleID = this.sSOLoginDataModel.RoleID  
+        x.status = this.status,
+        x.Remark = remark,
+        x.RoleID = this.sSOLoginDataModel.RoleID
       })
-      debugger
-      
 
-      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_DTE_THTE(selected)
+      await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Principle_THTE(selected)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.status = 0
-          this._DTEGenrateOrder.THTEAppIDs = selected.map((x: any) => x.THTEAppID).join(',');
-          this._DTEGenrateOrder.RoleID = this.sSOLoginDataModel.RoleID;
-          this.GenrateOrder();
           await this.ApplicationList_ForPrinciple_THTE();
         }
       })
@@ -187,43 +175,6 @@ export class THTEApplicationDteListComponent {
       console.error(error);
     }
   }
-
-
-
-
-  async GenrateOrder() {
-    debugger
-    await this.teacherHigherEducationApplicationVerificationService.GetApplication_GenrateOrder_Dte_THTE(this._DTEGenrateOrder).then(async (data: any) => {
-        
-        data = JSON.parse(JSON.stringify(data));
-        debugger
-        if (data && data.Data) {
-          const base64 = data.Data;
-
-          const byteCharacters = atob(base64);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: 'application/pdf' });
-          const blobUrl = URL.createObjectURL(blob);
-
-          const link = document.createElement('a');
-          link.href = blobUrl;
-          link.download = 'THTEApplicationGenrateOrderDte.pdf';
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          URL.revokeObjectURL(blobUrl);
-        } 
-      }, (error: any) => {
-        console.error(error);
-        this.toastr.error("some error !")
-      });
-  }
-
 
   //table feature
   calculateInTableTotalPage() {

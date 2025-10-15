@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Committee, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel    } from '../../Models/TeacherHigherEducationApplicationDataModel';
+
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +92,30 @@ export class TeacherHigherEducationApplicationVerificationService {
     public async UpdateApplicationStatus_Committee_THTE(request: UpdateApplicationStatusDataModel_Committee) {
         const body = JSON.stringify(request);
         return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_Committee_THTE`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+    public async GetApplication_GenrateOrder_Dte_THTE(request: ApplicationGenrateOrderByDteListSearchModel) {
+        const body = JSON.stringify(request);
+        debugger
+        return this.http.post(`${this.APIUrl}/GetApplication_GenrateOrder_Dte_THTE`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+
+    public async ApplicationList_ForCommitteeAfterPrinciple_THTE(request: PrincipleApplicationListSearchModel) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/ApplicationList_ForCommitteeAfterPrinciple_THTE`, body, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
+    public async UpdateApplicationStatus_CommitteeAfterPrinciple_THTE(request: UpdateApplicationStatusDataModel_Principle[]) {
+        const body = JSON.stringify(request);
+        return this.http.post(`${this.APIUrl}/UpdateApplicationStatus_CommitteeAfterPrinciple_THTE`, body, this.headersOptions)
             .pipe(
                 catchError(this.handleErrorObservable)
             ).toPromise();

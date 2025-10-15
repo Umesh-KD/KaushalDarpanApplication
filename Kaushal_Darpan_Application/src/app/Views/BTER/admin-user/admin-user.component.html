@@ -30,9 +30,9 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contact SSO</label>
-          <input type="text" class="form-input" placeholder="Contact SSO Number" id="MobileNo" [(ngModel)]="searchRequest.MobileNo" maxlength="10">
-          
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO</label>
+          <input type="text" class="form-input" placeholder="SSO" id="SSOID" [(ngModel)]="searchRequest.SSOID">
+
         </div>
 
         <div>
@@ -79,10 +79,11 @@
             <th class="text-left">
               Name
             </th>
-            <th class="text-left">SSO User Name</th>
+            <th class="text-left">SSO</th>
             <th class="text-left">Email</th>
             <th class="text-left">Mobile Number</th>
             <th class="text-left">Role Name</th>
+            <th class="text-left">Institute</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -94,6 +95,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Email}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{maskMobileNumber(Admi.MobileNo)}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.RoleNameEnglish}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.InstituteNameEnglish}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,Admi.UserID,Admi.UserAdditionID,Admi.ProfileID)" title="Edit"><i class="ti ti-pencil"></i></a>
@@ -170,17 +172,30 @@
                     </p>
                   </div>
                 </div>
-                <div *ngIf="this.sSOLoginDataModel.RoleID == _enumrole.Principal || this.sSOLoginDataModel.RoleID == _enumrole.PrincipalNon">
+
+                <div>
                   <label for="ddlRole" class="text-gray-800 text-sm font-medium inline-block mb-2">
                     Role<span class="StarMarking">*</span>
                   </label>
                   <select class="form-select" id="ddlRole" name="ddlRole" [(ngModel)]="request.UserRole"
                           formControlName="ddlRole">
-                    <option value="0" disabled>-- Select --</option>
+                    <option value="0" disabled>--Select--</option>
                     <option *ngFor="let item of RoleMasterList" value="{{item.ID}}">{{item.Name}}</option>
                   </select>
                   <div *ngIf="isSubmitted&&_AdminUserFormGroup.ddlRole.errors" class="text-danger">
                     <p *ngIf="!_AdminUserFormGroup.ddlRole.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+
+                <div *ngIf="this.sSOLoginDataModel.RoleID == _enumrole.Admin || this.sSOLoginDataModel.RoleID == _enumrole.AdminNon">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label><span class="StarMarking">*</span>
+                  <select class="form-select" id="InstituteID" [(ngModel)]="request.InstituteID" formControlName="InstituteID"
+                          >
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                  </select>
+                  <div *ngIf="isSubmitted&&_AdminUserFormGroup.InstituteID.errors" class="text-danger">
+                    <p *ngIf="!_AdminUserFormGroup.InstituteID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
 
@@ -192,35 +207,8 @@
                          formControlName="txtUserEmail" [(ngModel)]="request.Email">
                   <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtUserEmail.errors" class="text-danger">
                     <p *ngIf="_AdminUserFormGroup.txtUserEmail.errors.required">
-                      <i aria-hidden="true"></i> This field is
-                      required .!
+                      <i aria-hidden="true"></i> This field is required .!
                     </p>
-                  </div>
-                </div>
-
-                <div>
-                  <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                    Is Citizen Query User<span class="StarMarking">*</span>
-                  </label>
-                  <select class="form-select" id="ddlIsCitizenQueryUser" name="IsCitizenQueryUser" [(ngModel)]="request.IsCitizenQueryUser"
-                          formControlName="IsCitizenQueryUser">
-                    <option [ngValue]="false">No</option>
-                    <option [ngValue]="true">Yes</option>
-                  </select>
-
-                </div>
-
-                <div *ngIf="request.IsCitizenQueryUser">
-                  <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                    Query Type<span class="StarMarking">*</span>
-                  </label>
-                  <select class="form-select" id="QueryType" name="QueryType" [(ngModel)]="request.QueryType"
-                          formControlName="QueryType">
-                    <option value="0">--- Choose Query Type ---</option>
-                    <option *ngFor="let item of SubMasterList" value="{{item.ID}}">{{item.Name}}</option>
-                  </select>
-                  <div *ngIf="isSubmitted&&_AdminUserFormGroup.QueryType.errors" class="text-danger">
-                    <p *ngIf="!_AdminUserFormGroup.QueryType.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
 

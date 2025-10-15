@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { CollegeMasterDataModels } from '../../Models/CollegeMasterDataModels';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { PlacementDashboardModel } from '../../Models/PlacementDashReportModel';
+import { ITIPlacementDashboardModel, PlacementDashboardModel } from '../../Models/PlacementDashReportModel';
 //import { CollegeMasteDataModels } from '../../Models/CollegeMasterDataModels';
 
 
@@ -39,6 +39,19 @@ export class PlacementDashService {
   }
   public async GetByID(PK_ID: number) {
     return await this.http.get(this.APIUrl + "/GetByID/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+
+  // ------------------------ITI DASHBOARD---------------------------------------
+
+    public async GetITIAllData(request: ITIPlacementDashboardModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetITIAllData", body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

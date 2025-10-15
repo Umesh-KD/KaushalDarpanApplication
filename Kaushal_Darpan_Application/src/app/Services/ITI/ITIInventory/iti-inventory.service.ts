@@ -529,4 +529,11 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+   public async GetIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
+      var body = JSON.stringify(submitRequest);
+      return await this.http.post(`${this.APIUrl}/GetIssueSubmitPermanent`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
 }

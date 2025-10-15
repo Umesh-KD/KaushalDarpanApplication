@@ -14,3 +14,14 @@ export class PlacementDashboardModel {
   public RoleId: number = 0
 
 }
+
+
+// ---------------------ITI DASHBOARD--------------------------
+export class ITIPlacementDashboardModel {
+  public DepartmentID:number=0
+  public CollegeID: number = 0
+  public EndTermID: number = 0
+  public UserId: number = 0
+  public RoleId: number = 0
+
+}
