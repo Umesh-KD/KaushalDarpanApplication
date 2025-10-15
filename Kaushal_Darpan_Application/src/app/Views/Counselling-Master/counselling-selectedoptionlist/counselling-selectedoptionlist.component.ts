@@ -638,7 +638,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
     })
     
     try {
-      await this.CounsellingMasterService.SaveCandidateAllotment_Counselling(0, selected).then(async (data: any) => { 
+      await this.CounsellingMasterService.SaveCandidateAllotment_Counselling(this.TradeID, selected).then(async (data: any) => { 
         data = JSON.parse(JSON.stringify(data));
         if(data.State = EnumStatus.Success) {
           this.toastr.success(data.Message);
