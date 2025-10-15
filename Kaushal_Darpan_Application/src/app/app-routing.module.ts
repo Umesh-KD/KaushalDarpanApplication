@@ -1485,7 +1485,7 @@ const routes: Routes = [
       { path: 'thte-application-verification-dte', loadChildren: () => import('./Views//BTER/THTE/thte-application-dte-list/thte-application-dte-list.module').then(m => m.THTEApplicationDteListModule), title: 'Application Verify For DTE' },
       { path: 'Committee-After-PrincipleApplication-verification', loadChildren: () => import('./Views//BTER/THTE/thte-committee-afterprinciple-application-list/thte-committee-afterprinciple-application-list.module').then(m => m.THTECommitteeafterPrincipleApplicationListModule), title: 'Application Verify For Committee After Principle' },
       //{ path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
- 
+      { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
 
     ]
   },
@@ -1590,6 +1590,7 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+ 
   
   
 
