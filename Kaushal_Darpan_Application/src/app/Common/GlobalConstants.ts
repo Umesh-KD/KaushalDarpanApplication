@@ -105,6 +105,7 @@ export enum EnumRole {
   TITSupport = 29,
   ITITeacherNonEngNonEng = 30,
   TITTPO = 32,
+
   ExaminationIncharge = 38,
   ExaminationIncharge_NonEng = 56,
   Registrar = 40,
@@ -189,9 +190,11 @@ export enum EnumRole {
   GuestHouseIncharge = 228,
 
   ITIPlanningAdmin = 231,
-  ITIBuildingAdmin=232
+  ITIBuildingAdmin=232,
   
-  
+  // ITI Placement Roles 
+  ITI_Placement_TPO =229,
+  ITI_Placement_Admin=233,
 
 
 }
