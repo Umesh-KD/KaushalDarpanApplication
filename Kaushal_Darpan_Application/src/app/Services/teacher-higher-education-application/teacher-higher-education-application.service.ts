@@ -103,4 +103,11 @@ export class TeacherHigherEducationApplicationService {
       ).toPromise();
   }
 
+  public async THTE_GrtApplicationStatusHistory(request: THTE_ApplicationSearchModel) {
+    return await this.http.post(this.APIUrl + "/THTE_GrtApplicationStatusHistory", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
 }

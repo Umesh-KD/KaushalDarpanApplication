@@ -29,6 +29,7 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   AppliedInstituteSubCategory: number = 0;
   Remark: string = '';
   CreatedBy: number = 0;
+  InstituteID: number = 0;
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {

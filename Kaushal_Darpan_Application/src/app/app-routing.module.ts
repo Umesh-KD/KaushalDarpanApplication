@@ -1481,7 +1481,7 @@ const routes: Routes = [
       { path: 'thte-application-verification-dte', loadChildren: () => import('./Views//BTER/THTE/thte-application-dte-list/thte-application-dte-list.module').then(m => m.THTEApplicationDteListModule), title: 'Application Verify For DTE' },
       { path: 'Committee-After-PrincipleApplication-verification', loadChildren: () => import('./Views//BTER/THTE/thte-committee-afterprinciple-application-list/thte-committee-afterprinciple-application-list.module').then(m => m.THTECommitteeafterPrincipleApplicationListModule), title: 'Application Verify For Committee After Principle' },
       //{ path: 'ItiInstructorForm', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
-
+ 
 
     ]
   },
