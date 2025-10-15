@@ -673,21 +673,21 @@ export class ITIDirectQualificationFormComponent {
       if (count2 > 0 && count2 == count1) {
         /*this is condition for if applicant choose only non eng trades. in this case skip validation for Science & Maths Marks (non) */
       } else {
-        if (this.box10Checked) {
-          if (this.formData10th.ScienceMarksObtained10 <= 0) {
-            this.toastr.warning("Science Obtain Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.ScienceMaxMarks10 <= 0) {
-            this.toastr.warning("Science Max Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.MathsMarksObtained10 <= 0) {
-            this.toastr.warning("Maths Obtain Marks Should be greater than zero")
-            return
-          } else if (this.formData10th.MathsMaxMarks10 <= 0) {
-            this.toastr.warning("Maths Max Marks Should be greater than zero")
-            return
-          }
-        }
+        //if (this.box10Checked) {
+        //  if (this.formData10th.ScienceMarksObtained10 <= 0) {
+        //    this.toastr.warning("Science Obtain Marks Should be greater than zero")
+        //    return
+        //  } else if (this.formData10th.ScienceMaxMarks10 <= 0) {
+        //    this.toastr.warning("Science Max Marks Should be greater than zero")
+        //    return
+        //  } else if (this.formData10th.MathsMarksObtained10 <= 0) {
+        //    this.toastr.warning("Maths Obtain Marks Should be greater than zero")
+        //    return
+        //  } else if (this.formData10th.MathsMaxMarks10 <= 0) {
+        //    this.toastr.warning("Maths Max Marks Should be greater than zero")
+        //    return
+        //  }
+        //}
       }
 
 
