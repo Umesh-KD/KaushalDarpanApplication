@@ -178,12 +178,17 @@
           <tr *ngFor="let item of SelectedItems; let i = index">
             <td>{{ item.ItemCategoryName }}</td>
             <td>{{ item.ItemName }}</td>
-            <td>
+            <td *ngIf="Searchrequests.ItemType == 1">
               <input type="number"
                      class="form-input"
                      [(ngModel)]="item.Quantity"
                      min="1"
                      placeholder="Enter Qty" (change)="validateQuantity(item)">
+            </td>
+            <td *ngIf="Searchrequests.ItemType === 0">
+                 <span style="cursor: pointer; color: blue;" (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
+                {{item.Quantity}}
+              </span>
             </td>
           </tr>
           <tr *ngIf="SelectedItems?.length === 0" class="text-center">
@@ -191,7 +196,7 @@
           </tr>
         </tbody>
       </table>
-      <div *ngIf="SelectedItems?.length > 0">
+      <div *ngIf="SelectedItems?.length > 0 && Searchrequests.ItemType == 1">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                for="fileStudentPhoto">Upload Document</label>
         <div class="flex fileUploader">

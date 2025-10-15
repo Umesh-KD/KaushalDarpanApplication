@@ -73,6 +73,7 @@ export class UploadNcvtDataComponent implements OnInit
   //upload data
   async UploadDataInChunks(item:any)
   {
+    this.PostData=[]
     this.PostData.push(item);
     this.UploadTraineeData(this.PostData)
 
@@ -101,6 +102,7 @@ export class UploadNcvtDataComponent implements OnInit
           {
      
           }
+          this.PostData = [];
         }, (error: any) => console.error(error)
         );
     }

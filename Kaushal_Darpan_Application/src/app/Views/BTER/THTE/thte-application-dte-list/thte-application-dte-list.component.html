@@ -1,0 +1,132 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Application List</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Application List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div>
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status </label>
+            <select class="form-select" id="status"
+                    [(ngModel)]="searchRequest.status"
+                    (change)="ApplicationList_ForPrinciple_THTE()">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of StatusListDDL" value="{{item.ID}}">
+                {{item.Name}}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6" (click)="ApplicationList_ForPrinciple_THTE()">Search</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a> -->
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3"
+         *ngIf="searchRequest.status == 1343">
+      <div class="flex">
+        <!--*ngIf="MapKeyEng == 1"-->
+
+        <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of UpdateStatusListDDL" value="{{item.ID}}">{{item.Name}}</option>
+        </select>
+        <button type="button" class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save &  Genrate Order</button>
+      </div>
+      <div>
+        <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+      </div>
+
+    </div>
+    <button *ngIf="searchRequest.status == 1344" type="button" class="btn bg-info text-white inline-block" (click)="GenrateOrder()">Genrate Order</button>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left" *ngIf="searchRequest.status == 1343">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
+            <th class="text-left">Sr.No.</th>
+            <!-- <th class="text-left">Action</th> -->
+            <th class="text-left">Name</th>
+            <th class="text-left">SSOID</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">Joining Date</th>
+            <th class="text-left">Applied Institute</th>
+            <th class="text-left">Applied Course</th>
+            <th class="text-left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td *ngIf="searchRequest.status == 1343">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
+            <td>{{(startInTableIndex+1)+idx}}</td>
+            <!-- <td>
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
+            </div>
+          </td> -->
+            <td>{{row.TeacherName}}</td>
+            <td>{{row.SSOID}}</td>
+            <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
+            <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
+            <td align="left">{{row.AppliedInstitute}}</td>
+            <td align="left">{{row.AppliedCourseName}}</td>
+            <td align="left">{{row.StatusName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>
+
+<!-- otp -->
+<app-otpmodal #otpModal></app-otpmodal>

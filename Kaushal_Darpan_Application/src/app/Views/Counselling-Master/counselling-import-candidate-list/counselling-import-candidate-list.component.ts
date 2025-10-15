@@ -116,25 +116,61 @@ export class CounsellingImportCandidateListComponent implements OnInit {
          // Reset file input so selecting the same file again triggers change
         event.target.value = null;
       }
-    ImportExcelFile(file: File): void {
-        let mesg = '';
-        this.counsellingImportCandidateListService.SampleImportExcelFile(file)
-          .then((data: any) => {
-    
-            data = JSON.parse(JSON.stringify(data));
-            if (data.State === EnumStatus.Success) {
-    
-              this.ImportExcelList = data['Data'];
-              console.log(this.ImportExcelList, "data in excel")
-    
-              if (this.ImportExcelList.length > 0) {
-                this.GetImportExcelDataPopup(this.MyModel_ViewDetails);
-    
+    //ImportExcelFile(file: File): void {
+    //    let mesg = '';
+    //    this.counsellingImportCandidateListService.SampleImportExcelFile(file)
+    //      .then((data: any) => {
+
+    //        data = JSON.parse(JSON.stringify(data));
+    //        if (data.State === EnumStatus.Success) {
+
+    //          this.ImportExcelList = data['Data'];
+    //          console.log(this.ImportExcelList, "data in excel")
+
+    //          if (this.ImportExcelList.length > 0) {
+    //            this.GetImportExcelDataPopup(this.MyModel_ViewDetails);
+
+    //          }
+
+    //        }
+    //      });
+  //}
+
+  ImportExcelFile(file: File): void {
+    let mesg = '';
+    this.counsellingImportCandidateListService.SampleImportExcelFile(file)
+      .then((data: any) => {
+
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+
+          // Assign data to model
+          this.ImportExcelList = data['Data'].map((item: any) => {
+            const processedItem: any = {};
+
+            Object.keys(item).forEach((key) => {
+              let val = item[key];
+
+              // ✅ Convert numeric strings to numbers (including decimals)
+              if (typeof val === 'string' && !isNaN(Number(val))) {
+                val = Number(val);
               }
-                      
-            }
+
+              processedItem[key] = val;
+            });
+
+            return processedItem;
           });
-    }
+
+          console.log(this.ImportExcelList, "data in excel");
+
+          if (this.ImportExcelList.length > 0) {
+            this.GetImportExcelDataPopup(this.MyModel_ViewDetails);
+          }
+        }
+      });
+  }
+
 
     SaveDataInDB(): void {
         console.log(this.ImportExcelList);
@@ -574,65 +610,188 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   //   this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
   // }
   // end table feature
- 
+
 
 // Inside your component or service
-DownloadExcelSample(){
+//DownloadExcelSample(){
+//    this.counsellingImportCandidateListService.GetSampleExcelFile().then((data: any) => {
+//     data = JSON.parse(JSON.stringify(data));
+//               console.log("ExportExcelData data", data);
+//               if (data.State === EnumStatus.Success) {
+//                 let dataExcel = data.Data;
+//                  console.log('dataExcel check',dataExcel);
+
+//                 const unwantedColumns = [
+//                   "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "TradeId"
+//                 ];
+
+//                 // Filter out unwanted columns
+//                 const filteredData = dataExcel.map((item: { [x: string]: any; }) => {
+//                   const filteredItem: any = {};
+//                   Object.keys(item).forEach(key => {
+//                     if (!unwantedColumns.includes(key)) {
+//                       filteredItem[key] = item[key];
+//                     }
+//                   });
+//                   return filteredItem;
+//                 });
+
+//                 // Create Excel worksheet and workbook
+//                 const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+//                 const wb: XLSX.WorkBook = XLSX.utils.book_new();
+//                 XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+//                 // Auto-fit column widths
+//                 const autoFitColumns = (ws: XLSX.WorkSheet, data: any[]) => {
+//                   const colWidths = data.reduce((widths, row) => {
+//                     Object.keys(row).forEach((key, colIndex) => {
+//                       const value = row[key] ? row[key].toString() : "";
+//                       const currentWidth = widths[colIndex] || key.length; // Use header length initially
+//                       widths[colIndex] = Math.max(currentWidth, value.length);
+//                     });
+//                     return widths;
+//                   }, [] as number[]);
+
+//                   ws['!cols'] = colWidths.map((width: any) => ({
+//                     wch: width + 2 // Add some padding for better appearance
+//                   }));
+//                 };
+
+//                 autoFitColumns(ws, filteredData);
+
+//                 // Export the Excel file
+//                 XLSX.writeFile(wb, this.generateFileNameYearly('xlsx'));
+
+
+//                 //this.searchRequest = new BTERMeritSearchModel()
+//               } else {
+//                 this.toastr.error(data.ErrorMessage);
+//               }
+//    });
+  //  }
+
+  //DownloadExcelSample() {
+  //  this.counsellingImportCandidateListService.GetSampleExcelFile().then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    console.log("ExportExcelData data", data);
+
+  //    if (data.State === EnumStatus.Success) {
+  //      let dataExcel = data.Data;
+  //      console.log('dataExcel check', dataExcel);
+
+  //      const unwantedColumns = [
+  //        "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "TradeId"
+  //      ];
+
+  //      // Step 1: Convert objects into only their values
+  //      const filteredData = dataExcel.map((item: any) => {
+  //        const values = Object.keys(item)
+  //          .filter(key => !unwantedColumns.includes(key))
+  //          .map(key => item[key]);
+  //        return values;
+  //      });
+
+  //      // Step 2: Create worksheet from array of arrays (no header row)
+  //      const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(filteredData);
+
+  //      // Step 3: Auto-fit column widths
+  //      const autoFitColumns = (ws: XLSX.WorkSheet, data: any[][]) => {
+  //        const colWidths = data.reduce((widths, row) => {
+  //          row.forEach((val: any, colIndex: number) => {
+  //            const value = val ? val.toString() : "";
+  //            const currentWidth = widths[colIndex] || 0;
+  //            widths[colIndex] = Math.max(currentWidth, value.length);
+  //          });
+  //          return widths;
+  //        }, [] as number[]);
+
+  //        ws['!cols'] = colWidths.map(width => ({
+  //          wch: width + 2 // Add padding
+  //        }));
+  //      };
+
+  //      autoFitColumns(ws, filteredData);
+
+  //      // Step 4: Create workbook and save file
+  //      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //      XLSX.writeFile(wb, this.generateFileNameYearly('xlsx'));
+
+  //    } else {
+  //      this.toastr.error(data.ErrorMessage);
+  //    }
+  //  });
+  //}
+
+  DownloadExcelSample() {
     this.counsellingImportCandidateListService.GetSampleExcelFile().then((data: any) => {
-     data = JSON.parse(JSON.stringify(data));
-               console.log("ExportExcelData data", data);
-               if (data.State === EnumStatus.Success) {
-                 let dataExcel = data.Data;
-                  console.log('dataExcel check',dataExcel);
-                  
-                 const unwantedColumns = [
-                   "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "TradeId"
-                 ];
-     
-                 // Filter out unwanted columns
-                 const filteredData = dataExcel.map((item: { [x: string]: any; }) => {
-                   const filteredItem: any = {};
-                   Object.keys(item).forEach(key => {
-                     if (!unwantedColumns.includes(key)) {
-                       filteredItem[key] = item[key];
-                     }
-                   });
-                   return filteredItem;
-                 });
-     
-                 // Create Excel worksheet and workbook
-                 const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
-                 const wb: XLSX.WorkBook = XLSX.utils.book_new();
-                 XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-     
-                 // Auto-fit column widths
-                 const autoFitColumns = (ws: XLSX.WorkSheet, data: any[]) => {
-                   const colWidths = data.reduce((widths, row) => {
-                     Object.keys(row).forEach((key, colIndex) => {
-                       const value = row[key] ? row[key].toString() : "";
-                       const currentWidth = widths[colIndex] || key.length; // Use header length initially
-                       widths[colIndex] = Math.max(currentWidth, value.length);
-                     });
-                     return widths;
-                   }, [] as number[]);
-     
-                   ws['!cols'] = colWidths.map((width: any) => ({
-                     wch: width + 2 // Add some padding for better appearance
-                   }));
-                 };
-     
-                 autoFitColumns(ws, filteredData);
-     
-                 // Export the Excel file
-                 XLSX.writeFile(wb, this.generateFileNameYearly('xlsx'));
-     
-     
-                 //this.searchRequest = new BTERMeritSearchModel()
-               } else {
-                 this.toastr.error(data.ErrorMessage);
-               }
+      data = JSON.parse(JSON.stringify(data));
+      console.log("ExportExcelData data", data);
+
+      if (data.State === EnumStatus.Success) {
+        let dataExcel = data.Data;
+        console.log('dataExcel check', dataExcel);
+
+        const unwantedColumns = [
+          "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "TradeId"
+        ];
+
+        // Step 1: Convert objects into only their values
+        const filteredData = dataExcel.map((item: any) => {
+          const values = Object.keys(item)
+            .filter(key => !unwantedColumns.includes(key))
+            .map(key => {
+              let val = item[key];
+
+              // ✅ If value is a number with decimals, remove the decimal part
+              if (typeof val === 'number') {
+                val = Math.trunc(val); // removes decimal
+              }
+
+              // ✅ If value is a string containing a decimal number, strip the decimal part
+              if (typeof val === 'string' && val.includes('.')) {
+                val = val.split('.')[0];
+                val = parseInt(val);
+              }
+             
+              return val;
+            });
+
+          return values;
+        });
+
+        // Step 2: Create worksheet from array of arrays (no header row)
+        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(filteredData);
+
+        // Step 3: Auto-fit column widths
+        const autoFitColumns = (ws: XLSX.WorkSheet, data: any[][]) => {
+          const colWidths = data.reduce((widths, row) => {
+            row.forEach((val: any, colIndex: number) => {
+              const value = val ? val.toString() : "";
+              const currentWidth = widths[colIndex] || 0;
+              widths[colIndex] = Math.max(currentWidth, value.length);
+            });
+            return widths;
+          }, [] as number[]);
+
+          ws['!cols'] = colWidths.map(width => ({
+            wch: width + 2 // Add padding
+          }));
+        };
+
+        autoFitColumns(ws, filteredData);
+
+        // Step 4: Create workbook and save file
+        const wb: XLSX.WorkBook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.writeFile(wb, this.generateFileNameYearly('xlsx'));
+
+      } else {
+        this.toastr.error(data.ErrorMessage);
+      }
     });
   }
+
 
 
   

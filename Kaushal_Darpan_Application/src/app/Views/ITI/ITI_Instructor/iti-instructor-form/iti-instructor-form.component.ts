@@ -1117,6 +1117,7 @@ export class ItiInstructorFormComponent {
                 this.employeeRequest.EmploymentDocument = data['Data'][0]["FileName"];
               }
 
+
               event.target.value = null;
             }
             if (this.State == EnumStatus.Error) {

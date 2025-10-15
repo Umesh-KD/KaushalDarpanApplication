@@ -97,6 +97,7 @@
             <th class="text-left">Name</th>
             <th class="text-left">Item Category Name</th>
             <th class="text-left">Equipment Name</th>
+            <th class="text-left">Item Code</th>
             <th class="text-left">IsConsumable</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
@@ -112,6 +113,7 @@
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.EquipmentName}}</td> 
+            <td align="left">{{ item.ItemCode}}</td> 
             <td align="left">
               <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
                 {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
