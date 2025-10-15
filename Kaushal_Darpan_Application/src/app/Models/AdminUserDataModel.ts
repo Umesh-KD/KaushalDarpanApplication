@@ -29,7 +29,7 @@ export class AdminUserDetailModel {
   public IsCitizenQueryUser?: boolean = false;
   public QueryType?: number = 0;
   public CourseType: number = 0;
-  public UserRole: number = 0
+  public UserRole: number = 0;
 }
 
 export class AdminUserSearchModel extends RequestBaseModel {
@@ -47,11 +47,12 @@ export class AdminUserSearchModel extends RequestBaseModel {
   public ModifyBy: number = 0;
   public ModifyDate: string = '';
   public IPAddress: string = '';
-  public UserRole:number=0
- 
+  public UserRole: number = 0
+  public SSOID?: string = '';
+
 }
 export class StreamMasterForHodModel extends RequestBaseModel {
   public StreamType: number = 0;
-  public UserAdditionID: number = 0; 
-  public InstituteID: number = 0; 
+  public UserAdditionID: number = 0;
+  public InstituteID: number = 0;
 }

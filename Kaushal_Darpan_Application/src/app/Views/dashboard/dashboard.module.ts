@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'; 
 import { LoaderModule } from '../Shared/loader/loader.module';
 import { PlacementDashboardModule } from '../placement-dashboard/placement-dashboard.module';
+import { ITIPlacementDashboardModule } from '../ITI/placement-dashboard/placement-dashboard.module';
 import { PrincipleDashboardModule } from '../principle-dashboard/principle-dashboard.module';
 import { StudentDashboardModule } from '../student-dashboard/student-dashboard.module';
 import { StaffDashboardModule } from '../staff-dashboard/staff-dashboard.module';
@@ -66,6 +67,7 @@ import { BTERHODDashboardModule } from '../BTER-HOD-Dashboard/BTER-HOD-Dashboard
     LoaderModule,
     BterDashboardModule,
     PlacementDashboardModule,
+    ITIPlacementDashboardModule,
     PrincipleDashboardModule,
     StudentDashboardModule,
     StaffDashboardModule,
