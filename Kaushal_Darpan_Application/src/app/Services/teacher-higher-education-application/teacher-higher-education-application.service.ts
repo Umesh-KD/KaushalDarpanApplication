@@ -36,7 +36,7 @@ export class TeacherHigherEducationApplicationService {
     
   public async SaveTeacherHighEduApp(request: TeacherHigherEducationApplicationSaveModel) {
     const body = JSON.stringify(request);
-    debugger
+    
     return this.http.post(`${this.APIUrl}/SaveTeacherHighEduApp`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -70,7 +70,37 @@ export class TeacherHigherEducationApplicationService {
       ).toPromise();
   }
 
+  public async GetTHTE_ApplicationByID(searchRequest: THTE_ApplicationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetTHTE_ApplicationByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteTHTE_ApplicationByID(searchRequest: THTE_ApplicationSearchModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/DeleteTHTE_ApplicationByID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
-  
+  public async GetAllAppliedCoursesDDL(request: THTE_DDL) {
+    return await this.http.post(this.APIUrl + "/GetAllAppliedCoursesDDL", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async GetAllInstitutionalsDDL(request: THTE_DDL) {
+    return await this.http.post(this.APIUrl + "/GetAllInstitutionalsDDL", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

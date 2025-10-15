@@ -26,23 +26,8 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>   
           <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
-        <!-- <div *ngIf="sSOLoginDataModel.RoleID === _EnumRole.AdminNodel">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
-          <select class="form-select" id="InstituteID" [(ngModel)]="searchRequest.InstituteID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
-        </div> -->
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year</label>
-          <select class="form-select" id="AcademicYearID" [(ngModel)]="searchRequest.AcademicYearID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">{{item.FinancialYearName}}</option>
-          </select>
-        </div> -->
+   
         <div>
-          
-
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetStudentCorrectionListData(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>
@@ -84,6 +69,7 @@
             <th class="text-left">UIDNumber</th>
             <th class="text-left">DOB</th>
             <th class="text-left">FatherName</th>
+            <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -94,14 +80,11 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
             
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td> -->
-            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td> -->
-            <!-- <td>{{item.Status}}</td> -->
+
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
                 <a  [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}"  title="Edit"><i class="ti ti-pencil"></i></a>
-                <!-- <a href="javascript:void(0);" title="Company On Action" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="CompanyOnAction(MyModel_Action,company.ID)"><i class="ti ti-check"></i></a> -->
-               
+
               </div>
              </td>
           </tr>

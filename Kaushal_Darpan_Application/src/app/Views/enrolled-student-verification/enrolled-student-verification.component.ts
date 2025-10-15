@@ -440,9 +440,14 @@ export class EnrolledStudentVerificationComponent {
         //confirmed
         if (result.isConfirmed) {
           try {
+            //
             this.isSubmitted = true;
             this.loaderService.requestStarted();
 
+            // await for otp
+            await this.openOTPModal();
+
+            //
             var request: EnrolledPromotedStudentSaveModel[] = [];
             const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
             selectedStudents.forEach(x => {
@@ -485,6 +490,9 @@ export class EnrolledStudentVerificationComponent {
           try {
             this.isSubmitted = true;
             this.loaderService.requestStarted();
+
+            // await for otp
+            await this.openOTPModal();
 
             var request: EnrolledPromotedStudentSaveModel[] = [];
             const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
@@ -529,6 +537,9 @@ export class EnrolledStudentVerificationComponent {
             this.isSubmitted = true;
             this.loaderService.requestStarted();
 
+            // await for otp
+            await this.openOTPModal();
+
             var request: EnrolledPromotedStudentSaveModel[] = [];
             const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
             selectedStudents.forEach(x => {
@@ -570,6 +581,9 @@ export class EnrolledStudentVerificationComponent {
         try {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
+
+          // await for otp
+          await this.openOTPModal();
 
           var request: EnrolledPromotedStudentSaveModel[] = [];
           const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
@@ -614,6 +628,9 @@ export class EnrolledStudentVerificationComponent {
             this.isSubmitted = true;
             this.loaderService.requestStarted();
 
+            // await for otp
+            await this.openOTPModal();
+
             var request: EnrolledPromotedStudentSaveModel[] = [];
             const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
             selectedStudents.forEach(x => {
@@ -656,6 +673,9 @@ export class EnrolledStudentVerificationComponent {
           this.isSubmitted = true;
           this.loaderService.requestStarted();
 
+          // await for otp
+          await this.openOTPModal();
+
           var request: EnrolledPromotedStudentSaveModel[] = [];
           const selectedStudents = this.enrolledPromotedStudentList.filter(x => x.Selected);
           selectedStudents.forEach(x => {
@@ -690,32 +710,14 @@ export class EnrolledStudentVerificationComponent {
   }
 
   async openOTPModal() {
-    // status marked
-    if (this.status <= 0) {
-      this.toastr.error("Please select status!");
-      return;
-    }
-    // any student selected
-    const anyStudentSelected = this.enrolledPromotedStudentList.some(student => student.Selected);
-    if (!anyStudentSelected) {
-      this.toastr.error("Please select Student(s)!");
-      return;
-    }
+    // debugger
+    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
-    this.Swal2.Confirmation("Are you sure you want to Verify ?",
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    // await for open model
+    await this.childComponent.OpenOTPPopup();
 
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          await this.SaveDataMarked();
-        }
-      });
+    // await OTP verification
+    await this.childComponent.waitForVerification();
   }
   // ---------- end save marked student
 
