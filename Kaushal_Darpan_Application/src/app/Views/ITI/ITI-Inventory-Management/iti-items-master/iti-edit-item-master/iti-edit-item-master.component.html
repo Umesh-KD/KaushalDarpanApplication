@@ -73,7 +73,7 @@
               <th class="border p-2">Is Eligible As Repaired</th>
             </tr>
           </thead>
-          <tbody *ngIf="ItemDetailsList?.length > 0">
+          <tbody *ngIf="ItemDetailsList?.length > 0" formArrayName="items">
             <tr *ngFor="let item of itemsFormArray.controls; let i = index" [formGroup]="item">
               <td class="border p-2">{{ i + 1 }}</td>
 
@@ -130,13 +130,7 @@
                 <label>
                   <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 3 || item.get('equipmentStatus')?.value === '3'">
                     <input type="checkbox" formControlName="isRepaired" /> Is Repaired
-                  </ng-container>
-                
-                  <!--<ng-container *ngIf="item.get('equipmentStatus')?.value === '2' || ItemDetailsList[i]?.EquipmentWorking === 2; else editableAuction">
-                  </ng-container>
-                  <ng-template #editableAuction>
-                    <input type="checkbox" formControlName="isOption" />  Is Auction
-                  </ng-template>-->
+                  </ng-container> 
 
                 </label>
               </td>

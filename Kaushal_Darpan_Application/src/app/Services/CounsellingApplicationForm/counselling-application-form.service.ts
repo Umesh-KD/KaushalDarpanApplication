@@ -36,6 +36,14 @@ export class CounsellingApplicationFormService {
       ).toPromise();
   }
 
+  public async SavePersonalDetailsFromAdmin(request: CounsellingApplicationFormDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SavePersonalDetailsFromAdmin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetApplicationDataByID_Counselling(request: CounsellingApplicationSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetApplicationDataByID_Counselling`, body, this.headersOptions)

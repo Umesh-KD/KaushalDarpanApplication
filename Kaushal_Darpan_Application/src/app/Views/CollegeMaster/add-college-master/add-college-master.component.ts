@@ -503,6 +503,8 @@ export class AddCollegeMasterComponent implements OnInit {
       this.collegeRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.collegeRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.collegeRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.collegeRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      
       //get
       await this.instituteService.GetByID(this.collegeRequest)
         .then(async (data: any) => {
@@ -569,9 +571,21 @@ export class AddCollegeMasterComponent implements OnInit {
     }
   }
 
-  onDivisionChange() {
+ async onDivisionChange() {
+   debugger
+   const selectedDivisionID = this.instituteForm.get('divisionID')?.value;
 
-    const selectedDivisionID = this.request.DivisionID;
+   await this.commonMasterService.DistrictMaster_DivisionIDWise(selectedDivisionID)
+           .then((data: any) => {
+             data = JSON.parse(JSON.stringify(data));
+             this.State = data['State'];
+             this.Message = data['Message'];
+             this.ErrorMessage = data['ErrorMessage'];
+             this.DistrictMasterList = data['Data'];
+             console.log(this.DistrictMasterList)
+             // console.log(this.DivisionMasterList)
+           }, error => console.error(error));
+
 
     this.filteredDistricts = this.DistrictMasterList.filter((district: any) => district.ID == selectedDivisionID);
 
@@ -618,14 +632,14 @@ export class AddCollegeMasterComponent implements OnInit {
     this.refreshCourseTypeRefValidation();
     debugger
     // Skip form validation only for Admin roles
-    const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
-    if (!isAdminRole) {
-      this.toastr.warning("Unauthorized role!");
-      return false;
-    }
-    else if (this.instituteForm.invalid) {
-      return false;
-    }
+    //const isAdminRole = this.sSOLoginDataModel.RoleID === EnumRole.Admin || this.sSOLoginDataModel.RoleID === EnumRole.AdminNon;
+    //if (!isAdminRole) {
+    //  this.toastr.warning("Unauthorized role!");
+    //  return false;
+    //}
+    //else if (this.instituteForm.invalid) {
+    //  return false;
+    //}
 
    
     this.isLoading = true;

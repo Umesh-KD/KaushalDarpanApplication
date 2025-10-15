@@ -90,6 +90,9 @@ export class CandidatePersonalDetailsComponent {
     await this.GetMasterDDL();
     await this.GetDistrictList();
     await this.GetApplicationDataByID_Counselling();
+
+    const Designation = this.PersonalDetailForm.get('Designation');
+Designation?.disable();
   }
 
   get _PersonalDetailForm() { return this.PersonalDetailForm.controls; }

@@ -2,8 +2,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { ITIStudentCorrectionMasterSearchModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
+import { ChunksSearchModel,ITIStudentCorrectionMasterSearchModel, StudentMarkedModel, StudentMarkedModelForJoined, StudentMasterModel } from '../../../Models/StudentMasterModels';
 import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
+import { NCVTChunkInfoDataModelDataPagingList } from '../../../Models/DataPagingListModel';
 
 @Injectable({
   providedIn: 'root'
@@ -67,57 +68,27 @@ export class ITIStudentEnrollmentService {
       ).toPromise();
   }
 
-  // public async SaveAdmittedStudentData(request: StudentMarkedModel[]) {
-  //   const body = JSON.stringify(request);
-  //   return this.http.post(`${this.APIUrl}/SaveAdmittedStudentData`, body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
-
-  // public async SaveEligibleForEnrollment(request: StudentMarkedModel[]) {
-  //   const body = JSON.stringify(request);
-  //   return this.http.post(`${this.APIUrl}/SaveEligibleForEnrollment`, body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
 
 
-  // //Get Enrolled Student Annexture
-  // public async GetAnnextureListPreExamStudent(request: PreExamStudentDataModel) {
-  //   const body = JSON.stringify(request);
-  //   return await this.http.post(this.APIUrl + "/GetAnnextureListPreExamStudent", body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
+  public async GetNcvtStudentData_Chunks(request: ChunksSearchModel)
+  {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetNcvtStudentData_Chunks", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
+  public async UploadTraineeData(request: NCVTChunkInfoDataModelDataPagingList[]) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/UploadTraineeData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
-  // public async SaveRejectAtBTER(request: StudentMarkedModel[]) {
-  //   const body = JSON.stringify(request);
-  //   return this.http.post(`${this.APIUrl}/SaveRejectAtBTER`, body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
 
-  // public async SaveDropout(request: StudentMarkedModel[]) {
-  //   const body = JSON.stringify(request);
-  //   return this.http.post(`${this.APIUrl}/SaveDropout`, body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
-
-  // public async SaveRevokeDropout(request: StudentMarkedModel[]) {
-  //   const body = JSON.stringify(request);
-  //   return this.http.post(`${this.APIUrl}/SaveRevokeDropout`, body, this.headersOptions)
-  //     .pipe(
-  //       catchError(this.handleErrorObservable)
-  //     ).toPromise();
-  // }
 
 
 }

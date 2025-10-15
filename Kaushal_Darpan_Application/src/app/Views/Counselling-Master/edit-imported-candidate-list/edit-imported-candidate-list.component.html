@@ -87,7 +87,7 @@
               SSOID <span class="StarMarking">*</span>
             </label>
             <input type="text" class="form-input" placeholder="Enter SSOID" id="SSOID" name="SSOID"
-                   [(ngModel)]="request.SSOID" formControlName="SSOID">
+                   [(ngModel)]="request.SSOID" formControlName="SSOID" disabled>
             <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
               <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
                 <i aria-hidden="true"></i> This field is
@@ -100,7 +100,42 @@
                 </p>
               </div> -->
           </div>
-
+              <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Trade  
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Trade" id="Trade" name="Trade"
+                   [(ngModel)]="request.Trade" formControlName="Trade" disabled>
+            <div *ngIf="isSubmitted && _CandidateFormGroup['Trade'].errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup['Trade'].errors?.['required']">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
+                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
+                  <i aria-hidden="true"></i> This field is required!
+                </p>
+              </div> -->
+          </div>
+<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Designation  
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Designation" id="Designation" name="Designation"
+                   [(ngModel)]="request.Designation" formControlName="Designation" disabled>
+            <div *ngIf="isSubmitted && _CandidateFormGroup['Designation'].errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup['Designation'].errors?.['required']">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
+                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
+                  <i aria-hidden="true"></i> This field is required!
+                </p>
+              </div> -->
+          </div>
 
           <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">

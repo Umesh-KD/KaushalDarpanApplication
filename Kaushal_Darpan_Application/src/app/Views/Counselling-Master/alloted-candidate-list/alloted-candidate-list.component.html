@@ -17,7 +17,14 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+         <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation :</label>
+            <select class="form-select" id="DesignationID" name="DesignationID" [(ngModel)]="searchRequest.DesignationID" (change)="getTradeByDegree($event.target.value)" >
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of designations" [value]="item.id"  >{{item.name}}</option>
+            </select>
+        </div>
+         <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="request.TradeID"
                  (change)="GetAllottedCandidateList_Counselling()">
