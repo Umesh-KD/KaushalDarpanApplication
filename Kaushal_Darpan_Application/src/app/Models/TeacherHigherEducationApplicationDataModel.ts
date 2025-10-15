@@ -84,4 +84,15 @@ export class UpdateApplicationStatusDataModel_Principle {
   public status?: number = 0;
   public Remark?: string = '';
   public RoleID?: string = '';
+  
+}
+
+
+export class ApplicationGenrateOrderByDteListSearchModel extends RequestBaseModel {
+  public Id: number = 0;
+  public THTEAppID: number = 0;
+  public Name: string = '';
+  public StaffID: number = 0;
+  public status?: number = 0;
+  public THTEAppIDs?: string = '';
 }
