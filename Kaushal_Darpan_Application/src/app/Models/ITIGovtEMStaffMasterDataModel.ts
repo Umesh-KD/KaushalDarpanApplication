@@ -685,3 +685,31 @@ export class HODDashboardSearchModel {
   public StaffID: number = 0
   public SSOID: string = ''
 }
+
+
+export class ITIOfficeVacancyModel {
+  public Index: number = 0;
+  public ID: number = 0;
+  public OfficeID: number = 0;
+  public InstituteID: number = 0;
+  public DesignationID: number = 0;
+  public TotalSeatID: number = 0;
+  public RemainingSeatID: number = 0;
+  public StaffTypeID: number = 0;
+  public Comments: string = '';
+  public DepartmentID: number = 0;
+  public EndTermID: number = 0;
+  public CourseTypeID: number = 0;
+  public ActiveStatus: boolean = false;
+  public DeleteStatus: boolean = false;
+  public RTS: string = '';
+  public CreatedBy: number = 0;
+  public ModifyBy: number = 0;
+  public ModifyDate: string = '';
+  public IPAddress: string = '';
+  public OfficeName: string = '';
+  public DesignationName: string = '';
+  public InstituteName: string = '';
+  public StaffTypeName: string = '';
+  public PostedSeat: number = 0;
+}

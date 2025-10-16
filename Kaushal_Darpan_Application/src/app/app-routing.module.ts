@@ -1488,6 +1488,7 @@ const routes: Routes = [
       { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
       { path: 'THTE-Committee', loadChildren: () => import('./Views//BTER/THTE/thte-committee/thte-committee.module').then(m => m.THTECommitteeModule), title: ' add THTE Committee' },
       { path: 'THTE-CommitteeList', loadChildren: () => import('./Views//BTER/THTE/thte-committee-list/thte-committee-list.module').then(m => m.THTECommitteeListModule), title: 'THTE Committee List' },
+      { path: 'ITI-Office-Vacancy', loadChildren: () => import('./Views//ITI/ITI-GOVT-EstablishManagement/ITI-OfficeVacancy/ITI-OfficeVacancy.module').then(m => m.ITIOfficeVacancyModule), title: 'ITI Office Vacancy' },
 
     ]
   },
