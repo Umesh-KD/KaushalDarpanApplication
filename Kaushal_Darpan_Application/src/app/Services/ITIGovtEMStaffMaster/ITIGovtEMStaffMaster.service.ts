@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel, ITIOfficeVacancyModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
 
 import { AppsettingService } from '../../Common/appsetting.service';
 
@@ -559,7 +559,58 @@ export class ITIGovtEMStaffMaster {
 
 
 
-  
+  public async Save_M_OfficeVacancy_IU(request: ITIOfficeVacancyModel[]) {
+    var body = JSON.stringify(request);
+    debugger
+    return await this.http.post(`${this.APIUrl}/Save_M_OfficeVacancy_IU`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async OfficeVacancyList(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/OfficeVacancyList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async DeleteOfficeVacancy(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/DeleteOfficeVacancy`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ViewByIDOfficeVacancy(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/ViewByIDOfficeVacancy/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async UpdateOfficeVacancy(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/UpdateOfficeVacancy`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  public async OfficeVacancyActiveDeActive(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/OfficeVacancyActiveDeActive`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 }

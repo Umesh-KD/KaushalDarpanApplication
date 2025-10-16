@@ -1468,6 +1468,7 @@ const routes: Routes = [
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
       {path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
+      {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       
       
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
@@ -1478,8 +1479,8 @@ const routes: Routes = [
       { path: 'thte-application-verify-committee', loadChildren: () => import('./Views//BTER/THTE/verify-application-committee/verify-application-committee.module').then(m => m.VerifyApplicationCommitteeModule), title: 'Application Verify'},
       
       { path: 'ItiEstablishmentList', loadChildren: () => import('./Views/ITI/iti-establishment-list/iti-establishment-list.module').then(m => m.ItiEstablishmentListModule) },
-       { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
-
+      { path: 'ITIRevealuation', loadChildren: () => import('./Views/ITI/Examination/revealuation/revealuation.module').then(m => m.RevealuationModule) },
+      //{ path: 'know-revealuation-iti', loadChildren: () => import('./Views//ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
       { path: 'pushncvtdatatosdh', loadChildren: () => import('./Views/ITI/NCVTAPI/upload-ncvt-data/upload-ncvt-data.module').then(m => m.UploadNcvtDataModule) },
       { path: 'NcvtAdmissionStudentList', loadChildren: () => import('./Views/ITI/NCVTAPI/ncvt-admission-student-list/ncvt-admission-student-list.module').then(m => m.NcvtAdmissionStudentListModule) },
       { path: 'thte-application-verification-dte', loadChildren: () => import('./Views//BTER/THTE/thte-application-dte-list/thte-application-dte-list.module').then(m => m.THTEApplicationDteListModule), title: 'Application Verify For DTE' },
@@ -1488,6 +1489,10 @@ const routes: Routes = [
       { path: 'EditQualificationList', loadChildren: () => import('./Views/ITI/edit-qualification-list/edit-qualification-list.module').then(m => m.EditQualificationListModule) },
       { path: 'THTE-Committee', loadChildren: () => import('./Views//BTER/THTE/thte-committee/thte-committee.module').then(m => m.THTECommitteeModule), title: ' add THTE Committee' },
       { path: 'THTE-CommitteeList', loadChildren: () => import('./Views//BTER/THTE/thte-committee-list/thte-committee-list.module').then(m => m.THTECommitteeListModule), title: 'THTE Committee List' },
+      { path: 'ITI-Office-Vacancy', loadChildren: () => import('./Views//ITI/ITI-GOVT-EstablishManagement/ITI-OfficeVacancy/ITI-OfficeVacancy.module').then(m => m.ITIOfficeVacancyModule), title: 'ITI Office Vacancy' },
+
+
+      { path: 'know-revealuation-iti', loadChildren: () => import('./Views/ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
 
     ]
   },

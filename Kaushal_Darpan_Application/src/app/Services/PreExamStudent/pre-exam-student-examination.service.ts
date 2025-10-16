@@ -227,9 +227,22 @@ export class PreExamStudentExaminationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
   public async VerifyStudent_Registrar(request: StudentMarkedModel[]) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/VerifyStudent_Registrar`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async HaveOptionalSubject(StudentExamID: number) {
+    return await this.http.get(this.APIUrl + "/HaveOptionalSubject/" + StudentExamID,
+      {
+        ...this.headersOptions,   // spread existing options (e.g., headers)
+        responseType: 'json'     // explicitly set response type to JSON
+      }
+    )
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

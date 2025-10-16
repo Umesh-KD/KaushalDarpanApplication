@@ -53,6 +53,7 @@ export class OptionalSubjectRequestModel extends RequestBaseModel {
   public StudentID: number = 0;
   public RowJson: string = "";
   public CreatedBy: number = 0;
+  public StudentExamID?: number = 0;
 } 
 export class AnnexureDataModel {
   public DepartmentID: number = 0;
