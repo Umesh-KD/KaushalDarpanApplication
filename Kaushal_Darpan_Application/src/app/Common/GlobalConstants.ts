@@ -45,9 +45,9 @@ export class GlobalConstants {
   //session
   public static SessionTime: number = 10;
 
-   static readonly designationList: any = [
-     { id: 1, name: 'Degree' },
-  { id: 2, name: 'ITI' },
+  static readonly designationList: any = [
+    { id: 1, name: 'Degree' },
+    { id: 2, name: 'ITI' },
   ];
 
 }

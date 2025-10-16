@@ -76,6 +76,7 @@ export class TeacherHigherEducationApplicationComponent {
   public GetAllAppliedCoursesDDLList: any[] = [];//ddl
   public GetAllInstitutionalsDDLList: any[] = [];//ddl
   public THTE_ApplicationList: any[] = [];//ddl
+  public UserRequestHistoryList: any[] = [];
   public teacherHigherEducationApplicationRequest = new TeacherHigherEducationApplicationRequestModel();
 
   constructor(private commonMasterService: CommonFunctionService,
@@ -261,6 +262,8 @@ export class TeacherHigherEducationApplicationComponent {
      
       this.teacherHigherEducationApplicationSaveRequest.CreatedBy = this.sSOLoginDataModel.UserID;
       this.teacherHigherEducationApplicationSaveRequest.StaffID = this.sSOLoginDataModel.StaffID;
+      this.teacherHigherEducationApplicationSaveRequest.SSOID = this.sSOLoginDataModel.SSOID;
+      this.teacherHigherEducationApplicationSaveRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       debugger
       //save
       await this.teacherHigherEducationApplicationService.SaveTeacherHighEduApp(this.teacherHigherEducationApplicationSaveRequest)
@@ -271,7 +274,7 @@ export class TeacherHigherEducationApplicationComponent {
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State == EnumStatus.Success) {
             this.toastr.success(this.Message)
-            this.teacherHigherEducationApplicationSaveRequest = new TeacherHigherEducationApplicationSaveModel();
+            this.Reset();
             this.GetTHTE_ApplicationData();
             this.ButtonText = "Save";
           } else if (data.State == EnumStatus.Warning) {
@@ -387,7 +390,8 @@ export class TeacherHigherEducationApplicationComponent {
             AppliedInstituteCourseCategory: jsonResult.AppliedInstituteCourseCategory,
             AppliedInstituteSubCategory: jsonResult.AppliedInstituteSubCategory,
             Remark: jsonResult.Remark,
-            CreatedBy: jsonResult.CreatedBy
+            CreatedBy: jsonResult.CreatedBy,
+            InstituteID: jsonResult.InstituteID
           };
           
         } else {
@@ -414,6 +418,11 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
 
+  Reset() {
+    this.teacherHigherEducationApplicationSaveRequest = new TeacherHigherEducationApplicationSaveModel();
+    this.isSubmitted = false;
+  }
+
   async THTEAppDelete(ID: number) {
 
     this.requestSearch.THTEAppID = ID;
@@ -434,32 +443,33 @@ export class TeacherHigherEducationApplicationComponent {
       );
   }
 
-  async onUserRequestHistorylist(model: any, ServiceRequestId: number) {
+  async onUserRequestHistorylist(model: any, THTEAppID: number) {
     debugger
-    //try {
-    //  this.loaderService.requestStarted();
-    //  this.searchRequest.ServiceRequestId = ServiceRequestId;
-    //  await this.userRequestService.BterEmUserRequestHistoryList(this.searchRequest)
-    //    .then((data: any) => {
-    //      data = JSON.parse(JSON.stringify(data));
-    //      this.UserRequestHistoryList = data.Data;
-    //      this.showJoiningStatusColumn = this.UserRequestHistoryList?.some(r => r.RequestTypeID === 1);
-    //      this.totalRecord = this.UserRequestList[0]?.TotalRecords;
-    //      this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+    try {
+      this.loaderService.requestStarted();
+      this.requestSearch.THTEAppID = THTEAppID
+      
+      await this.teacherHigherEducationApplicationService.THTE_GrtApplicationStatusHistory(this.requestSearch)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserRequestHistoryList = data.Data;
+          this.showJoiningStatusColumn = this.UserRequestHistoryList?.some(r => r.RequestTypeID === 1);
+          this.totalRecord = this.UserRequestHistoryList[0]?.TotalRecords;
+          this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
 
-    //    }, (error: any) => console.error(error))
+        }, (error: any) => console.error(error))
 
-    //  console.log(ServiceRequestId, "modal");
-    //  this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
-    //}
-    //catch (Ex) {
-    //  console.log(Ex);
-    //}
-    //finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
+      
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 }
 

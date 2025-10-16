@@ -2,8 +2,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { PrincipleApplicationListSearchModel, TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Committee, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
-import { ApplicationGenrateOrderByDteListSearchModel    } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel,   UpdateApplicationStatusDataModel_Committee } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { ApplicationGenrateOrderByDteListSearchModel,  TeacherHigherEducationApplicationVerificationModel, TeacherHigherEducationApplicationVerificationSaveModel, UpdateApplicationStatusDataModel_Principle } from '../../Models/TeacherHigherEducationApplicationDataModel';
 
 
 @Injectable({

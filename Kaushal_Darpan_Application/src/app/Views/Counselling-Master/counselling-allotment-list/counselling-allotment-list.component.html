@@ -73,7 +73,7 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>Sr. No.</th>
+            <th class="text-left">Sr. No.</th>
             <th class="text-left">Designation</th>
             <th class="text-left">Trade Name</th>
             <th class="text-left">Total Candidates</th>
@@ -83,14 +83,16 @@
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DesignationID}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.tradeName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Trade}}</td>
             <td>
-            <a
-              class="btn bg-info btn-sm text-white"
-              [routerLink]="['/CounsellingSelectedOptionList']"  
-              [queryParams]="{ Id: item.tradeId, deg: item.DesignationID }">{{ item.totalCandidate }}
-            </a>
-              
+              <a class="btn bg-info btn-sm text-white"
+                 [routerLink]="item.totalCandidate > 0 ? ['/CounsellingSelectedOptionList'] : null"
+                 [queryParams]="item.totalCandidate > 0 ? { Id: item.tradeId, deg: item.DesignationID } : null"
+                 [ngStyle]="{ 'pointer-events': item.totalCandidate === 0 ? 'none' : 'auto', 'opacity': item.totalCandidate === 0 ? '0.6' : '1' }">
+                {{ item.totalCandidate }}
+              </a>
+
+
 
             </td>
             

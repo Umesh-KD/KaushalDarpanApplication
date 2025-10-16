@@ -82,7 +82,7 @@
             </div>
           </div>
 
-           <div>
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               SSOID <span class="StarMarking">*</span>
             </label>
@@ -94,31 +94,21 @@
                 required.!
               </p>
             </div>
-             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
-                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
-                  <i aria-hidden="true"></i> This field is required!
-                </p>
-              </div> -->
           </div>
-              <div>
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Trade  
+              Trade  {{request.TradeName}}
             </label>
             <input type="text" class="form-input" placeholder="Enter Trade" id="Trade" name="Trade"
-                   [(ngModel)]="request.Trade" formControlName="Trade" disabled>
+                  [(ngModel)]="request.Trade" formControlName="Trade" disabled>
             <div *ngIf="isSubmitted && _CandidateFormGroup['Trade'].errors" class="text-danger">
               <p *ngIf="_CandidateFormGroup['Trade'].errors?.['required']">
                 <i aria-hidden="true"></i> This field is
                 required.!
               </p>
             </div>
-             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
-                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
-                  <i aria-hidden="true"></i> This field is required!
-                </p>
-              </div> -->
           </div>
-<div>
+          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Designation  
             </label>
@@ -130,32 +120,13 @@
                 required.!
               </p>
             </div>
-             <!-- <div *ngIf="isSubmitted && _CandidateFormGroup['SSOID'].errors" class="text-danger">
-                <p *ngIf="_CandidateFormGroup['SSOID'].errors?.['required']">
-                  <i aria-hidden="true"></i> This field is required!
-                </p>
-              </div> -->
           </div>
-
-          <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Address <span class="StarMarking">*</span>
-            </label>
-            <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
-                   [(ngModel)]="request.Address" formControlName="Address">
-            <div *ngIf="isSubmitted && _CandidateFormGroup.Address.errors" class="text-danger">
-              <p *ngIf="_CandidateFormGroup.Address.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-          </div> -->
    
 
         </div>
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
           <div class="text-center">
-            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Submit':'Edit'}}</button>          
+            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="EditCandidateExcelDataById()">{{key==1?'Submit':'Edit'}}</button>          
             <button *ngIf="key==1 || key==2" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
               <i class="ti ti-refresh"></i> Reset
             </button>

@@ -53,9 +53,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
   public TradeID: number = 0;
 
-  public TradeDDLList: any = [];
-
-  
+  public TradeDDLList: any = [];  
 
   modalRef1: NgbModalRef | null=null;
   isSubmitted:boolean =false;
@@ -97,9 +95,6 @@ export class CounsellingImportCandidateListComponent implements OnInit {
     private counsellingApplicationFormService: CounsellingApplicationFormService,
     private counsellingImportCandidateListService: CounsellingImportCandidateListService
   ){}
-
-
-
 
   //  --------------------------
     public importFile: any;
@@ -511,105 +506,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   //     });    
   // }
 
-  //table feature
   
-  
-  calculateInTableTotalPage() {
-    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
-  }
-  // (replace org.list here)
-  updateInTablePaginatedData() {
-    this.loaderService.requestStarted();
-    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
-    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
-    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
-    this.paginatedInTableData = [...this.StudentList].slice(this.startInTableIndex, this.endInTableIndex);
-    this.loaderService.requestEnded();
-  }
-
-  previousInTablePage() {
-    if (this.currentInTablePage > 1) {
-      this.currentInTablePage--;
-      this.updateInTablePaginatedData();
-    }
-  }
-  nextInTablePage() {
-    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.currentInTablePage++;
-      this.updateInTablePaginatedData();
-    }
-  }
-  firstInTablePage() {
-    if (this.currentInTablePage > 1) {
-      this.currentInTablePage = 1;
-      this.updateInTablePaginatedData();
-    }
-  }
-  lastInTablePage() {
-    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.currentInTablePage = this.totalInTablePage;
-      this.updateInTablePaginatedData();
-    }
-  }
-  randamInTablePage() {
-    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
-      this.currentInTablePage = 1;
-    }
-    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.updateInTablePaginatedData();
-    }
-  }
-  // (replace org.list here)
-  sortInTableData(field: string) {
-    this.loaderService.requestStarted();
-    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
-    this.paginatedInTableData = ([...this.StudentList] as any[]).sort((a, b) => {
-      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
-      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
-    }).slice(this.startInTableIndex, this.endInTableIndex);
-    this.sortInTableColumn = field;
-    this.loaderService.requestEnded();
-  }
-  //main 
-  loadInTable() {
-    this.resetInTableValiable();
-    this.calculateInTableTotalPage();
-    this.updateInTablePaginatedData();
-  }
-  // (replace org. list here)
-  resetInTableValiable() {
-    this.paginatedInTableData = [];//copy of main data
-    this.currentInTablePage = 1;
-    this.totalInTablePage = 0;
-    this.sortInTableColumn = '';
-    this.sortInTableDirection = 'asc';
-    this.startInTableIndex = 0;
-    this.endInTableIndex = 0;
-    this.totalInTableRecord = this.StudentList.length;
-  }
-  // (replace org.list here)
-  get totalInTableSelected(): number {
-    return this.StudentList.filter((x: any) => x.Selected)?.length;
-  }
-  get sortInTableDirectionAero(): string {
-    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
-  }
-  //checked all (replace org. list here)
-  // selectInTableAllCheckbox() {
-  //   this.StudentList.forEach((x: any) => {
-  //     x.Selected = this.AllInTableSelect;
-  //   });
-  // }
-  //checked single (replace org. list here)
-  // selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-  //   const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
-  //   data.forEach((x: any) => {
-  //     x.Selected = isSelected;
-  //   });
-  //   //select all(toggle)
-  //   this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
-  // }
-  // end table feature
 
 
 // Inside your component or service
@@ -790,14 +687,110 @@ export class CounsellingImportCandidateListComponent implements OnInit {
         this.toastr.error(data.ErrorMessage);
       }
     });
-  }
-
-
-
-  
+  }  
 
   generateFileNameYearly(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `Import Candidate List Sample ${timestamp}.${extension}`;
   }
+
+  //table feature 
+  
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org.list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.StudentList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org.list here)
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.StudentList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main 
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.StudentList.length;
+  }
+  // (replace org.list here)
+  get totalInTableSelected(): number {
+    return this.StudentList.filter((x: any) => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  // selectInTableAllCheckbox() {
+  //   this.StudentList.forEach((x: any) => {
+  //     x.Selected = this.AllInTableSelect;
+  //   });
+  // }
+  //checked single (replace org. list here)
+  // selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+  //   const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
+  //   data.forEach((x: any) => {
+  //     x.Selected = isSelected;
+  //   });
+  //   //select all(toggle)
+  //   this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
+  // }
+  // end table feature
 }
+
