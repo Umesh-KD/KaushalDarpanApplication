@@ -6,7 +6,8 @@ import { RevertDataModel, Student_DataModel, StudentAttendenceModel, StudentMark
 import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
 import { ITIExamination_UpdateEnrollmentNoModel, ITIExaminationOptionalSubjectRequestModel, ITIExaminationStudentDataModel } from '../../../Models/ITIExaminationDataModel';
 import { PreExamStudentDataModel } from '../../../Models/PreExamStudentDataModel';
-import { ITIRevaluationModel } from '../../../Models/RevaluationModel';
+import { ITIRevaluationModel, SaveStudentDetailsModel } from '../../../Models/RevaluationModel';
+import { ITIRevalRequestStudentDetailsModel } from '../../../Models/RevaluationModel';
 
 @Injectable({
   providedIn: 'root'
@@ -47,4 +48,44 @@ export class ITIStudentRevaluationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveRVLPaymentData(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/SaveRVLPaymentData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetRVLDetailByStudentApplicationNo(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetRVLDetailByStudentApplicationNo", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
+
+      // ITI Student Reval Request Details
+    public async GetAllRevalRequestDetails(searchRequest: ITIRevalRequestStudentDetailsModel) {
+      var body = JSON.stringify(searchRequest);
+      return await this.http.post(`${this.APIUrl}/GetAllRevalRequestDetails`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+
+    public async UploadDocument(request:[]) {
+        const body = JSON.stringify(request);
+    
+        return await this.http.post(this.APIUrl + '/UploadDocument', request, this.headersOptions)
+          .pipe(
+            catchError(this.handleErrorObservable)
+          ).toPromise();
+    }
+    
+   
 }

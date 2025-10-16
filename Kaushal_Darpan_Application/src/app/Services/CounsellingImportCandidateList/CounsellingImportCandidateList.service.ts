@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { CollegeMasterDataModels } from '../../Models/CollegeMasterDataModels'
 import { StreamMasterDataModelsTesting } from '../../Models/StreamMasterDataModelsTesting';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { CounsellingAllotmentListModel } from '../../Models/CounsellingMasterModel';
+import { CounsellingAllotmentListModel, CounsellingEditImportedCandidateListModel } from '../../Models/CounsellingMasterModel';
 
 @Injectable({
   providedIn: 'root'
@@ -51,13 +51,13 @@ export class CounsellingImportCandidateListService {
         ).toPromise();
     }
 
-    public async SaveImportExcelData(ImportExcelList: any) {
-      const body = JSON.stringify(ImportExcelList);
-      return await this.http.post(this.APIUrl + '/SaveImportExcelData', body, this.headersOptions)
-        .pipe(
-          catchError(this.handleErrorObservable)
-        ).toPromise();
-    }
+  public async SaveImportExcelData(ImportExcelList: any) {
+    const body = JSON.stringify(ImportExcelList);
+    return await this.http.post(this.APIUrl + '/SaveImportExcelData', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
        //Get studetn list eligible for placement all data
@@ -68,5 +68,13 @@ export class CounsellingImportCandidateListService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async EditCandidateExcelDataById(ImportExcelList: CounsellingEditImportedCandidateListModel) {
+      const body = JSON.stringify(ImportExcelList);
+      return await this.http.post(this.APIUrl + '/EditCandidateExcelDataById', body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
 
 }

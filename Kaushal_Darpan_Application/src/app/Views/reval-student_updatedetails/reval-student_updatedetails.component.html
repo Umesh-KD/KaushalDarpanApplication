@@ -2,19 +2,18 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Counselling List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Reval Student Details</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Reval Student Details</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling Candidate List </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Reval Student Details List </a>
     </div>
   </div>
-    <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
+    <!-- <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i
       class="ti ti-chevron-left"></i>
-    Back</a>
-    <!-- <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i>Back</a> -->
-</div>
+    Back</a> -->
+ </div>
 <!-- Page Title End -->
 
 
@@ -53,14 +52,6 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
-
-        <a href="javascript:void(0);"
-           class="btn bg-info btn-sm text-white"
-           (click)="OpenOTPModal_SaveAllotment()">
-          Save Allotment
-        </a>
-     
-
       </div>
       
     </div>
@@ -74,10 +65,6 @@
           <option value="1000">1000</option>
         </select>
 
-        <!-- <a (click)="SaveCandidateAllotment_Counselling()"
-           class="inline-flex items-center btn bg-dark text-white btn-sm">
-          <i class="ti ti-chevron-left"></i>Save Marked
-        </a> -->
       </div>
       <div class=""></div>
       <div class=""></div>
@@ -90,30 +77,28 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th align="left">
-              <input type="checkbox" id="checkboxSeletedAl" class="checkboxSize" [checked]="AllSelect"
-                     #checkboxSeletedAll (change)="checkboxthView_checkboxchange(checkboxSeletedAll.checked)">
-            </th>
-            <th class="text-left">Sr. No.</th>            
-            <th class="text-left">Application No</th>            
-            <th class="text-left">Name</th>
-            <th class="text-left">DOB</th>
-            <th class="text-left">SSOID</th>
+           
+            <th class="text-left">Sr. No.</th>    
+            <th class="text-left">Student Name</th>        
+            <th class="text-left">Father's Name</th>    
+            <th class="text-left">DOB</th>    
+            <th class="text-left">Stream</th>       
+            <th class="text-left">Application No</th>                      
+            <th class="text-left">Percentage</th>    
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <!-- {{paginatedInTableData| json}} -->
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;" >
-            <td>
-              <input type="checkbox" name="MarkCheck" [checked]="true"
-                     [(ngModel)]="row.Marked" />
-            </td>
-            <td>{{(startInTableIndex+1)+idx}}</td>            
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CandidateName}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB | date:'yyyy-MM-dd'}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SSOID}}</td>
+           
+            <td>{{(startInTableIndex+1)+idx}}</td>    
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>  
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>  
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB | date:'yyyy-MM-dd'}}</td>  
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StreamName}}</td>        
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>  
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Percentage}}</td>           
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
@@ -121,20 +106,20 @@
                 <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,row)" title="View Institute Option Details"><i
                 class="ti ti-eye"></i> </a>
 
-                <a href="javascript:void(0)" (click)="redirectToEdit(row)" title="Edit Details">
+                <!-- <a href="javascript:void(0)" (click)="redirectToEdit(row)" title="Edit Details">
                   <i class="ti ti-pencil"></i>
-                </a>
-                <a href="javascript:void(0)" (click)="redirectToPreview(row)" title="View Candidate Details">
+                </a> -->
+                <!-- <a href="javascript:void(0)" (click)="redirectToPreview(row)" title="View Candidate Details">
                   <i class="ti ti-eye"></i>
-                </a>
+                </a> -->
                 <!-- <a href="javascript:void(0)" (click)="OpenOTPModal_RejectApplication(row)" title="Reject Application">
                   <i class="ti ti-x"></i>
                 </a> -->
 
-                <a href="javascript:void(0)" *ngIf="row.IsFinalSubmit === 2 && row.IsMeritGenerated === 0"
+                <!-- <a href="javascript:void(0)" *ngIf="row.IsFinalSubmit === 2 && row.IsMeritGenerated === 0"
                     (click)="UnlockApplication_Counselling(row)" title="Unlock Application">
                   <i class="ti ti-lock-open"></i>
-                </a>
+                </a> -->
               </div>
              </td>
           </tr>
@@ -176,14 +161,57 @@
               <thead>
                 <tr>
                   <th>Sr. No.</th>
-                  <th>Institue Name</th>
-                    
+                  <th>Subject Code</th>
+                  <th>Subject Name</th>
+                  <th>Obtained Marks</th>
+                  <th class="text-left">Upload Document</th>               
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let row of StudentOptionList; let i = index">
                   <td>{{i+1}}</td>
-                  <td>{{ row.instituteName }}</td>
+                  <td>{{ row.SubjectCode }}</td>
+                  <td>{{ row.SubjectName }}</td>
+                  <td>{{ row.ObtainedMarks }}</td>
+                  <!-- ----------------------upload documnet code--------------------------- -->
+                  <!-- <td>
+                      <div class="flex fileUploader">
+                        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                               id="filepanPhoto_{{i+1}}" type="file" (change)="UploadDocument($event,row)" />
+                        <label for="filepanPhoto_{{i+1}}">
+
+                          <span>Choose File</span>
+                          {{ row.UploadedCopy === '' ? 'No File Chosen' : row.UploadedCopy }}
+                        </label>
+                        <div class="flex" *ngIf="row.UploadedCopy !== ''">
+                          <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                             (click)="DeleteDocument(row)">
+                            <i class="ti ti-trash"></i>
+                          </a>
+                        </div>
+                      </div>
+                  </td> -->
+
+
+                  <td>
+                       <div class="flex fileUploader">
+                        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                               id="filepanPhoto_{{i+1}}" type="file" (change)="UploadDocument($event,row)" />
+                        <label for="filepanPhoto_{{i+1}}">                         
+                          <span>Choose File</span>
+                          {{ row.UploadedCopy === '' ? 'No File Chosen' : row.UploadedCopy }}
+                        </label>
+                        <div class="flex" *ngIf="row.UploadedCopy !== ''">
+                          <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/RevalDocument//{{row.UploadedCopy}}"
+                             class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                          <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                             (click)="DeleteDocument(row)">
+                            <i class="ti ti-trash"></i>
+                          </a>
+                        </div>
+                      </div>
+                  </td>
+                  <!-- --------------------------------------------------------- -->
                 </tr>
                 <tr *ngIf="StudentOptionList.length === 0">
                   <td colspan="7" class="text-center">No records found.</td>
@@ -191,10 +219,13 @@
               </tbody>
             </table>
           </div>
+          
           <div class="text-center flex items-center justify-center mt-3">
-            <!-- <button type="button" id="btnSave" (click)="SaveData_EditDetails()" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" class="btn bg-info text-white">
+            <button type="button" id="btnSave" (click)="SaveUpload_Details()"  class="btn bg-info text-white">
               <i class="ti ti-device-floppy"></i> Submit
-            </button> -->
+            </button>
+            <!-- <button type="button" class="btn bg-success text-white" [disabled]="AddCollegeWiseScholarshipModelList.length < 1" (click)="DocumentSave()">Submit</button> -->
+           
             <button type="button" (click)="CloseModal1()" class="btn bg-danger text-white">Cancel</button>
           </div>
           <!--{{ApprovedTeacherList|json}}-->
