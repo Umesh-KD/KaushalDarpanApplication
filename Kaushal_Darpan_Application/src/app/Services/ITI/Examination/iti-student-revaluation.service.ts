@@ -7,7 +7,7 @@ import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDe
 import { ITIExamination_UpdateEnrollmentNoModel, ITIExaminationOptionalSubjectRequestModel, ITIExaminationStudentDataModel } from '../../../Models/ITIExaminationDataModel';
 import { PreExamStudentDataModel } from '../../../Models/PreExamStudentDataModel';
 import { ITIRevaluationModel, SaveStudentDetailsModel } from '../../../Models/RevaluationModel';
-import { ITIRevalRequestStudentDetailsModel, ITIRevaluationModel } from '../../../Models/RevaluationModel';
+import { ITIRevalRequestStudentDetailsModel } from '../../../Models/RevaluationModel';
 
 @Injectable({
   providedIn: 'root'
