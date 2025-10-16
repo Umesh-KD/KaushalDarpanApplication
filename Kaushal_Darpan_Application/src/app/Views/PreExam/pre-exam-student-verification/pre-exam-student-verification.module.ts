@@ -9,6 +9,7 @@ import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, Ng
 import { PreExamStudentVerificationComponent } from './pre-exam-student-verification.component';
 import { PreExamStudentVerificationRoutingModule } from './pre-exam-student-verification-routing.module';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
+import { StudentExamDetailsViewModalModule } from '../../Student/student-exam-details-view-modal/student-exam-details-view-modal.module';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     NgMultiSelectDropDownModule.forRoot(),
     NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
     OTPModalModule,
+    StudentExamDetailsViewModalModule
   ]
 })
 export class PreExamStudentVerificationModule { }
