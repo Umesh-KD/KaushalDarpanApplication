@@ -1,29 +1,30 @@
-    <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5">Candidate Personal Details</b>
-      
-      </div>
+<div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+  <b class="text-1xl-5">Candidate Personal Details</b>
+
+</div>
 <div class="card tab-panel" id="PersonalDetail">
   <div class="card-body p-5">
     <form [formGroup]="PersonalDetailForm">
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
- 
+
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
             आवेदक का नाम (Applicant's Name):<span class="StarMarking">*</span>
-        </label>
+          </label>
           <input type="text" class="form-input" id="CandidateName" value="Test Kumar" formControlName="CandidateName"
-             [(ngModel)]="request.CandidateName" placeholder="Enter Candidate Name">
+            [(ngModel)]="request.CandidateName" placeholder="Enter Candidate Name">
           <div *ngIf="isSubmitted && _PersonalDetailForm.CandidateName.errors" class="text-danger">
-            <p *ngIf="_PersonalDetailForm.CandidateName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="_PersonalDetailForm.CandidateName.errors.required"><i aria-hidden="true"></i> This field is
+              required.!</p>
           </div>
         </div>
-        
+
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
             ईमेल (Email Address):<span class="StarMarking">*</span>
-            </label>
-          <input type="email" class="form-input" id="Email" value="TEST@gmail.com" placeholder="Enter Applicant Email" formControlName="Email"
-             [(ngModel)]="request.Email">
+          </label>
+          <input type="email" class="form-input" id="Email" value="TEST@gmail.com" placeholder="Enter Applicant Email"
+            formControlName="Email" [(ngModel)]="request.Email">
           <div *ngIf="isSubmitted && _PersonalDetailForm.Email.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.Email.errors.pattern">
               <i aria-hidden="true"></i> Please enter a valid email address.
@@ -33,57 +34,62 @@
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
             पिता का नाम (Father's Name):<span class="StarMarking">*</span>
-        </label>
-          <input type="text" class="form-input " id="FatherName" value="Test Father Name" placeholder="Enter Father Name"
-             formControlName="FatherName" [(ngModel)]="request.FatherName">
+          </label>
+          <input type="text" class="form-input " id="FatherName" value="Test Father Name"
+            placeholder="Enter Father Name" formControlName="FatherName" [(ngModel)]="request.FatherName">
           <div *ngIf="isSubmitted && _PersonalDetailForm.FatherName.errors" class="text-danger">
-            <p *ngIf="_PersonalDetailForm.FatherName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="_PersonalDetailForm.FatherName.errors.required"><i aria-hidden="true"></i> This field is
+              required.!</p>
           </div>
         </div>
 
         <div>
           <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">
             माता का नाम (Mother's Name):<span class="StarMarking">*</span>
-        </label>
-          <input type="text" class="form-input" id="MotherName"value="Test Mother Name" formControlName="MotherName"
-             placeholder="Enter Mother Name" [(ngModel)]="request.MotherName">
+          </label>
+          <input type="text" class="form-input" id="MotherName" value="Test Mother Name" formControlName="MotherName"
+            placeholder="Enter Mother Name" [(ngModel)]="request.MotherName">
           <div *ngIf="isSubmitted && _PersonalDetailForm.MotherName.errors" class="text-danger">
-            <p *ngIf="_PersonalDetailForm.MotherName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="_PersonalDetailForm.MotherName.errors.required"><i aria-hidden="true"></i> This field is
+              required.!</p>
           </div>
         </div>
-        
+
         <div>
           <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            जन्म तिथि (Date of Birth):<span class="StarMarking">*</span> 
-        </label>
-          <input type="date" class="form-input" id="DOB"value="03/11/1995" formControlName="DOB" [(ngModel)]="request.DOB">
+            जन्म तिथि (Date of Birth):<span class="StarMarking">*</span>
+          </label>
+          <input type="date" class="form-input" id="DOB" value="03/11/1995" formControlName="DOB"
+            [(ngModel)]="request.DOB">
           <div *ngIf="isSubmitted && _PersonalDetailForm.DOB.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.DOB.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
           </div>
         </div>
-        
+
 
         <div>
           <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
             लिंग (Gender):<span class="StarMarking">*</span>
-        </label>
+          </label>
           <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
             <option value="" selected>--Select Gender--</option>
             <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.GenderId.errors" class="text-danger">
-            <p *ngIf="!_PersonalDetailForm.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="!_PersonalDetailForm.GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!
+            </p>
           </div>
         </div>
 
         <div>
           <label for="MobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
             मोबाइल नंबर (Mobile Number):<span class="StarMarking">*</span>
-        </label>
+          </label>
           <input type="text" class="form-input" id="MobileNo" value="XXXXXX3866" formControlName="MobileNo"
-             [(ngModel)]="request.MobileNo" maxlength="10">
+            [(ngModel)]="request.MobileNo" maxlength="10">
           <div *ngIf="isSubmitted && _PersonalDetailForm.MobileNo.errors" class="text-danger">
-            <p *ngIf="_PersonalDetailForm.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="_PersonalDetailForm.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!
+            </p>
           </div>
         </div>
 
@@ -92,8 +98,7 @@
             आधार संख्या (Aadhar Number):<span class="StarMarking">*</span>
           </label>
           <input type="text" (keypress)="validateNumber($event)" class="form-input" id="AadharNo"
-                 formControlName="AadharNo" [(ngModel)]="request.AadharNo" [attr.maxlength]="12"
-                 [attr.minlength]="12" />
+            formControlName="AadharNo" [(ngModel)]="request.AadharNo" [attr.maxlength]="12" [attr.minlength]="12" />
           <div *ngIf="isSubmitted && _PersonalDetailForm.AadharNo.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.AadharNo.errors.required">
               <i aria-hidden="true"></i> This field is required.!
@@ -107,7 +112,7 @@
         <div>
           <label for="MaritalID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             वैवाहिक स्थिति(Marital Status):<span class="StarMarking">*</span>
-        </label>
+          </label>
           <select class="form-select" id="MaritalID" formControlName="MaritalID" [(ngModel)]="request.MaritalID">
             <option value="0">Select (Marital Status)</option>
             <option *ngFor="let item of maritalList" value="{{item.ID}}">{{item.Name}}</option>
@@ -121,21 +126,23 @@
         <div>
           <label for="ReligionID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             धर्म (Religion):<span class="StarMarking">*</span>
-        </label>
+          </label>
           <select class="form-select" id="ReligionID" formControlName="ReligionID" [(ngModel)]="request.ReligionID">
 
             <option value="0">Select Religion</option>
             <option *ngFor="let item of ReligionList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.ReligionID.errors" class="text-danger">
-            <p *ngIf="!_PersonalDetailForm.ReligionID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            <p *ngIf="!_PersonalDetailForm.ReligionID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is
+              required.!</p>
           </div>
         </div>
         <div>
           <label for="NationalityID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             राष्ट्रीयता (Nationality):<span class="StarMarking">*</span>
-        </label>
-          <select class="form-select" id="NationalityID" formControlName="NationalityID" [(ngModel)]="request.NationalityID">
+          </label>
+          <select class="form-select" id="NationalityID" formControlName="NationalityID"
+            [(ngModel)]="request.NationalityID">
             <option value="0">--select--</option>
             <option *ngFor="let item of NationalityList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
@@ -156,8 +163,8 @@
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
             रोल नंबर (Roll Number):<span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="AadharNo"
-                 formControlName="RollNumber" [(ngModel)]="request.RollNumber" />
+          <input type="text" class="form-input" id="AadharNo" formControlName="RollNumber"
+            [(ngModel)]="request.RollNumber" />
           <div *ngIf="isSubmitted && _PersonalDetailForm.RollNumber.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.RollNumber.errors.required">
               <i aria-hidden="true"></i> This field is required.!
@@ -168,8 +175,8 @@
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
             पद (Designation):<span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="Designation"
-                 formControlName="Designation" [(ngModel)]="request.Designation" />
+          <input type="text" class="form-input" id="Designation" formControlName="Designation"
+            [(ngModel)]="request.Designation" />
           <div *ngIf="isSubmitted && _PersonalDetailForm.Designation.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.Designation.errors.required">
               <i aria-hidden="true"></i> This field is required.!
@@ -192,8 +199,7 @@
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
             मेरिट नंबर (Merit Number):<span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input" id="MeritNo"
-                 formControlName="MeritNo" [(ngModel)]="request.MeritNo" />
+          <input type="text" class="form-input" id="MeritNo" formControlName="MeritNo" [(ngModel)]="request.MeritNo" />
           <div *ngIf="isSubmitted && _PersonalDetailForm.MeritNo.errors" class="text-danger">
             <p *ngIf="_PersonalDetailForm.MeritNo.errors.required">
               <i aria-hidden="true"></i> This field is required.!
@@ -206,7 +212,7 @@
             गृह जिला (Home District): <span class="StarMarking">*</span>
           </label>
           <select class="form-select" id="HomeDistrictID" name="HomeDistrictID" formControlName="HomeDistrictID"
-                  [(ngModel)]="request.HomeDistrictID">
+            [(ngModel)]="request.HomeDistrictID">
             <option value="0">Select District</option>
             <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
           </select>
@@ -229,7 +235,8 @@
           </label>
           <select class="form-select" formControlName="CategoryA_ID" [(ngModel)]="request.CategoryA_ID">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}
+            </option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryA_ID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailForm.CategoryA_ID.errors.DropdownValidators">
@@ -262,7 +269,8 @@
           </label>
           <select class="form-select" formControlName="SelectionCategoryID" [(ngModel)]="request.SelectionCategoryID">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}
+            </option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.SelectionCategoryID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailForm.SelectionCategoryID.errors.DropdownValidators">
@@ -272,17 +280,16 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsPH" [value]="true" formControlName="IsPH"
-                      [(ngModel)]="request.IsPH" />
+              <input type="radio" name="IsPH" [value]="true" formControlName="IsPH" [(ngModel)]="request.IsPH" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsPH" [value]="false" formControlName="IsPH"
-                      [(ngModel)]="request.IsPH" />
+              <input type="radio" name="IsPH" [value]="false" formControlName="IsPH" [(ngModel)]="request.IsPH" />
               <span>No</span>
             </label>
           </div>
@@ -295,17 +302,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsExServicemen" [value]="true" formControlName="IsExServicemen"
-                      [(ngModel)]="request.IsExServicemen" />
+                [(ngModel)]="request.IsExServicemen" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsExServicemen" [value]="false" formControlName="IsExServicemen"
-                      [(ngModel)]="request.IsExServicemen" />
+                [(ngModel)]="request.IsExServicemen" />
               <span>No</span>
             </label>
           </div>
@@ -318,17 +326,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsSportsPerson" [value]="true" formControlName="IsSportsPerson"
-                      [(ngModel)]="request.IsSportsPerson" />
+                [(ngModel)]="request.IsSportsPerson" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsSportsPerson" [value]="false" formControlName="IsSportsPerson"
-                      [(ngModel)]="request.IsSportsPerson" />
+                [(ngModel)]="request.IsSportsPerson" />
               <span>No</span>
             </label>
           </div>
@@ -341,17 +350,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsShahidDependent" [value]="true" formControlName="IsShahidDependent"
-                      [(ngModel)]="request.IsShahidDependent" />
+                [(ngModel)]="request.IsShahidDependent" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsShahidDependent" [value]="false" formControlName="IsShahidDependent"
-                      [(ngModel)]="request.IsShahidDependent" />
+                [(ngModel)]="request.IsShahidDependent" />
               <span>No</span>
             </label>
           </div>
@@ -364,17 +374,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To Mother/Father/Spouse) <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To
+            Mother/Father/Spouse) <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsAnyIncurableDiseases" [value]="true" formControlName="IsAnyIncurableDiseases"
-                      [(ngModel)]="request.IsAnyIncurableDiseases" />
+                [(ngModel)]="request.IsAnyIncurableDiseases" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsAnyIncurableDiseases" [value]="false" formControlName="IsAnyIncurableDiseases"
-                      [(ngModel)]="request.IsAnyIncurableDiseases" />
+                [(ngModel)]="request.IsAnyIncurableDiseases" />
               <span>No</span>
             </label>
           </div>
@@ -387,17 +398,18 @@
         </div>
 
         <div *ngIf="request.MaritalID == 62">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
-                      [(ngModel)]="request.IsSpouseInSameService" />
+                [(ngModel)]="request.IsSpouseInSameService" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
-                      [(ngModel)]="request.IsSpouseInSameService" />
+                [(ngModel)]="request.IsSpouseInSameService" />
               <span>No</span>
             </label>
           </div>
@@ -411,9 +423,8 @@
 
       </div>
     </form>
-  </div> 
+  </div>
 </div>
-
 
 
 
@@ -441,42 +452,42 @@
 <div class="card tab-panel" id="PersonalDetailEditAdmin">
   <div class="card-body p-5">
     <form [formGroup]="PersonalDetailFormEditAdmin">
-         <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">Additional Field Edit</b>
-       <div class="actionBtns " style="width: auto !important">
-  <a href="javascript:void(0)" *ngIf="PersonalDetailFormEditAdmin.disabled"  (click)="editPersonalDetails()"  title="Edit Details">
-                  <i class="ti ti-pencil"></i>
-                </a>
-  <a href="javascript:void(0)" *ngIf="PersonalDetailFormEditAdmin.enabled"  (click)="editPersonalDetailsDisable()"  title="Edit Details">
-                  <i class="ti ti-eye"></i>
-                </a>
-</div>
+        <div class="actionBtns " style="width: auto !important">
+          <a href="javascript:void(0)" *ngIf="PersonalDetailFormEditAdmin.disabled" (click)="editPersonalDetails()"
+            title="Edit Details">
+            <i class="ti ti-pencil"></i>
+          </a>
+          <a href="javascript:void(0)" *ngIf="PersonalDetailFormEditAdmin.enabled"
+            (click)="editPersonalDetailsDisable()" title="Edit Details">
+            <i class="ti ti-eye"></i>
+          </a>
+        </div>
       </div>
 
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
-
-       
-
         <div>
           <label for="Add_Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
             लिंग (Gender):<span class="StarMarking">*</span>
-        </label>
-          <select class="form-select" id="Add_GenderId" formControlName="Add_GenderId" [(ngModel)]="requestfromAdmin.GenderId">
+          </label>
+          <select class="form-select" id="Add_GenderId" formControlName="Add_GenderId"
+            [(ngModel)]="requestfromAdmin.GenderId_ByAdmin">
             <option value="" selected>--Select Gender--</option>
             <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailFormEditAdmin.Add_GenderId.errors" class="text-danger">
-            <p *ngIf="!_PersonalDetailFormEditAdmin.Add_GenderId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            <p *ngIf="!_PersonalDetailFormEditAdmin.Add_GenderId.errors.required"><i aria-hidden="true"></i> This field
+              is required.!</p>
           </div>
         </div>
-
-        
 
         <div>
           <label for="Add_MaritalID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             वैवाहिक स्थिति(Marital Status):<span class="StarMarking">*</span>
-        </label>
-          <select class="form-select" id="Add_MaritalID" formControlName="Add_MaritalID" [(ngModel)]="requestfromAdmin.MaritalID">
+          </label>
+          <select class="form-select" id="Add_MaritalID" formControlName="Add_MaritalID"
+            [(ngModel)]="requestfromAdmin.MaritialID_ByAdmin">
             <option value="0">Select (Marital Status)</option>
             <option *ngFor="let item of maritalList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
@@ -486,19 +497,17 @@
             </p>
           </div>
         </div>
-        
-
       </div>
 
-      
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
         <div>
           <label for="Add_CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" formControlName="Add_CategoryA_ID" [(ngModel)]="requestfromAdmin.CategoryA_ID">
+          <select class="form-select" formControlName="Add_CategoryA_ID" [(ngModel)]="requestfromAdmin.CategoryA_ID_ByAdmin">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}
+            </option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailFormEditAdmin.Add_CategoryA_ID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailFormEditAdmin.Add_CategoryA_ID.errors.DropdownValidators">
@@ -510,7 +519,7 @@
           <label for="Add_CategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             श्रेणी बी(Category B)(Widow/Divorcee/Single Woman) :<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" formControlName="Add_CategoryB_ID" [(ngModel)]="requestfromAdmin.CategoryB_ID">
+          <select class="form-select" formControlName="Add_CategoryB_ID" [(ngModel)]="requestfromAdmin.CategoryB_ID_ByAdmin">
             <option value="0">--Select--</option>
             <option value="1">Widow</option>
             <option value="2">Divorcee</option>
@@ -529,9 +538,11 @@
           <label for="Add_CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" formControlName="Add_SelectionCategoryID" [(ngModel)]="requestfromAdmin.SelectionCategoryID">
+          <select class="form-select" formControlName="Add_SelectionCategoryID"
+            [(ngModel)]="requestfromAdmin.SelectionCategoryID_ByAdmin">
             <option value="0">--Select--</option>
-            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option>
+            <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}
+            </option>
           </select>
           <div *ngIf="isSubmitted && _PersonalDetailFormEditAdmin.Add_SelectionCategoryID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailFormEditAdmin.Add_SelectionCategoryID.errors.DropdownValidators">
@@ -541,17 +552,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsPH" [value]="true" formControlName="Add_IsPH"
-                      [(ngModel)]="requestfromAdmin.IsPH" />
+                [(ngModel)]="requestfromAdmin.IsPH_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsPH" [value]="false" formControlName="Add_IsPH"
-                      [(ngModel)]="requestfromAdmin.IsPH" />
+                [(ngModel)]="requestfromAdmin.IsPH_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -564,17 +576,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsExServicemen" [value]="true" formControlName="Add_IsExServicemen"
-                      [(ngModel)]="requestfromAdmin.IsExServicemen" />
+                [(ngModel)]="requestfromAdmin.IsExServicemen_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsExServicemen" [value]="false" formControlName="Add_IsExServicemen"
-                      [(ngModel)]="requestfromAdmin.IsExServicemen" />
+                [(ngModel)]="requestfromAdmin.IsExServicemen_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -587,17 +600,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsSportsPerson" [value]="true" formControlName="Add_IsSportsPerson"
-                      [(ngModel)]="requestfromAdmin.IsSportsPerson" />
+                [(ngModel)]="requestfromAdmin.IsSportsPerson_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsSportsPerson" [value]="false" formControlName="Add_IsSportsPerson"
-                      [(ngModel)]="requestfromAdmin.IsSportsPerson" />
+                [(ngModel)]="requestfromAdmin.IsSportsPerson_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -610,17 +624,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsShahidDependent" [value]="true" formControlName="Add_IsShahidDependent"
-                      [(ngModel)]="requestfromAdmin.IsShahidDependent" />
+                [(ngModel)]="requestfromAdmin.IsShahidDependent_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsShahidDependent" [value]="false" formControlName="Add_IsShahidDependent"
-                      [(ngModel)]="requestfromAdmin.IsShahidDependent" />
+                [(ngModel)]="requestfromAdmin.IsShahidDependent_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -633,17 +648,18 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To Mother/Father/Spouse) <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To
+            Mother/Father/Spouse) <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsAnyIncurableDiseases" [value]="true" formControlName="Add_IsAnyIncurableDiseases"
-                      [(ngModel)]="requestfromAdmin.IsAnyIncurableDiseases" />
+              <input type="radio" name="Add_IsAnyIncurableDiseases" [value]="true"
+                formControlName="Add_IsAnyIncurableDiseases" [(ngModel)]="requestfromAdmin.IsAnyIncurableDiseases_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsAnyIncurableDiseases" [value]="false" formControlName="Add_IsAnyIncurableDiseases"
-                      [(ngModel)]="requestfromAdmin.IsAnyIncurableDiseases" />
+              <input type="radio" name="Add_IsAnyIncurableDiseases" [value]="false"
+                formControlName="Add_IsAnyIncurableDiseases" [(ngModel)]="requestfromAdmin.IsAnyIncurableDiseases_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -656,17 +672,18 @@
         </div>
 
         <div *ngIf="requestfromAdmin.MaritalID == 62">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span
+              class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsSpouseInSameService" [value]="true" formControlName="Add_IsSpouseInSameService"
-                      [(ngModel)]="requestfromAdmin.IsSpouseInSameService" />
+              <input type="radio" name="Add_IsSpouseInSameService" [value]="true"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin" />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsSpouseInSameService" [value]="false" formControlName="Add_IsSpouseInSameService"
-                      [(ngModel)]="requestfromAdmin.IsSpouseInSameService" />
+              <input type="radio" name="Add_IsSpouseInSameService" [value]="false"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin" />
               <span>No</span>
             </label>
           </div>
@@ -682,8 +699,10 @@
     </form>
   </div>
   <div class="card-footer text-center">
-    <button type="button" class="btn bg-info text-white" (click)="Back()"><i class="ti ti-chevron-left"></i>Back</button>
-    <button *ngIf="PersonalDetailFormEditAdmin.enabled" type="button" class="btn bg-primary text-white" (click)="SaveDataFromAdmin()"><i class="ti ti-device-floppy"></i>Save Details</button>
+    <button type="button" class="btn bg-info text-white" (click)="Back()"><i
+        class="ti ti-chevron-left"></i>Back</button>
+    <button *ngIf="PersonalDetailFormEditAdmin.enabled" type="button" class="btn bg-primary text-white"
+      (click)="SaveDataFromAdmin()"><i class="ti ti-device-floppy"></i>Save Details</button>
     <!-- <button type="button" class="btn bg-light text-dark" (click)="ResetData()"><i class="ti ti-refresh"></i>Reset</button> -->
   </div>
 </div>
