@@ -67,7 +67,9 @@ export class AddBterIssueItemComponent {
   SelectedItems: any[] = [];
   AddItemList: DTEItemsSaveModel[] = [];
   public StreamMasterList: any = [];
-
+  public ItemsDataList: any = []; 
+  public selectedDataList: any[] = [];
+  public staff_ID:number =0;
   constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
@@ -461,9 +463,11 @@ export class AddBterIssueItemComponent {
 
         this.Searchrequests.ItemCategoryId = 0; // reset
         this.ItemsDDLList = []; // reset
+        this.SelectedItems = [];
       } else {
         this.CategoryDDLList = [];
         this.ItemsDDLList = [];
+        this.SelectedItems=[];
       }
     } catch (Ex) {
       console.error("Error in GetItemListType:", Ex);
@@ -477,7 +481,7 @@ export class AddBterIssueItemComponent {
     debugger
   try {
     this.loaderService.requestStarted();
-
+      this.SelectedItems = [];
     const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -485,14 +489,15 @@ export class AddBterIssueItemComponent {
       RoleID: this.sSOLoginDataModel.RoleID || 0,
       CollegeId: this.sSOLoginDataModel.InstituteID || 0,
       ItemType: this.Searchrequests.ItemType || 0,
-      EquipmentsId: 0,
+      EquipmentsId: this.Searchrequests.ItemCategoryId || 0,
       OfficeID: 0,
-      StatusID: 0
+      StatusID: 0 
     };
     await this.bterInventoryService.GetAllItemList(searchdata)
     .then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItemsDDLList = data['Data'];
+      
       console.log("Bind  Item  list", this.ItemsDDLList )
     }, error => console.error(error));
     }
@@ -530,7 +535,8 @@ export class AddBterIssueItemComponent {
           ItemId: item.ItemId,
           ItemName: item.CampanyName,
           ItemCategoryName: item.CategoryName,
-          Quantity: 1, // default,
+          //Quantity: 1, // default
+          Quantity: item.Quantity, 
           FileName: item.FileName || '',
           Dis_FileName: item.Dis_FileName || '',
           EquipmentsId: item.EquipmentsId,
@@ -557,7 +563,16 @@ export class AddBterIssueItemComponent {
       this.toastr.error("Please select at least one item!");
       return;
     }
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if (!anyTeamSelected) {
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
 
+    if (this.Searchrequests.staffID == 0) {
+      this.toastr.error("Please select at least one Staff!");
+      return;
+    }
     this.SelectedItems.forEach((element: any) => {
       element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
         element.InstituteID = this.sSOLoginDataModel.InstituteID,
@@ -738,9 +753,128 @@ export class AddBterIssueItemComponent {
     this.Searchrequests.ItemCategoryId = 0; 
     this.CategoryDDLList = [];
     this.ItemsDDLList = [];
+    this.SelectedItems =[];
     console.log("Staff changed => reset ItemType & Category");
 
     this.GetItemListType();
+    
   }
+  async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
+    debugger;
+      this.staff_ID=staffId;
+    const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+    if ((!anyTeamSelected) && (this.Searchrequests.issuedTo == 2)){
+      this.toastr.error("Please select at least one Item!");
+      return;
+    }
 
+    if (this.Searchrequests.staffID == 0 && this.Searchrequests.issuedTo == 2)  {
+      this.toastr.error("Please select at least one Staff!");
+      return;
+    }
+
+    console.log('Logs Item ID:'+itemId);
+      await this.bterInventoryService.GetDTEIssueItemListPermanent(itemId).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          this.ItemsDataList = data.Data; 
+        this.ItemsDDLList = [];
+        this.SelectedItems = [];
+          console.log(this.ItemsDataList);
+           this.BindItem_list();
+        }
+      }); 
+
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
+  }
+  toggleAll(event: any) {
+    const checked = event.target.checked;
+    this.ItemsDataList.forEach((item: any) => item.Selected = checked);
+  }
+  onIssueItemToggle(item: any) {
+  // Only run logic when checkbox is checked
+    if (item.Selected) {
+      // Check both conditions
+      debugger;
+      if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
+        console.log('✅ Serial item selected:', item); 
+      }
+      else {
+      console.warn('⚠️ This item has no serial or Equipments Code is empty:', item);
+      this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
+        }
+    }
+  }
+  async confirmSubmitNew() {
+  const selectedItems = this.ItemsDataList.filter((x: any) => x.Selected);
+
+    if (selectedItems.length === 0) {
+      this.toastr.warning("Please select at least one item to return.", "Warning", {
+        toastClass: "ngx-toastr my-warning-toast"
+      });
+      return;
+    }
+    this.selectedDataList = this.ItemsDataList.filter((item:any) => item.Selected);
+    this.selectedDataList = this.ItemsDataList .filter((item: any) => item.Selected).map((item: any) => ({
+      ...item,
+      StaffId: this.staff_ID,
+      InstituteID : this.sSOLoginDataModel.InstituteID,
+      EndTermID : this.sSOLoginDataModel.EndTermID,
+      RoleID : this.sSOLoginDataModel.RoleID,  
+      FileName : this.FileName, 
+      Dis_FileName : this.Dis_FileName,
+    }));
+    console.table(this.selectedDataList); 
+    await this.confirmSubmit(this.selectedDataList); 
+  }
+  async confirmSubmit(arr: any,) {
+    debugger;
+
+    this.loaderService.requestStarted();
+    this.isLoading = true;
+    this.submitRequest.TradeId=this.TradeId,
+    this.submitRequest.StaffId = this.staff_ID,
+    this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID,
+    this.submitRequest.EndTermID = this.sSOLoginDataModel.EndTermID,
+    this.submitRequest.RoleID = this.sSOLoginDataModel.RoleID,
+    this.submitRequest.StaffId = this.Searchrequests.staffID, 
+    this.submitRequest.ItemList = arr; 
+    this.submitRequest.FileName = this.FileName;
+
+    console.log('arr: '+arr);
+    try {
+      await this.bterInventoryService.GetDTEIssueSubmitPermanent(this.submitRequest)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State == EnumStatus.Success)
+          {
+            this.toastr.success("Items issued successfully", "", {
+              toastClass: "ngx-toastr my-update-toast"
+            });
+
+            //this.GetAllData();
+           // this.CloseModalPopup();
+          } else if (this.State == EnumStatus.Error)
+          {
+            this.toastr.error("Something went wrong.");
+          }
+        });
+
+      this.modalService.dismissAll();
+    } catch (ex) {
+      console.error(ex);
+      this.toastr.error('Something went wrong. Please try again.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
 }
