@@ -22,27 +22,39 @@ import { CounsellingImportCandidateListService } from '../../../Services/Counsel
     standalone: false
 })
 export class EditImportedCandidateListComponent implements OnInit {
-
-  public CandidateID: number = 0;
   public request =new CounsellingEditImportedCandidateListModel();
   public request1=new CounsellingAllotmentListModel();
+  public sSOLoginDataModel = new SSOLoginDataModel();
+  public CandidateFormGroup!: FormGroup;
+  
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  isDisabled = true;
   public State: number = 0;
   public key: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
-  public CandidateFormGroup!: FormGroup;
-  public sSOLoginDataModel = new SSOLoginDataModel();
+  public CandidateID: number = 0;
+  public DesignationID: number = 0;
+  public TradeId: number = 0;
+  
   public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = [];
   public CandidateData:any=[];
-isDisabled = true;
-  constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
-    private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
-    private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal,
-  private counsellingImportCandidateListService:CounsellingImportCandidateListService) 
+
+  constructor(
+    private commonMasterService: CommonFunctionService, 
+    private CompanyMasterService: CompanyMasterService,
+    private toastr: ToastrService, 
+    private loaderService: LoaderService, 
+    private formBuilder: FormBuilder,
+    private activatedRoute: ActivatedRoute, 
+    public appsettingConfig: AppsettingService, 
+    private routers: Router, 
+    private modalService: NgbModal,
+    private counsellingImportCandidateListService:CounsellingImportCandidateListService
+  ) 
     {}
 
   async ngOnInit() {
@@ -77,19 +89,19 @@ isDisabled = true;
     // await this.GetMaterData()
     // await this.loadDropdownData('CompanyType')
     //edit
-    debugger
+    
     if (this.CandidateID > 0) {
-      await this.GetById(this.CandidateID);
+      await this.GetById();
     }
     if(this.key==3){
       this.CandidateFormGroup.disable();
-    }else if(this.key==2){
-    const SSOID = this.CandidateFormGroup.get('SSOID');
-SSOID?.disable();
-    const Trade = this.CandidateFormGroup.get('Trade');
-Trade?.disable();
-    const Designation = this.CandidateFormGroup.get('Designation');
-Designation?.disable();
+    } else if(this.key==2){
+      const SSOID = this.CandidateFormGroup.get('SSOID');
+      SSOID?.disable();
+      const Trade = this.CandidateFormGroup.get('Trade');
+      Trade?.disable();
+      const Designation = this.CandidateFormGroup.get('Designation');
+      Designation?.disable();
     }
   }
   get _CandidateFormGroup() { return this.CandidateFormGroup.controls; }
@@ -139,36 +151,23 @@ Designation?.disable();
 
 
   // get detail by id
-  async GetById(candidateID: number = 0) {
-    debugger
+  async GetById() {
     try {
-   
-      this.loaderService.requestStarted();
-      this.request1.CandidateID = candidateID;
-      this.request1.action="_GetcandidateList"
       if(this.key==1){
-        this.request=new CounsellingEditImportedCandidateListModel();
-        this.request1=new CounsellingAllotmentListModel();
+        this.request = new CounsellingEditImportedCandidateListModel();
+        this.request1 = new CounsellingAllotmentListModel();
         return;
       }
-      await this.counsellingImportCandidateListService.GetCandidateList(this.request1)
+      this.loaderService.requestStarted();
+      this.request1.CandidateID = this.CandidateID;
+      this.request1.action="_GetCandidateById"
 
+      await this.counsellingImportCandidateListService.GetCandidateList(this.request1)      
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"Candidate data");
-          this.CandidateData=data.Data;
-          if (data && data.Data) {
-            console.log(data.Data[0]);
-            this.CandidateFormGroup.patchValue({
-              CandidateName: data.Data[0].CandidateName,
-              CandidateFatherName: data.Data[0].CandidateFatherName,
-              // Address: data.Data.CandidateName,
-              Email: data.Data[0].Email,
-              MobileNo: data.Data[0].MobileNo,
-              SSOID: data.Data[0].SSOID,
-              Trade: data.Data[0].TradeName,
-              Designation: data.Data[0].Designation,
-            })
+          if(data.State === EnumStatus.Success) {
+            this.request = data.Data[0]
           }
           console.log(this.CandidateFormGroup.value, " check data");
 
@@ -214,12 +213,34 @@ Designation?.disable();
         });
     }
 
+  async EditCandidateExcelDataById () {
+    try {
+      this.request.CandidateID = this.CandidateID;
+      this.request.ModifyBy = this.sSOLoginDataModel.UserID
+      
+      await this.counsellingImportCandidateListService.EditCandidateExcelDataById(this.request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+          this.routers.navigate(['/CounsellingImportCandidateList']);
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // reset
   ResetControls() {
     this.request = new CounsellingEditImportedCandidateListModel();
-
-
-    //this.multiSelect.toggleSelectAll();
+    this.request.CandidateName = ''
+    this.request.CandidateFatherName = ''
+    this.request.MobileNo = ''
+    this.request.Email = ''
   }
 
 

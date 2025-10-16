@@ -1,0 +1,123 @@
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent"  *ngIf="!isOnStatus">
+  <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
+    <!--<div class="row">
+      <div class="col-lg-12 mb-4 mt-2 text-center">
+        <div class="col-md-12">
+          <h3>Coming Soon....</h3>
+        </div>
+      </div>
+    </div>-->
+  </div>
+</div>
+
+<div class="card" id="Tabs5"  *ngIf="isOnStatus">
+  <div class="p-5">
+    <div class="card bg-light mb-4">
+      <div class="card-body text-center">
+
+        <h3 class="m-0">Revealuation Details </h3>
+      </div>
+    </div>
+
+    <form [formGroup]="RVLform">
+      <div class="row">
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">Application No.</label>
+          <input type="text" class="form-input" placeholder="Enter Application No"
+                 formControlName="ApplicationNo" [(ngModel)]="Request.ApplicationNo">
+          <div *ngIf="isSubmitted && _RVLform.ApplicationNo.errors" class="text-danger">
+            <p *ngIf="_RVLform.ApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <label class="form-label">Roll No:</label>
+          <input type="text" class="form-input" placeholder="Enter Roll No"
+                 formControlName="RollNo" [(ngModel)]="Request.RollNo">
+          <div *ngIf="isSubmitted && _RVLform.RollNo.errors" class="text-danger">
+            <p *ngIf="_RVLform.RollNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+          </div>
+        </div>
+
+        <div class="col-xxl-4 col-xl-4 col-md-6 col-sm-12 col-12 mb-3">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6 "><i class="ti ti-refresh"></i>Reset</button>
+        </div>
+      </div>
+    </form>
+
+    <!--<div class="mt-3">
+    <h3 class="mb-1">Application Info:</h3>
+
+    <div class="table-responsive">
+
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+
+            <th class="text-left">Application Number</th>
+            <th class="text-left">Applicant Name</th>
+            <th class="text-left">Category</th>
+
+            <th class="text-left">Date of Birth </th>
+            <th class="text-left">Gender</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+
+            <td>{{requestData.ApplicationNo}}</td>
+            <td>{{requestData.StudentName}}</td>
+            <td>{{requestData.categoryName}}</td>
+            <td>{{requestData.DOB}}</td>
+            <td>{{ requestData.Gender === 'M' ? 'Male' : (requestData.Gender === 'F' ? 'Female' : 'Other') }}</td>
+
+
+
+          </tr>
+          <tr *ngIf="requestData.ApplicationID == 0"><td colspan="15"> No records found</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>-->
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Revealuation List</b>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sno</th>
+            <th class="text-left">Application No</th>
+            <th class="text-left">Roll No</th>
+            <th class="text-left">Student Exam</th>
+            <th class="text-left">Action</th>
+            <th class="text-left">Reval Status</th>
+            <th style="width:125px;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of RVLApplicatiodata;let idx=index;">
+            <td>{{idx+1}}</td>
+            <td>{{item.ApplicationNo}}</td>
+            <td>{{item.RollNo}}</td>
+            <td>{{item.StudentExamID}}</td>
+            <td>{{item.ActionID}}</td>
+            <td>{{item.RevalStatus}}</td>
+            <td>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <i class="ti ti-eye"></i>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+</div>
