@@ -245,5 +245,17 @@ export class DteItemsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+  public async GetDTEIssueItemListPermanent(itemId: number) {
+    return await this.http.get(this.APIUrl + "/GetDTEIssueItemListPermanent/" + itemId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+   public async GetDTEIssueSubmitPermanent(submitRequest: ItemsIssueReturnModels) {
+      var body = JSON.stringify(submitRequest);
+      return await this.http.post(`${this.APIUrl}/GetDTEIssueSubmitPermanent`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
 }
