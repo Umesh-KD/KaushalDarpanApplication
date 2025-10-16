@@ -32,3 +32,16 @@ export class ITIRevaluationModel {
   public RollNo?: number
   public DOB: string = ''
 }
+
+
+export class ITIRevalRequestStudentDetailsModel {
+  public RollNo?: string='';
+  public DOB: string = '';
+  public RevalReqID?:number=0;
+
+  public PageSize: number = 50;
+  public PageNumber: number = 1;
+  public SortOrder: string = '';
+  public SortColumn: string = '';
+  public action :string='';
+}
