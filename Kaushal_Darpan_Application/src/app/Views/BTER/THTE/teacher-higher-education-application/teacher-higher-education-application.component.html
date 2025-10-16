@@ -162,6 +162,9 @@
           <button type="button" class="btn bg-info text-white mt-6" (click)="SaveTeacherHighEduApp()">
             {{ButtonText}}
           </button>
+          <button type="button" class="btn bg-revert text-white mt-6" (click)="Reset()">
+            Reset
+          </button>
         </div>
 
       </div>
@@ -204,8 +207,8 @@
         
           <td align="left">
             <a href="javascript:void(0);" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
-            <!--<a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>-->
-            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
+            <a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
+            <button *ngIf="row.StatusID == 1340" class="btn bg-danger text-white" type="button" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
               <i class="ti ti-trash"></i>
             </button>
           </td>
@@ -260,24 +263,20 @@
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
               <tr>
                 <th class="text-left">S No</th>
-                <th class="text-left">Request Type</th>
-                <th class="text-left">Relieving Status</th>
-                <th class="text-left">Joining Status</th>
-                <th class="text-left">
-                  Request Status
-                </th>
-                <th class="text-left">Remark</th>
+                <th class="text-left">Teacher Name</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Remarks</th>
+                <th class="text-left">Action Name</th>
                 <th class="text-left">Date</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let row of UserRequestHistoryList; let idx=index;  ">
                 <td align="left">{{idx+1}}</td>
-                <td align="left">{{ row.ServiceRequestName }}</td>
-                <td align="left">{{ row.RelievingStatusName }}</td>
-                <td align="left">{{ row.JoiningStatusName }}</td>
-                <td align="left">{{ row.RequestStatusName }}</td>
-                <td align="left">{{ row.Remarks}}</td>
+                <td align="left">{{ row.TeacherName }}</td>
+                <td align="left">{{ row.StatusName }}</td>
+                <td align="left">{{ row.Remarks }}</td>
+                <td align="left">{{ row.ActionName }}</td>
                 <td align="left">{{ row.ActionDate }}</td>
               </tr>
               <tr *ngIf="UserRequestHistoryList?.length==0">

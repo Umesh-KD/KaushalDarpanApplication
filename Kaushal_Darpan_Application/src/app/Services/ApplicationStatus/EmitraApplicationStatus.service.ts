@@ -62,5 +62,12 @@ export class ApplicationStatusService {
       ).toPromise();
   }
 
+  public async EditQualificationList(searchRequest: StudentSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/EditQualificationList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

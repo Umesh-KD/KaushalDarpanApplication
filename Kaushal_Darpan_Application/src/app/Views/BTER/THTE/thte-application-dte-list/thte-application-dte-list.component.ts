@@ -73,8 +73,8 @@ export class THTEApplicationDteListComponent {
         this.StatusListDDL = data['Data'];
         this.UpdateStatusListDDL = data['Data'];
 
-        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1343 || x.ID == 1344)
-        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344)
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1344 || x.ID == 1345)
+        this.UpdateStatusListDDL = this.UpdateStatusListDDL.filter((x: any) => x.ID == 1342 || x.ID == 1345)
         
       })
     } catch (error) {
@@ -308,18 +308,37 @@ export class THTEApplicationDteListComponent {
   }
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
-    this.ApplicationListData.forEach((x: any) => {
-      x.Selected = this.AllInTableSelect;
+    this.paginatedInTableData.forEach((row: any) => {
+      row.Selected = this.AllInTableSelect;
+
+      // Direct update to the original list
+      const item = this.ApplicationListData.find((x: any) => x.THTEAppID === row.THTEAppID);
+      if (item) {
+        item.Selected = this.AllInTableSelect;
+      }
     });
   }
-  //checked single (replace org. list here)
-  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.ApplicationListData.filter((x: any) => x.StudentExamID == item.StudentExamID);
-    data.forEach((x: any) => {
-      x.Selected = isSelected;
+
+  // Select/Deselect Single
+  selectInTableSingleCheckbox(isSelected: boolean, row: any) {
+    // Update current row
+    row.Selected = isSelected;
+
+    // Update master list item
+    const item = this.ApplicationListData.filter((x: any) => x.THTEAppID === row.THTEAppID);
+    if (item) {
+      item.Selected = isSelected;
+    }
+
+    // Ensure all rows have boolean Selected (default false)
+    this.paginatedInTableData.forEach(r => {
+      if (typeof r.Selected !== 'boolean') {
+        r.Selected = false;
+      }
     });
-    //select all(toggle)
-    this.AllInTableSelect = this.ApplicationListData.every((r: any) => r.Selected);
+
+    // Check if all visible rows are selected (defensive)
+    this.AllInTableSelect = this.paginatedInTableData.every(r => r.Selected === true);
   }
   // end table feature
 }
