@@ -165,7 +165,7 @@
           <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 loginBox mt-8">
             <!--<a [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:BTER}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">BTER <i class="ti ti-chevron-right"></i></a>-->
             <a [routerLink]="'/dtepublicinfo'" *ngIf="ShowBTERApply" [queryParams]="{deptid:BTER,type:1}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">Polytechnic <br /> Admission<i class="ti ti-chevron-right"></i></a> 
-            <a  [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:ITI}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">ITI <br /> Admission<i class="ti ti-chevron-right"></i></a>
+            <!--<a  [routerLink]="'/StudentJanAadharDetail'" [queryParams]="{deptid:ITI}" (click)="CloseModal()" class="btn bg-info btn-lg text-white text-center text-3 xl py-4 c-pointer">ITI <br /> Admission<i class="ti ti-chevron-right"></i></a>-->
             
             <a (click)="Redirect(2)" *ngIf="DirectAdmissionMapKey==1"
                  class="btn bg-info btn-lg text-white text-center py-4 c-pointer">

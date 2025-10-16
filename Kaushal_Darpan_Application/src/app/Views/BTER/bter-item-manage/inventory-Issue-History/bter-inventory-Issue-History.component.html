@@ -96,10 +96,14 @@
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
             <th class="text-left">Item Name</th>
+            <th class="text-left">Equipment Name</th>
+            <th class="text-left">Item Code</th>
+            <th class="text-left">IsConsumable</th>
             <th class="text-left">Qty</th>
             <th class="text-left">Issue Date</th>
             <!-- <th class="text-left">Due Date</th> -->
             <th class="text-left">Return Date</th>
+            <th class="text-left">Equipment Status on Return</th>
             <th class="text-left">Status</th>
           </tr>
         </thead>
@@ -108,10 +112,22 @@
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.EquipmentName}}</td> 
+            <td align="left">{{ item.ItemCode}}</td> 
+            <td align="left">
+              <span [ngClass]="item.IsConsumable == 1 ? 'badge-consumable' : 'badge-permanent'">
+                {{ item.IsConsumable == 1 ? 'Consumable' : 'Permanent' }}
+              </span>
+            </td>
             <td align="left">{{ item.Quantity}}</td>
             <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td>
+             <td align="left">
+              <span [ngClass]="item.ConditionOnReturn == 1 ? 'badge-working' : 'badge-notworking'">
+                  {{ item.ConditionOnReturn == 1 ? 'Working' : 'Not Working' }}
+                </span>
+            </td> 
             <td align="left">
               <span [ngClass]="{
                                  'InvStatus-issued': item.InvStatus === 0,

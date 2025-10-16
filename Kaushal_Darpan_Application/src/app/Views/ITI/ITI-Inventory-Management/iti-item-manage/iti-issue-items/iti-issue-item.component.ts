@@ -490,7 +490,16 @@ export class AddItiIssueItemComponent {
         this.toastr.error("Please select at least one item!");
         return;
       }
-  
+      // const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      // if (!anyTeamSelected) {
+      //   this.toastr.error("Please select at least one Item!");
+      //   return;
+      // }
+
+      // if (this.Searchrequests.staffID == 0) {
+      //   this.toastr.error("Please select at least one Staff!");
+      //   return;
+      // }
       this.SelectedItems.forEach((element: any) => {
         element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
           element.InstituteID = this.sSOLoginDataModel.InstituteID,
