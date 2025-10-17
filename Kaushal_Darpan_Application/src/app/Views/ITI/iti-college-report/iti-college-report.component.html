@@ -55,24 +55,196 @@
         </div>
         <div *ngIf="request.IsNewCollege!=undefined" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
 
-          <div >
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">A: <span class="StarMarking">*</span></label>
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.CollegeID" formControlName="CollegeID">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Annoucement Type: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.AnnoucementType" formControlName="AnnoucementType">
               <option value="0">--Select--</option>
-              <option *ngFor="let item of ItiDDLlist" [value]="item.ID">{{item.Name}}</option>
+              <option [value]="1">Budget Annoucement</option>
+              <option [value]="2">CM Annoucement </option>
             </select>
             <!--<div *ngIf="isSubmitted && _ReportForm.CollegeID.errors" class="text-danger">
       <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
     </div>-->
           </div>
 
-
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Year <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" maxlength="4" (input)="onYearInput($event)" (keypress)="numberOnly($event)" formControlName="txtYear" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
+            <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.txtYear.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
           <div *ngIf="request.IsNewCollege==1">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
 
           </div>
+
+
+
+          <div>
+            <label>Division<span class="StarMarking">*</span></label>
+            <select formControlName="DivisionID" class="form-select" id="DivisionId" (change)="ddlDivision_Change()"
+                    [(ngModel)]="request.DivisionID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let division of DivisionMasterList" [value]="division.ID">{{division.Name}}</option>
+
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.DivisionID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.DivisionID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>District<span class="StarMarking">*</span></label>
+            <select formControlName="DistrictID" class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
+                    [(ngModel)]="request.DistrictID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of DistrictMasterList1" [value]="item.ID">
+                {{item.Name}}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.DistrictID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.DistrictID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+          <div>
+            <label>Sub Division<span class="StarMarking">*</span></label>
+            <select formControlName="SubDivisionID" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of SubDivisionMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.SubDivisionID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.SubDivisionID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>Tehsil<span class="StarMarking">*</span></label>
+            <select formControlName="TehsilID" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilID" (change)="GetGramPanchayatSamiti()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.TehsilID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.TehsilID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label>Urban/Rural:<span class="StarMarking">*</span></label>
+            <select formControlName="UrbanRural" class="form-select" id="UrbanRural" [(ngModel)]="request.UrbanRural" (change)="changeUrbanRural()">
+              <option value="0">Select Urban/Rural</option>
+              <option *ngFor="let item of ResidenceList" value="{{item.ID}}">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.UrbanRural.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.UrbanRural.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+
+
+          <!--<div *ngIf="request.UrbanRural==76">
+    <label for="PanchayatSamiti">Panchayat Samiti:<span class="StarMarking">*</span></label>
+    <select formControlName="PanchayatSamiti" class="form-select" id="PanchayatSamiti"
+            [(ngModel)]="request.PanchayatSamiti">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&_ReportForm.PanchayatSamiti.errors" class="text-danger">
+      <p *ngIf="!_ReportForm.PanchayatSamiti.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div>-->
+          <div *ngIf="request.UrbanRural==76">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Panchayat Samiti<span class="StarMarking">*</span></label>
+            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.PanchayatId" formControlName="PanchayatId">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && _ReportForm.PanchayatId.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PanchayatId.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.UrbanRural==76">
+            <label for="GramPanchayatSamiti">Gram Panchayat:<span class="StarMarking">*</span></label>
+            <select formControlName="GramPanchayatSamiti" class="form-select" id="GramPanchayatSamiti"
+                    [(ngModel)]="request.GramPanchayatSamiti" (change)="villageMaster()">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of GramPanchayatList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.GramPanchayatSamiti.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.GramPanchayatSamiti.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.UrbanRural==76">
+            <label for="village">Village:<span class="StarMarking">*</span></label>
+            <select formControlName="VillageID" class="form-select" id="village"
+                    [(ngModel)]="request.VillageID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of VillageList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.VillageID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.VillageID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+          <div *ngIf="request.UrbanRural==75">
+            <label>City:<span class="StarMarking">*</span></label>
+            <select formControlName="CityID" class="form-select" id="CityID" [(ngModel)]="request.CityID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of CityMasterDDLList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.CityID.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.CityID.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+          <div *ngIf="request.UrbanRural==75">
+            <label>Administrative Body:<span class="StarMarking">*</span></label>
+            <select formControlName="AdministrativeBodyId" class="form-select" id="Administrative" [(ngModel)]="request.AdministrativeBodyId">
+              <option value="0">Select Administrative Body</option>
+              <option value="1">Cantonment Board</option>
+              <option value="2">Nagar Nigam</option>
+              <option value="3">Nagar Palika</option>
+              <option value="4">Nagar Parishad</option>
+            </select>
+            <div *ngIf="isSubmitted&&_ReportForm.AdministrativeBodyId.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.AdministrativeBodyId.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
+            </div>
+          </div>
+
+
+
+
+
 
           <div *ngIf="request.IsNewCollege==0">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI Name: <span class="StarMarking">*</span></label>
@@ -86,13 +258,7 @@
           </div>
 
 
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Establishment Year <span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" maxlength="4" (input)="onYearInput($event)" (keypress)="numberOnly($event)" formControlName="txtYear" [(ngModel)]="request.Esttablishment_Year" placeholder="Enter Establishment Year">
-            <div *ngIf="isSubmitted && _ReportForm.txtYear.errors" class="text-danger">
-              <p *ngIf="!_ReportForm.txtYear.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
+
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LokSabha Constituency<span class="StarMarking">*</span></label>
@@ -134,6 +300,7 @@
 
               <!--<option *ngFor="let item of AssemblyMaster" [value]="item.ID">{{item.Name}}</option>-->
               <option value="">--Select--</option>
+              n
               <option value="1">Bigha</option>
               <option value="2">Hector</option>
 
@@ -153,18 +320,6 @@
           </div>
 
 
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Panchayat Samiti<span class="StarMarking">*</span></label>
-            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.PanchayatId" formControlName="PanchayatId">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
-            </select>
-
-            <div *ngIf="isSubmitted && _ReportForm.PanchayatId.errors" class="text-danger">
-              <p *ngIf="_ReportForm.PanchayatId.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
 
 
           <div>

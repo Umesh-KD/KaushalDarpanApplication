@@ -78,7 +78,7 @@ export class ITIStudentRevaluationService {
     }
 
 
-    public async UploadDocument(request:[]) {
+    public async UploadDocument(request: ITIRevalRequestStudentDetailsModel) {
         const body = JSON.stringify(request);
     
         return await this.http.post(this.APIUrl + '/UploadDocument', request, this.headersOptions)

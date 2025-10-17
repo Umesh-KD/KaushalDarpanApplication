@@ -155,13 +155,6 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
   }
 
 
-    //
-  // public async ExcelExport() {
-  //   if (this.StudentOptionList.length > 0) {
-  //     tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
-  //   }
-  // }
-
 
 
   async GetCandidateList(i:any) {
@@ -232,6 +225,7 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
     // this.searchRequest.Enrollment = '';
     // this.searchRequest.Category='';
     // this.searchRequest.Status = '';
+    this.searchRequest.Name='';
     this.searchRequest.PageNumber = this.pageNo;
     this.searchRequest.PageSize = this.pageSize;
     await this.GetCandidateList(1);
@@ -267,44 +261,7 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
     }
   }
 
-  // async getcandidateOptionList(){
-  //   try {
 
-  //         this.searchRequest.PageNumber=this.pageNo
-  //         this.searchRequest.PageSize=this.pageSize
-  //         this.searchRequest.SortColumn=this.sortColumn
-  //         this.searchRequest.SortOrder=this.sortOrder 
-  //         this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:this.TradeID;
-  //         this.searchRequest.CandidateID=0
-
-          
-  //         this.searchRequest.action="_GetcandidateOptionList"
-  //         // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-  //         //   this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
-  //         //   this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //         //   this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
-  //         //   console.log(this.searchRequest.Category);
-  //         this.loaderService.requestStarted();
-  //         await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
-  //           data = JSON.parse(JSON.stringify(data));
-  //           this.StudentOptionListToExport = data.Data;
-
-  //           // this.totalRecord=this.StudentOptionList[0]?.TotalRecords;
-  //           // this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
-
-  //           console.log(this.StudentOptionList)
-  //         }, (error: any) => console.error(error))
-  //       }
-  //       catch (ex) {
-  //         console.log(ex);
-  //       }
-  //       finally {
-  //         setTimeout(() => {
-  //           this.loaderService.requestEnded();
-  //         }, 200);
-  //       }
-            
-  // }
 
   async EditData(content: any, rowData?: any) {
     this.isSubmitted = true;
@@ -371,113 +328,6 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
     }
   }
 
-    // async UploadDocument(event: any, item: any) {
-    //   try {
-
-    //     let uploadModel: UploadBTERFileModel = {
-    //       ApplicationID: item.TransactionID?.toString() ?? "0",
-    //       AcademicYear: item.AcademicYear?.toString() ?? "0",
-    //       DepartmentID: '1',
-    //       EndTermID: item.EndTermID?.toString() ?? "0",
-    //       Eng_NonEng: item.CourseType?.toString() ?? "0",
-    //       FileName: item.ColumnName ?? "",
-    //       FileExtention: item.FileExtention ?? "",
-    //       MinFileSize: item.MinFileSize ?? "",
-    //       MaxFileSize: item.MaxFileSize ?? "",
-    //       FolderName: item.FolderName ?? "",
-    //       IsCopy: true 
-    //     }
-    //     //call
-  
-    //     await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
-    //       .then((data: any) => {
-    //         this.State = data['State'];
-    //         this.Message = data['Message'];
-    //         this.ErrorMessage = data['ErrorMessage'];
-    //         //
-    //         if (this.State == EnumStatus.Success) {
-    //           //add/update document in js list
-    //           const index = this.DocumentList.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
-    //           if (index !== -1) {
-    //             this.DocumentList[index].FileName = data.Data[0].FileName;
-    //             this.DocumentList[index].Dis_FileName = data.Data[0].Dis_FileName;
-    //             this.DocumentList[index].OldFileName = data.Data[0].OldFileName;
-    //           }
-    //           console.log(this.DocumentList)
-    //           //reset file type
-    //           event.target.value = null;
-    //         }
-    //         if (this.State == EnumStatus.Error) {
-    //           this.toastrService.error(this.ErrorMessage)
-    //         }
-    //         else if (this.State == EnumStatus.Warning) {
-    //           this.toastrService.warning(this.ErrorMessage)
-    //         }
-    //       });
-    //   }
-    //   catch (Ex) {
-    //     console.log(Ex);
-    //   }
-    // }
-
-
-
-// Upload handler
-// async UploadDocument(event: any, item: any) {
-//   debugger
-//   const file: File = event.target.files[0];
-//    if (!file) {
-//     return;
-//   }
-
-//     // Create a new array where only the matching row is updated with the file
-//   this.StudentOptionList = this.StudentOptionList.map((row:any) => {
-//     if (row.RequestSubjectID === item.RequestSubjectID && row.StudentExamPaperMarksID === item.StudentExamPaperMarksID) {
-//       return {
-//         ...row,
-//         UploadedCopy: file
-//       };
-//     }
-//     return row;
-//   });
-
-
-//     // await this.commonMasterService.UploadDocument(this.file)
-//     //       .then((data: any) => {
-//     //         data = JSON.parse(JSON.stringify(data));
-
-//     //         this.State = data['State'];
-//     //         this.Message = data['Message'];
-//     //         this.ErrorMessage = data['ErrorMessage'];
-
-//     //         if (this.State == EnumStatus.Success) {
-//     //           if (Type == "Photo") {
-//     //             this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-//     //             this.request.CompanyPhoto = data['Data'][0]["FileName"];
-
-//     //           }
-//     //           //else if (Type == "Sign") {
-//     //           //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
-//     //           //  this.request.CompanyPhoto = data['Data'][0]["FileName"];
-//     //           //}
-//     //           /*              item.FilePath = data['Data'][0]["FilePath"];*/
-//     //           event.target.value = null;
-//     //         }
-//     //         if (this.State == EnumStatus.Error) {
-//     //           this.toastr.error(this.ErrorMessage)
-//     //         }
-//     //         else if (this.State == EnumStatus.Warning) {
-//     //           this.toastr.warning(this.ErrorMessage)
-//     //         }
-//     //       });
- 
-
-//   event.target.value = null;
-
-//   console.log('Updated StudentOptionList:', this.StudentOptionList);
-
-
-// }
 
 
   async UploadDocument(event: any, item: any) {
@@ -526,28 +376,38 @@ export class RevalStudentUpdateDetailsComponent implements OnInit {
   }
 
 
+  async AddRemark(event:any,item:any){
+    debugger;
+      item.Remarks=event.target.value;
+  }
+
 // Optional: delete the uploaded file
-DeleteDocument(item: any) {
+// DeleteDocument(item: any) {
   
-   this.StudentOptionList = this.StudentOptionList.map((row:any) => {
-    if (row.RequestSubjectID === item.RequestSubjectID && row.StudentExamPaperMarksID === item.StudentExamPaperMarksID) {
-      return {
-        ...row,
-        UploadedCopy: null
-      };
-    }
-    return row;
-  });
+//    this.StudentOptionList = this.StudentOptionList.map((row:any) => {
+//     if (row.RequestSubjectID === item.RequestSubjectID && row.StudentExamPaperMarksID === item.StudentExamPaperMarksID) {
+//       return {
+//         ...row,
+//         UploadedCopy: null
+//       };
+//     }
+//     return row;
+//   });
 
-   console.log('Updated StudentOptionList:', this.StudentOptionList);
+//    console.log('Updated StudentOptionList:', this.StudentOptionList);
 
-}
+// }
 
 async SaveUpload_Details (){
 debugger
     try{
          this.loaderService.requestStarted();
-          await this.ITIStudentRevaluationService.UploadDocument(this.StudentOptionList).then((data: any) => {
+          
+          let obj=new ITIRevalRequestStudentDetailsModel();
+          obj.StudentOptionList=this.StudentOptionList;
+          obj.ActionBy=this.sSOLoginDataModel.UserID;
+          obj.RevalReqID=this.StudentOptionList[0].RevalRequestID;
+          await this.ITIStudentRevaluationService.UploadDocument(obj).then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
             this.State = data['State'];
@@ -560,6 +420,7 @@ debugger
             else {
               this.toastr.error(this.ErrorMessage)
             }
+            this.CloseModal1();
             console.log(this.StudentOptionList)
         }, (error: any) => console.error(error))
     }
@@ -568,19 +429,6 @@ debugger
     }
 }
 
-
-// Submit all uploaded documents
-  // SubmitAllDocuments() {
-  //   const formDataList: FormData[] = [];
-
-  //   this.StudentOptionList.forEach((row, index) => {
-  //     if (row.UploadedCopy && row.UploadedCopy instanceof File) {
-  //       const formData = new FormData();
-  //       formData.append('Document', row.UploadedCopy); 
-  //       formDataList.push(formData);
-  //     }
-  //   });
-  // }
 
 
   CloseModal1() {
@@ -610,39 +458,6 @@ debugger
     }
 
 
-    DeleteFromList(index:any){
-      this.Swal2.Confirmation("Do you want to delete?",
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          this.AddCollegeWiseScholarshipModelList.splice(index, 1);
-          console.log('test');
-        }
-        
-      });
-    }
-
-      async GetCategoryMatserDDL() {
-    try {
-      this.AddCollegeWiseScholarshipModel.InstituteID = this.sSOLoginDataModel.DepartmentID
-
-      this.loaderService.requestStarted();
-      await this.commonMasterService.CasteCategoryA()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.CategoryList = data['Data'];
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
 
   async redirectToEdit(row: any) {
     this.routers.navigate(['edit-counselling-candidate-form'],{
@@ -655,31 +470,7 @@ debugger
     });
   }
 
-  async UnlockApplication_Counselling(item: any) {
-    this.Swal2.Confirmation(`Are you sure you want to Unlock Application for Candidate!`,
-      async (result: any) => {
-        //confirmed
-        if (result.isConfirmed) {
-          try {
-            this.unlockRequest.CandidateId = item.CandidateID;
-            await this.counsellingApplicationFormService.UnlockApplication_Counselling(this.unlockRequest)
-              .then(async (data: any) => {
-                data = JSON.parse(JSON.stringify(data));
-                if(data.State === EnumStatus.Success){
-                  this.toastr.success(data.Message);
-                  await this.GetCandidateList(1);
-                } else if(data.State === EnumStatus.Warning){
-                  this.toastr.warning(data.Message);
-                } else {
-                  this.toastr.error(data.ErrorMessage);
-                }
-            })
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      });    
-  }
+
 
   //table feature
   calculateInTableTotalPage() {
@@ -762,119 +553,41 @@ debugger
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
-  //checked all (replace org. list here)
-  selectInTableAllCheckbox() {
-    this.StudentList.forEach((x: any) => {
-      x.Selected = this.AllInTableSelect;
-    });
-  }
-  //checked single (replace org. list here)
-  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.StudentList.filter((x: any) => x.StudentID == item.StudentID);
-    data.forEach((x: any) => {
-      x.Selected = isSelected;
-    });
-    //select all(toggle)
-    this.AllInTableSelect = this.StudentList.every((r: any) => r.Selected);
-  }
+
   // end table feature
 
-  async OpenOTPModal_SaveAllotment() {
-    let anySelected = this.StudentList.some((x: any) => x.Marked == true);
-    if(!anySelected) {
-      this.toastr.error("Please select at least one candidate.");
-      return;
-    }
-    
-    this.Swal2.Confirmation(`Are you sure you want to Save Allotment!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
 
-          // await OTP verification
-          await this.childComponent.waitForVerification();
 
-          // do work
-          await this.SaveCandidateAllotment_Counselling();
-        }
-      }
-    );
-  }
-
- 
-  async SaveCandidateAllotment_Counselling() {
-    
-
-    let selected = this.StudentList.filter((x: any) => x.Marked == true);
-    selected.forEach((x: any) => {
-      x.ModifyBy = this.sSOLoginDataModel.UserID
-    })
-    
-    try {
-      await this.CounsellingMasterService.SaveCandidateAllotment_Counselling(this.TradeID, selected).then(async (data: any) => { 
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State = EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.GetCandidateList(1);
-        } else if(data.State = EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-   async OpenOTPModal_RejectApplication(row:any) {
-  
-    this.Swal2.Confirmation(`Are you sure you want to Reject Application!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          // do work
-          await this.RejectApplication(row);
-        }
-      }
-    );
-  }
-
-   
-  async RejectApplication(rowData:any) {
-    console.log('rowData ',rowData);
-    
-
-    // let selected = this.StudentList.filter((x: any) => x.Marked == true);
-    // selected.forEach((x: any) => {
-    //   x.ModifyBy = this.sSOLoginDataModel.UserID
-    // })
-    
-    // try {
-    //   await this.CounsellingMasterService.SaveCandidateAllotment_Counselling(0, selected).then(async (data: any) => { 
-    //     data = JSON.parse(JSON.stringify(data));
-    //     if(data.State = EnumStatus.Success) {
-    //       this.toastr.success(data.Message);
-    //       await this.GetCandidateList(1);
-    //     } else if(data.State = EnumStatus.Warning) {
-    //       this.toastr.warning(data.Message);
-    //     } else {
-    //       this.toastr.error(data.ErrorMessage);
-    //     }
-    //   });
-    // } catch (error) {
-    //   console.error(error);
+    // async DeleteDocument(item: any) {
+    //   try {
+    //     // delete from server folder
+    //     let deleteModel = new DeleteDocumentDetailsModel()
+    //     deleteModel.FolderName = item.FolderName ?? "";
+    //     deleteModel.FileName = item.FileName;
+    //     //call
+    //     await this.documentDetailsService.DeleteDocument(deleteModel)
+    //       .then((data: any) => {
+    //         this.State = data['State'];
+    //         this.Message = data['Message'];
+    //         this.ErrorMessage = data['ErrorMessage'];
+    //         if (data.State != EnumStatus.Error) {
+    //           //add/update document in js list
+    //           const index = this.DocumentList.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+    //           if (index !== -1) {
+    //             this.DocumentList[index].FileName = '';
+    //             this.DocumentList[index].Dis_FileName = '';
+    //           }
+    //           console.log(this.DocumentList)
+    //         }
+    //         if (this.State == EnumStatus.Error) {
+    //           this.toastrService.error(this.ErrorMessage)
+    //         }
+    //       });
+    //   }
+    //   catch (Ex) {
+    //     console.log(Ex);
+    //   }
     // }
-  }
 
 }

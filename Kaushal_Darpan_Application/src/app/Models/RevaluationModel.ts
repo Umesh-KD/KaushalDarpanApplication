@@ -86,10 +86,22 @@ export class ITIRevalRequestStudentDetailsModel {
   public RollNo?: string='';
   public DOB: string = '';
   public RevalReqID?:number=0;
+  public ActionBy?:number=0;
+  public Name?:string='';
+
 
   public PageSize: number = 50;
   public PageNumber: number = 1;
   public SortOrder: string = '';
   public SortColumn: string = '';
+
+  public StudentOptionList: StudentOptionItem[] = [];
   public action :string='';
+}
+
+export class StudentOptionItem {
+  public RequestSubjectID: number=0;
+  public StudentExamPaperMarksID: number=0;
+  public UploadedCopy: string='';  // Can be filename or null
+  public Remarks:string='';
 }
