@@ -8,7 +8,7 @@ import { RoleSearchModel, RoleMasterDataModel } from '../../../../Models/RoleMas
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
-import { ITIRevaluationModel, RevaluationModel, StudentDetailsByRollNoModel } from '../../../../Models/RevaluationModel';
+import { ITIRevaluationModel, RevaluationModel, SaveStudentDetailsModel, StudentDetailsByRollNoModel } from '../../../../Models/RevaluationModel';
 import { RevaluationService } from '../../../../Services/Revaluation/revaluation.service';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -34,6 +34,7 @@ export class RevealuationComponent {
   paymentSectionVisible: boolean = false;
   public AllInTableSelect: boolean = false;
   public searchRequest = new ITIRevaluationModel();
+  public SaveStudentRequest = new SaveStudentDetailsModel();
   public Request = new StudentDetailsByRollNoModel();
   emitraRequest = new EmitraRequestDetails();
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -56,6 +57,9 @@ export class RevealuationComponent {
   Message: any;
   ErrorMessage: any;
   toastrService: any;
+  public SelectedItemList: any = [];
+  public ItemList: any = [];
+  public SelectedItemDataList: any = [];
 
   constructor(private commonFunctionService: CommonFunctionService,
     private revaluationService: RevaluationService,
@@ -81,46 +85,109 @@ export class RevealuationComponent {
   }
 
 
+  //async submitRollDob(stepper: MatStepper): Promise<void> {
+  //  debugger
+  //  this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+  //  try {
+
+  //    this.searchRequest.RollNo = 2882;
+  //    this.searchRequest.DOB = '2006-10-04';
+
+  //    if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
+  //      this.toastr.error('Please fill in both Roll Number and Date of Birth.');
+  //      return;
+  //    }
+  //    await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest).then((data: any) => {
+
+  //      if (data.State == EnumStatus.Success) {
+
+  //        this.Request = data['Data'][0];
+
+  //        if (!this.Request.IsReval) {
+  //          this.Request.StudentName = data['Data'][0]['StudentName']
+  //          this.StudentSemesterDetails = data['Data']
+  //          this.GetDateDataList();
+  //          this.switchSection('studentDetails');
+  //          //go to next Step
+  //          stepper.next();
+  //        }
+  //        else {
+  //          this.toastr.error('you already applied for reval.');
+  //        }
+  //      }
+  //      else {
+  //        this.toastr.error('No Record Found.');
+  //      }
+
+  //    });
+
+  //  } catch (error) {
+  //    console.error('Error fetching student details:', error);
+  //    this.toastr.error('An error occurred while fetching student details. Please try again later.');
+  //    }
+  //  });
+  //}
+
   async submitRollDob(stepper: MatStepper): Promise<void> {
-    debugger
-    try {
+    debugger;
 
-      this.searchRequest.RollNo = 2881;
-      this.searchRequest.DOB = '2006-10-04';
+    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+      if (result.isConfirmed) {
+        try {
+          this.searchRequest.RollNo = 2881;
+          this.searchRequest.DOB = '2006-10-04';
 
-      if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
-        this.toastr.error('Please fill in both Roll Number and Date of Birth.');
-        return;  
+          if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
+            this.Swal2.Confirmation('Please fill in both Roll Number and Date of Birth.'
+              + 'Missing Information', async (result: any) => {
+
+            });
+            return;
+          }
+
+          const data: any = await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest);
+
+          if (data.State === EnumStatus.Success) {
+            this.Request = data['Data'][0];
+
+            if (!this.Request.IsReval) {
+              this.Request.StudentName = data['Data'][0]['StudentName'];
+              this.StudentSemesterDetails = data['Data'];
+              this.GetDateDataList();
+              this.switchSection('studentDetails');
+              stepper.next();
+            } else {
+              this.toastr.warning(
+                'You have already applied for revaluation.',
+                'Duplicate Entry',
+                { timeOut: 3000, positionClass: 'toast-top-right' }
+              );
+            }
+          } else {
+            this.toastr.error(
+              'No Record Found.',
+              'Invalid Details',
+              { timeOut: 3000, positionClass: 'toast-top-right' }
+            );
+          }
+        } catch (error) {
+          console.error('Error fetching student details:', error);
+          this.toastr.error(
+            'An error occurred while fetching student details. Please try again later.',
+            'Server Error',
+            { timeOut: 3000, positionClass: 'toast-top-right' }
+          );
+        }
+      } else {
+        this.toastr.info(
+          'Submission cancelled.',
+          'Cancelled',
+          { timeOut: 2000, positionClass: 'toast-top-right' }
+        );
       }
-      await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest).then((data: any) => {
-
-        if (data.State == EnumStatus.Success) {
-
-          this.Request = data['Data'][0];
-
-          if (!this.Request.IsReval) {
-            this.Request.StudentName = data['Data'][0]['StudentName']
-            this.StudentSemesterDetails = data['Data']
-            this.GetDateDataList();
-            this.switchSection('studentDetails');
-            //go to next Step
-            stepper.next();
-          }
-          else {
-            this.toastr.error('you already applied for reval.');
-          }
-        }
-        else {
-          this.toastr.error('No Record Found.');
-        }
-
-      });
-
-    } catch (error) {
-      console.error('Error fetching student details:', error);
-      this.toastr.error('An error occurred while fetching student details. Please try again later.');
-    }
+    });
   }
+
 
 
   async GetRevalation(stepper: MatStepper, row: any): Promise<void> {
@@ -132,11 +199,14 @@ export class RevealuationComponent {
         if (data.state !== EnumStatus.Error) {
 
           this.GetStudentDetails = data['Data']
-          console.log(this.GetStudentDetails, "deeeemoooon")
+          console.log("Student Details",this.GetStudentDetails )
           console.log(data, 'hhhhh');
           this.switchSection('payment');
         } else {
-          this.toastr.error('Invalid Roll Number or Date of Birth.');
+          //this.toastr.error('Invalid Roll Number or Date of Birth.');
+          this.Swal2.Confirmation("Invalid Roll Number or Date of Birth.", async (result: any) => {
+
+          });
         }
       });
       stepper.next();
@@ -403,8 +473,120 @@ export class RevealuationComponent {
   }
 
 
+  //async RVLPayment() {
+  //  debugger
+  //  const selectedItems = this.ItemList.filter((x: any) => x.Selected);
+  //  if (selectedItems.length === 0) {
+  //    this.toastr.warning("Please select at least one item to return.", "Warning", {
+  //      toastClass: "ngx-toastr my-warning-toast"
+  //    });
+  //    return;
+  //  }
+  //  this.SelectedItemList = this.ItemList.filter((item: any) => item.Selected);
+  //  console.table(this.SelectedItemList);
+  //}
+
+
+  //async RVLPayment(arr: any) {
+  //  debugger;
+
+  //  const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+
+  //  if (!selectedItems || selectedItems.length === 0) {
+  //    this.toastr.warning(
+  //      "Please select at least one subject before submitting.",
+  //      "No Selection",
+  //      { timeOut: 3000, positionClass: "toast-top-right" }
+  //    );
+  //    return;
+  //  }
+
+  //  const paymentRequest = {
+  //    Year: this.Request.Year,
+  //    RollNo: this.Request.RollNo,
+  //    StudentType: this.Request.StudentType,
+  //    selectedItems: selectedItems,
+  //    CreatedBy: this.sSOLoginDataModel?.UserID || "0"
+  //  };
+
+  //  console.log("Final Payment Request:", paymentRequest);
+
+  //  this.loaderService.requestStarted();
+
+  //  this.SaveStudentRequest.StudentID = this.studentDetailsModel.StudentID;
+  //  this.SaveStudentRequest.SemesterId = this.studentDetailsModel.SemesterID;
+  //  this.SaveStudentRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
+  //  this.SaveStudentRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
+  //  this.SaveStudentRequest.ItemList = arr;
+
+  //  try {
+  //    const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
+
+  //    if (response?.State === "Success" || response?.State === 1) {
+  //      this.toastr.success(response?.Message || " Payment submitted successfully!");
+
+  //      this.GetStudentDetails.forEach((x: any) => (x.IsSelected = false));
+  //    } else {
+  //      this.toastr.error(response?.ErrorMessage || "❌ Failed to submit payment!");
+  //    }
+
+  //  } catch (error) {
+  //    console.error("Error saving payment:", error);
+  //    this.toastr.error("🚫 An error occurred while saving payment.", "Error");
+  //  } finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
+
+
   async RVLPayment() {
+    debugger;
+
+    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+
+      const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+
+      if (!selectedItems || selectedItems.length === 0) {
+        this.Swal2.Confirmation("Please select at least one subject before submitting." + "No Selection", async (result: any) => {
+
+        });
+        return;
+      }
+      const totalFee = selectedItems.reduce(
+        (sum: number, s: any) => sum + (s.FeeAmount || 0),
+        0
+      );
+      this.SelectedItemDataList = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+
+      this.SaveStudentRequest.RollNo = this.Request.RollNo;
+      this.SaveStudentRequest.StudentID = this.Request.StudentID;
+      this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
+      this.SaveStudentRequest.StudentType = this.Request.StudentType;
+      this.SaveStudentRequest.PaymentAmount = totalFee;
+
+      this.SaveStudentRequest.ItemList = this.SelectedItemDataList;
+      this.loaderService.requestStarted();
+      try {
+        const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
+        if (response?.State === "Success" || response?.State === 1) {
+          this.toastr.success(response?.Message || "submitted successfully!");
+          this.GetStudentDetails.forEach((x: any) => (x.IsSelected = false));
+        } else {
+          this.Swal2.Confirmation("Revaluation request already exists for this Roll No !", async (result: any) => {
+
+          });
+        }
+      } catch (error) {
+        console.error("Error saving :", error);
+        this.Swal2.Confirmation("An error occurred while saving ." + "Error", async (result: any) => {
+
+        });
+      } finally {
+        this.loaderService.requestEnded();
+      }
+    });
+  };
 
 
-  }
+
 }

@@ -143,7 +143,7 @@ export class PreExamStudentExaminationComponent {
   public minDate: string = '';
   public settingsMultiselector: object = {};
   modalRef!: NgbModalRef;
-  
+
   public IsYearly: boolean = false;
   public _enumStudentType = EnumStudentType;
 
@@ -314,16 +314,16 @@ export class PreExamStudentExaminationComponent {
     //}, 2000); 
     // for dashboard tiles search
     let _studentFilterStatusId = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());
-    
+
     if (isNaN(_studentFilterStatusId) == false) {
       this.request.StudentFilterStatusId = _studentFilterStatusId;
       this.btn_SearchClick();
     }
 
-    
+
     this.setMinDate();
     this.ExaminationSchemeChange();
-    
+
   }
 
   get EditStudentDataform() { return this.EditStudentDataFormGroup.controls; }
@@ -497,7 +497,7 @@ export class PreExamStudentExaminationComponent {
     if (this.request.IsYearly == 0) {
       this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID <= 6);
     } else if (this.request.IsYearly == 1) {
-        this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID >= 7);
+      this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID >= 7);
     } else {
       this.filteredSemesterList = this.SemesterMasterList
     }
@@ -658,7 +658,7 @@ export class PreExamStudentExaminationComponent {
           }
           this.IsYearly = data['Data']['ViewStudentDetails'][0]['IsYearly'];
           //this.setStudentFilesForOldBterview()
-          console.log(data['Data']['ViewStudentDetails'][0]['IsYearly'],"yearly")
+          console.log(data['Data']['ViewStudentDetails'][0]['IsYearly'], "yearly")
           console.log(this.StudentProfileDetailsData, "view student")
           console.log(data)
 
@@ -673,7 +673,7 @@ export class PreExamStudentExaminationComponent {
       }, 200);
     }
   }
-  
+
   //get edit student
   async GetPreExam_StudentMaster(StudentID: number, StudentExamID: number) {
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -908,20 +908,33 @@ export class PreExamStudentExaminationComponent {
 
 
   // get edit student
-  async EditStudentData(content: any, StudentID: number, StudentExamID: number) {
+  async EditStudentData(content: any, StudentID: number, StudentExamID: number, SemesterID: number, StudentTypeID: number) {
+    //debugger
+    let needCheckOptionalSubjectAdded = false;
+    // check optional subject already added or not for condition base
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
+      && [4, 5, 6].includes(SemesterID) && StudentTypeID == 1) {
+      needCheckOptionalSubjectAdded = true;
+    }
 
+    // check
+    await this.preExamStudentExaminationService.HaveOptionalSubject(StudentExamID)
+      .then(async (data: any) => {
+        if (needCheckOptionalSubjectAdded == true && this.toBoolean(data?.Data) != true) {
+          this.toastr.warning("Please add optional subject first!");
+          return;
+        }
 
-    this.IsShowViewStudent = true;
-    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason: any) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    //
-
-
-
-    await this.GetPreExam_StudentMaster(StudentID, StudentExamID);
+        // continue
+        this.IsShowViewStudent = true;
+        this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+          this.closeResult = `Closed with: ${result}`;
+        }, (reason: any) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        });
+        //
+        await this.GetPreExam_StudentMaster(StudentID, StudentExamID);
+      });
   }
 
 
@@ -1861,8 +1874,7 @@ export class PreExamStudentExaminationComponent {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
   // (replace org. list here)
-  updateInTablePaginatedData()
-  {
+  updateInTablePaginatedData() {
     this.loaderService.requestStarted();
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
     this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
@@ -1961,8 +1973,7 @@ export class PreExamStudentExaminationComponent {
     //
     await this.GetPreExamStudentForExcel();
     //
-    const filteredData = this.PreExamStudentDataForExcel.map((item: any) =>
-    {
+    const filteredData = this.PreExamStudentDataForExcel.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
@@ -2117,7 +2128,7 @@ export class PreExamStudentExaminationComponent {
       await this.commonMasterService.GetOptionalSubjectsByStudentID(StudentID, this.sSOLoginDataModel.DepartmentID, StudentExamID)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.optionalSubjectList = data['Data']["Table"];
+          this.optionalSubjectList = data['Data']["Table"];// exam id
           this.optionalChildSubjectList = data['Data']["Table1"];
           this.optionalSubjectList.forEach((x: any) => {
             if (x.SubjectID == 0) {
@@ -2228,7 +2239,7 @@ export class PreExamStudentExaminationComponent {
         MinFileSize: item.MinFileSize ?? "",
         MaxFileSize: item.MaxFileSize ?? "",
         FolderName: item.FolderName ?? "",
-        FilePrefix: this.requestStudent.FinancialYearName+"/"+this.requestStudent.CourseTypeID+"/"+this.requestStudent.StudentID ,
+        FilePrefix: this.requestStudent.FinancialYearName + "/" + this.requestStudent.CourseTypeID + "/" + this.requestStudent.StudentID,
         //IsCopy: true 
         FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
       }
@@ -2315,8 +2326,7 @@ export class PreExamStudentExaminationComponent {
 
 
 
-  async DownloadAdmitCard(row: any)
-  {
+  async DownloadAdmitCard(row: any) {
     try {
       this.loaderService.requestStarted();
       this.AdmitcardModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -2473,7 +2483,7 @@ export class PreExamStudentExaminationComponent {
       this.AnnexureDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.AnnexureDataModel.StudentExamType = EnumStudentExamType.Main;
       this.AnnexureDataModel.InstitueID = this.sSOLoginDataModel.InstituteID;
-    
+
       //call
       await this.preExamStudentExaminationService.GetMainAnnexure(this.AnnexureDataModel)
         .then((response: any) => {
@@ -2680,11 +2690,9 @@ export class PreExamStudentExaminationComponent {
       request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       //call
       await this.preExamStudentExaminationService.GetPreExamStudent(request)
-        .then(async (data: any) =>
-        {
+        .then(async (data: any) => {
           //
-          if (data.State == EnumStatus.Success)
-          {
+          if (data.State == EnumStatus.Success) {
             this.PreExamStudentDataForExcel = data.Data
           }
           else {
@@ -2740,7 +2748,7 @@ export class PreExamStudentExaminationComponent {
     //console.log(this.IsYearly,"IsYearly")
     //console.log(this.requestStudent.DocumentDetails,"documents")
     // set in doc.
-    
+
     this.documentDetails.forEach(x => {
       // yearly
       if (this.IsYearly == true) {
@@ -2766,6 +2774,11 @@ export class PreExamStudentExaminationComponent {
       }
       //
     });
+  }
+
+  // convert to bool
+  toBoolean(value: any): boolean {
+    return !!value;  // double NOT operator converts any value to true/false
   }
 
 }

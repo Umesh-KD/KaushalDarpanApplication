@@ -57,6 +57,18 @@ export class CounsellingApplicationFormDataModel {
   public IsShahidDependent?: boolean = false;
   public IsAnyIncurableDiseases?: boolean = false;
   public AcademicYearID?: number = 0;
+
+  public IsPH_ByAdmin?: boolean = false;
+  public IsExServicemen_ByAdmin?: boolean = false;
+  public IsSportsPerson_ByAdmin?: boolean = false;
+  public IsShahidDependent_ByAdmin?: boolean = false;
+  public IsAnyIncurableDiseases_ByAdmin?: boolean = false;
+  public IsSpouseInSameService_ByAdmin?: boolean = false;
+  public CategoryB_ID_ByAdmin?: number = 0;
+  public GenderId_ByAdmin?: number = 0;
+  public MaritialID_ByAdmin?: number = 0;
+  public CategoryA_ID_ByAdmin?: number = 0;
+  public SelectionCategoryID_ByAdmin?: number = 0;
 }
 
 export class CounsellingApplicationSearchModel {

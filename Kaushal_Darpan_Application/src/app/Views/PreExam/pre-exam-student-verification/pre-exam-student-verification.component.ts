@@ -17,6 +17,7 @@ import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { StudentExamDetailsViewModalComponent } from '../../Student/student-exam-details-view-modal/student-exam-details-view-modal.component';
 
 @Component({
   selector: 'app-pre-exam-student-verification',
@@ -69,6 +70,7 @@ export class PreExamStudentVerificationComponent {
   _EnumRole = EnumRole;
 
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  @ViewChild('MyModel_ViewStudentExam') childComponentViewStudentExam!: StudentExamDetailsViewModalComponent;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -94,7 +96,7 @@ export class PreExamStudentVerificationComponent {
     public appsettingConfig: AppsettingService,
     private Swal2: SweetAlert2
   ) { }
-  async ngOnInit() { 
+  async ngOnInit() {
     this.SearchStudentDataFormGroup = this.formBuilder.group(
       {
         txtEnrollmentNo: [''],
@@ -114,10 +116,10 @@ export class PreExamStudentVerificationComponent {
         txtMobileNo: [''],
         SessionType: ['']
       })
-    
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('Status')?.toString());
-    
+
     await this.GetMasterData();
     await this.ExaminationSchemeChange();
 
@@ -125,17 +127,17 @@ export class PreExamStudentVerificationComponent {
       this.request.StudentFilterStatusId = this.statusID
       await this.GetPreExamStudentForVerify();
     }
-    
+
   }
 
   async GetMasterData() {
     try {
-      
+
       this.loaderService.requestStarted();
       await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          
+
           if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
             this.InstituteMasterList = data['Data'];
             this.request.InstituteID = this.sSOLoginDataModel.InstituteID
@@ -252,7 +254,7 @@ export class PreExamStudentVerificationComponent {
     if (this.request.IsYearly == 0) {
       this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID <= 6);
     } else if (this.request.IsYearly == 1) {
-        this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID >= 7);
+      this.filteredSemesterList = this.SemesterMasterList.filter((item: any) => item.SemesterID >= 7);
     } else {
       this.filteredSemesterList = this.SemesterMasterList
     }
@@ -371,8 +373,7 @@ export class PreExamStudentVerificationComponent {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
   // (replace org. list here)
-  updateInTablePaginatedData()
-  {
+  updateInTablePaginatedData() {
     this.loaderService.requestStarted();
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
     this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
@@ -471,8 +472,7 @@ export class PreExamStudentVerificationComponent {
     //
     await this.GetPreExamStudentForExcel();
     //
-    const filteredData = this.PreExamStudentDataForExcel.map((item: any) =>
-    {
+    const filteredData = this.PreExamStudentDataForExcel.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
@@ -507,11 +507,9 @@ export class PreExamStudentVerificationComponent {
       request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       //call
       await this.preExamStudentExaminationService.GetPreExamStudent(request)
-        .then(async (data: any) =>
-        {
+        .then(async (data: any) => {
           //
-          if (data.State == EnumStatus.Success)
-          {
+          if (data.State == EnumStatus.Success) {
             this.PreExamStudentDataForExcel = data.Data
           }
           else {
@@ -544,7 +542,7 @@ export class PreExamStudentVerificationComponent {
       })
     });
     try {
-      
+
       await this.preExamStudentExaminationService.VerifyByExaminationIncharge(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
@@ -557,8 +555,8 @@ export class PreExamStudentVerificationComponent {
       })
     } catch (error) {
       console.log(error);
-    } 
-    
+    }
+
   }
 
   async VerifyStudent_Registrar() {
@@ -581,7 +579,7 @@ export class PreExamStudentVerificationComponent {
       })
     });
     try {
-      
+
       await this.preExamStudentExaminationService.VerifyStudent_Registrar(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State == EnumStatus.Success) {
@@ -594,114 +592,46 @@ export class PreExamStudentVerificationComponent {
       })
     } catch (error) {
       console.log(error);
-    } 
-    
-  }
-
-  async ViewStudentDetails(content: any, StudentID: number, StudentExamID: number) {
-    if (this.request.StudentFilterStatusId == enumExamStudentStatus.Addimited) {
-      return
     }
 
-    this.IsShowViewStudent = true;
-    this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason: any) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-    this.GetStudentProfileDetails(StudentID, StudentExamID)
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
+  async openOTPModal() {
+    const isAnySelected = this.PreExamStudentData.some((x: any) => x.Selected);
+    if (!isAnySelected) {
+      this.toastr.error('Please select at least one Student!');
+      return;
     }
-  }
 
-  async GetStudentProfileDetails(StudentID: number, StudentExamID: number) {
-    try {
-      this.loaderService.requestStarted();
-      //model
-      let model = new ViewStudentDetailsRequestModel()
-      model.StudentID = StudentID;
-      model.StudentFilterStatusId = this.request.StudentFilterStatusId;
-      model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      model.EndTermID = this.sSOLoginDataModel.EndTermID;
-      model.StudentExamID = StudentExamID;
-      //
-      await this.preExamStudentExaminationService.ViewStudentDetails(model)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.StudentProfileDetailsData = data['Data']['ViewStudentDetails'];
-          this.Student_QualificationDetailsData = data['Data']['Student_QualificationDetails'];
-          this.documentDetails = data['Data']['documentDetails'];
-          // for admitted/new admitted
-          if (this.StudentProfileDetailsData[0].status == null || this.StudentProfileDetailsData[0].status == "") {
-            this.StudentProfileDetailsData[0].status = this.StudentProfileDetailsData[0].status1;
+    this.Swal2.Confirmation("Are you sure you want to Verify ?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+          // await for open model
+          await this.childComponent.OpenOTPPopup();
+
+          // await OTP verification
+          await this.childComponent.waitForVerification();
+
+          // do work
+          if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge ||
+            this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
+            await this.VerifyStudent_ExaminationIncharge();
           }
-          this.IsYearly = data['Data']['ViewStudentDetails'][0]['IsYearly'];
-          //this.setStudentFilesForOldBterview()
-          console.log(data['Data']['ViewStudentDetails'][0]['IsYearly'],"yearly")
-          console.log(this.StudentProfileDetailsData, "view student")
-          console.log(data)
 
-        }, (error: any) => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
-
-  CloseViewStudentDetails() {
-
-    this.modalService.dismissAll();
-    this.requestStudent = new StudentMasterModel()
-    this.SubjectID = []
-    this.SubjectMasterDDLList = []
-    this.GetSubjectMasterDDL()
-    this.IsVerified = false;
-
-  }
-
-    async openOTPModal() {
-      const isAnySelected = this.PreExamStudentData.some((x: any) => x.Selected);
-      if (!isAnySelected) {
-        this.toastr.error('Please select at least one Student!');
-        return;
-      }
-
-      this.Swal2.Confirmation("Are you sure you want to Verify ?",
-        async (result: any) => {
-          if (result.isConfirmed) {
-            this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-            // await for open model
-            await this.childComponent.OpenOTPPopup();
-
-            // await OTP verification
-            await this.childComponent.waitForVerification();
-
-            // do work
-            if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || 
-              this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
-              await this.VerifyStudent_ExaminationIncharge();
-            }
-
-            if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar || 
-              this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
-              await this.VerifyStudent_Registrar();
-            }
+          if (this.sSOLoginDataModel.RoleID == EnumRole.Registrar ||
+            this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng) {
+            await this.VerifyStudent_Registrar();
           }
-        });
+        }
+      });
+  }
+
+  async openViewStudentExamDetailsPopup(StudentID: number, StudentExamID: number) {
+    //debugger
+    this.childComponentViewStudentExam.StudentID = StudentID;
+    this.childComponentViewStudentExam.StudentExamID = StudentExamID;
+    await this.childComponentViewStudentExam.OpenViewStudentExamDetailsPopup();
   }
 }

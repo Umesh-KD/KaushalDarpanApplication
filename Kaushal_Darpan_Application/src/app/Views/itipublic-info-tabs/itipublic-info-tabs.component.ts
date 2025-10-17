@@ -81,7 +81,7 @@ export class ITIPublicInfoTabsComponent implements OnInit {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
     this.tabs.push({ TabName: 'General Instructions', TabNameHI: 'सामान्य निर्देश', TabIcon: 'ti ti-license', component: ItiGeneralInstructionsComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
     this.tabs.push({ TabName: 'Apply for ITI Admission', TabNameHI: 'प्रवेश हेतु आवेदन करें', TabIcon: 'ti ti-license', component: ItiAdmissionComponent, DepartmentID: 1, CourseTypeId: 1, Enable: false, HasLink: false });
-    this.tabs.push({ TabName: 'Know Your Merit', TabNameHI: 'मेरिट क्रमांक जानें', TabIcon: 'ti ti-license', component: KnowMeritITIComponent, DepartmentID: 2, HasLink: false });
+    this.tabs.push({ TabName: 'Know Your Merit testby vivek', TabNameHI: 'मेरिट क्रमांक जानें', TabIcon: 'ti ti-license', component: KnowMeritITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Allotment Status', TabNameHI: 'आवंटन स्थिति', TabIcon: 'ti ti-exchange', component: AllotmentStatusITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'Upward Movement', TabNameHI: 'अपवर्ड मोमेंट', TabIcon: 'ti ti-exchange', component: UpwardMomentITIComponent, DepartmentID: 2, HasLink: false });
     this.tabs.push({ TabName: 'ITI College Search', TabNameHI: 'आईटीआई कॉलेज खोज', TabIcon: 'ti ti-license', component: ItiCollegeSearchComponent, DepartmentID: 2, HasLink: false });

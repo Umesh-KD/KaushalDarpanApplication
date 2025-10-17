@@ -69,5 +69,12 @@ export class ApplicationStatusService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async AddQualificationDetails(searchRequest: StudentSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/AddQualificationDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

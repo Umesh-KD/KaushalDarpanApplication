@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ToastrService } from 'ngx-toastr'; 
+import { ToastrService } from 'ngx-toastr';
 import { CommonFunctionService } from '../../../../app/Services/CommonFunction/common-function.service';
 import { GlobalConstants, EnumStatus } from '../../../Common/GlobalConstants';
 import { CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
@@ -14,11 +14,11 @@ import { EncryptionService } from '../../../Services/EncryptionService/encryptio
   selector: 'app-edit-counselling-candidate-form',
   templateUrl: './edit-counselling-candidate-form.component.html',
   styleUrl: './edit-counselling-candidate-form.component.css',
-   standalone: false
+  standalone: false
 })
 export class EditCounsellingCandidateFormComponent {
-public PersonalDetailForm!: FormGroup
-public PersonalDetailFormEditAdmin!: FormGroup
+  public PersonalDetailForm!: FormGroup
+  public PersonalDetailFormEditAdmin!: FormGroup
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public errorMessage = '';
@@ -42,11 +42,11 @@ public PersonalDetailFormEditAdmin!: FormGroup
     private loaderService: LoaderService,
     private commonFunctionService: CommonFunctionService,
     private toastr: ToastrService,
-    private routers:Router,
+    private routers: Router,
     private activatedRoute: ActivatedRoute,
     private encryptionService: EncryptionService,
     private counsellingApplicationFormService: CounsellingApplicationFormService,
-  ) {}
+  ) { }
   async ngOnInit() {
     this.PersonalDetailForm = this.formBuilder.group({
       CandidateName: ['', Validators.required],
@@ -77,7 +77,7 @@ public PersonalDetailFormEditAdmin!: FormGroup
       IsMinority: ['',],
     });
     this.PersonalDetailFormEditAdmin = this.formBuilder.group({
-    
+
       Add_GenderId: [0, [DropdownValidators]],
       Add_CategoryB_ID: [0, [DropdownValidators]],
       Add_CategoryA_ID: [0, [DropdownValidators]],
@@ -96,9 +96,9 @@ public PersonalDetailFormEditAdmin!: FormGroup
     await this.GetMasterDDL();
     await this.GetDistrictList();
     await this.GetApplicationDataByID_Counselling();
-  
-          this.PersonalDetailForm.disable();
-          this.PersonalDetailFormEditAdmin.disable();
+
+    this.PersonalDetailForm.disable();
+    this.PersonalDetailFormEditAdmin.disable();
 
 
   }
@@ -137,7 +137,7 @@ public PersonalDetailFormEditAdmin!: FormGroup
           this.maritalList = data['Data'];
 
         }, (error: any) => console.error(error)
-      );
+        );
 
       await this.commonFunctionService.CasteCategoryA()
         .then((data: any) => {
@@ -163,14 +163,14 @@ public PersonalDetailFormEditAdmin!: FormGroup
 
         }, (error: any) => console.error(error)
         );
-      
+
       await this.commonFunctionService.GetCommonMasterData('Gender')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.GenderList = data['Data'];
         }, (error: any) => console.error(error)
-      );
-      
+        );
+
     }
     catch (ex) {
       console.log(ex);
@@ -183,32 +183,35 @@ public PersonalDetailFormEditAdmin!: FormGroup
   }
 
   async SaveDataFromAdmin() {
-        console.log('value check',this.PersonalDetailFormEditAdmin.value);
+    console.log('value check', this.PersonalDetailFormEditAdmin.value);
 
     await this.refreshValidators();
-    if(this.PersonalDetailFormEditAdmin.invalid){
+    if (this.PersonalDetailFormEditAdmin.invalid) {
       this.toastr.error("Please fill all the required fields");
       Object.keys(this.PersonalDetailFormEditAdmin.controls).forEach(key => {
-          const control = this.PersonalDetailFormEditAdmin.get(key);
- 
-          if (control && control.invalid) {
-            // this.toastr.error(`Control ${key} is invalid`);
-            console.error(`Control ${key} is invalid`);
-            Object.keys(control.errors!).forEach(errorKey => {
-              this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
-            });
-          }
-        });
+        const control = this.PersonalDetailFormEditAdmin.get(key);
+
+        if (control && control.invalid) {
+          // this.toastr.error(`Control ${key} is invalid`);
+          console.error(`Control ${key} is invalid`);
+          Object.keys(control.errors!).forEach(errorKey => {
+            this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+          });
+        }
+      });
       return;
     }
     try {
       this.request.CandidateID = this.CandidateID
+      this.request.ModifyBy = this.SSOLoginDataModel.UserID
+
       this.request.AcademicYearID = 9 //this.SSOLoginDataModel.FinancialYearID
       await this.counsellingApplicationFormService.SavePersonalDetailsFromAdmin(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
-    this.routers.navigate(['/CounsellingAllotmentList'])
+          // this.routers.navigate(['/CounsellingAllotmentList'])
+          await this.GetApplicationDataByID_Counselling();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -220,7 +223,7 @@ public PersonalDetailFormEditAdmin!: FormGroup
     }
   }
 
-  async ResetData() {}
+  async ResetData() { }
 
   async GetApplicationDataByID_Counselling() {
     try {
@@ -269,17 +272,17 @@ public PersonalDetailFormEditAdmin!: FormGroup
   }
 
 
-  editPersonalDetails(){
+  editPersonalDetails() {
     this.PersonalDetailFormEditAdmin.enable();
     console.log(this.PersonalDetailFormEditAdmin.value);
-    console.log('request',this.requestfromAdmin);
-    
+    console.log('request', this.requestfromAdmin);
+
   }
 
-  editPersonalDetailsDisable(){
+  editPersonalDetailsDisable() {
     this.PersonalDetailFormEditAdmin.disable();
   }
-  
+
   async Back() {
     this.routers.navigate(['/CounsellingAllotmentList'])
   }
