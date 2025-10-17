@@ -884,8 +884,12 @@ export class EditQualificationComponent {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message)
-            this.Router.navigate(['ApplicationList'])
+            if (this.SSOLoginDataModel.RoleID == 20 || this.SSOLoginDataModel.RoleID == 43) {
+              this.Router.navigate(['EditQualificationList'])
+            } else {
 
+              this.Router.navigate(['ApplicationList'])
+            }
             //if (this.PersonalDetailsData.DirectAdmissionType == 1) {
             // /* this.tabChange.emit(2);*/
             //} else {

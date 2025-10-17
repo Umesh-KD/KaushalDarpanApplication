@@ -127,9 +127,9 @@
                 <a href="javascript:void(0)" (click)="redirectToPreview(row)" title="View Candidate Details">
                   <i class="ti ti-eye"></i>
                 </a>
-                <a href="javascript:void(0)" (click)="OpenOTPModal_RejectApplication(row)" title="Reject Application">
+                <!-- <a href="javascript:void(0)" (click)="OpenOTPModal_RejectApplication(row)" title="Reject Application">
                   <i class="ti ti-x"></i>
-                </a>
+                </a> -->
 
                 <a href="javascript:void(0)" *ngIf="row.IsFinalSubmit === 2 && row.IsMeritGenerated === 0"
                     (click)="UnlockApplication_Counselling(row)" title="Unlock Application">

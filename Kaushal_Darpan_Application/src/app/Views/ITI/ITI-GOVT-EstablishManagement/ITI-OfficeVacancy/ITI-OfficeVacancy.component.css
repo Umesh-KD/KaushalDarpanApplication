@@ -1,0 +1,126 @@
+.container {
+  max-width: 100%;
+  padding: 20px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-control {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+  .table th, .table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
+
+  .table th {
+    background-color: #f8f9fa;
+  }
+
+.text-center {
+  text-align: center;
+}
+
+
+/* The switch wrapper */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+}
+
+  /* Hide default checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+/* The slider background */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc; /* grey background when off */
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+  /* The circle */
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+
+/* Checked ON state */
+input:checked + .slider {
+  background-color: #4caf50; /* green background */
+}
+
+  /* Move the circle to right when ON */
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+
+/* Optional: Rounded slider */
+.slider.round {
+  border-radius: 34px;
+}
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
