@@ -204,13 +204,14 @@ export class EditCounsellingCandidateFormComponent {
     try {
       this.request.CandidateID = this.CandidateID
       this.request.ModifyBy = this.SSOLoginDataModel.UserID
-      
+
       this.request.AcademicYearID = 9 //this.SSOLoginDataModel.FinancialYearID
       await this.counsellingApplicationFormService.SavePersonalDetailsFromAdmin(this.request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.routers.navigate(['/CounsellingAllotmentList'])
+          // this.routers.navigate(['/CounsellingAllotmentList'])
+          await this.GetApplicationDataByID_Counselling();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {

@@ -74,23 +74,23 @@ export class CounsellingApplicationFormService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-    }
-    public async MapCandidateSSO(request: CounsellingApplicationSearchModel) {
-        var body = JSON.stringify(request);
-        return await this.http.post(`${this.APIUrl}/MapCandidateSSO`, body, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
+  }
+  public async MapCandidateSSO(request: CounsellingApplicationSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/MapCandidateSSO`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
-    public async UpdateCandidateSsoMapping(searchRequest: CounsellingApplicationSearchModel) {
-        const body = JSON.stringify(searchRequest);
-        return await this.http.post(`${this.APIUrl}/UpdateCandidateSsoMapping`, body, this.headersOptions)
-            .pipe(
-                catchError(this.handleErrorObservable)
-            ).toPromise();
-    }
+  public async UpdateCandidateSsoMapping(searchRequest: CounsellingApplicationSearchModel) {
+    const body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/UpdateCandidateSsoMapping`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
   public async DeleteOptionByID_Counselling(request: Counselling_OptionFormDataModel) {
@@ -100,6 +100,7 @@ export class CounsellingApplicationFormService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
   public async PriorityChange_Counselling(request: Counselling_OptionFormDataModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/PriorityChange_Counselling`, body, this.headersOptions)

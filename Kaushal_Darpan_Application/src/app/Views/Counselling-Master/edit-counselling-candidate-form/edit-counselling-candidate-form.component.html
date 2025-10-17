@@ -551,7 +551,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="requestfromAdmin.IsPH == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Physical Handicapped: <span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
@@ -575,7 +575,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="requestfromAdmin.IsExServicemen == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Ex-Servicemen<span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
@@ -599,7 +599,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="requestfromAdmin.IsSportsPerson == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Sports Person<span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
@@ -623,7 +623,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="requestfromAdmin.IsShahidDependent == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Shahid Dependent<span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
@@ -647,7 +647,7 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="requestfromAdmin.IsAnyIncurableDiseases == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Any Incurable Diseases: (To
             Mother/Father/Spouse) <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
@@ -671,7 +671,7 @@
           </div>
         </div>
 
-        <div *ngIf="requestfromAdmin.MaritalID == 62">
+        <div *ngIf="requestfromAdmin.MaritalID == 62 && requestfromAdmin.IsSpouseInSameService == true">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
