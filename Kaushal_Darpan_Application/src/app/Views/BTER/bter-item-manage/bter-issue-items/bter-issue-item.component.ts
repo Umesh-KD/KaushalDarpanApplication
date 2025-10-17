@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,DTELabMasterModel,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
@@ -30,6 +30,7 @@ export class AddBterIssueItemComponent {
   public searchRequest = new DTEItemsSearchModel();
   public submitRequest = new ItemsIssueReturnModels();
   public Searchrequests = new inventoryIssueHistorySearchModel()
+  public labrequests = new DTELabMasterModel()
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public showColumn: boolean = false;
@@ -67,6 +68,7 @@ export class AddBterIssueItemComponent {
   SelectedItems: any[] = [];
   AddItemList: DTEItemsSaveModel[] = [];
   public StreamMasterList: any = [];
+  public LabMasterList: any = [];
   public ItemsDataList: any = []; 
   public selectedDataList: any[] = [];
   public staff_ID:number =0;
@@ -439,7 +441,7 @@ export class AddBterIssueItemComponent {
     debugger
     try {
       this.loaderService.requestStarted();
-
+    console.log('Branch Id :'+this.Searchrequests.StreamID  );
       const searchdata: DTEItemsSearchModel1 = {
         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -569,7 +571,7 @@ export class AddBterIssueItemComponent {
       return;
     }
 
-    if (this.Searchrequests.staffID == 0) {
+    if (this.Searchrequests.staffID == 0 && this.Searchrequests.issuedTo == 2) {
       this.toastr.error("Please select at least one Staff!");
       return;
     }
@@ -579,6 +581,8 @@ export class AddBterIssueItemComponent {
         element.EndTermID = this.sSOLoginDataModel.EndTermID,
         element.RoleID = this.sSOLoginDataModel.RoleID,
         element.StaffId = this.Searchrequests.staffID,
+        element.StreamID=this.Searchrequests.StreamID,
+        element.LabID=this.Searchrequests.LabID,
       //element.itemCategoryId = this.Searchrequests.itemCategoryId,
         element.itemCategoryId = this.Searchrequests.ItemCategoryId
         || 0;
@@ -618,7 +622,7 @@ export class AddBterIssueItemComponent {
             , departmentID: 0
             , EquipmentsId: 0
             , IssuedId: 0
-            ,StreamID: 0
+            ,StreamID: 0 
           };
           this.FileName = '';
           this.Dis_FileName = '';
@@ -746,7 +750,31 @@ export class AddBterIssueItemComponent {
       }, 200);
     }
   }
-
+ async GeLabMasterData() {
+    try {
+      this.loaderService.requestStarted();
+      debugger;
+      this.labrequests.Lab_DepartmentId=this.sSOLoginDataModel.DepartmentID;
+      this.labrequests.Lab_BranchId=this.Searchrequests.StreamID;
+      this.labrequests.ActionName='GetLabDataForMaster';
+      await this.bterInventoryService.GetDTEGetSetLabMaster(this.labrequests)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.LabMasterList = data['Data'];
+          this.LabMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+      this.labrequests.Lab_Id = 0;
+      console.log('Stream Master List',this.StreamMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
   onStaffChange() {
     debugger
     this.Searchrequests.ItemType = 0; 
@@ -843,7 +871,9 @@ export class AddBterIssueItemComponent {
     this.submitRequest.StaffId = this.Searchrequests.staffID, 
     this.submitRequest.ItemList = arr; 
     this.submitRequest.FileName = this.FileName;
-
+    this.submitRequest.StreamID=this.Searchrequests.StreamID || 0;
+    this.submitRequest.LabID=this.Searchrequests.LabID || 0;
+ 
     console.log('arr: '+arr);
     try {
       await this.bterInventoryService.GetDTEIssueSubmitPermanent(this.submitRequest)

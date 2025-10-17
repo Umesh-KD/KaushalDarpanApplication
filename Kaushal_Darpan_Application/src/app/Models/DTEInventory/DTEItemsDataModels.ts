@@ -86,7 +86,8 @@ export class inventoryIssueHistorySearchModel {
   public ItemType: number = 0;
   public EquipmentsId: number = 0;
   public IssuedId: number = 0;
-  public StreamID: number = 0; 
+  public StreamID: number = 0;  
+  public LabID? : number = 0;
 }
 export class inventoryIssueHistoryITISearchModel {
   public InstituteID: number = 0;
@@ -135,6 +136,8 @@ export class ItemsIssueReturnModels extends RequestBaseModel {
   public FileName: string = '';
   
   public ItemList: ItemsDetails[] = [];
+  public LabID?: number=0;
+  public StreamID?: number=0;
 }
 
 
@@ -182,4 +185,22 @@ export class DTEItemsSaveModel {
   public ReturnIssueDate: string = '';
   public IssueQuantity: number = 0;
 
+}
+
+export class DTELabMasterModel {
+  public ActionName?: string='';
+  public Lab_Id: number=0;
+  public Lab_Name: string='';
+  public Lab_DepartmentId: number=0;
+  public Lab_BranchId: number=0;
+  public Lab_CollegeId: number=0;
+  public Lab_TechnicianId: number=0;
+  public Lab_ActiveStatus: boolean=true;
+  public Lab_DeleteStatus: boolean=false;
+  public Lab_RTS?: Date | string | null;
+  public Lab_CreatedBy: number=0;
+  public Lab_ModifyBy: number=0;
+  public Lab_ModifyDate?: Date | string | null;
+  public Lab_IPAddress: string='';
+  
 }
