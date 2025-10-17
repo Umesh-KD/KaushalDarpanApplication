@@ -32,10 +32,14 @@ export class ItiCollegeReportComponent {
   public AddReportFormGroup1!: FormGroup
   public _enumRole = EnumRole
   public CompanyMasterDDLList: any[] = [];
+  public DivisionMasterList: any[] = [];
   public ItiDDLlist: any[] = [];
   public ParliamentMaster: any[] = [];
   public AssemblyMaster: any[] = [];
   public PanchayatSamitiList: any[] = [];
+  public SubDivisionMasterList: any[] = [];
+  public ResidenceList: any[] = [];
+  public TehsilMasterList: any[] = [];
   public BoardList: any = []
   public request = new ItiReportDataModel()
   /*  public addrequest = new SupplementaryDataModel()*/
@@ -53,6 +57,7 @@ export class ItiCollegeReportComponent {
   public CategoryBlist: any = []
   public CategoryAlist: any = []
   public CategoryDlist: any = []
+  public CityMasterDDLList: any = []
   public isSupplement: boolean = false
   public NationalityList: any = []
   public ReligionList: any = []
@@ -112,6 +117,16 @@ export class ItiCollegeReportComponent {
         //IsHostel: ['', Validators.required],
         txtYear: ['', [DropdownValidators]],
         PanchayatId: ['', [DropdownValidators]],
+        AnnoucementType: ['', [DropdownValidators]],
+        DivisionID: ['', [DropdownValidators]],
+        DistrictID: ['', [DropdownValidators]],
+        SubDivisionID: ['', [DropdownValidators]],
+        TehsilID: ['', [DropdownValidators]],
+        UrbanRural: ['', [DropdownValidators]],
+        GramPanchayatSamiti: ['', [DropdownValidators]],
+        VillageID: ['', [DropdownValidators]],
+        CityID: ['', [DropdownValidators]],
+        AdministrativeBodyId: ['', [DropdownValidators]],
         CollegeID: ['',],
       /*  Remarks: [''],*/
      
@@ -1188,6 +1203,113 @@ export class ItiCollegeReportComponent {
   deleteRow1(index: number): void {
     this.request.BasicDetailsList.splice(index, 1);
   }
+
+
+
+  async GetDivisionMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDivisionMaster()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.DivisionMasterList = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async ddlDistrict_Change() {
+
+    try {
+      this.loaderService.requestStarted();
+
+      let InstituteDistrictID: number = this.request?.DistrictID ?? 0;
+
+      await this.commonMasterService.TehsilMaster_DistrictIDWise(InstituteDistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.TehsilMasterList = data['Data'];
+
+        }, error => console.error(error));
+      await this.commonMasterService.SubDivisionMaster_DistrictIDWise(InstituteDistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.SubDivisionMasterList = data['Data'];
+          console.log(this.SubDivisionMasterList, "SubDivisionMasterList")
+        }, error => console.error(error));
+
+      //await this.commonMasterService.AssemblyMaster_DistrictIDWise(this.request.DistrictId)
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.AssemblyMasterList = data['Data'];
+      //    console.log(this.AssemblyMasterList, "AssemblyMasterList")
+      //  }, error => console.error(error));
+
+      await this.commonMasterService.CityMasterDistrictWise(InstituteDistrictID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CityMasterDDLList = data['Data'];
+          console.log(this.CityMasterDDLList, "CityMasterDDLList")
+        }, error => console.error(error));
+
+      //await this.commonMasterService.PanchayatSamiti(InstituteDistrictID)
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.State = data['State'];
+      //    this.Message = data['Message'];
+      //    this.ErrorMessage = data['ErrorMessage'];
+      //    this.PanchayatSamitiList = data['Data'];
+
+      //  }, error => console.error(error));
+
+
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetLateralCourse() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterDDLByType('Residence')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, 'ggg');
+          this.ResidenceList = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 }
 
 
