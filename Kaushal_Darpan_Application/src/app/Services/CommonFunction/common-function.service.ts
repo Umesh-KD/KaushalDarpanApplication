@@ -109,9 +109,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async GetParliamentMaster() {
+  public async GetParliamentMaster(DistrictID:number=0) {
 
-    return await this.http.get(this.APIUrl + '/GetParliamentMaster/', this.headersOptions)
+    return await this.http.get(this.APIUrl + '/GetParliamentMaster/' + DistrictID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
