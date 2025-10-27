@@ -125,7 +125,6 @@ export class UploadTraineeLogsListComponent {
       return;
     }
 
-
   }
 
 
@@ -218,6 +217,8 @@ calculateInTableTotalPage() {
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
     debugger
+ 
+    this.TraineeLogsList.forEach(x => x.Selected = false);
     const data = this.TraineeLogsList.filter(x => x.LogID == item.LogID);
     data.forEach(x => {
       x.Selected = isSelected;
