@@ -116,59 +116,8 @@ export class UploadTraineeLogsListComponent {
     }
   }
 
-  // async editAllottedInstitute(content: any, row: any) {
-  //   //await this.GetInstituteOptionList();
-  //   this.editInstituteReq.CandidateID = row.CandidateID
-  //   this.editInstituteReq.OptionID = row.OptionID
-  //   this.editInstituteReq.AllotmentID = row.AllotmentID
-  //   this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
-  // }
 
-  // CloseModal_EditAllottedInstitute() {
-  //   this.modalService.dismissAll();
-  //   this.editInstituteReq = new EditInstituteDataModel_Counselling()
-  // }
-
-  // async OpenOTPModal_EditInstitute() {
-  //   this.Swal2.Confirmation(`Are you sure you want to Change Allotted Institute!`,
-  //     async (result: any) => {
-  //       if (result.isConfirmed) {
-  //         this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-  //         // await for open model
-  //         await this.childComponent.OpenOTPPopup();
-
-  //         // await OTP verification
-  //         await this.childComponent.waitForVerification();
-
-  //         // do work
-  //         await this.SaveData_EditAllottedInstitute();
-  //       }
-  //     }
-  //   );
-  // }
-
-  // async SaveData_EditAllottedInstitute() {
-  //   try {
-  //     this.editInstituteReq.ModifyBy = this.sSOLoginDataModel.UserID
-  //     await this.counsellingMasterService.SaveFinalInstituteAllotment_Counselling(this.editInstituteReq).then(async (data: any) => {
-  //       data = JSON.parse(JSON.stringify(data));
-  //       if(data.State === EnumStatus.Success) {
-  //         this.toastr.success(data.Message);
-  //         await this.GetUploadedTraineeLogsData();
-  //         this.CloseModal_EditAllottedInstitute();
-  //       } else if(data.State === EnumStatus.Warning) {
-  //         this.toastr.warning(data.Message);
-  //       } else {
-  //         this.toastr.error(data.ErrorMessage);
-  //       }
-  //     })
-  //   } catch (error) {
-  //     console.error(error)
-  //   }
-  // }
-
-  async OpenOTPModal_GenerateAllotmentOrder() {
+  async CheckStatus() {
     
     let anySelected = this.TraineeLogsList.some((x: any) => x.Selected == true);
     if(!anySelected) {
@@ -176,74 +125,11 @@ export class UploadTraineeLogsListComponent {
       return;
     }
 
-    this.Swal2.Confirmation(`Are you sure you want to Generate Allotment Order for Selected Candidates!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
 
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          // do work
-          await this.GenerateAllotmentOrder_Counselling();
-        }
-      }
-    );
   }
 
 
-  async GenerateAllotmentOrder_Counselling() {
-    let selected = this.TraineeLogsList.filter((x: any) => x.Selected == true);
-
-    if(selected.length == 0) {
-      this.toastr.error("Please select at least one candidate.");
-      return;
-    }
-    selected.forEach((x: any) => {
-      x.ModifyBy = this.sSOLoginDataModel.UserID
-    })
-    try {
-      await this.counsellingMasterService.GenerateAllotmentOrder_Counselling(selected).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.DownloadFile(data.Data, 'file download');
-          await this.GetUploadedTraineeLogsData();
-        } else if(data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-    DownloadFile(FileName: string, DownloadfileName: any): void {
-
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
-      downloadLink.click();
-      // Clean up the object URL
-      window.URL.revokeObjectURL(url);
-    });
-  }
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
-  }
-
-  //table feature
-  calculateInTableTotalPage() {
+calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
   // (replace org.list here)
