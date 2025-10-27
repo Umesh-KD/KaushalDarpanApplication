@@ -5,7 +5,7 @@ import { EmitraRequestDetails } from '../../../../Models/PaymentDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { StudentDetailsModel } from '../../../../Models/StudentDetailsModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { enumExamStudentStatus, EnumStatus, EnumVerificationAction } from '../../../../Common/GlobalConstants';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -19,7 +19,7 @@ import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
 import { ITIStudentMeritInfoModel } from '../../../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ITIStudentRevaluationService } from '../../../../Services/ITI/Examination/iti-student-revaluation.service';
-import { RVLStudentRevalRequestModel, StudentRevalRequestModel } from '../../../../Models/RevaluationModel';
+import { ITIRevalRequestStudentDetailsModel, RVLstudentListModel, RVLStudentRevalRequestModel, StudentRevalRequestModel } from '../../../../Models/RevaluationModel';
 
 
 @Component({
@@ -44,7 +44,7 @@ export class KnowRevealuationITIComponent {
 
   public requestData: any;
 
-  public searchRequest = new StudentSearchModel();
+  public searchRequest = new ITIRevalRequestStudentDetailsModel();
   public isShowGrid: boolean = false;
   emitraRequest = new EmitraRequestDetails();
   public OTP: string = '';
@@ -65,10 +65,15 @@ export class KnowRevealuationITIComponent {
   public isShowSelected: boolean = false;
   public IsdocumentShow: boolean = false
   public isOnStatus = false;
+  SelectedStudent: any = {};
+  modalRef1: NgbModalRef | null = null;
+  public StudentOptionList: any = [];
+
 
   public StudentRevalRequest = new RVLStudentRevalRequestModel();
   public Request = new StudentRevalRequestModel();
   public RVLform!: FormGroup
+  public RVLstudentList: RVLstudentListModel[] = [];
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService, private documentDetailsService: DocumentDetailsService,
     private emitraPaymentService: EmitraPaymentService,
@@ -76,6 +81,7 @@ export class KnowRevealuationITIComponent {
     private appsettingConfig: AppsettingService,
 
     private StudentRevaluation: ITIStudentRevaluationService,
+    private ITIStudentRevaluationService: ITIStudentRevaluationService,
   ) { }
 
   async ngOnInit() {
@@ -131,70 +137,61 @@ export class KnowRevealuationITIComponent {
 
 
 
-  async GetAllDataActionWise() {
-    this.collegeMerit8 = [];
-    this.collegeMerit10 = [];
-    this.collegeMerit12 = [];
-    this.isSubmitted = true
-    if (this.searchssoform.invalid) {
-      return
-    }
+  //async GetAllDataActionWise() {
+  //  this.collegeMerit8 = [];
+  //  this.collegeMerit10 = [];
+  //  this.collegeMerit12 = [];
+  //  this.isSubmitted = true
+  //  if (this.searchssoform.invalid) {
+  //    return
+  //  }
 
-    this.isShowGrid = true;
-    this.searchRequest.action = "_getstudentmeritdata";
-    this.searchRequest.DepartmentID = 2;
-    this.request = new ITIStudentMeritInfoModel()
+  //  this.isShowGrid = true;
+  //  this.searchRequest.action = "_getstudentmeritdata";
+  //  this.searchRequest.DepartmentID = 2;
+  //  this.request = new ITIStudentMeritInfoModel()
 
-    try {
-      this.loaderService.requestStarted();
-      await this.studentService.GetITIStudentMeritinfo(this.searchRequest)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success) {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.studentService.GetITIStudentMeritinfo(this.searchRequest)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        if (data.State == EnumStatus.Success) {
 
-            debugger;
+  //          debugger;
 
-            this.request = data['Data'].Table;
-            this.requestData = data['Data'].Table[0];
+  //          this.request = data['Data'].Table;
+  //          this.requestData = data['Data'].Table[0];
 
-            this.collegeMerit8 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 8);
-            this.collegeMerit10 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 10);
-            this.collegeMerit12 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 12);
-
-
+  //          this.collegeMerit8 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 8);
+  //          this.collegeMerit10 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 10);
+  //          this.collegeMerit12 = data['Data'].Table1.filter((x: any) => x.Tradelevel === 12);
 
 
 
-           
-
-
-
-
-
-
-            this.isShowGrid = this.requestData.ApplicationID > 0;
+  //          this.isShowGrid = this.requestData.ApplicationID > 0;
             
            
 
-            if (this.requestData) {
-              this.isShowSelected = true;
-            }
-          } else {
-            this.isShowGrid = false;
-            this.toastrService.error("Data not found");
-          }
-        }, (error: any) => console.error(error)
-        );
-    }
-    catch (ex) {
-      console.log(ex);
-    }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-  }
+  //          if (this.requestData) {
+  //            this.isShowSelected = true;
+  //          }
+  //        } else {
+  //          this.isShowGrid = false;
+  //          this.toastrService.error("Data not found");
+  //        }
+  //      }, (error: any) => console.error(error)
+  //      );
+  //  }
+  //  catch (ex) {
+  //    console.log(ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
   async OnShow(Key: number) {
     if (Key == 1) {
@@ -220,14 +217,7 @@ export class KnowRevealuationITIComponent {
           this.ErrorMessage = data['ErrorMessage'];
           //
           if (this.State == EnumStatus.Success) {
-            //add/update document in js list
-            //const index = this.request.RecheckDocumentModel.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
-            //if (index !== -1) {
-            //  this.request.RecheckDocumentModel[index].FileName = data.Data[0].FileName;
-            //  this.request.RecheckDocumentModel[index].Dis_FileName = data.Data[0].Dis_FileName;
-            //}
-     /*       console.log(this.request.RecheckDocumentModel)*/
-            //reset file type
+     
             event.target.value = null;
           }
           if (this.State == EnumStatus.Error) {
@@ -255,13 +245,7 @@ export class KnowRevealuationITIComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            //add/update document in js list
-            //const index = this.request.RecheckDocumentModel.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
-            //if (index !== -1) {
-            //  this.request.RecheckDocumentModel[index].FileName = '';
-            //  this.request.RecheckDocumentModel[index].Dis_FileName = '';
-            //}
-          /*  console.log(this.request.RecheckDocumentModel)*/
+ 
           }
           if (this.State == EnumStatus.Error) {
             this.toastrService.error(this.ErrorMessage)
@@ -297,10 +281,11 @@ export class KnowRevealuationITIComponent {
     if (this.RVLform.invalid) {
       return
     }
-     this.isShowGrid = true;
-
-      this.StudentRevalRequest.ApplicationNo = this.Request.ApplicationNo
-      this.StudentRevalRequest.RollNo = this.Request.RollNo
+    this.isShowGrid = true;
+    
+    this.StudentRevalRequest.ApplicationNo = this.Request.ApplicationNo
+    this.StudentRevalRequest.RollNo = this.Request.RollNo
+    
 
     console.log('data view ==>',this.StudentRevalRequest)
     try {
@@ -327,7 +312,159 @@ export class KnowRevealuationITIComponent {
     }
   }
 
-  
+  //async openModal(model: any, row: any) {
+  //  debugger
+  //  try {
+  //    await this.getRVLstudent(row.RevalRequestID)
+  //    this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static', });
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
 
+
+  //async getRVLstudent(RevalRequestID: number) {
+  //  debugger
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    this.StudentRevalRequest.RevalRequestID = RevalRequestID;
+
+  //    await this.StudentRevaluation.getRVLstudent(this.StudentRevalRequest)
+  //      .then((data: any) => {
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+  //        this.RVLstudentList = data.Data.Table;
+  //        console.log(this.RVLstudentList)
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
+  async openModal(model: any, item: any) {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.getRVLstudent(item.RevalRequestID);
+
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (error) {
+      console.error(error);
+      this.toastrService.error('Unable to open modal.');
+    }
+    finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+
+
+  async getRVLstudent(RevalRequestID: number) {
+    debugger;
+    try {
+      this.StudentRevalRequest.RevalRequestID = RevalRequestID;
+
+      const response: any = await this.StudentRevaluation.getRVLstudent(this.StudentRevalRequest);
+      const data = JSON.parse(JSON.stringify(response));
+
+      if (data?.State === EnumStatus.Success && data?.Data?.Table?.length) {
+        this.RVLstudentList = data.Data.Table;
+      } else {
+        this.toastrService.warning('No data found!');
+        this.RVLstudentList = [];
+      }
+
+    } catch (error) {
+      console.error(error);
+      this.toastrService.error('Failed to fetch student data.');
+    }
+  }
+
+
+  CloseModal_RVLStudent() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+  }
+
+
+
+  async EditData(content: any, rowData?: any) {
+
+    this.isSubmitted = true;
+    this.SelectedStudent = rowData;
+
+    this.modalRef1 = this.modalService.open(content, {
+      size: 'xl',
+      ariaLabelledBy: 'modal-basic-title',
+      backdrop: 'static'
+    });
+
+    this.modalRef1.result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason: any) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+    debugger
+    if (rowData != null && rowData != undefined) {
+      try {
+
+        //this.searchRequest.PageNumber = this.pageNo
+        //this.searchRequest.PageSize = this.pageSize
+        //this.searchRequest.SortColumn = this.sortColumn
+        //this.searchRequest.SortOrder = this.sortOrder
+        this.searchRequest.RevalReqID = rowData.RevalRequestID
+   
+
+        this.searchRequest.action = "_getRevalDetailsbyRevalReqID"
+      
+        this.loaderService.requestStarted();
+        await this.ITIStudentRevaluationService.GetAllRevalRequestDetails(this.searchRequest).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StudentOptionList = data.Data;
+          console.log(this.StudentOptionList, "studetn")
+          //this.totalRecord = this.StudentOptionList[0]?.TotalRecords;
+          //this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
+
+          console.log(this.StudentOptionList)
+        }, (error: any) => console.error(error))
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+
+      // }
+    }
+  }
+
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
 
 }

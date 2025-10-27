@@ -19,6 +19,7 @@ import { ItiGeneralInstructionsComponent } from '../itipublic-info-tabs/iti-gene
 //import { ItiAdmissionComponent } from '../itipublic-info-tabs/iti-admission/iti-admission.component';
 import { ItiCollegeSearchComponent } from '../ITI/results/iti-college-search/iti-college-search.component';
 import { RevealuationComponent } from '../ITI/Examination/revealuation/revealuation.component';
+import { KnowRevealuationITIComponent } from '../ITI/Examination/know-revealuation-iti/know-revealuation-iti.component';
 //import { ItiAdmissionComponent } from './iti-admission/iti-admission.component';
 //import { KnowMeritITIComponent } from './know-merit-iti/know-merit-iti.component';
 //import { UpwardMomentITIComponent } from './upward-moment-iti/upward-moment-iti.component';
@@ -85,6 +86,7 @@ export class ITIExaminationPublicInfoTabsComponent implements OnInit {
     this.tabs = [] as { TabName: string; TabNameHI: string; TabIcon: string; component: Type<any>; DepartmentID: number; CourseTypeId: number, Enable: boolean, HasLink: boolean, Link: string }[];
     //this.tabs.push({ TabName: 'General Instructions', TabNameHI: 'सामान्य निर्देश', TabIcon: 'ti ti-license', component: ItiGeneralInstructionsComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
     this.tabs.push({ TabName: 'Apply for ITI Revealuation', TabNameHI: 'पुनर्मूल्यांकन हेतु आवेदन करें', TabIcon: 'ti ti-license', component: RevealuationComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
+    this.tabs.push({ TabName: 'Know your Revaluation Appication No', TabNameHI: 'Know your Revaluation Appication No', TabIcon: 'ti ti-license', component: KnowRevealuationITIComponent, DepartmentID: 2, CourseTypeId: 1, Enable: false, HasLink: false });
     //this.tabs.push({ TabName: 'Know Your Merit', TabNameHI: 'मेरिट क्रमांक जानें', TabIcon: 'ti ti-license', component: KnowMeritITIComponent, DepartmentID: 2, HasLink: false });
     //this.tabs.push({ TabName: 'Allotment Status', TabNameHI: 'आवंटन स्थिति', TabIcon: 'ti ti-exchange', component: AllotmentStatusITIComponent, DepartmentID: 2, HasLink: false });
     //this.tabs.push({ TabName: 'Upward Movement', TabNameHI: 'अपवर्ड मोमेंट', TabIcon: 'ti ti-exchange', component: UpwardMomentITIComponent, DepartmentID: 2, HasLink: false });

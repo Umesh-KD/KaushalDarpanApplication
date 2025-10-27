@@ -99,6 +99,20 @@ export class ITIRevalRequestStudentDetailsModel {
   public action :string='';
 }
 
+
+export class RVLstudentListModel {
+  public RevalRequestID: number = 0;
+  public StudentExamID: number = 0;
+  public ActionID: number = 0;
+  public RevalStatus: number = 0;
+  public StudentID: number = 0;
+  public NewMarks: number = 0;
+  public RollNo: string = '';
+  public ApplicationNo: string = '';
+  public Remarks: string = '';
+  public PaymentAmount: number = 0;
+}
+
 export class StudentOptionItem {
   public RequestSubjectID: number=0;
   public StudentExamPaperMarksID: number=0;
