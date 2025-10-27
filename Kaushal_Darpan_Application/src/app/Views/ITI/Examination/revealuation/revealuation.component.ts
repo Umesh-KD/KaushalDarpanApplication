@@ -1,4 +1,4 @@
-import { AfterViewInit, Component,  OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, Component,  OnInit, ViewChild, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -245,91 +245,8 @@ export class RevealuationComponent {
 
 
 
-  async MultiPayment() {
+  
 
-    this.totalAmount = 0;
-    this.emitraRequest = new EmitraRequestDetails();
-    this.studentDetailsModel = new StudentDetailsModel()
-    if (this.GetStudentDetails.some(f => f.IsSelected == true)) {
-      this.GetStudentDetails.filter(f => f.IsSelected == true).forEach(item => {
-        this.totalAmount += Number(item.FeeAmount);
-        this.emitraRequest.StudentFeesTransactionItems.push(
-          {
-            itemAmount: Number(item.FeeAmount ?? 0),
-            status: item.ExamStudentStatus,
-            transactionApplicationID: item.StudentExamPaperID,
-            tranSemesterID: item.SemesterID
-          } as StudentFeesTransactionItems);
-
-      });
-
-      //this.GetStudentDetails
-      //  .filter(f => f.IsSelected)
-      //  .map((student, index) => {
-      //    if (index === 0) {
-      //      this.emitraRequest.SsoID = student.SSOID;
-      //    }
-      //  });
-
-      if (this.totalAmount > 0) {
-        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
-        // confirm
-        this.sweetAlert2.Confirmation(message, async (result: any) => {
-          //confirmed btn click
-          if (result.isConfirmed) {
-            ;
-            this.studentDetailsModel = this.GetStudentDetails.filter(f => f.IsSelected == true)[0];
-            //Set Parameters for emitra
-            this.emitraRequest.Amount = Number(this.totalAmount);
-            this.emitraRequest.ApplicationIdEnc = this.studentDetailsModel?.StudentExamID?.toString();
-            this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID?.toString();
-            this.emitraRequest.ID = this.studentDetailsModel.ID ?? 0;
-            this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
-            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
-            this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
-            this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
-            this.emitraRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
-            this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
-            this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
-            this.emitraRequest.FeeFor = "RevalFee";
-            //common
-
-            this.emitraRequest.IsKiosk = false;
-            //this.GetDateDataList();
-            this.loaderService.requestStarted();
-            try {
-              await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
-                .then(async (data: any) => {
-                  data = JSON.parse(JSON.stringify(data));
-                  this.State = data['State'];
-                  this.Message = data['SuccessMessage'];
-                  this.ErrorMessage = data['ErrorMessage'];
-                  if (data.State == EnumStatus.Success) {
-                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
-                  }
-                  else {
-                    this.toastrService.error(this.ErrorMessage)
-                  }
-                })
-            }
-            catch (ex) { console.log(ex) }
-            finally {
-              setTimeout(() => {
-                this.loaderService.requestEnded();
-              }, 200);
-            }
-          }
-        });
-      }
-      else {
-        this.toastrService.warning('Payment amount is greater then 0')
-      }
-    }
-    else {
-      this.toastr.error('Please select atleast one subject..');
-    }
-
-  }
   async EmitraPaymentCheckStatus(item: StudentDetailsModel) { console.log(item); }
   RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
     var form = document.createElement("form");
@@ -473,119 +390,133 @@ export class RevealuationComponent {
   }
 
 
-  //async RVLPayment() {
-  //  debugger
-  //  const selectedItems = this.ItemList.filter((x: any) => x.Selected);
-  //  if (selectedItems.length === 0) {
-  //    this.toastr.warning("Please select at least one item to return.", "Warning", {
-  //      toastClass: "ngx-toastr my-warning-toast"
-  //    });
-  //    return;
-  //  }
-  //  this.SelectedItemList = this.ItemList.filter((item: any) => item.Selected);
-  //  console.table(this.SelectedItemList);
-  //}
+  async MultiPayment() {
 
+    this.totalAmount = 0;
+    this.emitraRequest = new EmitraRequestDetails();
+    this.studentDetailsModel = new StudentDetailsModel()
+    if (this.GetStudentDetails.some(f => f.IsSelected == true)) {
+      this.GetStudentDetails.filter(f => f.IsSelected == true).forEach(item => {
+        this.totalAmount += Number(item.FeeAmount);
+        this.emitraRequest.StudentFeesTransactionItems.push(
+          {
+            itemAmount: Number(item.FeeAmount ?? 0),
+            status: item.ExamStudentStatus,
+            transactionApplicationID: item.StudentExamPaperID,
+            tranSemesterID: item.SemesterID
+          } as StudentFeesTransactionItems);
 
-  //async RVLPayment(arr: any) {
-  //  debugger;
+      });
 
-  //  const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+      //this.GetStudentDetails
+      //  .filter(f => f.IsSelected)
+      //  .map((student, index) => {
+      //    if (index === 0) {
+      //      this.emitraRequest.SsoID = student.SSOID;
+      //    }
+      //  });
 
-  //  if (!selectedItems || selectedItems.length === 0) {
-  //    this.toastr.warning(
-  //      "Please select at least one subject before submitting.",
-  //      "No Selection",
-  //      { timeOut: 3000, positionClass: "toast-top-right" }
-  //    );
-  //    return;
-  //  }
+      if (this.totalAmount > 0) {
+        var message = "You are about to pay " + this.totalAmount + " for your fee.Would you like to proceed ? ";
+        // confirm
+        this.sweetAlert2.Confirmation(message, async (result: any) => {
+          //confirmed btn click
+          if (result.isConfirmed) {
+            ;
+            this.studentDetailsModel = this.GetStudentDetails.filter(f => f.IsSelected == true)[0];
+            //Set Parameters for emitra
+            this.emitraRequest.Amount = Number(this.totalAmount);
+            this.emitraRequest.ApplicationIdEnc = this.studentDetailsModel?.StudentExamID?.toString();
+            this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID?.toString();
+            this.emitraRequest.ID = this.studentDetailsModel.ID ?? 0;
+            this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
+            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
+            this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
+            this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
+            this.emitraRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
+            this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
+            this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
+            this.emitraRequest.FeeFor = "RevalFee";
+            //common
 
-  //  const paymentRequest = {
-  //    Year: this.Request.Year,
-  //    RollNo: this.Request.RollNo,
-  //    StudentType: this.Request.StudentType,
-  //    selectedItems: selectedItems,
-  //    CreatedBy: this.sSOLoginDataModel?.UserID || "0"
-  //  };
-
-  //  console.log("Final Payment Request:", paymentRequest);
-
-  //  this.loaderService.requestStarted();
-
-  //  this.SaveStudentRequest.StudentID = this.studentDetailsModel.StudentID;
-  //  this.SaveStudentRequest.SemesterId = this.studentDetailsModel.SemesterID;
-  //  this.SaveStudentRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
-  //  this.SaveStudentRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
-  //  this.SaveStudentRequest.ItemList = arr;
-
-  //  try {
-  //    const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
-
-  //    if (response?.State === "Success" || response?.State === 1) {
-  //      this.toastr.success(response?.Message || " Payment submitted successfully!");
-
-  //      this.GetStudentDetails.forEach((x: any) => (x.IsSelected = false));
-  //    } else {
-  //      this.toastr.error(response?.ErrorMessage || "❌ Failed to submit payment!");
-  //    }
-
-  //  } catch (error) {
-  //    console.error("Error saving payment:", error);
-  //    this.toastr.error("🚫 An error occurred while saving payment.", "Error");
-  //  } finally {
-  //    this.loaderService.requestEnded();
-  //  }
-  //}
-
-
-  async RVLPayment() {
-    debugger;
-
-    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
-
-      const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
-
-      if (!selectedItems || selectedItems.length === 0) {
-        this.Swal2.Confirmation("Please select at least one subject before submitting." + "No Selection", async (result: any) => {
-
+            this.emitraRequest.IsKiosk = false;
+            //this.GetDateDataList();
+            this.loaderService.requestStarted();
+            try {
+              await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+                .then(async (data: any) => {
+                  data = JSON.parse(JSON.stringify(data));
+                  this.State = data['State'];
+                  this.Message = data['SuccessMessage'];
+                  this.ErrorMessage = data['ErrorMessage'];
+                  if (data.State == EnumStatus.Success) {
+                    await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+                  }
+                  else {
+                    this.toastrService.error(this.ErrorMessage)
+                  }
+                })
+            }
+            catch (ex) { console.log(ex) }
+            finally {
+              setTimeout(() => {
+                this.loaderService.requestEnded();
+              }, 200);
+            }
+          }
         });
+      }
+      else {
+        this.toastrService.warning('Payment amount is greater then 0')
+      }
+    }
+    else {
+      this.toastr.error('Please select atleast one subject..');
+    }
+
+  }
+
+  @ViewChild('SuccessModal') SuccessModal!: TemplateRef<any>;
+  async RVLPayment() {
+    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+      const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+      if (!selectedItems || selectedItems.length === 0) {
+        this.Swal2.Confirmation("Please select at least one subject before submitting.", async () => { });
         return;
       }
       const totalFee = selectedItems.reduce(
         (sum: number, s: any) => sum + (s.FeeAmount || 0),
         0
       );
-      this.SelectedItemDataList = this.GetStudentDetails.filter((x: any) => x.IsSelected);
 
+      this.SelectedItemDataList = selectedItems;
       this.SaveStudentRequest.RollNo = this.Request.RollNo;
       this.SaveStudentRequest.StudentID = this.Request.StudentID;
       this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
       this.SaveStudentRequest.StudentType = this.Request.StudentType;
       this.SaveStudentRequest.PaymentAmount = totalFee;
-
       this.SaveStudentRequest.ItemList = this.SelectedItemDataList;
+
       this.loaderService.requestStarted();
       try {
         const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
         if (response?.State === "Success" || response?.State === 1) {
-          this.toastr.success(response?.Message || "submitted successfully!");
-          this.GetStudentDetails.forEach((x: any) => (x.IsSelected = false));
-        } else {
-          this.Swal2.Confirmation("Revaluation request already exists for this Roll No !", async (result: any) => {
-
-          });
+          setTimeout(() => {
+            this.modalService.open(this.SuccessModal, { centered: true, backdrop: 'static' });
+          }, 200);
+        }
+        else {
+          this.Swal2.Confirmation("Revaluation request already exists for this Roll No!", async () => { });
         }
       } catch (error) {
         console.error("Error saving :", error);
-        this.Swal2.Confirmation("An error occurred while saving ." + "Error", async (result: any) => {
-
-        });
-      } finally {
+        this.Swal2.Confirmation("An error occurred while saving. Please try again.", async () => { });
+      }
+      finally {
         this.loaderService.requestEnded();
       }
     });
-  };
+  }
 
 
 

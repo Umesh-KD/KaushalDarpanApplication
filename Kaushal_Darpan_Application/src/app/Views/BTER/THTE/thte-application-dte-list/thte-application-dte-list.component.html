@@ -60,7 +60,9 @@
         <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus">
           <option value="0">--select--</option>
           <option *ngFor="let item of UpdateStatusListDDL" value="{{item.ID}}">{{item.Name}}</option>
-        </select>
+        </select>   
+      </div>
+      <div>
         <button type="button" class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save &  Genrate Order</button>
       </div>
       <div>

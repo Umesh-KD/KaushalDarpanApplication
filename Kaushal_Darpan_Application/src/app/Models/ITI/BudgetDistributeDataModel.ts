@@ -8,6 +8,7 @@ export class BudgetDistributeModel {
   public CreatedBy:number=0
   public ActionType:string=''
   public Remarks:string=''
+  public CollegeBudgetUtilizationModel: any[] = []
 }
 
 export class BudgetHeadSearchFilter {

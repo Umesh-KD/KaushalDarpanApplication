@@ -85,5 +85,12 @@ export class BudgetDistributedService {
       ).toPromise();
   }
   
+  public async SaveBudgetUtilization_Admin(BudgetUtilizationsList: any) {
+    var body = JSON.stringify(BudgetUtilizationsList);
+    return await this.http.post(`${this.APIUrl}/SaveBudgetUtilization_Admin`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
 }

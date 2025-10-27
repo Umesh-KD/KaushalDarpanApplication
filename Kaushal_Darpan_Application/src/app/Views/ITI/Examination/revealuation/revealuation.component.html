@@ -165,8 +165,8 @@
 
 
           <!--<div class="col-span-2">
-    <p>In case your transaction got failed, To verify your payment, please click on <b>Verify</b> button<button (click)="CheckPaymentSataus()" class="text-center text-white bg-success btn" style="margin-left:15px"><i class="ti ti-currency-rupee"></i> Verify Button</button></p>
-  </div>-->
+            <p>In case your transaction got failed, To verify your payment, please click on <b>Verify</b> button<button (click)="CheckPaymentSataus()" class="text-center text-white bg-success btn" style="margin-left:15px"><i class="ti ti-currency-rupee"></i> Verify Button</button></p>
+          </div>-->
           <!--<button type="button" class="block text-center text-white bg-success btn w-full" (click)="MultiPayment()"><i class="ti ti-currency-rupee"></i>Pay Now </button>-->
 
         </div>
@@ -181,4 +181,35 @@
     <mat-icon>forum</mat-icon>
   </ng-template>
 
+
+  <ng-template #SuccessModal let-modal>
+    <div class="modal-content rounded-lg shadow-lg border-0">
+      <div class="card border-0">
+        <h4 class=" text-white fw-bold bg-black py-2 px-3 rounded-top text-center">
+          Submission Successful
+        </h4>
+
+        <div class="modal-body mt-3 text-center">
+          <i class="bi bi-check-circle" style="font-size: 60px; color: #28a745;"></i>
+          <p class="mt-3 text-primary fw-semibold">
+            Your request has been submitted successfully!
+          </p>
+              <!--<p class="mt-3 text-primary fw-semibold">
+                ApplicationNo
+              </p>-->
+
+        </div>
+
+        <div class="modal-footer justify-content-center border-0">
+          <button type="button" class="btn bg-success text-white w-50" (click)="MultiPayment()">
+            <i class="ti ti-currency-rupee"></i> Pay Now
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+
+
 </mat-stepper>
+
