@@ -148,8 +148,15 @@
                 <td>{{item.SubjectName}}</td>
                 <td>{{item.ObtainedMarks}}</td>
                 <td>
-                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/RevalDocument/{{item.UploadedCopy}}"
-                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-download"></i></a>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a *ngIf="item.UploadedCopy && item.UploadedCopy.trim() !== ''"
+                       [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/RevalDocument/' + item.UploadedCopy"
+                       class="btn  text-white m-0"
+                       target="_blank"
+                       title="Download Document">
+                      <i class="ti ti-download"></i>
+                    </a>
+                    </div>
                 </td>
               </tr>
             </tbody>

@@ -400,6 +400,7 @@ export class KnowRevealuationITIComponent {
 
 
 
+
   async EditData(content: any, rowData?: any) {
 
     this.isSubmitted = true;
