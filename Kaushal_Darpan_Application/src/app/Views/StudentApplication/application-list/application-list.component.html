@@ -233,13 +233,10 @@
               <div class="flex items-center gap-3 mb-2 flex justify-between">
                 <p class="text-sm font-semibold text-gray-700 m-0 ">
                   <b>Application Remark:<span class="text-danger"> {{ CommonRemark }} </span> </b>
-
                 </p>
                 <p class="text-sm font-semibold text-gray-700 m-0 ">
                   <b><span class="text-danger"> Note: Add Multiple Documents in single PDF </span> </b>
-
                 </p>
-
               </div>
               <table class="w-full table-border" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -248,16 +245,13 @@
                     <th>Document Name</th>
                     <th> Revert Remark</th>
                     <th class="text-left">Upload Document</th>
-
                   </tr>
                 </thead>
                 <tbody>
-
                   <tr *ngFor="let item of DocumentList; let idx = index;">
                     <td>{{ idx + 1 }}</td>
                     <td><a class="text-success">{{ item.DisplayColumnNameEn }}</a></td>
                     <td>{{ item.Remark }}</td>
-
                     <td>
                       <div class="flex fileUploader">
                         <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
