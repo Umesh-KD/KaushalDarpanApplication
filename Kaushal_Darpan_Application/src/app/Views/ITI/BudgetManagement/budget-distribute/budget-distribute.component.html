@@ -136,7 +136,7 @@
 
 
 
-<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+<!-- <ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <form [formGroup]="AddStaffBasicDetailFromGroup" id="AddStaffBasicDetailFromGroup" class="form-horizontal">
     <div class="card">
       <div class="card-header flex justify-between items-center">
@@ -182,7 +182,7 @@
       </div>
     </div>
   </form>
-</ng-template>
+</ng-template> -->
 
 <ng-template #modal_AddUtilize let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="card">
@@ -237,6 +237,89 @@
           </tr>
         </tfoot>
       </table>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+
+  <div class="card">
+    <div class="card-header flex justify-between items-center">
+      <b><i class="fa fa-plus"></i>&nbsp;Utilize Budget</b>
+      <b>Alloted Amount : {{getTotalUtilizationAmount_Save()}}</b>
+      <button class="btn bg-info text-white" (click)="CloseModal()">
+        <i class="ti ti-x"></i>
+      </button>
+    </div>
+
+    <div class="card-body">
+      <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>S No</th>
+            <th>Head Name</th>
+            <th>Utilization Amount</th>
+            <!-- <th>Upload File</th>  -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of BudgetUtilizationsListSave; let i = index">
+            <td>{{i+1}}</td>
+            <td>{{ item.HeadName }}</td>
+            <td>
+              <input type="number"
+                     [(ngModel)]="item.UtilizationAmount"
+                     name="amount_{{item.HeadID}}"
+                     min="0"
+                     step="0.01"
+                     required
+                     class="form-control"/>
+            </td>
+            <!-- <td>
+              <input type="file"
+                     (change)="onFileSelected($event, i)"
+                     accept=".pdf,.doc,.docx,.jpg,.png"
+                     class="form-control-file" />
+              <div *ngIf="item.UploadedFileName">
+                <small>Selected: {{ item.UploadedFileName }}</small>
+              </div>
+            </td> -->
+          </tr>
+        </tbody>
+
+        <!-- Footer -->
+        <tfoot>
+          <tr>
+            <td colspan="2"><b>Total</b></td>
+            <td  colspan="2"><b [class]="getTotalUtilizationAmount_Save()>ColegeAmount?'text-success':'text-success'">{{ getTotalUtilizationAmount_Save() | number: '1.2-2' }}</b></td>
+            <td></td> <!-- Keep column alignment -->
+          </tr>
+
+          <tr>
+            <label for="remark"><strong>Remark:</strong></label>
+            <td colspan="4">
+              <textarea id="remark"
+                        [(ngModel)]="Remarks"
+                        name="Remarks"
+                        rows="2"
+                        style="width: 100%; resize: none;"
+                        placeholder="Enter remark..."
+                        class="form-control mt-1"></textarea>
+            </td>
+          </tr>
+
+        </tfoot>
+      </table>
+
+
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="BudgetUtilize()">Submit</button>
+          <!-- <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button> -->
+        </div>
+      </div>
     </div>
   </div>
 </ng-template>
