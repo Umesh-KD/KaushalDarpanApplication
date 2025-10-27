@@ -105,3 +105,8 @@ export class StudentOptionItem {
   public UploadedCopy: string='';  // Can be filename or null
   public Remarks:string='';
 }
+
+export class UploadTrainee_LogsModel{
+  public RequestID:string='';
+  public log_id:string='';
+}
