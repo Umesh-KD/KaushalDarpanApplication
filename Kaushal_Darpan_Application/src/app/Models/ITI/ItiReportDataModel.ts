@@ -65,7 +65,9 @@ export class ItiReportDataModel {
   public ModifyBy:number=0
   public Esttablishment_Year: number = 0
   public FinancialSanctionList: any[] = []
- public BasicDetailsList:any[]=[]
+  public BasicDetailsList: any[] = []
+  public AnnoucementType: number = 0
+
 }
 
 

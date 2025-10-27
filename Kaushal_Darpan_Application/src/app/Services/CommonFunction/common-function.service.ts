@@ -1979,4 +1979,12 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async DDL_ITI_GovtEMDDLOfficeVacancy(DepartmentID: number, LevelID: number) {
+    return await this.http.get(this.APIUrl + '/DDL_ITI_GovtEMDDLOfficeVacancy/' + DepartmentID + "/" + LevelID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

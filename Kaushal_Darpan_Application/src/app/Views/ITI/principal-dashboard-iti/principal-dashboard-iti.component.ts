@@ -44,6 +44,7 @@ export class PrincipalDashboardITIComponent implements OnInit
   public DistrictMasterList: any = [];
   public isprofile: number = 0;
   public isfeeLoaced: number = 0;
+  public IsPendingQual: number = 0;
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   constructor(private ITIAdminDashboardServiceService: ITIPrincipalDashboardServiceService, private ITIAdminDashboardService: ITIAdminDashboardServiceService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private encryptionService: EncryptionService,
@@ -74,6 +75,18 @@ export class PrincipalDashboardITIComponent implements OnInit
           window.open("/iti-fees-peryear-list", "_Self");
         }, 'OK', false);
       }
+
+      else if (this.IsPendingQual == 1) {
+
+        this.sweetAlert2.Confirmation("Some Students has pending Qualification Details Please Fill", async (result: any) => {
+          window.open("/EditQualificationList", "_Self");
+        }, 'OK', false);
+
+      }
+
+
+
+
       else {
         await this.GetAllData()
       }
@@ -90,6 +103,8 @@ export class PrincipalDashboardITIComponent implements OnInit
           console.log(data);
           this.isprofile = data['Data'][0]['IsProfile'];
           this.isfeeLoaced = data['Data'][0]['isFeeLocked'];
+          this.IsPendingQual = data['Data'][0]['IsPendingQual'];
+          
         }, (error: any) => console.error(error)
         );
     }

@@ -29,6 +29,7 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   AppliedInstituteSubCategory: number = 0;
   Remark: string = '';
   CreatedBy: number = 0;
+  InstituteID: number = 0;
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -108,4 +109,76 @@ export class ApplicationGenrateOrderByDteListSearchModel extends RequestBaseMode
     public StaffID: number = 0;
     public status?: number = 0;
     public THTEAppIDs?: string = '';
+}
+
+export class CommitteeDataModel extends RequestBaseModel {
+  public InspectionTeamID: number = 0;
+  public InspectionTeamName: string = '';
+  public UserID: number = 0
+  public TeamInitials: string = ''
+  public InspectionMemberDetails: CommitteeMemberDetailsDataModel[] = []
+  public InspectionDeploymentDetails: CommitteeDeploymentDataModel[] = []
+  public TeamTypeID: number = 0
+  public DeploymentDateFrom: string = ''
+  public DeploymentDateTo: string = ''
+}
+
+export class CommitteeMemberDetailsDataModel extends RequestBaseModel {
+  public ID: number = 0
+  public DistrictID: number = 0
+  public InstituteID: number = 0
+  public StreamID: number = 0
+  public SemesterID: number = 0
+  public SSOID: string = ''
+  public ShiftID: number = 0
+  public StaffID: number = 0
+  public ManagementTypeID?: number = 0
+  IsIncharge: boolean = false
+
+  public DistrictName: string = ''
+  public InstituteName: string = ''
+  public StreamName: string = ''
+  public SemesterName: string = ''
+  public ShiftName: string = ''
+  public StaffName: string = ''
+  public latitude?: string = ''
+  public longitude?: string = ''
+  public photo?: string = ''
+  public DeploymentDateFrom: string = ''
+  public DeploymentDateTo: string = ''
+}
+
+
+export class CommitteeDeploymentDataModel extends RequestBaseModel {
+  public DistrictID: number = 0
+  public InstituteID: number = 0
+  public DeploymentDateFrom: string = ''
+  public DeploymentDateTo: string = ''
+  public InspectionTeamID: number = 0
+  public UserID: number = 0
+  public DeploymentID: number = 0
+  public DistrictName: string = ''
+  public InstituteName: string = ''
+  public DeploymentType?: number = 0
+  public DeploymentTypeName?: string = ''
+
+}
+
+
+export class CommitteeSearchModel extends RequestBaseModel {
+  public InspectionTeamID?: number = 0
+  public Status?: number = 0
+  public InspectionID?: number = 0
+  public TypeID?: number = 0
+  public DeploymentDate?: string = ''
+  public InspectionTeamName?: string = ''
+  public DeploymentStatus?: string = ""
+  public TeamName?: string = ''
+  public StaffID?: number = 0
+  public UserID?: number = 0
+  public LevelId?: number = 0
+  public DistrictID?: number = 0
+
+  public DeploymentDateFrom: string = ''
+  public DeploymentDateTo: string = ''
 }

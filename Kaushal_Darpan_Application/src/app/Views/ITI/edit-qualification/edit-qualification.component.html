@@ -11,8 +11,13 @@
     </div>
   </div>
 
-  <div class="btn bg-dark btn-sm text-white">
+  <div *ngIf="SSOLoginDataModel.RoleID!=20 && SSOLoginDataModel.RoleID!=43" class="btn bg-dark btn-sm text-white">
     <a routerLink="/ApplicationList">
+      <i class="ti ti-chevron-left"></i> Back
+    </a>
+  </div>
+  <div *ngIf="SSOLoginDataModel.RoleID==20 || SSOLoginDataModel.RoleID==43" class="btn bg-dark btn-sm text-white">
+    <a routerLink="/EditQualificationList">
       <i class="ti ti-chevron-left"></i> Back
     </a>
   </div>
