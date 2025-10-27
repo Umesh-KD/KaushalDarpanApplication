@@ -111,11 +111,9 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
       this.searchRequest.PageSize = this.pageSize
       this.searchRequest.SortColumn = this.sortColumn
       this.searchRequest.SortOrder = this.sortOrder
-
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       // this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-
       // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       this.searchRequest.action = "NcvtAdmissionStudentList";
