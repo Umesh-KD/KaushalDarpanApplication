@@ -46,16 +46,29 @@
         <div *ngIf="Searchrequests.issuedTo == 3">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Department List:</label>
 
-          <ng-select [(ngModel)]="request.BranchID"
-                     [clearable]="false">
+          <ng-select [(ngModel)]="Searchrequests.StreamID"
+                     [clearable]="false" (change)="GeLabMasterData()">
             <!--<ng-option [value]="0" selected>--All--</ng-option>-->
             <ng-option [ngValue]="0">-- Select Department --</ng-option>
             @for (item of StreamMasterList; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
             }
           </ng-select>
+                
         </div>
+        <div *ngIf="Searchrequests.issuedTo == 3">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Laboratory List:</label>
 
+          <ng-select [(ngModel)]="Searchrequests.LabID"
+                     [clearable]="false">
+            <!--<ng-option [value]="0" selected>--All--</ng-option>-->
+            <!-- <ng-option [ngValue]="0">-- Select Department --</ng-option> -->
+            @for (item of LabMasterList; track item.LabID) {
+            <ng-option [value]="item.LabID">{{item.LabName}}</ng-option>
+            }
+          </ng-select>
+                
+        </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Item Type:</label>

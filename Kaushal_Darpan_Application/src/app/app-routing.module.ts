@@ -1493,6 +1493,9 @@ const routes: Routes = [
 
 
       { path: 'know-revealuation-iti', loadChildren: () => import('./Views/ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
+      { path: 'AddQualificationList', loadChildren: () => import('./Views/ITI/add-qualification-list/add-qualification-list.module').then(m => m.AddQualificationListModule) },
+
+
 
     ]
   },
@@ -1597,9 +1600,7 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
- 
-  
-  
+
 
 
 

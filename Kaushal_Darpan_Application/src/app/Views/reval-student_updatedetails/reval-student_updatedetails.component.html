@@ -23,21 +23,25 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
-      <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/Application No</label>   
+          <input type="text" class="form-input" placeholder="Name/Application No" id="Name" [(ngModel)]="searchRequest.Name">
+        </div>
+        <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation :</label>
             <select class="form-select" id="DesignationID" name="DesignationID" [(ngModel)]="searchRequest.DesignationID" (change)="getTradeByDegree($event.target.value)" >
               <option value="0">Choose Option</option>
               <option *ngFor="let item of designations" [value]="item.id"  >{{item.name}}</option>
             </select>
-        </div>
-        <div>
+        </div> -->
+        <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
             <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
               <option value="0">Choose Option</option>
               <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
             </select>
-        </div>
+        </div> -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetCandidateList(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -46,13 +50,13 @@
           </button>
         </div>
 
-      </div> -->
+      </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div>
+      <!-- <div>
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
-      </div>
+      </div> -->
       
     </div>
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -84,7 +88,7 @@
             <th class="text-left">DOB</th>    
             <th class="text-left">Stream</th>       
             <th class="text-left">Application No</th>                      
-            <th class="text-left">Percentage</th>    
+    
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -97,8 +101,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.FatherName}}</td>  
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.DOB | date:'yyyy-MM-dd'}}</td>  
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StreamName}}</td>        
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>  
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Percentage}}</td>           
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>         
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
@@ -165,6 +168,7 @@
                   <th>Subject Name</th>
                   <th>Obtained Marks</th>
                   <th class="text-left">Upload Document</th>               
+                  <th>Remark (Optional)</th>
                 </tr>
               </thead>
               <tbody>
@@ -174,24 +178,7 @@
                   <td>{{ row.SubjectName }}</td>
                   <td>{{ row.ObtainedMarks }}</td>
                   <!-- ----------------------upload documnet code--------------------------- -->
-                  <!-- <td>
-                      <div class="flex fileUploader">
-                        <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                               id="filepanPhoto_{{i+1}}" type="file" (change)="UploadDocument($event,row)" />
-                        <label for="filepanPhoto_{{i+1}}">
-
-                          <span>Choose File</span>
-                          {{ row.UploadedCopy === '' ? 'No File Chosen' : row.UploadedCopy }}
-                        </label>
-                        <div class="flex" *ngIf="row.UploadedCopy !== ''">
-                          <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-                             (click)="DeleteDocument(row)">
-                            <i class="ti ti-trash"></i>
-                          </a>
-                        </div>
-                      </div>
-                  </td> -->
-
+               
 
                   <td>
                        <div class="flex fileUploader">
@@ -211,6 +198,12 @@
                         </div>
                       </div>
                   </td>
+
+
+                  <td>
+                    <input type="text" class="form-input" placeholder="Add Remark" id="Remark" (change)="AddRemark($event,row)">
+                  </td>
+
                   <!-- --------------------------------------------------------- -->
                 </tr>
                 <tr *ngIf="StudentOptionList.length === 0">
@@ -235,4 +228,3 @@
   </div>
 </ng-template>
 
-<app-otpmodal #otpModal></app-otpmodal>

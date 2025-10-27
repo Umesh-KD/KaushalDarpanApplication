@@ -332,6 +332,7 @@ export class BterUserRequestListComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
           console.log(this.OfficeList, "OfficeList")
+          this.OfficeList = this.OfficeList.filter((item: any) => item.ID != 21);
         }, error => console.error(error));
     }
     catch (Ex) {

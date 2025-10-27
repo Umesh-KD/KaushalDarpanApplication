@@ -4,7 +4,7 @@
     <div class="card-body p-5">
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Inspection Members</b>
+          <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Committee Members</b>
           <div class="flex justify-end flex-wrap items-center">
             <a routerLink="/THTE-CommitteeList" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
           </div>
@@ -16,7 +16,7 @@
 
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Committee Name</label>
-                <input type="text" formControlName="InspectionTeamName" class="form-input" [(ngModel)]="request.InspectionTeamName" placeholder="Team Name" [readonly]="isFormReadOnly">
+                <input type="text" formControlName="InspectionTeamName" class="form-input" [(ngModel)]="request.InspectionTeamName" placeholder="Committee Name" [readonly]="isFormReadOnly">
                 <div *ngIf="isFormSubmitted && _inspectionForm.InspectionTeamName.errors" class="text-danger">
                   <p *ngIf="_inspectionForm.InspectionTeamName.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
