@@ -1,28 +1,27 @@
+
+
 import { Component, OnInit } from '@angular/core';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 import { ToastrService } from 'ngx-toastr';
-
-import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../../../Models/CompanyMasterDataModel';
-import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { CompanyMasterSearchModel, EligibleStudentListMasterSearchModel, ICompanyMasterDataModel } from '../../..//Models/CompanyMasterDataModel';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnumRole } from '../../../../Common/GlobalConstants';
-import { ITIStudentEnrollmentService } from '../../../../Services/ITI/ITIstudentenrollment/itistudent-enrollment.service';
-import { ItiDataMasterService } from '../../../../Services/ITI/ITIDataMaster/iti-datamaster.service';
-import { ITIStudentCorrectionMasterSearchModel } from '../../../../Models/StudentMasterModels';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
-
-
+import { EnumRole } from '../../../Common/GlobalConstants';
+import { ITIStudentEnrollmentService } from '../../../Services/ITI/ITIstudentenrollment/itistudent-enrollment.service';
+import { ItiDataMasterService } from '../../../Services/ITI/ITIDataMaster/iti-datamaster.service';
+import { ITIStudentCorrectionMasterSearchModel } from '../../../Models/StudentMasterModels';
 
 @Component({
-  selector: 'app-ncvt-admission-student-list',
+  selector: 'app-nodal-student-correction-master',
   standalone: false,
-  templateUrl: './ncvt-admission-student-list.component.html',
-  styleUrl: './ncvt-admission-student-list.component.css'
+  templateUrl: './nodal-student-correction-master.component.html',
+  styleUrl: './nodal-student-correction-master.component.css'
 })
-export class NcvtAdmissionStudentListComponent implements OnInit {
+export class NodalStudentCorrectionMasterComponent implements OnInit {
   public StudentList: any = [];
   public SessionYearList: any = [];
   public InstituteMasterDDLList: any = [];
@@ -64,12 +63,8 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'ErrorDescription', 'RecordStatus', 'createddate', 'CollegeID', 'AcedmicYearID',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
     ];
-
- 
-
-
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -111,12 +106,15 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
       this.searchRequest.PageSize = this.pageSize
       this.searchRequest.SortColumn = this.sortColumn
       this.searchRequest.SortOrder = this.sortOrder
+
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
       // this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+
       // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
-      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-      this.searchRequest.action = "NcvtAdmissionStudentList";
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      //this.searchRequest.UIDNumber
+      this.searchRequest.action = "Get_NCVT_studentData";
       // }
       this.loaderService.requestStarted();
       await this.ItiDataMasterService.GetStudentCorrectionListData(this.searchRequest).then((data: any) => {
@@ -152,6 +150,43 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
 
 
 
+
+  // async DeleteById(ID: number) {
+  //   this.Swal2.Confirmation("Do you want to delete?",
+  //     async (result: any) => {
+  //       //confirmed
+  //       if (result.isConfirmed) {
+  //         try {
+  //           //Show Loading
+  //           this.loaderService.requestStarted();
+
+  //           await this.ITIStudentEnrollmentService.DeleteById(ID, this.sSOLoginDataModel.UserID)
+  //             .then(async (data: any) => {
+  //               data = JSON.parse(JSON.stringify(data));
+  //               console.log(data);
+
+  //               if (!data.State) {
+  //                 this.toastr.success(data.Message)
+  //                 await this.GetStudentCorrectionListData(1);
+  //               }
+  //               else {
+  //                 this.toastr.error(data.ErrorMessage)
+  //               }
+
+  //             }, (error: any) => console.error(error)
+  //             );
+  //         }
+  //         catch (ex) {
+  //           console.log(ex);
+  //         }
+  //         finally {
+  //           setTimeout(() => {
+  //             this.loaderService.requestEnded();
+  //           }, 200);
+  //         }
+  //       }
+  //     });
+  // }
 
 
 

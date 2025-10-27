@@ -1,4 +1,4 @@
-<div class="tab-content bg-white p-2 rounded border" id="myTabContent"  *ngIf="!isOnStatus">
+<div class="tab-content bg-white p-2 rounded border" id="myTabContent" *ngIf="!isOnStatus">
   <div class="tab-pane fade show active" id="GeneralInstructions-tab-pane" role="tabpanel" aria-labelledby="GeneralInstructions-tab" tabindex="0">
     <!--<div class="row">
       <div class="col-lg-12 mb-4 mt-2 text-center">
@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<div class="card" id="Tabs5"  *ngIf="isOnStatus">
+<div class="card" id="Tabs5" *ngIf="isOnStatus">
   <div class="p-5">
     <div class="card bg-light mb-4">
       <div class="card-body text-center">
@@ -86,7 +86,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 mt-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Revealuation List</b>
     </div>
-
+    <!--{{RVLApplicatiodata | json}}-->
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
@@ -110,14 +110,59 @@
             <td>{{item.RevalStatus}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <i class="ti ti-eye"></i>
+                <a href="javascript:void(0);"
+                   (click)=" EditData(Model_RVLstudent, item)" title="View Image"><i class="ti ti-eye"></i></a>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-
-
   </div>
 </div>
+
+<ng-template #Model_RVLstudent let-modal>
+  <div class="modal-content ">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Revealuation Subject List</b>
+        <button class="btn bg-info text-white" (click)="CloseModal_RVLStudent()" type="button"><i class="ti ti-x"></i></button>
+      </div>
+      <!--{{StudentOptionList | json}}-->
+      <div class="card-body">
+        <div class="overflow-x-auto mt-3">
+          <table class="table table-border w-full table-auto" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+              <tr>
+                <th class="text-left">Sno</th>
+                <th class="text-left">Subject Code</th>
+                <th class="text-left">Subject Name</th>
+                <th class="text-left">Obtained Marks</th>
+                <th class="text-left">File Document</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of StudentOptionList  ;let idx=index;">
+                <td>{{idx+1}}</td>
+                <td>{{item.SubjectCode}}</td>
+                <td>{{item.SubjectName}}</td>
+                <td>{{item.ObtainedMarks}}</td>
+                <td>
+                  <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <a *ngIf="item.UploadedCopy && item.UploadedCopy.trim() !== ''"
+                       [href]="appsettingConfig.StaticFileRootPathURL + '/ITI/RevalDocument/' + item.UploadedCopy"
+                       class="btn  text-white m-0"
+                       target="_blank"
+                       title="Download Document">
+                      <i class="ti ti-download"></i>
+                    </a>
+                    </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div> 
+  </div>
+</ng-template>

@@ -80,12 +80,19 @@ export class ITIStudentRevaluationService {
 
     public async UploadDocument(request: ITIRevalRequestStudentDetailsModel) {
         const body = JSON.stringify(request);
-    
         return await this.http.post(this.APIUrl + '/UploadDocument', request, this.headersOptions)
           .pipe(
             catchError(this.handleErrorObservable)
           ).toPromise();
     }
+
+  public async getRVLstudent(request: any) {
+      const body = JSON.stringify(request);
+      return await this.http.post(this.APIUrl + '/getRVLstudent', request, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+      }
     
    
 }
