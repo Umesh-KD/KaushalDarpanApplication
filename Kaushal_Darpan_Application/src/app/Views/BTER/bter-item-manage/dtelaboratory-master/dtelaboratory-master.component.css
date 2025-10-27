@@ -1,0 +1,38 @@
+.badge-consumable {
+  background-color: #28a745; /* green */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.badge-permanent {
+  background-color: #007bff; /* blue */
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+
+.LabStatus-active {
+  background-color: #34a853; /* green */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+}
+
+.LabStatus-inactive { 
+  background-color: #fbbc05; /* yellow */
+  color: #fff;
+  padding: 0px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 12px;
+  display: inline-block;
+}

@@ -40,6 +40,9 @@ export class ItiCollegeReportComponent {
   public SubDivisionMasterList: any[] = [];
   public ResidenceList: any[] = [];
   public TehsilMasterList: any[] = [];
+  public DistrictMasterList1: any[] = [];
+  public VillageList: any[] = [];
+  public GramPanchayatList: any[] = [];
   public BoardList: any = []
   public request = new ItiReportDataModel()
   /*  public addrequest = new SupplementaryDataModel()*/
@@ -99,6 +102,9 @@ export class ItiCollegeReportComponent {
         SanctionOrderDate: ['', Validators.required],
         TradeOrderNo: ['', Validators.required],
         TradeOrderDate: ['', Validators.required],
+        PrincipleName: ['', Validators.required],
+        PrincipleMobile: ['', Validators.required],
+        PrincipleEmailID: ['', Validators.required],
         //ApproachRoad: ['', Validators.required],
         //InternalRoad: ['', Validators.required],
         //Harvesting: ['', Validators.required],
@@ -127,6 +133,7 @@ export class ItiCollegeReportComponent {
         VillageID: ['', [DropdownValidators]],
         CityID: ['', [DropdownValidators]],
         AdministrativeBodyId: ['', [DropdownValidators]],
+        Category: ['', [DropdownValidators]],
         CollegeID: ['',],
       /*  Remarks: [''],*/
      
@@ -322,7 +329,10 @@ export class ItiCollegeReportComponent {
     }
     /*    this.request.IsNewCollege=1*/
     await this.GetGovtITI()
-    await this.GetParliamentITI()
+/*    await this.GetParliamentITI()*/
+    await this.GetDivisionMasterList()
+    await this.GetLateralCourse()
+
     
   }
 
@@ -364,7 +374,7 @@ export class ItiCollegeReportComponent {
 
 
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetParliamentMaster()
+      await this.commonMasterService.GetParliamentMaster(this.request.DistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -1236,6 +1246,9 @@ export class ItiCollegeReportComponent {
 
       let InstituteDistrictID: number = this.request?.DistrictID ?? 0;
 
+
+      await this.GetParliamentITI()
+
       await this.commonMasterService.TehsilMaster_DistrictIDWise(InstituteDistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -1308,7 +1321,81 @@ export class ItiCollegeReportComponent {
       }, 200);
     }
   }
+  async ddlDivision_Change() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_DivisionIDWise(this.request.DivisionID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictMasterList1 = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 2000);
+    }
+  }
 
+  async changeUrbanRural() {
+    this.GetGramPanchayatSamiti()
+  }
+  async GetGramPanchayatSamiti() {
+    try {
+      if (this.request.UrbanRural == 75) {
+        this.request.GramPanchayatSamiti = 0
+        return
+      }
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GramPanchayat(this.request.TehsilID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.GramPanchayatList = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async villageMaster() {
+    try {
+      if (this.request.UrbanRural == 75) {
+        this.request.VillageID = 0
+        return
+      }
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.villageMaster(this.request.GramPanchayatSamiti)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.VillageList = data['Data'];
+          /*     console.log(this.ParliamentMasterList)*/
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }
 

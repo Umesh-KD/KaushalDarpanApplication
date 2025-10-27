@@ -66,10 +66,12 @@ export class BudgetDistributeComponent {
   public TradeMasterList: any = [];
 
   public BudgetUtilizationsList: any[] = [];
+  public BudgetUtilizationsListSave: any[] = [];
   public ColegeAmount: string = '';
   public CollegeName: string = '';
   public Remarks: string = '';
   public SelectedCollegeName: string = '';
+  public TotalUtilizedBudget: number = 0;
   constructor(
     private activatedRoute: ActivatedRoute,
     private resultService: ResultService,
@@ -109,7 +111,6 @@ export class BudgetDistributeComponent {
 
   async ddlITIColleges() {
     try {
-
       this.loaderService.requestStarted();
       this.collegeRequest.action = "_getDataITIcollege";
       this.collegeRequest.DistrictID = 0;
@@ -134,7 +135,6 @@ export class BudgetDistributeComponent {
 
   async ddlITITrade() {
     try {
-
       this.loaderService.requestStarted();
       this.collegeRequest.action = "_getDataITITrade";
       this.collegeRequest.DistrictID = 0;
@@ -158,8 +158,8 @@ export class BudgetDistributeComponent {
 
   async GetList() {
     try {
-      debugger;
-      this.searchRequest.CollegeID 
+       ;
+      this.searchRequest.CollegeID
       this.loaderService.requestStarted();
       await this.budgetDistributedService.GetAllBudgetManagementData(this.searchRequest)
         .then((data: any) => {
@@ -168,7 +168,7 @@ export class BudgetDistributeComponent {
           this.isVisibleList = true;
           this.isVisibleDownload = true;
           this.loadInTable();
-         /* this.AddmissionList = data.Data;*/
+          /* this.AddmissionList = data.Data;*/
           console.log(this.AddmissionList, "AddmissionList")
         }, error => console.error(error));
     }
@@ -199,7 +199,6 @@ export class BudgetDistributeComponent {
   }
   // (replace org. list here)
   updateInTablePaginatedData() {
-
     this.loaderService.requestStarted();
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
     this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
@@ -263,7 +262,7 @@ export class BudgetDistributeComponent {
 
 
   exportToExcel(): void {
-    const unwantedColumns = [''];
+    const unwantedColumns = ['CollegeId','DistributedID'];
     const filteredData = this.AddmissionList.map(item => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -287,7 +286,6 @@ export class BudgetDistributeComponent {
 
   async AssignBudget() {
     try {
-      debugger;
       this.isSubmitted = true;
       if (this.AddStaffBasicDetailFromGroup.invalid) {
         console.log("errro")
@@ -335,7 +333,6 @@ export class BudgetDistributeComponent {
 
   async GetBudgetUtilizationsList() {
     try {
-      debugger;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
 
@@ -345,6 +342,33 @@ export class BudgetDistributeComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BudgetUtilizationsList = data.Data;
+
+
+          this.Remarks = this.BudgetUtilizationsList[0].Remarks;
+
+          console.log(this.BudgetUtilizationsList, "BudgetUtilizationsList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async GetBudgetUtilizationsList_Save() {
+    try {
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+      this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
+
+      this.loaderService.requestStarted();
+      // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      await this.budgetDistributedService.GetBudgetUtilizationsData(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BudgetUtilizationsListSave = data.Data;
 
           this.Remarks = this.BudgetUtilizationsList[0].Remarks;
 
@@ -365,13 +389,16 @@ export class BudgetDistributeComponent {
     return this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0;
   }
 
+  getTotalUtilizationAmount_Save(): number {
+    return this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0;
+  }
+
   async Utilize(content: any, row: any, indexNum: number) {
-    debugger;
     this.CollegeName = row.CollegeName
     this.ColegeAmount = row.Amount
     console.log(row, 'RowData');
     try {
-      debugger;
+       ;
       this.searchRequest.DistributedID = row.DistributedID
       this.GetBudgetUtilizationsList();
       await this.modalService
@@ -394,8 +421,9 @@ export class BudgetDistributeComponent {
   async openModal(content: any, row: any, indexNum: number) {
     console.log(row, 'RowData');
     try {
-      debugger;
+       ;
       this.Request.CollegeID = row.CollegeId
+      await this.GetBudgetUtilizationsList_Save();
       await this.modalService
         .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(
@@ -412,8 +440,7 @@ export class BudgetDistributeComponent {
     }
   }
 
-  private getDismissReason(reason: any): string
-  {
+  private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
@@ -430,4 +457,60 @@ export class BudgetDistributeComponent {
   }
 
 
+  async BudgetUtilize() {
+    try {
+      this.loaderService.requestStarted();
+      const remarkValue = this.Remarks;
+      if (!this.Remarks || this.Remarks.trim() === '') {
+        this.toastr.warning("Please fill in the remark before submitting.");
+        return;
+      }
+
+      this.BudgetUtilizationsListSave.forEach(item => {
+        item.Remarks = remarkValue;
+        item.CreatedBy = this.sSOLoginDataModel.UserID;
+        item.CollegeID = this.Request.CollegeID
+      });
+
+      this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
+
+      if (this.TotalUtilizedBudget <= 0) {
+        this.toastr.warning("Please add Budget")
+        return;
+      }
+
+      this.Request.CollegeBudgetUtilizationModel = this.BudgetUtilizationsListSave
+      this.Request.DistributedAmount = this.TotalUtilizedBudget
+      this.Request.CreatedBy = this.sSOLoginDataModel.UserID;
+      this.Request.FinYearID = this.sSOLoginDataModel.FinancialYearID
+      this.Request.DistributedType = 1
+      this.Request.ActionType = 'INSERT'
+
+      await this.budgetDistributedService.SaveBudgetUtilization_Admin(this.Request)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (data.State = EnumStatus.Success) {
+            this.toastr.success(data.Message)
+            this.GetList();
+            this.ResetControls();
+            this.CloseModal();
+          } else if (data.State = EnumStatus.Warning) {
+            this.toastr.warning(data.Message)
+          } else {
+            this.toastr.error(data.ErrorMessage)
+          }
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 }

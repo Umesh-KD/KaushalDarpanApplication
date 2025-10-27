@@ -61,6 +61,9 @@ export class ItiReportDataModel {
   public BuildingPlanCopy:string=''
   public DomeViewCopy: string = ''
   public ShilanyasName: string = ''
+  public PrincipleName: string = ''
+  public PrincipleMobile: string = ''
+  public PrincipleEmailID: string = ''
   public IsNewCollege: number = 0
   public ModifyBy:number=0
   public Esttablishment_Year: number = 0
@@ -75,6 +78,7 @@ export class ItiReportDataModel {
   public VillageID: number = 0
   public CityID: number = 0
   public AdministrativeBodyId: number = 0
+  public SubDivisionID: number = 0
 
 }
 

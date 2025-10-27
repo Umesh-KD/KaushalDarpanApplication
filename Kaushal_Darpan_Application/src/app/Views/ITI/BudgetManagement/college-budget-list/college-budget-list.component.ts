@@ -98,7 +98,7 @@ export class CollegeBudgetListComponent {
 
   async GetList() {
     try {
-      debugger;
+        ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
 
@@ -133,7 +133,7 @@ export class CollegeBudgetListComponent {
 
   async GetBudgetUtilizationsList() {
     try {
-      debugger;
+        ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
 
@@ -265,8 +265,6 @@ export class CollegeBudgetListComponent {
     this.Remarks = '';
   }
 
-
-
   //onFileSelected(event: any, index: number) {
   //  const file: File = event.target.files[0];
   //  if (file) {
@@ -277,7 +275,7 @@ export class CollegeBudgetListComponent {
 
   async onFileSelected(event: any, index: number) {
     try {
-      debugger;
+        ;
       const file: File = event.target.files[0];
       if (file)
       {
@@ -326,11 +324,10 @@ export class CollegeBudgetListComponent {
 
 
 
-  async BudgetUtilize()
-  {
+  async BudgetUtilize() {
 
     try {
-      debugger;
+        ;
       this.loaderService.requestStarted();
       const remarkValue = this.Remarks;
       if (!this.Remarks || this.Remarks.trim() === '')
@@ -389,7 +386,7 @@ export class CollegeBudgetListComponent {
     this.ColegeAmount = row.Amount
     console.log(row, 'RowData');
     try {
-      debugger;
+        ;
       this.searchRequest.DistributedID = row.DistributedID
       this.GetBudgetUtilizationsList();
       await this.modalService
