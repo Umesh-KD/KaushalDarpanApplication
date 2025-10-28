@@ -75,8 +75,8 @@ export class ItiCampusPostService {
       ).toPromise();
   }
 
-  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number) {
-    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID, this.headersOptions)
+  public async CampusValidationList(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number,flagName:string) {
+    return await this.http.get(this.APIUrl + "/CampusValidationList" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + flagName, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

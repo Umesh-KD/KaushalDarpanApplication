@@ -846,6 +846,8 @@ const routes: Routes = [
       { path: 'AddItiCampusPost/:id', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post/iticampus-post.module').then(m => m.ItiCampusPostModule) },
       { path: 'ItiCampusPostList', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post-list/iticampus-post-list.module').then(m => m.ItiCampusPostListModule) },
       { path: 'ItiCampusPostValidation', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
+      { path: 'ItiCampusPostValidation/:flag', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
+      
       { path: 'Grievance', loadChildren: () => import('./Views/grievance/grievance.module').then(m => m.GrievanceModule) },
       { path: 'GrievanceList', loadChildren: () => import('./Views/GrievanceList/GrievanceList.module').then(m => m.GrievanceListModule) },
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },

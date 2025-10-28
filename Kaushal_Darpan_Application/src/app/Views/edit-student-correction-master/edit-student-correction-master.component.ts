@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
@@ -16,6 +16,7 @@ import { CounsellingAllotmentListModel, CounsellingEditImportedCandidateListMode
 import { CounsellingImportCandidateListService } from '../../Services/CounsellingImportCandidateList/CounsellingImportCandidateList.service';
 import { ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
+import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 
 @Component({
     selector: 'edit-student-correction-master',
@@ -25,6 +26,8 @@ import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datam
 })
 export class EditStudentCorrectionMasterComponent implements OnInit {
 
+    @ViewChild('otpModal') childComponent!: OTPModalComponent;
+  
   public CandidateID: number = 0;
   public request =new ITIStudentCorrectionMasterSearchModel();
  
@@ -56,8 +59,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
     // form group
     this.CandidateFormGroup = this.formBuilder.group(
       {
-        Name: ['', Validators.required],
-        CandidateFatherName: ['', Validators.required],
+        Name: [{ value: '', disabled: true }, Validators.required],
+        CandidateFatherName: [{value:'',disabled:true},Validators.required],
         // Address: ['', Validators.required],
         Email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
         MobileNo: ['', [
@@ -65,11 +68,11 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           Validators.pattern('^[0-9]*$'),  // only digits
           Validators.minLength(10),        // min 10 digits
           Validators.maxLength(10) ]],        // max 10 digits]],
-          CandidateMotherName:[''],
-          CandidateGender:[0, [DropdownValidatorsString]],
+          CandidateMotherName:[{value:'',disabled:true}],
+          CandidateGender:[{value:0,disabled:true}, [DropdownValidatorsString]],
 
           
-          UIDNumber:['',Validators.required]
+          UIDNumber:[{value:'',disabled:true},Validators.required]
       });
 
 
@@ -174,31 +177,39 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       if(this.CandidateFormGroup.invalid){
         return;
       }
+      this.childComponent.MobileNo = '8334874706'
+      //this.CandidateFormGroup.get('MobileNo')?.value;
+      this.childComponent.OpenOTPPopup();
       this.request.DepartmentID=this.sSOLoginDataModel.DepartmentID;
       // this.request.RoleID=this.sSOLoginDataModel.RoleID;
       this.request.ModifyBy=this.sSOLoginDataModel.UserID;
       // let obj=JSON.parse(this.request);
       this.request.action="Update_studData"
       //save
-      await this.ItiDataMasterService.SaveStudentCorrectionData(this.request)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          console.log(data);
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
+        //  this.childComponent.onVerified.subscribe(() =>
+      // { 
+        this.childComponent.onVerified.subscribe(async ()=>{
+          await this.ItiDataMasterService.SaveStudentCorrectionData(this.request)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log(data);
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
 
-          if (this.State = EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.ResetControls();
-            this.routers.navigate(['/StudentCorrectionMaster']);
-          }
-          else {
-            this.toastr.error(this.ErrorMessage)
-          }
+            if (this.State == EnumStatus.Success) {
+              this.toastr.success(this.Message)
+              this.ResetControls();
+              this.routers.navigate(['/StudentCorrectionMaster']);
+            }
+            else {
+              this.toastr.error(this.ErrorMessage)
+            }
 
-        }, (error: any) => console.error(error)
-        );
+          }, (error: any) => console.error(error)
+          );
+        })
+    
 
     }
 
@@ -215,8 +226,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
 
   // reset
   ResetControls() {
-    this.request = new ITIStudentCorrectionMasterSearchModel();
-
+     this.request.MobileNo='';
+      this.request.Email='';
     //this.multiSelect.toggleSelectAll();
   }
 
