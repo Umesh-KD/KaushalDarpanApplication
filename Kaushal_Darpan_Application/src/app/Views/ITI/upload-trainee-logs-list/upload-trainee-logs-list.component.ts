@@ -54,6 +54,11 @@ export class UploadTraineeLogsListComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public selectedDataList: any[] = [];
+  public isLoading: boolean = false;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
   //end table feature default
 
   constructor(
@@ -117,7 +122,51 @@ export class UploadTraineeLogsListComponent {
   }
 
 
-  async CheckStatus() {
+  // CloseModal_EditAllottedInstitute() {
+  //   this.modalService.dismissAll();
+  //   this.editInstituteReq = new EditInstituteDataModel_Counselling()
+  // }
+
+  // async OpenOTPModal_EditInstitute() {
+  //   this.Swal2.Confirmation(`Are you sure you want to Change Allotted Institute!`,
+  //     async (result: any) => {
+  //       if (result.isConfirmed) {
+  //         this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+
+  //         // await for open model
+  //         await this.childComponent.OpenOTPPopup();
+
+  //         // await OTP verification
+  //         await this.childComponent.waitForVerification();
+
+  //         // do work
+  //         await this.SaveData_EditAllottedInstitute();
+  //       }
+  //     }
+  //   );
+  // }
+
+  // async SaveData_EditAllottedInstitute() {
+  //   try {
+  //     this.editInstituteReq.ModifyBy = this.sSOLoginDataModel.UserID
+  //     await this.counsellingMasterService.SaveFinalInstituteAllotment_Counselling(this.editInstituteReq).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       if(data.State === EnumStatus.Success) {
+  //         this.toastr.success(data.Message);
+  //         await this.GetUploadedTraineeLogsData();
+  //         this.CloseModal_EditAllottedInstitute();
+  //       } else if(data.State === EnumStatus.Warning) {
+  //         this.toastr.warning(data.Message);
+  //       } else {
+  //         this.toastr.error(data.ErrorMessage);
+  //       }
+  //     })
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
+
+  async OpenOTPModal_GenerateAllotmentOrder_old() {
     
     let anySelected = this.TraineeLogsList.some((x: any) => x.Selected == true);
     if(!anySelected) {
@@ -208,24 +257,134 @@ calculateInTableTotalPage() {
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
-  //checked all (replace org. list here)
+  
   selectInTableAllCheckbox() {
     this.TraineeLogsList.forEach(x => {
       x.Selected = this.AllInTableSelect;
     });
   }
-  //checked single (replace org. list here)
+  
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
     debugger
- 
-    this.TraineeLogsList.forEach(x => x.Selected = false);
     const data = this.TraineeLogsList.filter(x => x.LogID == item.LogID);
     data.forEach(x => {
       x.Selected = isSelected;
     });
-    //select all(toggle)
+   
     this.AllInTableSelect = this.TraineeLogsList.every(r => r.Selected);
   }
-  // end table feature
+  
 
+
+
+  
+
+  
+  selectedRows: any[] = [];
+
+  //async OpenOTPModal_GenerateAllotmentOrder() {
+  //  debugger
+  //  this.selectedRows = this.paginatedInTableData.filter((x: any) => x.Selected);
+
+  //  if (this.selectedRows.length === 0) {
+  //    this.toastr.warning('Please select at least one record.', 'No Selection');
+  //    return;
+  //  }
+  //  console.log('Selected Records==>', this.selectedRows);
+
+  //  this.selectedDataList = this.paginatedInTableData.filter((item: any) => item.Selected).map((item: any) => ({
+  //    ...item
+  //  }));
+  //  console.log('Selected Data List==>', this.selectedDataList);
+  //  try {
+  //    await this.ItiDataMasterService.UploadStatusCheckNew(this.selectedDataList)
+  //      .then((data: any) => {
+  //        this.State = data['State'];
+  //        this.Message = data['Message'];
+  //        this.ErrorMessage = data['ErrorMessage'];
+
+  //        if (this.State == EnumStatus.Success) {
+  //          this.toastr.success("Items issued successfully", "", {
+  //            toastClass: "ngx-toastr my-update-toast"
+  //          });
+
+  //          //this.GetAllData();
+  //          // this.CloseModalPopup();
+  //        } else if (this.State == EnumStatus.Error) {
+  //          this.toastr.error("Something went wrong.");
+  //        }
+  //      });
+
+  //    this.modalService.dismissAll();
+  //  } catch (ex) {
+  //    console.error(ex);
+  //    this.toastr.error('Something went wrong. Please try again.');
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //      this.isLoading = false;
+  //    }, 200);
+  //  }
+
+
+  //}
+
+
+  async OpenOTPModal_GenerateAllotmentOrder() {
+    debugger;
+
+    this.selectedRows = this.paginatedInTableData.filter((x: any) => x.Selected);
+
+    if (this.selectedRows.length === 0) {
+      this.toastr.warning('Please select at least one record.', 'No Selection');
+      return;
+    }
+
+    console.log('Selected Records ==>', this.selectedRows);
+
+    this.selectedDataList = this.selectedRows.map((item: any) => ({
+      log_id: item.LogID,              
+      response: item.Response || null, 
+      isSelected: true,                
+    }));
+
+    console.log('Selected Data List (For API) ==>', this.selectedDataList);
+
+    try {
+      this.loaderService.requestStarted();
+      this.isLoading = true;
+
+      
+      await this.ItiDataMasterService.UploadStatusCheckNew(this.selectedDataList)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State === EnumStatus.Success) {
+            this.toastr.success("Items issued successfully", "", {
+              toastClass: "ngx-toastr my-update-toast"
+            });
+
+            
+          } else if (this.State === EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage || "Something went wrong.");
+          }
+        });
+
+      this.modalService.dismissAll();
+    } catch (ex) {
+      console.error('Error in OpenOTPModal_GenerateAllotmentOrder:', ex);
+      this.toastr.error('Something went wrong. Please try again.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+
+
+  
+  
 }
