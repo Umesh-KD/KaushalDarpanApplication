@@ -1,0 +1,152 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Candidate List</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Trainee Log</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Trainee Log Details List</a>
+    </div>
+  </div>
+</div>
+
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by LogID</label>   
+          <input type="text" class="form-input" placeholder="LogID" id="Name" [(ngModel)]="request.log_id">
+        </div>
+    
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetUploadedTraineeLogsData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <button type="button"
+             class="btn bg-info text-white inline-block"
+            >Check Status
+        </button>
+        <!-- <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select> -->
+      </div>
+    </div>
+
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="flex justify-between flex-wrap items-center">
+        <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">
+              <!-- <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" /> -->
+            </th>
+            <th class="text-left">Sr.No.</th>
+            <th class="text-left">LogID </th>  
+            <th class="text-left">Response </th>  
+
+            <!-- <th>Action</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td align="left">
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>         
+            <td align="left">{{row.LogID}}</td>
+            <td align="left">{{row.Response}}</td>   
+           
+            <!-- <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
+                <a href="javascript:void(0)"
+                    (click)="editAllottedInstitute(MyModel_EditAllottedInstitute, row)" title="Edit Allotted Institute">
+                  <i class="ti ti-pencil"></i>
+                </a>
+              </div>
+            </td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
+    </div>
+    <!--end pagination-->
+  </div>
+</div>  
+
+<!-- <ng-template #MyModel_EditAllottedInstitute let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <b><i class="fa fa-plus"></i>&nbsp;Change Allotted Institute</b>
+        <button class="btn bg-info text-white" (click)="CloseModal_EditAllottedInstitute()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
+                <select class="form-select" id="InstituteID" name="InstituteID" [(ngModel)]="editInstituteReq.InstituteID" >
+                    <option value="0">--- Choose Option ---</option>
+                    <option *ngFor="let item of InstituteList" [ngValue]="item.InstituteID">{{item.InstituteName}} - ({{item.VacantSeats}})</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="text-center flex items-center justify-center mt-3">
+            <button type="button" id="btnSave"
+                    (click)="OpenOTPModal_EditInstitute()"
+                    class="btn bg-info text-white">
+                <i class="ti ti-device-floppy"></i> Submit
+            </button>
+            <button type="button" (click)="CloseModal_EditAllottedInstitute()" class="btn bg-danger text-white">Cancel</button>
+        </div>
+      </div>      
+    </div>
+  </div>
+</ng-template>
+
+<app-otpmodal #otpModal></app-otpmodal> -->
+
+

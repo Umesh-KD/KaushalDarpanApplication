@@ -47,10 +47,7 @@ export class BudgetRequestStatusComponent
   ) { }
 
 
-  ngOnInit()
-  {
-    // ✅ Initialize the form BEFORE it's used
-    
+  ngOnInit() {    
     const storedData = localStorage.getItem('SSOLoginUser');
     if (storedData) {
       this.ssoLoginDataModel = JSON.parse(storedData);
@@ -59,26 +56,21 @@ export class BudgetRequestStatusComponent
   }
 
   async GetReportAllData() {
-    debugger;
     try {
       this.BudgetModel.CreatedBy = this.ssoLoginDataModel.UserID;
       this.BudgetModel.FinYearID = this.ssoLoginDataModel.FinancialYearID;
       this.BudgetModel.CollegeID = this.ssoLoginDataModel.InstituteID;
       this.BudgetModel.RequestID = 0;
-      if (this.ssoLoginDataModel.RoleID == 20 || this.ssoLoginDataModel.RoleID == 43)
-      {
+      if (this.ssoLoginDataModel.RoleID == 20 || this.ssoLoginDataModel.RoleID == 43) {
         this.BudgetModel.ActionName = "GETRecordByCompanyID";
-      }
-      else
-      {
-      
+      } else {
         this.BudgetModel.ActionName = "GETLIST";
       }
       
       await this.budgetDistributedService.GetRequeststatusAllData(this.BudgetModel)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger;
+             ;
           if (data.Data.length > 0) {
             this.DataList = data.Data;
             //this.loadInTable();
@@ -97,8 +89,7 @@ export class BudgetRequestStatusComponent
       }, 200);
     }
   }
-  async openModal(content: any, RequestId: number, RequestAmount: number)
-  {
+  async openModal(content: any, RequestId: number, RequestAmount: number) {
     this.BudgetModelStatus.RequestID = RequestId;
     this.BudgetModelStatus.ApprovedAmount = RequestAmount;
     this.RequestAmountDetail = RequestAmount;
@@ -133,17 +124,12 @@ export class BudgetRequestStatusComponent
 
   async Sumbit()
   {
-    if (this.BudgetModelStatus.StatusId == EnumBugetStatus.Rejected)
-    {
-      if (this.BudgetModelStatus.Remarks == '')
-      {
+    if (this.BudgetModelStatus.StatusId == EnumBugetStatus.Rejected){
+      if (this.BudgetModelStatus.Remarks == '') {
         this.toastr.warning('Please Enter Remarks')
         return;
       }
-    }
-    else
-    {
-
+    } else {
       if (this.BudgetModelStatus.StatusId == 0 || this.BudgetModelStatus.Remarks == '') {
         this.toastr.warning('Please fill all required field')
         return;
@@ -153,14 +139,12 @@ export class BudgetRequestStatusComponent
         this.toastr.warning('Please Enter  Approved Amount')
         return;
       }
-      if (this.BudgetModelStatus.ApprovedAmount > this.RequestAmountDetail)
-      {
+      if (this.BudgetModelStatus.ApprovedAmount > this.RequestAmountDetail) {
         this.toastr.warning('Approved Amount is greater than Request Amount. Please check the values.');
         return;
       }
     }
-    try
-    { 
+    try { 
       this.BudgetModelStatus.UserID = this.ssoLoginDataModel.UserID;
       this.BudgetModelStatus.FinYearID = this.ssoLoginDataModel.FinancialYearID;
       this.BudgetModelStatus.RoleId = this.ssoLoginDataModel.EndTermID;
@@ -190,11 +174,8 @@ export class BudgetRequestStatusComponent
   }
 
   ResetAmount() {
-
-    if (this.BudgetModelStatus.StatusId == EnumBugetStatus.Rejected)
-    {
+    if (this.BudgetModelStatus.StatusId == EnumBugetStatus.Rejected) {
       this.BudgetModelStatus.ApprovedAmount = 0;
     }
-
   }
 }

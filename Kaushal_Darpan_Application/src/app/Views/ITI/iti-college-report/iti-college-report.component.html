@@ -75,11 +75,19 @@
             </div>
           </div>
 
-          <div *ngIf="request.IsNewCollege==1">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
 
+          <div *ngIf="request.IsNewCollege==0">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI Name: <span class="StarMarking">*</span></label>
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.CollegeID" formControlName="CollegeID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of ItiDDLlist" [value]="item.ID">{{item.Name}}</option>
+            </select>
+            <!--<div *ngIf="isSubmitted && _ReportForm.CollegeID.errors" class="text-danger">
+      <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
+    </div>-->
           </div>
+
+
 
 
 
@@ -113,6 +121,42 @@
               </p>
             </div>
           </div>
+
+
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LokSabha Constituency<span class="StarMarking">*</span></label>
+            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Loksabha" [(ngModel)]="request.Loksabha" placeholder="Enter LokSabha Constituency">-->
+
+            <select class="form-select"
+                    id="CollegeID"
+                    [(ngModel)]="request.Loksabha"
+                    formControlName="Loksabha"
+                    (change)="GetAssemblyITI($event.target.value)">
+              <option value="">--Select--</option>
+              <option *ngFor="let item of ParliamentMaster" [value]="item.ID">
+                {{ item.Name }}
+              </option>
+            </select>
+
+
+            <div *ngIf="isSubmitted && _ReportForm.Loksabha.errors" class="text-danger">
+              <p *ngIf="_ReportForm.Loksabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
+            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.Vidhansabha" formControlName="Vidhansabha">
+              <option value="">--Select--</option>
+              <option *ngFor="let item of AssemblyMaster" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && _ReportForm.Vidhansabha.errors" class="text-danger">
+              <p *ngIf="_ReportForm.Vidhansabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
           <div>
             <label>Sub Division<span class="StarMarking">*</span></label>
             <select formControlName="SubDivisionID" class="form-select" id="SubDivisionId" [(ngModel)]="request.SubDivisionID">
@@ -126,6 +170,7 @@
             </div>
           </div>
 
+
           <div>
             <label>Tehsil<span class="StarMarking">*</span></label>
             <select formControlName="TehsilID" class="form-select" id="TehsilId" [(ngModel)]="request.TehsilID" (change)="GetGramPanchayatSamiti()">
@@ -136,6 +181,18 @@
               <p *ngIf="!_ReportForm.TehsilID.errors.DropdownValidators">
                 <i aria-hidden="true"></i>This field is required .!
               </p>
+            </div>
+          </div>
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Panchayat Samiti<span class="StarMarking">*</span></label>
+            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.PanchayatId" formControlName="PanchayatId">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+            <div *ngIf="isSubmitted && _ReportForm.PanchayatId.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PanchayatId.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
 
@@ -168,18 +225,6 @@
       </p>
     </div>
   </div>-->
-          <div *ngIf="request.UrbanRural==76">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Panchayat Samiti<span class="StarMarking">*</span></label>
-            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.PanchayatId" formControlName="PanchayatId">
-              <option value="0">--Select--</option>
-              <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
-            </select>
-
-            <div *ngIf="isSubmitted && _ReportForm.PanchayatId.errors" class="text-danger">
-              <p *ngIf="_ReportForm.PanchayatId.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
 
 
           <div *ngIf="request.UrbanRural==76">
@@ -246,52 +291,57 @@
 
 
 
-          <div *ngIf="request.IsNewCollege==0">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI Name: <span class="StarMarking">*</span></label>
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.CollegeID" formControlName="CollegeID">
+          <div *ngIf="request.IsNewCollege==1">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="txtName" placeholder="Enter Iti College Name" [(ngModel)]="request.CollegeName">
+
+          </div>
+
+
+
+          <div *ngIf="request.UrbanRural==75">
+            <label>Category:<span class="StarMarking">*</span></label>
+            <select formControlName="Category" class="form-select" id="Administrative" [(ngModel)]="request.Category">
               <option value="0">--Select--</option>
-              <option *ngFor="let item of ItiDDLlist" [value]="item.ID">{{item.Name}}</option>
+              <option value="1">General</option>
+              <option value="2">DevNarayan</option>
+              <option value="3">Minority</option>
+              <option value="4">Nagar Parishad</option>
             </select>
-            <!--<div *ngIf="isSubmitted && _ReportForm.CollegeID.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
-    </div>-->
-          </div>
-
-
-
-
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LokSabha Constituency<span class="StarMarking">*</span></label>
-            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Loksabha" [(ngModel)]="request.Loksabha" placeholder="Enter LokSabha Constituency">-->
-
-            <select class="form-select"
-                    id="CollegeID"
-                    [(ngModel)]="request.Loksabha"
-                    formControlName="Loksabha"
-                    (change)="GetAssemblyITI($event.target.value)">
-              <option value="">--Select--</option>
-              <option *ngFor="let item of ParliamentMaster" [value]="item.ID">
-                {{ item.Name }}
-              </option>
-            </select>
-
-
-            <div *ngIf="isSubmitted && _ReportForm.Loksabha.errors" class="text-danger">
-              <p *ngIf="_ReportForm.Loksabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            <div *ngIf="isSubmitted&&_ReportForm.Category.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.Category.errors.DropdownValidators">
+                <i aria-hidden="true"></i>This field is required .!
+              </p>
             </div>
           </div>
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
-            <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.Vidhansabha" formControlName="Vidhansabha">
-              <option value="">--Select--</option>
-              <option *ngFor="let item of AssemblyMaster" [value]="item.ID">{{item.Name}}</option>
-            </select>
 
-            <div *ngIf="isSubmitted && _ReportForm.Vidhansabha.errors" class="text-danger">
-              <p *ngIf="_ReportForm.Vidhansabha.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name of Principal/ Superintendent<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PrincipleName" [(ngModel)]="request.PrincipleName" placeholder="Enter Name of Principal/ Superintendent">
+            <div *ngIf="isSubmitted && _ReportForm.PrincipleName.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PrincipleName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No. of Principal/ Superintendent<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" maxlength="10" formControlName="PrincipleMobile" [(ngModel)]="request.PrincipleMobile" placeholder="Enter Mobile No. of Principal/ Superintendent">
+            <div *ngIf="isSubmitted && _ReportForm.PrincipleMobile.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PrincipleMobile.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">EmailID of Principal/ Superintendent<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PrincipleEmailID" [(ngModel)]="request.PrincipleEmailID" placeholder="Enter EmailID of Principal/ Superintendent">
+            <div *ngIf="isSubmitted && _ReportForm.PrincipleEmailID.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PrincipleEmailID.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Availablity Type<span class="StarMarking">*</span></label>
@@ -300,7 +350,7 @@
 
               <!--<option *ngFor="let item of AssemblyMaster" [value]="item.ID">{{item.Name}}</option>-->
               <option value="">--Select--</option>
-              n
+
               <option value="1">Bigha</option>
               <option value="2">Hector</option>
 
@@ -326,7 +376,7 @@
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Distance From Panchayat Samiti HQ(Km)<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="PanchayatDis" [(ngModel)]="request.PanchayatDis" placeholder="Enter Distance From Panchayat Samiti HQ">
             <div *ngIf="isSubmitted && _ReportForm.PanchayatDis.errors" class="text-danger">
-              <p *ngIf="_ReportForm.PanchayatDis.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              <p *ngIf="_ReportForm.PanchayatDis.errors.required"><i aria-hidden="true"></i>e"This field is required.!</p>
             </div>
           </div>
 

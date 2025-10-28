@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { AppsettingService } from '../../../Common/appsetting.service';
-import { DTEItemsSaveModel,DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSaveModel,DTEItemsDataModels, ItemsDetailsModel, DTEItemsSearchModel, EquipmentCodeDuplicateSearch, CheckItemAuctionSearch, inventoryIssueHistorySearchModel, ItemsIssueReturnModels,DTELabMasterModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDataModels, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -258,4 +258,10 @@ export class DteItemsMasterService {
           catchError(this.handleErrorObservable)
         ).toPromise();
     }
+    public async GetDTEGetSetLabMaster(labRequest: DTELabMasterModel) {
+    return await this.http.post(this.APIUrl + "/GetDTEGetSetLabMaster",labRequest, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

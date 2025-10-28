@@ -1,0 +1,49 @@
+/* Centers the modal and makes it medium width */
+::ng-deep .modal-dialog {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+  ::ng-deep .modal-dialog.modal-md {
+    max-width: 500px; /* adjust for medium size */
+  }
+
+::ng-deep .modal-content {
+  border-radius: 10px !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+  background: #fff !important;
+}
+
+/* Optional: blue header and text contrast */
+::ng-deep .modal-header,
+::ng-deep .bg-primary {
+  background-color: #007bff !important;
+  color: #fff !important;
+}
+
+::ng-deep .modal-body {
+  color: #333 !important;
+  font-size: 16px;
+}
+
+::ng-deep .modal-footer {
+  border-top: none !important;
+}
+
+
+::ng-deep .custom-success-modal .modal-content {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

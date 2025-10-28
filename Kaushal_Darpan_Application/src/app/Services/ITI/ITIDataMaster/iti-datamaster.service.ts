@@ -6,6 +6,7 @@ import { SeatIntakeDataModel, SeatIntakeSearchModel, ITICollegeTradeSearchModel 
 import { SanctionOrderModel } from '../../../Models/ITI/UserRequestModel';
 import { SeatIntakesDataListSearchModel } from '../../../Models/ITI/IITIDataMasterDataModel';
 import { ITIStudentCorrectionMasterSearchModel } from '../../../Models/StudentMasterModels';
+import { UploadTrainee_LogsModel } from '../../../Models/RevaluationModel';
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +73,12 @@ export class ItiDataMasterService {
         ).toPromise();
     }
 
+    public async GetTraineeLogsList(searchRequest: UploadTrainee_LogsModel){
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTraineeLogsList`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

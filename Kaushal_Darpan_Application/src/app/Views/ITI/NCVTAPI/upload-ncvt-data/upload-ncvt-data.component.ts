@@ -95,13 +95,17 @@ export class UploadNcvtDataComponent implements OnInit
   {
     try {
       this.loaderService.requestStarted();
+      debugger;
       await this.itigenrateenrollservice.UploadTraineeData(request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          if (data.State == EnumStatus.Success)
-          {
-     
+          if (data.State == EnumStatus.Success) {
+            this.toastrService.success(data.Message)
           }
+          else {
+            this.toastrService.success(data.Message)
+          }
+
           this.PostData = [];
         }, (error: any) => console.error(error)
         );
