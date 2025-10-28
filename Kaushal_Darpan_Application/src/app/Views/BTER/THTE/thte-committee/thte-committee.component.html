@@ -47,7 +47,7 @@
         <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
 
       </div>
-      {{request.InspectionMemberDetails|json}}
+      <!--{{request.InspectionMemberDetails|json}}-->
       <div class="overflow-auto max-height500">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -72,7 +72,7 @@
                 <label><input type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)">&nbsp; Set Incharge</label>
               </td>
               <td class="text-center">
-                <button  class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <button *ngIf="row.CommitteeID==0"  class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>

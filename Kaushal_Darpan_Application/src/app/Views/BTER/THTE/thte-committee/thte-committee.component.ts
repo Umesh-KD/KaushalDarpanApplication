@@ -284,7 +284,7 @@ export class THTECommitteeComponent {
   }
 
   async GetById_Team(id: number) {
-
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.teacherHigherEducationApplicationService.GetCommitteeById_Team(id).then((data: any) => {

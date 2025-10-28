@@ -10,6 +10,7 @@ export class ITI_InspectionDataModel extends RequestBaseModel{
     public TeamTypeID: number = 0
     public DeploymentDateFrom: string = ''
     public DeploymentDateTo: string = ''
+    public CommitteeID: number = 0;
 }
 
 export class InspectionMemberDetailsDataModel extends RequestBaseModel {
@@ -35,6 +36,9 @@ export class InspectionMemberDetailsDataModel extends RequestBaseModel {
     public photo?: string = ''
     public DeploymentDateFrom: string = ''
     public DeploymentDateTo: string = ''
+
+    public CommitteeID: number = 0;
+
 }
 
 
