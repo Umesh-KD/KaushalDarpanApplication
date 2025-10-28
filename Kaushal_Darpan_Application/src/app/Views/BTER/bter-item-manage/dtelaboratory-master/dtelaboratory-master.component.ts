@@ -48,6 +48,7 @@ export class DteLaboratoryMasterComponent {
   public LabTechnicianList: any=[];
   public submitRequest = new ItemsIssueReturnModels();
   public LabID: number = 0;
+  public checkLab: number = 0;
   constructor(
     private toastr: ToastrService,
     private commonMasterService: CommonFunctionService,
@@ -80,7 +81,50 @@ export class DteLaboratoryMasterComponent {
     await this.GetAllData(); 
     this.getRoleID = this.sSOLoginDataModel.RoleID;
   }
- 
+  onNameChange(event: any) {
+    try {
+          this.checkLab = 0;
+          const labnameValue = event.target.value;
+      console.log('Name changed:', labnameValue);
+          const streamId = this.LaboratoryRequestFormGroup.get('StreamID')?.value;
+          console.log("Stream Id :", streamId);
+          this.loaderService.requestStarted();
+          this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
+          this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
+          this.request.ActionName = 'GetLabCheck';
+          this.request.LabName = labnameValue;
+          this.request.StreamID = streamId;
+          this.dteLaboratoryService.GetAllData(this.request)
+          .then((response: any) => {
+            response = JSON.parse(JSON.stringify(response));
+            console.log('data:', response); 
+            this.State = response['State'];
+            this.Message = response['Message'];
+            this.ErrorMessage = response['ErrorMessage'];
+            console.log('Count before assign ==> ', response.Data[0].CNT)
+            this.checkLab = response.Data[0].CNT;
+            console.log('Count ==> ', this.checkLab)
+            if (this.checkLab >= 1) {
+              this.toastr.warning(`Laboratry With Name ${labnameValue} , Already Available For Selected Stream !`);
+              this.LaboratoryRequestFormGroup.get('txtName')?.setValue('');
+              return;
+            }
+          // this.LabMasterList = data['Data'];
+         
+          }, error => console.error(error));
+      debugger;
+          
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+    // your logic here
+  }
   async GetMasterData() {
     try {
       this.loaderService.requestStarted();
