@@ -65,6 +65,8 @@
             <th class="text-left">UIDNumber</th>
             <th class="text-left">DOB</th>
             <th class="text-left">FatherName</th>
+            <th class="text-left">Error Description</th>
+            <th class="text-left">Record Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -76,6 +78,8 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
             
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.RecordStatus}}</td>
 
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
