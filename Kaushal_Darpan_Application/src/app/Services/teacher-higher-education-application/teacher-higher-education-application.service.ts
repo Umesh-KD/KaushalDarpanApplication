@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { CommitteeDataModel, CommitteeSearchModel, TeacherHigherEducationApplicationRequestModel, TeacherHigherEducationApplicationSaveModel, THTE_ApplicationSearchModel, THTE_DDL } from '../../Models/TeacherHigherEducationApplicationDataModel';
+import { CommitteeDataModel, CommitteeSearchModel, CommitteeStaffSSOIDSearchModel, TeacherHigherEducationApplicationRequestModel, TeacherHigherEducationApplicationSaveModel, THTE_ApplicationSearchModel, THTE_DDL } from '../../Models/TeacherHigherEducationApplicationDataModel';
 import { BTER_EM_GetPersonalDetailByUserID } from '../../Models/BTER/BTER_EstablishManagementDataModel';
 
 
@@ -136,4 +136,19 @@ export class TeacherHigherEducationApplicationService {
       ).toPromise();
   }
 
+
+  public async GetCommitteeDDL(request: THTE_DDL) {
+    return await this.http.post(this.APIUrl + "/GetCommitteeDDL", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
+  public async Bter_CommitteeStaffCheckSSOID(searchRequest: CommitteeStaffSSOIDSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/Bter_CommitteeStaffCheckSSOID`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

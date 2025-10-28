@@ -15,6 +15,7 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Staff Details</b>
+      <span>{{YearMessage}}</span>
     </div>
 
     <form [formGroup]="ApplyTeacherHigerTechnicalEducationFromGroup">
@@ -57,12 +58,30 @@
 
         </div>
 
+
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification At Joining</label>
+          <input class="form-input" type="text" name="QualificationAtJoining"
+                 formControlName="QualificationAtJoining" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.QualificationAtJoining" />
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification After Joining</label>
+          <input class="form-input" type="text" name="QualificationAfterJoining"
+                 formControlName="QualificationAfterJoining" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.QualificationAfterJoining" />
+        </div>
+
+
+        <!--QualificationAfterJoining
+  QualificationAtJoining-->
+        <!--{{GetAllAppliedCoursesDDLList|json}}-->
+
+        <div>
+
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Course</label>
-          <select class="form-select" name="appliedCourse" formControlName="appliedCourse"
+          <select class="form-select" name="appliedCourse" formControlName="appliedCourse" (change)="getAppliedCoursesByIDDDLFill()"
                   [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedCourse">
             <option value="0">--Select--</option>
-            
             <option *ngFor="let item of GetAllAppliedCoursesDDLList" [value]="item.ID">{{item.Name}}</option>
           </select>
           <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedCourse.errors" class="text-danger">
@@ -73,18 +92,21 @@
           </div>
         </div>
 
-
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute</label>
-          <input class="form-input" type="text" name="appliedInstitute"
-                 formControlName="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />
-          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
-            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Apply Course Institute </label>
+          <select class="form-select" name="appliedInstituteCategory" formControlName="appliedInstituteCategory" (change)="AC_appliedInstituteCategoryDDl()"
+                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of CategoryOfApplyCourseInstituteList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors" class="text-danger">
+            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors.DropdownValidators">
               <i aria-hidden="true"></i>
               This field is required!
             </p>
           </div>
         </div>
+
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">PHD</label>
@@ -115,34 +137,6 @@
           </div>
         </div>
 
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute Distance</label>
-          <input class="form-input" type="number" name="appliedInstituteDistance"
-                 formControlName="appliedInstituteDistance" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance" />
-          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors" class="text-danger">
-            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors.required">
-              <i aria-hidden="true"></i>
-              This field is required!
-            </p>
-          </div>
-        </div>
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Apply Course Institute </label>
-          <select class="form-select" name="appliedInstituteCategory" formControlName="appliedInstituteCategory" (change)="AC_appliedInstituteCategoryDDl()"
-                  [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of CategoryOfApplyCourseInstituteList" [value]="item.ID">{{item.Name}}</option>
-          </select>
-          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors" class="text-danger">
-            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteCategory.errors.DropdownValidators">
-              <i aria-hidden="true"></i>
-              This field is required!
-            </p>
-          </div>
-        </div>
-
         <div *ngIf="teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory==3">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category Of Apply Course Institute(Sub)</label>
           <select class="form-select" name="appliedInstituteSubCategory" formControlName="appliedInstituteSubCategory"
@@ -158,8 +152,48 @@
           </div>
         </div>
 
+
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveTeacherHighEduApp()">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute</label>
+          <select class="form-select" name="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" formControlName="appliedInstitute">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of InstituteMasterDDL" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
+            <p *ngIf="!_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This
+              field is required .!
+            </p>
+          </div>
+          <!--<input class="form-input" type="text" name="appliedInstitute"
+    formControlName="appliedInstitute" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstitute" />-->
+          <!--<div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors" class="text-danger">
+      <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstitute.errors.DropdownValidators">
+        <i aria-hidden="true"></i>
+        This field is required!
+      </p>
+    </div>-->
+        </div>
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Applied Institute KM(Distance)</label>
+          <input class="form-input" type="number" name="appliedInstituteDistance"
+                 formControlName="appliedInstituteDistance" [(ngModel)]="teacherHigherEducationApplicationSaveRequest.AppliedInstituteDistance" />
+          <div *ngIf="isSubmitted && _ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors" class="text-danger">
+            <p *ngIf="_ApplyTeacherHigerTechnicalEducationFromGroup.appliedInstituteDistance.errors.required">
+              <i aria-hidden="true"></i>
+              This field is required!
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <button *ngIf="IsYear == true" type="button" class="btn bg-info text-white mt-6" (click)="SaveTeacherHighEduApp()">
             {{ButtonText}}
           </button>
           <button type="button" class="btn bg-revert text-white mt-6" (click)="Reset()">
@@ -206,8 +240,8 @@
         
         
           <td align="left">
-            <a href="javascript:void(0);" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
-            <a href="javascript:void(0);" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
+            <a href="javascript:void(0);" *ngIf="row.StatusID == 1340" class="btn bg-blue text-red" title="Edit" (click)="EditInfo(row.THTEAppID)"><i class="ti ti-pencil"></i></a>
+            <a href="javascript:void(0);" class="btn bg-blue text-red" title="History" (click)="onUserRequestHistorylist(MyModel_UserRequestHistory, row.THTEAppID)"><i class="ti ti-eye"></i></a>
             <button *ngIf="row.StatusID == 1340" class="btn bg-danger text-white" type="button" title="Delete" (click)="THTEAppDelete(row.THTEAppID)">
               <i class="ti ti-trash"></i>
             </button>
@@ -258,6 +292,8 @@
 
         <!--{{UserRequestHistoryList|json}}-->
         <div class="overflow-x-auto mt-3">
+
+          
 
           <table class="table table-border w-full table-auto" cellpadding="5">
             <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">

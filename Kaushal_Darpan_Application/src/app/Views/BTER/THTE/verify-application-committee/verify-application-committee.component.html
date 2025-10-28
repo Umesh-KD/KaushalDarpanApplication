@@ -21,8 +21,8 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status </label>
             <select class="form-select" id="status"
-                [(ngModel)]="searchRequest.status"
-                (change)="ApplicationList_ForCommittee_THTE()">
+                    [(ngModel)]="searchRequest.status"
+                    (change)="ApplicationList_ForCommittee_THTE()">
               <option value="0">--All--</option>
               <option *ngFor="let item of StatusListDDL" value="{{item.ID}}">
                 {{item.Name}}
@@ -33,9 +33,9 @@
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="ApplicationList_ForCommittee_THTE()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
-            </div>
+          </div>
         </div>
-        
+
       </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -52,22 +52,32 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3"
-        *ngIf="searchRequest.status == 1341">
+         *ngIf="searchRequest.status == 1341">
+
+      <div class="flex mt-6">
+        <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+               for="fileStudentPhoto">Committee</label>
+        <select class="form-select" id="CommitteeID" [(ngModel)]="CommitteeID" name="ddlCommittee">
+          <option value="0">--select--</option>
+          <option *ngFor="let item of CommitteeListDDL" value="{{item.ID}}">{{item.Name}}</option>
+        </select>
+
+      </div>
 
       <div>
         <label class="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                for="fileStudentPhoto">Committee Document</label>
+               for="fileStudentPhoto">Committee Document</label>
         <div class="flex fileUploader">
           <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="CommitteeDoc" type="file" (change)="onFilechange($event,'CommitteeDoc')">
+                 id="CommitteeDoc" type="file" (change)="onFilechange($event,'CommitteeDoc')">
           <label for="CommitteeDoc">
             <span>Choose File</span>
             {{request.Dis_CommitteeDocs === '' ? 'No File Choosen' : request.Dis_CommitteeDocs}}
           </label>
           <div class="flex">
             <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CommitteeDocs}}"
-                *ngIf="this.request.Dis_CommitteeDocs !=''"
-                class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+               *ngIf="this.request.Dis_CommitteeDocs !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
           </div>
         </div>
       </div>
@@ -80,11 +90,15 @@
         </select>
         <button type="button" class="btn bg-info text-white inline-block" (click)="updateStatusRemark()">Save</button>
       </div>
+
+
+
       <div class="mt-6">
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
 
     </div>
+    <!--{{ApplicationListData|json}}-->
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
@@ -101,6 +115,8 @@
             <th class="text-left">Joining Date</th>
             <th class="text-left">Applied Institute</th>
             <th class="text-left">Applied Course</th>
+            <th class="text-left">Committee Name </th>
+            <th class="text-left">Committee Document</th>
             <th class="text-left">Status</th>
           </tr>
         </thead>
@@ -112,16 +128,25 @@
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <!-- <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
-              </div>
-            </td> -->
+            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
+            </div>
+          </td> -->
             <td>{{row.TeacherName}}</td>
             <td>{{row.SSOID}}</td>
             <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.AppliedInstitute}}</td>
             <td align="left">{{row.AppliedCourseName}}</td>
+            <td align="left">{{row.CommitteeName}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.CommitteeDocument}}"
+                   *ngIf="row.Dis_CommitteeDocument !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+              <!--{{row.Dis_CommitteeDocument}}-->
+            </td>
+
             <td align="left">{{row.StatusName}}</td>
           </tr>
         </tbody>

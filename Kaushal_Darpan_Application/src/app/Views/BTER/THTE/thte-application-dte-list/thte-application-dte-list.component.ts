@@ -113,7 +113,7 @@ export class THTEApplicationDteListComponent {
 
 
     let dyMsg = '';
-    if(this.status == 1341) {
+    if (this.status == 1345) {
       dyMsg = "Approve";
     } else {
       dyMsg = "Reject";

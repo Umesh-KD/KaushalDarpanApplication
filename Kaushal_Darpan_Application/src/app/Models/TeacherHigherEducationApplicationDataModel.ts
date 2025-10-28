@@ -30,6 +30,8 @@ export class TeacherHigherEducationApplicationSaveModel extends ResponseBaseMode
   Remark: string = '';
   CreatedBy: number = 0;
   InstituteID: number = 0;
+  QualificationAtJoining: string = '';
+  QualificationAfterJoining: string = '';
 }
 
 export class TeacherHigherEducationApplicationVerificationModel extends RequestBaseModel {
@@ -90,6 +92,7 @@ export class UpdateApplicationStatusDataModel_Principle {
 
 export class UpdateApplicationStatusDataModel_Committee {
   public status?: number = 0;
+  public CommitteeID?: number = 0;
   public Remark?: string = '';
   public RoleID?: number = 0;
   public ModifyBy?: number = 0;
@@ -181,4 +184,11 @@ export class CommitteeSearchModel extends RequestBaseModel {
 
   public DeploymentDateFrom: string = ''
   public DeploymentDateTo: string = ''
+}
+
+export class CommitteeStaffSSOIDSearchModel {
+  public DepartmentID: number = 0;
+  public SSOID: string = '';
+  public RoleID: number = 0;
+  public InstituteID: number = 0;
 }
