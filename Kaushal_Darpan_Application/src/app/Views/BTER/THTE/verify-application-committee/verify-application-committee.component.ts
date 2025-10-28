@@ -6,11 +6,12 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { TeacherHigherEducationApplicationVerificationService } from '../../../../Services/teacher-higher-education-application-Verification/teacher-higher-education-application-Verification.service';
 import { OTPModalComponent } from '../../../otpmodal/otpmodal.component';
-import { PrincipleApplicationListSearchModel, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
+import { PrincipleApplicationListSearchModel, THTE_DDL, THTE_DropdownDataModel, UpdateApplicationStatusDataModel_Committee } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { EnumRole, EnumStatus } from '../../../../Common/GlobalConstants';
 import Swal from 'sweetalert2';
+import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
 
 @Component({
   selector: 'app-verify-application-committee',
@@ -29,8 +30,10 @@ export class VerifyApplicationCommitteeComponent {
   public ApplicationListData: any = [];
   public StatusListDDL: any = [];
   public UpdateStatusListDDL: any = [];
+  public CommitteeListDDL: any = [];
 
   public status: number = 0;
+  public CommitteeID: number = 0;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -44,6 +47,7 @@ export class VerifyApplicationCommitteeComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public DateConfigSetting: any = [];
+  public requestDDl = new THTE_DDL();
   //end table feature default
 
   constructor(
@@ -55,19 +59,53 @@ export class VerifyApplicationCommitteeComponent {
     public appsettingConfig: AppsettingService,
     public teacherHigherEducationApplicationVerificationService: TeacherHigherEducationApplicationVerificationService,
     private router: Router,
+    public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+
   ) { }
 
   async ngOnInit () { 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+    await this.GetCommitteeListDDL();
     await this.GetStatusData();
   }
+
+
+  async GetCommitteeListDDL() {
+    try {
+      await this.teacherHigherEducationApplicationService.GetCommitteeDDL(this.requestDDl)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CommitteeListDDL = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+
 
   async GetStatusData() {
     try {
       this.dropdownRequest.action = "GetStatusDDL"
       this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
       
+      await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StatusListDDL = data['Data'];
+        this.StatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1341  || x.ID === 1343)
+        this.UpdateStatusListDDL = this.StatusListDDL.filter((x: any) => x.ID === 1343)
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async GetCommitteeData() {
+    try {
+      this.dropdownRequest.action = "GetStatusDDL"
+      this.dropdownRequest.RoleID = this.sSOLoginDataModel.RoleID
+
       await this.commonMasterService.THTE_StatusDDL(this.dropdownRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StatusListDDL = data['Data'];
@@ -78,6 +116,8 @@ export class VerifyApplicationCommitteeComponent {
       console.error(error);
     }
   }
+
+
 
   async btn_Clear() {
     this.searchRequest = new PrincipleApplicationListSearchModel();
@@ -115,6 +155,13 @@ export class VerifyApplicationCommitteeComponent {
       this.toastr.warning('Please select status.');
       return;
     }
+
+    if (this.CommitteeID == 0) {
+      this.toastr.warning('Please select committee.');
+      return;
+    }
+    
+
     if(this.request.CommitteeDocs == '' || this.request.CommitteeDocs == undefined || this.request.CommitteeDocs == null) {
       this.toastr.warning('Please upload committee document.');
       return;
@@ -168,6 +215,7 @@ export class VerifyApplicationCommitteeComponent {
   }
 
   async SaveDataMarked(remark: string) {
+    debugger
     try {
       let selected = this.ApplicationListData.filter((x: any) => x.Selected === true)
       this.request.ApplicationListData = selected
@@ -176,13 +224,15 @@ export class VerifyApplicationCommitteeComponent {
       this.request.status = this.status
       this.request.Remark = remark
       this.request.RoleID = this.sSOLoginDataModel.RoleID
+      this.request.CommitteeID = this.CommitteeID
 
       await this.teacherHigherEducationApplicationVerificationService.UpdateApplicationStatus_Committee_THTE(this.request)
       .then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
-          this.status = 0
+          this.status = 0;
+          this.CommitteeID = 0;
           this.request = new UpdateApplicationStatusDataModel_Committee();
           await this.ApplicationList_ForCommittee_THTE();
         }

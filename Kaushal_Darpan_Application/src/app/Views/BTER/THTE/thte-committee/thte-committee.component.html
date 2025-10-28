@@ -9,7 +9,7 @@
             <a routerLink="/THTE-CommitteeList" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
           </div>
         </div>
-        <div >
+        <div>
 
           <form *ngIf="InspectionFormGroup" [formGroup]="InspectionFormGroup">
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
@@ -32,14 +32,14 @@
                 <div *ngIf="isFormSubmitted && _inspectionMemberForm.SSOID.errors" class="text-danger">
                   <p *ngIf="_inspectionMemberForm.SSOID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
                 </div>
-               </div>
               </div>
-              <div>
-                <div class="text-left">
-                  <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddMoreMember()">Verify</button>
-                </div>
+            </div>
+            <div>
+              <div class="text-left">
+                <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="AddMoreMember()">Verify</button>
               </div>
-</form>
+            </div>
+          </form>
 
         </div>
       </div>
@@ -47,7 +47,7 @@
         <b class="text-1xl-5"><i class="ti ti-list"></i> Added Member List</b>
 
       </div>
-
+      <!--{{request.InspectionMemberDetails|json}}-->
       <div class="overflow-auto max-height500">
         <table class="w-full table-border" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
@@ -72,7 +72,7 @@
                 <label><input type="radio" name="memberType" [value]="row.IsIncharge" [checked]="row.IsIncharge" (change)="SetInchargeFlyingSquad(row, idx)">&nbsp; Set Incharge</label>
               </td>
               <td class="text-center">
-                <button class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
+                <button *ngIf="row.CommitteeID==0"  class="btn bg-danger text-white" type="button" title="Delete" (click)="DeleteRow(row)">
                   <i class="ti ti-trash"></i>
                 </button>
               </td>

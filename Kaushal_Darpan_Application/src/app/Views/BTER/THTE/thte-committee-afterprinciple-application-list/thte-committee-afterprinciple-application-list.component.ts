@@ -108,7 +108,7 @@ export class THTECommitteeafterPrincipleApplicationListComponent {
       return;
     }
     let dyMsg = '';
-    if(this.status == 1341) {
+    if (this.status == 1344) {
       dyMsg = "Approve";
     } else {
       dyMsg = "Reject";

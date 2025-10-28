@@ -233,6 +233,10 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
+    if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited) {
+      this.isShowImageDeleteButton = false;
+      return;
+    }
     if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       this.isShowImageDeleteButton = true
     } else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
@@ -711,17 +715,13 @@ export class StudentEnrollmentComponent {
     this.requestStudent.EnrollmentNo = this.requestStudent.EnrollmentNo || '0';
     this.requestStudent.StudentExamStatus = this.requestStudent.StudentExamStatus || '0';
 
-    if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) && this.requestStudent.status == enumExamStudentStatus.SelectedForEnrollment) {
-      this.requestStudent.status = enumExamStudentStatus.VerifiedForEnrollment// verified for enrollment(bter) 
-    }
-    else if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) && this.requestStudent.status == enumExamStudentStatus.SelectedForExamination) {
-      this.requestStudent.status = enumExamStudentStatus.VerifiedForExamination// verified for examination(principle)
-    }
-    else {
+    if (!(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
       this.toastr.error("Invalid Action!");
       return;
+    }
+    if (this.IsVerified == true) {
+      this.requestStudent.status = this._enumExamStudentStatus.VerifiedForEnrollment;
     }
     console.log(this.requestStudent.status, '4')
     // verified

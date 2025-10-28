@@ -332,6 +332,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
       }, 200);
     }
   }
+
   async PayEnrollmentFee(item: StudentDetailsModel) {
     this.emitraRequest = new EmitraRequestDetails();
     //Set Parameters for emitra
@@ -348,6 +349,9 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
     this.emitraRequest.IsKiosk = true;
     this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
+    this.emitraRequest.ID = item.ID;
+    this.emitraRequest.FormCommision = item.FormCommision;
+    this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
 
 
     this.emitraRequest.StudentFeesTransactionItems.push({
@@ -359,26 +363,45 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
 
 
     this.loaderService.requestStarted();
+
     try {
-      await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+      // back to back emitra kiyosk
+      await this.emitraPaymentService.EnrollmentExaminationFeePaymentByKiyosk(this.emitraRequest)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
-          this.Message = data['SuccessMessage'];
+          this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
+          this.PDFURL = data['PDFURL'];
+
           if (data.State == EnumStatus.Success) {
-            await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+            this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
+              if (result.isConfirmed) {
+                try {
+                  //sms code missiog
+                  //await this.SendApplicationMessage();
+                  window.open(this.PDFURL, '_blank');
+                  setTimeout(function () { window.location.reload(); }, 200)
+                }
+                catch (ex) {
+                  console.log(ex)
+                }
+              }
+              else {
+                let displayMessage = this.Message ?? this.ErrorMessage;
+                this.toastrService.error(displayMessage);
+              }
+            });
+            //open
           }
           else {
-            this.toastrService.error(this.ErrorMessage)
+            let displayMessage = this.Message ?? this.ErrorMessage;
+            this.toastrService.error(displayMessage)
           }
-        })
+        });
     }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+    catch (ex) {
+      console.log(ex)
     }
   }
 
@@ -511,10 +534,14 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
               this.emitraRequest.IsKiosk = true;
               this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
               this.emitraRequest.ID = this.studentDetailsModel.ID;
+              this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
+              this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
+
               this.loaderService.requestStarted();
 
               try {
-                await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+                //old is = EmitraPayment
+                await this.emitraPaymentService.EnrollmentExaminationFeePaymentByKiyosk(this.emitraRequest)
                   .then(async (data: any) => {
                     data = JSON.parse(JSON.stringify(data));
                     this.State = data['State'];

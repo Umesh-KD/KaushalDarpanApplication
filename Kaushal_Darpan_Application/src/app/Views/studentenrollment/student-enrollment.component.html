@@ -409,7 +409,14 @@
               <tr *ngFor="let item of documentDetails;">
                 <td>{{item.DisplayColumnNameEn}}</td>
                 <td>
-                  <img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
+                  <!-- when data by application master-->
+                  <img *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited"
+                       alt="{{item.ColumnName}}"
+                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                       class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
+                  <!-- when data by student master-->
+                  <img *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited"
+                       alt="{{item.ColumnName}}"
                        src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                        class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
                 </td>
@@ -811,12 +818,19 @@
               <div class="flex fileUploader">
                 <input [ngModelOptions]="{standalone: true}"
                        class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                       id="{{item.ColumnName}}" type="file" (change)="UploadDocument($event,item)" [disabled]="item.FileName!=''">
+                       id="{{item.ColumnName}}" type="file" (change)="UploadDocument($event,item)" [disabled]="item.FileName!='' || request.StudentFilterStatusId==_enumExamStudentStatus.Addimited">
                 <label for="{{item.ColumnName}}">
                   <span>Choose File</span>{{item.Dis_FileName == '' ? 'No File Choosen' : item.Dis_FileName}}
                 </label>
                 <div class="flex" *ngIf="item.FileName!=''">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
+                  <!-- when data by application master-->
+                  <a *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited" href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                     class="btn bg-primary text-white m-0" target="_blank">
+                    <i class="ti ti-eye"></i>
+                  </a>
+                  <!-- when data by students master-->
+                  <a *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited"
+                     href="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                      class="btn bg-primary text-white m-0" target="_blank">
                     <i class="ti ti-eye"></i>
                   </a>

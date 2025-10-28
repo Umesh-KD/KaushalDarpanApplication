@@ -84,6 +84,8 @@
             <th class="text-left">Joining Date</th>
             <th class="text-left">Applied Institute</th>
             <th class="text-left">Applied Course</th>
+            <th class="text-left">Committee Name </th>
+            <th class="text-left">Committee Document</th>
             <th class="text-left">Status</th>
           </tr>
         </thead>
@@ -95,16 +97,24 @@
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <!-- <td>
-              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
-              </div>
-            </td> -->
+    <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0);" title="View Details" (click)="openViewStudentExamDetailsPopup(row.StudentID, row.StudentExamID)"><i class="ti ti-eye"></i></a>
+    </div>
+  </td> -->
             <td>{{row.TeacherName}}</td>
             <td>{{row.SSOID}}</td>
             <td align="left">{{row.DOB | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.JoiningDate | date: 'dd-MM-yyyy'}}</td>
             <td align="left">{{row.AppliedInstitute}}</td>
             <td align="left">{{row.AppliedCourseName}}</td>
+            <td align="left">{{row.CommitteeName}}</td>
+            <td align="left">
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.CommitteeDocument}}"
+                   *ngIf="row.Dis_CommitteeDocument !=''" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+              <!--{{row.Dis_CommitteeDocument}}-->
+            </td>
             <td align="left">{{row.StatusName}}</td>
           </tr>
         </tbody>

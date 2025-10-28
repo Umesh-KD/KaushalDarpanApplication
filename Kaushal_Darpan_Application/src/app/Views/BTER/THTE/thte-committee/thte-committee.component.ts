@@ -15,6 +15,7 @@ import { ActivatedRoute, Route, Router } from '@angular/router';
 
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
 import { TeacherHigherEducationApplicationService } from '../../../../Services/teacher-higher-education-application/teacher-higher-education-application.service';
+import { CommitteeStaffSSOIDSearchModel } from '../../../../Models/TeacherHigherEducationApplicationDataModel';
 
 @Component({
   selector: 'app-thte-committee',
@@ -45,7 +46,8 @@ export class THTECommitteeComponent {
   public requestStaff = new StaffMasterDDLDataModel();
   requestTrade = new ItiTradeSearchModel()
   requestIti = new ItiCollegesSearchModel()
-  requestDropdown = new ITI_InspectionDropdownModel()
+  requestDropdown = new ITI_InspectionDropdownModel();
+  requestCommitteeStaffSSOIDSearchModel = new CommitteeStaffSSOIDSearchModel();
   InspectionTeamID: number = 0
   @Input() tabId: number = 0;
   _EnumInspectionDeploymentType = EnumInspectionDeploymentType;
@@ -61,6 +63,7 @@ export class THTECommitteeComponent {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     public teacherHigherEducationApplicationService: TeacherHigherEducationApplicationService,
+
   ){}
 
   async ngOnInit() {
@@ -185,7 +188,7 @@ export class THTECommitteeComponent {
     //this.requestMember.InstituteName = this.InstituteMasterDDL.find((x: any) => x.Id == this.requestMember.InstituteID)?.Name;
     this.requestMember.StaffName = this.formData.Name
     this.requestMember.StaffID = data.Data;
-    this.requestMember.SSOID = this.requestSSoApi.SSOID;
+    this.requestMember.SSOID = this.formData.SSOID;
 
     console.log(this.requestMember);
 
@@ -233,6 +236,7 @@ export class THTECommitteeComponent {
     }
     try {
       this.loaderService.requestStarted();
+      this.request.InstituteId = this.sSOLoginDataModel.InstituteID;
       await this.teacherHigherEducationApplicationService.CommitteeSaveData(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log("data", data)
@@ -280,7 +284,7 @@ export class THTECommitteeComponent {
   }
 
   async GetById_Team(id: number) {
-
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.teacherHigherEducationApplicationService.GetCommitteeById_Team(id).then((data: any) => {
@@ -334,71 +338,61 @@ export class THTECommitteeComponent {
 
 
 
-  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
-
-    if (SSOID == "") {
-      this.toastr.error("Please Enter SSOID");
+  async SSOIDGetSomeDetails(SSOID: string): Promise<void> {
+    if (!SSOID || SSOID.trim() === "") {
+      this.toastr.error("Please enter SSOID");
       return;
     }
 
-    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
-    const appName = 'madarsa.test';
-    const password = 'Test@1234';
-
-    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
-
-    this.requestSSoApi.SSOID = username;
-    this.requestSSoApi.appName = appName;
-    this.requestSSoApi.password = password;
-
-
-
+    this.loaderService.requestStarted();
+    debugger
     try {
+      this.requestCommitteeStaffSSOIDSearchModel.SSOID = SSOID;
+      this.requestCommitteeStaffSSOIDSearchModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        let response = JSON.parse(JSON.stringify(data));
-        if (response?.Data) {
+      const data: any = await this.teacherHigherEducationApplicationService
+        .Bter_CommitteeStaffCheckSSOID(this.requestCommitteeStaffSSOIDSearchModel);
 
-          let parsedData = JSON.parse(response.Data); // parse string inside Data
-          if (parsedData != null) {
-            
-            //this.formData.Displayname = parsedData.displayName
+      const response = data?.Data[0];
+      if (!response) {
+        this.toastr.error("SSO ID not found. Staff record does not exist.");
+        return;
+      }
 
+      let parsedData: any;
+      try {
+        parsedData =response;
+      } catch (e) {
+        console.error("Error parsing SSOID response:", e);
+        this.toastr.error("Invalid data format received from server.");
+        return;
+      }
 
-            
-            this.formData.Name = parsedData.displayName;
-            this.formData.MobileNo = parsedData.mobile;
-            this.formData.EmailID = parsedData.mailPersonal;
-            this.formData.SSOID = parsedData.SSOID;
-            this.formData.DeploymentDateFrom = this.request.DeploymentDateFrom;
-            this.formData.DeploymentDateTo = this.request.DeploymentDateTo;
+      if (parsedData) {
+        this.formData = {
+          ...this.formData,
+          Name: parsedData.DisplayName,
+          MobileNo: parsedData.mobile,
+          EmailID: parsedData.mailPersonal,
+          SSOID: SSOID,
+          DeploymentDateFrom: this.request.DeploymentDateFrom,
+          DeploymentDateTo: this.request.DeploymentDateTo
+        };
+         this.Save_CheckSSOData(this.formData);
+      } else {
+        this.toastr.error("This SSO ID does not exist. Please contact the Admin!");
+        this.requestMember.SSOID = "";
+        return;
+      }
 
-            this.Save_CheckSSOData(this.formData);
-
-            //this.DuplicateCheck(this.requestSSoApi.SSOID);
-            //this.AddStaffBasicDetailFromGroup.get('txtSSOID')?.disable();
-            //return true;
-          }
-          else {
-            this.toastr.error("This SSO ID is not Exist, Please contact to Admin!");
-            this.requestMember.SSOID = "";
-            //this.isSSOVisible = false;
-            return;
-          }
-
-          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
-        }
-      });
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching SSOID details:", error);
+      this.toastr.error("An error occurred while fetching details. Please try again.");
     } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      setTimeout(() => this.loaderService.requestEnded(), 200);
     }
   }
+
 
   async Save_CheckSSOData(formData: any) {
     //this.isFormSubmitted = true
