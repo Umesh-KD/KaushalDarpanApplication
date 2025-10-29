@@ -10,7 +10,10 @@ export class ItiReportDataModel {
   public LandAvailable:string=''
   public PanchayatDis:string=''
   public SanctionOrderNo:string=''
+  public MetpOrderNo:string=''
+  public MetpOrderDate:string=''
   public SanctionOrderDate:string=''
+  public MetpCopy:string=''
   public TradeOrderNo:string=''
   public AdministrativeOrderNo:string=''
   public ElectPhaserequired:string=''
@@ -34,6 +37,8 @@ export class ItiReportDataModel {
   public Remarks:string=''
   public FrontPhoto:string=''
   public SidePhoto:string=''
+  public CompleteDate:string=''
+  public StartDate:string=''
   public InteriorPhoto:string=''
   public SanctionOrderCopy:string=''
   public TradeCopy:string=''
@@ -60,15 +65,20 @@ export class ItiReportDataModel {
   public AllotmentLetter:string=''
   public BuildingPlanCopy:string=''
   public DomeViewCopy: string = ''
+  public WorkOrderCopy: string = ''
   public ShilanyasName: string = ''
   public PrincipleName: string = ''
   public PrincipleMobile: string = ''
   public PrincipleEmailID: string = ''
+  public Pincode: string = ''
+  public LandAddress: string = ''
   public IsNewCollege: number = 0
   public ModifyBy:number=0
+  public Category:number=0
   public Esttablishment_Year: number = 0
   public FinancialSanctionList: any[] = []
   public BasicDetailsList: any[] = []
+  public UpdateWorkList: any[] = []
   public AnnoucementType: number = 0
   public DistrictID: number = 0
   public UrbanRural: number = 0
@@ -79,6 +89,19 @@ export class ItiReportDataModel {
   public CityID: number = 0
   public AdministrativeBodyId: number = 0
   public SubDivisionID: number = 0
+  public OrderType: number = 0
+  public OrderDetailsList: any[] = []
+  public WorkStarted:string=''
+  public WorkName:string=''
+  public WorkTradeCopy:string=''
+  public WorkFSCopy:string=''
+  public WorkConstructor:string=''
+  public WorkCopy:string=''
+  public UpdateWorkStarted:string=''
+  public UpdateExpectedDate:string=''
+  public WorkSanctionCopy:string=''
+  public UpdatePercentWork:string=''
+  public UpdateRemarks: string = ''
 
 }
 

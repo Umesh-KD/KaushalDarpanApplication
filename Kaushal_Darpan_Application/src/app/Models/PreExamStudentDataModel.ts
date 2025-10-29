@@ -22,7 +22,8 @@ export class PreExamStudentDataModel extends RequestBaseModel {
   public AdmittStatus?: string = '-1';
   public PromoteStatus?: number = 0;
 
-  public TradeSchemeID:number=0
+  public TradeSchemeID: number = 0;
+  public StudentExamTypeID: number = 0;
 }
 
 export class PreExam_UpdateEnrollmentNoModel extends RequestBaseModel {
