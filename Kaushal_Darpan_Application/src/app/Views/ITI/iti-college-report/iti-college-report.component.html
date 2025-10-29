@@ -23,7 +23,7 @@
 
     <div class="flex  flex-wrap justify-between items-center mb-3 p-3 py-2 bg-light">
       <div class="flex">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>Is This ITI Is Under New Establishment</b>
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>Is This ITI Is Under New Establishment</b>
 
         <label class="flex ms-4">
           <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" type="radio" name="IsNewCollege" id="IsNewCollege"
@@ -62,9 +62,9 @@
               <option [value]="1">Budget Annoucement</option>
               <option [value]="2">CM Annoucement </option>
             </select>
-            <!--<div *ngIf="isSubmitted && _ReportForm.CollegeID.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
-    </div>-->
+            <div *ngIf="isSubmitted && _ReportForm.AnnoucementType.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.AnnoucementType.errors.DropdownValidators">This field is required .!</p>
+            </div>
           </div>
 
           <div>
@@ -78,13 +78,13 @@
 
           <div *ngIf="request.IsNewCollege==0">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI Name: <span class="StarMarking">*</span></label>
-            <select class="form-select" id="CollegeID" [(ngModel)]="request.CollegeID" formControlName="CollegeID">
+            <select class="form-select" id="CollegeID" [(ngModel)]="request.CollegeID" formControlName="CollegeID" (change)="GetCollegeDetails($event.target.value)">
               <option value="0">--Select--</option>
               <option *ngFor="let item of ItiDDLlist" [value]="item.ID">{{item.Name}}</option>
             </select>
             <!--<div *ngIf="isSubmitted && _ReportForm.CollegeID.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
-    </div>-->
+            <p *ngIf="!_ReportForm.CollegeID.errors.DropdownValidators">This field is required .!</p>
+          </div>-->
           </div>
 
 
@@ -192,7 +192,7 @@
             </select>
 
             <div *ngIf="isSubmitted && _ReportForm.PanchayatId.errors" class="text-danger">
-              <p *ngIf="_ReportForm.PanchayatId.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+              <p *ngIf="!_ReportForm.PanchayatId.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
 
@@ -213,18 +213,18 @@
 
 
           <!--<div *ngIf="request.UrbanRural==76">
-    <label for="PanchayatSamiti">Panchayat Samiti:<span class="StarMarking">*</span></label>
-    <select formControlName="PanchayatSamiti" class="form-select" id="PanchayatSamiti"
-            [(ngModel)]="request.PanchayatSamiti">
-      <option value="0">--Select--</option>
-      <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
-    </select>
-    <div *ngIf="isSubmitted&&_ReportForm.PanchayatSamiti.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.PanchayatSamiti.errors.DropdownValidators">
-        <i aria-hidden="true"></i>This field is required .!
-      </p>
-    </div>
-  </div>-->
+          <label for="PanchayatSamiti">Panchayat Samiti:<span class="StarMarking">*</span></label>
+          <select formControlName="PanchayatSamiti" class="form-select" id="PanchayatSamiti"
+                  [(ngModel)]="request.PanchayatSamiti">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PanchayatSamitiList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted&&_ReportForm.PanchayatSamiti.errors" class="text-danger">
+            <p *ngIf="!_ReportForm.PanchayatSamiti.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+        </div>-->
 
 
           <div *ngIf="request.UrbanRural==76">
@@ -299,14 +299,15 @@
 
 
 
-          <div *ngIf="request.UrbanRural==75">
+          <div>
             <label>Category:<span class="StarMarking">*</span></label>
             <select formControlName="Category" class="form-select" id="Administrative" [(ngModel)]="request.Category">
               <option value="0">--Select--</option>
               <option value="1">General</option>
               <option value="2">DevNarayan</option>
               <option value="3">Minority</option>
-              <option value="4">Nagar Parishad</option>
+              <option value="4">TSP</option>
+              <option value="5">SCSP</option>
             </select>
             <div *ngIf="isSubmitted&&_ReportForm.Category.errors" class="text-danger">
               <p *ngIf="!_ReportForm.Category.errors.DropdownValidators">
@@ -343,7 +344,7 @@
 
 
 
-          <div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Availablity Type<span class="StarMarking">*</span></label>
             <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
             <select class="form-select" id="LandTypeID" [(ngModel)]="request.LandTypeID" formControlName="LandTypeID">
@@ -361,7 +362,7 @@
             </div>
           </div>
 
-          <div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Available (Bigha/Hector)<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="LandAvailable" [(ngModel)]="request.LandAvailable" placeholder="Enter Land Available">
             <div *ngIf="isSubmitted && _ReportForm.LandAvailable.errors" class="text-danger">
@@ -369,10 +370,25 @@
             </div>
           </div>
 
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI/Land Address <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="LandAddress" [(ngModel)]="request.LandAddress" placeholder="Enter Land Address">
+            <div *ngIf="isSubmitted && _ReportForm.LandAddress.errors" class="text-danger">
+              <p *ngIf="_ReportForm.LandAddress.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Pincode <span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="Pincode" [(ngModel)]="request.Pincode" placeholder="Enter Pincode">
+            <div *ngIf="isSubmitted && _ReportForm.Pincode.errors" class="text-danger">
+              <p *ngIf="_ReportForm.Pincode.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
-          <div>
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Distance From Panchayat Samiti HQ(Km)<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="PanchayatDis" [(ngModel)]="request.PanchayatDis" placeholder="Enter Distance From Panchayat Samiti HQ">
             <div *ngIf="isSubmitted && _ReportForm.PanchayatDis.errors" class="text-danger">
@@ -382,126 +398,240 @@
 
 
 
-          <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order No<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="SanctionOrderNo" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">
-            <div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
-              <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order Date<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="SanctionOrderDate" [(ngModel)]="request.SanctionOrderDate">
-            <div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
-              <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
+            <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
+              <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
 
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
+            <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
+            <div *ngIf="isSubmitted && _ReportForm.AdministrativeOrderDate.errors" class="text-danger">
+              <p *ngIf="_ReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Santion Order Copy<span class="StarMarking">*</span> </label>
-            <div class="flex fileUploader">
-              <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
-
-              <label for="SanctionOrderCopy">
-                <span>Choose File</span>
-                {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
-                   *ngIf="this.request.SanctionOrderCopy  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-              </div>
-
-            </div>
-          </div>
-
-
-
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order No<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="TradeOrderNo" [(ngModel)]="request.TradeOrderNo" placeholder="Enter Trade Sanction Order No">
-            <div *ngIf="isSubmitted && _ReportForm.TradeOrderNo.errors" class="text-danger">
-              <p *ngIf="_ReportForm.TradeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
-
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order Date<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="TradeOrderDate" [(ngModel)]="request.TradeOrderDate">
-            <div *ngIf="isSubmitted && _ReportForm.TradeOrderDate.errors" class="text-danger">
-              <p *ngIf="_ReportForm.TradeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>
-
-
-          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Trade Santion Order Copy<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="TradeCopy" type="file" (change)="onFilechange($event,'TradeCopy')" />
+                     id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
 
-              <label for="TradeCopy">
+              <label for="AdministrativeCopy">
                 <span>Choose File</span>
-                {{ request.TradeCopy === '' ? 'No File Chosen' : request.TradeCopy }}
+                {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
               </label>
               <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.TradeCopy}}"
-                   *ngIf="this.request.TradeCopy  !=''"
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
+                   *ngIf="this.request.AdministrativeCopy  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
+
+
 
             </div>
           </div>
 
 
-          <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-               [(ngModel)]="request.ApproachRoad" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-               [(ngModel)]="request.ApproachRoad" value="No" /> No
-      </label>
 
 
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.ApproachRoad.errors" class="text-danger">
-      <p *ngIf="_ReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
 
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-               [(ngModel)]="request.InternalRoad" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-               [(ngModel)]="request.InternalRoad" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.InternalRoad.errors" class="text-danger">
-      <p *ngIf="_ReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>-->
+
+
+          <!--<div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order No<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="SanctionOrderNo" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">
+          <div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
+            <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="SanctionOrderDate" [(ngModel)]="request.SanctionOrderDate">
+          <div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
+            <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Santion Order Copy<span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
+
+            <label for="SanctionOrderCopy">
+              <span>Choose File</span>
+              {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
+                 *ngIf="this.request.SanctionOrderCopy  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+          <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+          <!--</div>
+
+          </div>
+        </div>-->
+          <!--<div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order No<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="TradeOrderNo" [(ngModel)]="request.TradeOrderNo" placeholder="Enter Trade Sanction Order No">
+          <div *ngIf="isSubmitted && _ReportForm.TradeOrderNo.errors" class="text-danger">
+            <p *ngIf="_ReportForm.TradeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Santion Order Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="TradeOrderDate" [(ngModel)]="request.TradeOrderDate">
+          <div *ngIf="isSubmitted && _ReportForm.TradeOrderDate.errors" class="text-danger">
+            <p *ngIf="_ReportForm.TradeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Trade Santion Order Copy<span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="TradeCopy" type="file" (change)="onFilechange($event,'TradeCopy')" />
+
+            <label for="TradeCopy">
+              <span>Choose File</span>
+              {{ request.TradeCopy === '' ? 'No File Chosen' : request.TradeCopy }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.TradeCopy}}"
+                 *ngIf="this.request.TradeCopy  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+          <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+          <!--</div>
+
+          </div>
+        </div>-->
+          <!--<div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order No<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="MetpOrderNo" [(ngModel)]="request.MetpOrderNo" placeholder="Enter METP Sanction Order No">
+          <div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
+            <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+        <div>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="MetpOrderDate" [(ngModel)]="request.MetpOrderDate">
+          <div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
+            <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of METP Santion Order Copy<span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="MetpCopy" type="file" (change)="onFilechange($event,'MetpCopy')" />
+
+            <label for="MetpCopy">
+              <span>Choose File</span>
+              {{ request.MetpCopy === '' ? 'No File Chosen' : request.MetpCopy}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.MetpCopy}}"
+                 *ngIf="this.request.MetpCopy  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+          <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+          <!--</div>
+
+          </div>
+        </div>-->
+
+          <div>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Santion of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="FinancialSanction" (keypress)="numberOnly($event)" [(ngModel)]="request.FinancialSanction" placeholder="Enter Financial Sanction">
+            <div *ngIf="isSubmitted && _ReportForm.FinancialSanction.errors" class="text-danger">
+              <p *ngIf="_ReportForm.FinancialSanction.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Santion Order Copy<span class="StarMarking">*</span> </label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="FinancialCopy" type="file" (change)="onFilechange($event,'FinancialCopy')" />
+
+              <label for="FinancialCopy">
+                <span>Choose File</span>
+                {{ request.FinancialCopy === '' ? 'No File Chosen' : request.FinancialCopy }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FinancialCopy}}"
+                   *ngIf="this.request.FinancialCopy  !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              </div>
+            </div>
+          </div>
+
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                       [(ngModel)]="request.ApproachRoad" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                       [(ngModel)]="request.ApproachRoad" value="No" /> No
+              </label>
+
+
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.ApproachRoad.errors" class="text-danger">
+              <p *ngIf="_ReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+
+          </div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                       [(ngModel)]="request.InternalRoad" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                       [(ngModel)]="request.InternalRoad" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.InternalRoad.errors" class="text-danger">
+              <p *ngIf="_ReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
           <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Water Supply Source<span class="StarMarking">*</span></label>
@@ -529,173 +659,173 @@
             </div>
           </div>
 
-          <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-               [(ngModel)]="request.Harvesting" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-               [(ngModel)]="request.Harvesting" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.Harvesting.errors" class="text-danger">
-      <p *ngIf="_ReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                       [(ngModel)]="request.Harvesting" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                       [(ngModel)]="request.Harvesting" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.Harvesting.errors" class="text-danger">
+              <p *ngIf="_ReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
-    <div *ngIf="isSubmitted && _ReportForm.ElectPhaserequired.errors" class="text-danger">
-      <p *ngIf="_ReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
+            <div *ngIf="isSubmitted && _ReportForm.ElectPhaserequired.errors" class="text-danger">
+              <p *ngIf="_ReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />-->
-          <!--<div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
-    <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-  </div>-->
-          <!--</div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
+            <div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-               [(ngModel)]="request.ElectPhase" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-               [(ngModel)]="request.ElectPhase" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.ElectPhase.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                       [(ngModel)]="request.ElectPhase" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                       [(ngModel)]="request.ElectPhase" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.ElectPhase.errors" class="text-danger">
+              <p *ngIf="!_ReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
-    <div *ngIf="isSubmitted && _ReportForm.ElectConnection.errors" class="text-danger">
-      <p *ngIf="_ReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-               [(ngModel)]="request.IsSolarPanel" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-               [(ngModel)]="request.IsSolarPanel" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.IsSolarPanel.errors" class="text-danger">
-      <p *ngIf="_ReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="request.IsSolarPanel=='Yes'">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity" (keypress)="numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
-    <div *ngIf="isSubmitted && _ReportForm.PanelCapacity.errors" class="text-danger">
-      <p *ngIf="_ReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
 
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-               [(ngModel)]="request.IsBoundaryWall" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-               [(ngModel)]="request.IsBoundaryWall" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.IsBoundaryWall.errors" class="text-danger">
-      <p *ngIf="_ReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
+            <div *ngIf="isSubmitted && _ReportForm.ElectConnection.errors" class="text-danger">
+              <p *ngIf="_ReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+                       [(ngModel)]="request.IsSolarPanel" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+                       [(ngModel)]="request.IsSolarPanel" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.IsSolarPanel.errors" class="text-danger">
+              <p *ngIf="_ReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
-  </div>
-
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
-               [(ngModel)]="request.IsHostel" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
-               [(ngModel)]="request.IsHostel" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.IsHostel.errors" class="text-danger">
-      <p *ngIf="_ReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
-    <div class="flex items-center">
-      <label class="flex items-center">
-        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-               [(ngModel)]="request.HostelUtilized" value="Yes" />
-        Yes
-      </label>
-      <label class="flex items-center ms-2">
-        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-               [(ngModel)]="request.HostelUtilized" value="No" /> No
-      </label>
-    </div>
-    <div *ngIf="isSubmitted && _ReportForm.HostelUtilized.errors" class="text-danger">
-      <p *ngIf="_ReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
+          <div *ngIf="request.IsSolarPanel=='Yes'">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity" (keypress)="numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
+            <div *ngIf="isSubmitted && _ReportForm.PanelCapacity.errors" class="text-danger">
+              <p *ngIf="_ReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
-    <div *ngIf="isSubmitted && _ReportForm.NoOfTree.errors" class="text-danger">
-      <p *ngIf="_ReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>
-  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
-    <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
-    <div *ngIf="isSubmitted && _ReportForm.Remarks.errors" class="text-danger">
-      <p *ngIf="_ReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div>-->
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+                       [(ngModel)]="request.IsBoundaryWall" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+                       [(ngModel)]="request.IsBoundaryWall" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.IsBoundaryWall.errors" class="text-danger">
+              <p *ngIf="_ReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
+
+          </div>
+
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
+                       [(ngModel)]="request.IsHostel" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
+                       [(ngModel)]="request.IsHostel" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.IsHostel.errors" class="text-danger">
+              <p *ngIf="_ReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
+            <div class="flex items-center">
+              <label class="flex items-center">
+                <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+                       [(ngModel)]="request.HostelUtilized" value="Yes" />
+                Yes
+              </label>
+              <label class="flex items-center ms-2">
+                <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+                       [(ngModel)]="request.HostelUtilized" value="No" /> No
+              </label>
+            </div>
+            <div *ngIf="isSubmitted && _ReportForm.HostelUtilized.errors" class="text-danger">
+              <p *ngIf="_ReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
+
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
+            <div *ngIf="isSubmitted && _ReportForm.NoOfTree.errors" class="text-danger">
+              <p *ngIf="_ReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+          <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
+            <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
+            <div *ngIf="isSubmitted && _ReportForm.Remarks.errors" class="text-danger">
+              <p *ngIf="_ReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
 
 
 
@@ -714,8 +844,8 @@
                    *ngIf="this.request.FrontPhoto  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -738,8 +868,8 @@
                    *ngIf="this.request.SidePhoto  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -763,8 +893,8 @@
                    *ngIf="this.request.InteriorPhoto  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -774,7 +904,7 @@
 
           <!--<div class="col-span-3 text-center">-->
           <!--<button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
-  <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>-->
           <!--</div>-->
 
         </div>
@@ -783,301 +913,275 @@
       </div>
     </form>
 
-    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Basic Details</b>
+    <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>AS Of Post Sanction Details</b>
     </div>
-    <form [formGroup]="BasicReportForm" id="HrMasterFormGroup" class="form-horizontal">
-      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order No<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">
+        <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
+        <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.SanctionOrderDate">
+        <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
+        <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-                     [(ngModel)]="request.ApproachRoad" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
-                     [(ngModel)]="request.ApproachRoad" value="No" /> No
-            </label>
 
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Santion Order Copy<span class="StarMarking">*</span> </label>
+        <div class="flex fileUploader">
+          <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
 
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.ApproachRoad.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          <label for="SanctionOrderCopy">
+            <span>Choose File</span>
+            {{ request.SanctionOrderCopy === '' ? 'No File Chosen' : request.SanctionOrderCopy }}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.SanctionOrderCopy}}"
+               *ngIf="this.request.SanctionOrderCopy  !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           </div>
 
         </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-                     [(ngModel)]="request.InternalRoad" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
-                     [(ngModel)]="request.InternalRoad" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.InternalRoad.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
+      </div>
 
 
-
-
-
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-                     [(ngModel)]="request.Harvesting" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
-                     [(ngModel)]="request.Harvesting" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.Harvesting.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-                     [(ngModel)]="request.ElectPhase" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
-                     [(ngModel)]="request.ElectPhase" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhase.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.ElectPhase=='Yes'">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
-          <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhaserequired.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)</label>
-          <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Contract Load" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
-          <!--<div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
-      <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>-->
-        </div>
-
-
-
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
-          <div *ngIf="isAddrequest1 && _BasicReportForm.ElectConnection.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-                     [(ngModel)]="request.IsSolarPanel" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
-                     [(ngModel)]="request.IsSolarPanel" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.IsSolarPanel.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="request.IsSolarPanel=='Yes'">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity" (keypress)="numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
-          <div *ngIf="isAddrequest1 && _BasicReportForm.PanelCapacity.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-                     [(ngModel)]="request.IsBoundaryWall" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
-                     [(ngModel)]="request.IsBoundaryWall" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.IsBoundaryWall.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
-
-        </div>
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
-                     [(ngModel)]="request.IsHostel" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
-                     [(ngModel)]="request.IsHostel" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.IsHostel.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsHostel=='Yes'">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-                     [(ngModel)]="request.HostelUtilized" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
-                     [(ngModel)]="request.HostelUtilized" value="No" /> No
-            </label>
-          </div>
-          <div *ngIf="isAddrequest1 && _BasicReportForm.HostelUtilized.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
-          <div *ngIf="isAddrequest1 && _BasicReportForm.NoOfTree.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
-          <div *ngIf="isAddrequest1 && _BasicReportForm.Remarks.errors" class="text-danger">
-            <p *ngIf="_BasicReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-
-
-
-
-        <div class="pt-30">
-          <button (click)="AddChoice1()" type="button" class="btn bg-primary text-white">
-            <i class="ti ti-plus"></i> Add
-            More
-          </button>
-          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
-        </div>
-
+      <div class="pt-30">
+        <button (click)="AddPost()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+          More
+        </button>
 
       </div>
-    </form>
 
 
-    <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
 
-      <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-      <b class="text-1xl-5">More Details List </b>
     </div>
-
-    <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="overflow-auto">
+    <div *ngIf="PostSanctionList.length>0" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
           <tr>
             <th>S.No</th>
-            <th>App Road Complete</th>
-            <th>Internal Road Complete </th>
-            <th>Water Harvest Struct</th>
-            <th>3 Phase Elect Load</th>
-          
-            <th>Contract Load</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Order Copy</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
+          </tr>
 
-            <!--<th>Subject Type</th>-->
-            <th>Consumer No</th>
-            <th>Solar Panel</th>
-            <th>Boundary Wall</th>
-            <th>Building Shortage</th>
-            <th>Hostel Available</th>
-            <th>Hostel Utilized</th>
-            <th>No of Tree</th>
-            <th>Remarks</th>
-            <!--<th>Self Operating</th>-->
+        </thead>  
+
+        <tbody>
+          <tr *ngFor="let row of PostSanctionList; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.OrderNo}}</td>
+            <td class="text-center">{{row.OrderDate}}</td>
+            <td  class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deletePost(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>AS Of Trade Sanction Details</b>
+    </div>
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Sanction Order No<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.TradeOrderNo" placeholder="Enter Trade Sanction Order No">
+        <!--<div *ngIf="isSubmitted && _ReportForm.TradeOrderNo.errors" class="text-danger">
+        <p *ngIf="_ReportForm.TradeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Trade Sanction Order Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.TradeOrderDate">
+        <!--<div *ngIf="isSubmitted && _ReportForm.TradeOrderDate.errors" class="text-danger">
+        <p *ngIf="_ReportForm.TradeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Trade Sanction Order Copy<span class="StarMarking">*</span> </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="TradeCopy" type="file" (change)="onFilechange($event,'TradeCopy')" />
+
+          <label for="TradeCopy">
+            <span>Choose File</span>
+            {{ request.TradeCopy === '' ? 'No File Chosen' : request.TradeCopy }}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.TradeCopy}}"
+               *ngIf="this.request.TradeCopy  !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="pt-30">
+        <button (click)="AddTrade()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+          More
+        </button>
+
+      </div>
+
+
+
+    </div>
+    <div *ngIf="TradeSanctionList.length>0" class="overflow-auto mt-4">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>S.No</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Order Copy</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
           </tr>
 
         </thead>
 
         <tbody>
-          <tr *ngFor="let row of request.BasicDetailsList; let idx = index">
+          <tr *ngFor="let row of TradeSanctionList; let idx = index">
             <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.ApproachRoad}}</td>
-            <td class="text-center">{{row.InternalRoad}}</td>
-
-            <td class="text-center">{{row.Harvesting}}</td>
-            <td class="text-center">
-              {{ row.ElectPhase }}{{ row.ElectPhase === 'Yes' ? ' - (' + row.ElectPhaserequired + ')' : '' }}
+            <td class="text-center">{{row.OrderNo}}</td>
+            <td class="text-center">{{row.OrderDate}}</td>
+            <td  class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
             </td>
 
-            <td class="text-center">{{row.ContractLoad}}</td>
-            <td class="text-center">{{row.ElectConnection}}</td>
-            <td class="text-center">{{row.IsSolarPanel}}</td>
-            <td class="text-center">{{row.IsBoundaryWall}}</td>
-            <td class="text-center">{{row.BuildShortage}}</td>
-            <td class="text-center">{{row.IsHostel}}</td>
-            <td class="text-center">{{row.HostelUtilized}}</td>
-            <td class="text-center">{{row.NoOfTree}}</td>
-            <td class="text-center">{{row.Remarks}}</td>
-            <!--<td class="text-center">{{row.IsOperatingOwn}}</td>-->
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteTrade(idx)">
+                <i class="ti ti-trash"></i>
+              </button>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
 
-            <td>
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow1(idx)">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>AS Of METP Sanction Details</b>
+    </div>
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order No<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.MetpOrderNo" placeholder="Enter METP Sanction Order No">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
+        <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.MetpOrderDate">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
+        <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>-->
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of METP Santion Order Copy<span class="StarMarking">*</span> </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="MetpCopy" type="file" (change)="onFilechange($event,'MetpCopy')" />
+
+          <label for="MetpCopy">
+            <span>Choose File</span>
+            {{ request.MetpCopy === '' ? 'No File Chosen' : request.MetpCopy}}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.MetpCopy}}"
+               *ngIf="this.request.MetpCopy!=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+          </div>
+
+        </div>
+      </div>
+
+
+      <div class="pt-30">
+        <button (click)="AddMetp()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+          More
+        </button>
+
+      </div>
+
+
+
+    </div>
+    <div *ngIf="MetpSanctionList.length>0" class="overflow-auto mt-4">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+          <tr>
+            <th>S.No</th>
+            <th>Order No</th>
+            <th>Order Date</th>
+            <th>Order Copy</th>
+            <th *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="text-left">Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let row of MetpSanctionList; let idx = index">
+            <td class="text-center">{{idx+1}}</td>
+            <td class="text-center">{{row.OrderNo}}</td>
+            <td class="text-center">{{row.OrderDate}}</td>
+            <td  class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.OrderCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+
+            <td *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteMetp(idx)">
                 <i class="ti ti-trash"></i>
               </button>
 
@@ -1089,27 +1193,329 @@
 
 
 
+    <!--<div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Basic Details</b>
+  </div>
+  <form [formGroup]="BasicReportForm" id="HrMasterFormGroup" class="form-horizontal">
+    <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+
+
+
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approach Road Complete<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                   [(ngModel)]="request.ApproachRoad" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="ApproachRoad" id="ApproachRoad" formControlName="ApproachRoad"
+                   [(ngModel)]="request.ApproachRoad" value="No" /> No
+          </label>
+
+
+        </div>
+        <div *ngIf="isAddrequest1 && _BasicReportForm.ApproachRoad.errors" class="text-danger">
+          <p *ngIf="_BasicReportForm.ApproachRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+
+      </div>
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Internal Road Complete<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                   [(ngModel)]="request.InternalRoad" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="InternalRoad" id="InternalRoad" formControlName="InternalRoad"
+                   [(ngModel)]="request.InternalRoad" value="No" /> No
+          </label>
+        </div>
+        <div *ngIf="isAddrequest1 && _BasicReportForm.InternalRoad.errors" class="text-danger">
+          <p *ngIf="_BasicReportForm.InternalRoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+
+
+
+
+
+
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Water Harvesting Structure Available<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                   [(ngModel)]="request.Harvesting" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="Harvesting" id="Harvesting" formControlName="Harvesting"
+                   [(ngModel)]="request.Harvesting" value="No" /> No
+          </label>
+        </div>
+        <div *ngIf="isAddrequest1 && _BasicReportForm.Harvesting.errors" class="text-danger">
+          <p *ngIf="_BasicReportForm.Harvesting.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Available<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                   [(ngModel)]="request.ElectPhase" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="ElectPhase" id="ElectPhase" formControlName="ElectPhase"
+                   [(ngModel)]="request.ElectPhase" value="No" /> No
+          </label>
+        </div>
+        <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhase.errors" class="text-danger">
+          <p *ngIf="_BasicReportForm.ElectPhase.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.ElectPhase=='Yes'">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> 3 Phase Electricity Load Required(kw)<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="ElectPhaserequired" [(ngModel)]="request.ElectPhaserequired" />
+        <div *ngIf="isAddrequest1 && _BasicReportForm.ElectPhaserequired.errors" class="text-danger">
+          <p *ngIf="_BasicReportForm.ElectPhaserequired.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+      <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Contract Load If Any(kw)</label>
+        <input type="text" class="form-input" id="ApplicationId" placeholder="Enter Contract Load" (keypress)="numberOnly($event)" formControlName="ContractLoad" [(ngModel)]="request.ContractLoad" />
+    <!--<div *ngIf="isSubmitted && _ReportForm.ContractLoad.errors" class="text-danger">
+    <p *ngIf="!_ReportForm.ContractLoad.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+  </div>-->
+    <!--</div>
+
+
+
+
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Consumer Number Of Electrical Connection<span class="StarMarking">*</span></label>
+    <input type="text" class="form-input" id="ApplicationId" formControlName="ElectConnection" (keypress)="numberOnly($event)" [(ngModel)]="request.ElectConnection" placeholder="Enter No of Electricirty Connection ">
+    <div *ngIf="isAddrequest1 && _BasicReportForm.ElectConnection.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.ElectConnection.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Solar Panel Available<span class="StarMarking">*</span></label>
+    <div class="flex items-center">
+      <label class="flex items-center">
+        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+               [(ngModel)]="request.IsSolarPanel" value="Yes" />
+        Yes
+      </label>
+      <label class="flex items-center ms-2">
+        <input type="radio" name="IsSolarPanel" id="IsSolarPanel" formControlName="IsSolarPanel"
+               [(ngModel)]="request.IsSolarPanel" value="No" /> No
+      </label>
+    </div>
+    <div *ngIf="isAddrequest1 && _BasicReportForm.IsSolarPanel.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.IsSolarPanel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+  <div *ngIf="request.IsSolarPanel=='Yes'">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Solar Panel Capacity<span class="StarMarking">*</span></label>
+    <input type="text" class="form-input" id="ApplicationId" formControlName="PanelCapacity" (keypress)="numberOnly($event)" [(ngModel)]="request.PanelCapacity" placeholder="Enter Solar Panel Capacity">
+    <div *ngIf="isAddrequest1 && _BasicReportForm.PanelCapacity.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.PanelCapacity.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Boundary Wall Complete<span class="StarMarking">*</span></label>
+    <div class="flex items-center">
+      <label class="flex items-center">
+        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+               [(ngModel)]="request.IsBoundaryWall" value="Yes" />
+        Yes
+      </label>
+      <label class="flex items-center ms-2">
+        <input type="radio" name="IsBoundaryWall" id="IsBoundaryWall" formControlName="IsBoundaryWall"
+               [(ngModel)]="request.IsBoundaryWall" value="No" /> No
+      </label>
+    </div>
+    <div *ngIf="isAddrequest1 && _BasicReportForm.IsBoundaryWall.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.IsBoundaryWall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Shortage(If Any)</label>
+    <input type="text" class="form-input" id="ApplicationId" formControlName="BuildShortage" [(ngModel)]="request.BuildShortage" placeholder="Enter Building Shortage">
+
+  </div>
+
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Available<span class="StarMarking">*</span></label>
+    <div class="flex items-center">
+      <label class="flex items-center">
+        <input type="radio" name="IsHostel" id="IsHostel" formControlName="IsHostel"
+               [(ngModel)]="request.IsHostel" value="Yes" />
+        Yes
+      </label>
+      <label class="flex items-center ms-2">
+        <input type="radio" name="IsHostel" id="StaffStatus" formControlName="IsHostel"
+               [(ngModel)]="request.IsHostel" value="No" /> No
+      </label>
+    </div>
+    <div *ngIf="isAddrequest1 && _BasicReportForm.IsHostel.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.IsHostel.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin && request.IsHostel=='Yes'">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel Utilized<span class="StarMarking">*</span></label>
+    <div class="flex items-center">
+      <label class="flex items-center">
+        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+               [(ngModel)]="request.HostelUtilized" value="Yes" />
+        Yes
+      </label>
+      <label class="flex items-center ms-2">
+        <input type="radio" name="HostelUtilized" id="HostelUtilized" formControlName="HostelUtilized"
+               [(ngModel)]="request.HostelUtilized" value="No" /> No
+      </label>
+    </div>
+    <div *ngIf="isAddrequest1 && _BasicReportForm.HostelUtilized.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.HostelUtilized.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">No Of Tree Planted In Campus<span class="StarMarking">*</span></label>
+    <input type="text" class="form-input" id="ApplicationId" formControlName="NoOfTree" (keypress)="numberOnly($event)" [(ngModel)]="request.NoOfTree" placeholder="Enter No of Plants Planted">
+    <div *ngIf="isAddrequest1 && _BasicReportForm.NoOfTree.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.NoOfTree.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+  <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+    <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
+    <input type="text" class="form-input" id="ApplicationId" formControlName="Remarks" [(ngModel)]="request.Remarks" placeholder="Enter Remarks">
+    <div *ngIf="isAddrequest1 && _BasicReportForm.Remarks.errors" class="text-danger">
+      <p *ngIf="_BasicReportForm.Remarks.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="pt-30">
+    <button (click)="AddChoice1()" type="button" class="btn bg-primary text-white">
+      <i class="ti ti-plus"></i> Add
+      More
+    </button>-->
+    <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+    <!--</div>
+
+
+    </div>
+  </form>
+
+
+  <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">-->
+    <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
+    <!--<b class="text-1xl-5">More Details List </b>
+  </div>
+
+  <div *ngIf="request.BasicDetailsList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="overflow-auto">
+    <table class="w-full table-border" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+        <tr>
+          <th>S.No</th>
+          <th>App Road Complete</th>
+          <th>Internal Road Complete </th>
+          <th>Water Harvest Struct</th>
+          <th>3 Phase Elect Load</th>
+
+          <th>Contract Load</th>-->
+    <!--<th>Subject Type</th>-->
+    <!--<th>Consumer No</th>
+  <th>Solar Panel</th>
+  <th>Boundary Wall</th>
+  <th>Building Shortage</th>
+  <th>Hostel Available</th>
+  <th>Hostel Utilized</th>
+  <th>No of Tree</th>
+  <th>Remarks</th>-->
+    <!--<th>Self Operating</th>-->
+    <!--</tr>
+
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let row of request.BasicDetailsList; let idx = index">
+      <td class="text-center">{{idx+1}}</td>
+      <td class="text-center">{{row.ApproachRoad}}</td>
+      <td class="text-center">{{row.InternalRoad}}</td>
+
+      <td class="text-center">{{row.Harvesting}}</td>
+      <td class="text-center">
+        {{ row.ElectPhase }}{{ row.ElectPhase === 'Yes' ? ' - (' + row.ElectPhaserequired + ')' : '' }}
+      </td>
+
+      <td class="text-center">{{row.ContractLoad}}</td>
+      <td class="text-center">{{row.ElectConnection}}</td>
+      <td class="text-center">{{row.IsSolarPanel}}</td>
+      <td class="text-center">{{row.IsBoundaryWall}}</td>
+      <td class="text-center">{{row.BuildShortage}}</td>
+      <td class="text-center">{{row.IsHostel}}</td>
+      <td class="text-center">{{row.HostelUtilized}}</td>
+      <td class="text-center">{{row.NoOfTree}}</td>
+      <td class="text-center">{{row.Remarks}}</td>-->
+    <!--<td class="text-center">{{row.IsOperatingOwn}}</td>-->
+    <!--<td>
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow1(idx)">
+              <i class="ti ti-trash"></i>
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>-->
+
+
+
     <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">For New Establish ITI</b>
     </div>
 
     <form [formGroup]="NewReportFormGroup">
       <div *ngIf="request.IsNewCollege==1" class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3">
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Construction Agency<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ConstructionAgency" [(ngModel)]="request.ConstructionAgency" placeholder="Enter Construction Agency">
           <div *ngIf="isSubmitted && _NewReportForm.ConstructionAgency.errors" class="text-danger">
             <p *ngIf="_NewReportForm.ConstructionAgency.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDName" [(ngModel)]="request.PDName" placeholder="Enter Name Of Project Director">
           <div *ngIf="isSubmitted && _NewReportForm.PDName.errors" class="text-danger">
             <p *ngIf="_NewReportForm.PDName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Project Director<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="PDMobile" maxlength="10" (keypress)="numberOnly($event)" [(ngModel)]="request.PDMobile" placeholder="Enter Mobile No Of Project Director">
           <div *ngIf="isSubmitted && _NewReportForm.PDMobile.errors" class="text-danger">
@@ -1117,14 +1523,14 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorName" [(ngModel)]="request.ContractorName" placeholder="Enter Name Of Contractor">
           <div *ngIf="isSubmitted && _NewReportForm.ContractorName.errors" class="text-danger">
             <p *ngIf="_NewReportForm.ContractorName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Mobile No Of Contractor<span class="StarMarking">*</span> </label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ContractorMobile" (keypress)="numberOnly($event)" maxlength="10" [(ngModel)]="request.ContractorMobile" placeholder="Enter Mobile No Of Contractor">
           <div *ngIf="isSubmitted && _NewReportForm.ContractorMobile.errors" class="text-danger">
@@ -1132,7 +1538,51 @@
           </div>
         </div>
 
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date of Work Started<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="StartDate" [(ngModel)]="request.StartDate">
+          <div *ngIf="isSubmitted && _NewReportForm.StartDate.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.StartDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Expected Date of Work Complete<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="CompleteDate" [(ngModel)]="request.CompleteDate">
+          <div *ngIf="isSubmitted && _NewReportForm.CompleteDate.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.CompleteDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Work Order Copy<span class="StarMarking">*</span> </label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="WorkOrderCopy" type="file" (change)="onFilechange($event,'WorkOrderCopy')" />
+
+            <label for="WorkOrderCopy">
+              <span>Choose File</span>
+              {{ request.WorkOrderCopy === '' ? 'No File Chosen' : request.WorkOrderCopy }}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkOrderCopy}}"
+                 *ngIf="this.request.WorkOrderCopy  !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)" [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
+          <div *ngIf="isSubmitted && _NewReportForm.PercentCivilWork.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Land Disputed<span class="StarMarking">*</span></label>
           <div class="flex items-center">
             <label class="flex items-center">
@@ -1150,58 +1600,131 @@
           </div>
         </div>
 
-        <div>
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
-          <div *ngIf="isSubmitted && _NewReportForm.AdministrativeeOrderNo.errors" class="text-danger">
-            <p *ngIf="_NewReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-        <div>
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
-          <div *ngIf="isSubmitted && _NewReportForm.AdministrativeOrderDate.errors" class="text-danger">
-            <p *ngIf="_NewReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
-          <div class="flex fileUploader">
-            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
-
-            <label for="AdministrativeCopy">
-              <span>Choose File</span>
-              {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
+          <div class="flex items-center">
+            <label class="flex items-center">
+              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                     [(ngModel)]="request.IsPurposeHall" value="Yes" />
+              Yes
             </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
-                 *ngIf="this.request.AdministrativeCopy  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-              <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-            </div>
-
-
-
+            <label class="flex items-center ms-2">
+              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                     [(ngModel)]="request.IsPurposeHall" value="No" /> No
+            </label>
+            <label class="flex items-center ms-2">
+              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                     [(ngModel)]="request.IsPurposeHall" value="UnAvailable" /> UnAvailable
+            </label>
+          </div>
+          <div *ngIf="isSubmitted && _NewReportForm.IsPurposeHall.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.IsPurposeHall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
 
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
+          <div class="flex items-center">
+            <label class="flex items-center">
+              <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                     [(ngModel)]="request.IsMainITI" value="Yes" />
+              Yes
+            </label>
+            <label class="flex items-center ms-2">
+              <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                     [(ngModel)]="request.IsMainITI" value="No" /> No
+            </label>
+
+          </div>
+          <div *ngIf="isSubmitted && _NewReportForm.IsMainITI.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.IsMainITI.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
+          <div class="flex items-center">
+            <label class="flex items-center">
+              <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                     [(ngModel)]="request.IsBuildingTaken" value="Yes" />
+              Yes
+            </label>
+            <label class="flex items-center ms-2">
+              <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                     [(ngModel)]="request.IsBuildingTaken" value="No" /> No
+            </label>
+
+          </div>
+          <div *ngIf="isSubmitted && _NewReportForm.IsBuildingTaken.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.IsBuildingTaken.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Post<span class="StarMarking">*</span></label>
+          <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanPost" [(ngModel)]="request.LokarpanPost" placeholder="Enter Post Name">
+          <div *ngIf="isSubmitted && _NewReportForm.LokarpanPost.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.LokarpanPost.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+        <!--<div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
+        <div *ngIf="isSubmitted && _NewReportForm.AdministrativeeOrderNo.errors" class="text-danger">
+          <p *ngIf="_NewReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
+        <div *ngIf="isSubmitted && _NewReportForm.AdministrativeOrderDate.errors" class="text-danger">
+          <p *ngIf="_NewReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
+
+          <label for="AdministrativeCopy">
+            <span>Choose File</span>
+            {{ request.AdministrativeCopy === '' ? 'No File Chosen' : request.AdministrativeCopy }}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.AdministrativeCopy}}"
+               *ngIf="this.request.AdministrativeCopy  !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+        <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+      (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+      *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+        <!--</div>
+
+
+
+        </div>
+      </div>-->
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">onFoundation Stone (Shilanyas) Date<span class="StarMarking">*</span></label>
           <input type="date" class="form-input" id="ApplicationId" formControlName="ShilanyasDate" [(ngModel)]="request.ShilanyasDate">
           <div *ngIf="isSubmitted && _NewReportForm.ShilanyasDate.errors" class="text-danger">
+            "i
             <p *ngIf="_NewReportForm.ShilanyasDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Foundation Stone (Shilanyas) Dignitary Name<span class="StarMarking">*</span></label>
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">" Foundation Stone (Shilanyas) Dignitary Name<span class="StarMarking">*</span></label>
           <input type="text" class="form-input" id="ApplicationId" formControlName="ShilanyasName" [(ngModel)]="request.ShilanyasName" placeholder="Enter Dignitary Name">
           <div *ngIf="isSubmitted && _NewReportForm.ShilanyasName.errors" class="text-danger">
             <p *ngIf="_NewReportForm.ShilanyasName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -1237,13 +1760,7 @@
 
 
 
-        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building Inauguration (Lokarpan) Post<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="LokarpanPost" [(ngModel)]="request.LokarpanPost" placeholder="Enter Post Name">
-          <div *ngIf="isSubmitted && _NewReportForm.LokarpanPost.errors" class="text-danger">
-            <p *ngIf="_NewReportForm.LokarpanPost.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
+
 
 
         <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
@@ -1262,6 +1779,29 @@
           </div>
           <div *ngIf="isSubmitted && _NewReportForm.IsOperatingOwn.errors" class="text-danger">
             <p *ngIf="_NewReportForm.IsOperatingOwn.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+
+        <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
+          <div *ngIf="isSubmitted && _NewReportForm.PercentCivilDate.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.PercentCivilDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+          </div>
+        </div>
+
+
+
+
+
+
+        <div *ngIf="request.IsBuildingTaken=='Yes'">
+          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
+          <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
+          <div *ngIf="isSubmitted && _NewReportForm.TakenOverDate.errors" class="text-danger">
+            <p *ngIf="_NewReportForm.TakenOverDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
           </div>
         </div>
 
@@ -1335,187 +1875,394 @@
       </div>
     </form>
 
-    <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add More Details</b>
+    <div *ngIf="request.IsNewCollege==0 && request.IsNewCollege!=undefined"  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Upgradation Of Existing ITIs  </b>
     </div>
-    <form [formGroup]="AddReportFormGroup1" id="HrMasterFormGroup" class="form-horizontal">
-      <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
-        <div>
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Santion of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="FinancialSanction" (keypress)="numberOnly($event)" [(ngModel)]="request.FinancialSanction" placeholder="Enter Financial Sanction">
-          <div *ngIf="isAddrequest && AddReportFormGroup.FinancialSanction.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.FinancialSanction.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    <div *ngIf="request.IsNewCollege==0 && request.IsNewCollege!=undefined" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Name of Work<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="request.WorkName" placeholder="Enter Name of Work">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
+      <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Work Started<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.WorkStarted">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
+      <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          A.S. of work(Trade/Other)<span class="StarMarking">*</span>
+        </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="WorkTradeCopy" type="file" (change)="onFilechange($event,'WorkTradeCopy')" />
+
+          <label for="WorkTradeCopy">
+            <span>Choose File</span>
+            {{ request.WorkTradeCopy === '' ? 'No File Chosen' : request.WorkTradeCopy}}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkTradeCopy}}"
+               *ngIf="this.request.WorkTradeCopy!=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           </div>
+
         </div>
+      </div>
 
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          F.S. of work (Civil/METP/Post)<span class="StarMarking">*</span>
+        </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="WorkFSCopy" type="file" (change)="onFilechange($event,'WorkFSCopy')" />
 
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Santion Order Copy<span class="StarMarking">*</span> </label>
-          <div class="flex fileUploader">
-            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                   id="FinancialCopy" type="file" (change)="onFilechange($event,'FinancialCopy')" />
-
-            <label for="FinancialCopy">
-              <span>Choose File</span>
-              {{ request.FinancialCopy === '' ? 'No File Chosen' : request.FinancialCopy }}
-            </label>
-            <div class="flex">
-              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FinancialCopy}}"
-                 *ngIf="this.request.FinancialCopy  !=''"
-                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-              <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
-            </div>
+          <label for="WorkFSCopy">
+            <span>Choose File</span>
+            {{ request.WorkFSCopy === '' ? 'No File Chosen' : request.WorkFSCopy}}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkFSCopy}}"
+               *ngIf="this.request.WorkFSCopy!=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           </div>
+
         </div>
+      </div>
 
-        <div>
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
-          <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)"  [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
-          <div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Constructor Agency Name<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" [(ngModel)]="request.WorkConstructor" placeholder="Enter Constructor Agency Name">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
+      <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Upload Sanction Order<span class="StarMarking">*</span>
+        </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="WorkSanctionCopy" type="file" (change)="onFilechange($event,'WorkSanctionCopy')" />
+
+          <label for="WorkSanctionCopy">
+            <span>Choose File</span>
+            {{ request.WorkSanctionCopy === '' ? 'No File Chosen' : request.WorkSanctionCopy}}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkSanctionCopy}}"
+               *ngIf="this.request.WorkSanctionCopy!=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           </div>
+
         </div>
+      </div>
 
-        <div>
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
-          <div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilDate.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.PercentCivilDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Date Of Work Started<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.UpdateWorkStarted">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
+      <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+
+
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Expected Date of Complition <span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.UpdateExpectedDate">
+        <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
+      <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+          Work Order Copy<span class="StarMarking">*</span>
+        </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="WorkCopy" type="file" (change)="onFilechange($event,'WorkCopy')" />
+
+          <label for="WorkCopy">
+            <span>Choose File</span>
+            {{ request.WorkCopy === '' ? 'No File Chosen' : request.WorkCopy}}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.WorkCopy}}"
+               *ngIf="this.request.WorkCopy!=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
+        (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+        *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           </div>
+
         </div>
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.UpdatePercentWork" placeholder="Enter Percentage Of Civil Work Progress">
+        <!--<div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
+      <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
+        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.UpdateRemarks" placeholder="Enter Remarks">
+        <!--<div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
+      <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>-->
+      </div>
 
 
-
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
-                     [(ngModel)]="request.IsPurposeHall" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
-                     [(ngModel)]="request.IsPurposeHall" value="No" /> No
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
-                     [(ngModel)]="request.IsPurposeHall" value="UnAvailable" /> UnAvailable
-            </label>
-          </div>
-          <div *ngIf="isAddrequest && AddReportFormGroup.IsPurposeHall.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.IsPurposeHall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
-                     [(ngModel)]="request.IsMainITI" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
-                     [(ngModel)]="request.IsMainITI" value="No" /> No
-            </label>
-
-          </div>
-          <div *ngIf="isAddrequest && AddReportFormGroup.IsMainITI.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.IsMainITI.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
-          <div class="flex items-center">
-            <label class="flex items-center">
-              <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
-                     [(ngModel)]="request.IsBuildingTaken" value="Yes" />
-              Yes
-            </label>
-            <label class="flex items-center ms-2">
-              <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
-                     [(ngModel)]="request.IsBuildingTaken" value="No" /> No
-            </label>
-
-          </div>
-          <div *ngIf="isAddrequest && AddReportFormGroup.IsBuildingTaken.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.IsBuildingTaken.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-        <div *ngIf="request.IsBuildingTaken=='Yes'">
-          <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
-          <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
-          <div *ngIf="isAddrequest && AddReportFormGroup.TakenOverDate.errors" class="text-danger">
-            <p *ngIf="AddReportFormGroup.TakenOverDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-          </div>
-        </div>
-
-
-
-
-        <div class="pt-30">
-          <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
-            <i class="ti ti-plus"></i> Add
-            More
-          </button>
-          <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
-        </div>
-
+      <div class="pt-30">
+        <button (click)="AddUpdateWork()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+          More
+        </button>
 
       </div>
-    </form>
 
 
-    <div *ngIf="request.FinancialSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
 
-      <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
-      <b class="text-1xl-5">More Details List </b>
     </div>
 
-    <div *ngIf="request.FinancialSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="overflow-auto">
+
+    <!--<div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
+    <b class="text-1xl-5"><i class="ti ti-plus"></i>Add More Details</b>
+  </div>
+  <form [formGroup]="AddReportFormGroup1" id="HrMasterFormGroup" class="form-horizontal">
+    <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
+
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Percentage of Civil Work Progress<span class="StarMarking">*</span></label>
+        <input type="text" class="form-input" id="ApplicationId" formControlName="PercentCivilWork" (keypress)="numberOnly($event)"  [(ngModel)]="request.PercentCivilWork" placeholder="Enter Percentage Of Civil Work Progress">
+        <div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+      <div>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Civil Work Progress Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" formControlName="PercentCivilDate" [(ngModel)]="request.PercentCivilDate">
+        <div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilDate.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.PercentCivilDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is MultiPurpose Hall Complete<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                   [(ngModel)]="request.IsPurposeHall" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                   [(ngModel)]="request.IsPurposeHall" value="No" /> No
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="IsPurposeHall" id="IsPurposeHall" formControlName="IsPurposeHall"
+                   [(ngModel)]="request.IsPurposeHall" value="UnAvailable" /> UnAvailable
+          </label>
+        </div>
+        <div *ngIf="isAddrequest && AddReportFormGroup.IsPurposeHall.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.IsPurposeHall.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Main  ITI Building Complete<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                   [(ngModel)]="request.IsMainITI" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="IsMainITI" id="IsMainITI" formControlName="IsMainITI"
+                   [(ngModel)]="request.IsMainITI" value="No" /> No
+          </label>
+
+        </div>
+        <div *ngIf="isAddrequest && AddReportFormGroup.IsMainITI.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.IsMainITI.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Building TakenOver<span class="StarMarking">*</span></label>
+        <div class="flex items-center">
+          <label class="flex items-center">
+            <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                   [(ngModel)]="request.IsBuildingTaken" value="Yes" />
+            Yes
+          </label>
+          <label class="flex items-center ms-2">
+            <input type="radio" name="IsBuildingTaken" id="IsBuildingTaken" formControlName="IsBuildingTaken"
+                   [(ngModel)]="request.IsBuildingTaken" value="No" /> No
+          </label>
+
+        </div>
+        <div *ngIf="isAddrequest && AddReportFormGroup.IsBuildingTaken.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.IsBuildingTaken.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+      <div *ngIf="request.IsBuildingTaken=='Yes'">
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Building TakenOver Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" formControlName="TakenOverDate" [(ngModel)]="request.TakenOverDate">
+        <div *ngIf="isAddrequest && AddReportFormGroup.TakenOverDate.errors" class="text-danger">
+          <p *ngIf="AddReportFormGroup.TakenOverDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>
+
+
+
+
+      <div class="pt-30">
+        <button (click)="AddChoice()" type="button" class="btn bg-primary text-white">
+          <i class="ti ti-plus"></i> Add
+          More
+        </button>-->
+    <!--<button type="button" class="btn bg-light text-dark"><i class="ti ti-refresh"></i> Reset</button>-->
+    <!--</div>
+
+
+    </div>
+  </form>
+
+
+  <div *ngIf="request.FinancialSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">-->
+    <!--<b class="text-1xl-5">{{ExamTypeID == 50 ?'Yearly Staff Subject List':ExamTypeID == 51 ?'Semester Staff Subject List'}} </b>-->
+    <!--<b class="text-1xl-5">More Details List </b>
+  </div>
+
+  <div *ngIf="request.FinancialSanctionList.length>0 && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="overflow-auto">
+    <table class="w-full table-border" cellpadding="5">
+      <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+        <tr>
+          <th>S.No</th>
+          <th>Financial Santion of Civil Work</th>
+          <th>Order Copy</th>
+
+          <th>Percentage</th>
+          <th>Progress Date</th>-->
+    <!--<th>Subject Type</th>-->
+    <!--<th>Multi Purpose</th>
+  <th>Main Building</th>
+  <th>Building TakeOver</th>
+  <th>Building TakeOver Date</th>-->
+    <!--<th>Self Operating</th>-->
+    <!--</tr>
+
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let row of request.FinancialSanctionList; let idx = index">
+      <td class="text-center">{{idx+1}}</td>
+      <td class="text-center">{{row.FinancialSanction}}</td>
+      <td class="text-center">
+        <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FinancialCopy}}">
+          <i class="ti ti-eye"></i>
+        </a>
+      </td>
+      <td class="text-center">{{row.PercentCivilWork}}</td>
+      <td class="text-center">{{row.IsPurposeHall}}</td>
+      <td class="text-center">{{row.IsMainITI}}</td>
+      <td class="text-center">{{row.IsMainITI}}</td>
+      <td class="text-center">{{row.IsBuildingTaken}}</td>
+      <td class="text-center">{{row.TakenOverDate}}</td>-->
+    <!--<td class="text-center">{{row.IsOperatingOwn}}</td>-->
+    <!--<td>
+            <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+              <i class="ti ti-trash"></i>
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>-->
+
+
+    <div *ngIf="request.UpdateWorkList?.length>0" class="overflow-auto mt-4">
       <table class="w-full table-border" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
           <tr>
             <th>S.No</th>
-            <th>Financial Santion of Civil Work</th>
-            <th>Order Copy</th>
-
-            <th>Percentage</th>
-            <th>Progress Date</th>
-            <!--<th>Subject Type</th>-->
-            <th>Multi Purpose</th>
-            <th>Main Building</th>
-            <th>Building TakeOver</th>
-            <th>Building TakeOver Date</th>
-            <!--<th>Self Operating</th>-->
+            <th>Work Name</th>
+            <th>A.S. of work</th>
+            <th>F.S. of work </th>
+            <th>Name of Construction </th>
+            <th>Sanction Order </th>
+            <th>Work Started </th>
+            <th>Expected date of work Complition </th>
+            <th>work Order Copy </th>
+            
+            <th>Percentage  of civil work Progress </th>
+            <th>Remarks </th>
+            <th class="text-left">Action</th>
           </tr>
 
         </thead>
 
         <tbody>
-          <tr *ngFor="let row of request.FinancialSanctionList; let idx = index">
+          <tr *ngFor="let row of request.UpdateWorkList; let idx = index">
             <td class="text-center">{{idx+1}}</td>
-            <td class="text-center">{{row.FinancialSanction}}</td>
+            <td class="text-center">{{row.WorkName}}</td>
             <td class="text-center">
-              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.FinancialCopy}}">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkTradeCopy}}">
                 <i class="ti ti-eye"></i>
               </a>
             </td>
-            <td class="text-center">{{row.PercentCivilWork}}</td>
-            <td class="text-center">{{row.IsPurposeHall}}</td>
-            <td class="text-center">{{row.IsMainITI}}</td>
-            <td class="text-center">{{row.IsMainITI}}</td>
-            <td class="text-center">{{row.IsBuildingTaken}}</td>
-            <td class="text-center">{{row.TakenOverDate}}</td>
-            <!--<td class="text-center">{{row.IsOperatingOwn}}</td>-->
-
-
+            <td class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkFSCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+            <td class="text-center">{{row.WorkConstructor}}</td>
+            <td class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkSanctionCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+            <td class="text-center">{{row.UpdateWorkStarted}}</td>
+            <td class="text-center">{{row.UpdateExpectedDate}}</td>
+            <td class="text-center">
+              <a class="btn bg-success text-white" type="button" title="View" target="_blank" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.WorkCopy}}">
+                <i class="ti ti-eye"></i>
+              </a>
+            </td>
+            <td class="text-center">{{row.UpdatePercentWork}}</td>
+            <td class="text-center">{{row.UpdateRemarks}}</td>
             <td>
-              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteRow(idx)">
+              <button class="btn bg-danger text-white" type="button" title="Delete" (click)="deleteUpdateWork(idx)">
                 <i class="ti ti-trash"></i>
               </button>
 
@@ -1524,8 +2271,6 @@
         </tbody>
       </table>
     </div>
-
-
 
 
     <div *ngIf="request.IsNewCollege!=undefined" class="card-footer text-center">
@@ -1537,7 +2282,7 @@
     </div>
   </div>
 
-</div>
+  </div>
 
 <app-otpmodal #otpModal></app-otpmodal>
 
