@@ -1495,7 +1495,7 @@
 
 
 
-    <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+    <div *ngIf="request.IsNewCollege==1 && request.IsNewCollege!=undefined && sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin " class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5">For New Establish ITI</b>
     </div>
 
