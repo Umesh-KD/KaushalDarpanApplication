@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
@@ -54,6 +54,11 @@ export class UploadTraineeLogsListComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public selectedDataList: any[] = [];
+  public isLoading: boolean = false;
+  public State: number = 0;
+  public Message: string = '';
+  public ErrorMessage: string = '';
   //end table feature default
 
   constructor(
@@ -69,6 +74,7 @@ export class UploadTraineeLogsListComponent {
     private ItiDataMasterService:ItiDataMasterService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -116,13 +122,6 @@ export class UploadTraineeLogsListComponent {
     }
   }
 
-  // async editAllottedInstitute(content: any, row: any) {
-  //   //await this.GetInstituteOptionList();
-  //   this.editInstituteReq.CandidateID = row.CandidateID
-  //   this.editInstituteReq.OptionID = row.OptionID
-  //   this.editInstituteReq.AllotmentID = row.AllotmentID
-  //   this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
-  // }
 
   // CloseModal_EditAllottedInstitute() {
   //   this.modalService.dismissAll();
@@ -168,7 +167,7 @@ export class UploadTraineeLogsListComponent {
   //   }
   // }
 
-  async OpenOTPModal_GenerateAllotmentOrder() {
+  async OpenOTPModal_GenerateAllotmentOrder_old() {
     
     let anySelected = this.TraineeLogsList.some((x: any) => x.Selected == true);
     if(!anySelected) {
@@ -176,74 +175,10 @@ export class UploadTraineeLogsListComponent {
       return;
     }
 
-    this.Swal2.Confirmation(`Are you sure you want to Generate Allotment Order for Selected Candidates!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          // do work
-          await this.GenerateAllotmentOrder_Counselling();
-        }
-      }
-    );
   }
 
 
-  async GenerateAllotmentOrder_Counselling() {
-    let selected = this.TraineeLogsList.filter((x: any) => x.Selected == true);
-
-    if(selected.length == 0) {
-      this.toastr.error("Please select at least one candidate.");
-      return;
-    }
-    selected.forEach((x: any) => {
-      x.ModifyBy = this.sSOLoginDataModel.UserID
-    })
-    try {
-      await this.counsellingMasterService.GenerateAllotmentOrder_Counselling(selected).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.DownloadFile(data.Data, 'file download');
-          await this.GetUploadedTraineeLogsData();
-        } else if(data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-    DownloadFile(FileName: string, DownloadfileName: any): void {
-
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
-      downloadLink.click();
-      // Clean up the object URL
-      window.URL.revokeObjectURL(url);
-    });
-  }
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
-  }
-
-  //table feature
-  calculateInTableTotalPage() {
+calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
   // (replace org.list here)
@@ -323,22 +258,81 @@ export class UploadTraineeLogsListComponent {
   get sortInTableDirectionAero(): string {
     return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
   }
-  //checked all (replace org. list here)
+  
   selectInTableAllCheckbox() {
     this.TraineeLogsList.forEach(x => {
       x.Selected = this.AllInTableSelect;
     });
   }
-  //checked single (replace org. list here)
+  
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
     debugger
     const data = this.TraineeLogsList.filter(x => x.LogID == item.LogID);
     data.forEach(x => {
       x.Selected = isSelected;
     });
-    //select all(toggle)
+   
     this.AllInTableSelect = this.TraineeLogsList.every(r => r.Selected);
   }
-  // end table feature
+  
 
+  
+  selectedRows: any[] = [];
+
+  async OpenOTPModal_GenerateAllotmentOrder() {
+    debugger;
+    this.selectedRows = this.paginatedInTableData.filter((x: any) => x.Selected);
+
+    if (this.selectedRows.length === 0) {
+      this.toastr.warning('Please select at least one record.', 'No Selection');
+      return;
+    }
+
+    console.log('Selected Records ==>', this.selectedRows);
+
+    this.selectedDataList = this.selectedRows.map((item: any) => ({
+      log_id: item.LogID,              
+      response: item.Response || null, 
+      isSelected: true,                
+    }));
+
+    console.log('Selected Data List (For API) ==>', this.selectedDataList);
+
+    try {
+      this.loaderService.requestStarted();
+      this.isLoading = true;
+
+      
+      await this.ItiDataMasterService.UploadStatusCheckNew(this.selectedDataList)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+
+          if (this.State === EnumStatus.Success) {
+            this.toastr.success("Items issued successfully", "", {
+              toastClass: "ngx-toastr my-update-toast"
+            });
+            this.router.navigate(['/Upload-Status-Check']);
+            
+          } else if (this.State === EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage || "Something went wrong.");
+          }
+        });
+
+      this.modalService.dismissAll();
+    } catch (ex) {
+      console.error('Error in OpenOTPModal_GenerateAllotmentOrder:', ex);
+      this.toastr.error('Something went wrong. Please try again.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isLoading = false;
+      }, 200);
+    }
+  }
+
+
+  
+  
 }

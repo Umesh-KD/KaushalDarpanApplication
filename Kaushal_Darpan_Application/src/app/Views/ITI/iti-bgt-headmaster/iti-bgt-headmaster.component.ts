@@ -24,8 +24,9 @@ import { FontsService } from "../../../Services/FontService/fonts.service";
 import { ITI_InstructorService } from "../../../Services/ITI/ITI_Instructor/ITI_Instructor.Service";
 import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel } from "../../../Models/ITI/ItiInstructorDataModel";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import { ITI_BGT_HeadMasterDataModel } from "../../../Models/ITI/ItiBGTHeadMasterDataModel";
+import { ITI_BGT_HeadMasterDataModel, ITI_BGT_HeadMasterSearchModel } from "../../../Models/ITI/ItiBGTHeadMasterDataModel";
 import { ITI_BGTHeadmasterService } from "../../../Services/ITI/ITI_BGT_Headmaster/ITI_BGTHeadmaster.Service";
+import { SweetAlert2 } from "../../../Common/SweetAlert2";
 @Component({
   selector: 'app-marksheet',
   standalone: false,
@@ -75,6 +76,7 @@ export class ItiBGTHeadmasterComponent{
   public isSubmitted:boolean=false;
   public isLoading:boolean=false;
   public request = new ITI_BGT_HeadMasterDataModel()
+  public searchRequest = new ITI_BGT_HeadMasterSearchModel()
 
 
   collegeDropDown: any = [];
@@ -97,6 +99,7 @@ export class ItiBGTHeadmasterComponent{
     private fontsService : FontsService,
     private ItiBGTHeadmasterServices: ITI_BGTHeadmasterService,
     private modalService: NgbModal,
+    private Swal2: SweetAlert2,
   ) 
   {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -131,11 +134,9 @@ export class ItiBGTHeadmasterComponent{
 
   async getBGTHeadmasterData() {
     this.loaderService.requestStarted();
-    this.ItiBGTHeadmasterServices.GetBGTHeadmasterData()
+    debugger
+    this.ItiBGTHeadmasterServices.GetBGTHeadmasterData(this.searchRequest)
       .then((data: any) => {
-        this.State = data['State'];
-        this.Message = data['Message'];
-        this.ErrorMessage = data['ErrorMessage'];
         data = JSON.parse(JSON.stringify(data));
         if (data && data.Data) {
           if(Object.keys(data).includes('Data')){
@@ -147,7 +148,7 @@ export class ItiBGTHeadmasterComponent{
           this.loadInTable();
           console.log(data);
         } else {
-          this.toastr.error(this.Message)
+          this.toastr.error(data.ErrorMessage)
         }
       }, (error: any) => {
         console.error(error);
@@ -519,14 +520,30 @@ export class ItiBGTHeadmasterComponent{
     this.InstructorSearch.Uid = this.searchForm.value.Uid;
     this.InstructorSearch.Name = this.searchForm.value.Name;
   
-    // await this.GetItiInstructorData();
-  //  this.MarksheetSearch.CollegeCode = this.searchForm.value.collegeCode;
-  //  this.MarksheetSearch.DistrictID = this.searchForm.value.districtID;
-  //  this.MarksheetSearch.InstituteID = this.searchForm.value.collegeID;
-  //  this.GetITICollegeStudent_Marksheet();
   }
 
-
+  async onDeleteClick(id: number) {
+    this.Swal2.Confirmation("Are you sure you want to delete this ?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {      
+            await this.ItiBGTHeadmasterServices.DeleteBudgetHeadById(id, this.sSOLoginDataModel.UserID).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if(data.State == EnumStatus.Success){
+                this.toastr.success(data.Message);
+                await this.getBGTHeadmasterData();
+              } else if (data.State == EnumStatus.Warning) {
+                this.toastr.warning(data.Message);
+              } else {
+                this.toastr.error(data.ErrorMessage);
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      });
+  }
 
 
 

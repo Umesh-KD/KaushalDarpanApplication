@@ -1,0 +1,168 @@
+<!-- Page Title Start -->
+<app-loader></app-loader>
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Laboratory Master</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Laboratory Master</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-plus"></i>  Add Laboratory Master</b>
+      </div>
+      <form [formGroup]="LaboratoryRequestFormGroup">
+        <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+          <!-- Stream Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Stream: <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" formControlName="StreamID">
+              <option [ngValue]="0">-- Stream --</option>
+              <option *ngFor="let item of StreamMasterList" [value]="item.StreamID">
+                {{ item.StreamName }}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && LaboratoryRequestFormGroup.get('StreamID')?.errors" class="text-danger">
+              <p *ngIf="LaboratoryRequestFormGroup.get('StreamID')?.errors?.DropdownValidators">
+                Please select a Stream.
+              </p>
+            </div>
+          </div>
+
+          <!-- Laboratory Name -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Laboratory Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text"
+                   placeholder="Enter Laboratory Name"
+                   class="form-input"
+                   id="txtName"
+                   formControlName="txtName" (input)="onNameChange($event)" />
+
+            <div *ngIf="isSubmitted && LaboratoryRequestFormGroup.get('txtName')?.errors" class="text-danger">
+              <p *ngIf="LaboratoryRequestFormGroup.get('txtName')?.errors?.required">
+                Laboratory Name is required.
+              </p>
+            </div>
+          </div>
+
+          <!-- Technician Dropdown -->
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Technician : <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select" formControlName="staffID">
+              <option [ngValue]="0">-- Technician --</option>
+              <option *ngFor="let item of staffDDLList" [value]="item.staffID">
+                {{ item.staffName }}
+              </option>
+            </select>
+
+            <div *ngIf="isSubmitted && LaboratoryRequestFormGroup.get('staffID')?.errors" class="text-danger">
+              <p *ngIf="LaboratoryRequestFormGroup.get('staffID')?.errors?.DropdownValidators">
+                Please select a Technician.
+              </p>
+            </div>
+          </div>
+
+          <!-- Active Checkbox -->
+          <div class="mt-3">
+            <label class="block">Is Active <span class="StarMarking">*</span></label>
+            <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+              <input type="checkbox" class="sr-only peer" formControlName="ActiveStatus">
+              <span class="toggleIcon"><span class="toggleTitle"></span></span>
+            </label>
+          </div>
+
+          <!-- Buttons -->
+          <div>
+            <button type="button"
+                    class="btn bg-info text-white mt-6"
+                    id="btnSave"
+                    (click)="saveData()">
+              Submit
+            </button>
+
+            <button type="button"
+                    class="btn bg-danger text-white mt-6"
+                    id="btnReset"
+                    (click)="ResetControl()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </form>
+      
+
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Equipments List</b>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div>
+    </div>
+    <div class="overflow-x-auto mt-3">
+      <table class="table table-border w-full table-auto" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th class="text-left">Sr. No.</th>
+            <th class="text-left">Department</th>
+            <th class="text-left">Stream</th>
+            <th class="text-left">Laboratory</th>
+            <th class="text-left">Staff/Instructor</th>
+            <th class="text-left">Is Active</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of LabMasterList  | tableSearchFilter:Table_SearchText;let idx=index;">
+            <td align="left">{{idx+1}}</td>
+            <td align="left">{{item.DepartmentName}}</td>
+            <td align="left">{{item.StreamName}}</td>
+            <td align="left">{{item.Lab_Name}}</td>
+            <td align="left">{{item.StaffName}}</td>
+            <td align="left"> 
+              <span [ngClass]="{
+                                'LabStatus-active': item.Lab_ActiveStatus === true,
+                                'LabStatus-inactive': item.Lab_ActiveStatus === false
+                               }">
+                {{ item.Lab_ActiveStatus === false ? 'Inactive' : 'Active' }}
+              </span>
+            </td>
+            <td align="left">
+              <a href="javascript:void(0)" (click)="btnEdit_OnClick(item.Lab_Id)" title="Edit"><i class="ti ti-pencil"></i></a>
+              <a *ngIf="_EnumRole.DTELateral == getRoleID || _EnumRole.AdminNon == getRoleID || _EnumRole.Admin == getRoleID || _EnumRole.NodalVerifier == getRoleID || _EnumRole.DTENON == getRoleID || _EnumRole.DTE == getRoleID || _EnumRole.DTEDegreeCourse2ndYear == getRoleID || _EnumRole.DTEDegreeCourse1stYear == getRoleID" href="javascript:void(0)" (click)="btnDelete_OnClick(item.Lab_Id)" title="Delete"><i class="ti ti-trash"></i> </a>
+            </td>
+          </tr>
+        </tbody>
+      </table> 
+    </div>
+  </div>
+</div>
+<!-- end row -->

@@ -846,6 +846,8 @@ const routes: Routes = [
       { path: 'AddItiCampusPost/:id', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post/iticampus-post.module').then(m => m.ItiCampusPostModule) },
       { path: 'ItiCampusPostList', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-post-list/iticampus-post-list.module').then(m => m.ItiCampusPostListModule) },
       { path: 'ItiCampusPostValidation', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
+      { path: 'ItiCampusPostValidation/:flag', loadChildren: () => import('./Views/ITI/ITI-Campus/iticampus-validation/iticampus-validation.module').then(m => m.ItiCampusValidationModule) },
+      
       { path: 'Grievance', loadChildren: () => import('./Views/grievance/grievance.module').then(m => m.GrievanceModule) },
       { path: 'GrievanceList', loadChildren: () => import('./Views/GrievanceList/GrievanceList.module').then(m => m.GrievanceListModule) },
       { path: 'VerifyRollnumber/:id/:status', loadChildren: () => import('./Views/verify-roll-number/verify-roll-number.module').then(m => m.VerifyRollNumberModule) },
@@ -1449,8 +1451,8 @@ const routes: Routes = [
       { path: 'tabulation-report', loadChildren: () => import('./Views/BTER/tabulation-report/tabulation-report.module').then(m => m.TabulationReportModule) },
 
       { path: 'OfficeVacancy', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/OfficeVacancy/OfficeVacancy.module').then(m => m.OfficeVacancyModule), title: 'Extra Ordinary Leaves For Staff' },
-
-      { path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+{ path: 'bter-issue-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-issue-items/bter-issue-item.module').then(m => m.AddBterIssueItemModule) },
+      { path: 'bter-lab-master', loadChildren: () => import('./Views/BTER/bter-item-manage/dtelaboratory-master/dtelaboratory-master-module').then(m => m.DteLaboratoryMasterModule) },
       { path: 'bter-return-item', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-return-items/bter-return-item.module').then(m => m.AddBterReturnItemModule) },
       { path: 'bter-inventory-Issue-History', loadChildren: () => import('./Views/BTER/bter-item-manage/inventory-Issue-History/bter-inventory-Issue-History.module').then(m => m.bterinventoryIssueHistoryModule) },
       { path: 'bter-inventory_Issue-report', loadChildren: () => import('./Views/BTER/bter-item-manage/bter-INV_Issue-report/bter-INV_Issue-report.module').then(m => m.bterINVIssuereportModule) },
@@ -1469,7 +1471,7 @@ const routes: Routes = [
       { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
       {path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
       {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
-      {path:'Traineelist', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
+      { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },

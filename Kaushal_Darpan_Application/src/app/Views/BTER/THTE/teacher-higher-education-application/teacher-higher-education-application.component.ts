@@ -77,7 +77,10 @@ export class TeacherHigherEducationApplicationComponent {
   public GetAllInstitutionalsDDLList: any[] = [];//ddl
   public THTE_ApplicationList: any[] = [];//ddl
   public UserRequestHistoryList: any[] = [];
+  public InstituteMasterDDL: any[] = [];
   public teacherHigherEducationApplicationRequest = new TeacherHigherEducationApplicationRequestModel();
+  public IsYear: boolean = false;
+  public YearMessage: string = '';
 
   constructor(private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
@@ -98,20 +101,22 @@ export class TeacherHigherEducationApplicationComponent {
       dOB: [{ value: '', disabled: true }, [Validators.required]],
       joiningDate: [{ value: '', disabled: true }, [Validators.required]],
       appliedCourse: ['', [DropdownValidators]],
-      appliedInstitute: ['', [Validators.required]],
+      appliedInstitute: ['', [DropdownValidators]],
       pHDStatus: ['', [Validators.required]],
       appliedInstituteDistance: ['', [Validators.required]],
       appliedInstituteCategory: ['', [DropdownValidators]],
       appliedInstituteSubCategory: [''],
+      QualificationAtJoining: [{ value: '', disabled: true }],
+      QualificationAfterJoining: [{ value: '', disabled: true }]
     });
     this.ButtonText = "Save";
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    this.teacherHigherEducationApplicationSaveRequest.AppliedInstitute = "0";
     //load data
     await this.GetPersonalDetailByUserID();
     await this.GetAllAppliedCoursesDDL();
-    await this.GetCategoryOfApplyCourseInstitute();
+    await this.GetInstituteMaster();
     await this.GetTHTE_ApplicationData();
   }
 
@@ -133,6 +138,8 @@ export class TeacherHigherEducationApplicationComponent {
           this.teacherHigherEducationApplicationSaveRequest.TeacherName = this.request.Name;
           this.teacherHigherEducationApplicationSaveRequest.DOB = this.request.DateOfBirth;
           this.teacherHigherEducationApplicationSaveRequest.JoiningDate = this.request.DateOfJoining;
+          this.teacherHigherEducationApplicationSaveRequest.QualificationAtJoining = this.request.QualificationAtJoining;
+          this.teacherHigherEducationApplicationSaveRequest.QualificationAfterJoining = this.request.QualificationAfterJoining;
 
         }
 
@@ -140,8 +147,28 @@ export class TeacherHigherEducationApplicationComponent {
 
       }, error => console.error(error))
 
-      
+      const joiningDateValue = this.teacherHigherEducationApplicationSaveRequest.JoiningDate;
 
+      if (joiningDateValue) {
+        const joiningDate = new Date(joiningDateValue);
+        const today = new Date();
+
+        // Calculate difference in years
+        const diffInMs = today.getTime() - joiningDate.getTime();
+        const diffInYears = diffInMs / (1000 * 60 * 60 * 24 * 365.25); // Approx years
+
+        if (diffInYears < 3) {
+          this.toastr.warning("Joining date must be at least 3 years before or equal to today's date.");
+          this.IsYear = false;
+          this.YearMessage ="Joining date must be at least 3 years before or equal to today's date"
+        }
+        else {
+          this.IsYear = true;
+          this.YearMessage = "You can apply for higher education"
+          this.toastr.success("You can apply for higher education .");
+        }
+
+      }
 
     } catch (error) {
       console.error(error);
@@ -153,7 +180,23 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
 
+  GetInstituteMaster() {
+    //const officeList = [
+    //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID :17},
+    //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
+    //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
+    //];
 
+    this.commonMasterService.InstituteMaster(
+      this.sSOLoginDataModel.DepartmentID,
+      this.sSOLoginDataModel.Eng_NonEng,
+      this.sSOLoginDataModel.EndTermID
+    ).then((response: any) => {
+      const instituteList = Array.isArray(response?.Data) ? response.Data : [];
+      this.InstituteMasterDDL = instituteList;
+      //this.InstituteMasterDDL = officeList.concat(instituteList);
+    });
+  }
   async GetAllAppliedCoursesDDL() {
     try {
       await this.teacherHigherEducationApplicationService.GetAllAppliedCoursesDDL(this.requestDDl)
@@ -168,12 +211,20 @@ export class TeacherHigherEducationApplicationComponent {
   }
 
 
+  async getAppliedCoursesByIDDDLFill() {
+    debugger
+
+    this.GetCategoryOfApplyCourseInstitute();
+  }
+
   async GetCategoryOfApplyCourseInstitute() {
     try {
+      debugger
       await this.teacherHigherEducationApplicationService.GetCategoryOfApplyCourseInstitute(this.requestDDl)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CategoryOfApplyCourseInstituteList = data['Data'];
+          this.CategoryOfApplyCourseInstituteList=this.CategoryOfApplyCourseInstituteList.filter((item: any) => item.AppiedSubCatID == this.teacherHigherEducationApplicationSaveRequest.AppliedCourse);
         }, (error: any) => console.error(error));
     }
     catch (Ex) {
@@ -200,20 +251,32 @@ export class TeacherHigherEducationApplicationComponent {
 
 
   async AC_appliedInstituteCategoryDDl() {
+   
+        if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 3) {
+          await this.GetAllInstitutionalsDDL();
 
-    if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 3) {
-      await this.GetAllInstitutionalsDDL();
+          this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
 
-      this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
+        } else {
+          this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].clearValidators();
+          this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory = 0;
+        }
 
-    } else {
-      this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].clearValidators();
-      this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteSubCategory = 0;
+        this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
+
+
+        if (this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 2 || this.teacherHigherEducationApplicationSaveRequest.AppliedInstituteCourseCategory == 4) {
+          this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'Yes';
+        } else {
+          this.teacherHigherEducationApplicationSaveRequest.PHDStatusSt = 'No';
+        }
     }
 
-    this.ApplyTeacherHigerTechnicalEducationFromGroup.controls['appliedInstituteSubCategory'].updateValueAndValidity();
 
-  }
+    
+
+
+  
 
   async GetTHTE_ApplicationData() {
     try {
@@ -276,6 +339,7 @@ export class TeacherHigherEducationApplicationComponent {
             this.toastr.success(this.Message)
             this.Reset();
             this.GetTHTE_ApplicationData();
+            window.location.reload(); 
             this.ButtonText = "Save";
           } else if (data.State == EnumStatus.Warning) {
             this.toastr.warning(this.Message);
@@ -391,9 +455,12 @@ export class TeacherHigherEducationApplicationComponent {
             AppliedInstituteSubCategory: jsonResult.AppliedInstituteSubCategory,
             Remark: jsonResult.Remark,
             CreatedBy: jsonResult.CreatedBy,
-            InstituteID: jsonResult.InstituteID
+            InstituteID: jsonResult.InstituteID,
+            QualificationAtJoining:'',
+            QualificationAfterJoining:''
           };
-          
+          await this.getAppliedCoursesByIDDDLFill();
+
         } else {
           this.toastr.error('Data not found.');
         }
@@ -453,6 +520,7 @@ export class TeacherHigherEducationApplicationComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.UserRequestHistoryList = data.Data;
+          this.UserRequestHistoryList = this.UserRequestHistoryList.filter((item: any) => item.StatusID == 1340 || item.StatusID == 1345)
           this.showJoiningStatusColumn = this.UserRequestHistoryList?.some(r => r.RequestTypeID === 1);
           this.totalRecord = this.UserRequestHistoryList[0]?.TotalRecords;
           this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);

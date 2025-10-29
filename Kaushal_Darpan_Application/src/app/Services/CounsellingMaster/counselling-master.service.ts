@@ -86,4 +86,14 @@ export class CounsellingMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async UploadStatusCheckNew(request: any[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UploadStatusCheckNew`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

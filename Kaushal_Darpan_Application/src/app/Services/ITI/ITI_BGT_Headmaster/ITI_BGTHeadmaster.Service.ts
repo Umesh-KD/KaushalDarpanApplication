@@ -3,7 +3,7 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel } from '../../../Models/ITI/ItiInstructorDataModel';
-import { ITI_BGT_HeadMasterDataModel } from '../../../Models/ITI/ItiBGTHeadMasterDataModel';
+import { ITI_BGT_HeadMasterDataModel, ITI_BGT_HeadMasterSearchModel } from '../../../Models/ITI/ItiBGTHeadMasterDataModel';
 
 
 
@@ -46,8 +46,8 @@ export class ITI_BGTHeadmasterService {
       ).toPromise();
   }
 
-  public async GetBGTHeadmasterData() {
-    var body = JSON.stringify({});
+  public async GetBGTHeadmasterData(request: ITI_BGT_HeadMasterSearchModel) {
+    var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetBGTHeadmasterData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -56,6 +56,14 @@ export class ITI_BGTHeadmasterService {
 
   public async deleteInstructorDataByID(id: number) {
     return await this.http.get(`${this.APIUrl}/deleteInstructorDataByID/${id}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteBudgetHeadById(HeadId: number, UserID: number) {
+    debugger
+    return await this.http.delete(`${this.APIUrl}/DeleteBudgetHeadById/${HeadId}/${UserID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
