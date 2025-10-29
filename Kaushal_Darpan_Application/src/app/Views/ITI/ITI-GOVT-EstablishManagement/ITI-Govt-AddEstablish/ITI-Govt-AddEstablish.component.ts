@@ -103,6 +103,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       txtMobileNo: [{ value: '', disabled: true }],
       txtEmailID: [{ value: '', disabled: true }],
       ddlHostel: [''],
+      ddlPost: ['', [DropdownValidators]]
     })
    /* txtName: [{ value: '', disabled: true }],*/
    /* Applied: [{ value: '', disabled: true }, Validators.required],*/
@@ -657,7 +658,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.formData.StaffLevelID = 0;
     this.AddValidationStaffWiseNon();
     this.AddValidationStaffWise();
-   
+       await this.GetPostList();  
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.StaffTypeID = this.formData.StaffTypeID;
     //Teaching=30
@@ -1013,7 +1014,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          /*this.PostList = this.PostList.filter((itme: any) => itme.IsPostTypeID == 1)*/
+          this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
           console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
