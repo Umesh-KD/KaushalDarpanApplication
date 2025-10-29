@@ -401,7 +401,7 @@ export class ItiCollegeReportComponent {
 
 
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetParliamentMaster(this.request.DistrictID)
+      await this.commonMasterService.GetParliamentMaster()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
