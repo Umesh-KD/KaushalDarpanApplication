@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
@@ -74,6 +74,7 @@ export class UploadTraineeLogsListComponent {
     private ItiDataMasterService:ItiDataMasterService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -275,64 +276,11 @@ calculateInTableTotalPage() {
   }
   
 
-
-
-  
-
   
   selectedRows: any[] = [];
 
-  //async OpenOTPModal_GenerateAllotmentOrder() {
-  //  debugger
-  //  this.selectedRows = this.paginatedInTableData.filter((x: any) => x.Selected);
-
-  //  if (this.selectedRows.length === 0) {
-  //    this.toastr.warning('Please select at least one record.', 'No Selection');
-  //    return;
-  //  }
-  //  console.log('Selected Records==>', this.selectedRows);
-
-  //  this.selectedDataList = this.paginatedInTableData.filter((item: any) => item.Selected).map((item: any) => ({
-  //    ...item
-  //  }));
-  //  console.log('Selected Data List==>', this.selectedDataList);
-  //  try {
-  //    await this.ItiDataMasterService.UploadStatusCheckNew(this.selectedDataList)
-  //      .then((data: any) => {
-  //        this.State = data['State'];
-  //        this.Message = data['Message'];
-  //        this.ErrorMessage = data['ErrorMessage'];
-
-  //        if (this.State == EnumStatus.Success) {
-  //          this.toastr.success("Items issued successfully", "", {
-  //            toastClass: "ngx-toastr my-update-toast"
-  //          });
-
-  //          //this.GetAllData();
-  //          // this.CloseModalPopup();
-  //        } else if (this.State == EnumStatus.Error) {
-  //          this.toastr.error("Something went wrong.");
-  //        }
-  //      });
-
-  //    this.modalService.dismissAll();
-  //  } catch (ex) {
-  //    console.error(ex);
-  //    this.toastr.error('Something went wrong. Please try again.');
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-  //    }, 200);
-  //  }
-
-
-  //}
-
-
   async OpenOTPModal_GenerateAllotmentOrder() {
     debugger;
-
     this.selectedRows = this.paginatedInTableData.filter((x: any) => x.Selected);
 
     if (this.selectedRows.length === 0) {
@@ -365,7 +313,7 @@ calculateInTableTotalPage() {
             this.toastr.success("Items issued successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
-
+            this.router.navigate(['/Upload-Status-Check']);
             
           } else if (this.State === EnumStatus.Error) {
             this.toastr.error(this.ErrorMessage || "Something went wrong.");
