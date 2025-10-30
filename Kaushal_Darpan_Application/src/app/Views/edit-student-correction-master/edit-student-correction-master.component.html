@@ -55,33 +55,6 @@
             </div>
           </div>
 
-          
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-               Mobile Number <span class="StarMarking">*</span>
-            </label>
-            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
-            <div *ngIf="isSubmitted && _CandidateFormGroup.MobileNo.errors" class="text-danger">
-              <p *ngIf="_CandidateFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-                <!-- <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.required">Mobile number is required!</p> -->
-                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.pattern">Only digits allowed!</p>
-                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.minlength">Mobile number must be 10 digits!</p>
-                <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.maxlength">Mobile number must be 10 digits!</p>
-            </div>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Email <span class="StarMarking">*</span>
-            </label>
-            <input type="email" class="form-input" placeholder="Enter Email" id="Email" name="Email" 
-               [(ngModel)]="request.Email" formControlName="Email">
-            <div *ngIf="isSubmitted && _CandidateFormGroup.Email.errors" class="text-danger">
-              <p *ngIf="_CandidateFormGroup.Email.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              <p *ngIf="_CandidateFormGroup.Email.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
-            </div>
-          </div>
-
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Mother's Name <span class="StarMarking">*</span>
@@ -112,23 +85,23 @@
 
 
           <!-- <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
-              <option selected value="0">Choose Option</option>
-              <option value="97">Male</option>
-              <option value="98">Female</option>
-              <option value="0">Female</option>
-            </select>
-            <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
-              <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
+    <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
+      <option selected value="0">Choose Option</option>
+      <option value="97">Male</option>
+      <option value="98">Female</option>
+      <option value="0">Female</option>
+    </select>
+    <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
+      <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div> -->
 
 
-            <div>
+          <div>
             <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">Gender:<span class="StarMarking">*</span></label>
             <!--<input type="text" class="form-input disabled" id="Gender" disabled value="Male" formControlName="Gender" [(ngModel)]="request.Gender">-->
-            <select class="form-select" id="CandidateGender" formControlName="CandidateGender"  [(ngModel)]="request.Gender">
+            <select class="form-select" id="CandidateGender" formControlName="CandidateGender" [(ngModel)]="request.Gender">
               <option value="0" selected>--Select Gender--</option>
               <option *ngFor="let item of GenderList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
@@ -137,13 +110,42 @@
             </div>
           </div>
 
-          
-   
+
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Mobile Number <span class="StarMarking">*</span>
+            </label>
+            <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.MobileNo.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <!-- <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.required">Mobile number is required!</p> -->
+              <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.pattern">Only digits allowed!</p>
+              <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.minlength">Mobile number must be 10 digits!</p>
+              <p *ngIf="_CandidateFormGroup['MobileNo'].errors?.maxlength">Mobile number must be 10 digits!</p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Email <span class="StarMarking">*</span>
+            </label>
+            <input type="email" class="form-input" placeholder="Enter Email" id="Email" name="Email"
+                   [(ngModel)]="request.Email" formControlName="Email">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.Email.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.Email.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              <p *ngIf="_CandidateFormGroup.Email.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+            </div>
+          </div>
+
+
+
 
         </div>
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
           <div class="text-center">
-            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Edit':'Submit'}}</button>          
+            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Update':'Submit'}}</button>          
             <button *ngIf="key==1 || key==2" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
               <i class="ti ti-refresh"></i> Reset
             </button>
