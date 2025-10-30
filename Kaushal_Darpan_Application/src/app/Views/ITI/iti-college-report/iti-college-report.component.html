@@ -402,15 +402,15 @@
 
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order No<span class="StarMarking">*</span></label>
+            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Sanction Order No">
             <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
               <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
           </div>
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order Date<span class="StarMarking">*</span></label>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Sanction Order Date<span class="StarMarking">*</span></label>
             <input type="date" class="form-input" id="ApplicationId" formControlName="AdministrativeOrderDate" [(ngModel)]="request.AdministrativeOrderDate">
             <div *ngIf="isSubmitted && _ReportForm.AdministrativeOrderDate.errors" class="text-danger">
               <p *ngIf="_ReportForm.AdministrativeOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -420,7 +420,7 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Santion Order Copy<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Administrative Sanction Order Copy<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="AdministrativeCopy" type="file" (change)="onFilechange($event,'AdministrativeCopy')" />
@@ -567,7 +567,7 @@
         </div>-->
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Santion of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Sanction of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="FinancialSanction" (keypress)="numberOnly($event)" [(ngModel)]="request.FinancialSanction" placeholder="Enter Financial Sanction">
             <div *ngIf="isSubmitted && _ReportForm.FinancialSanction.errors" class="text-danger">
               <p *ngIf="_ReportForm.FinancialSanction.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -576,7 +576,7 @@
 
 
           <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Santion Order Copy<span class="StarMarking">*</span> </label>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Financial Sanction Order Copy<span class="StarMarking">*</span> </label>
             <div class="flex fileUploader">
               <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="FinancialCopy" type="file" (change)="onFilechange($event,'FinancialCopy')" />
@@ -920,7 +920,7 @@
     </div>
     <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
       <div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order No<span class="StarMarking">*</span></label>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Sanction Order No<span class="StarMarking">*</span></label>
         <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.SanctionOrderNo" placeholder="Enter Post Sanction Order No">
         <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderNo.errors" class="text-danger">
         <p *ngIf="_ReportForm.SanctionOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -928,7 +928,7 @@
       </div>
 
       <div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Santion Order Date<span class="StarMarking">*</span></label>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of Post Sanction Order Date<span class="StarMarking">*</span></label>
         <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.SanctionOrderDate">
         <!--<div *ngIf="isSubmitted && _ReportForm.SanctionOrderDate.errors" class="text-danger">
         <p *ngIf="_ReportForm.SanctionOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -939,7 +939,7 @@
 
 
       <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Santion Order Copy<span class="StarMarking">*</span> </label>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of Post Sanction Order Copy<span class="StarMarking">*</span> </label>
         <div class="flex fileUploader">
           <input [disabled]="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                  id="SanctionOrderCopy" type="file" (change)="onFilechange($event,'SanctionOrderCopy')" />
@@ -1107,7 +1107,7 @@
     </div>
     <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIPlanningAdmin" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 ">
       <div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order No<span class="StarMarking">*</span></label>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Sanction Order No<span class="StarMarking">*</span></label>
         <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.MetpOrderNo" placeholder="Enter METP Sanction Order No">
         <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderNo.errors" class="text-danger">
         <p *ngIf="_ReportForm.MetpOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -1115,7 +1115,7 @@
       </div>
 
       <div>
-        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Santion Order Date<span class="StarMarking">*</span></label>
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">A.s Of METP Sanction Order Date<span class="StarMarking">*</span></label>
         <input type="date" class="form-input" id="ApplicationId" [(ngModel)]="request.MetpOrderDate">
         <!--<div *ngIf="isSubmitted && _ReportForm.MetpOrderDate.errors" class="text-danger">
         <p *ngIf="_ReportForm.MetpOrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -1124,7 +1124,7 @@
 
 
       <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of METP Santion Order Copy<span class="StarMarking">*</span> </label>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">A.s Of METP Sanction Order Copy<span class="StarMarking">*</span> </label>
         <div class="flex fileUploader">
           <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                  id="MetpCopy" type="file" (change)="onFilechange($event,'MetpCopy')" />
