@@ -311,8 +311,17 @@ calculateInTableTotalPage() {
 
           if (this.State === EnumStatus.Success) {
             this.toastr.success("Items issued successfully", "", {
+
+
               toastClass: "ngx-toastr my-update-toast"
             });
+
+            
+            this.paginatedInTableData.forEach((x: any) => x.Selected = false);
+            this.AllInTableSelect = false;
+            this.selectedRows = [];
+            this.selectedDataList = [];
+
             this.router.navigate(['/Upload-Status-Check']);
             
           } else if (this.State === EnumStatus.Error) {

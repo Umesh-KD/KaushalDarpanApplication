@@ -60,11 +60,12 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">
-               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" /> 
+               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
+            
             <th class="text-left">Sr.No.</th>
-            <th class="text-left">LogID </th>  
-            <th class="text-left">Response </th>  
+            <th class="text-left">LogID </th>
+            <th class="text-left">Response </th>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +74,11 @@
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
             </td>
-            <td align="left">{{(startInTableIndex+1)+idx}}</td>         
+            
+            <td align="left">{{(startInTableIndex+1)+idx}}</td>
             <td align="left">{{row.LogID}}</td>
-            <td align="left">{{row.Response}}</td>   
-           
+            <td align="left">{{row.Response}}</td>
+
           </tr>
         </tbody>
       </table>
