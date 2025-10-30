@@ -11,6 +11,7 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2'
 import { ReportService } from '../../../Services/Report/report.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
+import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-iti-establishment-list',
   standalone: false,
@@ -129,7 +130,98 @@ export class ItiEstablishmentListComponent {
     this.searchRequest.IsNewCollege = 2
     this.searchRequest.InstituteID = 0
   }
+  exportToExcel(): void {
+    const wantedColumns = [
+      'AnnoucementType',
+      'DivisionName',
+      'DistrictName',
+      'LoksabhaConstituency',
+      'VidhanSabhaConstituency',
+      'SubDivision',
+      'TehsilName',
+      'PanchayatSamiti1',
+      'Urban/Rural',
+      'GramPanchayatSamitiName',
+      'VillageName',
+      'CollegeName',
+      'Principal/SuperintendentName',
+      'PrincipalMobile',
+      'PrincipleEmailID',
+      'Category',
+      'NameOfConstructionAgency',
+      'PDName',
+      'PDMobile',
+      'ContractorName',
+      'ContractorName',
+      'ContractorMobile',
+      'LandType',
+      'LandAvailable',
+      'LandAddress',
+      'Pincode',
+      'DistanceFromPanchayat',
+      'LandDispute',
+      'AdministrativeOrderNo',
+      'AdministrativeOrderDate',
+      'WorkStartDate',
+      'WorkCompleteDate',
+      'PercentageOfCivilWorkprogress',
+      'MultipurposeHallStatus',
+      'IsMainITIBuilding',
+      'BuildingTakeOver',
+      'ApproachRoadComplete',
+      'InternalRoadComplete',
+      'WaterSupplySource',
+      'WaterHarvestingStructure',
+      'IsRequired3Phase_KW',
+      'ContractLoad',
+      'Is3PhaseAvailable',
+      'NoOfElectricalConnection',
+      'IsSolarPanelAvailable',
+      'PanelCapacity',
+      'IsBoundaryWall',
+      'BuildShortage',
+      'IsOperatingOwn',
+      'IsHostelAvailable',
+      'HostelUtilized',
+      'ShilanyasName',
+      'ShilanyasDate',
+      'NoOfTree',
 
+    
+    ];
+
+    // ✅ Keep only wanted columns
+    const filteredData = this.ExaminersList.map((item: any) => {
+      const filteredItem: any = {};
+      wantedColumns.forEach(key => {
+        if (item.hasOwnProperty(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+
+    // ✅ Create worksheet
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // ✅ Auto column width
+    const colWidths = Object.keys(filteredData[0] || {}).map(key => {
+      const maxLength = Math.max(
+        key.length,
+        ...filteredData.map((row: any) =>
+          row[key] ? row[key].toString().length : 0
+        )
+      );
+      return { wch: maxLength + 5 }; // Add 5 for spacing
+    });
+
+    ws['!cols'] = colWidths;
+
+    // ✅ Create workbook and export
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'PlanningList');
+    XLSX.writeFile(wb, 'PlanningList.xlsx');
+  }
 
 
 }

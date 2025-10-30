@@ -107,6 +107,7 @@
           </div>
 
           <div>
+          
             <label>District<span class="StarMarking">*</span></label>
             <select formControlName="DistrictID" class="form-select" id="DistrictId" (change)="ddlDistrict_Change()"
                     [(ngModel)]="request.DistrictID">
@@ -132,7 +133,7 @@
                     id="CollegeID"
                     [(ngModel)]="request.Loksabha"
                     formControlName="Loksabha"
-                    (change)="GetAssemblyITI($event.target.value)">
+                    >
               <option value="">--Select--</option>
               <option *ngFor="let item of ParliamentMaster" [value]="item.ID">
                 {{ item.Name }}
@@ -146,6 +147,7 @@
           </div>
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Vidhansabha Constituency<span class="StarMarking">*</span></label>
+     
             <!--<input type="text" class="form-input" id="ApplicationId" formControlName="Vidhansabha" [(ngModel)]="request.Vidhansabha" placeholder="Enter Vidhansabha Constituency">-->
             <select class="form-select" id="CollegeID" [(ngModel)]="request.Vidhansabha" formControlName="Vidhansabha">
               <option value="">--Select--</option>
@@ -353,7 +355,7 @@
               <option value="">--Select--</option>
 
               <option value="1">Bigha</option>
-              <option value="2">Hector</option>
+              <option value="2">Hectare</option>
 
             </select>
 
@@ -363,7 +365,7 @@
           </div>
 
           <div *ngIf="sSOLoginDataModel.RoleID==_enumRole.ITIBuildingAdmin">
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Available (Bigha/Hector)<span class="StarMarking">*</span></label>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Land Available (Bigha/Hectare)<span class="StarMarking">*</span></label>
             <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="LandAvailable" [(ngModel)]="request.LandAvailable" placeholder="Enter Land Available">
             <div *ngIf="isSubmitted && _ReportForm.LandAvailable.errors" class="text-danger">
               <p *ngIf="_ReportForm.LandAvailable.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
@@ -401,7 +403,7 @@
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Administrative Santion Order No<span class="StarMarking">*</span></label>
-            <input type="text" class="form-input" id="ApplicationId" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
+            <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" formControlName="AdministrativeeOrderNo" [(ngModel)]="request.AdministrativeOrderNo" placeholder="Enter Administrative Santion Order No">
             <div *ngIf="isSubmitted && _ReportForm.AdministrativeeOrderNo.errors" class="text-danger">
               <p *ngIf="_ReportForm.AdministrativeeOrderNo.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
             </div>
@@ -2030,7 +2032,7 @@
 
       <div>
         <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Remarks</label>
-        <input type="text" class="form-input" id="ApplicationId" (keypress)="numberOnly($event)" [(ngModel)]="request.UpdateRemarks" placeholder="Enter Remarks">
+        <input type="text" class="form-input" id="ApplicationId"  [(ngModel)]="request.UpdateRemarks" placeholder="Enter Remarks">
         <!--<div *ngIf="isAddrequest && AddReportFormGroup.PercentCivilWork.errors" class="text-danger">
       <p *ngIf="AddReportFormGroup.PercentCivilWork.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
     </div>-->
