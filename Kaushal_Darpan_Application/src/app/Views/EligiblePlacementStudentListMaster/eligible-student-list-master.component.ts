@@ -55,10 +55,11 @@ export class EligibleStudentListMasterComponent implements OnInit {
   }
 
 
+
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};

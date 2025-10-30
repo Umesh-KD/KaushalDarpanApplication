@@ -109,6 +109,7 @@
           <tr>
             <th class="text-left">Sr No</th>
             <!--<th class="text-left">Exam Name</th>-->
+            <th class="text-left">Annoucement Type</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Establishment Year</th>
             <th class="text-left">Is New Establishment</th>
@@ -122,6 +123,7 @@
         <tbody>
           <tr *ngFor="let examiner of ExaminersList | tableSearchFilter:Table_SearchText;let idx=index;">
             <td align="left">{{idx+1}}</td>
+            <td>{{examiner.AnnoucementType}}</td>
             <td>{{examiner.CollegeName}}</td>
             <td>{{examiner.Esttablishment_Year}}</td>
             <td>{{examiner.IsNewCollege}}</td>  

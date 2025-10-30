@@ -23,7 +23,7 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>   
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>
           <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
         <div *ngIf="sSOLoginDataModel.RoleID === _EnumRole.AdminNodel">
@@ -41,8 +41,14 @@
           </select>
         </div>
         <div>
-          
-
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Status</label>
+          <select class="form-select" id="Status" [(ngModel)]="searchRequest.Status">
+            <option value="0" >--All--</option>
+            <option value="mapped">Mapped Student</option>
+            <option value="unmapped">UnMapped Student</option>
+          </select>
+        </div>
+        <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
             <i class="ti ti-refresh"></i>

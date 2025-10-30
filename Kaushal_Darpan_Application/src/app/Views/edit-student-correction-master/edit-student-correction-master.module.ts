@@ -5,6 +5,7 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { EditStudentCorrectionMasterRoutingModule } from './edit-student-correction-master.routing.module';
 import { EditStudentCorrectionMasterComponent } from './edit-student-correction-master.component';
+import { OTPModalModule } from '../otpmodal/otpmodal.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,7 @@ import { EditStudentCorrectionMasterComponent } from './edit-student-correction-
   imports: [
     CommonModule,
     EditStudentCorrectionMasterRoutingModule
-    ,FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule
+    ,FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,OTPModalModule
   ]
 })
 export class EditStudentCorrectionMasterModule { }

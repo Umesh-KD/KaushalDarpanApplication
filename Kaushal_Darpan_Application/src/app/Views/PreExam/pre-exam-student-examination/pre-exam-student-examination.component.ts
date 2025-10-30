@@ -148,6 +148,7 @@ export class PreExamStudentExaminationComponent {
   public _enumStudentType = EnumStudentType;
 
   public PromoteStatusList: any[] = [];
+  public StudentExamTypeList: any[] = [];
 
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
@@ -227,7 +228,8 @@ export class PreExamStudentExaminationComponent {
         txtStudentName: [''],
         txtMobileNo: [''],
         SessionType: [''],
-        PromoteStatus: ['']
+        PromoteStatus: [''],
+        StudentExamType: ['']
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
@@ -458,6 +460,12 @@ export class PreExamStudentExaminationComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PromoteStatusList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      await this.commonMasterService.GetCommonMasterDDLByType('StudentExamType')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StudentExamTypeList = data['Data'];
         }, (error: any) => console.error(error));
     }
     catch (Ex) {

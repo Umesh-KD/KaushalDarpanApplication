@@ -9,6 +9,7 @@ import { ItiCampusPostService } from '../../../../Services/ITI/ITICampusPost/iti
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ItiCampusPostComponent } from '../iticampus-post/iticampus-post.component';
 import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-iticampus-validation',
@@ -39,10 +40,11 @@ export class ItiCampusValidationComponent {
   public isSubmitted: boolean = false;
   formAction!: FormGroup;
 
-  public TodayDate = new Date()
+  public TodayDate = new Date();
+  public flagName: string="TotalNoOfCampus";
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ItiCampusPostService, private loaderService: LoaderService,
-    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService) {
+    private modalService: NgbModal, private route:ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService) {
   }
 
   async ngOnInit() {
@@ -51,6 +53,7 @@ export class ItiCampusValidationComponent {
         ddlAction: ['', Validators.required],
         txtActionRemarks: ['', Validators.required],
       })
+      this.flagName=this.route.snapshot.queryParamMap.get('flag')??"TotalNoOfCampus";
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetMasterData();
     await this.btn_SearchClick();
@@ -86,7 +89,7 @@ export class ItiCampusValidationComponent {
     
     try {
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
+      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.flagName)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];

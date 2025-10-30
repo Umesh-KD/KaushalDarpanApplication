@@ -93,6 +93,9 @@ export class StudentCorrectionMasterComponent implements OnInit {
       if (this.pageNo > 1) {
         this.pageNo--;
       }
+      else{
+        this.pageNo=i>0?i:1;
+      }
     }
     else{
       this.pageNo=i>0?i:1;

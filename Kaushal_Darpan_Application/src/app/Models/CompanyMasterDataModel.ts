@@ -89,7 +89,7 @@ export class  SignedCopyOfResultSearchModel {
 
 export class EligibleStudentListMasterSearchModel {
   public Name: string = '';
-  public Status: string = '';
+  public Status: string = '0';
   public ModifyBy: number = 0
   public RoleID: number = 0
   public DepartmentID: number = 0;
