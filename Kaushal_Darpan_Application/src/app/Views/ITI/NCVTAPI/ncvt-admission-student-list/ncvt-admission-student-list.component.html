@@ -22,8 +22,8 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>
-          <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/MobileNo</label>
+          <input type="text" class="form-input" placeholder="Name/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
         <div>
 
@@ -86,65 +86,41 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-
+            <th class="text-left">College Name</th>
             <th class="text-left">Name</th>
-            <th class="text-left">UIDNumber</th>
-            <th class="text-left">DateOfBirth</th>
+            <th class="text-left">Date of Birth</th>
             <th class="text-left">Gender</th>
+            <th class="text-left">Father/Guardian Name</th>
+            <th class="text-left">Mother Name</th>
             <th class="text-left">Category</th>
-            <th class="text-left">FatherGuardianName</th>
-            <th class="text-left">MotherName</th>
-            <th class="text-left">MobileNumber</th>
-            <th class="text-left">EmailID</th>
-            <th class="text-left">AID</th>
-            <th class="text-left">StudentID</th>
-            <th class="text-left">StateRegNumber</th>
-            <th class="text-left">TraineeName</th>
-            <th class="text-left">Session</th>
-            <th class="text-left">AdmissionDate</th>
-            <th class="text-left">HighestQualification</th>
+            
+            <th class="text-left">Mobile Number</th>
+            <th class="text-left">Email ID</th>
+            
             <th class="text-left">Trade</th>
             <th class="text-left">Shift</th>
             <th class="text-left">Unit</th>
-            <th class="text-left">IsTraineeDualMode</th>
-            <th class="text-left">MISITICode</th>
-            <th class="text-left">PersonwithDisability</th>
-            <th class="text-left">PWDcategory</th>
-            <th class="text-left">EconomicWeakerSection</th>
-            <th class="text-left">TraineeType</th>
-            <th class="text-left">ErrorDescription</th>
-            <th class="text-left">RecordStatus</th>
+            <th class="text-left">Error Description</th>
+            <th class="text-left">Record Status</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentList | tableSearchFilter:Table_SearchText; let idx = index">
             <td>{{ idx + 1 }}</td>
-
+            <td>{{ item.CollegeName }}</td>
             <td>{{ item.Name }}</td>
-            <td>{{ item.UIDNumber }}</td>
             <td>{{ item.DateOfBirth | date: 'yyyy-MM-dd' }}</td>
-            <td>{{ item.Gender }}</td>
-            <td>{{ item.Category }}</td>
+            <td>{{ item.GenderName }}</td>
             <td>{{ item.FatherGuardianName }}</td>
             <td>{{ item.MotherName }}</td>
+            <td>{{ item.Category }}</td>
+            
             <td>{{ item.MobileNumber }}</td>
             <td>{{ item.EmailID }}</td>
-            <td>{{ item.AID }}</td>
-            <td>{{ item.StudentID }}</td>
-            <td>{{ item.StateRegNumber }}</td>
-            <td>{{ item.TraineeName }}</td>
-            <td>{{ item.Session }}</td>
-            <td>{{ item.AdmissionDate | date: 'yyyy-MM-dd' }}</td>
-            <td>{{ item.HighestQualification }}</td>
+            
             <td>{{ item.Trade }}</td>
             <td>{{ item.Shift }}</td>
             <td>{{ item.Unit }}</td>
-            <td>{{ item.IsTraineeDualMode }}</td>
-            <td>{{ item.MISITICode }}</td>
-            <td>{{ item.PersonwithDisability }}</td>
-            <td>{{ item.PWDcategory }}</td>
-            <td>{{ item.EconomicWeakerSection }}</td>
-            <td>{{ item.TraineeType }}</td>
             <td>{{ item.ErrorDescription }}</td>
             <td>{{ item.RecordStatus }}</td>
           </tr>

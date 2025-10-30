@@ -49,7 +49,7 @@
                    placeholder="Enter Laboratory Name"
                    class="form-input"
                    id="txtName"
-                   formControlName="txtName" (input)="onNameChange($event)" />
+                   formControlName="txtName" (change)="onNameChange($event)" />
 
             <div *ngIf="isSubmitted && LaboratoryRequestFormGroup.get('txtName')?.errors" class="text-danger">
               <p *ngIf="LaboratoryRequestFormGroup.get('txtName')?.errors?.required">
