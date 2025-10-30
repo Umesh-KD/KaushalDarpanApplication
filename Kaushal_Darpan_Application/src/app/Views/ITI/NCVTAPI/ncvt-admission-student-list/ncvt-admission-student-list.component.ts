@@ -64,11 +64,16 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'ErrorDescription', 'RecordStatus', 'createddate', 'CollegeID', 'AcedmicYearID',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'ErrorDescription', 'RecordStatus',
+       'createddate', 'CollegeID', 'AcedmicYearID',
+       'Gender', 'AID', 'StudentID', 'TraineeName', 'DateOfBirth1', 'Category1', 'FatherGuardianName1'
     ];
 
- 
+    const columnOrder = [
+      'SrNo','TraineeType','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
+      ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType',
 
+    ];
 
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -79,7 +84,39 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
       });
       return filteredItem;
     });
+    
+    // Create worksheet from filtered data
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+    // Calculate column widths based on max length of content in each column
+    const columnWidths = columnOrder.map((column) => ({
+      wch:
+        Math.max(
+          column.length, // Header length
+          ...filteredData.map((item: any) =>
+            item[column] ? item[column].toString().length : 0
+          ) // Max content length
+        ) + 2, // Add extra padding
+    }));
+
+    // Apply column widths
+    ws['!cols'] = columnWidths;
+
+    // Apply header styling (bold + background color)
+    const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+    if (range.s && range.e) {
+      for (let col = range.s.c; col <= range.e.c; col++) {
+        const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
+        if (!ws[cellAddress]) continue;
+
+        // Bold the header text and apply a background color
+        ws[cellAddress].s = {
+          font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
+          fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
+          alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
+        };
+      }
+    }
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StudentListData.xlsx');
