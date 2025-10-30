@@ -70,7 +70,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
     ];
 
     const columnOrder = [
-      'SrNo','TraineeType','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
+      'SrNo','CollegeName','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
       ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType',
 
     ];
@@ -148,11 +148,12 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
       this.searchRequest.PageSize = this.pageSize
       this.searchRequest.SortColumn = this.sortColumn
       this.searchRequest.SortOrder = this.sortOrder
-      // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-      // this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
       this.searchRequest.action = "NcvtAdmissionStudentList";
       // }
       this.loaderService.requestStarted();
