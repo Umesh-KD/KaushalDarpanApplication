@@ -16,14 +16,26 @@
 </div>
 
 
+
+
 <form [formGroup]="CandidateFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
+
+ 
   <div class="card">
+
+   
+
     <div class="card-body p-5">
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b  class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Update Trainee Details': key==2? 'Add Trainee Details' : 'See Trainee Details'}}</b>
+          <b class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Update Trainee Details': key==2? 'Add Trainee Details' : 'See Trainee Details'}}</b>
           <b *ngIf="key==1" class="text-1xl-5">SR Number: {{request.StateRegNumber}}</b>
         </div>
+
+        <div class="alert alert-danger" role="alert">
+          {{request.ErrorDescription}}
+        </div>
+
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -112,17 +124,17 @@
 
 
           <!-- <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
-    <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
-      <option selected value="0">Choose Option</option>
-      <option value="97">Male</option>
-      <option value="98">Female</option>
-      <option value="0">Female</option>
-    </select>
-    <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
-      <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-    </div>
-  </div> -->
+      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
+      <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
+        <option selected value="0">Choose Option</option>
+        <option value="97">Male</option>
+        <option value="98">Female</option>
+        <option value="0">Female</option>
+      </select>
+      <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
+        <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+      </div>
+    </div> -->
 
 
           <div>
@@ -172,7 +184,7 @@
         </div>
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
           <div class="text-center">
-            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Update':'Submit'}}</button>          
+            <button *ngIf="key==1 || key==2" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key==1?'Update':'Submit'}}</button>
             <button *ngIf="key==1 || key==2" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
               <i class="ti ti-refresh"></i> Reset
             </button>
