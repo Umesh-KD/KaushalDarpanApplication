@@ -240,6 +240,7 @@ export class ITIStudentCorrectionMasterSearchModel {
   public SortColumn: string = '';
   public action:string='';
   public StateRegNumber?: string = '';
+  public DateOfBirth?: string = '';
 
 }
 
