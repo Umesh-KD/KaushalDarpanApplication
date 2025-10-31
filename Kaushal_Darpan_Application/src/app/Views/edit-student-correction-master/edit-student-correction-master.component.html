@@ -1,14 +1,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Edit Student Details</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Update Trainee Details</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student Master</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Trainee Correction</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student Correction</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Edit Student Details</a>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Update Trainee Details</a>
     </div>
   </div>
   <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
@@ -23,8 +21,8 @@
     <div class="card-body p-5">
       <div class="mb-8">
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-          <b  class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Edit Candidate Details': key==2? 'Add Candidate Details' : 'See Candidate Details'}}</b>
-          <!-- <b *ngIf="key==2" class="text-1xl-5"><i class="ti ti-plus"></i> Edit Company Details</b> -->
+          <b  class="text-1xl-5"><i class="ti" [ngClass]="{'ti-plus':key==1, 'ti-pencil':key==2, 'ti-eye':key==3}"></i> {{key==1?'Update Trainee Details': key==2? 'Add Trainee Details' : 'See Trainee Details'}}</b>
+          <b *ngIf="key==1" class="text-1xl-5">SR Number: {{request.StateRegNumber}}</b>
         </div>
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
           <div>

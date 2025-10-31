@@ -23,8 +23,10 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/UID_No/MobileNo</label>   
-          <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" [(ngModel)]="searchRequest.Name">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/SRNumber/MobileNo</label>   
+          <input type="text" class="form-input" placeholder="Name/SRNumber/MobileNo" id="Name" 
+            [(ngModel)]="searchRequest.Name"
+            (keyup.enter)="GetStudentCorrectionListData(1)">
         </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetStudentCorrectionListData(1)">Search</button>
@@ -61,26 +63,24 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
+            <th class="text-left">SR Number</th>
             <th class="text-left">Name</th>
-            <th class="text-left">UIDNumber</th>
-            <th class="text-left">DOB</th>
             <th class="text-left">FatherName</th>
+            <th class="text-left">DOB</th>
+            <th class="text-left">UIDNumber</th>
             <th class="text-left">Error Description</th>
-            <th class="text-left">Record Status</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StateRegNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
-
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.RecordStatus}}</td>
-           
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
             
               @if(item.IsCollegeSubmitted)

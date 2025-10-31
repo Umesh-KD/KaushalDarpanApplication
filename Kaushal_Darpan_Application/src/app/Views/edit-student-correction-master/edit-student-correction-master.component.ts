@@ -70,7 +70,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           Validators.minLength(10),        // min 10 digits
           Validators.maxLength(10) ]],        // max 10 digits]],
           CandidateMotherName:[{value:'',disabled:true}],
-          CandidateGender:[{value:0,disabled:true}, [DropdownValidatorsString]],
+          CandidateGender:[{value:0}, [DropdownValidatorsString]],
 
           
           UIDNumber:[{value:'',disabled:true},Validators.required]
@@ -139,6 +139,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
           if(data && data.Data){
+            this.request.StateRegNumber = data.Data[0].StateRegNumber
             this.CandidateFormGroup.patchValue({
               Name: data.Data[0].Name,
               CandidateFatherName: data.Data[0].FatherGuardianName,

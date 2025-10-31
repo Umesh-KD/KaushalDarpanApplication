@@ -239,6 +239,7 @@ export class ITIStudentCorrectionMasterSearchModel {
   public SortOrder: string = '';
   public SortColumn: string = '';
   public action:string='';
+  public StateRegNumber?: string = '';
 
 }
 

@@ -1,12 +1,90 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Aprroved Contract</h4>
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Aprroved Contract</h4>
 
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Aprroved Contract</a>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI College
+                Aprroved Contract</a>
+        </div>
     </div>
-  </div>
 </div>
 <!-- Page Title End -->
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-plus"></i> Add College Aprroved Contract</b>
+                <div class="flex justify-end flex-wrap items-center">
+                    <!-- <a routerLink="/iti-apprenticeship" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a> -->
+                </div>
+            </div>
+            <form [formGroup]="CollegeApprovedContractForm">
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Zone: </label>
+                        <select class="form-select"
+                                name="DivisionID"
+                                [(ngModel)]="this.request.DivisionID"
+                                (change)="GetDistictData()">
+                            <option [ngValue]="0">Choose option</option>
+                            <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
+                            {{ item.Name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
+                        <select class="form-select "
+                                [(ngModel)]="this.request.DistrictID"
+                                (change)="GetInstituteMaster($event.target.value)">
+                            <option value="0">Choose option</option>
+                            <option *ngFor="let item of Districtlist" [value]="item.ID">
+                            {{item.Name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="overflow-auto max-height500" *ngIf="Institutelist?.length > 0">
+            <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+                    <tr>
+                        <th>#</th>
+                        <th class="text-left">Name of ITI</th>
+
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let row of Institutelist; let idx = index;">
+                        <td class="text-left">{{idx+1}}</td>
+                        <td class="text-left">{{row.Name}}</td>
+
+                        <td class="text-center">
+                            <button class="btn bg-danger text-white" type="button" title="Delete"
+                                (click)="DeleteRow(row)">
+                                <i class="ti ti-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-center">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white mt-6 me-1">
+                <i class="ti ti-refresh"></i> Reset
+            </button>
+        </div>
+
+    </div>
+</div>
