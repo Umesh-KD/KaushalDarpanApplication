@@ -33,6 +33,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
  
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+ 
   public State: number = 0;
   public key: number = 0;
   public Message: string = '';
@@ -174,6 +175,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       // if(this.CandidateFormGroup.get('SSOID')?.value=='' || this.CandidateFormGroup.get('SSOID')?.value==null){
       //   this.CandidateFormGroup.get('SSOID')?.setValue('NA');
       // }
+      
       if(this.CandidateFormGroup.invalid){
         return;
       }
@@ -201,6 +203,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
               this.toastr.success(this.Message)
               this.ResetControls();
               this.routers.navigate(['/StudentCorrectionMaster']);
+             
             }
             else {
               this.toastr.error(this.ErrorMessage)
