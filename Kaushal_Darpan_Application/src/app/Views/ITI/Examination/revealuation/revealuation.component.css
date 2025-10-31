@@ -8073,3 +8073,30 @@ span.main-heading {
 .upload-input-man a {
   border-radius: 0 5px 5px 0 !important;
 }
+
+
+
+.modal-dialog {
+  max-width: 600px; /* Adjust width as per your need */
+}
+
+.modal-content {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.modal-body i {
+  font-size: 70px;
+}
+
+.modal-footer .btn {
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 90%;
+  }
+}
