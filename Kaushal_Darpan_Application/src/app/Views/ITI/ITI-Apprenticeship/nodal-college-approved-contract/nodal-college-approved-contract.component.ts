@@ -5,7 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { EnumRole, MONTH_LIST } from '../../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-nodal-college-approved-contract',
@@ -23,6 +24,8 @@ export class NodalCollegeApprovedContractComponent {
   public Districtlist: any = [];
   public Institutelist: any = [];
   public DivisionData: any = [];
+  _enumRole = EnumRole;
+  months = MONTH_LIST;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -30,19 +33,26 @@ export class NodalCollegeApprovedContractComponent {
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
   ) { }
 
   async ngOnInit() {
-    debugger
+    this.CollegeApprovedContractForm = this.formBuilder.group({
+      DivisionID: [''],
+      DistrictID: [''],
+    })
+      
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDivisionMaster();
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
     await this.DivisionData_ByDistrict();
     await this.GetDistictData();
     
-    await this.GetInstituteMaster(this.request.DistrictID);
+    // await this.GetInstituteMaster(this.request.DistrictID);
   }
+
+  get _CollegeApprovedContractForm() { return this.CollegeApprovedContractForm.controls; }
 
   async GetDivisionMaster() {   
     try {
@@ -56,13 +66,14 @@ export class NodalCollegeApprovedContractComponent {
 
   async GetDistictData() {
     try {
-      debugger
+        
       // this.request.DistrictID = 0
       // this.Institutelist = [];
       await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.request.DivisionID))
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.Districtlist = data['Data'];
+          this.request.DistrictID = this.sSOLoginDataModel.DistrictID
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -72,7 +83,7 @@ export class NodalCollegeApprovedContractComponent {
 
   async GetInstituteMaster(dis: number) {
     try {
-      debugger
+        
       await this.commonMasterService.GovtITICollege_DistrictWise(this.request.DistrictID, this.sSOLoginDataModel.EndTermID).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.Institutelist = data['Data'];
@@ -84,7 +95,7 @@ export class NodalCollegeApprovedContractComponent {
 
   async DivisionData_ByDistrict() {
     try {
-      debugger
+        
       await this.commonMasterService.DivisionData_ByDistrict(Number(this.request.DistrictID))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
