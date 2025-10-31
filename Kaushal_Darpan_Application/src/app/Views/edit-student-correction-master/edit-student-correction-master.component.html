@@ -94,6 +94,35 @@
           </div>
 
 
+          <div>
+            <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              जन्म तिथि (Date of Birth):<span class="StarMarking">*</span>
+            </label>
+            <input type="date"
+                   class="form-input"
+                   id="txtDOB"
+                   placeholder="DOB"
+                   [(ngModel)]="request.DateOfBirth"
+                   onkeydown="return false"
+                   onpaste="return false"
+                   onkeypress="return false"
+                   oninput="return false"
+                   formControlName="txtDOB">
+
+            <div *ngIf="isSubmitted && _CandidateFormGroup.txtDOB.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.txtDOB.errors.required">
+                <i aria-hidden="true"></i> This field is required!
+              </p>
+            
+              <p *ngIf="_CandidateFormGroup.txtDOB.errors.invalidAge">
+                <i aria-hidden="true"></i> Date of Birth must be at least 14 years!
+              </p>
+
+            </div>
+          </div>
+
+
+
           <!-- <div>
       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
       <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">

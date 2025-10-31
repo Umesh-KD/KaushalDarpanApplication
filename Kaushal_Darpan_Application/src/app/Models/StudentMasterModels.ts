@@ -230,7 +230,7 @@ export class ITIStudentCorrectionMasterSearchModel {
   public RoleID: number = 0;
   public UserID: number = 0;
   public DistrictID: number = 0;
-  public DateOfBirth: string = ''
+ // public DateOfBirth: string = ''
  
   public InstituteID: number = 0;
   public DepartmentID: number = 0;
@@ -242,6 +242,7 @@ export class ITIStudentCorrectionMasterSearchModel {
   public action:string='';
   public StateRegNumber?: string = '';
   public ErrorDescription?: string = '';
+  public DateOfBirth?: string = '';
 
 }
 
