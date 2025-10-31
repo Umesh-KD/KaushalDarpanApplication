@@ -251,6 +251,14 @@ item.CourseTypeName
               Trade Scheme
               <span class="shortingSpan" *ngIf="sortInTableColumn=='TradeScheme'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('ShiftID')">
+              Shift
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='ShiftID'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
+            <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('UnitNo')">
+              UnitNo
+              <span class="shortingSpan" *ngIf="sortInTableColumn=='UnitNo'" [innerHTML]="sortInTableDirectionAero"></span>
+            </th>
 
             <!--<th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('SemesterName')">
     Semester
@@ -267,17 +275,17 @@ item.CourseTypeName
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <!--<td>
-              <div class="flex actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" title="View Student Details"
-                   (click)="ViewStudentDetails(MyModel_ViewStudent, row.ApplicationID)">
-                  <i class="ti ti-eye" aria-hidden="true"></i>
-                </a>-->
-                <!--<a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER"
-                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
-                  <i class="ti ti-user"></i>
-                </a>-->
-              <!--</div>
-            </td>-->
+    <div class="flex actionBtns w-auto" style="width:auto !important">
+      <a href="javascript:void(0);" title="View Student Details"
+         (click)="ViewStudentDetails(MyModel_ViewStudent, row.ApplicationID)">
+        <i class="ti ti-eye" aria-hidden="true"></i>
+      </a>-->
+            <!--<a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER"
+     title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
+    <i class="ti ti-user"></i>
+  </a>-->
+            <!--</div>
+  </td>-->
             <td>{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.ApplicationNo}}</td>
@@ -290,7 +298,10 @@ item.CourseTypeName
             <td align="left">{{row.BranchName}}</td>
             <td align="left">{{row.TradeScheme}}</td>
             <!--<td align="left">{{row.SemesterName}}<br />{{row.StudentStatus}}</td>-->
+            <td align="left">{{row.ShiftID}}</td>
+            <td align="left">{{row.UnitNo}}</td>
             <td align="left">{{row.StudentExamStatus}}</td>
+
           </tr>
         </tbody>
       </table>
