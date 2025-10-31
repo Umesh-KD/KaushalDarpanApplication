@@ -76,17 +76,24 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
-            
+
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.RecordStatus}}</td>
-
-             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+           
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            
+              @if(item.IsCollegeSubmitted)
+              {
+              <p class="text-center text-warning"><b>Update In Progress</b></p>
+              }
+              @else
+              {
               <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
-                <a  [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}"  title="Edit"><i class="ti ti-pencil"></i></a>
-
+                <a [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
               </div>
-             </td>
+              }
+            </td>
           </tr>
         </tbody>
       </table>
