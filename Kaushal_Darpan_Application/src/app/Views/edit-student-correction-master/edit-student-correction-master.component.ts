@@ -139,7 +139,11 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
           if(data && data.Data){
-            this.request.StateRegNumber = data.Data[0].StateRegNumber
+            this.request.StateRegNumber = data.Data[0]?.StateRegNumber;
+            this.request.ErrorDescription = data.Data[0]?.ErrorDescription;
+
+            
+
             this.CandidateFormGroup.patchValue({
               Name: data.Data[0].Name,
               CandidateFatherName: data.Data[0].FatherGuardianName,
