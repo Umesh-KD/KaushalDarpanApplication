@@ -41,6 +41,13 @@
           </select>
         </div>
         <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch<span class="StarMarking">*</span></label>
+            <select  class="form-select" id="StreamID" [(ngModel)]="searchRequest.StreamID">
+              <option value="0">--Select--</option>
+              <option *ngFor="let item of BranchList" [value]="item.StreamID">{{item.Name}}</option>
+            </select>
+        </div>
+        <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Student Status</label>
           <select class="form-select" id="Status" [(ngModel)]="searchRequest.Status">
             <option value="0" >--All--</option>
@@ -92,6 +99,7 @@
             <th class="text-left">FatherName</th>
             <th class="text-left">DOB</th>
             <th class="text-center">MobileNo</th>
+            <th class="text-center">Email</th>
             <th class="text-center">Status</th>
             <th class="text-center">Action</th>
           </tr>
@@ -105,6 +113,7 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Email}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID ? ('Mapped ( ' + item.SSOID + ' )') :'UnMapped Student'}}</td>
             <!-- <td>{{item.Status}}</td> -->
              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">

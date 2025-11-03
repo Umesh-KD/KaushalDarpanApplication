@@ -9,6 +9,7 @@ import { SweetAlert2 } from '../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnumRole } from '../../Common/GlobalConstants';
+import { StreamMasterService } from '../../Services/BranchesMaster/branches-master.service';
 @Component({
     selector: 'eligible-student-list-master',
     templateUrl: './eligible-student-list-master.component.html',
@@ -26,6 +27,9 @@ export class EligibleStudentListMasterComponent implements OnInit {
   public ApprovedStatus: string = "0";
   _EnumRole = EnumRole;
 
+  public BranchList:any[]=[];
+  public CampusPostID:number=0;
+
   // pagination
    pageNo: any = 1;
    pageSize: any = 50;
@@ -36,6 +40,11 @@ export class EligibleStudentListMasterComponent implements OnInit {
   sortColumn: string = "";
   sortOrder: string = "";
 
+
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
+
   constructor(
     private commonMasterService: CommonFunctionService, 
     private companyMasterService: CompanyMasterService,
@@ -43,6 +52,7 @@ export class EligibleStudentListMasterComponent implements OnInit {
     private loaderService: LoaderService, 
     private Swal2: SweetAlert2, 
     private Router: Router, 
+    private branchservice: StreamMasterService,
     private router: ActivatedRoute
   ) { }
 
@@ -50,7 +60,9 @@ export class EligibleStudentListMasterComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetSessionYear();
     await this.GetInstituteList();
+    await this.GetBranchList();
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
+    
     await this.GetEligibleStudentListData(1);
   }
 
@@ -74,6 +86,49 @@ export class EligibleStudentListMasterComponent implements OnInit {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'StudentListData.xlsx');
+  }
+
+  //   async GetStreamMasterList(CampusPostID: number) {
+  //   debugger;
+  //   try {
+  //     this.loaderService.requestStarted();
+
+  //     await this.commonMasterService.StreamMasterByCampus(this.CampusPostID, this.sSOLoginDataModel.DepartmentID)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         this.StreamMasterList = data['Data'];
+  //       }, error => console.error(error));
+  //   }
+  //   catch (Ex) {
+  //     console.log(Ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
+
+    async GetBranchList() {
+      debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.branchservice.GetAllData().then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.State = data['State'];
+        this.Message = data['Message'];
+        this.ErrorMessage = data['ErrorMessage'];
+        this.BranchList = data['Data'];
+        console.log(this.BranchList, "BranchList")
+      });
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   async GetEligibleStudentListData(i:any) {
@@ -134,7 +189,8 @@ export class EligibleStudentListMasterComponent implements OnInit {
   // get all data
   async ClearSearchData() {
     this.searchRequest.Name = '';
-    this.searchRequest.Status = '';
+    this.searchRequest.Status = '0';
+    this.searchRequest.StreamID = 0;
     this.searchRequest.InstituteID = 0;
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.PageNumber = this.pageNo;
