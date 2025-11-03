@@ -24,6 +24,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 })
 export class NcvtAdmissionStudentListComponent implements OnInit {
   public StudentList: any = [];
+  public StudentList1: any = [];
   public SessionYearList: any = [];
   public InstituteMasterDDLList: any = [];
   public Table_SearchText: string = "";
@@ -61,7 +62,29 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   }
 
 
-  exportToExcel(): void {
+  async exportToExcel() {
+
+    this.searchRequest.PageNumber = this.pageNo
+    this.searchRequest.PageSize = this.pageSize
+    this.searchRequest.SortColumn = this.sortColumn
+    this.searchRequest.SortOrder = this.sortOrder
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+    // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+    this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+    this.searchRequest.action = "NcvtAdmissionStudentExcelList";
+
+    await this.ItiDataMasterService.GetStudentCorrectionListData(this.searchRequest).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StudentList1 = data.Data;
+
+  
+
+      console.log(this.StudentList1)
+    }, (error: any) => console.error(error))
+
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'RecordStatus',
@@ -75,7 +98,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
 
     ];
 
-    const filteredData = this.StudentList.map((item: any) => {
+    const filteredData = this.StudentList1.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
