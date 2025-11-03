@@ -64,7 +64,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'ErrorDescription', 'RecordStatus',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'RecordStatus',
        'createddate', 'CollegeID', 'AcedmicYearID',
        'Gender', 'AID', 'StudentID', 'TraineeName', 'DateOfBirth1', 'Category1', 'FatherGuardianName1'
     ];
