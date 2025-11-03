@@ -71,7 +71,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
 
     const columnOrder = [
       'SrNo','CollegeName','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
-      ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType',
+      ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType','ErrorDescription'
 
     ];
 

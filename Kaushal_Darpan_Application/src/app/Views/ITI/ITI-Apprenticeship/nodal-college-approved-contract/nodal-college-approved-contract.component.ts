@@ -108,7 +108,13 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
-  async SaveData() {}
+  async SaveData() {
+    try {
+        this.request.UserID = this.sSOLoginDataModel.UserID;
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async ResetControl() {}
   
   async DeleteRow(row: any) {}
