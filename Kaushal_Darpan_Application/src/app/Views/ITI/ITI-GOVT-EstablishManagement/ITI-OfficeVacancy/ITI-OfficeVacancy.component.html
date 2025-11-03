@@ -10,81 +10,73 @@
 </div>
 <div class="card">
   <div class="card-body p-5">
-
     <div class="flex justify-between flex-wrap items-center p-3 mb-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-plus"></i>Add Office Vacancy</b>
+      <b class="text-1xl-5"><i class="ti ti-plus"></i> Add Office Vacancy</b>
     </div>
+
     <form [formGroup]="AddOfficeVacancyForm">
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Office <span class="StarMarking">*</span></label>
-        <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-        <div *ngIf="isSubmitted && _AddOfficeVacancyForm.ddlOffice.errors" class="text-danger">
-          <p *ngIf="!_AddOfficeVacancyForm.ddlOffice.errors.DropdownValidators">
-            <i aria-hidden="true"></i>This field is required .!
-          </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Office -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Office <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.OfficeID" formControlName="OfficeID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of OfficeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
         </div>
-      </div>
-      <!--{{InstituteMasterDDLList|json}}-->
-      <div *ngIf="formData.OfficeID== 11 ">
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-        <select class="form-select" id="StudentExamYear" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-        </select>
-      </div>
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Staff Type<span class="StarMarking">*</span>
-        </label>
-        <select class="form-select" name="StaffType" id="StaffTypeID" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
-          <option value="0">Choose Option</option>
-          <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-        <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.StaffTypeID.errors" class="text-danger">
-          <p *ngIf="!_AddOfficeVacancyForm.StaffTypeID.errors.DropdownValidators">
-            <i aria-hidden="true"></i>This
-            field is required .!
-          </p>
+
+        <!-- Institute (shows only when OfficeID == 11) -->
+        <div *ngIf="formData.OfficeID == 11">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+          <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+          </select>
         </div>
+
+        <!-- Staff Type -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="StaffTypeID" [(ngModel)]="formData.StaffTypeID" (change)="fillupDesignation()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of StaffTypeList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <!-- Post -->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
+          <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
+            <option value="0">--Select--</option>
+            <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <!-- Total Seat -->
+        <div>
+          <label for="TotalSeatID">Total Seat <span class="StarMarking">*</span></label>
+          <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
+                 [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
+        </div>
+
+        <!-- Comments -->
+        <div class="form-group col-span-3">
+          <label for="Comments">Comments:</label>
+          <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
+        </div>
+
       </div>
 
-      <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
-        <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
-          <option value="0">--Select--</option>
-          <option *ngFor="let item of PostList" [value]="item.ID">{{item.Name}}</option>
-        </select>
-        <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.ddlPost.errors" class="text-danger">
-          <p *ngIf="!_AddOfficeVacancyForm.ddlPost.errors.DropdownValidators">
-            <i aria-hidden="true"></i>This
-            field is required .!
-          </p>
-        </div>
+      <!-- Buttons -->
+      <div class="flex gap-4 mt-6">
+        <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add</button>
+        <button type="submit" class="btn btn-success" (click)="SaveData()">Final Save</button>
       </div>
-      <div>
-        <label for="TotalSeatID">Total Seat<span class="StarMarking">*</span></label>
-        <input type="number" id="TotalSeatID" formControlName="TotalSeatID" class="form-control"
-               [(ngModel)]="formData.TotalSeatID" min="0" max="99" pattern="\d*">
-
-        <div *ngIf="isSubmitted&&_AddOfficeVacancyForm.TotalSeatID.errors" class="text-danger">
-          <p *ngIf="_AddOfficeVacancyForm.TotalSeatID.errors.DropdownValidators">
-            <i aria-hidden="true"></i>This
-            field is required .!
-          </p>
-        </div>
-      </div>
-      <div class="form-group">
-        <label for="Comments">Comments:</label>
-        <textarea id="Comments" formControlName="Comments" class="form-control" [(ngModel)]="formData.Comments"></textarea>
-      </div>
-      <button type="submit" class="btn btn-primary" (click)="addOfficeVacancy()">Add</button>
-      <button type="submit" class="btn btn-primary" (click)="SaveData()">Final Save</button>
     </form>
   </div>
 </div>
+
 <!--{{OfficeVacancy|json}}-->
 <!--{{OfficeVacancyList|json}}-->
 <div class="card mt-3">
@@ -121,10 +113,10 @@
             <td>{{ leave.Comments }}</td>
             <td>
               <!--<button class="btn btn-sm"
-            [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
-            (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
-      {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
-    </button>-->
+                      [ngClass]="leave.ActiveStatus ? 'btn-success' : 'btn-danger'"
+                      (click)="OfficeVacancyActiveDeActive(leave.ID, !leave.ActiveStatus)">
+                {{ leave.ActiveStatus ? 'Active' : 'Inactive' }}
+              </button>-->
               <label class="switch">
                 <input type="checkbox"
                        [checked]="leave.ActiveStatus"
@@ -187,7 +179,7 @@
             </div>
           </div>
           <!--{{formData.PostedSeat|json}}-->
-  <!--{{formData.DesignationID|json}}-->
+          <!--{{formData.DesignationID|json}}-->
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Post <span class="StarMarking">*</span></label>
             <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
@@ -219,7 +211,7 @@
           </div>
           <button type="submit" class="btn btn-primary" (click)="VacancyPostUpdate()">Update</button>
         </div>
-</form>
+      </form>
     </div>
   </div>
 </ng-template>

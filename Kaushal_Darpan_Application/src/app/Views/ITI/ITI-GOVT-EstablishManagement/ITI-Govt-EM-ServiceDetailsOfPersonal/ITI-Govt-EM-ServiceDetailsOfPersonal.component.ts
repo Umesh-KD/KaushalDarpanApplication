@@ -174,7 +174,7 @@ export class ITIGovtEMServiceDetailsOfPersonalComponent implements OnInit {
   async GetOriginalPositionList() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster()
+      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));     
           this.OriginalPositionList = data['Data'];
