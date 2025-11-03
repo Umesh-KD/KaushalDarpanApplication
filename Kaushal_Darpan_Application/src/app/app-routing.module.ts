@@ -1040,7 +1040,8 @@ const routes: Routes = [
       { path: 'apprenticeship-deployment', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/apprenticeship-deployment/apprenticeship-deployment.module').then(m => m.ApprenticeshipDeploymentModule), title: 'ITI Apprenticeship' },
       { path: 'iti-apprenticeship', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship/iti-Apprenticeship.module').then(m => m.ITIApprenticeshipModule), title: 'ITI Apprenticeship' },
       { path: 'iti-apprenticeship-report', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship-report/iti-apprenticeship-report.module').then(m => m.ITIApprenticeshipReportModule), title: 'ITI Apprenticeship Report' },
-
+      { path: 'iti-college-approved-contract', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/nodal-college-approved-contract/nodal-college-approved-contract.module').then(m => m.NodalCollegeApprovedContractModule), title: 'ITI College Approved Contracts' },
+      
 
       { path: 'add-public-info', loadChildren: () => import('./Views/PublicInfo/add-public-info/add-public-info.module').then(m => m.AddPublicInfoModule) },
       { path: 'public-info-list', loadChildren: () => import('./Views/PublicInfo/list-public-info/list-public-info.module').then(m => m.ListPublicInfoModule) },

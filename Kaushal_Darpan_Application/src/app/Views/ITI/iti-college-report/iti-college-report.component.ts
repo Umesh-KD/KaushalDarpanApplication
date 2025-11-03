@@ -431,7 +431,7 @@ export class ItiCollegeReportComponent {
       
 
       this.loaderService.requestStarted();
-       this.commonMasterService.AssemblyMaster_DistrictIDWise(ID)
+       this.commonMasterService.AssemblyMaster_DistrictIDWise(0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -940,17 +940,31 @@ export class ItiCollegeReportComponent {
           (this.request as any)[field] = `${year}-${month}-${day}`;
         }
       });
-      this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)
-      this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 1)
-      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)
+
 
       await this.ddlDivision_Change()
-     await this.ddlDistrict_Change()
-    await  this.GetAssemblyITI()
-     await this.GetGramPanchayatSamiti()
-     await this.villageMaster()
-   
+      await this.ddlDistrict_Change()
+      await this.GetAssemblyITI()
+      await this.GetGramPanchayatSamiti()
+      await this.villageMaster()
 
+      this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+      this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GramPanchayatSamiti"]);
+      this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionID"]);
+      this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictID"]);
+      this.ReportForm.get('SubDivisionID')?.setValue(parsedData['Data']["SubDivisionID"]);
+      this.ReportForm.get('Loksabha')?.setValue(parsedData['Data']["Loksabha"]);
+      this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["Vidhansabha"]);
+      this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilID"]);
+      this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
+      this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+      this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageID"]);
+      this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
+      this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
+      this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
+           this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)
+      this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 1)
+      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)
       console.log(parsedData);
     } catch (ex) {
       console.log(ex);
@@ -1446,6 +1460,8 @@ export class ItiCollegeReportComponent {
 
       await this.GetParliamentITI()
 
+      await this.GetAssemblyITI(this.request.DistrictID)
+
       await this.commonMasterService.TehsilMaster_DistrictIDWise(InstituteDistrictID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -1860,21 +1876,36 @@ export class ItiCollegeReportComponent {
         await this.ddlDistrict_Change()
         this.request.SubDivisionID = parsedData['Data']["SubDivisionId"]
         this.request.Loksabha = parsedData['Data']["ParliamentId"]
-        await this.GetAssemblyITI(this.request.Loksabha)
+        //await this.GetAssemblyITI(this.request.Loksabha)
+        debugger  
         this.request.Vidhansabha = parsedData['Data']["AssemblyId"]
         this.request.TehsilID = parsedData['Data']["TehsilId"]
         this.request.CityID = parsedData['Data']["CityID"]
         this.request.PanchayatId = parsedData['Data']["PanchayatsamityId"]
         this.request.VillageID = parsedData['Data']["VillageId"]
         this.request.AdministrativeBodyId = parsedData['Data']["AdministrativeId"]
-        this.request.GramPanchayatSamiti = parsedData['Data']["GrampanchayatId"]
+       
         this.request.UrbanRural = parsedData['Data']["UrbanRural"]
         this.request.Pincode = parsedData['Data']["Pincode"]
+      
+        this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionId"]);
+        this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictId"]);
+        this.ReportForm.get('SubDivisionID')?.setValue(parsedData['Data']["SubDivisionId"]);
+        this.ReportForm.get('Loksabha')?.setValue(parsedData['Data']["ParliamentId"]);
+        this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["AssemblyId"]);
+        this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilId"]);
+        this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
+        this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatsamityId"]);
+        this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageId"]);
+        this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeId"]);
+        this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
+        this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
    
         if (this.request.UrbanRural == 76) {
           await this.GetGramPanchayatSamiti();
         }
-
+        this.request.GramPanchayatSamiti = parsedData['Data']["GrampanchayatId"]
+        this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GrampanchayatId"]);
       }
       //// Assign default values for null or undefined fields
     
@@ -1911,7 +1942,7 @@ export class ItiCollegeReportComponent {
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
-      }, 2000);
+      }, 4000);
     }
   }
 

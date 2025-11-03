@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CompanyMasterDataModels } from '../../Models/CompanyMasterDataModel';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { CompanyMasterService } from '../../Services/CompanyMaster/company-master.service.ts';
@@ -17,6 +17,8 @@ import { CounsellingImportCandidateListService } from '../../Services/Counsellin
 import { ITIStudentCorrectionMasterSearchModel } from '../../Models/StudentMasterModels';
 import { ItiDataMasterService } from '../../Services/ITI/ITIDataMaster/iti-datamaster.service';
 import { OTPModalComponent } from '../otpmodal/otpmodal.component';
+import { DateConfigurationModel } from '../../Models/DateConfigurationDataModels';
+import { DateConfigService } from '../../Services/DateConfiguration/date-configuration.service';
 
 @Component({
     selector: 'edit-student-correction-master',
@@ -33,7 +35,9 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
  
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  dateConfiguration = new DateConfigurationModel();
   public State: number = 0;
+  public AdmissionDateList: any = []
   public key: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
@@ -43,13 +47,16 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
   public StateMasterList: IStateMasterDataModel[] = []
   public CompanyTypeList: any = [];
   public CandidateData:any=[];
-  public GenderList: any = [];  
+  public GenderList: any = [];
+  public FromDate: string = ''
 
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal,
   private counsellingImportCandidateListService:CounsellingImportCandidateListService,
-    private ItiDataMasterService:ItiDataMasterService
+    private ItiDataMasterService: ItiDataMasterService,
+    private dateMasterService: DateConfigService,
+
 ) 
     {}
 
@@ -69,7 +76,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           Validators.minLength(10),        // min 10 digits
           Validators.maxLength(10) ]],        // max 10 digits]],
           CandidateMotherName:[{value:'',disabled:true}],
-          CandidateGender:[{value:0,disabled:true}, [DropdownValidatorsString]],
+        CandidateGender: [{ value: 0 }, [DropdownValidatorsString]],
+        txtDOB: ['', [Validators.required, this.minimumAgeValidator(14)]],
 
           
           UIDNumber:[{value:'',disabled:true},Validators.required]
@@ -88,6 +96,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
     // console.log(this.request.Gender,"gender")
     debugger
     this.loadDropdownData('Gender');
+    await this.GetDateDataList()
     if (this.CandidateID > 0) {
       await this.GetById(this.CandidateID);
     }
@@ -100,7 +109,28 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
   }
   get _CandidateFormGroup() { return this.CandidateFormGroup.controls; }
 
+  minimumAgeValidator(minYears: number) {
+    return (control: AbstractControl) => {
+      if (!control.value) return null;
+      debugger
+      const inputDate = new Date(control.value);
+      const baseDate = new Date(this.FromDate); // reference date (e.g., admission date)
 
+      // Normalize both dates to remove time part (set to 00:00:00)
+      const dob = new Date(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate());
+      const minAllowedDOB = new Date(
+        baseDate.getFullYear() - minYears,
+        baseDate.getMonth(),
+        baseDate.getDate()
+      );
+
+      if (dob.getTime() > minAllowedDOB.getTime()) {
+        return { invalidAge: true }; // Too young
+      }
+
+      return null;
+    };
+  }
 
 
   validateNumber(event: KeyboardEvent) {
@@ -138,6 +168,11 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           console.log(data,"Candidate data");
           this.CandidateData=data.Data;
           if(data && data.Data){
+            this.request.StateRegNumber = data.Data[0]?.StateRegNumber;
+            this.request.ErrorDescription = data.Data[0]?.ErrorDescription;
+
+            
+
             this.CandidateFormGroup.patchValue({
               Name: data.Data[0].Name,
               CandidateFatherName: data.Data[0].FatherGuardianName,
@@ -146,7 +181,8 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
               MobileNo: data.Data[0].MobileNumber,
               CandidateMotherName: data.Data[0].MotherName,
               CandidateGender: data.Data[0].Gender,
-              UIDNumber: data.Data[0].UIDNumber
+              UIDNumber: data.Data[0].UIDNumber,
+              txtDOB: data.Data[0].DateOfBirth
   
             })
           }
@@ -174,6 +210,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
       // if(this.CandidateFormGroup.get('SSOID')?.value=='' || this.CandidateFormGroup.get('SSOID')?.value==null){
       //   this.CandidateFormGroup.get('SSOID')?.setValue('NA');
       // }
+      
       if(this.CandidateFormGroup.invalid){
         return;
       }
@@ -201,6 +238,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
               this.toastr.success(this.Message)
               this.ResetControls();
               this.routers.navigate(['/StudentCorrectionMaster']);
+             
             }
             else {
               this.toastr.error(this.ErrorMessage)
@@ -242,6 +280,34 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
         }, (error: any) => console.error(error)
         );
       }
+  async GetDateDataList() {
 
+    try {
+      this.dateConfiguration.DepartmentID = 2;
+      this.dateConfiguration.SSOID = this.sSOLoginDataModel.SSOID;
+      await this.dateMasterService.GetDateDataList(this.dateConfiguration)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.AdmissionDateList = data['Data'];
+          const today = new Date();
+ 
+          var activeCourseID: any = [];
+
+       
+
+      
+
+            const admissionEntry = this.AdmissionDateList.find((e: any) => e.TypeID == 148);
+            this.FromDate = admissionEntry ? admissionEntry.From_Date : null;
+            console.log(this.FromDate, "from date")
+          
+
+         
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 
 }

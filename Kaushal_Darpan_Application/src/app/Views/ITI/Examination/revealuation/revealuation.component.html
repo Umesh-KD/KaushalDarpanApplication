@@ -183,13 +183,14 @@
 
 
   <ng-template #SuccessModal let-modal>
-    <div class="modal-content rounded-lg shadow-lg border-0">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+    <div class="modal-content rounded-lg shadow-lg border-0 text-center p-3">
       <div class="card border-0">
-        <h4 class=" text-white fw-bold bg-black py-2 px-3 rounded-top text-center">
+        <h4 class="text-white fw-bold bg-black py-2 px-3 rounded-top">
           Submission Successful
         </h4>
 
-        <div class="modal-body mt-3 text-center">
+        <div class="modal-body mt-3">
           <i class="bi bi-check-circle" style="font-size: 60px; color: #28a745;"></i>
           <p class="mt-3 text-primary fw-semibold">
             Your request has been submitted successfully!
@@ -206,6 +207,7 @@
           </button>
         </div>
       </div>
+    </div>
     </div>
   </ng-template>
 

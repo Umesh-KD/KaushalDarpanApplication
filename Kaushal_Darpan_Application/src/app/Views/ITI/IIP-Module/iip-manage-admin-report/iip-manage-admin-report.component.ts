@@ -213,7 +213,7 @@ export class IIPManageAdminReportComponent {
       //this.searchRequest.DivisionID = this.sSOLoginDataModel.DivisionID;
 
       await this.itiIIPManageService.GetAllData(this.searchRequest).then((data: any) => {
-        debugger
+        
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.IIPManageData = data.Data.Table;
