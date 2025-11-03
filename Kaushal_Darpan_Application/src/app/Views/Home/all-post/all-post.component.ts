@@ -243,12 +243,15 @@ export class AllPostComponent implements OnInit {
      ;
     const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + FileName;; // Replace with your URL
     // Fetch the file as a blob
+    debugger
     try {
       this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob: any) => {
         const downloadLink = document.createElement('a');
         const url = window.URL.createObjectURL(blob);
         downloadLink.href = url;
-        downloadLink.download = "" + FileName + ".pdf"; // Set the desired file name
+        // downloadLink.download = "" + FileName + ".pdf"; // Set the desired file name
+        
+        downloadLink.download = "" + FileName ; // Set the desired file name
         downloadLink.click();
         // Clean up the object URL
         window.URL.revokeObjectURL(url);
