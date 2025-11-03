@@ -255,9 +255,18 @@ export class DteLaboratoryMasterComponent {
   async ResetControl() {
     this.isSubmitted = false;
     this.request = new DTELaboratoryDataModel();
+    //this.LaboratoryRequestFormGroup.reset({
+    //  UnitId: 0
+    //});
+    this.LabID = 0;
     this.LaboratoryRequestFormGroup.reset({
-      UnitId: 0
+      txtName: '',
+      StreamID: 0,
+      staffID: 0,
+      ActiveStatus: false
     });
+    const btnSave = document.getElementById('btnSave');
+    if (btnSave) btnSave.innerHTML = "Save";
     await this.GetAllData();
   }
 

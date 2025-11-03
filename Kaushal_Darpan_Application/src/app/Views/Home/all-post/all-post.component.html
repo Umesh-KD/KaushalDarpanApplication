@@ -1,4 +1,6 @@
-<div class="container-fluid p-3 py-5 bg-primary text-white text-center">
+<!-- #d38192; -->
+<!-- #7d1c2f; -->
+<div class="container-fluid p-3 py-5 text-white text-center" style="background-color: #7d1c2f;">
   <h3 class="mt-0 text-white">All Campus List</h3>
   <p class="mb-0">Click on 'View More Details' to access comprehensive information related to campus activities, including companies, vacancies, requirements, and more.</p>
 </div>
@@ -90,8 +92,8 @@
                   </option>
                 </select> -->
               </div>
-              <div class="col-md-3">
-                <button type="button" class="btn btn-primary d-flex align-items-center" (click)="GetAllData()">
+              <div class="col-md-3" >
+                <button type="button" class="btn btn-primary d-flex align-items-center" style="background-color: #7d1c2f;" (click)="GetAllData()">
                   <i class="ti ti-search me-2"></i> Search
                 </button>
               </div>
@@ -134,8 +136,8 @@
 
                       <div class="compButton d-flex">
                         <a *ngIf="item.ConsentList != null && item.ConsentList != undefined" class="btn bg-primary text-white" (click)="DownloadFile(item.ConsentList)" title="ConsentList"><i class="ti ti-download"></i> Consent List</a>
-                        <a *ngIf="item.FinalPlaceList != null && item.FinalPlaceList != undefined" class="btn bg-primary text-white mx-2" (click)="DownloadFile(item.FinalPlaceList)" title="FinalPlaceList"><i class="ti ti-download"></i> FinalPlace List</a>
                         <a *ngIf="item.ShortList != null && item.ShortList != undefined" class="btn bg-primary text-white" (click)="DownloadFile(item.ShortList)" title="ShortList"><i class="ti ti-download"></i> Short List</a>
+                        <a *ngIf="item.FinalPlaceList != null && item.FinalPlaceList != undefined" class="btn bg-primary text-white mx-2" (click)="DownloadFile(item.FinalPlaceList)" title="FinalPlaceList"><i class="ti ti-download"></i> FinalPlace List</a>
                         <a *ngIf="item.OtherList != null && item.OtherList != undefined" class="btn bg-primary text-white" (click)="DownloadFile(item.OtherFile)" title="OtherList"><i class="ti ti-download"></i> Other List</a>
                       </div>
 

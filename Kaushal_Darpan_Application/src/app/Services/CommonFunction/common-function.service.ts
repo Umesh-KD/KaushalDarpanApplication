@@ -275,9 +275,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0) {
+  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0, EngNonEng: number = 0) {
     
-    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}/${EngNonEng}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -379,7 +379,7 @@ export class CommonFunctionService {
   }
 
   public async PreExam_StudentMaster(StudentID: number, statusId: number, DepartmentID: number = 0, Eng_NonEng: number = 0, EndTermID: number = 0, StudentExamID: number = 0, FileNameWithDynamicPath: number = 0) {
-    debugger
+     
     return await this.http.get(`${this.APIUrl}/PreExam_StudentMaster/${StudentID}/${statusId}/${DepartmentID}/${Eng_NonEng}/${EndTermID}/${StudentExamID}/${FileNameWithDynamicPath}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -525,7 +525,7 @@ export class CommonFunctionService {
   }
   public async UploadDocument(file: any, model: UploadFileModel | null = null) {
     //formdata
-    debugger;
+     ;
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");
@@ -550,7 +550,7 @@ export class CommonFunctionService {
   public async UploadBTEROriginalDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-    debugger
+     
 
     const formData = new FormData();
     formData.append("file", file);
@@ -576,7 +576,7 @@ export class CommonFunctionService {
   public async UploadBTERDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-    debugger
+     
 
     const formData = new FormData();
     formData.append("file", file);
@@ -769,7 +769,7 @@ export class CommonFunctionService {
   }
 
   public async DistrictMaster_DivisionIDWise(DivisionID: number) {
-    debugger;
+     ;
     return await this.http.get(this.APIUrl + '/DistrictMaster_DivisionIDWise/' + DivisionID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1669,7 +1669,7 @@ export class CommonFunctionService {
 
 
   public async ITIGetStaff_InstituteWise(request: any) {
-    debugger;
+     ;
     const body = JSON.stringify(request);
     console.log(body);
     return await this.http.post(this.APIUrl + '/ITIGetStaff_InstituteWise', body, this.headersOptions)
@@ -1688,7 +1688,7 @@ export class CommonFunctionService {
 
 
   public async NodalInstituteList(InstituteID: number = 0) {
-    debugger
+     
     return await this.http.post(`${this.APIUrl}/NodalInstituteList/${InstituteID}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
@@ -1894,7 +1894,7 @@ export class CommonFunctionService {
   }
 
   public async GetSSOIDDetailData(SSOIDDetailRequest: SSOIDDetailRequestModel) {
-    debugger
+     
     var body = JSON.stringify(SSOIDDetailRequest);
     const headers = { 'content-type': 'application/json' }
     return await this.http.post(this.APIUrl + "/GetSSOIDDetailData/", body, { 'headers': headers })
@@ -1904,7 +1904,7 @@ export class CommonFunctionService {
   }
 
   public async Counselling_UploadDocument(file: any, model: UploadCounsellingFileModel | null = null) {
-    debugger
+     
     const formData = new FormData();
     formData.append("file", file);
     formData.append("FolderName", model?.FolderName ?? "");
@@ -1987,11 +1987,18 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetDesignationDepartmentIDWise(DepartmentID: number=1) {
-    return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID , this.headersOptions)
+
+  public async DivisionData_ByDistrict(DistrictID: number = 0,) {
+    return await this.http.get(this.APIUrl + '/DivisionData_ByDistrict/' + DistrictID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
-  }
-  
+    }
+
+    public async GetDesignationDepartmentIDWise(DepartmentID: number = 1) {
+        return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID, this.headersOptions)
+            .pipe(
+                catchError(this.handleErrorObservable)
+            ).toPromise();
+    }
 }

@@ -1,3 +1,5 @@
+import { HrMasterDataModel } from "./HrMasterDataModel"
+
 export class CompanyMasterDataModels {
   public ID: number = 0
   public Name: string = ''
@@ -18,6 +20,8 @@ export class CompanyMasterDataModels {
   public HRName: string = '';
   public EmailId: string = '';
   public MobileNo: String = '';
+
+  public ListCompanyHRDetails: HrMasterDataModel[] = [];
 }
 
 export interface ICompanyMasterDataModel {
@@ -38,11 +42,19 @@ export class CompanyMasterSearchModel {
   public Name: string = '';
   public Status: string = '';
   public ModifyBy: number = 0
-  public RoleID: number = 0
+  public RoleID: number = 0;
+  // public ID: number = 0;
+  
   public DepartmentID: number = 0;
   public PageNumber: number = 0;
   public PageSize: number = 0;
 }
+
+export class CompanyMasterSearchByIdModel extends CompanyMasterSearchModel {
+  public ID: number = 0;
+}
+
+
 export class CompanyMaster_Action {
   public ID: number = 0;
   public Action: string = '0';
@@ -89,7 +101,7 @@ export class  SignedCopyOfResultSearchModel {
 
 export class EligibleStudentListMasterSearchModel {
   public Name: string = '';
-  public Status: string = '';
+  public Status: string = '0';
   public ModifyBy: number = 0
   public RoleID: number = 0
   public DepartmentID: number = 0;
@@ -97,6 +109,7 @@ export class EligibleStudentListMasterSearchModel {
   public PageSize: number = 50
   public PageNumber: number = 1
   public AcademicYearID: number = 0
+  public StreamID: number = 0
 
   public SortOrder: string = '';
   public SortColumn: string = '';

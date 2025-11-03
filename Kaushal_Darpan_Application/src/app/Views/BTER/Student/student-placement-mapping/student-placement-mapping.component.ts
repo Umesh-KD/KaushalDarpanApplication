@@ -81,7 +81,7 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
     this.BTER = this.encryptParameter(this._EnumDepartment.BTER);
     this.ITI = this.encryptParameter(this._EnumDepartment.ITI)
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    
+    debugger
     if(this.activatedRoute.snapshot.queryParamMap.get('ID')!=null){
       this.studentID=Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
       await this.GetDataByStudentId();
@@ -194,12 +194,12 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
         //   this.searchRequest.DOB = this.StudentDataEnrollmentWise.DOB;
         // }
         
-        if(this.StudentDataEnrollmentWise.EnrollmentNo!=null && this.StudentDataEnrollmentWise.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise.DOB!=null && this.StudentDataEnrollmentWise.DOB.length>0)
+        if(this.StudentDataEnrollmentWise?.EnrollmentNo!=null && this.StudentDataEnrollmentWise?.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise?.DOB!=null && this.StudentDataEnrollmentWise?.DOB.length>0)
         {
-          this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise.EnrollmentNo.trim();
+          this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise?.EnrollmentNo.trim();
           // Convert DOB to yyyy-MM-dd
           // const dob=new Date(this.StudentDataEnrollmentWise.DOB);
-          const dob=new Date(this.StudentDataEnrollmentWise.DOB);
+          const dob=new Date(this.StudentDataEnrollmentWise?.DOB);
           const year = dob.getFullYear();
           const month = ('0' + (dob.getMonth() + 1)).slice(-2);
           const day = ('0' + dob.getDate()).slice(-2);
@@ -237,11 +237,11 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
 
     this.searchRequest.DepartmentID = this.searchRequest.DepartmentID;
 
-    if(this.StudentDataEnrollmentWise.EnrollmentNo!=null && this.StudentDataEnrollmentWise.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise.DOB!=null && this.StudentDataEnrollmentWise.DOB.length>0)
+    if(this.StudentDataEnrollmentWise?.EnrollmentNo!=null && this.StudentDataEnrollmentWise?.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise?.DOB!=null && this.StudentDataEnrollmentWise?.DOB.length>0)
     {
-      this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise.EnrollmentNo.trim();
+      this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise?.EnrollmentNo.trim();
       // Convert DOB to yyyy-MM-dd
-      const dob=new Date(this.StudentDataEnrollmentWise.DOB);
+      const dob=new Date(this.StudentDataEnrollmentWise?.DOB);
       const year = dob.getFullYear();
       const month = ('0' + (dob.getMonth() + 1)).slice(-2);
       const day = ('0' + dob.getDate()).slice(-2);

@@ -833,7 +833,8 @@ export class ITIStudentEnrollmentAdmittedComponent {
               CollegeId: x.CollegeId,
               TradeSchemeID: x.TradeSchemeID,
               UnitNo: x.UnitNo,
-              ShiftID: x.ShiftID
+              ShiftID: x.ShiftID,
+              SeatIntakeId: x.SeatIntakeId
             })
           });
           // Call service to save student exam status

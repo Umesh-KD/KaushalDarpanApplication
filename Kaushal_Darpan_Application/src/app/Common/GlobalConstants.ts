@@ -567,6 +567,9 @@ export enum EnumEmitraService {
   BTER_CollegeFeeService = 14855,
   BTER_CollegeFee_Emitra_Service = 14855,
   
+  BTER_EnrollmentFees_ENG = 2920,
+  BTER_EnrollmentFees_NonENG = 2795,
+
   BTER_ExamFees_ENG = 7330,
   BTER_ExamFees_NonENG = 7350
 
@@ -790,60 +793,19 @@ export enum EnumLeaveType {
     PrivilegeLeave = 5
 }
 
-export class ITT_EM_ApproveStaffDataModel extends RequestBaseModel {
-  public InstitiuteID: number = 0
-  public BranchID: number = 0
-  public SanctionedPosts: number = 0 // dropdown
-  public IsWorking: boolean = false // radio button
-  public IsExtraWorking: boolean = false
-  public IsVacant: boolean = false
-  public OccupiedVacant: number = 0
-  public SSOID: string = '' // textbox
-  public Name: string = ''
-  public DesignationID: number = 0
-
-  public Gender: number = 0
-  public MobileNumber: string = ''
-  public EmployeeID: string = ''
-  public DateOfBirth: string = ''
-  public Experience: number = 0
-
-  public IsEmpWorkingOnPost: boolean = false
-
-  public IsEmpWorkingOnDeputationFromOther: boolean = false
-  public EmpInstituteID: number = 0
-
-  public EmpBranchID: number = 0
-
-  public IsEmpWorkingOnDeputationToOther: boolean = false
-  public EmpDeputatedInstituteID: number = 0
-
-  public IsSalaryDrawnFromSamePost: boolean = false
-  public SalaryDrawnPostID: number = 0
-  public IsSalaryDrawnFromOtherInstitute: boolean = false
-  public SalaryDrawnInstituteID: number = 0
-  public DateOfRetirement: string = ''
-  public AnyCourtCasePending: boolean = false
-  public AnyDisciplinaryActionPending: boolean = false
-  public ExtraOrdinaryLeave: boolean = false
-  public SelectionCategory: string = ''
-
-  public HigherEduPermission: boolean = false
-  public IsEmployeeWorking: boolean = false
-  public HigherEduInstitute: string = ''
-  public Remark: string = ''
-
-  public StaffID: number = 0;
-  public UserID: number = 0;
-  public StaffUserID: number = 0;
-  public ProfileStatusID: number = 0;
-
-  public ModifyBy: number = 0;
-  public StaffTypeID: number = 0;
-  public WorkOfficeID: number = 0;
-  public StatusIDs: number = 0;
-  public LevelID: number = 0;
-  
-}
+export const MONTH_LIST = [
+  { id: 1, name: 'January' },
+  { id: 2, name: 'February' },
+  { id: 3, name: 'March' },
+  { id: 4, name: 'April' },
+  { id: 5, name: 'May' },
+  { id: 6, name: 'June' },
+  { id: 7, name: 'July' },
+  { id: 8, name: 'August' },
+  { id: 9, name: 'September' },
+  { id: 10, name: 'October' },
+  { id: 11, name: 'November' },
+  { id: 12, name: 'December' }
+];
 
 
