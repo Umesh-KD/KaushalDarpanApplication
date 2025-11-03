@@ -1987,4 +1987,11 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetDesignationDepartmentIDWise(DepartmentID: number=1) {
+    return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID , this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
 }
