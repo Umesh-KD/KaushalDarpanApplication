@@ -62,16 +62,16 @@
 
           </div>
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Name.errors" class="text-danger">
-            ex
-            >
+          ex
+          >
 
-            <p *ngIf="_AddStaffBasicDetailFromGroup.Name.errors.required">
-              <i aria-hidden="true"></i>
-              This
-              field is
-              required.!
-            </p>
-          </div>-->
+          <p *ngIf="_AddStaffBasicDetailFromGroup.Name.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
+        </div>-->
         </div>
 
 
@@ -80,13 +80,13 @@
           <input class="form-input" placeholder="Enter SSO ID" name="SSOID" id="txtMobileNo"
                  formControlName="txtMobileNo" [(ngModel)]="formData.MobileNo" />
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
-            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
-              <i aria-hidden="true"></i>
-              This
-              field is
-              required.!
-            </p>
-          </div>-->
+          <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
+        </div>-->
         </div>
 
         <div>
@@ -94,13 +94,13 @@
           <input class="form-input" placeholder="Enter Email ID" name="SSOID" id="txtEmailID"
                  formControlName="txtEmailID" [(ngModel)]="formData.Mailpersonal" />
           <!--<div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.txtSSOID.errors" class="text-danger">
-            <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
-              <i aria-hidden="true"></i>
-              This
-              field is
-              required.!
-            </p>
-          </div>-->
+          <p *ngIf="_AddStaffBasicDetailFromGroup.txtSSOID.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
+        </div>-->
         </div>
 
 
@@ -182,15 +182,15 @@
           </div>
         </div>
         <!--<div *ngIf="formData.BranchID !=0 && HOD_DDlList.length > 0">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
-          <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"
-                  [(ngModel)]="formData.HODsId">
-            <option value="0">Choose Option</option>
-            <option *ngFor="let item of HOD_DDlList" [value]="item.ID">
-              {{item.Name}}
-            </option>
-          </select>
-        </div>-->
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Hod`S</label>
+        <select class="form-select" name="SearchByHODs" id="SearchByHODs" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="formData.HODsId">
+          <option value="0">Choose Option</option>
+          <option *ngFor="let item of HOD_DDlList" [value]="item.ID">
+            {{item.Name}}
+          </option>
+        </select>
+      </div>-->
         <!--{{StaffLevelChildList|json}}-->
 
         <div *ngIf="formData.Show_StaffLevelChild === true && formData.StaffLevelID != 0">
@@ -379,10 +379,10 @@
               </p>
             </td>
             <!--<td>
-    <p *ngIf="row.Address?.length>0" style="max-width:350px">
-      {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
-    </p>
-  </td>-->
+            <p *ngIf="row.Address?.length>0" style="max-width:350px">
+              {{row.Address}}, {{row.District}}, {{row.State}}, {{row.PinCode}}
+            </p>
+          </td>-->
             <td>
               <span *ngIf="row.ProfileStatus==0">Pending</span>
               <span *ngIf="row.ProfileStatus==1">Complete</span>
@@ -394,30 +394,30 @@
             </td>
             <!--<td>{{ row.Remarks}}</td>-->
             <!--<td>
-    <span class="py-1 px-2 bg-success text-white" *ngIf="row.ExaminerStatus==85">Approved</span>
-    <span class="py-1 px-2 bg-danger  text-white" *ngIf="row.ExaminerStatus==86">Draft</span>
-    <span class="py-1 px-2 bg-warning  text-white" *ngIf="row.ExaminerStatus==87">Submitted</span>
-  </td>-->
-          <td>
+            <span class="py-1 px-2 bg-success text-white" *ngIf="row.ExaminerStatus==85">Approved</span>
+            <span class="py-1 px-2 bg-danger  text-white" *ngIf="row.ExaminerStatus==86">Draft</span>
+            <span class="py-1 px-2 bg-warning  text-white" *ngIf="row.ExaminerStatus==87">Submitted</span>
+          </td>-->
+            <td>
 
-            <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-    <a *ngIf="GetRoleID== _EnumRole.ITIPrincipal || GetRoleID == _EnumRole.ITIAdmin_SCVT || GetRoleID == _EnumRole.DTETraing" href="javascript:void(0);" title="Edit" (click)="EditInfo(row.StaffID)"><i class="ti ti-pencil"></i></a>
-  </div>-->
-            <!--{{row.ProfileStatus|json}}-->
+              <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a *ngIf="GetRoleID== _EnumRole.ITIPrincipal || GetRoleID == _EnumRole.ITIAdmin_SCVT || GetRoleID == _EnumRole.DTETraing" href="javascript:void(0);" title="Edit" (click)="EditInfo(row.StaffID)"><i class="ti ti-pencil"></i></a>
+            </div>-->
+              <!--{{row.ProfileStatus|json}}-->
 
-            <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-              <a *ngIf="row.ProfileStatus == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
-              <a *ngIf="row.ProfileStatus>0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
-              <a *ngIf="row.ProfileStatus!=247" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
-              <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
-              <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-eye"></i></a>
-            </div>
+              <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                <a *ngIf="row.ProfileStatus == 0" href="javascript:void(0);" id="btnDelete" title="Delete" (click)="btnDelete_OnClick(row.StaffUserID)"><i class="ti ti-trash"></i></a>
+                <a *ngIf="row.ProfileStatus>0" href="javascript:void(0);" title="View" (click)="onCheckData(row)"><i class="ti ti-eye"></i></a>
+                <a *ngIf="row.ProfileStatus!=247" href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>
+                <!--<a href="javascript:void(0);" title="Assign Status" (click)="onSubmit(modal_SubmitReq, row)"><i class="ti ti-check"></i></a>-->
+                <a href="javascript:void(0);" title="User Profile Status History" (click)="onUserProfileStatusHistorylist(MyModel_UserProfileStatusHistory, row.MainStaffUserID)"><i class="ti ti-eye"></i></a>
+              </div>
 
 
-            <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-    <a (click)="OnConfirm(SttafModelPriview,row.StaffID)" title="View"><i class="ti ti-eye"></i></a>
-  </div>-->
-          </td>
+              <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+              <a (click)="OnConfirm(SttafModelPriview,row.StaffID)" title="View"><i class="ti ti-eye"></i></a>
+            </div>-->
+            </td>
           </tr>
           <tr *ngIf="StaffMasterList?.length==0">
             <td colspan="12">

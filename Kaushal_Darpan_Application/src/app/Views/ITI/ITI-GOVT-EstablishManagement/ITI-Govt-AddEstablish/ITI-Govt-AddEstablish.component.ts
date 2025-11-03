@@ -1328,7 +1328,42 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       this.approveRequest.StatusIDs = 0;
       this.approveRequest.Remark = '';
       this.approveRequest.WorkOfficeID = 0;
+      if (this.approveRequest.DateOfBirth) {
+        // Handle both "/" and "-" just in case
+        const dateParts = this.approveRequest.DateOfBirth.includes('/')
+          ? this.approveRequest.DateOfBirth.split('/')
+          : this.approveRequest.DateOfBirth.split('-');
 
+        const [dayStr, monthStr, yearStr] = dateParts;
+
+        const day = parseInt(dayStr, 10);
+        const month = parseInt(monthStr, 10); // 1-12
+        const year = parseInt(yearStr, 10);
+
+        // Format DateOfBirth as yyyy-MM-dd
+        const dob = new Date(year, month - 1, day);
+        // this.approveRequest.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+
+        // Calculate retirement year
+        const retirementYear = year + 60;
+
+        // Calculate Date of Retirement
+        let retirementDate: Date;
+        if (day === 1) {
+          // Last date of previous month in retirement year
+          retirementDate = new Date(retirementYear, month - 1, 0);
+        } else {
+          // Last date of current month in retirement year
+          retirementDate = new Date(retirementYear, month, 0);
+        }
+
+        // Format retirement date as yyyy-MM-dd
+        const rdDay = String(retirementDate.getDate()).padStart(2, '0');
+        const rdMonth = String(retirementDate.getMonth() + 1).padStart(2, '0');
+        const rdYear = retirementDate.getFullYear();
+
+        this.approveRequest.DateOfRetirement = `${rdYear}-${rdMonth}-${rdDay}`;
+      }
 
       this.approveRequest.IsExtraWorking = false;
 
