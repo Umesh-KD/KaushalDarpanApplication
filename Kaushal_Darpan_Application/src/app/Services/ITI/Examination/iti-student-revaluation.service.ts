@@ -94,5 +94,17 @@ export class ITIStudentRevaluationService {
         ).toPromise();
       }
     
+
+    // service to Update EnrollResponse in BulkExcel
+    public async UpdateEnrollResponseBulkExcel(file: any | null = null) {
+      //formdata
+      const formData = new FormData();
+      formData.append("file", file);
+      return await this.http.post(this.APIUrl + "/UpdateEnrollResponseBulkExcel", formData)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
    
+
 }
