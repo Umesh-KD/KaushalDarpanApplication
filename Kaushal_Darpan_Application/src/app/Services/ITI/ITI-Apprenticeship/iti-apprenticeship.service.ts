@@ -170,4 +170,12 @@ export class ITIApprenticeshipService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetCollegeApprovedContract_Appr(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetCollegeApprovedContract_Appr',body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

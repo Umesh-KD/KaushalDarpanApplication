@@ -68,6 +68,13 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
+  GetMonthNumber() {
+    let today = new Date();
+    let month = today.getMonth() + 1; // January is 0
+    return month;
+  }
+
+
   async GetDistictData() {
     try {
         
@@ -87,6 +94,12 @@ export class NodalCollegeApprovedContractComponent {
 
   async GetInstituteMaster() {
     try {
+      const curr_month = this.GetMonthNumber();
+      if (curr_month <= this.request.MonthID) {
+        this.toastr.error('Please select correct month as You cannot select future or present month');
+        return;
+      } 
+
       const request: any = {};
       request.DistrictID = this.request.DistrictID;
       request.EndTermID = this.sSOLoginDataModel.EndTermID;
