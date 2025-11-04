@@ -61,6 +61,7 @@ export class ItiCollegeReportComponent {
   public stateMasterDDL: any = []
   public PassingYearList: any = []
   public maritialList: any = []
+  public OrderList: any = []
   public CategoryBlist: any = []
   public CategoryAlist: any = []
   public CategoryDlist: any = []
@@ -359,6 +360,7 @@ export class ItiCollegeReportComponent {
 /*    await this.GetParliamentITI()*/
     await this.GetDivisionMasterList()
     await this.GetLateralCourse()
+    await this.GetOrderList()
 
     
   }
@@ -394,6 +396,31 @@ export class ItiCollegeReportComponent {
     }
   }
 
+
+
+  async GetOrderList() {
+    try {
+
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData("OrderList")
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.OrderList = data['Data'];
+
+          // console.log(this.DivisionMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   async GetParliamentITI() {
@@ -962,9 +989,12 @@ export class ItiCollegeReportComponent {
       this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
       this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
       this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
-           this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)
-      this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 1)
-      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)
+      /*  this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
+      this.PostSanctionList = this.request.OrderDetailsList
+
+
+     
+/*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
       console.log(parsedData);
     } catch (ex) {
       console.log(ex);
@@ -1239,18 +1269,18 @@ export class ItiCollegeReportComponent {
     }
 
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.PostSanctionList.length < 1) {
-      this.toastr.warning("Please Add ITI Post sanction Details")
+      this.toastr.warning("Please Add ITI sanction Details")
       return
     }
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
-        this.toastr.warning("Please Add Trade sanction Details")
-        return
-    }
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.MetpSanctionList.length < 1) {
-      this.toastr.warning("Please Add METP sanction Details")
-      return
-    }
+    //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.TradeSanctionList.length < 1 ) {
+    //    this.toastr.warning("Please Add Trade sanction Details")
+    //    return
+    //}
+    //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.MetpSanctionList.length < 1) {
+    //  this.toastr.warning("Please Add METP sanction Details")
+    //  return
+    //}
 
     this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
     this.childComponent.OpenOTPPopup();
@@ -1631,7 +1661,10 @@ export class ItiCollegeReportComponent {
 
     // Get the selected values
 
-
+    if (this.request.OrderType == 0) {
+      this.toastr.warning("Please Select Order Type")
+      return
+    }
     if (this.request.SanctionOrderDate == '') {
       this.toastr.warning("Please Add Order Date")
       return
@@ -1644,6 +1677,7 @@ export class ItiCollegeReportComponent {
       this.toastr.warning("Please Add Order Copy")
       return
     }
+  
 
     if (!this.PostSanctionList) {
       this.PostSanctionList = [];
@@ -1658,14 +1692,17 @@ export class ItiCollegeReportComponent {
     //  }
     //}
 
+    const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
+
+
 
     this.PostSanctionList.push({
 
       OrderCopy: this.request.SanctionOrderCopy,
       OrderDate: this.request.SanctionOrderDate,
       OrderNo: this.request.SanctionOrderNo,
-      OrderType:1
-
+      OrderType: this.request.OrderType,
+      OrderTypeName: OrderTypeName
 
     });
    /* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
@@ -1676,6 +1713,7 @@ export class ItiCollegeReportComponent {
     this.request.SanctionOrderNo = '';
     this.request.SanctionOrderNo = '';
     this.request.OrderType = 0;
+    OrderTypeName:''
 
 
 

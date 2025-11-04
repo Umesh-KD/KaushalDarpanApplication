@@ -793,6 +793,7 @@ export class ItiInstructorFormComponent {
 
           let parsedData = JSON.parse(response.Data);
           if (parsedData != null) {
+            debugger
             this.isSSOVisible = true;
             this.request.Name = parsedData.displayName;
             this.request.Mobile = parsedData.mobile;

@@ -1502,6 +1502,7 @@ const routes: Routes = [
       { path: 'know-revealuation-iti', loadChildren: () => import('./Views/ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
       { path: 'AddQualificationList', loadChildren: () => import('./Views/ITI/add-qualification-list/add-qualification-list.module').then(m => m.AddQualificationListModule) },
 
+      { path: 'SanctionMaster', loadChildren: () => import('./Views/ITI/sanction-master/sanction-master.module').then(m => m.SanctionMasterModule) },
 
 
     ]
