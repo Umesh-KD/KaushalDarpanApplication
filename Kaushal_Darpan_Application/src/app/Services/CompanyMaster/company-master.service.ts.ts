@@ -42,13 +42,21 @@ export class CompanyMasterService {
       ).toPromise();
   }
 
-  //Get by id
-  public async GetById(ID: number) {
-    return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
-      .pipe(
-        catchError(this.handleErrorObservable)
-      ).toPromise();
-  }
+  // //Get by id
+  // public async GetById(ID: number) {
+  //   return await this.http.get(`${this.APIUrl}/GetByID/${ID}`, this.headersOptions)
+  //     .pipe(
+  //       catchError(this.handleErrorObservable)
+  //     ).toPromise();
+  // }
+
+   public async GetById(request: CompanyMasterSearchModel ) {
+      var body = JSON.stringify(request);
+      return await this.http.post(`${this.APIUrl}/GetById`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
 
   //save data
   public async SaveData(request: CompanyMasterDataModels) {

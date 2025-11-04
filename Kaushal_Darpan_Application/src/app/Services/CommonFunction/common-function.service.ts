@@ -275,9 +275,9 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0) {
+  public async SemesterMaster(ShowAllSemester: number = 0, EndTermID: number = 0, IsWithNotYearly: number = 0, IsPromote: number = 0, IsForEx: number = 0, IsWithNot6thSem: number = 0, EngNonEng: number = 0) {
     
-    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}`, this.headersOptions)
+    return await this.http.get(`${this.APIUrl}/SemesterMaster/${ShowAllSemester}/${EndTermID}/${IsWithNotYearly}/${IsPromote}/${IsForEx}/${IsWithNot6thSem}/${EngNonEng}`, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -1993,5 +1993,12 @@ export class CommonFunctionService {
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
+  }
+
+  public async GetDesignationDepartmentIDWise(DepartmentID: number = 1) {
+      return await this.http.get(this.APIUrl + '/GetDesignationDepartmentIDWise/' + DepartmentID, this.headersOptions)
+          .pipe(
+              catchError(this.handleErrorObservable)
+          ).toPromise();
   }
 }

@@ -29,7 +29,8 @@
                         <select class="form-select"
                                 name="DivisionID"
                                 [(ngModel)]="this.request.DivisionID"
-                                (change)="GetDistictData()">
+                                (change)="GetDistictData()"
+                                formControlName="DivisionID">
                             <option [ngValue]="0">Choose option</option>
                             <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
                             {{ item.Name }}
@@ -41,10 +42,24 @@
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
                         <select class="form-select "
                                 [(ngModel)]="this.request.DistrictID"
-                                (change)="GetInstituteMaster($event.target.value)">
+                                formControlName="DistrictID">
                             <option value="0">Choose option</option>
                             <option *ngFor="let item of Districtlist" [value]="item.ID">
                             {{item.Name}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Month: </label>
+                        <select class="form-select"
+                                name="MonthID"
+                                [(ngModel)]="this.request.MonthID"
+                                (change)="GetInstituteMaster()"
+                                formControlName="MonthID">
+                            <option [ngValue]="0">Choose option</option>
+                            <option *ngFor="let item of months" [ngValue]="item.id">
+                            {{ item.name }}
                             </option>
                         </select>
                     </div>
@@ -57,10 +72,10 @@
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
                     <tr>
-                        <th>#</th>
+                        <th class="text-left">Sr No</th>
                         <th class="text-left">Name of ITI</th>
 
-                        <th>Action</th>
+                        <th class="text-left">No of Contract</th>
                     </tr>
 
                 </thead>
@@ -69,11 +84,14 @@
                         <td class="text-left">{{idx+1}}</td>
                         <td class="text-left">{{row.Name}}</td>
 
-                        <td class="text-center">
-                            <button class="btn bg-danger text-white" type="button" title="Delete"
-                                (click)="DeleteRow(row)">
-                                <i class="ti ti-trash"></i>
-                            </button>
+                        <td>
+                            <input type="number"
+                                    [(ngModel)]="row.No_Of_Contract"
+                                    name="Institute_{{row.InstituteID}}"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                    class="form-control"/>
                         </td>
                     </tr>
                 </tbody>

@@ -185,6 +185,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
   //save
   async SaveAllData() {
+    debugger
     this.isSubmitted = true;
     //
     this.refreshBranchRefValidation(true);

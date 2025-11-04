@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CompanyMasterDataModels } from '../../../Models/CompanyMasterDataModel';
+import { CompanyMasterDataModels, CompanyMasterSearchByIdModel, CompanyMasterSearchModel } from '../../../Models/CompanyMasterDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -12,6 +12,7 @@ import { DropdownValidators } from '../../../Services/CustomValidators/custom-va
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../../Models/CommonMasterDataModel';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import { HrMasterDataModel } from '../../../Models/HrMasterDataModel';
 
 @Component({
     selector: 'app-add-company-master',
@@ -22,14 +23,23 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 export class AddCompanyMasterComponent implements OnInit {
 
   public ID: number = 0;
-  public request = new CompanyMasterDataModels()
+  public request = new CompanyMasterDataModels();
+  public personRequest = new HrMasterDataModel();
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public isHrFormSubmitted:boolean=false;
+
   public State: number = 0;
   public key: number = 0;
+   public flag: number = 0;
   public Message: string = '';
   public ErrorMessage: string = '';
   public CompanyMasterFormGroup!: FormGroup;
+  public HrMasterFormGroup!: FormGroup;
+
+  public searchReq = new CompanyMasterSearchByIdModel();
+    
+
   public sSOLoginDataModel = new SSOLoginDataModel();
   public DistrictMasterList: IDistrictMaster_StateIDWiseDataModel[] = []
   public StateMasterList: IStateMasterDataModel[] = []
@@ -55,26 +65,37 @@ export class AddCompanyMasterComponent implements OnInit {
         ddlDistrict: ['', [DropdownValidators]],
         ddlCompanyType: ['', [DropdownValidators]],
 
-        HRName: ['', Validators.required],
-        EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
-        MobileNo: ['', Validators.required],
+        // HRName: ['', Validators.required],
+        // EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        // MobileNo: ['', Validators.required],
 
 
       });
 
+    this.HrMasterFormGroup=this.formBuilder.group(
+    {
+        Name: ['', Validators.required],
+        EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        MobileNo: ['', Validators.required],
+    })
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.ID = Number(this.activatedRoute.snapshot.queryParamMap.get('CompanyID')?.toString());
+    this.flag=Number(this.activatedRoute.snapshot.queryParamMap.get('flag')?.toString());
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
     await this.GetMaterData()
     await this.loadDropdownData('CompanyType')
     //edit
     if (this.ID > 0) {
+      this.searchReq.ID = this.ID;
       await this.GetById();
     }
   }
   get _CompanyMasterFormGroup() { return this.CompanyMasterFormGroup.controls; }
+  get _HrMasterFormGroup(){return this.HrMasterFormGroup.controls;}
+
+
 
 
   async loadDropdownData(MasterCode: string) {
@@ -123,6 +144,9 @@ export class AddCompanyMasterComponent implements OnInit {
       this.routers.navigate(['/CompanyMaster'])
     }
     else if (this.key == 2) {
+      this.routers.navigate(['/CompanyMaster'])
+    }
+    else if (this.key == 3) {
       this.routers.navigate(['/CompanyValidation'])
     }
   }
@@ -157,15 +181,15 @@ export class AddCompanyMasterComponent implements OnInit {
 
       this.loaderService.requestStarted();
 
-      await this.CompanyMasterService.GetById(this.ID)
+      await this.CompanyMasterService.GetById(this.searchReq)
 
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data,"company");
 
           this.request = data['Data'];
-          this.request.Dis_CompanyName = data['Data']['Dis_Name'];
-          this.request.CompanyPhoto = data['Data']['Logo'];
+          this.request.Dis_CompanyName = data['Data']['Dis_CompanyName'];
+          this.request.CompanyPhoto = data['Data']['CompanyPhoto'];
           this.ddlState_Change();
           this.request.DistrictID = data['Data']["DistrictID"];
           console.log(this.request, "request");
@@ -184,12 +208,52 @@ export class AddCompanyMasterComponent implements OnInit {
     }
   } 
 
+
+  
+  
+
+  async AddMoreMembers() {
+      
+      this.isHrFormSubmitted = true;
+      if(this.HrMasterFormGroup.invalid) {
+        this.toastr.error("Please fill all the required fields of Hr Form")
+        return;
+      }
+  
+      const personExists = this.request.ListCompanyHRDetails.some(person =>
+        person.EmailId === this.personRequest.EmailId && person.MobileNo === this.personRequest.MobileNo
+      );
+  
+      if (!personExists) {
+        this.request.ListCompanyHRDetails.push(this.personRequest);
+        this.personRequest = new HrMasterDataModel();
+        this.isHrFormSubmitted = false;
+      } else {
+        this.toastr.error("Person already exists with the same emailid and mobileno.");
+        return
+      }
+  
+      // this.request.ConcernPersonDetails.push(this.personRequest);
+    
+    }
+  
+
+  async resetHrDetails() {
+    this.personRequest = new HrMasterDataModel();
+  }
+
   // get detail by id
   async SaveData() {
+    debugger
     try {
       this.isSubmitted = true;
       if (this.CompanyMasterFormGroup.invalid) {
         console.log("errro")
+        return
+      }
+
+      if(this.request.ListCompanyHRDetails.length<=0){
+        this.toastr.error("Please add at least one HR details");
         return
       }
       this.isLoading = true;
@@ -212,7 +276,8 @@ export class AddCompanyMasterComponent implements OnInit {
           if (this.State = EnumStatus.Success) {
             this.toastr.success(this.Message)
             this.ResetControls();
-            this.routers.navigate(['/CompanyMaster']);
+             this.Back();
+            // this.routers.navigate(['/CompanyMaster']);
           }
           else {
             this.toastr.error(this.ErrorMessage)
@@ -332,9 +397,6 @@ export class AddCompanyMasterComponent implements OnInit {
     }
   }
 
-
-
-
   // reset
   ResetControls() {
     this.request = new CompanyMasterDataModels();
@@ -343,5 +405,13 @@ export class AddCompanyMasterComponent implements OnInit {
     //this.multiSelect.toggleSelectAll();
   }
 
+  async Delete_Hr(idx:number){
+    try{
+      this.request.ListCompanyHRDetails.splice(idx,1);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
 
 }

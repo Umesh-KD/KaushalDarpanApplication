@@ -5,7 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { EnumRole, EnumStatus, MONTH_LIST } from '../../../../Common/GlobalConstants';
+import { ITIApprenticeshipService } from '../../../../Services/ITI/ITI-Apprenticeship/iti-apprenticeship.service';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-nodal-college-approved-contract',
@@ -23,6 +26,8 @@ export class NodalCollegeApprovedContractComponent {
   public Districtlist: any = [];
   public Institutelist: any = [];
   public DivisionData: any = [];
+  _enumRole = EnumRole;
+  months = MONTH_LIST;
 
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -30,19 +35,28 @@ export class NodalCollegeApprovedContractComponent {
     private loaderService: LoaderService,
     private Swal2: SweetAlert2,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private apprenticeshipService: ITIApprenticeshipService
   ) { }
 
   async ngOnInit() {
-    debugger
+    this.CollegeApprovedContractForm = this.formBuilder.group({
+      DivisionID: ['', [DropdownValidators]],
+      DistrictID: ['', [DropdownValidators]],
+      MonthID: ['', [DropdownValidators]],
+    })
+      
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDivisionMaster();
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
     await this.DivisionData_ByDistrict();
     await this.GetDistictData();
     
-    await this.GetInstituteMaster(this.request.DistrictID);
+    // await this.GetInstituteMaster(this.request.DistrictID);
   }
+
+  get _CollegeApprovedContractForm() { return this.CollegeApprovedContractForm.controls; }
 
   async GetDivisionMaster() {   
     try {
@@ -56,13 +70,14 @@ export class NodalCollegeApprovedContractComponent {
 
   async GetDistictData() {
     try {
-      debugger
+        
       // this.request.DistrictID = 0
       // this.Institutelist = [];
       await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.request.DivisionID))
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.Districtlist = data['Data'];
+          this.request.DistrictID = this.sSOLoginDataModel.DistrictID
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -70,10 +85,14 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
-  async GetInstituteMaster(dis: number) {
+  async GetInstituteMaster() {
     try {
-      debugger
-      await this.commonMasterService.GovtITICollege_DistrictWise(this.request.DistrictID, this.sSOLoginDataModel.EndTermID).then(async (data: any) => {
+      const request: any = {};
+      request.DistrictID = this.request.DistrictID;
+      request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      request.MonthID = this.request.MonthID;
+      request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.Institutelist = data['Data'];
       })
@@ -84,7 +103,7 @@ export class NodalCollegeApprovedContractComponent {
 
   async DivisionData_ByDistrict() {
     try {
-      debugger
+        
       await this.commonMasterService.DivisionData_ByDistrict(Number(this.request.DistrictID))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -97,7 +116,39 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
-  async SaveData() {}
+  async SaveData() {
+    // this.Institutelist.some((row: any) => {
+    //   if (row.No_Of_Contract == null || row.No_Of_Contract == undefined || row.No_Of_Contract == '') {
+    //     this.toastr.error('Please enter No of Contract');
+    //     return true;
+    //   }
+    // })
+
+    try {
+      this.Institutelist.forEach((ele: any) => {
+        ele.UserID = this.sSOLoginDataModel.UserID;
+        ele.EndTermID = this.sSOLoginDataModel.EndTermID;
+        ele.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        ele.ZoneID = this.request.DivisionID;
+        ele.DistrictID = this.request.DistrictID;
+        ele.MonthID = this.request.MonthID;
+        ele.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      });
+
+      await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(this.Institutelist).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async ResetControl() {}
   
   async DeleteRow(row: any) {}

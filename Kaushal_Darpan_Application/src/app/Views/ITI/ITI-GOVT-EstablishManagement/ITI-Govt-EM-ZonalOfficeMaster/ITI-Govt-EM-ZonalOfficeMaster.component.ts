@@ -615,7 +615,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
    
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster()
+      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ITIGovtEMAddStaffBasicDetailDataModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffHostelListModel, UpdateSSOIDByPricipleModel, RequestUpdateStatus, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMAddStaffBasicDetailDataModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffHostelListModel, UpdateSSOIDByPricipleModel, RequestUpdateStatus, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITT_EM_ApproveStaffDataModel } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -9,11 +9,12 @@ import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, ITIGovtEM_EnumStaffType, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, ITIGovtEM_EnumStaffType, ITIGovtEM_EnumStaffLevel, ITIGovtEM_EnumStaffLevelChild,  EnumEMProfileStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
 import { ITICollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
+import { StreamDDL_InstituteWiseModel } from '../../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-ITI-Govt-AddEstablish',
@@ -64,16 +65,24 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   public GetDesignationID: number = 0
   public PostList: any = [];
   public RequestUpdateStatus = new RequestUpdateStatus();
+  public approveRequest = new ITT_EM_ApproveStaffDataModel();
   @ViewChild('MyModel_ReplayQuery') MyModel_ReplayQuery: any;
   closeResult: string | undefined;
   public filteredStatusList: any[] = [];
   public type: string = ''
-  groupForm!: FormGroup;
+  StaffMasterFormGroup!: FormGroup;
   public _ITIGovtEM_EnumStaffType = ITIGovtEM_EnumStaffType
   public _ITIGovtEM_EnumStaffLevel = ITIGovtEM_EnumStaffLevel
   public _ITIGovtEM_EnumStaffLevelChild = ITIGovtEM_EnumStaffLevelChild
   public searchRequestUserProfileStatus = new ITI_Govt_EM_UserRequestHistoryListSearchDataModel();
   public UserProfileStatusHistoryList: any = [];
+  public StreamSearch = new StreamDDL_InstituteWiseModel();
+  public CourseMasterDDL: any[] = [];
+  public OfficeList: any = [];
+  public OfficeWorkList: any = [];
+  public InstituteMasterDDLList: any[] = [];
+  public DesignationMasterDDLList: any = [];
+  public _EnumEMProfileStatus = EnumEMProfileStatus;
   constructor(private commonMasterService: CommonFunctionService, private Staffservice: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService
   ) {
@@ -86,9 +95,28 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.GetRoleID = this.sSOLoginDataModel.RoleID;
    
-    this.groupForm = this.formBuilder.group({
+    this.StaffMasterFormGroup = this.formBuilder.group({
       ddlStatus: [0, [DropdownValidators]],
-      txtRemark: ['', Validators.required]
+      txtRemark: ['', Validators.required],
+      /*DesignationID: [0, [DropdownValidators]],*/
+      DesignationID: [{ value: '', disabled: true }, [DropdownValidators]],
+      WorkOfficeID: [0, [DropdownValidators]],
+      IsExtraWorking: ['false'],
+      IsEmpWorkingOnPost: [false],
+      IsEmpWorkingOnDeputationFromOther: [''],
+      EmpInstituteID: [0, [DropdownValidators]],
+      IsEmpWorkingOnDeputationToOther: [false],
+      EmpDeputatedInstituteID: [0,],
+      IsSalaryDrawnFromSamePost: [false],
+      SalaryDrawnPostID: [0, [DropdownValidators]],
+      IsSalaryDrawnFromOtherInstitute: [''],
+      SalaryDrawnInstituteID: [0, [DropdownValidators]],
+      DateOfRetirement: [''],
+      AnyCourtCasePending: ['', [Validators.required]],
+      AnyDisciplinaryActionPending: ['', [Validators.required]],
+
+      
+
     });
 
     this.AddStaffBasicDetailFromGroup = this.formBuilder.group({
@@ -143,16 +171,19 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     await this.GetStaffTypeData();
     await this.GetStatusList();
     await this.getITICollege();
-    await this.GetAllData()
+    await this.GetAllData();
 
    
 
-    await this.StaffLevelType()
-    await this.StaffLevelChild()
-    await this.GetTechnicianDll()
+    await this.StaffLevelType();
+    await this.GetOfficeList();
+    await this.StaffLevelChild();
+    await this.GetTechnicianDll();
    /* await this.GetHostelData()*/
-    await this.GetBranchesMasterData()
+    await this.GetBranchesMasterData();
+    await this.getInstituteMasterList();
     await this.GetPostList();
+    await this.GetDesignationMasterData();
     this.formData.InstituteID = this.sSOLoginDataModel.InstituteID;
 
 
@@ -161,7 +192,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     console.log(this.sSOLoginDataModel);
   }
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
-
+  get _StaffMasterFormGroup() { return this.StaffMasterFormGroup.controls; }
 
   async getITICollege() {
     try {
@@ -1010,11 +1041,11 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationAndPostMaster()
+      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
-          this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
+          //this.PostList = this.PostList.filter((itme: any) => itme.TypeID == this.formData.StaffTypeID)
           console.log(this.PostList, "PostList")
         }, error => console.error(error));
     }
@@ -1289,10 +1320,67 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   async onSubmit(model: any, userSubmitData: any) {
 
     try {
-      this.RequestUpdateStatus = { ...userSubmitData };
-      this.RequestUpdateStatus.StatusIDs = 0;
-      this.RequestUpdateStatus.Remark = '';
-      console.log(this.RequestUpdateStatus, "modal");
+
+    
+
+      this.approveRequest = { ...userSubmitData };
+    /*  this.RequestUpdateStatus = { ...userSubmitData };*/
+      this.approveRequest.StatusIDs = 0;
+      this.approveRequest.Remark = '';
+      this.approveRequest.WorkOfficeID = 0;
+      if (this.approveRequest.DateOfBirth) {
+        // Handle both "/" and "-" just in case
+        const dateParts = this.approveRequest.DateOfBirth.includes('/')
+          ? this.approveRequest.DateOfBirth.split('/')
+          : this.approveRequest.DateOfBirth.split('-');
+
+        const [dayStr, monthStr, yearStr] = dateParts;
+
+        const day = parseInt(dayStr, 10);
+        const month = parseInt(monthStr, 10); // 1-12
+        const year = parseInt(yearStr, 10);
+
+        // Format DateOfBirth as yyyy-MM-dd
+        const dob = new Date(year, month - 1, day);
+        // this.approveRequest.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+
+        // Calculate retirement year
+        const retirementYear = year + 60;
+
+        // Calculate Date of Retirement
+        let retirementDate: Date;
+        if (day === 1) {
+          // Last date of previous month in retirement year
+          retirementDate = new Date(retirementYear, month - 1, 0);
+        } else {
+          // Last date of current month in retirement year
+          retirementDate = new Date(retirementYear, month, 0);
+        }
+
+        // Format retirement date as yyyy-MM-dd
+        const rdDay = String(retirementDate.getDate()).padStart(2, '0');
+        const rdMonth = String(retirementDate.getMonth() + 1).padStart(2, '0');
+        const rdYear = retirementDate.getFullYear();
+
+        this.approveRequest.DateOfRetirement = `${rdYear}-${rdMonth}-${rdDay}`;
+      }
+
+      this.approveRequest.IsExtraWorking = false;
+
+      if (this.approveRequest.IsExtraWorking == false) {
+        this.approveRequest.IsSalaryDrawnFromSamePost = true;
+        this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+
+        this.approveRequest.IsEmpWorkingOnDeputationToOther = false;
+      }
+      else {
+        this.approveRequest.IsSalaryDrawnFromSamePost = false;
+        this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+        this.approveRequest.IsEmpWorkingOnDeputationToOther = false;
+      }
+
+
+      console.log(this.approveRequest, "modal");
       this.modalReference = this.modalService.open(model, { size: 'sm', backdrop: 'static' });
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -1308,7 +1396,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.filteredStatusList = data['Data'];
-
+          this.filteredStatusList = this.filteredStatusList.filter((item: any) => item.ID != this._EnumEMProfileStatus.Pending && item.ID != this._EnumEMProfileStatus.Completed && item.ID != this._EnumEMProfileStatus.LockAndSubmit)
           console.log(this.filteredStatusList, "GetStatusList")
         }, error => console.error(error));
     }
@@ -1331,8 +1419,16 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
   async updateReqStatus() {
 
+    if (this.approveRequest.StatusIDs == 247) {
+      await this.refreshValidators();
+    } else {
+      await this.refreshRemoveRejectRevertValidators();
+    }
+
+    
+
     this.isSubmitted = true;
-    if (this.groupForm.invalid) {
+    if (this.StaffMasterFormGroup.invalid) {
       return console.log("error")
     }
     this.loaderService.requestStarted();
@@ -1352,13 +1448,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
         this.RequestUpdateStatus.ProfileStatusID = 4;
       }
 
-
-
-
-
-
-
-      await this.Staffservice.ITI_GOVT_EM_ApproveRejectStaff(this.RequestUpdateStatus)
+      await this.Staffservice.ITI_EM_PostWithVacancyApproveStaffProfile(this.approveRequest)
         .then(async (data: any) => {
           this.State = data['State'];
           this.Message = data['Message'];
@@ -1415,6 +1505,188 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+
+ 
+
+
+  async getStreamMasterData() {
+    try {
+      this.StreamSearch.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.StreamSearch.StreamType = this.sSOLoginDataModel.Eng_NonEng
+      this.loaderService.requestStarted();
+      await this.commonMasterService.StreamDDLInstituteIdWise(this.StreamSearch).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CourseMasterDDL = data.Data;
+        console.log("StreamMasterList", this.CourseMasterDDL)
+      }, error => console.error(error));
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+ 
+
+  async GetOfficeList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 2)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.OfficeList = data['Data'];
+          this.OfficeWorkList = data['Data'];
+          console.log(this.OfficeList, "OfficeList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async getInstituteMasterList() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteMasterDDLList = data.Data;
+      })
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetDesignationMasterData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.DesignationMasterDDLList = data.Data;
+        //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
+        // console.log("DesignationMasterList", this.DesignationMasterDDLList);
+      }, error => console.error(error))
+
+      //await this.commonMasterService.GetCommonMasterDDLByType('Gender')
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.GenderList = data['Data'];
+      //    console.log("GenderList", this.GenderList);
+      //  }, (error: any) => console.error(error)
+      //  );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async refreshValidators() {
+    debugger
+    if (this.approveRequest.IsEmpWorkingOnDeputationFromOther == false) {
+      this.StaffMasterFormGroup.get('EmpInstituteID')?.removeValidators([DropdownValidators]);
+    }
+    if (this.approveRequest.IsEmpWorkingOnDeputationToOther == false) {
+      this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.removeValidators([DropdownValidators]);
+    }
+    if (this.approveRequest.IsSalaryDrawnFromSamePost == true) {
+      this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([DropdownValidators]);
+    }
+    if (this.approveRequest.IsSalaryDrawnFromOtherInstitute == false) {
+      this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.removeValidators([DropdownValidators]);
+    }
+    if (this.approveRequest.HigherEduPermission == false) {
+      this.StaffMasterFormGroup.get('HigherEduInstitute')?.removeValidators([Validators.required]);
+    }
+
+    this.StaffMasterFormGroup.get('EmpInstituteID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('HigherEduInstitute')?.updateValueAndValidity();
+  }
+
+  async refreshRemoveRejectRevertValidators() {
+    debugger;
+
+    this.StaffMasterFormGroup.get('DesignationID')?.removeValidators(DropdownValidators);
+    this.StaffMasterFormGroup.get('WorkOfficeID')?.removeValidators(DropdownValidators);
+    this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators(DropdownValidators);
+    this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.removeValidators(DropdownValidators);
+    this.StaffMasterFormGroup.get('HigherEduInstitute')?.removeValidators(Validators.required);
+    this.StaffMasterFormGroup.get('AnyCourtCasePending')?.removeValidators(Validators.required);
+    this.StaffMasterFormGroup.get('AnyDisciplinaryActionPending')?.removeValidators(Validators.required);
+
+    this.StaffMasterFormGroup.get('DesignationID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('WorkOfficeID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('HigherEduInstitute')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('AnyCourtCasePending')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('AnyDisciplinaryActionPending')?.updateValueAndValidity();
+  }
+
+  onEmpWorkingChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsEmpWorkingOnPost = value;
+
+    if (value === true) {
+      // If working on post is 'Yes', default salary drawn to 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+    } else {
+      // If working on post is 'No', default salary drawn to 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+    }
+  }
+
+  onSalaryDrawnChange(value: boolean) {
+    debugger;
+    this.approveRequest.IsSalaryDrawnFromSamePost = value;
+
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsEmpWorkingOnPost = false;
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsEmpWorkingOnPost = true;
+    }
+  }
+
+  WorkAccordingonSalaryDrawnChange(value: boolean) {
+    debugger;
+    /*this.approveRequest.IsSalaryDrawnFromSamePost = value;*/
+    
+    if (value === true) {
+      // If salary is drawn from same post 'Yes', working on post should be 'No'
+      this.approveRequest.IsSalaryDrawnFromSamePost = false;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
+      this.approveRequest.IsEmpWorkingOnDeputationFromOther = false;
+
+    } else {
+      // If salary is drawn from same post 'No', working on post should be 'Yes'
+      this.approveRequest.IsSalaryDrawnFromSamePost = true;
+      this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+      this.approveRequest.IsEmpWorkingOnDeputationFromOther = true;
     }
   }
 }

@@ -476,6 +476,7 @@ export class PromotedStudentComponent {
       let IsPromote = 0;
       let IsForEx = this.request.PromoteStatusID == this._PromoteStatus.Reg ? 0 : 1;
       let IsWithNot6thSem = 0;
+      let EngNonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.SemesterMasterList = [];// reset
       if (this.request.PromoteStatusID == this._PromoteStatus.Reg) {
         IsPromote = 1;
@@ -492,7 +493,7 @@ export class PromotedStudentComponent {
       else {
         return;
       }
-      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx, IsWithNot6thSem)
+      await this.commonMasterService.SemesterMaster(ShowAllSemester, EndTermID, IsWithNotYearly, IsPromote, IsForEx, IsWithNot6thSem,EngNonEng)
         .then((data: any) => {
           this.SemesterMasterList = data['Data'];
         }, (error: any) => console.error(error));
