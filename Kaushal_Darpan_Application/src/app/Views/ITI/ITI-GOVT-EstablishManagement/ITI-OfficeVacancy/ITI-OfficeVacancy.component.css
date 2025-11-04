@@ -1,6 +1,10 @@
+/* ------------------------------
+   Container & Layout
+------------------------------ */
 .container {
   max-width: 100%;
   padding: 20px;
+  box-sizing: border-box;
 }
 
 .form-row {
@@ -8,64 +12,125 @@
   flex-wrap: wrap;
   gap: 15px;
   align-items: flex-end;
+  margin-bottom: 15px; /* add spacing between rows */
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  flex: 1 1 30%; /* auto-adjust width, ~3 per row */
+  min-width: 250px; /* prevent inputs from getting too narrow */
 }
 
-.form-control {
+/* ------------------------------
+   Form Controls
+------------------------------ */
+.form-control,
+.form-select,
+textarea {
+  width: 100%;
   padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  font-size: 14px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
 }
 
+  .form-control:focus,
+  .form-select:focus,
+  textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    outline: none;
+  }
+
+/* ------------------------------
+   Buttons
+------------------------------ */
 .btn {
   padding: 8px 16px;
   border-radius: 4px;
   border: none;
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+/* Primary button */
 .btn-primary {
   background-color: #007bff;
-  color: white;
+  color: #fff;
 }
 
   .btn-primary:hover {
     background-color: #0056b3;
   }
 
+/* Danger button */
 .btn-danger {
   background-color: #dc3545;
-  color: white;
+  color: #fff;
 }
 
   .btn-danger:hover {
     background-color: #c82333;
   }
 
+/* Success button */
+.btn-success {
+  background-color: #28a745;
+  color: #fff;
+}
+
+  .btn-success:hover {
+    background-color: #218838;
+  }
+
+/* ------------------------------
+   Table Styling
+------------------------------ */
 .table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
-  .table th, .table td {
+  .table th,
+  .table td {
     border: 1px solid #ddd;
     padding: 10px;
+    text-align: left;
+    vertical-align: middle;
   }
 
   .table th {
     background-color: #f8f9fa;
+    font-weight: 600;
   }
 
+  .table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+/* ------------------------------
+   Utility
+------------------------------ */
 .text-center {
   text-align: center;
 }
 
-
-/* The switch wrapper */
+/* ------------------------------
+   Custom Switch (Toggle)
+------------------------------ */
 .switch {
   position: relative;
   display: inline-block;
@@ -73,14 +138,14 @@
   height: 28px;
 }
 
-  /* Hide default checkbox */
+  /* Hide the default checkbox */
   .switch input {
     opacity: 0;
     width: 0;
     height: 0;
   }
 
-/* The slider background */
+/* Background track */
 .slider {
   position: absolute;
   cursor: pointer;
@@ -88,12 +153,12 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc; /* grey background when off */
+  background-color: #ccc;
   transition: 0.4s;
   border-radius: 34px;
 }
 
-  /* The circle */
+  /* Slider circle */
   .slider:before {
     position: absolute;
     content: "";
@@ -106,17 +171,16 @@
     border-radius: 50%;
   }
 
-/* Checked ON state */
-input:checked + .slider {
-  background-color: #4caf50; /* green background */
+/* When checked (ON) */
+.switch input:checked + .slider {
+  background-color: #4caf50;
 }
 
-  /* Move the circle to right when ON */
-  input:checked + .slider:before {
+  .switch input:checked + .slider:before {
     transform: translateX(24px);
   }
 
-/* Optional: Rounded slider */
+/* Rounded slider option */
 .slider.round {
   border-radius: 34px;
 }
