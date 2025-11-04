@@ -37,33 +37,7 @@
         </div>
 
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Name <span class="StarMarking">*</span>
-            </label>
-            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
-                   [(ngModel)]="request.Name" formControlName="Name">
-            <div *ngIf="isSubmitted && _CandidateFormGroup.Name.errors" class="text-danger">
-              <p *ngIf="_CandidateFormGroup.Name.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-          </div>
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Father's Name <span class="StarMarking">*</span>
-            </label>
-            <input type="text" class="form-input" placeholder="Enter Father's Name" id="CandidateFatherName" name="CandidateFatherName"
-                   [(ngModel)]="request.CandidateFatherName" formControlName="CandidateFatherName">
-            <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateFatherName.errors" class="text-danger">
-              <p *ngIf="_CandidateFormGroup.CandidateFatherName.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-          </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -95,6 +69,35 @@
 
 
           <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
+                   [(ngModel)]="request.Name" formControlName="Name">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.Name.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.Name.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              Father's Name <span class="StarMarking">*</span>
+            </label>
+            <input type="text" class="form-input" placeholder="Enter Father's Name" id="CandidateFatherName" name="CandidateFatherName"
+                   [(ngModel)]="request.CandidateFatherName" formControlName="CandidateFatherName">
+            <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateFatherName.errors" class="text-danger">
+              <p *ngIf="_CandidateFormGroup.CandidateFatherName.errors.required">
+                <i aria-hidden="true"></i> This field is
+                required.!
+              </p>
+            </div>
+          </div>
+
+
+          <div>
             <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
               जन्म तिथि (Date of Birth):<span class="StarMarking">*</span>
             </label>
@@ -113,7 +116,7 @@
               <p *ngIf="_CandidateFormGroup.txtDOB.errors.required">
                 <i aria-hidden="true"></i> This field is required!
               </p>
-            
+
               <p *ngIf="_CandidateFormGroup.txtDOB.errors.invalidAge">
                 <i aria-hidden="true"></i> Date of Birth must be at least 14 years!
               </p>
@@ -124,17 +127,17 @@
 
 
           <!-- <div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
-      <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
-        <option selected value="0">Choose Option</option>
-        <option value="97">Male</option>
-        <option value="98">Female</option>
-        <option value="0">Female</option>
-      </select>
-      <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
-        <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>
-    </div> -->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Gender  <span class="StarMarking">*</span></label>
+    <select class="form-select" id="CandidateGender" name="CandidateGender" [(ngModel)]="request.Gender" formControlName="CandidateGender">
+      <option selected value="0">Choose Option</option>
+      <option value="97">Male</option>
+      <option value="98">Female</option>
+      <option value="0">Female</option>
+    </select>
+    <div *ngIf="isSubmitted && _CandidateFormGroup.CandidateGender.errors" class="text-danger">
+      <p *ngIf="!_CandidateFormGroup.CandidateGender.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
+  </div> -->
 
 
           <div>

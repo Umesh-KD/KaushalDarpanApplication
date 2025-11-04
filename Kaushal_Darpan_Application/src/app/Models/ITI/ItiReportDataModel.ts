@@ -102,6 +102,7 @@ export class ItiReportDataModel {
   public WorkSanctionCopy:string=''
   public UpdatePercentWork:string=''
   public UpdateRemarks: string = ''
+  public OrderTypeID:number=0
 
 }
 
