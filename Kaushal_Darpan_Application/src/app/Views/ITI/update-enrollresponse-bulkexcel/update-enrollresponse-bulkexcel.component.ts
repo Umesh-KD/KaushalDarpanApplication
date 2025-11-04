@@ -109,11 +109,11 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
         const file: File = event.target.files[0];
         if (file) {
           this.selectedFile = file;
-          this.ImportExcelFile(file);
+          // this.ImportExcelFile(file);
         }
-        this.selectedFile = null;
+        // this.selectedFile = null;
          // Reset file input so selecting the same file again triggers change
-        event.target.value = null;
+        // event.target.value = null;
       }
     //ImportExcelFile(file: File): void {
     //    let mesg = '';

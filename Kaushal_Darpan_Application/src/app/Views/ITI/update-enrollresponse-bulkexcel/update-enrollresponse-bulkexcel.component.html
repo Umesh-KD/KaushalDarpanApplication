@@ -30,7 +30,7 @@
                    for="fileStudentPhoto">Import Excel</label>
             <div class="flex fileUploader bg-gray-100 items-center">
               <!-- (change)="onFileChange($event)" -->
-              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
+              <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" (change)="onFileChange($event)" [(ngModel)]="importFile"
                      id="fileStudentPhoto" type="file"  accept=".xls,.xlsx">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
@@ -47,10 +47,9 @@
               <input type="text" class="form-input" placeholder="Enter ChunkSize" id="ChunkSize" name="ChunkSize"
                     [(ngModel)]="ChunkSize" >   
             <!-- </div> -->
-     
           </div>
 
-          <button type="button" class=" btn bg-info text-white " (click)="onFileChange($event)">Submit</button>           
+          <button type="button" class=" btn bg-info text-white " (click)="ImportExcelFile(selectedFile)">Submit</button>           
           
           <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="DownloadExcelSample()"><i class="ti ti-download"></i> Sample Format</a> -->
         </div>
