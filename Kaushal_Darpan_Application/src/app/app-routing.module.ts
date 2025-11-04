@@ -1473,7 +1473,10 @@ const routes: Routes = [
       {path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
       {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
-      
+      {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
+     
+
+
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
       { path: 'ITIChangeShift', loadChildren: () => import('./Views/ITI/iti-change-shift/iti-change-shift.module').then(m => m.ItiChangeShiftModule) },
       { path: 'teacher-higher-education-application', loadChildren: () => import('./Views/BTER/THTE/teacher-higher-education-application/teacher-higher-education-application.module').then(m => m.TeacherHigherEducationApplicationModule)},

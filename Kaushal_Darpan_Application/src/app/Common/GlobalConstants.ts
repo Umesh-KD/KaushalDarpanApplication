@@ -1,3 +1,5 @@
+import { RequestBaseModel } from "../Models/RequestBaseModel";
+
 export class GlobalConstants {
 
   //api uploaded folder path in static folder

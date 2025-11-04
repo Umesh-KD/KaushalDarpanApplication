@@ -160,7 +160,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
     });
 
 
-    const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+    const data: any = await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID);
     this.PostList = data['Data'];
     
 
@@ -426,9 +426,9 @@ export class ITIOfficeVacancyComponent implements OnInit {
   async GetPostList() {
     try {
       this.loaderService.requestStarted();
-      const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+      const data: any = await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID);
       this.PostList = data['Data'];
-      this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
+      //this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
       // Keep original list for filtering later
       console.log(this.PostList, "PostList");
     } catch (error) {
