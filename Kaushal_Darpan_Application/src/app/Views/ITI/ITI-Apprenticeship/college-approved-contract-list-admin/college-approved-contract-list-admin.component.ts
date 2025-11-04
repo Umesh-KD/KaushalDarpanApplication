@@ -23,6 +23,7 @@ export class CollegeApprovedContractListAdminComponent {
   months = MONTH_LIST;
 
   public ApprovedContractDataList: any = [];
+  public InstitutelistDDL: any = [];
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -49,7 +50,8 @@ export class CollegeApprovedContractListAdminComponent {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    // await this.GetApprovedContractData();
+    await this.GetInstituteMaster();
+    await this.GetApprovedContractData();
   }
 
   async GetApprovedContractData() {
@@ -75,6 +77,20 @@ export class CollegeApprovedContractListAdminComponent {
   async ResetControl() {
     this.searchRequest = {};
     await this.GetApprovedContractData();
+  }
+
+  async GetInstituteMaster() {
+    try {
+      
+      const request: any = {};
+      request.action = "GetITIGovtInstituteDDL";
+      await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstitutelistDDL = data['Data'];
+      })
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   //table feature

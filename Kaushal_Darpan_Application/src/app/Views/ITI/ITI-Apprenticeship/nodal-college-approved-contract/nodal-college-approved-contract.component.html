@@ -42,7 +42,8 @@
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
                         <select class="form-select "
                                 [(ngModel)]="this.request.DistrictID"
-                                formControlName="DistrictID">
+                                formControlName="DistrictID"
+                                (change)="onChange()">
                             <option value="0">Choose option</option>
                             <option *ngFor="let item of Districtlist" [value]="item.ID">
                             {{item.Name}}
