@@ -96,10 +96,11 @@ export class ITIStudentRevaluationService {
     
 
     // service to Update EnrollResponse in BulkExcel
-    public async UpdateEnrollResponseBulkExcel(file: any | null = null) {
+    public async UpdateEnrollResponseBulkExcel(file: any | null = null, ChunkSize: number = 100) {
       //formdata
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("ChunkSize", ChunkSize.toString());
       return await this.http.post(this.APIUrl + "/UpdateEnrollResponseBulkExcel", formData)
         .pipe(
           catchError(this.handleErrorObservable)

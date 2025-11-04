@@ -53,6 +53,7 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
   sortOrder: string = "";
 
   public TradeID: number = 0;
+  public ChunkSize: number = 100;
 
   public TradeDDLList: any = [];  
 
@@ -108,11 +109,11 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
         const file: File = event.target.files[0];
         if (file) {
           this.selectedFile = file;
-          this.ImportExcelFile(file);
+          // this.ImportExcelFile(file);
         }
-        this.selectedFile = null;
+        // this.selectedFile = null;
          // Reset file input so selecting the same file again triggers change
-        event.target.value = null;
+        // event.target.value = null;
       }
     //ImportExcelFile(file: File): void {
     //    let mesg = '';
@@ -142,7 +143,7 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
          if (result.isConfirmed) {
           try{
             this.loaderService.requestStarted();
-            await  this.ITIStudentRevaluationService.UpdateEnrollResponseBulkExcel(file)
+            await  this.ITIStudentRevaluationService.UpdateEnrollResponseBulkExcel(file,this.ChunkSize)
             .then((data: any) => {
 
               data = JSON.parse(JSON.stringify(data));
