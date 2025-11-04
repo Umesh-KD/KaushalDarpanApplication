@@ -49,7 +49,7 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
   public CandidateData:any=[];
   public GenderList: any = [];
   public FromDate: string = ''
-
+  public IsEditName: boolean=false
   constructor(private commonMasterService: CommonFunctionService, private CompanyMasterService: CompanyMasterService,
     private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute, public appsettingConfig: AppsettingService, private routers: Router, private modalService: NgbModal,
@@ -170,8 +170,17 @@ export class EditStudentCorrectionMasterComponent implements OnInit {
           if(data && data.Data){
             this.request.StateRegNumber = data.Data[0]?.StateRegNumber;
             this.request.ErrorDescription = data.Data[0]?.ErrorDescription;
+            this.IsEditName = data.Data[0]?.IsEditName
 
-            
+            if (this.IsEditName == true)
+            {
+              this.CandidateFormGroup.controls['Name'].enable()
+              this.CandidateFormGroup.controls['CandidateFatherName'].enable()
+            }
+            else {
+              this.CandidateFormGroup.controls['Name'].disable()
+              this.CandidateFormGroup.controls['CandidateFatherName'].disable()
+            }
 
             this.CandidateFormGroup.patchValue({
               Name: data.Data[0].Name,

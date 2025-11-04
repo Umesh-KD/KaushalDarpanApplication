@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
-import { HiringRoleMasterDataModel } from '../../Models/HiringRoleMasterDataModel';
+import { HiringRoleMasterDataModel, SanctionOrderDataModel } from '../../Models/HiringRoleMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +36,32 @@ export class HiringRoleMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetAllSanction() {
+    return await this.http.get(this.APIUrl + "/GetAllSanction", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetByID(PK_ID: number) {
     return await this.http.get(this.APIUrl + "/GetByID/" + PK_ID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async GetByIDSanction(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/GetByIDSanction/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async SaveData(request: HiringRoleMasterDataModel) {
 
     const body = JSON.stringify(request);
@@ -51,6 +71,20 @@ export class HiringRoleMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async SaveDataSanction(request: SanctionOrderDataModel) {
+
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/SaveDataSanction', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
   public async DeleteDataByID(PK_ID: number, ModifyBy: number) {
 
     return await this.http.delete(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
@@ -58,4 +92,15 @@ export class HiringRoleMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
+  public async DeleteDataBySanctionID(PK_ID: number, ModifyBy: number) {
+
+    return await this.http.post(this.APIUrl + '/DeleteDataBySanctionID/' + PK_ID + "/" + ModifyBy, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }

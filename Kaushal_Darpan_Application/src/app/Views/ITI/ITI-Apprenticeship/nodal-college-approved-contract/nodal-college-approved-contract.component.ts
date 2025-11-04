@@ -6,7 +6,9 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { EnumRole, MONTH_LIST } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, MONTH_LIST } from '../../../../Common/GlobalConstants';
+import { ITIApprenticeshipService } from '../../../../Services/ITI/ITI-Apprenticeship/iti-apprenticeship.service';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-nodal-college-approved-contract',
@@ -35,12 +37,14 @@ export class NodalCollegeApprovedContractComponent {
     private router: Router,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
+    private apprenticeshipService: ITIApprenticeshipService
   ) { }
 
   async ngOnInit() {
     this.CollegeApprovedContractForm = this.formBuilder.group({
-      DivisionID: [''],
-      DistrictID: [''],
+      DivisionID: ['', [DropdownValidators]],
+      DistrictID: ['', [DropdownValidators]],
+      MonthID: ['', [DropdownValidators]],
     })
       
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -64,11 +68,19 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
+  GetMonthNumber() {
+    let today = new Date();
+    let month = today.getMonth() + 1; // January is 0
+    return month;
+  }
+
+
   async GetDistictData() {
     try {
         
       // this.request.DistrictID = 0
       // this.Institutelist = [];
+      await this.onChange();
       await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.request.DivisionID))
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -81,10 +93,23 @@ export class NodalCollegeApprovedContractComponent {
     }
   }
 
-  async GetInstituteMaster(dis: number) {
+  async GetInstituteMaster() {
     try {
-        
-      await this.commonMasterService.GovtITICollege_DistrictWise(this.request.DistrictID, this.sSOLoginDataModel.EndTermID).then(async (data: any) => {
+      const curr_month = this.GetMonthNumber();
+      if (curr_month <= this.request.MonthID) {
+        this.Institutelist = [];
+        this.request.MonthID = 0;
+        this.toastr.error('Please select correct month as You cannot select future or present month');
+        return;
+      } 
+
+      const request: any = {};
+      request.DistrictID = this.request.DistrictID;
+      request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      request.MonthID = this.request.MonthID;
+      request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      request.action = "GetInstituteList";
+      await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.Institutelist = data['Data'];
       })
@@ -109,13 +134,45 @@ export class NodalCollegeApprovedContractComponent {
   }
 
   async SaveData() {
+    if(this.CollegeApprovedContractForm.invalid) {
+      this.toastr.error('Please fill all the required fields');
+      return
+    }
+
+    if(this.Institutelist?.length == 0) {
+      this.toastr.error('there is no institute');
+      return
+    }
+
     try {
-        this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.Institutelist.forEach((ele: any) => {
+        ele.UserID = this.sSOLoginDataModel.UserID;
+        ele.EndTermID = this.sSOLoginDataModel.EndTermID;
+        ele.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        ele.ZoneID = this.request.DivisionID;
+        ele.DistrictID = this.request.DistrictID;
+        ele.MonthID = this.request.MonthID;
+        ele.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      });
+
+      await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(this.Institutelist).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.toastr.success(data.Message);
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
     } catch (error) {
       console.log(error);
     }
   }
-  async ResetControl() {}
+
+  async onChange() {
+    this.Institutelist = [];
+    this.request.MonthID = 0;
+  }
   
-  async DeleteRow(row: any) {}
 }
