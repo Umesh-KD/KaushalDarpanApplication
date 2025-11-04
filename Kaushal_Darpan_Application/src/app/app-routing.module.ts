@@ -1041,7 +1041,7 @@ const routes: Routes = [
       { path: 'iti-apprenticeship', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship/iti-Apprenticeship.module').then(m => m.ITIApprenticeshipModule), title: 'ITI Apprenticeship' },
       { path: 'iti-apprenticeship-report', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship-report/iti-apprenticeship-report.module').then(m => m.ITIApprenticeshipReportModule), title: 'ITI Apprenticeship Report' },
       { path: 'iti-college-approved-contract', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/nodal-college-approved-contract/nodal-college-approved-contract.module').then(m => m.NodalCollegeApprovedContractModule), title: 'ITI College Approved Contracts' },
-      
+      { path: 'college-approved-contract-list', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/college-approved-contract-list-admin/college-approved-contract-list-admin.module').then(m => m.CollegeApprovedContractListAdminModule), title: 'ITI College Approved Contracts' },
 
       { path: 'add-public-info', loadChildren: () => import('./Views/PublicInfo/add-public-info/add-public-info.module').then(m => m.AddPublicInfoModule) },
       { path: 'public-info-list', loadChildren: () => import('./Views/PublicInfo/list-public-info/list-public-info.module').then(m => m.ListPublicInfoModule) },
@@ -1502,6 +1502,7 @@ const routes: Routes = [
       { path: 'know-revealuation-iti', loadChildren: () => import('./Views/ITI/Examination/know-revealuation-iti/know-revealuation-iti.module').then(m => m.KnowRevealuationITIModule), title: 'Application Verify For DTE' },
       { path: 'AddQualificationList', loadChildren: () => import('./Views/ITI/add-qualification-list/add-qualification-list.module').then(m => m.AddQualificationListModule) },
 
+      { path: 'SanctionMaster', loadChildren: () => import('./Views/ITI/sanction-master/sanction-master.module').then(m => m.SanctionMasterModule) },
 
 
     ]
