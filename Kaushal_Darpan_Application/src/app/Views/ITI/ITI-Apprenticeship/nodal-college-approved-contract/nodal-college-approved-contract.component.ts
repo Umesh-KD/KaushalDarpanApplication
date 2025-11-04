@@ -41,6 +41,7 @@ export class NodalCollegeApprovedContractComponent {
     this.CollegeApprovedContractForm = this.formBuilder.group({
       DivisionID: [''],
       DistrictID: [''],
+      MonthID: [''],
     })
       
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -110,7 +111,14 @@ export class NodalCollegeApprovedContractComponent {
 
   async SaveData() {
     try {
-        this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.request.UserID = this.sSOLoginDataModel.UserID;
+      this.request.Institutelist = this.Institutelist;
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      this.request.UserID = this.sSOLoginDataModel.UserID;
+      console.log("this.request",this.request);
+
     } catch (error) {
       console.log(error);
     }
