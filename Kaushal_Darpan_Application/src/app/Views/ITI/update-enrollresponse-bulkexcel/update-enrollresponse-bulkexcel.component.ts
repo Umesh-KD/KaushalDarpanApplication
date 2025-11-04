@@ -53,6 +53,7 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
   sortOrder: string = "";
 
   public TradeID: number = 0;
+  public ChunkSize: number = 100;
 
   public TradeDDLList: any = [];  
 
@@ -142,7 +143,7 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
          if (result.isConfirmed) {
           try{
             this.loaderService.requestStarted();
-            await  this.ITIStudentRevaluationService.UpdateEnrollResponseBulkExcel(file)
+            await  this.ITIStudentRevaluationService.UpdateEnrollResponseBulkExcel(file,this.ChunkSize)
             .then((data: any) => {
 
               data = JSON.parse(JSON.stringify(data));

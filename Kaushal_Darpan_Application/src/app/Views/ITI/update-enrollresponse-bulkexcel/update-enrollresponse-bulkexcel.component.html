@@ -25,18 +25,33 @@
       <div class="flex  flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <div class="flex justify-between items-center " >
           <div class="flex items-center me-3">
+
             <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
                    for="fileStudentPhoto">Import Excel</label>
             <div class="flex fileUploader bg-gray-100 items-center">
-
+              <!-- (change)="onFileChange($event)" -->
               <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none" [(ngModel)]="importFile"
-                     id="fileStudentPhoto" type="file" (change)="onFileChange($event)" accept=".xls,.xlsx">
+                     id="fileStudentPhoto" type="file"  accept=".xls,.xlsx">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
                 {{selectedFile ? selectedFile.name : 'No file chosen'}}
               </label>
             </div>
+
           </div>
+
+          
+          <div class="flex items-center me-3">
+            <!-- <div class="me-3"> -->
+              <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center" for="ChunkSize"><span>ChunkSize</span></label>              
+              <input type="text" class="form-input" placeholder="Enter ChunkSize" id="ChunkSize" name="ChunkSize"
+                    [(ngModel)]="ChunkSize" >   
+            <!-- </div> -->
+     
+          </div>
+
+          <button type="button" class=" btn bg-info text-white " (click)="onFileChange($event)">Submit</button>           
+          
           <!-- <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="DownloadExcelSample()"><i class="ti ti-download"></i> Sample Format</a> -->
         </div>
        
