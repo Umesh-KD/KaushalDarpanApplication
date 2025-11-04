@@ -117,12 +117,15 @@ export class NodalCollegeApprovedContractComponent {
   }
 
   async SaveData() {
-    // this.Institutelist.some((row: any) => {
-    //   if (row.No_Of_Contract == null || row.No_Of_Contract == undefined || row.No_Of_Contract == '') {
-    //     this.toastr.error('Please enter No of Contract');
-    //     return true;
-    //   }
-    // })
+    if(this.CollegeApprovedContractForm.invalid) {
+      this.toastr.error('Please fill all the required fields');
+      return
+    }
+
+    if(this.Institutelist?.length == 0) {
+      this.toastr.error('there is no institute');
+      return
+    }
 
     try {
       this.Institutelist.forEach((ele: any) => {
@@ -149,7 +152,5 @@ export class NodalCollegeApprovedContractComponent {
       console.log(error);
     }
   }
-  async ResetControl() {}
   
-  async DeleteRow(row: any) {}
 }
