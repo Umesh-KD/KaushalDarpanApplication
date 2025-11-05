@@ -769,3 +769,19 @@ export class ITT_EM_ApproveStaffDataModel extends RequestBaseModel {
   public LevelID: number = 0;
 
 }
+
+
+export class ITI_EM_StaffListSearchModel {
+  ID: number = 0;
+  OfficeID: number = 0;
+  PostID: number = 0;
+  DepartmentID: number = 0;
+  CreatedBy: number = 0;
+  SSOID: string = "";
+  LevelID: number = 0;
+  StaffTypeID: number = 0;
+  RoleID: number = 0;
+  UserID: number = 0;
+  BranchID: number = 0;
+  Name: string = "";
+}

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel, ITIOfficeVacancyModel, ITT_EM_ApproveStaffDataModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
+import { ITIGovtEMAddStaffBasicDetailDataModel, ITI_Govt_EM_ZonalOFFICERSDataModel, ITIGovtEMStaffHostelListModel, ITI_Govt_EM_ZonalOFFICERSSearchDataModel, ITIGovtUserPrincipMasterSerchModel, ITIGovtEMStaffMasterDataModel, ITIGovtEMStaffMasterSearchModel, ITIGovtEMStaffSubjectList, ITIGovtEMStaff_EduQualificationDetailsModel, UpdateSSOIDByPricipleModel, ITI_Govt_EM_OFFICERSSearchDataModel, ITIGovtEM_OfficeSearchModel, ITIGovtEM_OfficeSaveDataModel, ITIGovtEM_PostSearchModel, ITIGovtEM_PostSaveDataModel, ITIGovtEMStaff_EducationalQualificationAndTechnicalQualificationModel, ITIGovtEMStaff_ServiceDetailsOfPersonalModel, ITIGovtEMStaff_PersonalDetailsModel, ITI_Govt_EM_SanctionedPostBasedInstituteModel, ITI_Govt_EM_SanctionedPostBasedInstituteSearchDataModel, RequestUpdateStatus, ITI_Govt_EM_RoleOfficeMapping_GetAllDataSearchDataModel, ITI_Govt_EM_PersonalDetailByUserIDSearchModel, JoiningLetterSearchModel, RelievingLetterSearchModel, ITI_Govt_EM_NodalSearchDataModel, ITI_Govt_EM_UserRequestHistoryListSearchDataModel, DeleteModel, ITI_Govt_EM_PersonalDetailByUserIDDeleteModel, ITI_Govt_EM_EducationDeleteModel, ITI_Govt_EM_ServiceDeleteModel, ITIOfficeVacancyModel, ITT_EM_ApproveStaffDataModel, ITI_EM_StaffListSearchModel } from '../../Models/ITIGovtEMStaffMasterDataModel';
 
 import { AppsettingService } from '../../Common/appsetting.service';
 
@@ -616,6 +616,15 @@ export class ITIGovtEMStaffMaster {
     var body = JSON.stringify(searchRequest);
 
     return await this.http.post(`${this.APIUrl}/ITI_EM_PostWithVacancyApproveStaffProfile`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetStaffWorkRegular_ArrangementReort(searchRequest: ITI_EM_StaffListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetStaffWorkRegular_ArrangementReort`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
