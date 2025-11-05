@@ -308,7 +308,7 @@ export class ITIGovtEMStaffProfileComponent implements OnInit {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CurrentBasicDesignationList = data['Data'];
