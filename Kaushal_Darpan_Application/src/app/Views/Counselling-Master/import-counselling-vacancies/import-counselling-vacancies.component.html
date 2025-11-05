@@ -33,14 +33,41 @@
                         (click)="DownloadExcelSample()"><i class="ti ti-download"></i> Sample Format</a>
                 </div>
             </div>
+            <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade: </label>
+                    <select class="form-select"
+                            name="TradeID"
+                            [(ngModel)]="searchRequest.TradeID">
+                        <option [ngValue]="0">Choose option</option>
+                        <option *ngFor="let item of TradeListDDL" [ngValue]="item.Id">
+                        {{ item.TradeName }}
+                        </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
+                    <select class="form-select"
+                            name="InstituteID"
+                            [(ngModel)]="searchRequest.InstituteID">
+                        <option [ngValue]="0">Choose option</option>
+                        <option *ngFor="let item of InstitutelistDDL" [ngValue]="item.InstituteID">
+                        {{ item.Name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="flex justify-center">
+                    <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="GetCounsellingVacancyData()">Search</button>
+                    <button type="button" class="btn bg-danger text-white mt-6 me-1" (click)="ResetControl()">Reset</button>
+                </div>
+            </div>
         </div>
         <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
         </div>
-        <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
             <div class="">
-                <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize"
-                    (change)="GetCandidateList(1)">
+                <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
                     <option value="50">50</option>
                     <option value="100">100</option>
                     <option value="500">500</option>
@@ -50,45 +77,35 @@
             <div class="">
             </div>
             <div class=""></div>
-        </div> -->
+        </div>
 
-        <!-- <div class="overflow-auto mt-3">
+        <div class="overflow-auto mt-3">
             <table class="table table-border w-full" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
                     <tr>
                         <th>Sr. No.</th>
-                        <th class="text-left">Name</th>
-                        <th class="text-left">Father Name</th>
-                        <th class="text-center">MobileNo</th>
-                        <th class="text-left">SSOID</th>
                         <th class="text-left">Trade</th>
                         <th class="text-left">Designation</th>
+                        <th class="text-center">Institute Name</th>
+                        <th class="text-left">Vacant Seats</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+                    <tr *ngFor="let row of paginatedInTableData; let idx=index;">
                         <td>{{idx+1}}</td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateFatherName}}
-                        </td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TradeName}}</td>
-                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Designation}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.TradeName}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Designation}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.InstituteName}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.VacantSeats}}</td>
 
                         <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
                             <div class="flex align-center justify-center actionBtns w-auto"
                                 style="width: auto !important">
-                                <a [routerLink]="['/EditImportedCandidateList']"
-                                    [queryParams]="{Id:item.CandidateID,key:2}" title="Edit Data"><i
-                                        class="ti ti-pencil"></i>
-                                </a>
-
-                                <a [routerLink]="['/EditImportedCandidateList']"
-                                    [queryParams]="{Id:item.CandidateID,key:3}" title="See Details"><i
-                                        class="ti ti-eye"></i>
+                                <a title="Edit Data"
+                                    (click)="OpenEditPopup(MyModel_EdiDetails, row)">
+                                    <i class="ti ti-pencil"></i>
                                 </a>
                             </div>
                         </td>
@@ -96,24 +113,22 @@
                     </tr>
                 </tbody>
             </table>
-        </div> -->
+        </div>
         <!--pagination-->
-        <!-- <div class="p-3 paginationBox flex items-center justify-end w-full">
-            <span class="block">
-                Record {{ (pageNo - 1) * pageSize + 1 }} - {{ (pageNo - 1) * pageSize + StudentList?.length }} of
-                {{StudentList[0]?.TotalRecords}}
-            </span>
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+            <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
             <div class="paginationBoxItems flex items-center">
-                <button (click)="GetCandidateList(1)" [disabled]="pageNo==1">First</button>
-                <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
-                <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
-                    [disabled]="StudentList[0]?.TotalRecords==0" (change)="GetCandidateList(pageNo)" />
-                <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
-                <button (click)="nextData()">Next</button>
-                <button (click)="GetCandidateList(TotalPages)"
-                    [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+                <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+                <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+                <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no."
+                    [(ngModel)]="currentInTablePage" [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+                <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+                <button (click)="nextInTablePage()"
+                    [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+                <button (click)="lastInTablePage()"
+                    [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
             </div>
-        </div> -->
+        </div>
         <!--end pagination-->
     </div>
 </div>
@@ -152,7 +167,7 @@
                             <tbody>
                                 <tr *ngFor="let row of ImportExcelList; let idx = index;">
                                     <td class="text-left">{{idx+1}}</td>
-                                    <td align="left">{{row.TradeCode}}</td>
+                                    <td align="left">{{ row.TradeCode | number:'3.0-0' }}</td>
                                     <td align="left">{{row.TradeName}}</td>
                                     <td align="left">{{row.Designation}}</td>
                                     <td align="left">{{row.InstituteName}}</td>
@@ -174,4 +189,79 @@
             </div>
         </div>
     </div>
+</ng-template>
+
+<ng-template #MyModel_EdiDetails let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="EditDataFormGroup" id="formEditDataFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Edit Vacancy Details</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Basic Details</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+                <select class="form-select"
+                        name="TradeID"
+                        formControlName="TradeID"
+                        [(ngModel)]="request.TradeID">
+                    <option [ngValue]="0">Choose option</option>
+                    <option *ngFor="let item of TradeListDDL" [ngValue]="item.Id">
+                    {{ item.TradeName }}
+                    </option>
+                </select>
+                <div *ngIf="isSubmitted && formEditData.TradeID.errors" class="text-danger">
+                    <p *ngIf="!formEditData.TradeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+            </div>
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
+                <select class="form-select"
+                        name="InstituteID"
+                        formControlName="InstituteID"
+                        [(ngModel)]="request.InstituteID">
+                    <option [ngValue]="0">Choose option</option>
+                    <option *ngFor="let item of InstitutelistDDL" [ngValue]="item.InstituteID">
+                    {{ item.Name }}
+                    </option>
+                </select>
+                <div *ngIf="isSubmitted && formEditData.InstituteID.errors" class="text-danger">
+                    <p *ngIf="!formEditData.InstituteID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Designation: </label>
+              <input class="form-input" placeholder="Add Staff" formControlName="Designation"
+                 [(ngModel)]="request.Designation"/>
+              <div *ngIf="isSubmitted && formEditData.Designation.errors" class="text-danger">
+                <p *ngIf="formEditData.Designation.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Vacant Seats: </label>
+              <input class="form-input" placeholder="Vacant Seats" formControlName="VacantSeats"
+                 [(ngModel)]="request.VacantSeats" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"/>
+              <div *ngIf="isSubmitted && formEditData.VacantSeats.errors" class="text-danger">
+                <p *ngIf="formEditData.VacantSeats.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+          </div>
+          <div class="text-center flex items-center justify-center" style="margin-top:200px">
+            <button type="button" id="btnSave" (click)="SaveData_EditDetails()"
+                    class="btn bg-info text-white">
+              <i class="ti ti-device-floppy"></i> Submit
+            </button>
+            <button type="button" (click)="CloseModal()" class="btn bg-danger text-white">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
 </ng-template>

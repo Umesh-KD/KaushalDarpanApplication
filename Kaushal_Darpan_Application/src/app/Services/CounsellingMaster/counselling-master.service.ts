@@ -9,6 +9,7 @@ import { CompanyMasterDataModels, CompanyMasterSearchModel, CompanyMaster_Action
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AddCollegeWiseScholarshipModel } from '../../Models/CollegeWiseScholarshipModel';
 import { CounsellingAllotmentListModel, CounsellingAllottedListSearchModel, EditInstituteDataModel_Counselling } from '../../Models/CounsellingMasterModel';
+import { EditVacancyDataModel } from '../../Models/CounsellingApplicationFormDataModel';
 
 
 @Injectable({
@@ -108,6 +109,37 @@ export class CounsellingMasterService {
     const formData = new FormData();
     formData.append("file", file);
     return await this.http.post(this.APIUrl + "/ImportExcelFile_CounsellingVacant", formData)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async SaveExcelData_CounsellingVacant(ImportExcelList: any) {
+    const body = JSON.stringify(ImportExcelList);
+    return await this.http.post(this.APIUrl + '/SaveExcelData_CounsellingVacant', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetCounsellingVacancyData(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetCounsellingVacancyData', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async EditVacancyData_Counselling(request: EditVacancyDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/EditVacancyData_Counselling', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetVacancyDetailsById_Counselling(TradeInstituteID: number) {
+    return await this.http.get(this.APIUrl + '/GetVacancyDetailsById_Counselling/'+ TradeInstituteID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
