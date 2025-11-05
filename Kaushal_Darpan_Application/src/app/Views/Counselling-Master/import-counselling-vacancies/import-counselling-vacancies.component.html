@@ -1,0 +1,177 @@
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">Counselling Vacant Seats</h4>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling
+                Vacant Seats</a>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-end flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <div class="flex justify-between items-center ">
+                    <div class="flex items-center me-3">
+                        <label class="block me-2 text-sm font-medium text-gray-900 dark:text-white items-center"
+                            for="fileStudentPhoto">Import Excel</label>
+                        <div class="flex fileUploader bg-gray-100 items-center">
+
+                            <input class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
+                                [(ngModel)]="importFile" id="fileStudentPhoto" type="file"
+                                (change)="onFileChange($event)" accept=".xls,.xlsx">
+                            <label for="fileStudentPhoto">
+                                <span>Choose File</span>
+                                {{selectedFile ? selectedFile.name : 'No file chosen'}}
+                            </label>
+                        </div>
+                    </div>
+                    <a href="javascript:void(0);" class="btn bg-info btn-sm text-white"
+                        (click)="DownloadExcelSample()"><i class="ti ti-download"></i> Sample Format</a>
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+        </div>
+        <!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+            <div class="">
+                <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize"
+                    (change)="GetCandidateList(1)">
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                </select>
+            </div>
+            <div class="">
+            </div>
+            <div class=""></div>
+        </div> -->
+
+        <!-- <div class="overflow-auto mt-3">
+            <table class="table table-border w-full" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th class="text-left">Name</th>
+                        <th class="text-left">Father Name</th>
+                        <th class="text-center">MobileNo</th>
+                        <th class="text-left">SSOID</th>
+                        <th class="text-left">Trade</th>
+                        <th class="text-left">Designation</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+                        <td>{{idx+1}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateName}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.CandidateFatherName}}
+                        </td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MobileNo}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.SSOID}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.TradeName}}</td>
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Designation}}</td>
+
+                        <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+
+                            <div class="flex align-center justify-center actionBtns w-auto"
+                                style="width: auto !important">
+                                <a [routerLink]="['/EditImportedCandidateList']"
+                                    [queryParams]="{Id:item.CandidateID,key:2}" title="Edit Data"><i
+                                        class="ti ti-pencil"></i>
+                                </a>
+
+                                <a [routerLink]="['/EditImportedCandidateList']"
+                                    [queryParams]="{Id:item.CandidateID,key:3}" title="See Details"><i
+                                        class="ti ti-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div> -->
+        <!--pagination-->
+        <!-- <div class="p-3 paginationBox flex items-center justify-end w-full">
+            <span class="block">
+                Record {{ (pageNo - 1) * pageSize + 1 }} - {{ (pageNo - 1) * pageSize + StudentList?.length }} of
+                {{StudentList[0]?.TotalRecords}}
+            </span>
+            <div class="paginationBoxItems flex items-center">
+                <button (click)="GetCandidateList(1)" [disabled]="pageNo==1">First</button>
+                <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+                <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+                    [disabled]="StudentList[0]?.TotalRecords==0" (change)="GetCandidateList(pageNo)" />
+                <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+                <button (click)="nextData()">Next</button>
+                <button (click)="GetCandidateList(TotalPages)"
+                    [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+            </div>
+        </div> -->
+        <!--end pagination-->
+    </div>
+</div>
+
+<ng-template #MyModel_ViewDetails let-modal
+    class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] ">
+    <div class="modal-content">
+        <div class="card">
+            <div class="card-header flex justify-between  items-center">
+                <div class="text-center">
+                    <b><i class="ti ti-plus"></i>Excel Data</b>
+                </div>
+                <a href="javascript:void(0);" style="display:none" class="btn bg-info text-white"
+                    (click)="exportToExcel()"><i class="ti ti-download"></i> Export To Excel</a>
+                <button class="btn bg-info text-white" (click)="CloseModalPopupimport()"><i
+                        class="ti ti-x"></i></button>
+            </div>
+            <div class="card-body">
+                <div class="mb-8">
+
+                    <div class="overflow-x-auto mt-3">
+
+                        <table class="table table-border w-full table-auto" cellpadding="5">
+                            <thead
+                                class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                                <tr>
+                                    <th class="text-left">Sr No</th>
+                                    <th class="text-left">Trade Code</th>
+                                    <th class="text-left">Trade Name</th>
+                                    <th class="text-left">Designation</th>
+                                    <th class="text-left">Institute Name</th>
+                                    <th class="text-left">Vacant Seats</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let row of ImportExcelList; let idx = index;">
+                                    <td class="text-left">{{idx+1}}</td>
+                                    <td align="left">{{row.TradeCode}}</td>
+                                    <td align="left">{{row.TradeName}}</td>
+                                    <td align="left">{{row.Designation}}</td>
+                                    <td align="left">{{row.InstituteName}}</td>
+                                    <td align="left">{{row.VacantSeats}}</td>
+                                </tr>
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" id="btnSave" class="btn bg-info text-white mt-6" (click)="SaveDataInDB()">
+                        Submit
+                    </button>
+                </div>
+            </div>
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            </div>
+        </div>
+    </div>
+</ng-template>

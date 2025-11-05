@@ -96,4 +96,20 @@ export class CounsellingMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetSampleExcelFile_CounsellingVacant() {
+    return await this.http.get(this.APIUrl + '/GetSampleExcelFile_CounsellingVacant', this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async ImportExcelFile_CounsellingVacant(file: any | null = null) {
+    //formdata
+    const formData = new FormData();
+    formData.append("file", file);
+    return await this.http.post(this.APIUrl + "/ImportExcelFile_CounsellingVacant", formData)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
