@@ -277,6 +277,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
 
 
   async OfficeITIWiseCollegeAndDirstrict() {
+    debugger
     this.GetRoleMasterData();
     this.formData.InstituteID = 0;
     this.formData.RoleID = 0;
@@ -432,7 +433,7 @@ export class ITIGovtEMZonalOfficeMasterComponent implements OnInit {
   async getITICollege() {
     debugger
     try {
-      this.searchRequestITi.Action = "_ITICollegeByManagementType";
+      this.searchRequestITi.Action = "_ITICollegeWithoutAcademicYearID";
       this.searchRequestITi.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequestITi.ManagementTypeId = 1;
 
