@@ -808,4 +808,6 @@ export const MONTH_LIST = [
   { id: 12, name: 'December' }
 ];
 
-
+export enum EnumITIBudgetDDLAction {
+    GetBudgetTypeDDL = "GetBudgetTypeDDL",
+}
