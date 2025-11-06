@@ -176,3 +176,17 @@ export class PendingDataModel_Counselling {
     Index?: number = 0;
 }
 
+export class EditVacancyDataModel {
+    public InstituteID?: number = 0;
+    public TradeInstituteID?: number = 0;
+    public TradeID?: number = 0;
+    public Designation?: string = '';
+    public VacantSeats?: number = 0;
+    public UserID?: number = 0;
+}
+
+export class CounsellingVacancySearchModel {
+    public InstituteID?: number = 0;
+    public TradeID?: number = 0;
+    public Designation?: string = '';
+}

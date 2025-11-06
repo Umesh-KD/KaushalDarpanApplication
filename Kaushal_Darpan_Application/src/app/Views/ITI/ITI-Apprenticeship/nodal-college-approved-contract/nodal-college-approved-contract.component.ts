@@ -80,6 +80,7 @@ export class NodalCollegeApprovedContractComponent {
         
       // this.request.DistrictID = 0
       // this.Institutelist = [];
+      await this.onChange();
       await this.commonMasterService.DistrictMaster_DivisionIDWise(Number(this.request.DivisionID))
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -96,6 +97,8 @@ export class NodalCollegeApprovedContractComponent {
     try {
       const curr_month = this.GetMonthNumber();
       if (curr_month <= this.request.MonthID) {
+        this.Institutelist = [];
+        this.request.MonthID = 0;
         this.toastr.error('Please select correct month as You cannot select future or present month');
         return;
       } 
@@ -105,6 +108,7 @@ export class NodalCollegeApprovedContractComponent {
       request.EndTermID = this.sSOLoginDataModel.EndTermID;
       request.MonthID = this.request.MonthID;
       request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
+      request.action = "GetInstituteList";
       await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.Institutelist = data['Data'];
@@ -164,6 +168,11 @@ export class NodalCollegeApprovedContractComponent {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async onChange() {
+    this.Institutelist = [];
+    this.request.MonthID = 0;
   }
   
 }

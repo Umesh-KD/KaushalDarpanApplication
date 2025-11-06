@@ -1041,7 +1041,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID)
+      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.PostList = data['Data'];
@@ -1417,6 +1417,23 @@ export class ITIGovtAddEstablishComponent implements OnInit {
     this.isSubmitted = false;
   }
 
+  getInvalidControls(formGroup: FormGroup): string[] {
+    const invalidControls: string[] = [];
+
+    Object.keys(formGroup.controls).forEach(key => {
+      const control = formGroup.get(key);
+      if (control instanceof FormGroup) {
+        // Recursively check nested groups
+        invalidControls.push(...this.getInvalidControls(control));
+      } else if (control && control.invalid) {
+        invalidControls.push(key);
+      }
+    });
+
+    return invalidControls;
+  }
+
+
   async updateReqStatus() {
 
     if (this.approveRequest.StatusIDs == 247) {
@@ -1425,11 +1442,17 @@ export class ITIGovtAddEstablishComponent implements OnInit {
       await this.refreshRemoveRejectRevertValidators();
     }
 
-    
+    debugger
 
     this.isSubmitted = true;
     if (this.StaffMasterFormGroup.invalid) {
-      return console.log("error")
+      const invalidControls = this.getInvalidControls(this.StaffMasterFormGroup);
+      console.error("❌ Form validation failed. Missing/Invalid fields:", invalidControls);
+
+      // Optional: show Toastr error to user
+      this.toastr.error(`Please fill required fields: ${invalidControls.join(', ')}`);
+
+      return; // Stop execution
     }
     this.loaderService.requestStarted();
     this.isLoading = true;
@@ -1578,7 +1601,7 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
+      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
@@ -1602,29 +1625,41 @@ export class ITIGovtAddEstablishComponent implements OnInit {
   }
 
   async refreshValidators() {
-    debugger
-    if (this.approveRequest.IsEmpWorkingOnDeputationFromOther == false) {
+    debugger;
+
+    // Remove validators based on conditions
+    if (this.approveRequest?.IsEmpWorkingOnDeputationFromOther === false || this.approveRequest?.IsEmpWorkingOnDeputationFromOther == null) {
       this.StaffMasterFormGroup.get('EmpInstituteID')?.removeValidators([DropdownValidators]);
     }
-    if (this.approveRequest.IsEmpWorkingOnDeputationToOther == false) {
+
+    if (this.approveRequest?.IsEmpWorkingOnDeputationToOther === false || this.approveRequest?.IsEmpWorkingOnDeputationToOther == null) {
       this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.removeValidators([DropdownValidators]);
     }
-    if (this.approveRequest.IsSalaryDrawnFromSamePost == true) {
+
+    if (this.approveRequest?.IsSalaryDrawnFromSamePost === true) {
       this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([DropdownValidators]);
     }
-    if (this.approveRequest.IsSalaryDrawnFromOtherInstitute == false) {
+
+    if (this.approveRequest?.IsSalaryDrawnFromOtherInstitute === false || this.approveRequest?.IsSalaryDrawnFromOtherInstitute == null) {
       this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.removeValidators([DropdownValidators]);
     }
-    if (this.approveRequest.HigherEduPermission == false) {
+
+    if (this.approveRequest?.HigherEduPermission === false || this.approveRequest?.HigherEduPermission == null) {
       this.StaffMasterFormGroup.get('HigherEduInstitute')?.removeValidators([Validators.required]);
     }
 
-    this.StaffMasterFormGroup.get('EmpInstituteID')?.updateValueAndValidity();
-    this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.updateValueAndValidity();
-    this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.updateValueAndValidity();
-    this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.updateValueAndValidity();
-    this.StaffMasterFormGroup.get('HigherEduInstitute')?.updateValueAndValidity();
+    // Update value & validity
+    [
+      'EmpInstituteID',
+      'EmpDeputatedInstituteID',
+      'SalaryDrawnPostID',
+      'SalaryDrawnInstituteID',
+      'HigherEduInstitute'
+    ].forEach(controlName => {
+      this.StaffMasterFormGroup.get(controlName)?.updateValueAndValidity();
+    });
   }
+
 
   async refreshRemoveRejectRevertValidators() {
     debugger;

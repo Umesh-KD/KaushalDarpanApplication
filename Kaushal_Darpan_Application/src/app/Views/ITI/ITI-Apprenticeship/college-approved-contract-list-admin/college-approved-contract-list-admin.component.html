@@ -23,11 +23,21 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Month: </label>
             <select class="form-select"
                     name="MonthID"
-                    [(ngModel)]="searchRequest.MonthID"
-                    (change)="GetApprovedContractData()">
+                    [(ngModel)]="searchRequest.MonthID">
                 <option [ngValue]="0">Choose option</option>
                 <option *ngFor="let item of months" [ngValue]="item.id">
                 {{ item.name }}
+                </option>
+            </select>
+        </div>
+        <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
+            <select class="form-select"
+                    name="InstituteID"
+                    [(ngModel)]="searchRequest.InstituteID">
+                <option [ngValue]="0">Choose option</option>
+                <option *ngFor="let item of InstitutelistDDL" [ngValue]="item.InstituteID">
+                {{ item.Name }}
                 </option>
             </select>
         </div>

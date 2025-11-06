@@ -458,7 +458,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
         // Format DateOfBirth as yyyy-MM-dd
         const dob = new Date(year, month - 1, day);
-        // this.approveRequest.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+        this.approveRequest.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
 
         // Calculate retirement year
         const retirementYear = year + 60;
@@ -484,7 +484,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
 
       if (this.sSOLoginDataModel.LevelId == 3) {
 
-        await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 2)
+        await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             /*this.OfficeList = data['Data'];*/
@@ -493,7 +493,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
           }, error => console.error(error));
       }
       else {
-        await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.LevelId)
+        await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             /*this.OfficeList = data['Data'];*/
@@ -893,7 +893,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
+      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);

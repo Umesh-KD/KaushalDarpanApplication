@@ -2001,4 +2001,12 @@ export class CommonFunctionService {
               catchError(this.handleErrorObservable)
           ).toPromise();
   }
+
+
+  public async GetITIPostDepartmentWise(DepartmentID: number = 1) {
+    return await this.http.get(this.APIUrl + '/GetITIPostDepartmentWise/' + DepartmentID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
