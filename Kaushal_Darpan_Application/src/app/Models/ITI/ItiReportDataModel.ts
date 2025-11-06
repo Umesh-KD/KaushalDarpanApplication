@@ -106,4 +106,14 @@ export class ItiReportDataModel {
 
 }
 
+export class ItiSanctionOrderList {
+  public SanctionID :number=0
+  public OrderType :number=0
+  public InstituteID :number=0
+  public ModifyBy :number=0
+  public OrderNo :string=''
+  public OrderDate :string=''
+  public OrderCopy: string = ''
 
+
+}

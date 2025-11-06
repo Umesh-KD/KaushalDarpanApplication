@@ -893,7 +893,7 @@ export class ITIGovtEMZonalOfficeListComponent implements OnInit {
   async GetDesignationMasterData() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetDesignationDepartmentIDWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
+      await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.DesignationMasterDDLList = data.Data;
         //this.DesignationMasterDDLList = this.DesignationMasterDDLList.filter((item: any) => item.TypeID == this.approveRequest.StaffTypeID);
