@@ -19,7 +19,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin" class="flex justify-end flex-wrap items-center">
+        <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin ||sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" class="flex justify-end flex-wrap items-center">
           <a routerLink="/ItiCollegeReport" class="btn bg-info btn-sm text-white me-2">
             <i class="ti ti-plus"></i>Add
           </a>
@@ -44,7 +44,7 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI</label>
-          <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID">
+          <select class="form-select" id="SubjectID" [disabled]="sSOLoginDataModel.RoleID == 20 ||sSOLoginDataModel.RoleID == 43" [(ngModel)]="searchRequest.InstituteID">
             <option value="0">--All--</option>
             <option *ngFor="let item of InstituteMasterDDLList" [value]="item.ID">
               {{item.Name}}
@@ -52,7 +52,7 @@
           </select>
         </div>
 
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">ITI Name </label>
           <input type="text" class="form-input" id="ApplicationId"  placeholder="Enter Iti College Name"
                  [(ngModel)]="searchRequest.CollegeName">
@@ -62,7 +62,7 @@
         <!--subject-->
         <!--group code-->
 
-        <div>
+        <div  *ngIf="sSOLoginDataModel.RoleID != 20 && sSOLoginDataModel.RoleID != 43">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">IsNewCollege</label>
           <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.IsNewCollege">
             <option [value]="2">--All--</option>
