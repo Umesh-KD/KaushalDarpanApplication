@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+  import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../Models/ApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
@@ -12,12 +12,13 @@ import { TspAreasService } from '../../../Services/Tsp-Areas/Tsp-Areas.service';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { EnumRole, EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
-import { ItiReportDataModel } from '../../../Models/ITI/ItiReportDataModel';
+import { ItiReportDataModel, ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { ITIsService } from '../../../Services/ITIs/itis.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { ITICollegeProfileService } from '../../../Services/ITI-College-Profile/iticollege-profile.service';
+import { HiringRoleMasterService } from '../../../Services/HiringRoleMaster/hiring-role-master.service';
 @Component({
   selector: 'app-iti-college-report',
   standalone: false,
@@ -42,6 +43,7 @@ export class ItiCollegeReportComponent {
   public ResidenceList: any[] = [];
   public TehsilMasterList: any[] = [];
   public DistrictMasterList1: any[] = [];
+  public searchRequest = new ItiSanctionOrderList();
   public VillageList: any[] = [];
   public GramPanchayatList: any[] = [];
   public BoardList: any = []
@@ -88,7 +90,8 @@ export class ItiCollegeReportComponent {
     private activatedRoute: ActivatedRoute,
     private appsettingConfig: AppsettingService,
     private swat: SweetAlert2,
-    private routers: Router
+    private routers: Router,
+    private ScholarshipService: HiringRoleMasterService,
   ) { }
 
 
@@ -238,7 +241,7 @@ export class ItiCollegeReportComponent {
     //this.searchrequest.DepartmentID = EnumDepartment.BTER;
     //this.request.DepartmentID = EnumDepartment.BTER;
     this.ApplicationID = Number(this.activatedRoute.snapshot.queryParamMap.get('ID')?.toString());
-
+  
     //await this.loadDropdownData('Board')
     //await this.GetStateMatserDDL()
     //await this.GetPassingYearDDL()
@@ -349,11 +352,17 @@ export class ItiCollegeReportComponent {
     //  });
     //}
 
+    if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+      this.request.CollegeID = this.sSOLoginDataModel.InstituteID
+      this.ReportForm.controls['CollegeID'].disable()
+      await this.GetCollegeDetails(this.request.CollegeID)
 
+    }
 
    
     if (this.ApplicationID > 0) {
       await this.GetById(this.ApplicationID)
+      
     }
     /*    this.request.IsNewCollege=1*/
     await this.GetGovtITI()
@@ -678,8 +687,8 @@ export class ItiCollegeReportComponent {
       if (this.request.IsNewCollege == 0) {
         this.resetConstructionDetails()
       }
-      this.request.OrderDetailsList=[]
-      this.request.OrderDetailsList.push(...this.TradeSanctionList, ...this.PostSanctionList, ...this.MetpSanctionList)
+  /*    this.request.OrderDetailsList=[]*/
+  /*    this.request.OrderDetailsList.push(...this.TradeSanctionList, ...this.PostSanctionList, ...this.MetpSanctionList)*/
 
 
       console.log(this.request)
@@ -990,7 +999,7 @@ export class ItiCollegeReportComponent {
       this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
       this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
       /*  this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
-      this.PostSanctionList = this.request.OrderDetailsList
+    /*  this.PostSanctionList = this.request.OrderDetailsList*/
 
 
      
@@ -1647,7 +1656,7 @@ export class ItiCollegeReportComponent {
 
     this.isAddrequest1 = true;
 
-    debugger
+
     //if (this.request.IsBuildingTaken != 'Yes') {
     //  this.AddReportFormGroup1.controls['TakenOverDate'].clearValidators();
     //} else {
@@ -1661,66 +1670,79 @@ export class ItiCollegeReportComponent {
 
     // Get the selected values
 
-    if (this.request.OrderType == 0) {
-      this.toastr.warning("Please Select Order Type")
+   // if (this.request.OrderType == 0) {
+   //   this.toastr.warning("Please Select Order Type")
+   //   return
+   // }
+   // if (this.request.SanctionOrderDate == '') {
+   //   this.toastr.warning("Please Add Order Date")
+   //   return
+   // }
+   // if (this.request.SanctionOrderNo == '') {
+   //   this.toastr.warning("Please Enter Order No")
+   //   return
+   // }
+   // if (this.request.SanctionOrderCopy == '') {
+   //   this.toastr.warning("Please Add Order Copy")
+   //   return
+   // }
+
+
+   // if (!this.PostSanctionList) {
+   //   this.PostSanctionList = [];
+   // }
+
+
+   // //if (this.request.PostID != 7 && this.request.PostID != 8) {
+   // //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
+   // //  if (Exist) {
+   // //    this.toastr.warning("Already Have request with selected Post ID")
+   // //    return
+   // //  }
+   // //}
+
+   // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
+
+
+
+   // this.PostSanctionList.push({
+
+   //   OrderCopy: this.request.SanctionOrderCopy,
+   //   OrderDate: this.request.SanctionOrderDate,
+   //   OrderNo: this.request.SanctionOrderNo,
+   //   OrderType: this.request.OrderType,
+   //   OrderTypeName: OrderTypeName
+
+   // });
+   ///* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
+
+
+   // this.request.SanctionOrderCopy = '';
+   // this.request.SanctionOrderDate = '';
+   // this.request.SanctionOrderNo = '';
+   // this.request.SanctionOrderNo = '';
+   // this.request.OrderType = 0;
+   // OrderTypeName:''
+
+    debugger
+
+    const IsSelect = this.PostSanctionList.filter((e:any)=>e.Marked==true)
+
+    if (IsSelect.length ==0) {
+      this.toastr.warning("Please Select Any Order First")
       return
     }
-    if (this.request.SanctionOrderDate == '') {
-      this.toastr.warning("Please Add Order Date")
-      return
-    }
-    if (this.request.SanctionOrderNo == '') {
-      this.toastr.warning("Please Enter Order No")
-      return
-    }
-    if (this.request.SanctionOrderCopy == '') {
-      this.toastr.warning("Please Add Order Copy")
-      return
-    }
-  
-
-    if (!this.PostSanctionList) {
-      this.PostSanctionList = [];
-    }
-
-
-    //if (this.request.PostID != 7 && this.request.PostID != 8) {
-    //  const Exist = this.request.ItirequestsModel.find((e) => e.PostID == this.request.PostID)
-    //  if (Exist) {
-    //    this.toastr.warning("Already Have request with selected Post ID")
-    //    return
-    //  }
-    //}
-
-    const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
-
-
-
-    this.PostSanctionList.push({
-
-      OrderCopy: this.request.SanctionOrderCopy,
-      OrderDate: this.request.SanctionOrderDate,
-      OrderNo: this.request.SanctionOrderNo,
-      OrderType: this.request.OrderType,
-      OrderTypeName: OrderTypeName
-
-    });
-   /* this.PostSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType==1)*/
-
-
-    this.request.SanctionOrderCopy = '';
-    this.request.SanctionOrderDate = '';
-    this.request.SanctionOrderNo = '';
-    this.request.SanctionOrderNo = '';
-    this.request.OrderType = 0;
-    OrderTypeName:''
-
-
-
     // Reset other unrelated fields (if required)
 
+    if (!this.request.OrderDetailsList) {
+      this.request.OrderDetailsList = [];
+      // }
 
-
+    }
+    this.request.OrderDetailsList = [
+      ...this.request.OrderDetailsList,
+      ...IsSelect
+    ];
 
   }
 
@@ -1874,7 +1896,7 @@ export class ItiCollegeReportComponent {
 
 
   deletePost(index: number): void {
-    this.PostSanctionList.splice(index, 1);
+    this.request.OrderDetailsList.splice(index, 1);
 
   }
   deleteTrade(index: number): void {
@@ -2056,6 +2078,27 @@ export class ItiCollegeReportComponent {
 
   }
 
+
+
+
+  async getExaminerData() {
+    this.searchRequest.OrderType = this.request.OrderType
+    this.PostSanctionList=[]
+    try {
+      await this.ScholarshipService.GetsanctionOrderNotAssign(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.PostSanctionList = data.Data;
+        console.log("this.PostSanctionList", this.PostSanctionList)
+        debugger
+       this.PostSanctionList = this.PostSanctionList.filter((item: any) =>
+        
+         !this.request.OrderDetailsList.some((order: any) => order.SanctionID === item.SanctionID)
+        );
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
 
 
