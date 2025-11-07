@@ -967,19 +967,22 @@ export class BranchSectionCreateComponent {
     newItem.SectionsName = this.GetSectionData.filter(x => (formValue.SectionID || []).includes(x.SectionID)).map(x => x.SectionName).join(', ');
 
 
-
-    //newItem.SemesterName = "";
-    //newItem.StreamName = "";
-    //newItem.SubjectName = "";
-    //newItem.SatffName = "";
-    //newItem.SectionsName = "";
     this.AddStaffSubjectSectionModel.RoleID = this.sSOLoginDataModel.RoleID;
     this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
+
+    const isDuplicate=this.AddStaffSubjectSectionModelList.some(
+      (x:any)=>
+        x.SubjectID===newItem.SubjectID &&
+        x.SectionIDs===newItem.SectionIDs
+    );
+    if(isDuplicate){
+      alert("This subject and section combination already exists!");
+      return;
+    }
+
     this.AddStaffSubjectSectionModelList.push(newItem);
 
-    // remove used sections from dropdown
-    this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
     this.refreshAvailableSections();
     this.EditDataFormGroup.reset({
       SectionID: [],
@@ -1005,7 +1008,7 @@ export class BranchSectionCreateComponent {
   // ✅ Delete row
   DeleteFromList(index: number) {
     this.AddStaffSubjectSectionModelList.splice(index, 1);
-    this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
+    // this.refreshAvailableSections1(this.AddStaffSubjectSectionModel.SubjectID);
     this.refreshAvailableSections();
   }
   refreshAvailableSections() {
@@ -1015,7 +1018,7 @@ export class BranchSectionCreateComponent {
       .flatMap(x => (x.SectionIDs ? x.SectionIDs.split(',').map(Number) : []));
 
     // filter sections
-    this.GetSectionData = this.GetSectionData.filter(sec => !usedIds.includes(sec.SectionID));
+    // this.GetSectionData = this.GetSectionData.filter(sec => !usedIds.includes(sec.SectionID));
   }
 
   refreshAvailableSections1(subjectId: number) {
