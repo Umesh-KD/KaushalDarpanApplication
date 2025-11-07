@@ -971,16 +971,66 @@ export class BranchSectionCreateComponent {
     this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
 
-    const isDuplicate=this.AddStaffSubjectSectionModelList.some(
-      (x:any)=>
-        x.SubjectID===newItem.SubjectID &&
-        x.SectionIDs===newItem.SectionIDs
-    );
-    if(isDuplicate){
-      alert("This subject and section combination already exists!");
-      return;
-    }
+// const normalize = (s: any) => {
+//   if (Array.isArray(s)) return s.map(x => String(x).trim()).sort().join(',');
+//   if (typeof s === 'number') return String(s);
+//   if (typeof s === 'string') return s.split(',').map(x => x.trim()).sort().join(',');
+//   return '';
+// };
+ 
+//   const isDuplicate = this.AddStaffSubjectSectionModelList.some(
+//     (x: any) =>
+//       // x.StreamID === newItem.StreamID &&
+//       // x.SemesterID === newItem.SemesterID &&
+  
+//       x.SubjectID === newItem.SubjectID &&
+//      ( normalize(x.SectionID) === normalize(newItem.SectionIDs) ||
+//       normalize(x.SectionIDs) === normalize(newItem.SectionIDs))
+//   );
+ // if (isDuplicate) {
+  //   this.toastr.warning("This subject and section combination already exists for the selected stream and semester!");
+  //   return;
+  // }
 
+// ✅ Safe normalize helper
+
+const normalize = (s: any): string[] => {
+  if (Array.isArray(s)) return s.map(x => String(x).trim());
+  if (typeof s === 'number') return [String(s)];
+  if (typeof s === 'string') return s.split(',').map(x => x.trim()).filter(x => x);
+  return [];
+};
+
+let duplicateSectionName = '';
+const isDuplicate = this.AddStaffSubjectSectionModelList.some((x: any) => {
+  // Compare only within same subject (and optionally same stream/semester)
+
+    const existingSections = normalize(x.SectionID);
+  const newSections = normalize(newItem.SectionIDs);
+
+  // Find any overlapping section IDs
+  const overlapping = existingSections.filter(sec => newSections.includes(sec));
+
+  if (overlapping.length > 0) {
+    // Get section names for user-friendly message
+    const overlapNames = this.GetSectionData
+      .filter((s: any) => overlapping.includes(String(s.SectionID)))
+      .map((s: any) => s.SectionName)
+      .join(', ');
+    duplicateSectionName = overlapNames;
+    return true; // stop searching, found duplicate
+  }
+
+  return false;
+});
+if (isDuplicate) {
+  this.toastr.warning(
+    `The following section(s) already exist for this subject: ${duplicateSectionName}`,
+    'Duplicate Section'
+  );
+  return;
+}
+ 
     this.AddStaffSubjectSectionModelList.push(newItem);
 
     this.refreshAvailableSections();
