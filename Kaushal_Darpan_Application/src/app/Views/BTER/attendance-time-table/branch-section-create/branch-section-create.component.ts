@@ -38,6 +38,7 @@ export class BranchSectionCreateComponent {
   requestBranchHOD = new BranchHODModel();
   AddStaffSubjectSectionModel = new AddStaffSubjectSectionModel();
   AddStaffSubjectSectionModelList: AddStaffSubjectSectionModel[] = [];
+  AddStaffSubjectAllSectionModelList: AddStaffSubjectSectionModel[] = [];
   PostAttendanceTimeTableList: PostAttendanceTimeTable[] = [];
   postItem = new PostAttendanceTimeTable();
   sectionForm!: FormGroup;
@@ -855,6 +856,8 @@ export class BranchSectionCreateComponent {
   async AddStaffData(content: any, rowData?: any) {
     debugger
     await this.GetAssignedTeacherForSubject_BySecctionID(rowData.SectionID)
+     await this.GetAssignedTeacherForSubject(rowData.SectionID)
+     console.log('alllist==>', this.AddStaffSubjectAllSectionModelList);
     this.isSubmitted = true;
     this.AddStaffSubjectSectionModel.SubjectID = 0;
     this.AddStaffSubjectSectionModel.SemesterID = rowData?.SemesterID || 0;
@@ -939,13 +942,7 @@ export class BranchSectionCreateComponent {
     debugger
     this.isSubmitted = true;
     if (this.EditDataFormGroup.invalid) return;
-    // if(this.availSectionData.length>0){
-    //    let existAssignedTeacherData=this.availSectionData.map(x=>x.AssignTeacherSectionID=this.AddStaffSubjectSectionModel.StaffID && x.SemesterID==this.AddStaffSubjectSectionModel.SemesterID && x.StreamID==this.AddStaffSubjectSectionModel.StreamID);
-    //    if(existAssignedTeacherData){
-    //     this.toastr.warning("This Teacher Already Assigned For This Stream And Semester");
-    //     return;
-    //    }
-    // }
+
     const formValue = this.EditDataFormGroup.value;
 
     const newItem = new AddStaffSubjectSectionModel();
@@ -958,8 +955,6 @@ export class BranchSectionCreateComponent {
     // Save as CSV
     newItem.SectionIDs = (formValue.SectionID || []).join(',');
 
-
-
     newItem.StreamName = this.StreamMasterDDL.find((x: any) => x.StreamID == newItem.StreamID)?.StreamName || "";
     newItem.SemesterName = this.SemesterMasterDDL.find((x: any) => x.SemesterID == newItem.SemesterID)?.SemesterName || "";
     newItem.SubjectName = this.SubjectMasterDDL.find((x: any) => x.ID == newItem.SubjectID)?.Name || "";
@@ -971,15 +966,38 @@ export class BranchSectionCreateComponent {
     this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
 
-    const isDuplicate=this.AddStaffSubjectSectionModelList.some(
-      (x:any)=>
-        x.SubjectID===newItem.SubjectID &&
-        x.SectionIDs===newItem.SectionIDs
+      // 🔍 DUPLICATE CHECK STARTS HERE
+  const selectedSections = formValue.SectionID || [];
+  let duplicateFound = false;
+  let duplicateSectionNames: string[] = [];
+
+  for (const secID of selectedSections) {
+
+    // ✅ Check from backend list (AddStaffSubjectAllSectionModelList)
+    const existsInAllSection = this.AddStaffSubjectAllSectionModelList.some(
+      (x: any) => x.SubjectID == newItem.SubjectID && x.SectionID == secID
     );
-    if(isDuplicate){
-      alert("This subject and section combination already exists!");
-      return;
+
+    // ✅ Check from already added list (AddStaffSubjectSectionModelList)
+    const existsInLocalList = this.AddStaffSubjectSectionModelList.some((x: any) => {
+      const existingSectionIDs = (x.SectionIDs || '').split(',').map((id: string) => id.trim());
+      return x.SubjectID == newItem.SubjectID && existingSectionIDs.includes(String(secID));
+    });
+
+    if (existsInAllSection || existsInLocalList) {
+      duplicateFound = true;
+      const sectionName = this.GetSectionData.find((s: any) => s.SectionID == secID)?.SectionName;
+      if (sectionName) duplicateSectionNames.push(sectionName);
     }
+  }
+
+  if (duplicateFound) {
+    this.toastr.warning(`Section(s) already assigned for this subject: ${duplicateSectionNames.join(', ')}`);
+    this.isSubmitted = false;
+    return;
+  }
+
+  
 
     this.AddStaffSubjectSectionModelList.push(newItem);
 
@@ -1171,6 +1189,28 @@ export class BranchSectionCreateComponent {
         if (data.length > 0) {
           // this.toastr.success(data.Message)
           this.AddStaffSubjectSectionModelList = data
+        }
+      })
+      
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+    async GetAssignedTeacherForSubject(SectionID: number) {
+    try {
+      this.AddStaffSubjectAllSectionModelList = []
+      let obj = {
+        SectionID: SectionID
+      }
+      //get all data
+      debugger
+      await this.staffMasterService.GetAssignedTeacherForSubject(obj).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        debugger
+        if (data.length > 0) {
+          // this.toastr.success(data.Message)
+          this.AddStaffSubjectAllSectionModelList = data
         }
       })
     } catch (error) {
