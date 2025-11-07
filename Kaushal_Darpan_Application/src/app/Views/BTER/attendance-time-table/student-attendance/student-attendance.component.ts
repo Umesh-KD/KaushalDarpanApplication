@@ -133,6 +133,11 @@ export class StudentAttendanceComponent implements OnInit {
         this.getData();
       }
     }, 1000);
+
+    //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
+    //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
+    //  this.TableForm.patchValue({ AttandanceTimeID: defaultTime.ID });
+    //}
     
   }
   get formTable() { return this.TableForm.controls; }
@@ -669,6 +674,8 @@ export class StudentAttendanceComponent implements OnInit {
     this.GetStaffLeaveAllData();
 
     if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+
+     
       this.GetAttendanceTimeTable();
     }
   }
