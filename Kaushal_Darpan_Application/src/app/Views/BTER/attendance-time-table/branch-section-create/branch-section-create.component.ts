@@ -973,12 +973,11 @@ export class BranchSectionCreateComponent {
 
   for (const secID of selectedSections) {
 
-    // ✅ Check from backend list (AddStaffSubjectAllSectionModelList)
+   
     const existsInAllSection = this.AddStaffSubjectAllSectionModelList.some(
       (x: any) => x.SubjectID == newItem.SubjectID && x.SectionID == secID
     );
 
-    // ✅ Check from already added list (AddStaffSubjectSectionModelList)
     const existsInLocalList = this.AddStaffSubjectSectionModelList.some((x: any) => {
       const existingSectionIDs = (x.SectionIDs || '').split(',').map((id: string) => id.trim());
       return x.SubjectID == newItem.SubjectID && existingSectionIDs.includes(String(secID));
@@ -990,6 +989,8 @@ export class BranchSectionCreateComponent {
       if (sectionName) duplicateSectionNames.push(sectionName);
     }
   }
+
+
 
   if (duplicateFound) {
     this.toastr.warning(`Section(s) already assigned for this subject: ${duplicateSectionNames.join(', ')}`);
