@@ -1103,7 +1103,7 @@ export class BranchSectionCreateComponent {
         this.postItem.AssignBySSOID = this.sSOLoginDataModel.SSOID,
         this.postItem.AssignBySSOID = this.sSOLoginDataModel.SSOID,
         this.postItem.AssignToSSOID = this.ApprovedTeacherList.find((x: any) => x.StaffID == item.StaffID)?.SSOID,
-
+        this.postItem.InstituteID = this.sSOLoginDataModel.InstituteID,
         this.PostAttendanceTimeTableList.push(this.postItem);
       this.postItem = new PostAttendanceTimeTable();
     }

@@ -847,7 +847,8 @@ export class StudentAttendanceComponent implements OnInit {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         InstituteID: this.sSOLoginDataModel.InstituteID,
-        AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID
+        AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
+        StaffID: this.sSOLoginDataModel.StaffID
       };
 
       saveAttendanceData.forEach(item => {
@@ -859,7 +860,7 @@ export class StudentAttendanceComponent implements OnInit {
             'SectionID', 'SectionName', 'DepartmentID', 'SemesterName', 'StreamName', 'EnrollmentNo',
             'StudentName', 'SubjectName', 'EndTermID', 'SemesterID', 'StreamID', 'SubjectID',
             'CourseTypeID', 'AssignTeacherForSubjectID', 'SubjectID1', 'AttendanceDate', 'Attendance',
-            'InstituteID', 'StudentID'
+            'InstituteID', 'StudentID','StaffID'
           ];
 
           if (!skipKeys.includes(key)) {
