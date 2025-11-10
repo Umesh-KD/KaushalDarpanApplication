@@ -23,6 +23,7 @@ import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInven
 import { DteTradeEquipmentsMappingService } from '../../../../../Services/DTEInventory/DTETradeEquipmentsMapping/dtetrade-equipments-mapping.service';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-add-request-labeling-equipments',
@@ -69,6 +70,7 @@ export class AddRequestLabelingEquipmentsComponent {
   public categoriesList: any = [];
   public UnitDDLList: any = [];
   public InstituteMasterList: any = [];
+  public FileName: string = '';
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -85,6 +87,7 @@ export class AddRequestLabelingEquipmentsComponent {
     private activatedRoute: ActivatedRoute,
     private routers: Router,
     private Swal2: SweetAlert2,
+    public appsettingConfig: AppsettingService,
     private modalService: NgbModal) { }
 
 
@@ -116,9 +119,15 @@ export class AddRequestLabelingEquipmentsComponent {
       this.request.EquipmentId = Number(params.get('equipment'));
       this.request.Quantity = Number(params.get('quantity'));
       this.request.MappingId = Number(params.get('mappingid'));
+      const indentDoc = params.get('indentdoc');
+      this.request.IndentDocument = indentDoc || 'Indent does not exist !';
+      console.log(this.request.IndentDocument);
+
+      //this.FileName = indentDoc || '';
       if (Number(params.get('equipment')) > 0) {
         this.isRequested = true;
       }
+      
       debugger
       this.sSOLoginDataModel =  JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       if (this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse1stYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTEDegreeCourse2ndYear || this.sSOLoginDataModel.RoleID == this._EnumRole.DTE || this.sSOLoginDataModel.RoleID == this._EnumRole.DTENON || this.sSOLoginDataModel.RoleID == this._EnumRole.NodalVerifier || this.sSOLoginDataModel.RoleID == this._EnumRole.Admin || this.sSOLoginDataModel.RoleID == this._EnumRole.AdminNon || this.sSOLoginDataModel.RoleID == this._EnumRole.DTELateral)  {
@@ -314,6 +323,7 @@ export class AddRequestLabelingEquipmentsComponent {
           this.request.Quantity = data['Data']["Quantity"];
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
+          this.request.IndentDocument = data['Data']["ModifyBy"];
           console.log(data)
           
           this.RequestFormGroup.patchValue({

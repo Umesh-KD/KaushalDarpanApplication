@@ -274,6 +274,12 @@ export class StaffMasterService {
       catchError(this.handleErrorObservable)
     ).toPromise();
   }
+  
+  public async GetAssignedTeacherForSubject(model: any) {
+    return await this.http.post(this.APIUrl + '/GetAssignedTeacherForSubject', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
 
   public async GetBranchStudentData(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
