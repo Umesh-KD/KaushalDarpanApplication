@@ -116,6 +116,8 @@ export class ItiBGTHeadmasterComponent{
       HeadName: ['', Validators.required],
       HeadCode: ['', Validators.required],
       HeadDescription: [''],
+      IsUnitWise: [''],
+      UnitName: [''],
     })
       // console.log("im in")
     this.searchForm = this.fb.group({
@@ -127,14 +129,13 @@ export class ItiBGTHeadmasterComponent{
     this.InstructorSearch.Name = '';
   
   //  await this.GetItiInstructorData();
-  await this.getBGTHeadmasterData();
+    await this.getBGTHeadmasterData();
 
   } 
 
 
   async getBGTHeadmasterData() {
     this.loaderService.requestStarted();
-    debugger
     this.ItiBGTHeadmasterServices.GetBGTHeadmasterData(this.searchRequest)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -179,149 +180,6 @@ export class ItiBGTHeadmasterComponent{
   async saveData() {
     this.isLoading = true;
   }
-  
-
-  // async GetItiInstructorData() {
-  //   // debugger
-  //   try {
-
-  //     this.loaderService.requestStarted();
-  //     debugger
-  //     // if(this.sSOLoginDataModel.RoleID === 16){  // Admin Role
-  //       this.InstructorSearch.roleID = this.sSOLoginDataModel.RoleID;
-  //       // this.InstructorSearch.roleID =17;
-  //     // }
-  //     // else{
-  //     //   this.InstructorSearch.roleID = 0;
-  //     // }
-     
-  //     this.InstructorSearch.InstituteID=this.sSOLoginDataModel.InstituteID;
-  //     await this.ItiInstructorService.GetInstructorData(this.InstructorSearch)
-  //       .then((data: any) => {
-  //         this.State = data['State'];
-  //         this.Message = data['Message'];
-  //         this.ErrorMessage = data['ErrorMessage'];
-  //         data = JSON.parse(JSON.stringify(data));
-  //         if (data && data.Data) {
-  //             if(Object.keys(data).includes('Data')){
-  //               this.GetInstructorDataList = data['Data'];
-  //             }
-  //             else{
-  //               this.GetInstructorDataList = [data];
-  //             }
-          
-  //           console.log(data);
-            
-  //         } else {
-  //           this.toastr.error(this.Message)
-  //         }
-  //       }, (error: any) => {
-  //         console.error(error);
-  //         this.toastr.error(this.ErrorMessage)
-  //       });
-
-  //   } catch (Ex) {
-  //     console.log(Ex);
-  //   } finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-  //  async deleteInstructorDataByID( id:number) {
-  //   // debugger
-  //   try {
-
-  //     this.loaderService.requestStarted();
-      
-     
-  //     await this.ItiInstructorService.deleteInstructorDataByID(id)
-  //       .then((data: any) => {
-  //         this.State = data['State'];
-  //         this.Message = data['Message'];
-  //         this.ErrorMessage = data['ErrorMessage'];
-  //         data = JSON.parse(JSON.stringify(data));
-
-  //         if (data && data.Data) {
-  //             this.ngOnInit();
-  //             if(Object.keys(data).includes('Data')){
-  //               this.GetInstructorDataList = data['Data'];
-  //             }
-  //             else{
-  //               this.GetInstructorDataList = [data];
-  //             }
-          
-  //           console.log(data);
-            
-  //         } else {
-  //           this.toastr.error(this.Message)
-  //         }
-  //       }, (error: any) => {
-  //         console.error(error);
-  //         this.toastr.error(this.ErrorMessage)
-  //       });
-
-  //   } catch (Ex) {
-  //     console.log(Ex);
-  //   } finally {
-  //     setTimeout(() => {
-  //       this.loaderService.requestEnded();
-  //     }, 200);
-  //   }
-  // }
-
-  // async addBGTHeadmaster1() {
-  //   if (!this.AppointExaminer.ExaminerCode) {
-  //     this.toastr.error("Please Fill Examiner code");
-  //     return;
-  //   }
-
-  //   // Set common values
-  //   this.AppointExaminer.IsAppointed = true;
-  //   this.AppointExaminer.ActiveStatus = true;
-  //   this.AppointExaminer.DeleteStatus = false;
-  //   this.AppointExaminer.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-  //   this.AppointExaminer.ModifyBy = this.sSOLoginDataModel.UserID;
-  //   this.AppointExaminer.CourseType = this.sSOLoginDataModel.Eng_NonEng;
-  //   this.AppointExaminer.EndTermID = this.sSOLoginDataModel.EndTermID;
-
-  //   const saveExaminer = async () => {
-  //     try {
-  //       this.loaderService.requestStarted();
-  //       const data: any = await this.examinerservice.SaveExaminerData(this.AppointExaminer);
-  //       this.State = data.State;
-  //       this.Message = data.Message;
-  //       this.ErrorMessage = data.ErrorMessage;
-
-  //       if (this.State === EnumStatus.Success) {
-  //         this.toastr.success(this.Message);
-  //         this.AppointExaminer = new ExaminerDataModel();
-  //         this.getStaffForExaminerData();
-  //         this.CloseModalPopup();
-  //       } else {
-  //         this.toastr.error(this.ErrorMessage);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error saving examiner data:", error);
-  //     } finally {
-  //       setTimeout(() => {
-  //         this.loaderService.requestEnded();
-  //       }, 200);
-  //     }
-  //   };
-
-  //   if (!this.AppointExaminer.AssignGroupCode || this.AppointExaminer.AssignGroupCode=='()') {
-  //     await saveExaminer();
-  //   } else {
-  //     this.Swal2.Confirmation(`This teacher is already assigned this Group Code ${this.AppointExaminer.AssignGroupCode},Select Yes If You want to Assign more Group Code!`, async (result: any) => {
-  //       if (result.isConfirmed) {
-  //         await saveExaminer();
-  //       }
-  //     });
-  //   }
-  // }
-
 
   async addBGTHeadmaster() {
 
@@ -336,7 +194,6 @@ export class ItiBGTHeadmasterComponent{
       if (this.BGTHeadForm.valid) {
         // Handle form submission logic here
 
-        // debugger;
         console.log('Form submitted successfully:', this.BGTHeadForm.value);
         // this.request.CopyPacket = this.RelievingPracticalForm.value.CopyPacket === 'Yes' ? true : false;
         // this.request.Uid = this.InstructorForm.value.Uid;
@@ -386,33 +243,6 @@ export class ItiBGTHeadmasterComponent{
 
 
     async ViewandUpdate(content: any, id : number = 0) {
-
-    //const initialState = {
-    //  UserID: UserID,
-    //  Type: "Admin",
-    //};
-
-    // await this.GetByID(UserID, StaffSubjectId)
-
-    /*  alert(  this.AppointExaminer.InstituteID)*/
-    //try {
-    //  await this.staffMasterService.GetByID(UserID)
-    //    .then((data: any) => {
-    //      data = JSON.parse(JSON.stringify(data));
-    //      console.log(data);
-
-    //      /*this.request.UserID = data['Data']["RoleID"];*/
-    //      //this.request.UserID = data['Data']["UserID"];
-    //      //this.request.SSOID = data['Data']["SSOID"];
-    //    }, error => console.error(error));
-    //}
-    //catch (ex) { console.log(ex) }
-    //finally {
-    //  setTimeout(() => {
-    //    this.loaderService.requestEnded();
-    //  }, 200);
-    //}
-
 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
     if(id > 0) {
@@ -515,7 +345,6 @@ export class ItiBGTHeadmasterComponent{
 
 
   async searchbtn_click() {
-    // debugger
     this.InstructorSearch.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.InstructorSearch.Uid = this.searchForm.value.Uid;
     this.InstructorSearch.Name = this.searchForm.value.Name;
