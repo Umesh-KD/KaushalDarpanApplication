@@ -258,7 +258,7 @@ export class ITITradeEquipmentsMappingListComponent {
             this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
             this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
             this.request.Status = 1;
-
+            debugger;
             try {
               await this.itiInventoryService.UpdateStatusEquipmentsMapping(this.request)
                 .then((data: any) => {

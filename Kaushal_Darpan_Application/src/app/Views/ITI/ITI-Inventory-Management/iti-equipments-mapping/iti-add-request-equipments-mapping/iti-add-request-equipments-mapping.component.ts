@@ -20,6 +20,9 @@ import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../../Common/document-details';
+import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
 
 @Component({
   selector: 'app-iti-add-request-equipments-mapping',
@@ -71,7 +74,8 @@ export class ITIAddRequestEquipmentsMappingComponent {
   searchEquipmentddlList: any[] = [{ EquipmentsId: 0, Name: '--Select--' }];
   sortField: string = '';
   sortOrder: string = 'asc';
-
+  public Dis_FileName: string = '';
+  public FileName: string = '';
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -83,6 +87,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private http: HttpClient,
+    private documentDetailsService: DocumentDetailsService,
     private modalService: NgbModal) { }
 
   async ngOnInit() {
@@ -99,6 +104,8 @@ export class ITIAddRequestEquipmentsMappingComponent {
       ddlEquipmentsId: ['', [DropdownValidators]],
       ddlCategoryId: ['0', [DropdownValidators]],
       ddlInstituteID: [this.sSOLoginDataModel.InstituteID, [DropdownValidators]],
+      txtRemarks: ['', Validators.required],
+      fileIndentPhoto: [null, Validators.required]
     });
     this.RequestFormGroup.get('ddlInstituteID')?.disable();
     this.CategoriesRequestFormGroup = this.formBuilder.group({
@@ -182,7 +189,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
   }
 
   async saveData() {
-    debugger;
+    
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.isSubmitted = true;
     if (this.RequestFormGroup.invalid) {
@@ -216,8 +223,12 @@ export class ITIAddRequestEquipmentsMappingComponent {
             this.RequestFormGroup.patchValue({
               txtQuantity: '',
               ddlEquipmentsId: '',
-              ddlCategoryId: ''
+              ddlCategoryId: '',
+              txtRemarks: '',
+              fileIndentPhoto: '',
             });
+            this.Dis_FileName = '';
+            this.FileName = '';
             this.isSubmitted = false;
             Object.keys(this.RequestFormGroup.controls).forEach(key => {
               this.RequestFormGroup.get(key)?.markAsPristine();
@@ -690,7 +701,7 @@ export class ITIAddRequestEquipmentsMappingComponent {
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.MappingList1);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'Inventory_Request_Reports.xlsx');
+    XLSX.writeFile(wb, 'ITIInventory_Request_Reports.xlsx');
   }
 
   DownloadFile(FileName: string, DownloadfileName: string): void {
@@ -710,6 +721,63 @@ export class ITIAddRequestEquipmentsMappingComponent {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_');
     return `file_${timestamp}.${extension}`;
   }
+  async UploadDocument(event: any, FileName: any, Dis_FileName: any) {
+    try {
+      let uploadModel: UploadFileModel = {
+        FileName: FileName ?? "",
+        FileExtention: "",
+        MinFileSize: "20kb",
+        MaxFileSize: "50mb",
+        FolderName: "ITIIssuesIndent",
 
-  
+      }
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          
+          if (this.State == EnumStatus.Success) {
+            this.FileName = data.Data[0].FileName;
+            this.Dis_FileName = data.Data[0].Dis_FileName;
+            this.request.IndentDocument = this.FileName;
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async DeleteDocument(item: any) {
+    try {
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName = "ITIIssuesIndent";
+      deleteModel.FileName = item;
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State != EnumStatus.Error) {
+            
+            this.FileName = '';
+            this.Dis_FileName = '';
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }
