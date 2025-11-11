@@ -17,7 +17,7 @@ import { DTEEquipmentsDataModel } from '../../../../../Models/DTEInventory/DTEEq
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { DTEItemsSearchModel } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
 import { ITIInventoryService } from '../../../../../Services/ITI/ITIInventory/iti-inventory.service';
-
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 @Component({
   selector: 'app-iti-add-request-labeling-equipments',
   templateUrl: './iti-add-request-labeling-equipments.component.html',
@@ -75,6 +75,7 @@ export class ITIAddRequestLabelingEquipmentsComponent {
     private formBuilder: FormBuilder,
     private activatedRoute: ActivatedRoute,
     private routers: Router,
+    public appsettingConfig: AppsettingService,
     private modalService: NgbModal) { }
 
 
@@ -84,6 +85,10 @@ export class ITIAddRequestLabelingEquipmentsComponent {
       this.request.CategoryId = Number(params.get('category'));
       this.request.EquipmentId = Number(params.get('equipment'));
       this.request.Quantity = Number(params.get('quantity'));
+      this.request.MappingId = Number(params.get('mappingid'));
+      const indentDoc = params.get('indentdoc');
+      this.request.IndentDocument = indentDoc || 'Indent does not exist !';
+      console.log(this.request.IndentDocument);
       if (Number(params.get('equipment')) > 0) {
         this.isRequested = true;
       }
@@ -124,6 +129,8 @@ export class ITIAddRequestLabelingEquipmentsComponent {
     });
 
     this.TE_MappingId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
+    //this.TE_MappingId = Number(this.activatedRoute.snapshot.queryParamMap.get('mappingid')?.toString());
+    debugger;
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;
     await this.GetCategoryDDL();

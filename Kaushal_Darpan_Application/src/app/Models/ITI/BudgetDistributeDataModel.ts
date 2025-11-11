@@ -1,14 +1,16 @@
 
 export class BudgetDistributeModel {
-  public DistributedID:number=0
-  public CollegeID:number=0
-  public FinYearID:number=0
-  public DistributedType:number=0
-  public DistributedAmount:number=0
-  public CreatedBy:number=0
-  public ActionType:string=''
-  public Remarks:string=''
-  public CollegeBudgetUtilizationModel: any[] = []
+  public DistributedID?:number=0
+  public CollegeID?:number=0
+  public FinYearID?:number=0
+  public DistributedType?:number=0
+  public DistributedAmount?:number=0
+  public CreatedBy?:number=0
+  public BodgetTypeID?:number=0
+  public BodgetType_Cumulative_HeadWise?:number=0
+  public ActionType?:string=''
+  public Remarks?:string=''
+  public CollegeBudgetUtilizationModel?: any[] = []
 }
 
 export class BudgetHeadSearchFilter {
@@ -21,6 +23,9 @@ export class BudgetHeadSearchFilter {
   public ActionName: string = ''
   public CollegeName: string = ''
   public DistributedType: number = 0
+  public InstituteId?: number = 0
+  public AcademicYearID?: number = 0
+  public BudgetTypeID?: number = 0
   
 }
 

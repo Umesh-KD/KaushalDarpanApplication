@@ -188,7 +188,7 @@
   <div class="card">
     <div class="card-header flex justify-between items-center">
       <div class="text-end">
-        <b>Utilize Amount : {{ColegeAmount}}</b>&nbsp;&nbsp;|&nbsp;&nbsp;
+        <b>Utilize Amount : {{getTotalUtilizationAmount()}}</b>&nbsp;&nbsp;|&nbsp;&nbsp;
         <b>College Name : {{CollegeName}}</b>
       </div>
       <button class="btn bg-info text-white" (click)="CloseModal()">
@@ -246,58 +246,68 @@
   <div class="card">
     <div class="card-header flex justify-between items-center">
       <b><i class="fa fa-plus"></i>&nbsp;Utilize Budget</b>
-      <b>Alloted Amount : {{getTotalUtilizationAmount_Save()}}</b>
+      <b>Alloted Amount : {{getTotalAllottedAmount_Save()}}</b>
       <button class="btn bg-info text-white" (click)="CloseModal()">
         <i class="ti ti-x"></i>
       </button>
     </div>
 
     <div class="card-body">
+      <!-- {{BudgetUtilizationsListSave | json}} -->
       <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>S No</th>
-            <th>Head Name</th>
-            <th>Utilization Amount</th>
-            <!-- <th>Upload File</th>  -->
+            <th class="text-left">S No</th>
+            <th class="text-left">Head Name</th>
+            <th class="text-left">Head Amount</th>
+            <th class="text-left">Unit Name</th>
+            <!-- <th class="text-left">Unit Value</th> -->
+            <th class="text-left">Estimated Amount</th>
+            <th class="text-left">Allot Amount</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of BudgetUtilizationsListSave; let i = index">
-            <td>{{i+1}}</td>
-            <td>{{ item.HeadName }}</td>
-            <td>
+            <td class="text-left">{{i+1}}</td>
+            <td class="text-left">{{ item.HeadName }}</td>
+            <td class="text-left">{{ item.Amount }}</td>
+            <td class="text-left">
+              {{ item.UnitName }}
               <input type="number"
-                     [(ngModel)]="item.UtilizationAmount"
+                     [(ngModel)]="item.UnitValue"
                      name="amount_{{item.HeadID}}"
                      min="0"
                      step="0.01"
                      required
+                     class="form-control"
+                     *ngIf="item.IsUnitWise"
+                     (input)="calculateEstimatedAmount(item)"/>
+            </td>
+            <td class="text-left">{{ item.EstimatedAmount | number : '1.2-2' }}</td>
+            <td class="text-left">
+              <input type="number"
+                     [(ngModel)]="item.AllotAmount"
+                     name="amount_{{item.HeadID}}"
+                     min="0"
+                     step="0.01"
+                     required
+                     placeholder="Enter Amount"
                      class="form-control"/>
             </td>
-            <!-- <td>
-              <input type="file"
-                     (change)="onFileSelected($event, i)"
-                     accept=".pdf,.doc,.docx,.jpg,.png"
-                     class="form-control-file" />
-              <div *ngIf="item.UploadedFileName">
-                <small>Selected: {{ item.UploadedFileName }}</small>
-              </div>
-            </td> -->
           </tr>
         </tbody>
 
         <!-- Footer -->
         <tfoot>
           <tr>
-            <td colspan="2"><b>Total</b></td>
-            <td  colspan="2"><b [class]="getTotalUtilizationAmount_Save()>ColegeAmount?'text-success':'text-success'">{{ getTotalUtilizationAmount_Save() | number: '1.2-2' }}</b></td>
-            <td></td> <!-- Keep column alignment -->
+            <td colspan="4" class="text-right"><b>Total</b></td>
+            <td  colspan="1"><b [class]="getTotalEstimatedAmount_Save()>ColegeAmount?'text-success':'text-success'">{{ getTotalEstimatedAmount_Save() | number: '1.2-2' }}</b></td>
+            <td><b [class]="getTotalAllottedAmount_Save()>ColegeAmount?'text-success':'text-success'">{{ getTotalAllottedAmount_Save() | number: '1.2-2' }}</b></td>
           </tr>
 
           <tr>
             <label for="remark"><strong>Remark:</strong></label>
-            <td colspan="4">
+            <td colspan="5">
               <textarea id="remark"
                         [(ngModel)]="Remarks"
                         name="Remarks"

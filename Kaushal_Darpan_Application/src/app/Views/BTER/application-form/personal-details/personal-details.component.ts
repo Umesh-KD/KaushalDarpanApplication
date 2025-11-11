@@ -526,7 +526,7 @@ export class PersonalDetailsComponent implements OnInit {
   onIdentityProofChange() {
     this.PersonalDetailForm.get('txtDetailsofIDProof')?.updateValueAndValidity();
   }
-
+    
   validateIDLength(control: any) {
     const identityProof = this.PersonalDetailForm?.get('ddlIdentityProof')?.value; // Access the value correctly
     const value = control.value; // This is the value of the current input

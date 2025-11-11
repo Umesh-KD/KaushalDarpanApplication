@@ -1,10 +1,194 @@
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
-  <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Create Budget</h4>
-    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700">ITI Budget Management</a>
-      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0)" class="text-sm font-medium text-slate-700" aria-current="page">Create Budget</a>
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">Create Budget</h4>
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0)" class="text-sm font-medium text-slate-700">ITI Budget Management</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0)" class="text-sm font-medium text-slate-700" aria-current="page">Create
+                Budget</a>
+        </div>
     </div>
-  </div>
+</div>
+
+<div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+                <div>
+                    <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
+                </div>
+            </div>
+
+            <form [formGroup]="BudgetCreateForm">
+
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Budget Type:<span class="StarMarking">*</span> </label>
+                        <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="request.BudgetTypeID" formControlName="BudgetTypeID">
+                            <option value="0">Choose Option</option>
+                            <option *ngFor="let item of ddlBudgetTypeList" [value]="item.BudgetTypeID">
+                                {{item.BudgetTypeName}}
+                            </option>
+                        </select>
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.BudgetTypeID.errors" class="text-danger">
+                            <p *ngIf="!_BudgetCreateForm.BudgetTypeID.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div *ngIf="request.BudgetTypeID == 1">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type Name:<span class="StarMarking">*</span> </label>
+                        <input class="form-input" type="text" placeholder="Enter Total Amount" id="Amount"
+                            [(ngModel)]="request.BudgetTypeName" formControlName="BudgetTypeName">
+
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.BudgetTypeName.errors" class="text-danger">
+                            <p *ngIf="_BudgetCreateForm.BudgetTypeName.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year:<span class="StarMarking">*</span></label>
+                        <select class="form-select" id="AcademicYearID" [(ngModel)]="request.AcademicYearID" formControlName="AcademicYearID">
+                            <option value="0">--All--</option>
+                            <option *ngFor="let item of SessionYearList" [value]="item.FinancialYearID">
+                                {{item.FinancialYearName}}</option>
+                        </select>
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.AcademicYearID.errors" class="text-danger">
+                            <p *ngIf="!_BudgetCreateForm.AcademicYearID.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget For:<span class="StarMarking">*</span></label>
+                        <select class="form-select" id="BudgetForID"
+                            [(ngModel)]="request.BudgetForID"
+                            formControlName="BudgetForID">
+                            <option value="0">--Select--</option>
+                            <option value="1">RCVT</option>
+                            <option value="2">College</option>
+                            <option value="3">Zonal</option>
+                            <option value="4">All of Above</option>
+                        </select>
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.BudgetForID.errors" class="text-danger">
+                            <p *ngIf="!_BudgetCreateForm.BudgetForID.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget Type (Cumulative/Head
+                            Wise):<span class="StarMarking">*</span></label>
+                        <select class="form-select" id="AcademicYearID"
+                            [(ngModel)]="request.BudgetType_Cumulative_HeadWise"
+                            (change)="onChangeBudgetType()"
+                            formControlName="BudgetType_Cumulative_HeadWise">
+                            <option value="0">--Select--</option>
+                            <option value="1">Cumulative Budget</option>
+                            <option value="2">Head Wise Budget</option>
+                        </select>
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.BudgetType_Cumulative_HeadWise.errors" class="text-danger">
+                            <p *ngIf="!_BudgetCreateForm.BudgetType_Cumulative_HeadWise.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div *ngIf="request.BudgetType_Cumulative_HeadWise == 1">
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter Cumulative Amount:<span
+                                class="StarMarking">*</span> </label>
+                        <input class="form-input" type="text" placeholder="Enter Total Amount" id="Amount"
+                            [(ngModel)]="request.CumulativeAmount"
+                            formControlName="CumulativeAmount">
+
+                        <div *ngIf="isSubmitted &&_BudgetCreateForm.CumulativeAmount.errors" class="text-danger">
+                            <p *ngIf="_BudgetCreateForm.CumulativeAmount.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+                    </div>
+
+
+                </div>
+            </form>
+        </div>
+        <div class="card-body" *ngIf="request.BudgetType_Cumulative_HeadWise == 2">
+            <div class="table-container" style="position: relative;">
+                <table class="table table-border w-full table-auto" cellpadding="5"
+                    style="white-space:nowrap; width: 100%;">
+                    <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+                        <tr>
+                            <th class="text-left">S No</th>
+                            <th class="text-left">Head Name</th>
+                            <th class="text-left">Amount</th>
+                            <th class="text-left">Is Unit Wise</th>
+                            <th class="text-left">Unit Name</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <!-- Existing + New Rows -->
+                        <tr *ngFor="let item of BudgetHeadList; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>
+                                <input type="text" class="form-control" [(ngModel)]="item.HeadName"
+                                    placeholder="Enter Head Name" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" />
+                            </td>
+                            <td>
+                                <input type="number" class="form-control" [(ngModel)]="item.Amount"
+                                    placeholder="Enter Amount" />
+                            </td>
+                            <td>
+                                <label>
+                                    <input type="radio" name="unitwise{{ i }}" [(ngModel)]="item.IsUnitWise"
+                                        [value]="true" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" /> Yes
+                                </label>
+                                <label class="ml-2">
+                                    <input type="radio" name="unitwise{{ i }}" [(ngModel)]="item.IsUnitWise"
+                                        [value]="false" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" /> No
+                                </label>
+                            </td>
+                            <td>
+                                <input *ngIf="item.IsUnitWise" type="text" class="form-control"
+                                    [(ngModel)]="item.UnitName" placeholder="Enter Unit Name" 
+                                    [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}"/>
+                            </td>
+                        </tr>
+
+                        <!-- If no data -->
+                        <tr *ngIf="BudgetHeadList?.length === 0">
+                            <td colspan="5" class="text-center text-gray-500 py-2">
+                                No data available.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Add New button BELOW the table -->
+                <div style="text-align: right; margin-top: 8px;">
+                    <button class="btn btn-sm btn-primary" (click)="addNewRow()">
+                        + Add New Head
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+            <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveBudget()">
+                    Submit
+                </button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+                    <i class="ti ti-refresh"></i> Reset
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

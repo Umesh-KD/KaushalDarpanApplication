@@ -140,6 +140,7 @@ export class ITIStudentPlacementConsentComponent {
   //  }
   //}
   async GetAllPost(PostID:number) {
+    debugger
     try {
       this.PostId = PostID
       this.loaderService.requestStarted();
@@ -247,4 +248,6 @@ export class ITIStudentPlacementConsentComponent {
     )
   }
   
+
+
 }

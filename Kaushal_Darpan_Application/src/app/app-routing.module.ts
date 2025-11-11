@@ -177,7 +177,7 @@ const routes: Routes = [
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
 
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
-
+      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
       //Old Software Master
       { path: 'updatecollegemaster/:id', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
       { path: 'updatecollegemaster', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
@@ -393,7 +393,7 @@ const routes: Routes = [
       { path: 'AddTspAreas', loadChildren: () => import('./Views/ITI/Tsp-Areas/add-tsp-areas/add-tsp-areas.module').then(m => m.AddTspAreasModule), title: 'AddItiApplication/3 TSP Areas' },
 
       { path: 'itifee', loadChildren: () => import('./Views/ITI/iti-fee/iti-fee.module').then(m => m.ItiFeeModule), title: 'ITI Fee' },
-      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
+      //{ path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       { path: 'ITIInstructorCollege', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-college/iti-instructor-college.module').then(m => m.ItiInstructorCollegeModule) },
 
       { path: 'verifiers', loadChildren: () => import('./Views/DTE_Verifier/verifier/verifier.module').then(m => m.VerifierModule), title: 'Verifiers' },
@@ -571,7 +571,7 @@ const routes: Routes = [
       { path: 'iti-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipments-mapping-list/iti-equipments-mapping-list.module').then(m => m.ITITradeEquipmentsMappingListModule) },
       { path: 'iti-add-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
       { path: 'iti-add-equipments-mapping:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
-      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
+      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID/:mappingid/:indentdoc', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
       { path: 'iti-stocks', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-stocks-items-list/iti-stocks-items-list.module').then(m => m.ITIStocksItemsListModule) },
       { path: 'iti-add-issued-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
       { path: 'iti-add-issued-items/:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
@@ -1476,6 +1476,8 @@ const routes: Routes = [
       {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
+     
+      {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
      
 
 

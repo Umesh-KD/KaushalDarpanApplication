@@ -966,19 +966,15 @@ export class BranchSectionCreateComponent {
     this.AddStaffSubjectSectionModel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this.AddStaffSubjectSectionModel.InstituteID = this.sSOLoginDataModel.InstituteID;
 
-      // 🔍 DUPLICATE CHECK STARTS HERE
+      //  DUPLICATE CHECK STARTS HERE
   const selectedSections = formValue.SectionID || [];
   let duplicateFound = false;
   let duplicateSectionNames: string[] = [];
 
-  for (const secID of selectedSections) {
-
-    // ✅ Check from backend list (AddStaffSubjectAllSectionModelList)
+  for (const secID of selectedSections) { 
     const existsInAllSection = this.AddStaffSubjectAllSectionModelList.some(
       (x: any) => x.SubjectID == newItem.SubjectID && x.SectionID == secID
     );
-
-    // ✅ Check from already added list (AddStaffSubjectSectionModelList)
     const existsInLocalList = this.AddStaffSubjectSectionModelList.some((x: any) => {
       const existingSectionIDs = (x.SectionIDs || '').split(',').map((id: string) => id.trim());
       return x.SubjectID == newItem.SubjectID && existingSectionIDs.includes(String(secID));
@@ -996,8 +992,6 @@ export class BranchSectionCreateComponent {
     this.isSubmitted = false;
     return;
   }
-
-  
 
     this.AddStaffSubjectSectionModelList.push(newItem);
 
@@ -1076,14 +1070,7 @@ export class BranchSectionCreateComponent {
 
           console.log("Filtered Sections:", this.GetSectionData);
           this.refreshAvailableSections();
-          // this.refreshAvailableSections();
-          //  const usedIds = this.availSectionData
-          //   .flatMap(x => (x.SectionID ? x.SectionID.split(',').map(Number) : []));
-          // console.log(" Available Sections List:", this.availSectionData);
-          //   // filter sections
-          // this.GetSectionData = this.allSections.filter(sec => !usedIds.includes(sec.SectionID));
-
-          // this.toastr.success('Saved Successfully');
+  
         }, error => console.error(error));
     } catch (Ex) {
       console.log(Ex);

@@ -93,4 +93,11 @@ export class BudgetDistributedService {
       ).toPromise();
   }
   
+  public async GetBudget_HeadWise(searchRequest: BudgetHeadSearchFilter) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetBudget_HeadWise`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

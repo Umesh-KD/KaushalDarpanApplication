@@ -9,7 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 
 @Component({
     selector: 'app-add-itihr-master',
@@ -44,8 +44,8 @@ export class AddItiHrMasterComponent {
     this.HrMasterFormGroup = this.formBuilder.group(
       {
         Name: ['', Validators.required],
-        EmailId: ['', Validators.required],
-        MobileNo: ['', Validators.required],
+        EmailId: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+        MobileNo: ['', [Validators.required,Validators.pattern(GlobalConstants.MobileNumberPattern), Validators.minLength(10), Validators.maxLength(10)]],
         PlacementCompanyID: ['', [DropdownValidators]],
 
       });
@@ -179,6 +179,13 @@ export class AddItiHrMasterComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+    validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+    if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+      event.preventDefault();
     }
   }
 

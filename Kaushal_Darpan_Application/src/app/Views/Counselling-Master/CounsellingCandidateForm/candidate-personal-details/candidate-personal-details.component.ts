@@ -78,6 +78,7 @@ export class CandidatePersonalDetailsComponent {
       IsExServicemen: [''],
       IsShahidDependent: [''],
       IsAnyIncurableDiseases: [''],
+      IsTSP: [''],
       IsSpouseInSameService: [''],
       
       ReligionID: [0, [DropdownValidators]],
