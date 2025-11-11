@@ -177,7 +177,7 @@ const routes: Routes = [
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
 
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
-
+      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
       //Old Software Master
       { path: 'updatecollegemaster/:id', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
       { path: 'updatecollegemaster', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
@@ -393,7 +393,7 @@ const routes: Routes = [
       { path: 'AddTspAreas', loadChildren: () => import('./Views/ITI/Tsp-Areas/add-tsp-areas/add-tsp-areas.module').then(m => m.AddTspAreasModule), title: 'AddItiApplication/3 TSP Areas' },
 
       { path: 'itifee', loadChildren: () => import('./Views/ITI/iti-fee/iti-fee.module').then(m => m.ItiFeeModule), title: 'ITI Fee' },
-      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
+      //{ path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       { path: 'ITIInstructorCollege', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-college/iti-instructor-college.module').then(m => m.ItiInstructorCollegeModule) },
 
       { path: 'verifiers', loadChildren: () => import('./Views/DTE_Verifier/verifier/verifier.module').then(m => m.VerifierModule), title: 'Verifiers' },
@@ -603,7 +603,7 @@ const routes: Routes = [
       { path: 'DteTradeEquipmentsMapping', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/dtetrade-equipments-mapping-list/dtetrade-equipments-mapping-list-module').then(m => m.DteTradeEquipmentsMappingListModule) },
       { path: 'AddDteTradeEquipmentsMapping', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/adddte-trade-equipments-mapping/adddte-trade-equipments-mapping.-module').then(m => m.AddDteTradeEquipmentsMappingModule) },
       { path: 'AddDteTradeEquipmentsMapping:id', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/adddte-trade-equipments-mapping/adddte-trade-equipments-mapping.-module').then(m => m.AddDteTradeEquipmentsMappingModule) },
-      { path: 'RequestEquipmentsMapping/:id/:category/:equipment/:quantity/:mappingid', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/add-request-labeling-equipments/add-request-labeling-equipments.module').then(m => m.AddRequestLabelingEquipmentsModule) },
+      { path: 'RequestEquipmentsMapping/:id/:category/:equipment/:quantity/:mappingid/:indentdoc', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DTETradeEquipmentsMapping/add-request-labeling-equipments/add-request-labeling-equipments.module').then(m => m.AddRequestLabelingEquipmentsModule) },
       { path: 'DteStocks', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/dtestocks-items-list/dtestocks-items-list-module').then(m => m.DteStocksItemsListModule) },
       { path: 'AddDteIssuedItems', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DteIssued&ReturnItems/dteadd-issued-items/dteadd-issued-items-module').then(m => m.DteAddIssuedItemsModule) },
       { path: 'AddDteIssuedItems/:id', loadChildren: () => import('./Views/BTER/DTE-Inventory-Management/DteIssued&ReturnItems/dteadd-issued-items/dteadd-issued-items-module').then(m => m.DteAddIssuedItemsModule) },
@@ -1352,20 +1352,20 @@ const routes: Routes = [
       { path: 'fresherRegistrationReportlist', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/fresher-registration-report-list/fresher-registration-report-list.module').then(m => m.fresherRegistrationReportListModule) },
 
       { path: 'BudgetDistribute', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-distribute/budget-distribute.module').then(m => m.BudgetDistributeModule) },
-
+      { path: 'CollegeBudgetList', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-list/college-budget-list.module').then(m => m.CollegeBudgetListModule) },
+      { path: 'BudgetRequest', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-request/college-budget-request.module').then(m => m.CollegeBudgetRequestModule) },
+      { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
+      { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
+      
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },
       { path: 'PrincipalDispatchRevalGroup', loadChildren: () => import('./Views/DispatchManagementReval/principal-dispatch-reval-group/principal-dispatch-reval-group.module').then(m => m.PrincipalDispatchRevalGroupModule) },
       { path: 'DispatchPrincipalRevalGroupCodeList', loadChildren: () => import('./Views/DispatchManagementReval/DispatchPrincipalRevalGroupCode-list/DispatchPrincipalRevalGroupCode-list.module').then(m => m.DispatchPrincipalRevalGroupCodeListModule) },
       { path: 'DispatchPrincipalRevalGroupCode', loadChildren: () => import('./Views/DispatchManagementReval/DispatchPrincipalRevalGroupCode-form/DispatchPrincipalRevalGroupCode-form.module').then(m => m.DispatchPrincipalRevalGroupCodeFormModule), title: 'Dispatch Principal Reval Group Code Form' },
       { path: 'ExaminerDispatchRevalVerify', loadChildren: () => import('./Views/DispatchManagementReval/examiner-dispatch-reval-verify/examiner-dispatch-reval-verify.module').then(m => m.ExaminerDispatchRevalVerifyModule) },
-      { path: 'CollegeBudgetList', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-list/college-budget-list.module').then(m => m.CollegeBudgetListModule) },
       { path: 'PlacementDataReport', loadChildren: () => import('./Views/Reports/placement-data-report/placement-data-report.module').then(m => m.PlacementDataReportModule) },
-      { path: 'BudgetRequest', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-request/college-budget-request.module').then(m => m.CollegeBudgetRequestModule) },
-
+      
       { path: 'download-admit-card', loadChildren: () => import('./Views/BTER/download-admit-card-cs/download-admit-card-cs.module').then(m => m.DownloadAdmitCardCSModule), title: 'Download Admit Card' },
-
-      { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
       { path: 'principle-reply-admin-reval-dispatch-list', loadChildren: () => import('./Views/DispatchManagementReval/principle-reply-admin-reval-dispatch-list/principle-reply-admin-reval-dispatch-list.module').then(m => m.PrincipleReplyAdminRevalDispatchListModule) },
       { path: 'AdminRevalGroupCodeReceivedlist', loadChildren: () => import('./Views/DispatchManagementReval/AdminRevalGroupCodeReceived-list/AdminRevalGroupCodeReceived-list.module').then(m => m.AdminRevalGroupCodeReceivedlistModule) },
       { path: 'StudentRevaluationDetailsReport', loadChildren: () => import('./Views/Reports/bter-student-revaluation-details-report/bter-student-revaluation-details-report.module').then(m => m.RevaluationStudentDetailsReportsModule) },
@@ -1505,7 +1505,14 @@ const routes: Routes = [
       { path: 'AddQualificationList', loadChildren: () => import('./Views/ITI/add-qualification-list/add-qualification-list.module').then(m => m.AddQualificationListModule) },
 
       { path: 'SanctionMaster', loadChildren: () => import('./Views/ITI/sanction-master/sanction-master.module').then(m => m.SanctionMasterModule) },
+      { path: 'AddSanctionOrder', loadChildren: () => import('./Views/ITI/add-sanction-order/add-sanction-order.module').then(m => m.AddSanctionOrderModule) },
+
+      { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
+
+
+
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
+
 
     ]
   },
@@ -1610,10 +1617,6 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-
-
-
-
 
 
 

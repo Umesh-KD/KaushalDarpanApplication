@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { HiringRoleMasterDataModel, SanctionOrderDataModel } from '../../Models/HiringRoleMasterDataModel';
+import { ItiSanctionOrderList } from '../../Models/ITI/ItiReportDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +62,12 @@ export class HiringRoleMasterService {
   }
 
 
+  public async GetByIDSanctionOrder(PK_ID: number) {
+    return await this.http.get(this.APIUrl + "/GetByIDSanctionOrder/" + PK_ID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async SaveData(request: HiringRoleMasterDataModel) {
 
@@ -84,6 +91,15 @@ export class HiringRoleMasterService {
   }
 
 
+  public async SaveSanctionOrder(request: ItiSanctionOrderList) {
+
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + '/SaveSanctionOrder', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async DeleteDataByID(PK_ID: number, ModifyBy: number) {
 
@@ -102,5 +118,34 @@ export class HiringRoleMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+   
+  //Get all data
+  public async GetsanctionOrder(searchRequest: ItiSanctionOrderList) {
+    var body = JSON.stringify(searchRequest);
+    debugger;
+    return await this.http.post(`${this.APIUrl}/GetsanctionOrder`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetsanctionOrderNotAssign(searchRequest: ItiSanctionOrderList) {
+    var body = JSON.stringify(searchRequest);
+    debugger;
+    return await this.http.post(`${this.APIUrl}/GetsanctionOrderNotAssign`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async DeleteSanctionOrder(PK_ID: number, ModifyBy: number) {
+
+    return await this.http.post(this.APIUrl + '/DeleteSanctionOrder/' + PK_ID + "/" + ModifyBy, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 
 }

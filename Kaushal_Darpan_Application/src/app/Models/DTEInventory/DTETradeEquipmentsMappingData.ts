@@ -20,6 +20,8 @@ export class DTETradeEquipmentsMappingData {
   public TotalPrice: number | null = null;
   public IdentificationMark: string = '';
   public CompanyName: string = '';
+  public IndentDocument: string = '';
+  public Remarks: string = '';
 }
 
 export class DTESearchTradeEquipmentsMapping {

@@ -216,6 +216,7 @@ export class ItiInstructorComponent{
           this.InstructorDetailsModelList = data.Data;
           if (data && data.Data) {
             this.InstructorDetailsModelList = data.Data;
+            console.log(this.InstructorDetailsModelList)
             this.totalInTableRecord = this.InstructorDetailsModelList.length;
             this.loadInTable();
           } else {

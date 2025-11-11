@@ -75,7 +75,7 @@ export class DteTradeEquipmentsMappingService {
 
   public async SaveRequestData(request: DTETradeEquipmentsMappingData) {
     const body = JSON.stringify(request);
-
+    console.log(body);
     return await this.http.post(this.APIUrl + '/SaveRequestData', request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)

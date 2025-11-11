@@ -133,6 +133,11 @@ export class StudentAttendanceComponent implements OnInit {
         this.getData();
       }
     }, 1000);
+
+    //const defaultTime = this.StudentAttandanceTimeDDL.find(x => x.Name === '09:00:00 - 10:00:00');
+    //if (!this.TableForm.get('AttandanceTimeID')?.value && defaultTime) {
+    //  this.TableForm.patchValue({ AttandanceTimeID: defaultTime.ID });
+    //}
     
   }
   get formTable() { return this.TableForm.controls; }
@@ -669,6 +674,8 @@ export class StudentAttendanceComponent implements OnInit {
     this.GetStaffLeaveAllData();
 
     if (this.TableForm.value.StreamID != null && this.TableForm.value.SubjectID) {
+
+     
       this.GetAttendanceTimeTable();
     }
   }
@@ -847,7 +854,8 @@ export class StudentAttendanceComponent implements OnInit {
         DepartmentID: this.sSOLoginDataModel.DepartmentID,
         CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
         InstituteID: this.sSOLoginDataModel.InstituteID,
-        AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID
+        AssignTeacherForSubjectID: this.sSOLoginDataModel.RoleID,
+        StaffID: this.sSOLoginDataModel.StaffID
       };
 
       saveAttendanceData.forEach(item => {
@@ -859,7 +867,7 @@ export class StudentAttendanceComponent implements OnInit {
             'SectionID', 'SectionName', 'DepartmentID', 'SemesterName', 'StreamName', 'EnrollmentNo',
             'StudentName', 'SubjectName', 'EndTermID', 'SemesterID', 'StreamID', 'SubjectID',
             'CourseTypeID', 'AssignTeacherForSubjectID', 'SubjectID1', 'AttendanceDate', 'Attendance',
-            'InstituteID', 'StudentID'
+            'InstituteID', 'StudentID','StaffID'
           ];
 
           if (!skipKeys.includes(key)) {

@@ -359,6 +359,7 @@ updateCalendar() {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         AcademicYearID: this.SSOLoginDataModel.FinancialYearID,
         CourseTypeID: this.SSOLoginDataModel.Eng_NonEng,
+        InstituteID: this.SSOLoginDataModel.InstituteID
       }));
 
       this.attendanceServiceService.SetCalendarEventModel(formattedEvents)

@@ -386,6 +386,29 @@
           </div>
         </div>
 
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is TSP <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="true" formControlName="IsTSP"
+                      [(ngModel)]="request.IsTSP" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="false" formControlName="IsTSP"
+                      [(ngModel)]="request.IsTSP" />
+              <span>No</span>
+            </label>
+          </div>
+
+          <div *ngIf="isSubmitted &&_PersonalDetailForm.IsTSP.errors" class="text-danger">
+            <p *ngIf="_PersonalDetailForm.IsTSP.errors.required">
+              <i aria-hidden="true"></i> This field is required.!
+            </p>
+          </div>
+        </div>
+
         <div *ngIf="request.MaritalID == 62">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
           <div class="flex gap-4">

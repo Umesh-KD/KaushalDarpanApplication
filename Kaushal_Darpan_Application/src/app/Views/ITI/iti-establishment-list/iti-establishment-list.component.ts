@@ -57,6 +57,10 @@ export class ItiEstablishmentListComponent {
 
 
     console.log(this.sSOLoginDataModel);
+    if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+    }
+
     //this.getSemesterMasterList();
     //this.getStreamMasterList();
     //this.getExamMasterList();

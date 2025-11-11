@@ -125,6 +125,10 @@ export class CandidateDocumentDetailsComponent {
     if (!this.PersonalDetailsData.IsAnyIncurableDiseases) {
       filtered = filtered.filter((x: any) => x.ColumnName !== "Incure_Dis_Doc");
     }
+
+    if (this.PersonalDetailsData.CategoryA_ID === 1) {
+      filtered = filtered.filter((x: any) => x.ColumnName !== "caste_Certificate");
+    }
     
     if(this.PersonalDetailsData.GenderId == 98) {
       if (this.PersonalDetailsData.CategoryB_ID !== 1) {
