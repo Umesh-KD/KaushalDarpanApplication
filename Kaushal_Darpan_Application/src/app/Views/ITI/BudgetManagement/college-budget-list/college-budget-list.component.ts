@@ -322,19 +322,31 @@ export class CollegeBudgetListComponent {
     }
   }
 
+  isFileMissing(item: any): boolean {
+    return (item.UtilizationAmount || 0) > 0 && !item.UploadedFileName;
+  }
 
+  validateUtilizationList(): boolean {
+    return !(this.BudgetUtilizationsList || []).some(
+      item => (item.UtilizationAmount || 0) > 0 && !item.UploadedFileName
+    );
+  }
 
   async BudgetUtilize() {
-
     try {
-        ;
       this.loaderService.requestStarted();
+
+      if (!this.validateUtilizationList()) {
+        this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
+        return; // stop submission
+      }
+
       const remarkValue = this.Remarks;
-      if (!this.Remarks || this.Remarks.trim() === '')
-      {
+      if (!this.Remarks || this.Remarks.trim() === '') {
         this.toastr.warning("Please fill in the remark before submitting.");
         return; // stop execution
       }
+
       // or any string you want to apply to all
       this.BudgetUtilizationsList.forEach(item => {
         item.Remarks = remarkValue;
@@ -421,10 +433,12 @@ export class CollegeBudgetListComponent {
 
   }
 
-  getTotalUtilizationAmount(): number
-  {
+  getTotalUtilizationAmount(): number  {
     return this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0;
   }
 
-
+  getRemainingAmount(): number {
+    const totalUtilized = this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0),0) || 0;
+    return (this.ColegeAmount || 0) - totalUtilized;
+  }
 }

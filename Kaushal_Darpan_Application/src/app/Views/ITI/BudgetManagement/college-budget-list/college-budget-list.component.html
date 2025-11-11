@@ -168,6 +168,7 @@
               <div *ngIf="item.UploadedFileName">
                 <small>Selected: {{ item.UploadedFileName }}</small>
               </div>
+              <p *ngIf="isFileMissing(item)" class="text-danger"> <i aria-hidden="true"></i> This field is required.!</p>
             </td>
           </tr>
         </tbody>
@@ -175,8 +176,13 @@
         <!-- Footer -->
         <tfoot>
           <tr>
-            <td colspan="2"><b>Total</b></td>
+            <td colspan="2"><b>Total Utilized Amount</b></td>
             <td  colspan="2"><b [class]="getTotalUtilizationAmount()>ColegeAmount?'text-danger':'text-success'">{{ getTotalUtilizationAmount() | number: '1.2-2' }}</b></td>
+            <td></td> <!-- Keep column alignment -->
+          </tr>
+          <tr>
+            <td colspan="2"><b>Remaining Amount</b></td>
+            <td  colspan="2"><b [class]="getRemainingAmount()>ColegeAmount?'text-danger':'text-success'">{{ getRemainingAmount() | number: '1.2-2' }}</b></td>
             <td></td> <!-- Keep column alignment -->
           </tr>
 

@@ -102,6 +102,9 @@ export class UpdateEnrollResponseBulkExcelComponent implements OnInit {
               if (data.State === EnumStatus.Success) {
                 this.toastr.success(data.Message);               
               }
+              else{
+                this.toastr.error(data.ErrorMessage);
+              }
             });
           }
            catch (ex) {

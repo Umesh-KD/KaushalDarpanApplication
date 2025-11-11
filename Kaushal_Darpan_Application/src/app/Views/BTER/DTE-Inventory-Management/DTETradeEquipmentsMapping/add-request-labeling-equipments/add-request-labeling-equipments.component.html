@@ -51,7 +51,7 @@
           </div>
         </div>
 
-       
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Category Category: <span class="StarMarking">*</span>
@@ -81,7 +81,7 @@
             <ng-select style="width:100%" formControlName="ddlEquipmentsId" [(ngModel)]="request.EquipmentId" [items]="EquipmentddlList" bindLabel="Name"
                        bindValue="EquipmentsId" placeholder="--Select--" [searchable]="true" [clearable]="false" [searchFn]="customSearch"
                        [loading]="isLoading" [loadingText]="'Loading...'">
-                </ng-select>
+            </ng-select>
 
             <div *ngIf="isSubmitted && _RequestFormGroup.ddlEquipmentsId.errors" class="text-danger">
               <p *ngIf="!_RequestFormGroup.ddlEquipmentsId.errors.DropdownValidators">
@@ -146,7 +146,7 @@
                  [max]="maxQty"
                  step="1"
                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,4)" [(ngModel)]="request.Quantity" (input)="onQuantityInput($event)">
-          
+
           <div *ngIf="isSubmitted && _RequestFormGroup.txtQuantity.errors" class="text-danger">
             <p *ngIf="_RequestFormGroup.txtQuantity.errors.required">
               <i aria-hidden="true"></i>
@@ -198,6 +198,14 @@
               Only numbers are allowed in the TotalPrice field!
             </p>
           </div>
+        </div>
+        <div>
+          <label for="Document" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            Document:  
+          </label>
+          <a *ngIf="request.IndentDocument" href="{{ appsettingConfig.StaticFileRootPathURL + 'IssuesIndent/' + request.IndentDocument }}" class="btn bg-primary text-white " target="_blank">
+            {{request.IndentDocument}}
+          </a>
         </div>
       </div>
 

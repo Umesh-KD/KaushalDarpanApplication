@@ -385,12 +385,61 @@ export class BudgetDistributeComponent {
     }
   }
 
+  async GetBudget_HeadWise(collegeID: number) {
+    try {
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+      this.searchRequest.AcademicYearID = 9; 
+      this.searchRequest.ActionName = "GetHeadWiseBudget";
+      this.searchRequest.BudgetTypeID = 2;
+      this.searchRequest.InstituteId = collegeID;
+
+      this.loaderService.requestStarted();
+      // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+      await this.budgetDistributedService.GetBudget_HeadWise(this.searchRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.BudgetUtilizationsListSave = data.Data;
+          this.calculateAllEstimated();
+
+          this.Remarks = this.BudgetUtilizationsListSave[0].Remarks;
+
+          console.log(this.BudgetUtilizationsListSave, "BudgetUtilizationsList")
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  calculateEstimatedAmount(item: any) {
+    if (item.IsUnitWise) {
+      // multiply Amount * UnitValue
+      item.EstimatedAmount = (Number(item.Amount) || 0) * (Number(item.UnitValue) || 0);
+    } else {
+      // just take Amount as Estimated
+      item.EstimatedAmount = Number(item.Amount) || 0;
+    }
+  }
+
+  calculateAllEstimated() {
+    this.BudgetUtilizationsListSave.forEach(item => this.calculateEstimatedAmount(item));
+  }
+
   getTotalUtilizationAmount(): number {
     return this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0;
   }
 
-  getTotalUtilizationAmount_Save(): number {
-    return this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0;
+  getTotalEstimatedAmount_Save(): number {
+    return this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.EstimatedAmount || 0), 0) || 0;
+  }
+
+  getTotalAllottedAmount_Save(): number {
+    return this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.AllotAmount || 0), 0) || 0;
   }
 
   async Utilize(content: any, row: any, indexNum: number) {
@@ -423,9 +472,10 @@ export class BudgetDistributeComponent {
     try {
        ;
       this.Request.CollegeID = row.CollegeId
-      await this.GetBudgetUtilizationsList_Save();
+      // await this.GetBudgetUtilizationsList_Save();
+      await this.GetBudget_HeadWise(row.CollegeId);
       await this.modalService
-        .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
+        .open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(
           (result) => {
             this.closeResult = `Closed with: ${result}`;
@@ -472,7 +522,7 @@ export class BudgetDistributeComponent {
         item.CollegeID = this.Request.CollegeID
       });
 
-      this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
+      this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.AllotAmount || 0), 0) || 0
 
       if (this.TotalUtilizedBudget <= 0) {
         this.toastr.warning("Please add Budget")
@@ -485,6 +535,7 @@ export class BudgetDistributeComponent {
       this.Request.FinYearID = this.sSOLoginDataModel.FinancialYearID
       this.Request.DistributedType = 1
       this.Request.ActionType = 'INSERT'
+      this.Request.BodgetTypeID = 2
 
       await this.budgetDistributedService.SaveBudgetUtilization_Admin(this.Request)
         .then((data: any) => {
