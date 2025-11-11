@@ -113,7 +113,7 @@ export class AddItiIssueItemComponent {
   }
 
   async saveData() {
-    debugger
+    
     this.submitRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.submitRequest.UserId = this.sSOLoginDataModel.UserID;
@@ -210,24 +210,25 @@ export class AddItiIssueItemComponent {
   async DGET_Details() {
     
     try {
-      const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
-      if (!anyTeamSelected) {
-        this.toastr.error("Please select at least one Item!");
-        return;
-      }
+      
+      //const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
+      //if (!anyTeamSelected) {
+      //  this.toastr.error("Please select at least one Item!");
+      //  return;
+      //}
 
       if (this.Searchrequests.staffID == 0) {
         this.toastr.error("Please select at least one Staff!");
         return;
       }
       this.loaderService.requestStarted();
-      debugger
+      
       //if (!TradeId || TradeId === 0) {
       //  this.EquipmentsDDLList = [{ EquipmentsId: 0, Name: '--Select--' }];
       //  this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(0);
       //  return;
       //}
-
+      console.log("ItemType:" + this.Searchrequests.ItemType);
       this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
       //this.searchRequest.ActionType="GetConsumeItemListNew";
@@ -237,7 +238,7 @@ export class AddItiIssueItemComponent {
 
           this.ItemsDDLList = data.Data;
             console.log(this.ItemsDDLList);
-
+          this.SelectedItems = [];
 
         }, error => console.error(error));
     }
@@ -297,7 +298,7 @@ export class AddItiIssueItemComponent {
 
 
   ShowSubmit(content: any): void {
-    debugger;
+    
 
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if (!anyTeamSelected) {
@@ -344,7 +345,7 @@ export class AddItiIssueItemComponent {
 
 
   async GetStaffDDL() {
-    debugger;
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -373,7 +374,7 @@ export class AddItiIssueItemComponent {
   }
 
   async GetTradeDDL() {
-    debugger;
+    
     try {
       
       this.loaderService.requestStarted();
@@ -403,7 +404,7 @@ export class AddItiIssueItemComponent {
   }
 
   async GetCategoryDDL() {
-    debugger;
+    
     try {
       // const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
       // if (!anyTeamSelected) {
@@ -444,7 +445,7 @@ export class AddItiIssueItemComponent {
     }
   }
   onItemToggle(item: any) {
-    debugger
+    
     if (item.Selected) {
       // Add if not already present
       if (!this.SelectedItems.find(x => x.ItemDetailsId === item.ItemDetailsId)) {
@@ -485,7 +486,7 @@ export class AddItiIssueItemComponent {
   }
 }
   async saveSelectedItems() {
-      debugger
+      
       if (!this.SelectedItems || this.SelectedItems.length === 0) {
         this.toastr.error("Please select at least one item!");
         return;
@@ -571,7 +572,7 @@ export class AddItiIssueItemComponent {
       }
     }
     async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
-    debugger;
+    
       this.staff_ID=staffId;
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if (!anyTeamSelected) {
@@ -625,7 +626,7 @@ export class AddItiIssueItemComponent {
     await this.confirmSubmit(this.selectedDataList); 
   }
   async confirmSubmit(arr: any,) {
-    debugger;
+    
 
     this.loaderService.requestStarted();
     this.isLoading = true;
@@ -651,7 +652,7 @@ export class AddItiIssueItemComponent {
             this.toastr.success("Items issued successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
-
+            this.DGET_Details(); 
             //this.GetAllData();
            // this.CloseModalPopup();
           } else if (this.State == EnumStatus.Error)
@@ -687,7 +688,7 @@ export class AddItiIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           //
-          debugger
+          
           if (this.State == EnumStatus.Success) {
               this.FileName = data.Data[0].FileName;
               this.Dis_FileName = data.Data[0].Dis_FileName;
@@ -717,7 +718,7 @@ export class AddItiIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            debugger
+            
               this.FileName = '';
               this.Dis_FileName = '';
             console.log(this.SelectedItems)
@@ -735,7 +736,7 @@ export class AddItiIssueItemComponent {
   // Only run logic when checkbox is checked
     if (item.Selected) {
       // Check both conditions
-      debugger;
+      
       if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
         console.log('✅ Serial item selected:', item); 
       }

@@ -1,0 +1,9 @@
+.table-container {
+  position: relative;
+}
+
+.add-btn-fixed {
+  position: absolute;
+  bottom: -40px;  /* below table */
+  right: 0;
+}

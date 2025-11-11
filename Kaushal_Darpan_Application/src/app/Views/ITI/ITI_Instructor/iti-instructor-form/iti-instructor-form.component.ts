@@ -1,3 +1,4 @@
+
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplicationDatamodel, BterSearchmodel } from '../../../../Models/ApplicationFormDataModel';
@@ -40,12 +41,13 @@ import Swal from 'sweetalert2';
 })
 export class ItiInstructorFormComponent {
 
-  public urlId: number = 0;
+  public urlId: string = '';
   public InstructorForm!: FormGroup
   public EducationForm!: FormGroup
   public TechnicalForm!: FormGroup
   public EmploymentForm!: FormGroup
   public isSSOVisible: boolean = false;
+  public isEmp: boolean = false;
   public showAadhaar: boolean = false;
   public showJanAadhaar: boolean = false;
   public ResidenceList: any = []
@@ -56,7 +58,7 @@ export class ItiInstructorFormComponent {
   public DistrictMasterList3: any[] = [];
   public BoardList: any = []
   closeResult: string | undefined;
-
+  public maxDate:string=''
   public request = new ITI_InstructorDataModel()
   public educationList: ITI_InstructorEducationalQualification[] = [];
   public educationRequest: ITI_InstructorEducationalQualification = new ITI_InstructorEducationalQualification();
@@ -75,6 +77,7 @@ export class ItiInstructorFormComponent {
   public IsShowDropdown: boolean = false
   public IsShowDrop: boolean = false
   public IsShow: boolean = false
+  public IsJANVerify: boolean = false
   private interval: any;
   public _enumDepartment = EnumDepartment
   // requestAction = new ItiVerificationModel();
@@ -103,6 +106,7 @@ export class ItiInstructorFormComponent {
   public CategoryAlist: any = []
   public CategoryDlist: any = []
   public isSupplement: boolean = false
+  public isedu: boolean = false
   public NationalityList: any = []
   public ReligionList: any = []
   public category_CList: any = []
@@ -189,11 +193,7 @@ export class ItiInstructorFormComponent {
     //  Education_CGPA: [null]
     //});
 
-    this.InstructorForm = this.formBuilder.group({
-      pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
-      Correspondence_pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
-      // other controls...
-    });
+  
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -219,69 +219,70 @@ export class ItiInstructorFormComponent {
       Name: ['', Validators.required],
       FatherOrHusbandName: ['', Validators.required],
       MotherName: ['', Validators.required],
-      Dob: [''],
-      Gender: [''],
-      MaritalStatus: [''],
-      Category: [''],
-      Mobile: [''],
-      Email: [''],
-
+      Dob: ['', Validators.required],
+      Gender: ['', Validators.required],
+      MaritalStatus: ['', Validators.required],
+      Category: ['', Validators.required],
+      Mobile: ['', [Validators.required, Validators.pattern(GlobalConstants.MobileNumberPattern)]],
+      Email: ['', [Validators.required, Validators.pattern(GlobalConstants.EmailPattern)]],
+      pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
+      Correspondence_pincode: ['', [Validators.required, Validators.pattern(/^[1-9][0-9]{5}$/)]],
       // Bank Details
-      BankAccountNumber: [''],
-      IFSCCode: [''],
-      BankName: [''],
+      BankAccountNumber: ['', [Validators.required, Validators.pattern(GlobalConstants.AccountNoPattern)]],
+      IFSCCode: ['', [Validators.required, Validators.pattern(GlobalConstants.IFSCPattern)]],
+      BankName: ['', Validators.required],
       ConsentToAssignAsExaminer: [false],
 
       // Permanent Address
-      PlotHouseBuildingNo: [''],
-      StreetRoadLane: [''],
-      AreaLocalitySector: [''],
-      LandMark: [''],
+      PlotHouseBuildingNo: ['', Validators.required],
+      StreetRoadLane: ['', Validators.required],
+      AreaLocalitySector: ['', Validators.required],
+      LandMark: ['', Validators.required],
       ddlState: ['', [DropdownValidators]],
       ddlDistrict: ['', [DropdownValidators]],
       PropTehsilID: ['', [DropdownValidators]],
       PropUrbanRural: [''],
-      City: [''],
+      City: ['', Validators.required],
       villageID: [''],
-      pincode: [''],
+
 
       // Correspondence Address
-      Correspondence_PlotHouseBuildingNo: [''],
-      Correspondence_StreetRoadLane: [''],
-      Correspondence_AreaLocalitySector: [''],
-      Correspondence_LandMark: [''],
+      Correspondence_PlotHouseBuildingNo: ['', Validators.required],
+      Correspondence_StreetRoadLane: ['', Validators.required],
+      Correspondence_AreaLocalitySector: ['', Validators.required],
+      Correspondence_LandMark: ['', Validators.required],
       Correspondence_ddlState: ['', [DropdownValidators]],
       Correspondence_ddlDistrict: ['', [DropdownValidators]],
       Correspondence_PropTehsilID: ['', [DropdownValidators]],
       Correspondence_PropUrbanRural: [''],
-      Correspondence_City: [''],
+      Correspondence_City: ['', Validators.required],
       Correspondence_villageID: [''],
-      Correspondence_pincode: [''],
+   
 
       // Educational Qualification
-      Education_Exam: [''],
-      Education_Board: [''],
-      Education_Year: [''],
-      Education_Subjects: [''],
-      Education_Percentage: [''],
-      QualificationDocument: [''],
+      //Education_Exam: [''],
+      //Education_Board: [''],
+      //Education_Year: [''],
+      //Education_Subjects: [''],
+      //Education_Percentage: [''],
+      //QualificationDocument: [''],
 
-      // Technical Qualification
-      Tech_Exam: [''],
-      Tech_Board: [''],
-      Tech_Subjects: [''],
-      Tech_Year: [''],
-      Tech_Percentage: [''],
-      TechQualificationDocument: [''],
+      //// Technical Qualification
+      //Tech_Exam: [''],
+      //Tech_Board: [''],
+      //Tech_Subjects: [''],
+      //Tech_Year: [''],
+      //Tech_Percentage: [''],
+      //TechQualificationDocument: [''],
 
       // Employment Details
       //Pan_No: [''],
-      Pan_No: ['', [Validators.required, Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')]],
+    /*  Pan_No: ['', [Validators.required, Validators.pattern('^[A-Z]{5}[0-9]{4}[A-Z]{1}$')]],*/
       Employee_Type: [''],
       Employer_Name: [''],
       Employer_Address: [''],
       Tan_No: [''],
-      Aadhar: [''],
+      Aadhar: ['', Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)],
       JanAadhar: [''],
       Employment_From: [''],
       Employment_To: [''],
@@ -291,49 +292,61 @@ export class ItiInstructorFormComponent {
     });
 
     this.EducationForm = this.formBuilder.group({
-      Education_Exam: [''],
-      Education_Board: [''],
-      Education_Year: ['', Validators.pattern('^[0-9]{4}$')],
-      Education_Subjects: [''],
+      Education_Exam: ['', Validators.required],
+      Education_Board: ['', Validators.required],
+      Education_Year: ['', Validators.required],
+      Education_Subjects: ['', Validators.required],
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
       Education_CGPA: [''],
-      EducationDocument: [''],
+      EducationDocument: ['', Validators.required],
       MarksType: ['', Validators.required]
      
     });
 
 
     this.TechnicalForm = this.formBuilder.group({
-      Tech_Exam: [''],
-      Tech_Board: [''],
-      Tech_Subjects: [''],
+      Tech_Exam: ['', Validators.required],
+      Tech_Board: ['', Validators.required],
+      Tech_Subjects: ['', Validators.required],
       Tech_Year: ['', [Validators.pattern('^[0-9]{4}$')]],
       Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
       Tech_CGPA: [''],
-      TechDocument: [''],
-      MarksType: ['']
+      TechDocument: ['', Validators.required],
+      MarksType: ['', Validators.required]
     });
 
 
     this.EmploymentForm = this.formBuilder.group({
-      Pan_No: ['', [Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
-      Employee_Type: [''],
-      Employer_Name: [''],
-      Employer_Address: [''],
-      Tan_No: [''],
+      Pan_No: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
+      Employee_Type: ['', Validators.required],
+      Employer_Name: ['', Validators.required],
+      Employer_Address: ['', Validators.required],
+      Tan_No: ['', Validators.required],
       //Aadhar: [''],
       //JanAadhar: [''],
-      Employment_From: [''],
-      Employment_To: [''],
-      Basic_Pay: [''],
-      EmploymentDocument: ['']
+      Employment_From: ['', Validators.required],
+      Employment_To: ['', Validators.required],
+      Basic_Pay: ['', Validators.required],
+      EmploymentDocument: ['', Validators.required]
     });
+    const today = new Date();
+    // Convert to yyyy-MM-dd format for input[type=date]
+    this.maxDate = today.toISOString().split('T')[0];
+    debugger
 
 
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    let idParam = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());
+    this.sSOLoginDataModel = await JSON.parse(localStorage.getItem('SSOLoginUser') ?? '{}');
+    if (this.sSOLoginDataModel.RoleID == null) {
+      this.sSOLoginDataModel.RoleID = 0
+    }
+
+    let idParam = this.activatedRoute.snapshot.queryParams['Uid'] ?? '';
+
     this.urlId = idParam;
 
+    if (this.urlId != '' && this.urlId != null && this.urlId != undefined) {
+      await this.GetById(this.urlId)
+    }
     this.GetInstituteCategoryList();
     this.GetManagmentType();
     this.GetStateMaterData()
@@ -344,17 +357,19 @@ export class ItiInstructorFormComponent {
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
+  get _EducationForm() { return this.EducationForm.controls; }
 
   async ddlDistrict_Change() {
 
     try {
       this.loaderService.requestStarted();
-
-      await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.ddlDistrict)
+      debugger
+      await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.TehsilMasterList = data['Data'];
+          this.TehsilMasterList2 = data['Data'];
 
+          this.request.Correspondence_PropTehsilID = '0'
         }, error => console.error(error));
 
       await this.commonMasterService.CityMasterDistrictWise(this.InstructorForm.value.ddlDistrict)
@@ -362,6 +377,7 @@ export class ItiInstructorFormComponent {
           data = JSON.parse(JSON.stringify(data));
           this.CityMasterDDLList = data['Data'];
           console.log(this.CityMasterDDLList, "CityMasterDDLList")
+      
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -381,11 +397,11 @@ export class ItiInstructorFormComponent {
       this.loaderService.requestStarted();
 
 
-      await this.commonMasterService.TehsilMaster_DistrictIDWise(Number(this.request.ddlDistrict))
+      await this.commonMasterService.TehsilMaster_DistrictIDWise(Number(this.InstructorForm.value.ddlDistrict))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.TehsilMasterList2 = data['Data'];
-
+          this.TehsilMasterList = data['Data'];
+          this.request.PropTehsilID = '0'
         }, error => console.error(error));
 
 
@@ -452,12 +468,18 @@ export class ItiInstructorFormComponent {
 
   async ddlState_Change() {
     console.log("State changed - (", this.InstructorForm.value.ddlState, ")");
+
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList = data['Data'];
+         
+            this.request.ddlDistrict = '0'
+          
+       
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -471,17 +493,60 @@ export class ItiInstructorFormComponent {
   }
 
 
+
+  async ddlState_Changeid() {
+    console.log("State changed - (", this.InstructorForm.value.ddlState, ")");
+
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.DistrictMasterList = data['Data'];
+
+
+
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
   addEducationQualification() {
-    if (!this.educationRequest.Education_Exam || !this.educationRequest.Education_Board) {
+    this.isedu=true
+    if (this.EducationForm.invalid) {
       alert("Please fill required fields before adding");
       return;
     }
 
-    this.educationList.push({ ...this.educationRequest });
+    this.educationList.push({
+      EducationDocument: this.educationRequest.EducationDocument,
+      Education_Board: this.educationRequest.Education_Board,
+      Education_CGPA: this.educationRequest.Education_CGPA,
+      Education_Exam: this.educationRequest.Education_Exam,
+      Education_Percentage: this.educationRequest.Education_Percentage,
+      Education_Subjects: this.educationRequest.Education_Subjects,
+      Education_Year: this.educationRequest.Education_Year,
+      MarksType: this.educationRequest.MarksType,
+      MarkTypeName: this.educationRequest.MarksType == '1' ? 'Percentage' : 'CGPA'
+        
 
+    });
+    console.log(this.educationList)
     this.educationRequest = new ITI_InstructorEducationalQualification();
 
     this.EducationForm.reset();
+    this.isedu=false
   }
 
   removeEducation(index: number) {
@@ -494,10 +559,20 @@ export class ItiInstructorFormComponent {
       return;
     }
 
-    this.techRequestList.push({ ...this.techRequest });
+    this.techRequestList.push({
+      TechDocument: this.techRequest.TechDocument,
+      Tech_Board: this.techRequest.Tech_Board,
+      Tech_CGPA: this.techRequest.Tech_CGPA,
+      Tech_Exam: this.techRequest.Tech_Exam,
+      Tech_Percentage: this.techRequest.Tech_Percentage,
+      Tech_Subjects: this.techRequest.Tech_Subjects,
+      Tech_Year: this.techRequest.Tech_Year,
+      MarksType: this.techRequest.MarksType,
+      MarkTypeName: this.techRequest.MarksType == '1' ? 'Percentage' : 'CGPA'
+});
 
-    this.techRequest = new ITI_InstructorTechnicalQualification();
 
+  
     this.TechnicalForm.reset();
   }
 
@@ -507,14 +582,15 @@ export class ItiInstructorFormComponent {
 
 
   addEmployeeQualification() {
-    if (!this.employeeRequest.Pan_No || !this.employeeRequest.Employer_Name) {
+    if (this.EmploymentForm.invalid) {
       alert("Please fill required fields before adding");
       return;
     }
 
     this.employeeRequestList.push({ ...this.employeeRequest });
-
+    this.employeeRequest = new ITI_InstructorEmploymentDetails();
     this.EmploymentForm.reset();
+    this.isEmp=false
   }
 
   removeEmployee(index: number) {
@@ -552,11 +628,18 @@ export class ItiInstructorFormComponent {
 
   async ddlState_Change2() {
     try {
+      
+    
+ /*       this.request.Correspondence_ddlState = this.InstructorForm.value.Correspondence_ddlState*/
+     
+     
+      
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.Correspondence_ddlState))
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList3 = data['Data'];
+    
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -633,7 +716,7 @@ export class ItiInstructorFormComponent {
 
  
   async onSubmit() {
-  debugger;
+
     this.isSubmitted = true;
 
     //if (!this.InstructorForm.get('Name')?.value || !this.InstructorForm.get('FatherName')?.value) {
@@ -641,7 +724,33 @@ export class ItiInstructorFormComponent {
     //  this.InstructorForm.markAllAsTouched();
     //  return;
     //}
+    this.request.Aadhar = this.InstructorForm.value.Aadhar
+    if (this.request.IsDomicile == true && this.request.JanAadhar == '') {
+      this.toastr.warning("Please Add Janaadhar Number ")
+      return
+    }
+    if (this.request.IsDomicile == true && this.IsJANVerify == false) {
+      this.toastr.warning("Please Verify or Add Valid JanAadhar ")
+      return
+    }
+    if (this.request.ddlState != '6') {
+      this.InstructorForm.controls['PropTehsilID'].clearAsyncValidators()
+      this.InstructorForm.controls['Correspondence_PropTehsilID'].clearAsyncValidators()
+      this.InstructorForm.controls['PropTehsilID'].updateValueAndValidity()
+      this.InstructorForm.controls['Correspondence_PropTehsilID'].updateValueAndValidity()
+    }
 
+    if (this.InstructorForm.invalid) {
+      return
+    }
+    if (this.educationList.length == 0) {
+      this.toastr.warning("Please Add Education Detail")
+      return
+    }
+    if (this.employeeRequestList.length == 0) {
+      this.toastr.warning("Please Add Employee Details")
+      return
+    }
   this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
     if (result.isConfirmed) {
       this.isLoading = true;
@@ -649,7 +758,7 @@ export class ItiInstructorFormComponent {
       try {
         const ssoid = this.request.Uid;
 
-        this.request = this.InstructorForm.value as ITI_InstructorDataModel;
+        //this.request = this.InstructorForm.value as ITI_InstructorDataModel;
         this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
         this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
         this.request.Uid = ssoid;
@@ -694,7 +803,7 @@ export class ItiInstructorFormComponent {
 
 
   async GetById(ID: string) {
-    debugger;
+
     try {
       if (ID == "") {
         this.toastr.error("Please Enter SSOID");
@@ -704,18 +813,29 @@ export class ItiInstructorFormComponent {
       await this.ItiInstructorService.GetInstructorDataBySsoid(ID)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
-
+          debugger;
           if (data['Data']['Table'] && data['Data']['Table'].length === 0) {
 
             await this.SSOIDGetSomeDetails(ID)
             return
 
           } else {
-
-            this.toastr.error("Already Fill")
+            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43) {
+              this.toastr.error("Already Fill")
+            }
+            debugger
             this.isSSOVisible = true;
             this.request = data['Data']['Table'][0]
-            this.InstructorForm.patchValue(this.request);
+            const safeRequest = Object.fromEntries(
+              Object.entries(this.request || {}).map(([key, value]) => [key, value ?? ''])
+            );
+
+            this.InstructorForm.patchValue({
+              ddlDistrict: this.request.ddlDistrict
+            });
+
+
+        
             if (data['Data']['Table1'] && data['Data']['Table1'].length > 0) {
               this.educationList = data['Data']['Table1']
             }
@@ -726,17 +846,54 @@ export class ItiInstructorFormComponent {
             if (data['Data']['Table3'] && data['Data']['Table3'].length > 0) {
               this.techRequestList = data['Data']['Table3']
             }
+            if (this.sSOLoginDataModel.RoleID != 20 && this.sSOLoginDataModel.RoleID != 43) {
+              this.EducationForm.disable()
+              this.EmploymentForm.disable()
+              this.TechnicalForm.disable()
+              this.InstructorForm.disable()
+            }
+            await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.Correspondence_ddlState))
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.DistrictMasterList3 = data['Data'];
 
-            this.EducationForm.disable()
-            this.EmploymentForm.disable()
-            this.TechnicalForm.disable()
-            this.InstructorForm.disable()
+              }, error => console.error(error));
 
-            await this.ddlState_Change2();
-            await this.ddlState_Change();
-            await this.ddlDistrict_Change();
-            await this.ddlDistrict_Change2();
+            await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.DistrictMasterList = data['Data'];
 
+               
+
+
+              }, error => console.error(error));
+        
+            await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.TehsilMasterList2 = data['Data'];
+
+       
+              }, error => console.error(error));
+
+            await this.commonMasterService.TehsilMaster_DistrictIDWise(Number(this.InstructorForm.value.ddlDistrict))
+              .then((data: any) => {
+                data = JSON.parse(JSON.stringify(data));
+                this.TehsilMasterList = data['Data'];
+           
+              }, error => console.error(error));
+         
+            debugger
+            this.InstructorForm.patchValue({
+          
+              Correspondence_PropTehsilID: this.request.Correspondence_PropTehsilID,
+              Correspondence_ddlDistrict: this.request.Correspondence_ddlDistrict,
+              PropTehsilID: this.request.PropTehsilID,
+              
+            });
+            this.request.ddlDistrict = this.InstructorForm.value.ddlDistrict
+            console.log(this.request,"sdas")
           }
 
         }, (error: any) => console.error(error));
@@ -800,8 +957,18 @@ export class ItiInstructorFormComponent {
             this.request.Email = parsedData.mailPersonal;
             this.request.Uid = parsedData.SSOID;
             this.request.Gender = parsedData.gender;
+            if (this.request.Gender == undefined || this.request.Gender == null) {
+              this.request.Gender=''
+            }
             this.request.Correspondence_PlotHouseBuildingNo = parsedData.postalAddress;
             this.request.ddlState = parsedData.st;
+            if (this.request.ddlState == undefined || this.request.ddlState == null) {
+              this.request.ddlState ='0'
+              this.InstructorForm.patchValue({
+                ddlState: 0
+              });
+
+            }
             this.request.Aadhar = parsedData.AadhaarId,
               this.request.JanAadhar = parsedData.JanaadhaarId,
               this.request.Uid = SSOID
@@ -825,7 +992,8 @@ export class ItiInstructorFormComponent {
           }
           else {
             this.request.Uid = "";
-            this.isSSOVisible = true;
+            this.toastr.error("Enter Valid SSO ID")
+            this.isSSOVisible = false;
             return;
           }
         }
@@ -875,11 +1043,13 @@ export class ItiInstructorFormComponent {
   //}
 
   async GetDetailsByJanAadhaar() {
+
+
     if (!this.request.JanAadhar || this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
       this.toastr.error("Invalid Jan Aadhaar Number");
       return;
     }
-
+    this.IsJANVerify=false
     try {
       this.loaderService.requestStarted();
 
@@ -890,21 +1060,22 @@ export class ItiInstructorFormComponent {
         console.log("Jan Aadhaar Details =>", this.AdharMemberList);
 
         if (this.AdharMemberList && this.AdharMemberList.length > 0) {
-          const member = this.AdharMemberList[0];
-         
-          this.request.Name = member.NAME || '';
-          this.request.Mobile = member.MOBILE_NO || '';
-          this.request.Aadhar = member.AADHAR_REF_NO || '';
+          /*    const member = this.AdharMemberList[0];*/
+          this.IsShow = false
+          this.IsShowDrop=true  
+          //this.request.Name = member.NAME || '';
+          //this.request.Mobile = member.MOBILE_NO || '';
+          //this.request.Aadhar = member.AADHAR_REF_NO || '';
           
-          this.InstructorForm.patchValue({
-            Name: this.request.Name,
-            FatherOrHusbandName: this.request.FatherOrHusbandName,
-            MotherName: this.request.MotherName,
-            Mobile: this.request.Mobile,
-            Aadhar: this.request.Aadhar,
-            Dob: this.request.Dob,
-            Gender: this.request.Gender
-          });
+          //this.InstructorForm.patchValue({
+          //  Name: this.request.Name,
+          //  FatherOrHusbandName: this.request.FatherOrHusbandName,
+          //  MotherName: this.request.MotherName,
+          //  Mobile: this.request.Mobile,
+          //  Aadhar: this.request.Aadhar,
+          //  Dob: this.request.Dob,
+          //  Gender: this.request.Gender
+          //});
         }
       }
       else if (data.State === EnumStatus.Warning) {
@@ -996,6 +1167,7 @@ export class ItiInstructorFormComponent {
               this.CloseModal();
               this.IsShow = true;
               this.IsShowDropdown = false;
+              this.IsJANVerify=true
               this.Address = data.Data.Address;
               await this.FillMemberDetails();
               this.toastr.success("Succesfully Verified")
@@ -1067,23 +1239,23 @@ export class ItiInstructorFormComponent {
   async FillMemberDetails() {
     try {
       console.log(this.janaadharMemberDetails, "hhh")
-      this.model.StudentName = this.janaadharMemberDetails.nameEng;
-      this.model.FatherName = this.janaadharMemberDetails.fnameEng;
-      this.model.MotherName = this.janaadharMemberDetails.mnameEng;
-      this.model.Gender = this.janaadharMemberDetails?.gender == 'Male' ? '97' : this.janaadharMemberDetails?.gender == 'Female' ? '98' : '99';
-      this.model.MobileNumber = this.janaadharMemberDetails.mobile;
-      this.model.Email = this.janaadharMemberDetails.email;
-      this.model.JanAadharMemberID = this.janaadharMemberDetails.janmemid;
-      this.model.JanAadharNo = this.janaadharMemberDetails.janaadhaarId;
+      this.request.Name = this.janaadharMemberDetails.nameEng;
+      this.request.FatherOrHusbandName = this.janaadharMemberDetails.fnameEng;
+      this.request.MotherName = this.janaadharMemberDetails.mnameEng;
+      this.request.Gender = this.janaadharMemberDetails?.gender == 'Male' ? '97' : this.janaadharMemberDetails?.gender == 'Female' ? '98' : '99';
+      this.request.Mobile = this.janaadharMemberDetails.mobile;
+      this.request.Email = this.janaadharMemberDetails.email;
+      this.request.JanAadharMemberID = this.janaadharMemberDetails.janmemid;
+      this.request.JanAadhar = this.janaadharMemberDetails.janaadhaarId;
 
       var result = this.CategoryAlist.find((f: any) => f.CasteCategoryName == this.janaadharMemberDetails.category)
       if (result != null || result != undefined) {
-        this.model.CategoryA = result.CasteCategoryID;
+        this.request.Category = result.CasteCategoryID;
       }
       const dateStr = this.janaadharMemberDetails.dob;
       const [day = '', month = '', year = ''] = dateStr?.split('/') ?? [];
       const formattedDate = new Date(`${year}-${month}-${day}`).toISOString().split('T')[0];
-      this.model.DOB = formattedDate;
+      this.request.Dob = formattedDate;
     }
     catch (ex) {
       console.log(ex);
@@ -1247,7 +1419,7 @@ export class ItiInstructorFormComponent {
   //}
   
 
-  onCopyCorrespondenceToggle() {
+ async onCopyCorrespondenceToggle() {
     debugger;
 
     if (this.sameAsPermanent) {
@@ -1256,11 +1428,13 @@ export class ItiInstructorFormComponent {
       this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
       this.request.Correspondence_LandMark = this.request.LandMark;
       this.request.Correspondence_ddlState = this.request.ddlState;
+      await this.ddlState_Change2()
       this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+      await this.ddlDistrict_Change()
       this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
       this.request.Correspondence_City = this.request.City;
       this.request.Correspondence_pincode = this.request.pincode;
-
+   
       //  Disable all correspondence fields in FormGroup (if reactive)
       if (this._InstructorForm) {
         Object.keys(this._InstructorForm.controls).forEach(key => {
@@ -1299,9 +1473,9 @@ export class ItiInstructorFormComponent {
     debugger
     const selectedType = this.EducationForm.get('MarksType')?.value;
 
-    if (selectedType == '0') {
+    if (selectedType == '1') {
       this.EducationForm.get('Education_CGPA')?.reset();
-    } else if (selectedType == '1') {
+    } else if (selectedType == '2') {
       this.EducationForm.get('Education_Percentage')?.reset();
     }
   }
@@ -1333,6 +1507,11 @@ export class ItiInstructorFormComponent {
   }
 
 
+  formatTime(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+  }
 }
 
 

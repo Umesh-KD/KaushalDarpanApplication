@@ -1,22 +1,22 @@
 import { Component, Pipe, PipeTransform } from '@angular/core';
-import { ItemsDataModels } from '../../../../Models/ItemsDataModels';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { ItemsDataModels } from '../../../../../Models/ItemsDataModels';
+import { SSOLoginDataModel } from '../../../../../Models/SSOLoginDataModel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { LoaderService } from '../../../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
-import { ITITradeSearchModel } from '../../../../Models/ITITradeDataModels';
-import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,  } from '../../../../Models/DTEInventory/DTEItemsDataModels';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { DropdownValidators } from '../../../../../Services/CustomValidators/custom-validators.service';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../../../Common/GlobalConstants';
+import { ITITradeSearchModel } from '../../../../../Models/ITITradeDataModels';
+import { DTEItemsSaveModel,DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, ItemsIssueReturnModels, DTEItemsSearchModel1,  } from '../../../../../Models/DTEInventory/DTEItemsDataModels';
+import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 /*import { ITIInventoryService } from '../../../../Services/ITI/ITIInventory/iti-inventory.service';*/
-import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
-import { DocumentDetailsService } from '../../../../Common/document-details';
-import { DeleteDocumentDetailsModel } from '../../../../Models/DeleteDocumentDetailsModel';
-import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadFileModel';
-import { AppsettingService } from '../../../../Common/appsetting.service';
+import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import { DocumentDetailsService } from '../../../../../Common/document-details';
+import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../../Models/UploadFileModel';
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 
 @Component({
   selector: 'app-iti-add-items-master',

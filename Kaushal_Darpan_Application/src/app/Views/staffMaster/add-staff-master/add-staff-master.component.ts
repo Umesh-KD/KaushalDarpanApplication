@@ -170,7 +170,7 @@ export class AddStaffMasterComponent implements OnInit {
 
       txtBankName: ['', [Validators.required]],
       txtBankAccountName: ['', [Validators.required]],
-      txtBankAccountNo: ['', [Validators.required, Validators.pattern(GlobalConstants.AccountNoPattern)]],
+      txtBankAccountNo: ['', [Validators.required, Validators.pattern(GlobalConstants.AccountNoPattern)]],  
       txtIFSCCode: [
         '',
         [
