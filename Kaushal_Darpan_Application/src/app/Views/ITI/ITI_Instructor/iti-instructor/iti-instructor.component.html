@@ -109,7 +109,7 @@
             <td>{{ item.Mobile }}</td>
             <td>{{ item.Email }}</td>
             <td>{{ item.AssignStatus }}</td>
-            <td class="text-center">
+            <td class="text-center">  
               <button *ngIf="item.AssignStatus != 'Assigned'"
                       (click)="onAssign(modal_ItiInstructorPopup,item.Uid)"
                       title="Assign"
