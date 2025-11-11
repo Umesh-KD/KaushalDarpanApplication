@@ -3,11 +3,12 @@ export class ITI_InstructorDataModel {
   public InstituteID?: number=0;
   public id?:  number = 0;
   public Uid?:  string = '';
+  public JanAadharMemberID?:  string = '';
   public Name?:  string = '';
   public FatherOrHusbandName?:  string = '';
   public MotherName?:  string = '';
   public Dob?:  string = '';
-  public Gender?:  string = '';
+  public Gender:  string = '0';
   public MaritalStatus?:  string = '';
   public Category?: string = '';
   public Mobile?:  string = '';
@@ -74,7 +75,7 @@ export class ITI_InstructorDataModel {
   public Basic_Pay?: number ;
   public IsDomicile?: boolean = false;
   public Aadhar?: string = '';
-  public JanAadhar: string = '';
+  public JanAadhar?: string = '';
   // Additional Fields
   public CreatedBy?: string = '';
   public DepartmentID?: string = '';
@@ -96,6 +97,7 @@ export class ITI_InstructorEducationalQualification {
   public EducationDocument?: string = '';
   public MarksType?: string = '';
   public Education_CGPA?: string= '';
+  public MarkTypeName?: string= '';
 }
 
 export class ITI_InstructorEmploymentDetails {
@@ -122,6 +124,7 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_CGPA?: number;
   public TechDocument?: string = '';
   public MarksType?: string = '';
+  public MarkTypeName?: string = '';
 }
 
 

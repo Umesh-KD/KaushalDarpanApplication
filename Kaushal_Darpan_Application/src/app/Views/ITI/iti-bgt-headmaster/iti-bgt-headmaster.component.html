@@ -148,7 +148,7 @@
         <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
-       <form [formGroup]="BGTHeadForm" (ngSubmit)="addBGTHeadmaster()">
+        <form [formGroup]="BGTHeadForm" (ngSubmit)="addBGTHeadmaster()">
           <div class="mb-8">
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
                 <div>
@@ -160,13 +160,26 @@
                   <input type="text" formControlName="HeadCode" class="form-input" placeholder="Enter Head Code" >
                 </div>
                 <div>
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Is Unit Wise</label>
+                  <div>
+                    <label>
+                      <input type="radio" [value]="true" formControlName="IsUnitWise" /> Yes
+                    </label>
+                    <label class="ml-2">
+                      <input type="radio" [value]="false" formControlName="IsUnitWise" /> No
+                    </label>
+                  </div>                  
+                </div>
+
+                <div *ngIf="BGTHeadForm.get('IsUnitWise')?.value">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Unit Name</label>
+                  <input type="text" formControlName="UnitName" class="form-input" placeholder="Enter Unit Name" >
+                </div>
+
+                <div>
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Description</label>
                   <textarea class="form-input resize-none w-full" formControlName="HeadDescription" rows="4" placeholder="Enter Head Description"></textarea>
                 </div>
-              <!-- <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Name:</label>
-                <input type="text" class="form-input disabled" disabled value="Staff Name" [(ngModel)]="AppointExaminer.Name">
-              </div> -->
             </div>
           </div>
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">

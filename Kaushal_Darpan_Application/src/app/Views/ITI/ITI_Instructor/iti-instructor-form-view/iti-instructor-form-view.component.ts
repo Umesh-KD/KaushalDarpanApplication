@@ -302,6 +302,7 @@ export class ItiInstructorFormViewComponent {
 
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    debugger
     let uidParam = this.activatedRoute.snapshot.queryParamMap.get('Uid');
     this.urlId = uidParam;
     //alert(this.urlId)

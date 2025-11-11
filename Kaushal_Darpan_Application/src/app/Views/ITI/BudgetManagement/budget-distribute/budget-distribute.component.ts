@@ -522,7 +522,7 @@ export class BudgetDistributeComponent {
         item.CollegeID = this.Request.CollegeID
       });
 
-      this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
+      this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.AllotAmount || 0), 0) || 0
 
       if (this.TotalUtilizedBudget <= 0) {
         this.toastr.warning("Please add Budget")
