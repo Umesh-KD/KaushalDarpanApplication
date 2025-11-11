@@ -23,13 +23,13 @@ import { LeaveMasterService } from '../../../../Services/LeaveMaster/leave-maste
 
 
 @Component({
-  selector: 'app-student-attendance',
-  templateUrl: './student-attendance.component.html',
-  styleUrl: './student-attendance.component.css',
+  selector: 'app-student-attendance-lc',
+  templateUrl: './student-attendance-lc.component.html',
+  styleUrl: './student-attendance-lc.component.css',
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class StudentAttendanceComponent implements OnInit {
+export class StudentAttendanceLComponent implements OnInit {
   displayedColumns: string[] = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName'];
  /* dynamicColumns: string[] = [];*/
 
@@ -62,8 +62,10 @@ export class StudentAttendanceComponent implements OnInit {
   semesterId!: number;
   sectionId!: number;
   subjectId!: number;
+  From_Date!: string;
+  To_Date!: string;
   today: Date = new Date();
-  yesterdayDate: string;
+  //yesterdayDate: string;
   sevenDaysLater: Date = new Date();
   selectedRange: { start: Date, end: Date } | null = null;
 
@@ -86,21 +88,31 @@ export class StudentAttendanceComponent implements OnInit {
 
   ) {
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    debugger
     // Access the route parameters
-    this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
-    this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
     this.semesterId = parseInt(this.route.snapshot.paramMap.get('semesterId') ?? "0");
+    this.streamId = parseInt(this.route.snapshot.paramMap.get('streamId') ?? "0");
     this.subjectId = parseInt(this.route.snapshot.paramMap.get('subjectId') ?? "0");
+    this.sectionId = parseInt(this.route.snapshot.paramMap.get('sectionId') ?? "0");
+
+    const fromDateParam = this.route.snapshot.paramMap.get('From_Date');
+    const toDateParam = this.route.snapshot.paramMap.get('To_Date');
+
+    this.From_Date = this.parseCustomDate(fromDateParam);
+    this.To_Date = this.parseCustomDate(toDateParam);
+
+
+
     this.getMasterData();
-    const today = new Date();
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
-    this.yesterdayDate = yesterday.toISOString().split('T')[0]; 
-    this.sevenDaysLater.setDate(this.today.getDate() - 7);
-    this.selectedRange = {
-      start: this.sevenDaysLater,
-      end: this.today
-    };
+    //const today = new Date();
+    //const yesterday = new Date();
+    //yesterday.setDate(yesterday.getDate() - 1); // Move to the previous day
+    //this.yesterdayDate = yesterday.toISOString().split('T')[0]; 
+    //this.sevenDaysLater.setDate(this.today.getDate() - 7);
+    //this.selectedRange = {
+    //  start: this.sevenDaysLater,
+    //  end: this.today
+    //};
   }
 
   ngOnInit() {
@@ -112,19 +124,53 @@ export class StudentAttendanceComponent implements OnInit {
       StreamID: ['', Validators.required],
       SectionID: ['', Validators.required],
       SemesterID: ['', Validators.required],
-      AttendanceStartDate: [this.selectedRange?.start],
-      AttendanceEndDate: [this.selectedRange?.end]
+      AttendanceStartDate: [''],
+      AttendanceEndDate: ['']
     });
 
+    this.getMasterData();
     this.getSubjectMasterDDL(this.streamId, this.semesterId);
-    this.GetStudentAttandanceTimeDDL();
+   /* this.GetStudentAttandanceTimeDDL();*/
     this.GetStaffLeaveAllData();
+
 
     this.TableForm.patchValue({
       StreamID: this.streamId,
       SemesterID: this.semesterId,
       SectionID: this.sectionId,
+      AttendanceStartDate: this.From_Date,
+      AttendanceEndDate: this.To_Date,
     });
+
+    //['StreamID', 'SemesterID', 'SectionID', 'AttendanceStartDate', 'AttendanceEndDate'].forEach(field => {
+    //  const control = this.TableForm.get(field);
+    //  if (control && control.value !== '' && control.value !== null && control.value !== undefined) {
+    //    control.disable();
+    //  }
+    //});
+
+
+    //if (this.TableForm.get('StreamID')?.value !== '' || this.TableForm.get('StreamID')?.value !== null || this.TableForm.get('StreamID')?.value !== undefined) {
+    //  this.TableForm.get('StreamID')?.disable();
+    //}
+
+    //if (this.TableForm.get('SemesterID')?.value !== '' || this.TableForm.get('SemesterID')?.value !== null || this.TableForm.get('SemesterID')?.value !== undefined) {
+    //  this.TableForm.get('SemesterID')?.disable();
+    //}
+
+    //if (this.TableForm.get('SectionID')?.value !== '' || this.TableForm.get('SectionID')?.value !== null || this.TableForm.get('SectionID')?.value !== undefined) {
+    //  this.TableForm.get('SectionID')?.disable();
+    //}
+
+    if (this.TableForm.get('AttendanceStartDate')?.value !== '' || this.TableForm.get('AttendanceStartDate')?.value !== null || this.TableForm.get('AttendanceStartDate')?.value !== undefined) {
+      this.TableForm.get('AttendanceStartDate')?.disable();
+    }
+
+    if (this.TableForm.get('AttendanceEndDate')?.value !== '' || this.TableForm.get('AttendanceEndDate')?.value !== null || this.TableForm.get('AttendanceEndDate')?.value !== undefined) {
+      this.TableForm.get('AttendanceEndDate')?.disable();
+    }
+
+
     setTimeout(()=> {
       if (this.semesterId > 0) {
         this.TableForm.patchValue({
@@ -142,6 +188,16 @@ export class StudentAttendanceComponent implements OnInit {
   }
   get formTable() { return this.TableForm.controls; }
 
+
+  private parseCustomDate(dateStr: string | null): string {
+    if (!dateStr) return '';
+
+    // Assuming format is 'dd-MM-yyyy'
+    const [day, month, year] = dateStr.split('-');
+
+    // Convert to ISO format 'yyyy-MM-dd'
+    return `${year}-${month}-${day}`;
+  }
   async getMasterData() {
     try {
       await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng).then((data: any) => {
@@ -168,32 +224,7 @@ export class StudentAttendanceComponent implements OnInit {
        
       }, (error: any) => console.error(error)
       );
-
-
-
-
-      //let obj = {
-      //  Action: "GET_BY_ID",
-      //  DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      //  EndTermID: this.sSOLoginDataModel.EndTermID,
-      //  Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      //  StreamID: this.streamId,
-      //}
-
-      //await this.staffMasterService.GetBranchSectionData(obj)
-      //  .then((data: any) => {
-      //    data = JSON.parse(JSON.stringify(data));
-      //    this.GetSectionData = data.Data
-      //  }, (error: any) => console.error(error)
-      //);
-
-
-
-      //console.log('Get Section all Data ==>', this.GetSectionData)
-      //await this.commonMasterService.GetSubjectMaster(this.sSOLoginDataModel.DepartmentID).then((data: any) => {
-      //  data = JSON.parse(JSON.stringify(data));
-      //  this.SubjectMasterDDL = data.Data;
-      //})
+     
     } catch (error) {
       console.error(error);
     }
@@ -224,23 +255,94 @@ export class StudentAttendanceComponent implements OnInit {
 
   }
 
- 
+  //async GetAttendanceTimeTable() {
+  //  debugger
+  //  try {
+  //    const dateStart = new Date(this.TableForm.value.AttendanceStartDate.toLocaleDateString());
+  //    dateStart.setDate(dateStart.getDate() + 1);
+  //    const formattedDateStart = dateStart.toISOString().split('T')[0];
+  //    const dateEnd = new Date(this.TableForm.value.AttendanceEndDate.toLocaleDateString());
+  //    dateEnd.setDate(dateEnd.getDate() + 1);
+  //    const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+  //    let obj = {
+  //      SemesterID: this.TableForm.value.SemesterID,
+  //      EndTermID: this.sSOLoginDataModel.EndTermID,
+  //      InstituteID: this.sSOLoginDataModel.InstituteID,
+  //      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+  //      CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+  //      StreamID: this.TableForm.value.StreamID,
+  //      SectionID: this.TableForm.value.SectionID,
+  //      SubjectID: this.TableForm.value.SubjectID,
+  //      AttendanceStartDate: formattedDateStart,
+  //      AttendanceEndDate: formattedDateEnd
+  //    };
+
+  //    this.filterData = [];
+
+
+  //    await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data['Data']));
+  //      this.filterData = data;
+
+  //      if (this.filterData.length > 0) {
+  //        this.dynamicColumns = [];
+  //        this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+  //        this.dynamicColumns = Object.keys(this.filterData[0])
+  //          .filter(key => ![
+  //            'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+  //            'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+  //            'EndTermID', 'CourseTypeID', 'StudentID'
+  //          ].includes(key))
+  //          .map(key => {
+  //            const isHoliday = key.toLowerCase().includes('holiday');
+  //            return { name: key, locked: isHoliday };
+  //          });
+
+
+  //        this.filterData.forEach(student => {
+  //          this.dynamicColumns.forEach(col => {
+  //            if (!student[col.name]) {
+  //              student[col.name] = col.locked ? 'H' : 'A'; // Holiday=H, Working=A
+  //            }
+  //          });
+  //        });
+
+  //        this.displayedColumns = [
+  //          ...this.displayedColumns,
+  //          ...this.dynamicColumns.map(c => c.name)
+  //        ];
+  //      }
+
+  //      this.dataSource.data = this.filterData;
+  //      this.dataSource.sort = this.sort;
+  //      this.totalRecords = this.filterData.length;
+  //      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+  //      this.updateTable();
+  //    }, error => console.error(error));
+
+
+
+  //  } catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //}
 
 
   async GetStaffLeaveAllData() {
     try {
       debugger
-      const rawStart = this.TableForm.value.AttendanceStartDate;
-      const rawEnd = this.TableForm.value.AttendanceEndDate;
+      const rawStart = this.From_Date;
+      const rawEnd = this.To_Date;
 
       // Parse correctly whether string or Date
-      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
+      //const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
+      //dateStart.setDate(dateStart.getDate() + 1);
+      //const formattedDateStart = dateStart.toISOString().split('T')[0];
 
-      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+      //const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
+      //dateEnd.setDate(dateEnd.getDate() + 1);
+      //const formattedDateEnd = dateEnd.toISOString().split('T')[0];
 
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -248,8 +350,8 @@ export class StudentAttendanceComponent implements OnInit {
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
       this.searchRequest.StaffID = this.sSOLoginDataModel.StaffID;
-      this.searchRequest.From_Date = formattedDateStart;
-      this.searchRequest.To_Date = formattedDateEnd;
+      this.searchRequest.From_Date = rawStart;
+      this.searchRequest.To_Date = rawEnd;
      
 
       this.loaderService.requestStarted();
@@ -272,6 +374,81 @@ export class StudentAttendanceComponent implements OnInit {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+  async GetAttendanceTimeTable() {
+    try {
+      debugger;
+
+      //const rawStart = this.TableForm.value.AttendanceStartDate;
+      //const rawEnd = this.TableForm.value.AttendanceEndDate;
+
+      // Parse correctly whether string or Date
+      //const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
+      //dateStart.setDate(dateStart.getDate() + 1);
+      //const formattedDateStart = dateStart.toISOString().split('T')[0];
+
+      //const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
+      //dateEnd.setDate(dateEnd.getDate() + 1);
+      //const formattedDateEnd = dateEnd.toISOString().split('T')[0];
+
+      let obj = {
+        SemesterID: this.TableForm.value.SemesterID,
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        InstituteID: this.sSOLoginDataModel.InstituteID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
+        StreamID: this.TableForm.value.StreamID,
+        SectionID: this.TableForm.value.SectionID,
+        SubjectID: this.TableForm.value.SubjectID,
+        AttendanceStartDate: this.From_Date,
+        AttendanceEndDate: this.To_Date,
+        StaffID: this.sSOLoginDataModel.StaffID,
+        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
+      };
+
+      this.filterData = [];
+
+      await this.attendanceServiceService.GetStudentAttendanceTLC(obj).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data['Data']));
+        this.filterData = data;
+
+        if (this.filterData.length > 0) {
+          this.dynamicColumns = [];
+          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
+
+          this.dynamicColumns = Object.keys(this.filterData[0])
+            .filter(key => ![
+              'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
+              'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
+              'EndTermID', 'CourseTypeID', 'StudentID'
+            ].includes(key))
+            .map(key => ({ name: key, locked: false }));
+
+          debugger;
+          this.filterData.forEach(student => {
+            this.dynamicColumns.forEach(col => {
+              if (!student[col.name]) {
+                student[col.name] = col.locked ? 'H' : 'A';
+              }
+            });
+          });
+
+          this.displayedColumns = [
+            ...this.displayedColumns,
+            ...this.dynamicColumns.map(c => c.name)
+          ];
+        }
+
+        this.dataSource.data = this.filterData;
+        this.dataSource.sort = this.sort;
+        this.totalRecords = this.filterData.length;
+        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+        this.updateTable();
+      }, error => console.error(error));
+
+    } catch (Ex) {
+      console.log(Ex);
     }
   }
 
@@ -308,7 +485,7 @@ export class StudentAttendanceComponent implements OnInit {
 
   //    this.filterData = [];
 
-  //    await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
+  //    await this.attendanceServiceService.GetStudentAttendanceTLC(obj).then((data: any) => {
   //      data = JSON.parse(JSON.stringify(data['Data']));
   //      this.filterData = data;
 
@@ -372,113 +549,6 @@ export class StudentAttendanceComponent implements OnInit {
   //  }
   //}
 
- 
-  async GetAttendanceTimeTable() {
-    try {
-      debugger;
-
-      const rawStart = this.TableForm.value.AttendanceStartDate;
-      const rawEnd = this.TableForm.value.AttendanceEndDate;
-
-      // Parse correctly whether string or Date
-      const dateStart = new Date(rawStart instanceof Date ? rawStart : new Date(rawStart));
-      dateStart.setDate(dateStart.getDate() + 1);
-      const formattedDateStart = dateStart.toISOString().split('T')[0];
-
-      const dateEnd = new Date(rawEnd instanceof Date ? rawEnd : new Date(rawEnd));
-      dateEnd.setDate(dateEnd.getDate() + 1);
-      const formattedDateEnd = dateEnd.toISOString().split('T')[0];
-
-      let obj = {
-        SemesterID: this.TableForm.value.SemesterID,
-        EndTermID: this.sSOLoginDataModel.EndTermID,
-        InstituteID: this.sSOLoginDataModel.InstituteID,
-        DepartmentID: this.sSOLoginDataModel.DepartmentID,
-        CourseTypeID: this.sSOLoginDataModel.Eng_NonEng,
-        StreamID: this.TableForm.value.StreamID,
-        SectionID: this.TableForm.value.SectionID,
-        SubjectID: this.TableForm.value.SubjectID,
-        AttendanceStartDate: formattedDateStart,
-        AttendanceEndDate: formattedDateEnd,
-        StaffID: this.sSOLoginDataModel.StaffID,
-        TimeDDLID: this.TableForm.value.AttandanceTimeID || 0,
-      };
-
-      this.filterData = [];
-
-      await this.attendanceServiceService.GetStudentAttendance(obj).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data['Data']));
-        this.filterData = data;
-
-        const leaveDates = this.getLeaveDates(this.GetLeaveList); // e.g. ['2025-11-06', '2025-11-09']
-
-        if (this.filterData.length > 0) {
-          this.dynamicColumns = [];
-          this.displayedColumns = ['SrNo', 'EnrollmentNo', 'StudentName', 'SubjectName', 'SectionName'];
-
-          // Generate dynamic columns
-          this.dynamicColumns = Object.keys(this.filterData[0])
-            .filter(key => ![
-              'SectionID', 'SectionName', 'EnrollmentNo', 'SemesterName', 'StreamName', 'StudentName', 'SubjectName',
-              'SemesterID', 'StreamID', 'SubjectID', 'SubjectID1', 'InstituteID', 'AttendanceDate', 'Attendance',
-              'EndTermID', 'CourseTypeID', 'StudentID'
-            ].includes(key))
-            .map(key => {
-              const dateMatch = key.match(/\d{4}-\d{2}-\d{2}/); // Extract date from column name
-              const isLeaveDate = dateMatch ? leaveDates.includes(dateMatch[0]) : false;
-              return { name: key, locked: isLeaveDate };
-            });
-
-          // Apply attendance logic
-          this.filterData.forEach(student => {
-            this.dynamicColumns.forEach(col => {
-              const dateMatch = col.name.match(/\d{4}-\d{2}-\d{2}/);
-              if (dateMatch) {
-                const colDate = dateMatch[0];
-                if (leaveDates.includes(colDate)) {
-                  // Mark Teacher Leave (TL)
-                  student[col.name] = 'TL';
-                } else {
-                  if (!student[col.name]) {
-                    student[col.name] = col.locked ? 'H' : 'A';
-                  }
-                }
-              } else {
-                if (!student[col.name]) {
-                  student[col.name] = col.locked ? 'H' : 'A';
-                }
-              }
-            });
-          });
-
-          this.displayedColumns = [
-            ...this.displayedColumns,
-            ...this.dynamicColumns.map(c => c.name)
-          ];
-        }
-
-        this.dataSource.data = this.filterData;
-        this.dataSource.sort = this.sort;
-        this.totalRecords = this.filterData.length;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        this.updateTable();
-      }, error => console.error(error));
-
-    } catch (Ex) {
-      console.log(Ex);
-    }
-  }
-
-  // ✅ Disable slide toggle when column is locked or value is 'TL'
-  isToggleDisabled(element: any, columnName: string): boolean {
-    return this.isColumnLocked(columnName) || element[columnName] === 'TL';
-  }
-
-  // ✅ Example helper (if not already defined)
-  isColumnLocked(columnName: string): boolean {
-    const col = this.dynamicColumns.find(c => c.name === columnName);
-    return col ? col.locked : false;
-  }
 
 
   private getLeaveDates(leaveList: any[]): string[] {
@@ -618,7 +688,7 @@ export class StudentAttendanceComponent implements OnInit {
     return `file_${timestamp}.${extension}`;
   }
 
-
+ 
 
 
   saveAttendance() {
@@ -673,7 +743,7 @@ export class StudentAttendanceComponent implements OnInit {
 
       console.log('Prepared data for saving:', saveAttendanceData);
 
-      this.attendanceServiceService.saveAttendanceData(saveAttendanceData)
+      this.attendanceServiceService.SaveStudentAttendanceTLC(saveAttendanceData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.Data == 1) {
@@ -695,9 +765,22 @@ export class StudentAttendanceComponent implements OnInit {
     });
   }
 
+  async ChangeStreamWiseSubject() {
+    debugger
+    const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+    const GetstreamId = this.TableForm.get('StreamID')?.value;
 
+    if (GetSemesterID != "" && GetstreamId != null) {
+      this.commonMasterService.SubjectMaster_StreamIDWise(GetstreamId, this.sSOLoginDataModel.DepartmentID, GetSemesterID).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.SubjectMasterDDL = data.Data;
+      })
+    } else {
+      console.error('Event or value is undefined');
+    }
+  }
   async ChangeSubjectDDL() {
-
+ 
     debugger
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
     const GetstreamId = this.TableForm.get('StreamID')?.value;
@@ -779,10 +862,10 @@ export class StudentAttendanceComponent implements OnInit {
     });
   }
 
-  //isColumnLocked(columnName: string): boolean {
-  //  const col = this.dynamicColumns.find(c => c.name === columnName);
-  //  return col ? col.locked : true;
-  //}
+  isColumnLocked(columnName: string): boolean {
+    const col = this.dynamicColumns.find(c => c.name === columnName);
+    return col ? col.locked : true;
+  }
 
 
   openDatePicker(event: any) {

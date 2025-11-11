@@ -30,7 +30,7 @@
         </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
-          <ng-select formControlName="StreamID" [clearable]="false">
+          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamWiseSubject()">
             <ng-option [value]="0">--Select--</ng-option>
             @for (item of StreamMasterDDL; track item.StreamID) {
             <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
@@ -88,7 +88,7 @@
           </div>
         </div>
         <!--{{GetLeaveList|json}}-->
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
           <ng-select formControlName="AttandanceTimeID" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
@@ -99,7 +99,7 @@
           <div *ngIf="isSubmitted && formTable.AttandanceTimeID.errors" class="text-danger">
             <p *ngIf="formTable.AttandanceTimeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>
-        </div>
+        </div>-->
 
 
 
@@ -113,6 +113,7 @@
     </form>
     <hr />
     <div class="table-container mt-3">
+
       <div class="mat-elevation-z8 table-responsive" #pdfTable>
         <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
@@ -142,8 +143,6 @@
             <th mat-header-cell *matHeaderCellDef> Section Name </th>
             <td mat-cell *matCellDef="let element">{{ element.SectionName }}</td>
           </ng-container>
-
-          <!-- Dynamic Columns -->
           <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
             <th mat-header-cell *matHeaderCellDef style="width:130px !important">
               <mat-checkbox [disabled]="column.locked"
@@ -151,7 +150,7 @@
                 {{ column.name }}
               </mat-checkbox>
 
-              <!-- Lock / Unlock buttons -->
+              <!-- Toggle lock/unlock button -->
               <button *ngIf="column.locked"
                       mat-mini-button color="primary"
                       (click)="unlockColumn(column.name)">
@@ -163,109 +162,33 @@
                 Lock
               </button>
             </th>
-
             <td mat-cell *matCellDef="let element"
-                [ngClass]="{
-            'present-cell': element[column.name] === 'P',
-            'tl-cell': element[column.name] === 'TL'
-          }">
+                [ngClass]="{'present-cell': element[column.name] === 'P'}">
 
-              <!-- ✅ Disabled if TL or locked -->
               <mat-slide-toggle [checked]="element[column.name] === 'P'"
-                                [disabled]="isToggleDisabled(element, column.name)"
+                                [disabled]="isColumnLocked(column.name)"
                                 (change)="onAttendanceChange($event, element, column.name)">
-
                 {{
-            element[column.name] === 'TL'
-              ? 'Leave (TL)'
-              : (element[column.name] === 'H'
-                  ? 'Holiday'
-                  : (element[column.name] === 'P'
-                      ? 'Present'
-                      : 'Absent'))
+        element[column.name] === 'TL'
+          ? 'Leave (TL)'
+          : (element[column.name] === 'H'
+              ? 'Holiday'
+              : (element[column.name] === 'P'
+                  ? 'Present'
+                  : 'Absent'))
                 }}
               </mat-slide-toggle>
             </td>
           </ng-container>
 
-          <!-- Header & Row -->
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
-        </table>
-      </div>
-
-      <!--<div class="mat-elevation-z8 table-responsive" #pdfTable>
-    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">-->
-      <!-- Sr. No -->
-      <!--<ng-container matColumnDef="SrNo">
-    <th mat-header-cell *matHeaderCellDef> # </th>
-    <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
-  </ng-container>-->
-      <!-- Static Columns -->
-      <!--<ng-container matColumnDef="EnrollmentNo">
-    <th mat-header-cell *matHeaderCellDef> Enrollment No. </th>
-    <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="StudentName">
-    <th mat-header-cell *matHeaderCellDef> Student Name </th>
-    <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="SubjectName">
-    <th mat-header-cell *matHeaderCellDef> Subject Name </th>
-    <td mat-cell *matCellDef="let element">{{ element.SubjectName }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="SectionName">
-    <th mat-header-cell *matHeaderCellDef> Section Name </th>
-    <td mat-cell *matCellDef="let element">{{ element.SectionName }}</td>
-  </ng-container>
-  <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
+          <!--<ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
     <th mat-header-cell *matHeaderCellDef style="width:130px !important">
       <mat-checkbox [disabled]="column.locked"
                     (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
         {{ column.name }}
       </mat-checkbox>-->
-      <!-- Toggle lock/unlock button -->
-      <!--<button *ngIf="column.locked"
-                mat-mini-button color="primary"
-                (click)="unlockColumn(column.name)">
-          Unlock
-        </button>
-        <button *ngIf="!column.locked"
-                mat-mini-button color="warn"
-                (click)="lockColumn(column.name)">
-          Lock
-        </button>
-      </th>
-      <td mat-cell *matCellDef="let element"
-          [ngClass]="{'present-cell': element[column.name] === 'P'}">
-
-        <mat-slide-toggle [checked]="element[column.name] === 'P'"
-                          [disabled]="isColumnLocked(column.name)"
-                          (change)="onAttendanceChange($event, element, column.name)">
-          {{
-  element[column.name] === 'TL'
-    ? 'Leave (TL)'
-    : (element[column.name] === 'H'
-        ? 'Holiday'
-        : (element[column.name] === 'P'
-            ? 'Present'
-            : 'Absent'))
-          }}
-        </mat-slide-toggle>
-      </td>
-    </ng-container>-->
-      <!--<ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
-  <th mat-header-cell *matHeaderCellDef style="width:130px !important">
-    <mat-checkbox [disabled]="column.locked"
-                  (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
-      {{ column.name }}
-    </mat-checkbox>-->
-      <!-- Toggle lock/unlock button -->
-      <!--<button *ngIf="column.locked"
+          <!-- Toggle lock/unlock button -->
+          <!--<button *ngIf="column.locked"
             mat-mini-button color="primary"
             (click)="unlockColumn(column.name)">
       Unlock
@@ -278,7 +201,7 @@
   </th>
   <td mat-cell *matCellDef="let element"
       [ngClass]="{'present-cell': element[column.name] === 'P'}">-->
-      <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
                           [disabled]="column.locked"
                           (change)="onAttendanceChange($event, element, column.name)">
           {{
@@ -287,7 +210,7 @@
     : (element[column.name] === 'P' ? 'Present' : 'Absent')
           }}
         </mat-slide-toggle>-->
-      <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
                             [disabled]="isColumnLocked(column.name)"
                             (change)="onAttendanceChange($event, element, column.name)">
             {{
@@ -298,11 +221,15 @@
           </mat-slide-toggle>
         </td>
       </ng-container>-->
-      <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
-    </table>
-  </div>-->
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+      </div>
 
 
 
