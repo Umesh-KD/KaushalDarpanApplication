@@ -55,7 +55,8 @@
               <td>
                 <p><b>{{row.CompanyName}}</b></p>
                 <p>{{row.Address}}</p>
-                <p><a href="{{row.Website}}" target="_blank">{{row.Website}}</a></p>
+                <!-- href="{{row.Website}}"  -->
+                <p><a [href]="row.Website.startsWith('http') ? row.Website : 'https://' + row.Website"  target="_blank">{{row.Website}}</a></p>
               </td>
               <!--<td>
                 <p><b>{{row.HR_Name}}</b></p>
@@ -69,7 +70,7 @@
                 <p style="white-space:nowrap">{{row.CampusAddress}}</p>
               </td>
 
-              <td><div [innerHtml]="row.RoleDetails"> </div></td>
+              <td><div class="role-detail"  [innerHtml]="row.RoleDetails"> </div></td>
            
               <td align="center">
                 <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
