@@ -177,7 +177,7 @@ const routes: Routes = [
       { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
 
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
-
+      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
       //Old Software Master
       { path: 'updatecollegemaster/:id', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
       { path: 'updatecollegemaster', loadChildren: () => import('./Views/CollegeMaster/add-college-master/add-college-master.module').then(m => m.AddCollegeMasterModule), title: 'Update College' },
@@ -393,7 +393,7 @@ const routes: Routes = [
       { path: 'AddTspAreas', loadChildren: () => import('./Views/ITI/Tsp-Areas/add-tsp-areas/add-tsp-areas.module').then(m => m.AddTspAreasModule), title: 'AddItiApplication/3 TSP Areas' },
 
       { path: 'itifee', loadChildren: () => import('./Views/ITI/iti-fee/iti-fee.module').then(m => m.ItiFeeModule), title: 'ITI Fee' },
-      { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
+      //{ path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form-view/iti-instructor-form-view.module').then(m => m.ItiInstructorFormViewModule) },
       { path: 'ITIInstructorCollege', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-college/iti-instructor-college.module').then(m => m.ItiInstructorCollegeModule) },
 
       { path: 'verifiers', loadChildren: () => import('./Views/DTE_Verifier/verifier/verifier.module').then(m => m.VerifierModule), title: 'Verifiers' },
