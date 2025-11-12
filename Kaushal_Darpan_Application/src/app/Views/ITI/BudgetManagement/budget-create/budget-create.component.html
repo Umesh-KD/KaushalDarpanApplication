@@ -140,7 +140,7 @@
                             <td>
                                 <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="item.HeadID" (change)="onUnitWiseChange(i)">
                                     <option value="0">Choose Option</option>
-                                    <option *ngFor="let option of BudgetHeadDDL" [value]="option.HeadID">
+                                    <option *ngFor="let option of getFilteredBudgetHeadDDL(i)" [value]="option.HeadID">
                                         {{option.HeadName}}
                                     </option>
                                 </select>

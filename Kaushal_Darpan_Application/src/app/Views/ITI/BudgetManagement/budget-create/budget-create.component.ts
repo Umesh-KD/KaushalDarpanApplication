@@ -188,4 +188,18 @@ export class BudgetCreateComponent {
   }
 
   async ResetControls() {}
+
+  getFilteredBudgetHeadDDL(currentIndex: number) {
+    if (!this.BudgetHeadDDL || this.BudgetHeadDDL.length === 0) return [];
+
+    // Collect all selected HeadIDs except the current one
+    const selectedHeadIDs = this.BudgetHeadList
+      .map((x: any, i: number) => (i !== currentIndex ? x.HeadID : null))
+      .filter((id: any) => id && id != 0);
+
+    // Return only HeadIDs not already selected
+    return this.BudgetHeadDDL.filter(
+      (item: any) => !selectedHeadIDs.includes(item.HeadID)
+    );
+  }
 }
