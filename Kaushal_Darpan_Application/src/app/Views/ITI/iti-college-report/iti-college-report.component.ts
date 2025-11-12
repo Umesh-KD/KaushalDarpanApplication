@@ -103,7 +103,7 @@ export class ItiCollegeReportComponent {
     // form group
     this.ReportForm = this.formBuilder.group(
       {
-        txtName: [{ value: ''}, Validators.required],
+        txtName: [{ value: ''],
         Loksabha: ['', Validators.required],
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
@@ -2109,8 +2109,8 @@ export class ItiCollegeReportComponent {
       UpdateWorkStarted: this.request.UpdateWorkStarted,
       UpdateExpectedDate: this.request.UpdateExpectedDate,
       WorkSanctionCopy: this.request.WorkSanctionCopy,
-      UpdatePercentWork: this.request.UpdatePercentWork
-
+      UpdatePercentWork: this.request.UpdatePercentWork,
+      UpdateRemarks: this.request.UpdateRemarks
 
     });
     /*    this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
@@ -2125,7 +2125,7 @@ export class ItiCollegeReportComponent {
     this.request.UpdateExpectedDate = ''
     this.request.WorkSanctionCopy = ''
     this.request.UpdatePercentWork = ''
-
+    this.request.UpdateRemarks=''
   }
 
 

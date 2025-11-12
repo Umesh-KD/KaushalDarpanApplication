@@ -289,7 +289,7 @@
 
 
           <div *ngIf="request.UrbanRural==76">
-            <="
+     
             <label for="GramPanchayatSamiti">Gram Panchayat:<span class="StarMarking">*</span></label>
             <select formControlName="GramPanchayatSamiti" class="form-select" id="GramPanchayatSamiti"
                     [(ngModel)]="request.GramPanchayatSamiti" (change)="villageMaster()">
@@ -648,7 +648,7 @@
   </div>-->
 
           <div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">-Financial Sanction of Civil Work (in Lakh)ta<span class="StarMarking">*</span></label>
+            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Financial Sanction of Civil Work (in Lakh)<span class="StarMarking">*</span></label>
       
             <input type="text" class="form-input" id="ApplicationId" formControlName="FinancialSanction" (keypress)="numberOnly($event)" [(ngModel)]="request.FinancialSanction" placeholder="Enter Financial Sanction">
 
