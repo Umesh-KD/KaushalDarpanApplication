@@ -1,0 +1,29 @@
+
+
+/*Role-details table overflow scroll css*/
+.role-detail{
+    height:100px;
+    overflow: auto;
+}
+
+
+
+  /* WebKit Scrollbar Styling (Chrome, Safari, Edge) */
+  .role-detail::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .role-detail::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  .role-detail::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+    .role-detail::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+

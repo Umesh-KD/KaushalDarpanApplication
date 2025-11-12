@@ -89,7 +89,7 @@ export class ItiCampusValidationComponent {
     
     try {
       this.loaderService.requestStarted();
-      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.flagName)
+      await this.campusPostService.CampusValidationList(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
