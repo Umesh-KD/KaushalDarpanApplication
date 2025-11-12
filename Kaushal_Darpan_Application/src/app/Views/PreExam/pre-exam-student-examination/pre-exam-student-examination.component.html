@@ -455,9 +455,9 @@
               <tr>
                 <td>Papers</td>
                 <td>
-                  <span *ngIf="StudentProfileDetailsData[0]['StudentTypeID']==1">Theory &amp; Practical &amp; Optional Papers</span>
-                  <br />
-                  <span style="word-break: break-all;">({{StudentProfileDetailsData[0]['StudentPaper']}}) </span>
+                  <!-- <span *ngIf="StudentProfileDetailsData[0]['StudentTypeID']==1">Theory &amp; Practical &amp; Optional Papers</span>
+                  <br /> -->
+                  <span style="word-break: break-all;">{{StudentProfileDetailsData[0]['StudentPaper']}} </span>
                 </td>
               </tr>
               <tr>
@@ -769,8 +769,9 @@
             <div *ngIf="requestStudent.StudentTypeID==1">
               <label for="txtPapers" class="text-gray-800 text-sm font-medium inline-block mb-1">Papers:</label>
               <div name="txtPapers" class="form-input disabled">
-                <span>Theory & Practical & Optional Papers <br /></span>
-                ({{requestStudent.StudentPaper}})
+                <!-- <span>Theory & Practical & Optional Papers <br /></span>
+                ({{requestStudent.StudentPaper}}) -->
+                {{requestStudent.StudentPaper}}
               </div>
 
 

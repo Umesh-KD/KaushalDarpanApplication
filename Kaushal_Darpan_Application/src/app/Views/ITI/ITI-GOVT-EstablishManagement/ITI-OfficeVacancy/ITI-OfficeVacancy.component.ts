@@ -188,6 +188,7 @@ export class ITIOfficeVacancyComponent implements OnInit {
       DesignationID: formValues.DesignationID,
       InstituteID: formValues.InstituteID || 0,  // fallback if null
       OfficeID: formValues.OfficeID,
+      PlanningID:0,
       StaffTypeID: formValues.StaffTypeID,
       TotalSeatID: formValues.TotalSeatID,
       EndTermID: this.sSOLoginDataModel.EndTermID,

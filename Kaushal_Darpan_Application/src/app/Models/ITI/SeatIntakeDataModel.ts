@@ -10,6 +10,7 @@ export class SeatIntakeDataModel {
   public SanctionedID: number = 0;
   public TradeLevel: number = 0;
   public DepartmentID: number = 0;
+  public PlanningID: number = 0;
   public CreatedBy: number = 0;
   public ModifyBy: number = 0;
   public ActiveStatus: boolean = true;

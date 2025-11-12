@@ -136,7 +136,10 @@
 
 
             <td>
-              <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status !='Approved' || sSOLoginDataModel.RoleID == _enumrole.ITIBuildingAdmin " class="flex align-center justify-center actionBtns w-auto"
+              <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPlanningAdmin && examiner.Status !='Approved' || sSOLoginDataModel.RoleID == _enumrole.ITIBuildingAdmin &&
+                    examiner.Status!='Pending Adding Trade' &&
+                    examiner.Status!='Pending Adding Post'
+                   " class="flex align-center justify-center actionBtns w-auto"
                    style="width:auto !important">
                 <a [routerLink]="'/ItiCollegeReport'" [queryParams]="{ID:examiner.EId}" href="javascript:void(0);" title="edit"><i class="ti ti-pencil"></i></a>
                 <!--<a href="javascript:void(0);" title="Remove"

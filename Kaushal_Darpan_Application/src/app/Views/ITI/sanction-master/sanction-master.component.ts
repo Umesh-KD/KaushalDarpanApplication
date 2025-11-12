@@ -10,6 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SweetAlert2 } from '../../../Common/SweetAlert2'
 import { EnumStatus } from '../../../Common/GlobalConstants';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-sanction-master',
@@ -57,6 +58,7 @@ export class SanctionMasterComponent {
     this.RoleMasterFormGroup = this.formBuilder.group(
       {
         txtRoleName: ['', Validators.required],
+        ParentID: ['', [DropdownValidators]],
         chkActiveStatus: ['true'],
       })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -140,6 +142,7 @@ export class SanctionMasterComponent {
 
           this.request.SanctionID = data['Data']["SanctionID"];
           this.request.Name = data['Data']["Name"];
+          this.request.ParentID = data['Data']["ParentID"];
           this.request.ActiveStatus = data['Data']["ActiveStatus"];
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = this.sSOLoginDataModel.UserID;

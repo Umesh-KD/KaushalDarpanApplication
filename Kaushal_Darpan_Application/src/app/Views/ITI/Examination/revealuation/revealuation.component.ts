@@ -134,8 +134,8 @@ export class RevealuationComponent {
     this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
       if (result.isConfirmed) {
         try {
-          this.searchRequest.RollNo = 2881;
-          this.searchRequest.DOB = '2006-10-04';
+          //this.searchRequest.RollNo = 2881;
+          //this.searchRequest.DOB = '2006-10-04';
 
           if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
             this.Swal2.Confirmation('Please fill in both Roll Number and Date of Birth.'
