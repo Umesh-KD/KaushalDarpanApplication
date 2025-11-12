@@ -103,7 +103,7 @@ export class ItiCollegeReportComponent {
     // form group
     this.ReportForm = this.formBuilder.group(
       {
-        txtName: [{ value: ''}, Validators.required],
+        txtName: [''],
         Loksabha: ['', Validators.required],
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
@@ -963,17 +963,17 @@ export class ItiCollegeReportComponent {
       }
       const defaultModel = new ItiReportDataModel();
 
-      Object.keys(defaultModel).forEach((key) => {
-        const value = this.request[key as keyof ItiReportDataModel];
+      //Object.keys(defaultModel).forEach((key) => {
+      //  const value = this.request[key as keyof ItiReportDataModel];
 
-        if (value == null || value == undefined) {
-          if (typeof (defaultModel as any)[key] === 'number') {
-            (this.request as any)[key] = 0;
-          } else {
-            (this.request as any)[key] = '';
-          }
-        }
-      });
+      //  if (value == null || value == undefined) {
+      //    if (typeof (defaultModel as any)[key] === 'number') {
+      //      (this.request as any)[key] = 0;
+      //    } else {
+      //      (this.request as any)[key] = '';
+      //    }
+      //  }
+      //});
       console.log(this.request.WorkCopy)
       //});
       //if (data['Data']['CollegeName'] == null) {
@@ -2109,8 +2109,8 @@ export class ItiCollegeReportComponent {
       UpdateWorkStarted: this.request.UpdateWorkStarted,
       UpdateExpectedDate: this.request.UpdateExpectedDate,
       WorkSanctionCopy: this.request.WorkSanctionCopy,
-      UpdatePercentWork: this.request.UpdatePercentWork
-
+      UpdatePercentWork: this.request.UpdatePercentWork,
+      UpdateRemarks: this.request.UpdateRemarks
 
     });
     /*    this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
@@ -2125,7 +2125,7 @@ export class ItiCollegeReportComponent {
     this.request.UpdateExpectedDate = ''
     this.request.WorkSanctionCopy = ''
     this.request.UpdatePercentWork = ''
-
+    this.request.UpdateRemarks=''
   }
 
 
