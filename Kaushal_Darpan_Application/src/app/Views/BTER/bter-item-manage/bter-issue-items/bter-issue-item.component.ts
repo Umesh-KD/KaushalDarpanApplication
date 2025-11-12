@@ -113,7 +113,7 @@ export class AddBterIssueItemComponent {
   }
 
   async saveData() {
-    debugger
+    
     this.submitRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.submitRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.submitRequest.UserId = this.sSOLoginDataModel.UserID;
@@ -167,7 +167,7 @@ export class AddBterIssueItemComponent {
   async DGET_Details() {
     try {
       this.loaderService.requestStarted();
-      debugger;
+      
 
       this.searchRequest.CollegeId = this.sSOLoginDataModel.InstituteID;
       this.searchRequest.EquipmentsId = this.Searchrequests.ItemId;
@@ -238,7 +238,7 @@ export class AddBterIssueItemComponent {
 
 
   ShowSubmit(content: any): void {
-    debugger;
+    
 
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if (!anyTeamSelected) {
@@ -288,7 +288,7 @@ export class AddBterIssueItemComponent {
 
 
   async GetStaffDDL() {
-    debugger;
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -317,7 +317,7 @@ export class AddBterIssueItemComponent {
   }
 
   async GetCategoryDDL() {
-    debugger;
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
@@ -438,7 +438,7 @@ export class AddBterIssueItemComponent {
 
 
   async GetItemListType() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
     console.log('Branch Id :'+this.Searchrequests.StreamID  );
@@ -480,10 +480,10 @@ export class AddBterIssueItemComponent {
 
 
   async BindItem_list() {
-    debugger
+    
   try {
     this.loaderService.requestStarted();
-      this.SelectedItems = [];
+     
     const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -499,7 +499,7 @@ export class AddBterIssueItemComponent {
     .then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.ItemsDDLList = data['Data'];
-      
+       this.SelectedItems = [];
       console.log("Bind  Item  list", this.ItemsDDLList )
     }, error => console.error(error));
     }
@@ -529,7 +529,7 @@ export class AddBterIssueItemComponent {
 
 
   onItemToggle(item: any) {
-    debugger
+    
     if (item.Selected) {
       // Add if not already present
       if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
@@ -560,7 +560,7 @@ export class AddBterIssueItemComponent {
   }
 
   async saveSelectedItems() {
-    debugger
+    
     if (!this.SelectedItems || this.SelectedItems.length === 0) {
       this.toastr.error("Please select at least one item!");
       return;
@@ -682,7 +682,7 @@ export class AddBterIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           //
-          debugger
+          
           if (this.State == EnumStatus.Success) {
               this.FileName = data.Data[0].FileName;
               this.Dis_FileName = data.Data[0].Dis_FileName;
@@ -712,7 +712,7 @@ export class AddBterIssueItemComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           if (data.State != EnumStatus.Error) {
-            debugger
+            
               this.FileName = '';
               this.Dis_FileName = '';
             console.log(this.SelectedItems)
@@ -753,7 +753,7 @@ export class AddBterIssueItemComponent {
  async GeLabMasterData() {
     try {
       this.loaderService.requestStarted();
-      debugger;
+      
       this.labrequests.Lab_DepartmentId=this.sSOLoginDataModel.DepartmentID;
       this.labrequests.Lab_BranchId=this.Searchrequests.StreamID;
       this.labrequests.ActionName='GetLabDataForMaster';
@@ -776,7 +776,7 @@ export class AddBterIssueItemComponent {
     }
   }
   onStaffChange() {
-    debugger
+    
     this.Searchrequests.ItemType = 0; 
     this.Searchrequests.ItemCategoryId = 0; 
     this.CategoryDDLList = [];
@@ -788,7 +788,7 @@ export class AddBterIssueItemComponent {
     
   }
   async ShowSubmitIssue(content: any, itemId:any,staffId:any) {
-    debugger;
+    
       this.staff_ID=staffId;
     const anyTeamSelected = this.ItemsDDLList.some((x: any) => x.Selected);
     if ((!anyTeamSelected) && (this.Searchrequests.issuedTo == 2)){
@@ -826,7 +826,7 @@ export class AddBterIssueItemComponent {
   // Only run logic when checkbox is checked
     if (item.Selected) {
       // Check both conditions
-      debugger;
+      
       if (item.IsSerialNo == 1 && item.EquipmentsCode && item.EquipmentsCode.trim() !== '') {  
         console.log('✅ Serial item selected:', item); 
       }
@@ -859,7 +859,7 @@ export class AddBterIssueItemComponent {
     await this.confirmSubmit(this.selectedDataList); 
   }
   async confirmSubmit(arr: any,) {
-    debugger;
+    
 
     this.loaderService.requestStarted();
     this.isLoading = true;
@@ -887,7 +887,7 @@ export class AddBterIssueItemComponent {
             this.toastr.success("Items issued successfully", "", {
               toastClass: "ngx-toastr my-update-toast"
             });
-
+            this.BindItem_list();
             //this.GetAllData();
            // this.CloseModalPopup();
           } else if (this.State == EnumStatus.Error)

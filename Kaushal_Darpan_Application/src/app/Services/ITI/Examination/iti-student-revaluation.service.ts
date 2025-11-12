@@ -106,6 +106,18 @@ export class ITIStudentRevaluationService {
           catchError(this.handleErrorObservable)
         ).toPromise();
     }
+
+       // service to Update EnrollResponse in BulkExcel
+    public async DynamicUpdateExcelData(file: any | null = null, ChunkSize: number = 100) {
+      //formdata
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("ChunkSize", ChunkSize.toString());
+      return await this.http.post(this.APIUrl + "/DynamicUpdateExcelData", formData)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
    
 
 }

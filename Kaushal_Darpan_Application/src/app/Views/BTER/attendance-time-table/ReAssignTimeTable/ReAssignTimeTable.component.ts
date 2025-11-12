@@ -12,22 +12,22 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { GlobalConstants } from '../../../Common/GlobalConstants';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { AssignTeacherForSubjectReqModel, BranchHODModel } from '../../../Models/StaffMasterDataModel';
-import { AttendanceServiceService } from '../../../Services/AttendanceServices/attendance-service.service';
-import { StaffMasterService } from '../../../Services/StaffMaster/staff-master.service';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { GlobalConstants } from '../../../../Common/GlobalConstants';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { AssignTeacherForSubjectReqModel, BranchHODModel } from '../../../../Models/StaffMasterDataModel';
+import { AttendanceServiceService } from '../../../../Services/AttendanceServices/attendance-service.service';
+import { StaffMasterService } from '../../../../Services/StaffMaster/staff-master.service';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
 @Component({
-  selector: 'app-attendance-time-table',
+  selector: 'app-ReAssignTimeTable',
   standalone: false,
-  templateUrl: './attendance-time-table.component.html',
-  styleUrls: ['./attendance-time-table.component.css']
+  templateUrl: './ReAssignTimeTable.component.html',
+  styleUrls: ['./ReAssignTimeTable.component.css']
 })
-export class AttendanceTimeTableComponent implements OnInit {
-  displayedColumns: string[] = ['SrNo', 'StaffSSOID', 'StaffName','SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
+export class ReAssignTimeTableComponent implements OnInit {
+  displayedColumns: string[] = ['SrNo', 'StaffSSOID', 'StaffName', 'From_Date','To_Date','SectionName', 'EndTermName', 'SemesterName', 'CourseTypeName', 'StreamName', 'SubjectName', 'Actions'];
   EditDataFormGroup!: FormGroup;
   TableForm!: FormGroup;
   isSubmitted: boolean = false;
@@ -279,7 +279,7 @@ export class AttendanceTimeTableComponent implements OnInit {
         SSOID: this.sSOLoginDataModel.SSOID,
         RoleID: this.sSOLoginDataModel.RoleID
       };
-      await this.attendanceServiceService.GetAttendanceTimeTable(obj)
+      await this.attendanceServiceService.GetReAttendanceTimeTable(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data['Data']));
           this.filterData = data;  // Populate filtered data with the fetched data
@@ -491,16 +491,33 @@ export class AttendanceTimeTableComponent implements OnInit {
       //this.clearValidationErrors();
     }
   }
-  //AttendanceData(rowData: any) {
-  //  if (rowData) {
-  //    const routePath =
-  //      rowData.ATType === 0
-  //        ? 'student-attendance'
-  //        : 'ReAssignTeacherLCAttendance';
+  AttendanceData(rowData: any) {
+    if (rowData) {
+      const routePath =
+        rowData.ATType === 0
+          ? 'student-attendance'
+          : 'ReAssignTeacherLCAttendance';
 
+      if (rowData.StreamID != null) {
+        this.router.navigate([
+          routePath,
+          rowData.StreamID,
+          rowData.SemesterID,
+          rowData.SubjectID,
+          rowData.SectionID,
+          rowData.From_Date,
+          rowData.To_Date,
+
+        ]);
+      }
+    }
+  }
+
+  //AttendanceData(rowData: any) {
+  //  if (rowData != null && rowData != undefined) {
   //    if (rowData.StreamID != null) {
   //      this.router.navigate([
-  //        routePath,
+  //        'student-attendance',
   //        rowData.StreamID,
   //        rowData.SemesterID,
   //        rowData.SubjectID,
@@ -509,20 +526,6 @@ export class AttendanceTimeTableComponent implements OnInit {
   //    }
   //  }
   //}
-
-  AttendanceData(rowData: any) {
-    if (rowData != null && rowData != undefined) {
-      if (rowData.StreamID != null) {
-        this.router.navigate([
-          'student-attendance',
-          rowData.StreamID,
-          rowData.SemesterID,
-          rowData.SubjectID,
-          rowData.SectionID
-        ]);
-      }
-    }
-  }
   clearValidationErrors() {
     // Iterate through each form control
     Object.keys(this.EditDataFormGroup.controls).forEach(controlName => {

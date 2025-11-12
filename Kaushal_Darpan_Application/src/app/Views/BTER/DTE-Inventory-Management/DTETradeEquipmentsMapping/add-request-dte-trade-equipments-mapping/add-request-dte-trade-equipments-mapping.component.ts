@@ -29,6 +29,7 @@ import { DocumentDetailsService } from '../../../../../Common/document-details';
 import * as XLSX from 'xlsx';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../../Common/appsetting.service';
+import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
 
 @Component({
   selector: 'app-add-request-dte-trade-equipments-mapping',
@@ -164,7 +165,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
   }
 
   async GetAllData() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       this.Searchrequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -194,7 +195,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
   }
 
   async saveData() {
-    debugger;
+    
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.isSubmitted = true;
     if (this.RequestFormGroup.invalid) {
@@ -226,8 +227,12 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
             this.RequestFormGroup.patchValue({
               txtQuantity: '',
               ddlEquipmentsId: '',
-              ddlCategoryId: ''
+              ddlCategoryId: '',
+              txtRemarks: '',
+              fileIndentPhoto:'',
             });
+            this.Dis_FileName = '';
+            this.FileName = '';
             this.isSubmitted = false;
             Object.keys(this.RequestFormGroup.controls).forEach(key => {
               this.RequestFormGroup.get(key)?.markAsPristine();
@@ -647,7 +652,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           //
-          debugger
+          
           if (this.State == EnumStatus.Success) {
             this.FileName = data.Data[0].FileName;
             this.Dis_FileName = data.Data[0].Dis_FileName;
@@ -659,6 +664,30 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
           }
           else if (this.State == EnumStatus.Warning) {
             this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
+  async DeleteDocument(item: any) {
+    try {
+      let deleteModel = new DeleteDocumentDetailsModel()
+      deleteModel.FolderName = "IssuesIndent";
+      deleteModel.FileName = item;
+      await this.documentDetailsService.DeleteDocument(deleteModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          if (data.State != EnumStatus.Error) {
+            
+            this.FileName = '';
+            this.Dis_FileName = ''; 
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
           }
         });
     }

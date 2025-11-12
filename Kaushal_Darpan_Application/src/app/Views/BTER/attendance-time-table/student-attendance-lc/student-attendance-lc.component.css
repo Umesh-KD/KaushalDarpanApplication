@@ -1,0 +1,86 @@
+.present {
+  background-color: #4caf50;
+  color: white;
+}
+
+.absent {
+  background-color: #f44336;
+  color: white;
+}
+.custom-button {
+  background-color: #4caf50 !important; /* Custom green color */
+  color: white !important;
+}
+.w-100 {
+  width: 100% !important;
+}
+
+/* set new  */
+
+
+/* Common label styling */
+.form-label {
+  color: #1f2937; /* text-gray-800 */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+/* Common field wrapper */
+.form-field {
+  width: 100%;
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Common error styling */
+.form-error {
+  color: #dc2626; /* red-600 */
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+
+
+
+.date-range-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+  .date-range-wrapper input[type="date"] {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 160px;
+    cursor: pointer;
+  }
+
+.date-separator {
+  font-weight: bold;
+  font-size: 16px;
+  color: #444;
+}
+
+.date-range-wrapper input[type="date"]:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+
+/* Highlight cell when Present */
+.present-cell {
+  background-color: #e6ffe6 !important; /* light green */
+}
+
+/* Highlight toggle when Present */
+.present-toggle {
+  background-color: #4caf50 !important; /* Material green */
+  color: white;
+  border-radius: 5px;
+  padding: 2px 6px;
+}

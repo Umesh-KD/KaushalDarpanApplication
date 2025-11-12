@@ -571,7 +571,7 @@ const routes: Routes = [
       { path: 'iti-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipments-mapping-list/iti-equipments-mapping-list.module').then(m => m.ITITradeEquipmentsMappingListModule) },
       { path: 'iti-add-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
       { path: 'iti-add-equipments-mapping:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
-      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
+      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID/:mappingid/:indentdoc', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
       { path: 'iti-stocks', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-stocks-items-list/iti-stocks-items-list.module').then(m => m.ITIStocksItemsListModule) },
       { path: 'iti-add-issued-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
       { path: 'iti-add-issued-items/:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
@@ -1477,6 +1477,8 @@ const routes: Routes = [
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
      
+      {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
+     
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
@@ -1517,8 +1519,10 @@ const routes: Routes = [
 
 
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
-
-
+      { path: 'ReAssignTeacherForAttendance', loadChildren: () => import('./Views/ReAssignTeacherForAttendance/ReAssignTeacherForAttendance.module').then(m => m.ReAssignTeacherForAttendanceModule) },
+      { path: 'ReAssignTeacherLCAttendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
+      { path: 'ReAssignTeacherLCAttendance/:streamId/:semesterId/:subjectId/:sectionId/:From_Date/:To_Date', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
+      { path: 'ReAttendanceTimeTable', loadChildren: () => import('./Views/BTER/attendance-time-table/ReAssignTimeTable/ReAssignTimeTable.module').then(m => m.ReAssignTimeTableModule), title: 'Re-Student-Attendance' },
     ]
   },
 

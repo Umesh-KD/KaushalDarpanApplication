@@ -170,6 +170,7 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   async GetStudentDashboard() {
+    debugger
     this.StudantDashboardList = [];
     try {
 
@@ -199,6 +200,7 @@ export class StudentDashboardComponent implements OnInit {
 
 
   async GetProfileDashboard() {
+    debugger
     try {
       this.searchRequest.studentId = this.sSOLoginDataModel.StudentID;
       this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
