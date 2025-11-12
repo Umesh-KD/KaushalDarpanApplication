@@ -103,7 +103,7 @@ export class ItiCollegeReportComponent {
     // form group
     this.ReportForm = this.formBuilder.group(
       {
-        txtName: [{ value: ''],
+        txtName: [''],
         Loksabha: ['', Validators.required],
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
@@ -963,17 +963,17 @@ export class ItiCollegeReportComponent {
       }
       const defaultModel = new ItiReportDataModel();
 
-      Object.keys(defaultModel).forEach((key) => {
-        const value = this.request[key as keyof ItiReportDataModel];
+      //Object.keys(defaultModel).forEach((key) => {
+      //  const value = this.request[key as keyof ItiReportDataModel];
 
-        if (value == null || value == undefined) {
-          if (typeof (defaultModel as any)[key] === 'number') {
-            (this.request as any)[key] = 0;
-          } else {
-            (this.request as any)[key] = '';
-          }
-        }
-      });
+      //  if (value == null || value == undefined) {
+      //    if (typeof (defaultModel as any)[key] === 'number') {
+      //      (this.request as any)[key] = 0;
+      //    } else {
+      //      (this.request as any)[key] = '';
+      //    }
+      //  }
+      //});
       console.log(this.request.WorkCopy)
       //});
       //if (data['Data']['CollegeName'] == null) {
