@@ -118,6 +118,8 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Quantity</th>
+            <th>Description / Remarks</th>
+            <th>Indent Document</th>
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -129,6 +131,12 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.Remarks}}</td>
+            <td align="left">
+              <a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIIssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
+                {{item.FileName}}
+              </a>
+            </td>
             <td>
 
               <!--<div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">-->

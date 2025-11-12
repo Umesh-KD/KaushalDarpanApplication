@@ -4,7 +4,7 @@ import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
-import { StudentSearchModel } from '../../Models/StudentSearchModel';
+import { ReAssignTeacherDataModel, ReAssignTeacherSaveModel, StudentSearchModel } from '../../Models/StudentSearchModel';
 import { VerifierDataModel } from '../../Models/VerifierDataModel';
 import { RecheckDocumentModel } from '../../Models/StudentMeritInfoDataModel';
 
@@ -158,6 +158,23 @@ export class StudentService
    public async getdublicateCheckSection(searchRequest: any) {
     var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/getdublicateCheckSection`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetReAssignTeacher(searchRequest: ReAssignTeacherDataModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetReAssignTeacher`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ReAssignTeacherForSaveLC(searchRequest: ReAssignTeacherSaveModel) {
+    var body = JSON.stringify(searchRequest);
+    debugger
+    return await this.http.post(`${this.APIUrl}/ReAssignTeacherForSaveLC`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

@@ -571,7 +571,7 @@ const routes: Routes = [
       { path: 'iti-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-equipments-mapping-list/iti-equipments-mapping-list.module').then(m => m.ITITradeEquipmentsMappingListModule) },
       { path: 'iti-add-equipments-mapping', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
       { path: 'iti-add-equipments-mapping:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-equipments-mapping/iti-add-equipments-mapping.module').then(m => m.ITIAddEquipmentsMappingModule) },
-      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
+      { path: 'iti-request-equipments-mapping/:id/:category/:equipment/:quantity/:OfficeID/:mappingid/:indentdoc', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-equipments-mapping/iti-add-request-labeling-equipments/iti-add-request-labeling-equipments.module').then(m => m.ITIAddRequestLabelingEquipmentsModule) },
       { path: 'iti-stocks', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-stocks-items-list/iti-stocks-items-list.module').then(m => m.ITIStocksItemsListModule) },
       { path: 'iti-add-issued-items', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
       { path: 'iti-add-issued-items/:id', loadChildren: () => import('./Views/ITI/ITI-Inventory-Management/iti-Issued-return-items/iti-add-issued-items/iti-add-issued-items.module').then(m => m.ITIAddIssuedItemsModule) },
@@ -1477,6 +1477,8 @@ const routes: Routes = [
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
      
+      {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
+     
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
@@ -1509,11 +1511,21 @@ const routes: Routes = [
 
       { path: 'SanctionOrderList', loadChildren: () => import('./Views/ITI/sanction-order-list/sanction-order-list.module').then(m => m.SanctionOrderListModule) },
 
+      { path: 'SeatIntakePlanning', loadChildren: () => import('./Views/ITI/seat-intake-planning/seat-intake-planning.module').then(m => m.SeatIntakePlanningModule) },
+      { path: 'AddIntakePlanning', loadChildren: () => import('./Views/ITI/add-intake-planning/add-intake-planning.module').then(m => m.AddIntakePlanningModule) },
+
+      { path: 'PostPlanning', loadChildren: () => import('./Views/ITI/post-planning/post-planning.module').then(m => m.PostPlanningModule) },
+      { path: 'AddPostPlanning', loadChildren: () => import('./Views/ITI/add-post-planning/add-post-planning.module').then(m => m.AddPostPlanningModule) },
+
+
+
 
 
       { path: 'ITIStaffWorkRegularArrangementReort', loadChildren: () => import('./Views/ITI/ITI-GOVT-EstablishManagement/ITI-StaffWorkRegularArrangementReort/ITI-StaffWorkRegularArrangementReort.module').then(m => m.ITIStaffWorkRegularArrangementReortModule) },
-
-
+      { path: 'ReAssignTeacherForAttendance', loadChildren: () => import('./Views/ReAssignTeacherForAttendance/ReAssignTeacherForAttendance.module').then(m => m.ReAssignTeacherForAttendanceModule) },
+      { path: 'ReAssignTeacherLCAttendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
+      { path: 'ReAssignTeacherLCAttendance/:streamId/:semesterId/:subjectId/:sectionId/:From_Date/:To_Date', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
+      { path: 'ReAttendanceTimeTable', loadChildren: () => import('./Views/BTER/attendance-time-table/ReAssignTimeTable/ReAssignTimeTable.module').then(m => m.ReAssignTimeTableModule), title: 'Re-Student-Attendance' },
     ]
   },
 
@@ -1617,10 +1629,6 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-
-
-
-
 
 
 

@@ -1,0 +1,258 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a routerLink="/attendance-time-table" class="btn bg-info btn-sm text-white">
+          <i class="ti ti-back"></i> Attendance Time Table
+        </a>
+        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white" *ngIf="filterData && filterData.length > 0">
+          <i class="ti ti-excel"></i> Export Excel
+        </a>
+       
+      </div>
+    </div>
+
+    <form [formGroup]="TableForm" (ngSubmit)="getData()">
+      <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-4 gap-6 mb-6">
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester<span class="StarMarking">*</span></label>
+          <ng-select formControlName="SemesterID" [clearable]="false" (change)="getSubjectMasterDDL(TableForm.value.StreamID, TableForm.value.SemesterID)">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of SemesterMasterDDL; track item.SemesterID) {
+            <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger">
+            <p *ngIf="formTable.SemesterID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream<span class="StarMarking">*</span></label>
+          <ng-select formControlName="StreamID" [clearable]="false" (change)="ChangeStreamWiseSubject()">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StreamMasterDDL; track item.StreamID) {
+            <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.StreamID.errors" class="text-danger">
+            <p *ngIf="formTable.StreamID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+        <!--{{GetSectionData|json}}-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Subject<span class="StarMarking">*</span></label>
+          <ng-select formControlName="SubjectID" [clearable]="false" (change)="ChangeSubjectDDL()">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of SubjectMasterDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SubjectID.errors" class="text-danger">
+            <p *ngIf="formTable.SubjectID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Section Name<span class="StarMarking">*</span></label>
+          <ng-select formControlName="SectionID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of GetSectionData; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.SectionID.errors" class="text-danger">
+            <p *ngIf="formTable.SectionID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 gap-6 mb-6">
+      
+        <div>
+          <label class="form-label">Attendance Date<span class="StarMarking">*</span></label>
+          <div class="date-range-wrapper">
+            Start Date:
+            <input type="date"
+                   class="form-field w-60"
+                   formControlName="AttendanceStartDate"
+                   (change)="onStartDateChange($event)" />
+
+            End Date:
+            <input type="date"
+                   class="form-field w-50"
+                   formControlName="AttendanceEndDate"
+                   [min]="minEndDate" />
+          </div>
+        </div>
+        <!--{{GetLeaveList|json}}-->
+        <!--<div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Attandance Time<span class="StarMarking">*</span></label>
+          <ng-select formControlName="AttandanceTimeID" [clearable]="false">
+            <ng-option [value]="0">--Select--</ng-option>
+            @for (item of StudentAttandanceTimeDDL; track item.ID) {
+            <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+            }
+          </ng-select>
+          <div *ngIf="isSubmitted && formTable.AttandanceTimeID.errors" class="text-danger">
+            <p *ngIf="formTable.AttandanceTimeID.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+          </div>
+        </div>-->
+
+
+
+        <div>
+
+          <div class="text-left">
+            <button type="submit" class="btn bg-info text-white mt-6 me-1">Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+    <hr />
+    <div class="table-container mt-3">
+
+      <div class="mat-elevation-z8 table-responsive" #pdfTable>
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+          <!-- Sr. No -->
+          <ng-container matColumnDef="SrNo">
+            <th mat-header-cell *matHeaderCellDef> # </th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Static Columns -->
+          <ng-container matColumnDef="EnrollmentNo">
+            <th mat-header-cell *matHeaderCellDef> Enrollment No. </th>
+            <td mat-cell *matCellDef="let element">{{ element.EnrollmentNo }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="StudentName">
+            <th mat-header-cell *matHeaderCellDef> Student Name </th>
+            <td mat-cell *matCellDef="let element">{{ element.StudentName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="SubjectName">
+            <th mat-header-cell *matHeaderCellDef> Subject Name </th>
+            <td mat-cell *matCellDef="let element">{{ element.SubjectName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="SectionName">
+            <th mat-header-cell *matHeaderCellDef> Section Name </th>
+            <td mat-cell *matCellDef="let element">{{ element.SectionName }}</td>
+          </ng-container>
+          <ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
+            <th mat-header-cell *matHeaderCellDef style="width:130px !important">
+              <mat-checkbox [disabled]="column.locked"
+                            (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
+                {{ column.name }}
+              </mat-checkbox>
+
+              <!-- Toggle lock/unlock button -->
+              <button *ngIf="column.locked"
+                      mat-mini-button color="primary"
+                      (click)="unlockColumn(column.name)">
+                Unlock
+              </button>
+              <button *ngIf="!column.locked"
+                      mat-mini-button color="warn"
+                      (click)="lockColumn(column.name)">
+                Lock
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let element"
+                [ngClass]="{'present-cell': element[column.name] === 'P'}">
+
+              <mat-slide-toggle [checked]="element[column.name] === 'P'"
+                                [disabled]="isColumnLocked(column.name)"
+                                (change)="onAttendanceChange($event, element, column.name)">
+                {{
+        element[column.name] === 'TL'
+          ? 'Leave (TL)'
+          : (element[column.name] === 'H'
+              ? 'Holiday'
+              : (element[column.name] === 'P'
+                  ? 'Present'
+                  : 'Absent'))
+                }}
+              </mat-slide-toggle>
+            </td>
+          </ng-container>
+
+          <!--<ng-container *ngFor="let column of dynamicColumns" [matColumnDef]="column.name">
+    <th mat-header-cell *matHeaderCellDef style="width:130px !important">
+      <mat-checkbox [disabled]="column.locked"
+                    (change)="toggleAllAttendanceForColumn(column.name, $event.checked)">
+        {{ column.name }}
+      </mat-checkbox>-->
+          <!-- Toggle lock/unlock button -->
+          <!--<button *ngIf="column.locked"
+            mat-mini-button color="primary"
+            (click)="unlockColumn(column.name)">
+      Unlock
+    </button>
+    <button *ngIf="!column.locked"
+            mat-mini-button color="warn"
+            (click)="lockColumn(column.name)">
+      Lock
+    </button>
+  </th>
+  <td mat-cell *matCellDef="let element"
+      [ngClass]="{'present-cell': element[column.name] === 'P'}">-->
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+                          [disabled]="column.locked"
+                          (change)="onAttendanceChange($event, element, column.name)">
+          {{
+  element[column.name] === 'H'
+    ? 'Holiday'
+    : (element[column.name] === 'P' ? 'Present' : 'Absent')
+          }}
+        </mat-slide-toggle>-->
+          <!--<mat-slide-toggle [checked]="element[column.name] === 'P'"
+                            [disabled]="isColumnLocked(column.name)"
+                            (change)="onAttendanceChange($event, element, column.name)">
+            {{
+  element[column.name] === 'H'
+    ? 'Holiday'
+    : (element[column.name] === 'P' ? 'Present' : 'Absent')
+            }}
+          </mat-slide-toggle>
+        </td>
+      </ng-container>-->
+
+
+
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        </table>
+      </div>
+
+
+
+
+      <div class="table-footer">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2">
+          <div>
+            <button mat-raised-button class="custom-button" type="button"
+                    (click)="saveAttendance()" *ngIf="filterData && filterData.length > 0">
+              Save
+            </button>
+          </div>
+          <div class="flex justify-end flex-wrap items-center">
+            <mat-paginator [length]="totalRecords"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="[10,20,50,100,500,1000]"
+                           (page)="onPaginationChange($event)">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+

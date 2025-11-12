@@ -115,5 +115,22 @@ export class AttendanceServiceService {
     ).toPromise();
   }
 
- 
+  public async GetStudentAttendanceTLC(model: any) {
+    return await this.http.post(this.APIUrl + '/GetStudentAttendanceTLC', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async SaveStudentAttendanceTLC(model: any) {
+    return await this.http.post(this.APIUrl + '/SaveStudentAttendanceTLC', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
+  public async GetReAttendanceTimeTable(model: any) {
+    return await this.http.post(this.APIUrl + '/GetReAttendanceTimeTable', model, this.headersOptions).pipe(
+      catchError(this.handleErrorObservable)
+    ).toPromise();
+  }
+
 }

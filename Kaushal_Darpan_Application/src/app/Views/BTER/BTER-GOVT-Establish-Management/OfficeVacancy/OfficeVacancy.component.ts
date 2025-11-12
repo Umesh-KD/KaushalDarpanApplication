@@ -204,7 +204,8 @@ export class OfficeVacancyComponent implements OnInit {
       DesignationName: getdesignation.Name,
       InstituteName: getinstituteName,
       StaffTypeName: getstaffType.Name,
-      PostedSeat:0,
+      PostedSeat: 0,
+      PlanningID:0,
       Index: this.tempIndex++
     };
 

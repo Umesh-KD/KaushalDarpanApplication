@@ -491,6 +491,25 @@ export class AttendanceTimeTableComponent implements OnInit {
       //this.clearValidationErrors();
     }
   }
+  //AttendanceData(rowData: any) {
+  //  if (rowData) {
+  //    const routePath =
+  //      rowData.ATType === 0
+  //        ? 'student-attendance'
+  //        : 'ReAssignTeacherLCAttendance';
+
+  //    if (rowData.StreamID != null) {
+  //      this.router.navigate([
+  //        routePath,
+  //        rowData.StreamID,
+  //        rowData.SemesterID,
+  //        rowData.SubjectID,
+  //        rowData.SectionID
+  //      ]);
+  //    }
+  //  }
+  //}
+
   AttendanceData(rowData: any) {
     if (rowData != null && rowData != undefined) {
       if (rowData.StreamID != null) {

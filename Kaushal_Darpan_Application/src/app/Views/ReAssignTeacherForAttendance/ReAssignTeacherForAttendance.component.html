@@ -1,0 +1,202 @@
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i>  Re-Assign Teacher For Attendance  </b>
+      <!--<a routerLink="/roster-display" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+    </div>
+    <!--<div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>-->
+
+
+    <form [formGroup]="TableForm" class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
+
+      <!-- SSOID -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSOID</label>
+        <input type="text" class="form-input" formControlName="SSOID" [(ngModel)]="filterModel.SSOID" placeholder="Enter SSOID" />
+        <div *ngIf="isSubmitted && formTable.SSOID.errors" class="text-danger text-sm mt-1">
+          <p *ngIf="formTable.SSOID.errors.required">This field is required.</p>
+        </div>
+      </div>
+
+      <!-- From Date -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date</label>
+        <input type="date" class="form-input" formControlName="From_Date" [(ngModel)]="filterModel.From_Date" />
+        <div *ngIf="isSubmitted && formTable.From_Date.errors" class="text-danger text-sm mt-1">
+          <p *ngIf="formTable.From_Date.errors.required">This field is required.</p>
+        </div>
+      </div>
+
+      <!-- To Date -->
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date</label>
+        <input type="date" class="form-input" formControlName="To_Date" [(ngModel)]="filterModel.To_Date" />
+        <div *ngIf="isSubmitted && formTable.To_Date.errors" class="text-danger text-sm mt-1">
+          <p *ngIf="formTable.To_Date.errors.required">This field is required.</p>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div>
+        <button type="submit" (click)="ReAssignTeacherForAttendance()" class="btn bg-info text-white mt-6">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="resetForm()">
+          <i class="ti ti-refresh"></i> Reset
+        </button>
+      </div>
+
+    </form>
+    <div class="flex justify-between flex-wrap items-center mt-3 mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-end flex-wrap items-center">
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="ReAssignTeacherFor(MyModel_ReAssignTeacherFor)">
+          <i class="ti ti-device-floppy"></i>Save
+        </a>
+      </div>
+
+
+    </div>
+    <!--{{filterData|json}}-->
+    <!--Table-->
+    <!--<div class="mat-elevation-z8 table-responsive">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8" *ngIf="this.filterData.length > 0">-->
+    <!--Dynamic columns-->
+    <!--<ng-container *ngFor="let column of columnSchema; trackBy: trackByFn" [matColumnDef]="column.key">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+      {{ column.label }}
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container [ngSwitch]="column.key">-->
+    <!--Action Column-->
+    <!--<ng-container *ngSwitchCase="'Action'">
+          <mat-checkbox [(ngModel)]="element.isSelected"
+                        (change)="onRowChecked(element)">
+          </mat-checkbox>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'AttendanceDate'">
+          {{ element[column.key] | date }}
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ element[column.key] }}
+        </ng-container>
+
+
+      </ng-container>
+    </td>
+  </ng-container>-->
+    <!--Table Rows-->
+    <!--<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    </table>
+  </div>-->
+   
+
+    <div class="mat-elevation-z8 table-responsive">
+      <table mat-table
+             [dataSource]="dataSource"
+             matSort
+             class="mat-elevation-z8"
+             *ngIf="filterData.length > 0">
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let column of columnSchema; trackBy: trackByFn"
+                      [matColumnDef]="column.key">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            {{ column.label }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <ng-container [ngSwitch]="column.key">
+              <!-- Action Column -->
+              <ng-container *ngSwitchCase="'Action'">
+                <mat-checkbox [(ngModel)]="element.isSelected"
+                              (change)="onRowChecked(element)">
+                </mat-checkbox>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="'AttendanceDate'">
+                {{ element[column.key] | date }}
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                {{ element[column.key] }}
+              </ng-container>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">
+      No Record Found
+    </div>
+
+    <!-- Pagination Controls -->
+    <mat-paginator [pageSize]="pageSize"
+                   [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
+                   [length]="totalRecords"
+                   (page)="onPaginationChange($event)">
+    </mat-paginator>
+  </div>
+
+</div>
+
+
+<ng-template #MyModel_ReAssignTeacherFor let-modal
+             class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="ReAssignTeacherFormGroup" id="ReAssignTeacherFormGroup" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Edit Assign Teacher For Attendance</b>
+          <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5">Basic Details</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSOID</label>
+              <input type="text" class="form-input" formControlName="SSOID" [(ngModel)]="ReAssignSaveData.SSOID" placeholder="Enter SSOID" />
+              <div *ngIf="isSubmitted && _ReAssignTeacherFormGroup.SSOID.errors" class="text-danger text-sm mt-1">
+                <p *ngIf="_ReAssignTeacherFormGroup.SSOID.errors.required">This field is required.</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">From Date</label>
+              <input type="date" class="form-input" formControlName="From_Date" [(ngModel)]="ReAssignSaveData.From_Date" />
+              <div *ngIf="isSubmitted && _ReAssignTeacherFormGroup.From_Date.errors" class="text-danger text-sm mt-1">
+                <p *ngIf="_ReAssignTeacherFormGroup.From_Date.errors.required">This field is required.</p>
+              </div>
+            </div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">To Date</label>
+              <input type="date" class="form-input" formControlName="To_Date" [(ngModel)]="ReAssignSaveData.To_Date" />
+              <div *ngIf="isSubmitted && _ReAssignTeacherFormGroup.To_Date.errors" class="text-danger text-sm mt-1">
+                <p *ngIf="_ReAssignTeacherFormGroup.To_Date.errors.required">This field is required.</p>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer flex justify-end items-center gap-2 bg-light py-3 px-3">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="CloseModal()">
+              <i class="ti ti-x"></i> Cancel
+            </button>
+            <button type="button" class="btn bg-info btn-sm text-white" (click)="ReAssignTeacherForSaveLC()">
+              <i class="ti ti-device-floppy"></i> Save
+            </button>
+          </div>
+
+        </div>
+        </div>
+    </form>
+
+
+  </div>
+
+</ng-template>
+
+

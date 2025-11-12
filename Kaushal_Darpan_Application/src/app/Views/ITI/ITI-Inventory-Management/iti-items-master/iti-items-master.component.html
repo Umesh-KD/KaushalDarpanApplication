@@ -132,7 +132,7 @@
             </td>
             <td align="left">{{item.InitialQuantity}}</td>
             <td align="left">
-              @if (item.Status != 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT) && sSOLoginDataModel.InstituteID == item.InstituteID)
+              @if (item.Status != 0 && item.IsConsumable == 0 && (sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_NCVT || sSOLoginDataModel.RoleID == EnumRole.StoreKeeper_SCVT) && sSOLoginDataModel.InstituteID == item.InstituteID)
               {
               <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)">
                 {{item.AvailableQuantity}}

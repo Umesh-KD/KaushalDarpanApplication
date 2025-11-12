@@ -104,7 +104,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-admin-dashboard-scvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-scvt>
 <app-admin-dashboard-ncvt *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.ITIADMINISTRATIVEOFFICER "></app-admin-dashboard-ncvt>  <!--// New Dashboard Create for ITI NCVT-->
 <app-registrar-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Registrar || this.sSOLoginDataModel.RoleID == _EnumRole.Registrar_NonEng "></app-registrar-dashboard>
-<app-it-support-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport || this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport "></app-it-support-dashboard>
+<!--<app-it-support-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport || this.sSOLoginDataModel.RoleID == _EnumRole.ITSupport "></app-it-support-dashboard>-->
 <app-student-section-incharge *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StudentSectionincharge || this.sSOLoginDataModel.RoleID == _EnumRole.StudentSectioninchargeNonEng "></app-student-section-incharge>
 <app-secretary-jd-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Secretary_JD || this.sSOLoginDataModel.RoleID == _EnumRole.Secretary_JD_NonEng"></app-secretary-jd-dashboard>
 <app-secretary-jd-confidential-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_Eng || this.sSOLoginDataModel.RoleID == _EnumRole.JDConfidential_NonEng"></app-secretary-jd-confidential-dashboard>
@@ -120,7 +120,7 @@ this.sSOLoginDataModel.RoleID== _EnumRole.ITIPrivateTeacher
 <app-iti-secretary-jd-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.Secretary_JD_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.Secretary_JD_SCVT"></app-iti-secretary-jd-dashboard>
 <app-itipaper-setter-professor-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITIProfessor_SCVT"></app-itipaper-setter-professor-dashboard>   <!--// Professor Role set-->
 <app-iti-inventory-management-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper_NCVT || this.sSOLoginDataModel.RoleID == _EnumRole.StoreKeeper_SCVT || this.sSOLoginDataModel.RoleID == _EnumRole.DTETrainingT3Purchase"></app-iti-inventory-management-dashboard>
-<app-iti-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_Admin || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_Admin"></app-iti-placement-dashboard>
+<app-iti-placement-dashboard *ngIf="this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_Admin || this.sSOLoginDataModel.RoleID == _EnumRole.ITI_Placement_TPO"></app-iti-placement-dashboard>
 
 <!--ITI END-->
 }

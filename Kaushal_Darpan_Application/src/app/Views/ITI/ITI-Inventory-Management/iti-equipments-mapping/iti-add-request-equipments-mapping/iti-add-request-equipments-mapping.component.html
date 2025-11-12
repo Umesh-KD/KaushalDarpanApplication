@@ -79,8 +79,8 @@
             </p>
           </div>
         </div>
-        <div>
-         
+        
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Quantity: <span class="StarMarking">*</span><span> Unit:1</span>
@@ -103,9 +103,49 @@
                 Quantity must be greater than 0.!
               </p>
             </div>
+          </div> 
+          <div>
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Description / Remarks: <span class="StarMarking">*</span>
+              </label>
+              <input type="text" placeholder="Description" class="form-input" id="txtRemarks" name="txtRemarks" formControlName="txtRemarks" [(ngModel)]="request.Remarks">
+              <div *ngIf="isSubmitted && _RequestFormGroup.txtRemarks.errors" class="text-danger">
+                <p *ngIf="_RequestFormGroup.txtRemarks.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+            </div>
           </div>
-
-        </div>
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="fileIndentPhoto">Upload Indent Document<span class="StarMarking">*</span></label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="fileIndentPhoto" type="file"
+                     (change)="UploadDocument($event, FileName, Dis_FileName)" formControlName="fileIndentPhoto">
+              <label for="fileIndentPhoto">
+                <span>Choose File</span>
+                {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
+              </label>
+              <div class="flex">
+                <a href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIIssuesIndent/' + FileName }}"
+                   *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
+                  <i class="ti ti-eye"></i>
+                </a>
+                <a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                   *ngIf="this.FileName!=''" (click)="DeleteDocument(FileName)">
+                  <i class="ti ti-trash"></i>
+                </a>
+              </div>
+              <div *ngIf="isSubmitted && _RequestFormGroup.fileIndentPhoto?.errors" class="text-danger">
+                <p *ngIf="_RequestFormGroup.fileIndentPhoto?.errors?.required">
+                  <i aria-hidden="true"></i>Upload Indent Document is required.!
+                </p>
+              </div>
+            </div>
+          </div>
+        <!--</div>-->
         <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
           <div class="text-center">
             <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
@@ -188,6 +228,8 @@
             <th class="text-left">Category</th>
             <th class="text-left">Equipment</th>
             <th class="text-left">Quantity</th>
+            <th>Description / Remarks</th>
+            <th>Indent Document</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -198,11 +240,16 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{ item.Quantity}}</td>
+            <td align="left">{{ item.Remarks}}</td>
+            <td align="left">
+              <a *ngIf="item.FileName" href="{{ appsettingConfig.StaticFileRootPathURL + 'ITIIssuesIndent/' + item.FileName }}" class="btn bg-primary text-white m-0" target="_blank">
+                {{item.FileName}}
+              </a>
+            </td>
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a *ngIf="(sSOLoginDataModel.OfficeID == 2 && item.EquipmentsStatus == 'Accept') || (sSOLoginDataModel.RoleID == 218 && item.EquipmentsStatus == 'Accept')"
-                   [routerLink]="['/iti-request-equipments-mapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity,item.OfficeID
-      ]"
+                   [routerLink]="['/iti-request-equipments-mapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity,item.OfficeID,item.TE_MappingId,item.FileName]"
                    title="Edit">
                   <i class="ti ti-pencil"></i>
                   <!--[routerLink]="['/iti-request-equipments-mapping', item.InstituteId, item.CategoryId, item.EquipmentId, item.Quantity]"    (item.InstituteId ? item.InstituteId : item.OfficeID)-->
