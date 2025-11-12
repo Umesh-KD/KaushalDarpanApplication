@@ -19,4 +19,5 @@ export class SanctionOrderDataModel {
   public ActiveDeactive: string = '';
   public DeleteStatus: boolean = false;
   public DepartmentID:number=0
+  public ParentID:number=0
 }

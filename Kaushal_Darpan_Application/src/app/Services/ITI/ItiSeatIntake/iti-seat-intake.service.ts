@@ -37,6 +37,14 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
 
+  public async GetAllDataPlanning(request: SeatIntakeSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetAllDataPlanning`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetAllData(request: SeatIntakeSearchModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions)
@@ -44,6 +52,7 @@ export class ItiSeatIntakeService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
 
   public async GetByID(id: number) {
     return await this.http.get(`${this.APIUrl}/GetByID/${id}`, this.headersOptions)

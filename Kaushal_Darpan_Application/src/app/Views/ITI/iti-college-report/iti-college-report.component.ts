@@ -76,6 +76,7 @@ export class ItiCollegeReportComponent {
   public ApplicationID: number = 0;
   public searchrequest = new BterSearchmodel()
   public GenderList: any = ''
+  public ParentID: number =0
   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
 
@@ -107,6 +108,8 @@ export class ItiCollegeReportComponent {
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
         PanchayatDis: ['', Validators.required],
+        ItiCode: ['', Validators.required],
+        MISCode: ['', Validators.required],
         //SanctionOrderNo: ['', Validators.required],
         //SanctionOrderDate: ['', Validators.required],
         //TradeOrderNo: ['', Validators.required],
@@ -150,6 +153,11 @@ export class ItiCollegeReportComponent {
         AdministrativeeOrderNo: ['', Validators.required],
         AdministrativeOrderDate: ['', Validators.required],
         FinancialSanction: ['', Validators.required],
+        Ward: ['', Validators.required],
+        KhasraKhataNo: ['', Validators.required],
+        NodalItiCode: ['', Validators.required],
+        NodalIti: ['', Validators.required],
+        NodalPostAddresss: ['', Validators.required],
        Remarks: [''],     
         //FrontPhoto: [''],
         //SidePhoto: [''],
@@ -274,7 +282,9 @@ export class ItiCollegeReportComponent {
         'AdministrativeBodyId',
         'AdministrativeeOrderNo',
         'AdministrativeOrderDate',
-        'FinancialSanction'
+        'FinancialSanction',
+        'ItiCode',
+        'MISCode'
 
 
         
@@ -369,7 +379,7 @@ export class ItiCollegeReportComponent {
 /*    await this.GetParliamentITI()*/
     await this.GetDivisionMasterList()
     await this.GetLateralCourse()
-    await this.GetOrderList()
+/*    await this.GetOrderList()*/
 
     
   }
@@ -412,7 +422,7 @@ export class ItiCollegeReportComponent {
 
 
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData("OrderList")
+      await this.commonMasterService.GetCommonMasterData("OrderList", this.ParentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -613,12 +623,17 @@ export class ItiCollegeReportComponent {
 
                   break;
 
-                  break;
+             
                 case "WorkFSCopy":
                   this.request.WorkFSCopy = data['Data'][0]["FileName"];
 
                   break;
-                 
+
+                case "LeaseOrderCopy":
+                  this.request.LeaseOrderCopy = data['Data'][0]["LeaseOrderCopy"];
+
+                  break;
+
                 default:
                   break;
               }
@@ -784,8 +799,11 @@ export class ItiCollegeReportComponent {
         'LandAddress',
         'Pincode',
         'PanchayatDis',
-   
-    
+        'KhasraKhataNo',
+        'Ward',
+        'NodalIti',
+   'NodalItiCode',
+    'NodalPostAddresss'
      
       ];
 
@@ -823,8 +841,12 @@ export class ItiCollegeReportComponent {
         'LandAddress',
         'Pincode',
         'PanchayatDis',
-     
-     
+        'Ward',
+        'KhasraKhataNo',
+        'NodalIti'
+        , 'NodalItiCode',
+        'NodalPostAddresss'
+
  
       ];
 
@@ -984,7 +1006,7 @@ export class ItiCollegeReportComponent {
       await this.GetGramPanchayatSamiti()
       await this.villageMaster()
 
-      this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+ 
       this.ReportForm.get('GramPanchayatSamiti')?.setValue(parsedData['Data']["GramPanchayatSamiti"]);
       this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionID"]);
       this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictID"]);
@@ -993,15 +1015,17 @@ export class ItiCollegeReportComponent {
       this.ReportForm.get('Vidhansabha')?.setValue(parsedData['Data']["Vidhansabha"]);
       this.ReportForm.get('TehsilID')?.setValue(parsedData['Data']["TehsilID"]);
       this.ReportForm.get('CityID')?.setValue(parsedData['Data']["CityID"]);
-      this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+  
       this.ReportForm.get('VillageID')?.setValue(parsedData['Data']["VillageID"]);
       this.ReportForm.get('AdministrativeBodyId')?.setValue(parsedData['Data']["AdministrativeBodyId"]);
       this.ReportForm.get('UrbanRural')?.setValue(parsedData['Data']["UrbanRural"]);
       this.ReportForm.get('Pincode')?.setValue(parsedData['Data']["Pincode"]);
       /*  this.TradeSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 2)*/
-    /*  this.PostSanctionList = this.request.OrderDetailsList*/
-
-
+      /*  this.PostSanctionList = this.request.OrderDetailsList*/
+      setTimeout(() => {
+        this.ReportForm.get('PanchayatId')?.setValue(parsedData['Data']["PanchayatId"]);
+        this.request.PanchayatId = parsedData['Data']['PanchayatId'];
+      }, 300);
      
 /*      this.MetpSanctionList = this.request.OrderDetailsList.filter((e: any) => e.OrderType == 3)*/
       console.log(parsedData);
@@ -1010,7 +1034,7 @@ export class ItiCollegeReportComponent {
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
-      }, 200);
+      }, 4000);
     }
   }
 
@@ -1129,7 +1153,7 @@ export class ItiCollegeReportComponent {
   }
 
 
-  openOTP() {
+ async openOTP() {
     debugger
 
     this.nonItiValidator()
@@ -1176,6 +1200,18 @@ export class ItiCollegeReportComponent {
     }
 
     this.NewReportFormGroup.controls['TakenOverDate'].updateValueAndValidity();
+
+    Object.keys(this.ReportForm.controls).forEach(key => {
+      const control = this.ReportForm.get(key);
+
+      if (control && control.invalid) {
+        this.toastr.error(`Control ${key} is invalid`);
+        Object.keys(control.errors!).forEach(errorKey => {
+          this.toastr.error(`Error on control ${key}: ${errorKey} - ${control.errors![errorKey]}`);
+        });
+      }
+    });
+
     this.isSubmitted = true;
     if (this.ReportForm.invalid) {
       return
@@ -1268,16 +1304,16 @@ export class ItiCollegeReportComponent {
 
 
 
-    if (this.request.FinancialCopy == '') {
-      this.toastr.warning("Please Add Financial Sanction Order Copy")
-      return
-    }
+    //if (this.request.FinancialCopy == '') {
+    //  this.toastr.warning("Please Add Financial Sanction Order Copy")
+    //  return
+    //}
     if (this.request.AdministrativeCopy == '') {
       this.toastr.warning("Please Add Administrative Order Copy")
       return
     }
 
-    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.PostSanctionList.length < 1) {
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin && this.request.OrderDetailsList.length < 1) {
       this.toastr.warning("Please Add ITI sanction Details")
       return
     }
@@ -1291,13 +1327,24 @@ export class ItiCollegeReportComponent {
     //  return
     //}
 
-    this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-    this.childComponent.OpenOTPPopup();
+      this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+      // await for open model
+      await this.childComponent.OpenOTPPopup();
+      // await OTP verification
+      await this.childComponent.waitForVerification();
 
-    this.childComponent.onVerified.subscribe(() => {
-      //this.PublishTimeTable();
-      this.SaveData();
-    })
+      // do work
+    await this.SaveData();
+    
+
+
+    //this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    //this.childComponent.OpenOTPPopup();
+
+    //this.childComponent.onVerified.subscribe(() => {
+    //  //this.PublishTimeTable();
+    //  this.SaveData();
+    //})
   }
 
   onYearInput(event: any) {
@@ -1703,7 +1750,7 @@ export class ItiCollegeReportComponent {
 
    // const OrderTypeName = this.OrderList.find((e: any) => e.ID == this.request.OrderType)?.Name || '';
 
-
+   
 
    // this.PostSanctionList.push({
 
@@ -1947,6 +1994,9 @@ export class ItiCollegeReportComponent {
        
         this.request.UrbanRural = parsedData['Data']["UrbanRural"]
         this.request.Pincode = parsedData['Data']["Pincode"]
+        this.request.Pincode = parsedData['Data']["Pincode"]
+        this.request.ItiCode = parsedData['Data']["Code"]
+        this.request.MISCode = parsedData['Data']["DgetCode"]
       
         this.ReportForm.get('DivisionID')?.setValue(parsedData['Data']["DivisionId"]);
         this.ReportForm.get('DistrictID')?.setValue(parsedData['Data']["DistrictId"]);
