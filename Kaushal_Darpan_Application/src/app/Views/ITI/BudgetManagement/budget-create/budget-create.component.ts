@@ -29,6 +29,7 @@ export class BudgetCreateComponent {
   public ddlBudgetTypeList: any = [];
   public SessionYearList: any = [];
   public BudgetHeadList: any = [];
+  public BudgetHeadDDL: any = [];
 
   _EnumRole = EnumRole;
 
@@ -56,6 +57,7 @@ export class BudgetCreateComponent {
     })
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetBudgetTypeDDL();
+    await this.GetBudgetHeadDDL();
     await this.GetSessionYear();
   }
 
@@ -74,6 +76,30 @@ export class BudgetCreateComponent {
       console.error(error);
     }
   }
+
+  async GetBudgetHeadDDL() {
+    try {
+      this.ddlSearchRequest.Action = EnumITIBudgetDDLAction.GetBudgetHeadDDL
+      await this.budgetCreateService.GetITIBudgetDropdown(this.ddlSearchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.BudgetHeadDDL = data.Data
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  onUnitWiseChange(index: number) {
+    const item = this.BudgetHeadList[index];
+    const headDetails = this.BudgetHeadDDL.find((head: any) => head.HeadID == item.HeadID);
+    if (headDetails) {
+      item.IsUnitWise = headDetails.IsUnitWise;
+      item.UnitName = headDetails.IsUnitWise ? headDetails.UnitName : ''; // Reset UnitName if IsUnitWise is false
+    }
+  }
+
 
   async GetSessionYear() {
     try {

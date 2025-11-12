@@ -784,6 +784,24 @@
                      [(ngModel)]="requestStudent.AadharNo">
             </div>
 
+            <div>
+              <label for="txtAbc" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                ABC ID <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc"
+                     [(ngModel)]="requestStudent.ABCID">
+              <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
+                <p *ngIf="EditStudentDataform.txtAbc.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required .!
+                </p>
+                <p *ngIf="EditStudentDataform.txtAbc.errors.zeroValue">
+                  <i aria-hidden="true"></i>  This field is
+                  required .!
+                </p>
+              </div>
+            </div>
+
 
             <div>
               <label for="txtBhamashahNo" class="text-gray-800 text-sm font-medium inline-block mb-1">

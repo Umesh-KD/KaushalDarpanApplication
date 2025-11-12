@@ -337,6 +337,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     this.emitraRequest = new EmitraRequestDetails();
     //Set Parameters for emitra
     this.emitraRequest.Amount = Number(item.FeeAmount);
+    this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
     this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
     this.emitraRequest.ServiceID = item.ServiceID.toString();
     this.emitraRequest.UserName = item.StudentName;

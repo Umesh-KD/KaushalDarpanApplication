@@ -174,6 +174,7 @@ export class StudentEnrollmentComponent {
         txtDOB: [{ value: '', disabled: true }, Validators.required],
         txtEmail: [''],
         txtAadharNo: [{ value: '', disabled: true },],
+        txtAbc: [{ value: ''}, Validators.required],
         txtBhamashahNo: [{ value: '', disabled: true },],
         JanAadharNo: [{ value: '', disabled: true },],
         txtAddress: [''],
