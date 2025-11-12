@@ -66,7 +66,7 @@ export class AddSanctionOrderComponent {
     this.ScholarshipID = Number(this.activatedRoute.snapshot.queryParamMap.get('SanctionID')?.toString());
     this.key = Number(this.activatedRoute.snapshot.queryParamMap.get('key')?.toString());//student list key
 
-    await this.GetOrderList()
+/*    await this.GetOrderList()*/
 
 
     if (this.ScholarshipID > 0) {
@@ -101,7 +101,7 @@ export class AddSanctionOrderComponent {
 
 
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData("OrderList")
+      await this.commonMasterService.GetCommonMasterData("OrderList", this.request.ParentID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
@@ -164,6 +164,12 @@ export class AddSanctionOrderComponent {
         this.toastr.warning("Please Add Order Copy")
         return
       }
+
+      if (this.request.ParentID ==0) {
+        this.toastr.warning("Please Select Sanction Type")
+        return
+      }
+
     this.isSubmitted = true;
     //  if (this.ScholarshipFormGroup.invalid) {
     //    return

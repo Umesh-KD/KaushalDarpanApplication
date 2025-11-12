@@ -21,6 +21,9 @@ export class ItiReportDataModel {
   public AdministrativeOrderDate:string=''
   public ApproachRoad:string=''
   public InternalRoad:string=''
+  public ItiCode:string=''
+  public NodalIti:string=''
+  public MISCode:string=''
   public WaterSupply:string=''
   public Harvesting:string=''
   public ElectPhase:string=''
@@ -102,12 +105,17 @@ export class ItiReportDataModel {
   public WorkSanctionCopy:string=''
   public UpdatePercentWork:string=''
   public UpdateRemarks: string = ''
+  public NodalItiCode: string = ''
+  public LeaseOrderCopy: string = ''
+  public NodalPostAddresss: string = ''
+  public Ward: string = ''
   public OrderTypeID:number=0
 
 }
 
 export class ItiSanctionOrderList {
   public SanctionID :number=0
+  public ParentID :number=0
   public OrderType :number=0
   public InstituteID :number=0
   public ModifyBy :number=0

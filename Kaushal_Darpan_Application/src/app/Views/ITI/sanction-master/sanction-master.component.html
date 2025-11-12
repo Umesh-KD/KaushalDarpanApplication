@@ -23,6 +23,20 @@
           </div>
           <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
 
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
+              <select class="form-select" id="CollegeID" [(ngModel)]="request.ParentID"  formControlName="ParentID">
+                <option value="0">--Select--</option>
+                <option value="1">Administrative Sanction</option>
+                <option value="2">Financial Sanction</option>
+                <!--<option *ngFor="let item of OrderList" [value]="item.ID">{{item.Name}}</option>-->
+              </select>
+              <div *ngIf="isSubmitted&&form.ParentID.errors" class="text-danger">
+                <p *ngIf="!form.ParentID.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required .!</p>
+              </div>
+            </div>
+
             <div>
               <label for="txtRoleName" class="text-gray-800 text-sm font-medium inline-block mb-2">Name<span class="StarMarking">*</span></label>
               <input type="text" class="form-input" placeholder="Enter Name" id="txtRoleName" name="txtRoleName" formControlName="txtRoleName" [(ngModel)]="request.Name">
@@ -75,6 +89,7 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th width="80px" align="left">Sr. No.</th>
+              <th align="left">Type</th>
               <th align="left">Name</th>
               <th align="left">Status</th>
               <th align="center" width="200">Action</th>
@@ -83,6 +98,7 @@
           <tbody>
             <tr *ngFor="let row of RoleMasterList | tableSearchFilter:Table_SearchText;let idx=index;">
               <td>{{idx+1}}</td>
+              <td>{{row.ParentName}}</td>
               <td>{{row.Name}}</td>
               <td>{{row.Status}}</td>
               <td>

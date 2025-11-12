@@ -27,6 +27,18 @@
 
 
       <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Sanction Type: <span class="StarMarking">*</span></label>
+        <select class="form-select" id="CollegeID" [(ngModel)]="request.ParentID" (change)="GetOrderList()">
+       
+          <option value="0">--Select--</option>
+          <option value="1">Administrative Sanction</option>
+          <option value="2">Financial Sanction</option>
+        </select>
+
+      </div>
+
+
+      <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Order Type: <span class="StarMarking">*</span></label>
         <select class="form-select" id="CollegeID" [(ngModel)]="request.OrderType">
           <option value="0">--Select--</option>
@@ -79,7 +91,7 @@
       <div class="col-span-3 text-center">
         <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
         <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()"><i class="ti ti-refresh"></i> Reset</button>
-      </div>  
+      </div>
 
 
 
