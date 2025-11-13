@@ -12,6 +12,7 @@ import { LoaderService } from '../../../../Services/Loader/loader.service';
 
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { ITIPlacementStudentService } from '../../../../Services/ITI/ITIPlacementStudent/iti-placement-student.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-iticampus-post-list',
@@ -29,6 +30,7 @@ export class ItiCampusPostListComponent {
   public CompanyMasterList: any = [];
   public CompanyID: number = 0;
   public InstituteID: number = 0;
+   public RoleID: number = 0;
   public ApprovedStatus: string = "0";
   public searchrequest = new StudentConsentSearchModel()
   request = new ItiCampusPostMasterModel();
@@ -38,17 +40,20 @@ export class ItiCampusPostListComponent {
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
   closeResult: string | undefined;
+  public flagName:string="TotalNoOfCampus";
 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public TodayDate = new Date()
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ItiCampusPostService, private loaderService: LoaderService,
-    private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: ITIPlacementStudentService) {
+    private modalService: NgbModal,private route: ActivatedRoute, private formBuilder: FormBuilder, private toastr: ToastrService, private Swal2: SweetAlert2, private placemenrservice: ITIPlacementStudentService) {
   }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.flagName = this.route.snapshot.queryParamMap.get('flag') ?? 'TotalNoOfCampus';
+
     await this.GetMasterData();
     await this.btn_SearchClick();
   }
@@ -74,11 +79,13 @@ export class ItiCampusPostListComponent {
   }
 
   async btn_SearchClick() {
+    debugger
     try {
       this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       this.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.RoleID = this.sSOLoginDataModel.RoleID;
       this.loaderService.requestStarted();
-      await this.campusPostService.GetAllData(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID)
+      await this.campusPostService.GetAllData(this.CompanyID, this.InstituteID, this.ApprovedStatus, this.sSOLoginDataModel.DepartmentID,this.RoleID,this.flagName)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];

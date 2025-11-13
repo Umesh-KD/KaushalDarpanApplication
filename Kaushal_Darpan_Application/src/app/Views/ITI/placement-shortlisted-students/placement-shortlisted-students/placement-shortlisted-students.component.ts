@@ -187,6 +187,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
         return; // Exit the method if no checkbox is selected
       }
 
+      debugger
       //
       this.StudentList.forEach(x => {
         x.ModifyBy = this.sSOLoginDataModel.UserID;
