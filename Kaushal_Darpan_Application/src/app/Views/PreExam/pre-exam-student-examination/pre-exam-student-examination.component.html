@@ -374,7 +374,7 @@
                    title="Edit Student Enrollment" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
                 </a>
-                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID)" class="bg-gray-200"
+                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID) && this.sSOLoginDataModel.Eng_NonEng==_EnumCourseType.Engineering" class="bg-gray-200"
                    title="Assign Optional Subject" (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID,row.StudentExamID)">
                   <i class="fa fa-file-o"></i>
                 </a>
