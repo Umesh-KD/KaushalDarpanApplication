@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { EnumFileUpload, EnumRole, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../Common/GlobalConstants';
 import { ForSMSEnrollmentStudentMarkedModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
+import { DropdownValidators, notZeroValidator } from '../../Services/CustomValidators/custom-validators.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { StudentEnrollmentService } from '../../Services/studentenrollment/student-enrollment.service';
@@ -174,7 +174,8 @@ export class StudentEnrollmentComponent {
         txtDOB: [{ value: '', disabled: true }, Validators.required],
         txtEmail: [''],
         txtAadharNo: [{ value: '', disabled: true },],
-        txtAbc: [{ value: ''}, Validators.required],
+        //txtAbc: [{ value: '' }, Validators.required],
+        txtAbc: ['', [Validators.required, notZeroValidator()]],
         txtBhamashahNo: [{ value: '', disabled: true },],
         JanAadharNo: [{ value: '', disabled: true },],
         txtAddress: [''],

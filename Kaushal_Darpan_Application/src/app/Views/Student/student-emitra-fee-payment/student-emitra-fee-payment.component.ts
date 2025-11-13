@@ -157,6 +157,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     if (this.searchssoform.invalid) {
       return
     }
+    debugger
     this.isShowGrid = true;
     this.searchRequest.action = "_PendingFeesForEmitra";
     this.searchRequest.MobileNumber == this.searchRequest.MobileNumber?.trim();

@@ -5,7 +5,7 @@ import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentM
 import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { PreExamStudentExaminationService } from '../../../Services/PreExamStudent/pre-exam-student-examination.service';
@@ -2788,5 +2788,5 @@ export class PreExamStudentExaminationComponent {
   toBoolean(value: any): boolean {
     return !!value;  // double NOT operator converts any value to true/false
   }
-
+  
 }
