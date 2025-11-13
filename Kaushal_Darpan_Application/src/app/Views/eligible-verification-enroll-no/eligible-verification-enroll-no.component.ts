@@ -20,6 +20,7 @@ import { GenerateEnrollData, GenerateEnrollSearchModel } from '../../Models/Gene
 import { EligibleStudentButPendingForVerification, StudentMarkedModel } from '../../Models/StudentMasterModels';
 import { GetEnrollService } from '../../Services/GenerateEnroll/generateEnroll.service';
 import { StudentDetailsViewModalComponent } from '../Student/student-details-view-modal/student-details-view-modal.component';
+import { StudentExamDetailsViewModalComponent } from '../Student/student-exam-details-view-modal/student-exam-details-view-modal.component';
 @Component({
   selector: 'app-eligible-verification-enroll-no',
   standalone: false,
@@ -72,8 +73,9 @@ export class EligibleVerificationEnrollNoComponent {
   public OTP: string = '';
   public GeneratedOTP: string = '';
 
-  @ViewChild('MyModel_ViewStudent') childComponent!: StudentDetailsViewModalComponent;
   @ViewChild('modal_GenrateOTP') modal_GenrateOTP: any;
+  @ViewChild('MyModel_ViewStudentExam') childComponentViewStudentExam!: StudentExamDetailsViewModalComponent;
+
   constructor(
     private commonMasterService: CommonFunctionService,
     private GetRollService: GetRollService,
@@ -856,9 +858,11 @@ export class EligibleVerificationEnrollNoComponent {
     }
   }
 
-  openViewStudentDetailsPopup(StudentID: number) {
+  async openViewStudentDetailsPopup(StudentID: number, StudentExamID: number) {
     //debugger
-    this.childComponent.StudentID = StudentID;
-    this.childComponent.OpenViewStudentDetailsPopup();
+    this.childComponentViewStudentExam.StudentID = StudentID;
+    this.childComponentViewStudentExam.StudentExamID = StudentExamID;
+    await this.childComponentViewStudentExam.OpenViewStudentExamDetailsPopup();
   }
+
 }
