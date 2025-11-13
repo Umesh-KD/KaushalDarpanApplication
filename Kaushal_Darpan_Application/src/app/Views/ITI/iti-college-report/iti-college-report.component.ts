@@ -35,6 +35,7 @@ export class ItiCollegeReportComponent {
   public _enumRole = EnumRole
   public CompanyMasterDDLList: any[] = [];
   public DivisionMasterList: any[] = [];
+  public DISCOM: any[] = [];
   public ItiDDLlist: any[] = [];
   public ParliamentMaster: any[] = [];
   public AssemblyMaster: any[] = [];
@@ -104,6 +105,10 @@ export class ItiCollegeReportComponent {
     this.ReportForm = this.formBuilder.group(
       {
         txtName: [''],
+        LandMark: [''],
+        AreaLocalitySector: [''],
+        StreetRoadLane: [''],
+        PlotHouseBuildingNo: ['', Validators.required],
         Loksabha: ['', Validators.required],
         LandAvailable: ['', Validators.required],
         Vidhansabha: ['', Validators.required],
@@ -130,7 +135,7 @@ export class ItiCollegeReportComponent {
         NoOfTree: ['', Validators.required],
         ElectPhaserequired: ['', Validators.required],
         LandTypeID: ['', Validators.required],
-        LandAddress: ['', Validators.required],
+        LandAddress: [''],
         Pincode: ['', Validators.required],
    
         ContractLoad: [''],
@@ -149,6 +154,7 @@ export class ItiCollegeReportComponent {
         CityID: ['', [DropdownValidators]],
         AdministrativeBodyId: ['', [DropdownValidators]],
         Category: ['', [DropdownValidators]],
+        Ownership: ['', [DropdownValidators]],
         CollegeID: ['',],
         AdministrativeeOrderNo: ['', Validators.required],
         AdministrativeOrderDate: ['', Validators.required],
@@ -158,7 +164,42 @@ export class ItiCollegeReportComponent {
         NodalItiCode: ['', Validators.required],
         NodalIti: ['', Validators.required],
         NodalPostAddresss: ['', Validators.required],
-       Remarks: [''],     
+        NodalOrderDate: ['', Validators.required],
+        NodalOrderNo: ['', Validators.required],
+        IsOperatingOwn: ['', Validators.required],
+        Remarks: [''],
+        PercentCivilWork: ['', Validators.required],
+        ConstructionAgency: ['', Validators.required],
+        SubDivOffice: ['', Validators.required],
+        ContractDemand: [''],
+        SanctionLoad: ['', Validators.required],
+        ConsumerName: ['', Validators.required],
+        ConnectionType: ['', [DropdownValidators]],
+        DISCOM: ['', [DropdownValidators]],
+        TakenOverDate: ['', Validators.required],
+        PDName: ['', Validators.required],
+        ContractorName: ['', Validators.required],
+        PDMobile: ['', Validators.required],
+        ContractorMobile: ['', Validators.required],
+        IsDispute: ['', Validators.required],
+        //AdministrativeeOrderNo: ['', Validators.required],
+        //AdministrativeOrderDate: ['', Validators.required],
+        //FinancialSanction: ['', Validators.required],
+
+        PercentCivilDate: ['', Validators.required],
+        IsPurposeHall: ['', Validators.required],
+        IsMainITI: ['', Validators.required],
+        IsBuildingTaken: ['', Validators.required],
+ 
+        ShilanyasDate: ['', Validators.required],
+        LokarpanDate: ['', Validators.required],
+        LokarpanName: ['', Validators.required],
+        LokarpanPost: ['', Validators.required],
+        ShilanyasPost: ['', Validators.required],
+        ShilanyasName: ['', Validators.required],
+        StartDate: ['', Validators.required],
+        CompleteDate: ['', Validators.required],
+      
         //FrontPhoto: [''],
         //SidePhoto: [''],
         //InteriorPhoto: [''],
@@ -189,6 +230,8 @@ export class ItiCollegeReportComponent {
 
         Remarks: [''],
 
+ 
+
         //FrontPhoto: [''],
         //SidePhoto: [''],
         //InteriorPhoto: [''],
@@ -199,7 +242,7 @@ export class ItiCollegeReportComponent {
 
 
     this.NewReportFormGroup = this.formBuilder.group({
-      ConstructionAgency: ['', Validators.required],
+    /*  ConstructionAgency: ['', Validators.required],*/
       PDName: ['', Validators.required],
       ContractorName: ['', Validators.required],
       PDMobile: ['', Validators.required],
@@ -214,7 +257,7 @@ export class ItiCollegeReportComponent {
       IsMainITI: ['', Validators.required],
       IsBuildingTaken: ['', Validators.required],
       TakenOverDate: ['', Validators.required],
-      IsOperatingOwn: ['', Validators.required],
+      IsOperatingOwn: [''],
       ShilanyasDate: ['', Validators.required],
       LokarpanDate: ['', Validators.required],
       LokarpanName: ['', Validators.required],
@@ -267,7 +310,7 @@ export class ItiCollegeReportComponent {
         'SanctionOrderNo',
         'SanctionOrderDate',
        
-        'PanchayatId',
+/*        'PanchayatId',*/
         'CollegeID',
         'txtYear',
         'Category',
@@ -275,17 +318,17 @@ export class ItiCollegeReportComponent {
         'DistrictID',
         'SubDivisionID',
         'TehsilID',
-        'UrbanRural',
-        'GramPanchayatSamiti',
-        'VillageID',
-        'CityID',
-        'AdministrativeBodyId',
+        //'UrbanRural',
+        //'GramPanchayatSamiti',
+        //'VillageID',
+        //'CityID',
+        //'AdministrativeBodyId',
         'AdministrativeeOrderNo',
         'AdministrativeOrderDate',
         'FinancialSanction',
         'ItiCode',
-        'MISCode'
-
+        'MISCode',
+        'ConstructionAgency'
 
         
       ];
@@ -301,14 +344,31 @@ export class ItiCollegeReportComponent {
       const controlsToUnfreeze = [
         'txtName',
         'Loksabha',
-        'LandAvailable',
+
         'Vidhansabha',
-        'PanchayatDis',
+
         'SanctionOrderNo',
         'SanctionOrderDate',
-   
+
+        /*        'PanchayatId',*/
         'CollegeID',
-        'txtYear'
+        'txtYear',
+        'Category',
+        'DivisionID',
+        'DistrictID',
+        'SubDivisionID',
+        'TehsilID',
+        //'UrbanRural',
+        //'GramPanchayatSamiti',
+        //'VillageID',
+        //'CityID',
+        //'AdministrativeBodyId',
+        'AdministrativeeOrderNo',
+        'AdministrativeOrderDate',
+        'FinancialSanction',
+        'ItiCode',
+        'MISCode',
+        'ConstructionAgency'
       ];
 
       controlsToUnfreeze.forEach(controlName => {
@@ -379,6 +439,7 @@ export class ItiCollegeReportComponent {
 /*    await this.GetParliamentITI()*/
     await this.GetDivisionMasterList()
     await this.GetLateralCourse()
+    await this.GetcOmmonData()
 /*    await this.GetOrderList()*/
 
     
@@ -630,7 +691,7 @@ export class ItiCollegeReportComponent {
                   break;
 
                 case "LeaseOrderCopy":
-                  this.request.LeaseOrderCopy = data['Data'][0]["LeaseOrderCopy"];
+                  this.request.LeaseOrderCopy = data['Data'][0]["FileName"];
 
                   break;
 
@@ -685,13 +746,13 @@ export class ItiCollegeReportComponent {
         return
       }
 
-      if (this.request.IsNewCollege == 1) {
-        if (this.NewReportFormGroup.invalid) {
+      //if (this.request.IsNewCollege == 1) {
+      //  if (this.NewReportFormGroup.invalid) {
 
-          return
-        }
+      //    return
+      //  }
 
-      }
+      //}
 
       //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIBuildingAdmin && this.request.FinancialSanctionList.length < 1 && this.request.IsNewCollege == 1) {
       //  this.toastr.warning("Please Add Financials sanction Details")
@@ -784,12 +845,12 @@ export class ItiCollegeReportComponent {
         'IsBoundaryWall',
         'WaterSupply',
         'ElectConnection',
-     
+
         'HostelUtilized',
         'NoOfTree',
         'ElectPhaserequired',
         'ContractLoad',
-        'BuildShortage',
+       
         'IsHostel',
         'PrincipleName',
         'PrincipleMobile',
@@ -802,8 +863,25 @@ export class ItiCollegeReportComponent {
         'KhasraKhataNo',
         'Ward',
         'NodalIti',
-   'NodalItiCode',
-    'NodalPostAddresss'
+        'NodalItiCode',
+        'NodalPostAddresss',
+
+        'NodalOrderNo',
+        'NodalOrderDate',
+        //'Ownership',
+        //'UrbanRural',
+        //'GramPanchayatSamiti',
+        //'VillageID',
+        //'CityID',
+        //'AdministrativeBodyId',
+        'PlotHouseBuildingNo',
+      'SubDivOffice',
+      
+      'ContractDemand',
+      'SanctionLoad',
+      'ConsumerName',
+      'ConnectionType'
+
      
       ];
 
@@ -831,23 +909,38 @@ export class ItiCollegeReportComponent {
         'NoOfTree',
         'ElectPhaserequired',
         'ContractLoad',
-        'BuildShortage',
+        
         'IsHostel',
         'PrincipleName',
         'PrincipleMobile',
         'PrincipleEmailID',
         'LandTypeID',
         'LandAvailable',
-        'LandAddress',
+     /*   'LandAddress',*/
         'Pincode',
         'PanchayatDis',
         'Ward',
         'KhasraKhataNo',
         'NodalIti'
         , 'NodalItiCode',
-        'NodalPostAddresss'
+        'NodalPostAddresss',
+        'NodalOrderNo',
+        'NodalOrderDate',
+        //'Ownership',
+        //'UrbanRural',
+        //'GramPanchayatSamiti',
+        //'VillageID',
+        //'CityID',
+        'AdministrativeBodyId',
+        'PlotHouseBuildingNo',
+        'SubDivOffice',
 
- 
+        'ContractDemand',
+        'SanctionLoad',
+        'ConsumerName',
+
+  
+
       ];
 
       requiredControls.forEach(controlName => {
@@ -858,7 +951,64 @@ export class ItiCollegeReportComponent {
         }
       });
     }
+
     if (this.sSOLoginDataModel.RoleID != EnumRole.ITIBuildingAdmin) {
+
+      const controlsToClear = [
+        //'TradeOrderNo',
+        //'TradeOrderDate',
+      
+       
+        'Ownership',
+        'UrbanRural',
+        'GramPanchayatSamiti',
+        'VillageID',
+        'CityID',
+        'AdministrativeBodyId',
+        'ConnectionType',
+        'DISCOM'
+
+
+      ];
+
+      controlsToClear.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.clearValidators();
+          control.updateValueAndValidity();
+        }
+      });
+
+    } else {
+      // If the user IS ITIBuildingAdmin — reapply required validators
+      const requiredControls = [
+   
+      
+        'Ownership',
+        'UrbanRural',
+        'GramPanchayatSamiti',
+        'VillageID',
+        'CityID',
+        'AdministrativeBodyId',
+
+        'ConnectionType',
+        'DISCOM'
+
+      ];
+
+      requiredControls.forEach(controlName => {
+        const control = this.ReportForm.get(controlName);
+        if (control) {
+          control.setValidators([DropdownValidators]);
+          control.updateValueAndValidity();
+        }
+      });
+    }
+
+
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin || this.request.IsNewCollege==0) {
 
       const controlsToClear = [
         'ShilanyasDate',
@@ -868,13 +1018,13 @@ export class ItiCollegeReportComponent {
         'ShilanyasPost',
         'ShilanyasName',
         'IsOperatingOwn',
-        'ConstructionAgency',
+     /*   'ConstructionAgency',*/
         'PDName',
         'ContractorName',
         'PDMobile',
         'ContractorMobile',
         'IsDispute',
-        'PercentCivilWork',
+         'PercentCivilWork',
         'PercentCivilDate',
         'IsPurposeHall',
         'IsMainITI',
@@ -888,7 +1038,7 @@ export class ItiCollegeReportComponent {
 
 
       controlsToClear.forEach(controlName => {
-        const control = this.NewReportFormGroup.get(controlName);
+        const control = this.ReportForm.get(controlName);
         if (control) {
           control.clearValidators();
           control.updateValueAndValidity();
@@ -905,7 +1055,7 @@ export class ItiCollegeReportComponent {
         'ShilanyasPost',
         'ShilanyasName',
         'IsOperatingOwn',
-        'ConstructionAgency',
+      /*  'ConstructionAgency',*/
         'PDName',
         'ContractorName',
         'PDMobile',
@@ -922,7 +1072,7 @@ export class ItiCollegeReportComponent {
       ];
 
       requiredControls.forEach(controlName => {
-        const control = this.NewReportFormGroup.get(controlName);
+        const control = this.ReportForm.get(controlName);
         if (control) {
           control.setValidators(Validators.required);
           control.updateValueAndValidity();
@@ -935,19 +1085,32 @@ export class ItiCollegeReportComponent {
       this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
       this.ReportForm.controls['VillageID'].setValidators([DropdownValidators]);
       this.ReportForm.controls['GramPanchayatSamiti'].setValidators([DropdownValidators]);
+      this.ReportForm.controls['PanchayatId'].setValidators([DropdownValidators]);
  
     } else {
       this.ReportForm.controls['CityID'].setValidators([DropdownValidators]);
       this.ReportForm.controls['AdministrativeBodyId'].setValidators([DropdownValidators]);
       this.ReportForm.controls['VillageID'].clearValidators();
       this.ReportForm.controls['GramPanchayatSamiti'].clearValidators();
+      this.ReportForm.controls['PanchayatId'].clearValidators();
 
     }
+
+    if (this.request.UrbanRural == 0) {
+      this.ReportForm.controls['VillageID'].clearValidators();
+      this.ReportForm.controls['GramPanchayatSamiti'].clearValidators();
+      this.ReportForm.controls['PanchayatId'].clearValidators();
+      this.ReportForm.controls['CityID'].clearValidators();
+      this.ReportForm.controls['AdministrativeBodyId'].clearValidators();
+    }
+
+
     this.ReportForm.controls['CityID'].updateValueAndValidity();
     this.ReportForm.controls['AdministrativeBodyId'].updateValueAndValidity();
     this.ReportForm.controls['VillageID'].updateValueAndValidity();
     this.ReportForm.controls['GramPanchayatSamiti'].updateValueAndValidity();
-
+    this.ReportForm.controls['PanchayatId'].updateValueAndValidity();
+   
 
   }
 
@@ -1194,12 +1357,12 @@ export class ItiCollegeReportComponent {
 
 
     if (this.request.IsBuildingTaken != 'Yes' || this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
-      this.NewReportFormGroup.controls['TakenOverDate'].clearValidators();
+      this.ReportForm.controls['TakenOverDate'].clearValidators();
     } else {
-      this.NewReportFormGroup.controls['TakenOverDate'].setValidators(Validators.required);
+      this.ReportForm.controls['TakenOverDate'].setValidators(Validators.required);
     }
 
-    this.NewReportFormGroup.controls['TakenOverDate'].updateValueAndValidity();
+   this.ReportForm.controls['TakenOverDate'].updateValueAndValidity();
 
     Object.keys(this.ReportForm.controls).forEach(key => {
       const control = this.ReportForm.get(key);
@@ -1217,13 +1380,13 @@ export class ItiCollegeReportComponent {
       return
     }
 
-    if (this.request.IsNewCollege == 1) {
-      if (this.NewReportFormGroup.invalid) {
+    //if (this.request.IsNewCollege == 1) {
+    //  if (this.NewReportFormGroup.invalid) {
 
-        return
-      }
+    //    return
+    //  }
 
-    }
+    //}
 
     //if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPlanningAdmin) {
     //  if (this.request.SanctionOrderCopy == '') {
@@ -1294,13 +1457,13 @@ export class ItiCollegeReportComponent {
  
    
   
-      if (this.request.IsNewCollege == 1) {
-        if (this.NewReportFormGroup.invalid) {
+    //  if (this.request.IsNewCollege == 1) {
+    //    if (this.NewReportFormGroup.invalid) {
 
-          return
-        }
+    //      return
+    //    }
 
-    }
+    //}
 
 
 
@@ -2150,6 +2313,27 @@ export class ItiCollegeReportComponent {
     }
   }
 
+  async GetcOmmonData() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterDDLByType('DISCOM')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          this.DISCOM = data['Data'];
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 
   }
