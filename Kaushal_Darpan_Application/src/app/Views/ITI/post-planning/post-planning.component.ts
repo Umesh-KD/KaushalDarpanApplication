@@ -1,36 +1,38 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
-import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
-import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { BTERGovtEMStaff_ServiceDetailsOfPersonalModel, BTERGovtEMStaffMasterDataModel, BTER_Govt_EM_ZonalOFFICERSSearchDataModel, UpdateSSOIDByPricipleModel, BTER_Govt_EM_PersonalDetailByUserIDSearchModel, Bter_RequestUpdateStatus, BTER_Govt_EM_ServiceDeleteModel, OfficeVacancyModel } from '../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
 /*import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';*/
-import { BTEREstablishManagementService } from '../../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
-import { LoaderService } from '../../../../Services/Loader/loader.service';
+import { BTEREstablishManagementService } from '../../../Services/BTER/BTER-EstablishManagement/bter-establish-management.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus } from '../../../../Common/GlobalConstants';
-import { SweetAlert2 } from '../../../../Common/SweetAlert2';
-import { ItiSeatIntakeService } from '../../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
-import { BTERCollegeTradeSearchModel } from '../../../../Models/ITI/SeatIntakeDataModel';
+import { EnumRole, EnumStatus, enumExamStudentStatus, EnumDepartment, EnumStatusOfStaff, EnumProfileStatus, EnumEMProfileStatus }
+  from '../../../Common/GlobalConstants';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-seat-intake.service';
+import { BTERCollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
+import { ITIGovtEMStaffMaster } from '../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
+import { ITIOfficeVacancyModel } from '../../../Models/ITIGovtEMStaffMasterDataModel';
 
 @Component({
-  selector: 'app-OfficeVacancy',
+  selector: 'app-post-planning',
   standalone: false,
-  
-  templateUrl: './OfficeVacancy.component.html',
-  styleUrl: './OfficeVacancy.component.css'
+  templateUrl: './post-planning.component.html',
+  styleUrl: './post-planning.component.css'
 })
-export class OfficeVacancyComponent implements OnInit {
+export class PostPlanningComponent {
   public AddOfficeVacancyForm!: FormGroup;
   public groupForm!: FormGroup;
-  public formData = new OfficeVacancyModel();
-  public SearchData = new OfficeVacancyModel();
+  public formData = new ITIOfficeVacancyModel();
+  public SearchData = new ITIOfficeVacancyModel();
   public isSubmitted: boolean = false;
+  public ItiCollegesListAll: any = [];
 
-
-  public deleteRequest = new OfficeVacancyModel();
+  public deleteRequest = new ITIOfficeVacancyModel();
 
   public isLoading: boolean = false;
 
@@ -47,7 +49,7 @@ export class OfficeVacancyComponent implements OnInit {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
-  public isModalOpen = false;  
+  public isModalOpen = false;
   public StaffLevelList: any = [];
   public StaffLevelChildList: any = [];
   public HostelList: any = [];
@@ -65,10 +67,10 @@ export class OfficeVacancyComponent implements OnInit {
   public GramPanchayatList: any = [];
   public City_VillageList: any = [];
   public PostingDirectRecruitment_PromotionList: any = [];
-  public CasteList: any = []; 
+  public CasteList: any = [];
   public QueryReqFormGroup!: FormGroup;
   public _EnumRole = EnumRole
-  public GetRoleID: number=0
+  public GetRoleID: number = 0
   OfficeVacancyList: OfficeVacancyModel[] = [];
   OfficeVacancy: OfficeVacancyModel[] = [];
   public ProfileStatus: number = 0;
@@ -82,7 +84,7 @@ export class OfficeVacancyComponent implements OnInit {
   public _EnumEMProfileStatus = EnumEMProfileStatus;
   public IsLockandSubmit: boolean = false;
 
-  constructor(private commonMasterService: CommonFunctionService, private BTER_EstablishManagementService: BTEREstablishManagementService, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
+  constructor(private commonMasterService: CommonFunctionService, private ITIGovtEMStaffMaster: ITIGovtEMStaffMaster, private toastr: ToastrService, private loaderService: LoaderService, private formBuilder: FormBuilder, private activatedRoute: ActivatedRoute, private routers: Router, private modalService: NgbModal, private Swal2: SweetAlert2,
     private ITICollegeTradeService: ItiSeatIntakeService
   ) {
 
@@ -92,7 +94,8 @@ export class OfficeVacancyComponent implements OnInit {
 
     this.AddOfficeVacancyForm = this.formBuilder.group({
       OfficeID: [0, [DropdownValidators]],
-      InstituteID: [0,[]],
+      ddlCollege: [0, [DropdownValidators]],
+      InstituteID: [0, []],
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
@@ -101,6 +104,7 @@ export class OfficeVacancyComponent implements OnInit {
 
     this.groupForm = this.formBuilder.group({
       OfficeID: [0, [DropdownValidators]],
+      ddlCollege: [0, [DropdownValidators]],
       InstituteID: [0, []],
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
@@ -109,12 +113,13 @@ export class OfficeVacancyComponent implements OnInit {
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    this.GetRoleID = this.sSOLoginDataModel.RoleID;    
+    this.GetRoleID = this.sSOLoginDataModel.RoleID;
+    await this.GetCollegesListAll();
     await this.OfficeVacancyDataList();
     await this.GetOfficeList();
     await this.GetInstitute();
     await this.GetStaffTypeData();
-   /* await this.GetPostList();*/
+    /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
   }
   get _AddOfficeVacancyForm() {
@@ -125,7 +130,7 @@ export class OfficeVacancyComponent implements OnInit {
   }
 
 
-  
+
   tempIndex: number = 1;
 
   async addOfficeVacancy() {
@@ -133,11 +138,14 @@ export class OfficeVacancyComponent implements OnInit {
     const formValues = this.AddOfficeVacancyForm.value;
 
     // Validate required fields before adding
-    if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID || !formValues.TotalSeatID) {
+    if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID
+      || !formValues.TotalSeatID
+      ||!formValues.ddlCollege
+    ) {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
     }
-    await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+    await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.OfficeList = data['Data'];
@@ -158,15 +166,15 @@ export class OfficeVacancyComponent implements OnInit {
     });
 
 
-    const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+    const data: any = await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID);
     this.PostList = data['Data'];
-    
 
-    const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
+
+    const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
 
-    
-   
+
+
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
 
     let getinstitute = [];
@@ -179,15 +187,16 @@ export class OfficeVacancyComponent implements OnInit {
 
     const getinstituteName = getinstitute.length > 0 ? getinstitute[0].InstituteName : '';
 
-    console.log(getinstituteName); 
+    console.log(getinstituteName);
 
-    const vacancyData: OfficeVacancyModel = {
+    const vacancyData: ITIOfficeVacancyModel = {
       Comments: formValues.Comments,
       DesignationID: formValues.DesignationID,
       InstituteID: formValues.InstituteID || 0,  // fallback if null
       OfficeID: formValues.OfficeID,
       StaffTypeID: formValues.StaffTypeID,
       TotalSeatID: formValues.TotalSeatID,
+      PlanningID: formValues.ddlCollege,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       CreatedBy: this.sSOLoginDataModel.UserID,
       DepartmentID: 1,
@@ -205,7 +214,6 @@ export class OfficeVacancyComponent implements OnInit {
       InstituteName: getinstituteName,
       StaffTypeName: getstaffType.Name,
       PostedSeat: 0,
-      PlanningID:0,
       Index: this.tempIndex++
     };
 
@@ -217,30 +225,51 @@ export class OfficeVacancyComponent implements OnInit {
 
     this.AddOfficeVacancyForm.reset(); // Reset form after adding
   }
+
+
+  async GetCollegesListAll() {
+
+    try {
+
+      await this.commonMasterService.GetCommonMasterData('PlanningCollege').then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.ItiCollegesListAll = data.Data
+        console.log(this.ItiCollegesListAll, "ItiCollegesListAll")
+      })
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
   async SaveData() {
     debugger;
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
-    
+
     if (this.OfficeVacancy.length === 0) {
       this.toastr.warning("Please add at least one valid vacancy before saving.");
       return;
     }
-   
+
     try {
       this.loaderService.requestStarted();
 
-      await this.BTER_EstablishManagementService.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
+      await this.ITIGovtEMStaffMaster.Save_M_OfficeVacancy_IU(this.OfficeVacancy).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
-          
+
           this.OfficeVacancy = [];
           this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
 
           window.location.reload();
-           // Clear array after successful save
+          // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
         }
@@ -257,9 +286,11 @@ export class OfficeVacancyComponent implements OnInit {
   }
 
 
+
+
   async removeLeave(index: number, ID: number) {
     debugger
-    
+
 
     if (ID === undefined || ID === null) {
       ID = 0;
@@ -280,7 +311,7 @@ export class OfficeVacancyComponent implements OnInit {
       try {
         this.deleteRequest.ID = ID;
         this.loaderService.requestStarted();
-        await this.BTER_EstablishManagementService.DeleteOfficeVacancy(this.deleteRequest).then((data: any) => {
+        await this.ITIGovtEMStaffMaster.DeleteOfficeVacancy(this.deleteRequest).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.toastr.success(data.Message);
@@ -300,36 +331,36 @@ export class OfficeVacancyComponent implements OnInit {
       }
     }
     else {
-     
+
     }
-   
+
   }
- 
 
 
-  
+
+
 
   ResetControl() {
     this.isSubmitted = false;
     this.formData = new OfficeVacancyModel();
-    
+
     //const btnSave = document.getElementById('btnSave');
     //if (btnSave) btnSave.innerHTML = "Submit";
   }
 
   async OfficeVacancyDataList() {
-   debugger
+    debugger
     try {
       this.loaderService.requestStarted();
       this.SearchData.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       this.SearchData.EndTermID = this.sSOLoginDataModel.EndTermID;
 
-      await this.BTER_EstablishManagementService.OfficeVacancyList(this.SearchData)
+      await this.ITIGovtEMStaffMaster.OfficeVacancyListPlanning(this.SearchData)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeVacancyList = data['Data'];
-          
-         
+
+
         }, error => console.error(error));
 
       console.log(this.OfficeVacancyList, "leaves data")
@@ -349,10 +380,10 @@ export class OfficeVacancyComponent implements OnInit {
 
   async GetOfficeList() {
     debugger;
-  
+
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+      await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.OfficeList = data['Data'];
@@ -389,9 +420,7 @@ export class OfficeVacancyComponent implements OnInit {
         data = JSON.parse(JSON.stringify(data));
 
         //  Filter only InstitutionManagementTypeID = 1
-        this.InstituteMasterDDLList = data.Data.filter(
-          (x: any) => x.InstitutionManagementTypeID === 1
-        );
+        this.InstituteMasterDDLList = data.Data;
 
         console.log("Filtered Institute Master List ==>", this.InstituteMasterDDLList);
       });
@@ -416,18 +445,18 @@ export class OfficeVacancyComponent implements OnInit {
     }
   }
 
- async fillupDesignation() {
-   
-    
-    await  this.GetPostList();
+  async fillupDesignation() {
+
+
+    await this.GetPostList();
   }
 
   async GetPostList() {
     try {
       this.loaderService.requestStarted();
-      const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+      const data: any = await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID);
       this.PostList = data['Data'];
-      this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
+      //this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
       // Keep original list for filtering later
       console.log(this.PostList, "PostList");
     } catch (error) {
@@ -451,14 +480,14 @@ export class OfficeVacancyComponent implements OnInit {
 
           this.groupForm.get('OfficeID')?.disable();
           this.groupForm.get('StaffTypeID')?.disable();
-         /* this.groupForm.get('DesignationID')?.disable();*/
+          /* this.groupForm.get('DesignationID')?.disable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.disable();
           }
         } else {
           this.groupForm.get('OfficeID')?.enable();
           this.groupForm.get('StaffTypeID')?.enable();
-         /* this.groupForm.get('DesignationID')?.enable();*/
+          /* this.groupForm.get('DesignationID')?.enable();*/
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.enable();
           }
@@ -495,9 +524,9 @@ export class OfficeVacancyComponent implements OnInit {
 
 
       if (this.formData.ID != 0) {
-        await this.BTER_EstablishManagementService.UpdateOfficeVacancy(this.formData).then((data: any) => {
+        await this.ITIGovtEMStaffMaster.UpdateOfficeVacancy(this.formData).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-         
+
           if (data.State === EnumStatus.Success) {
             this.toastr.success(data.Message);
 
@@ -524,7 +553,7 @@ export class OfficeVacancyComponent implements OnInit {
 
         });
       }
-      
+
 
     } catch (error) {
       console.error("Error saving data:", error);
@@ -540,12 +569,12 @@ export class OfficeVacancyComponent implements OnInit {
     if (ID != 0) {
       this.formData.ID = ID;
       this.formData.ActiveStatus = IsActive;
-      await this.BTER_EstablishManagementService.OfficeVacancyActiveDeActive(this.formData).then((data: any) => {
+      await this.ITIGovtEMStaffMaster.OfficeVacancyActiveDeActive(this.formData).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.toastr.success(data.Message);
           this.OfficeVacancyDataList();
-          this.formData = new OfficeVacancyModel();
+          this.formData = new ITIOfficeVacancyModel();
           // Clear array after successful save
         } else {
           this.toastr.error(data.ErrorMessage);
@@ -553,4 +582,5 @@ export class OfficeVacancyComponent implements OnInit {
       });
     }
   }
+
 }

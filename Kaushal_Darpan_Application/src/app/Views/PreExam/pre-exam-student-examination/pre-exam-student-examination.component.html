@@ -374,7 +374,7 @@
                    title="Edit Student Enrollment" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
                 </a>
-                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID)" class="bg-gray-200"
+                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID) && this.sSOLoginDataModel.Eng_NonEng==_EnumCourseType.Engineering" class="bg-gray-200"
                    title="Assign Optional Subject" (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID,row.StudentExamID)">
                   <i class="fa fa-file-o"></i>
                 </a>
@@ -455,9 +455,9 @@
               <tr>
                 <td>Papers</td>
                 <td>
-                  <span *ngIf="StudentProfileDetailsData[0]['StudentTypeID']==1">Theory &amp; Practical &amp; Optional Papers</span>
-                  <br />
-                  <span style="word-break: break-all;">({{StudentProfileDetailsData[0]['StudentPaper']}}) </span>
+                  <!-- <span *ngIf="StudentProfileDetailsData[0]['StudentTypeID']==1">Theory &amp; Practical &amp; Optional Papers</span>
+                  <br /> -->
+                  <span style="word-break: break-all;">{{StudentProfileDetailsData[0]['StudentPaper']}} </span>
                 </td>
               </tr>
               <tr>
@@ -769,8 +769,9 @@
             <div *ngIf="requestStudent.StudentTypeID==1">
               <label for="txtPapers" class="text-gray-800 text-sm font-medium inline-block mb-1">Papers:</label>
               <div name="txtPapers" class="form-input disabled">
-                <span>Theory & Practical & Optional Papers <br /></span>
-                ({{requestStudent.StudentPaper}})
+                <!-- <span>Theory & Practical & Optional Papers <br /></span>
+                ({{requestStudent.StudentPaper}}) -->
+                {{requestStudent.StudentPaper}}
               </div>
 
 
@@ -956,16 +957,25 @@
               <label for="txtAbc" class="text-gray-800 text-sm font-medium inline-block mb-1">
                 ABC ID <span class="StarMarking">*</span>
               </label>
-              <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc"
+              <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
-                <p *ngIf="EditStudentDataform.txtAbc.errors.required">
-                  <i aria-hidden="true"></i> This field is
-                  required .!
+              <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
+    <p *ngIf="EditStudentDataform.txtAbc.errors.required">
+      <i aria-hidden="true"></i> This field is
+      required .!
+    </p>
+    <p *ngIf="EditStudentDataform.txtAbc.errors.zeroValue">
+      <i aria-hidden="true"></i>  This field is
+      required .!
+    </p>
+  </div>-->
+
+              <div *ngIf="isSubmitted && EditStudentDataform.txtAbc.errors" class="text-danger">
+                <p *ngIf="EditStudentDataform.txtAbc.errors['required']">
+                  This field is required!
                 </p>
-                <p *ngIf="EditStudentDataform.txtAbc.errors.zeroValue">
-                  <i aria-hidden="true"></i>  This field is
-                  required .!
+                <p *ngIf="EditStudentDataform.txtAbc.errors['zeroValue']">
+                  Zero is not allowed!
                 </p>
               </div>
             </div>

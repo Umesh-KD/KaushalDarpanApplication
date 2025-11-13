@@ -138,27 +138,32 @@
                         <tr *ngFor="let item of BudgetHeadList; let i = index">
                             <td>{{ i + 1 }}</td>
                             <td>
-                                <input type="text" class="form-control" [(ngModel)]="item.HeadName"
-                                    placeholder="Enter Head Name" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" />
+                                <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="item.HeadID" (change)="onUnitWiseChange(i)">
+                                    <option value="0">Choose Option</option>
+                                    <option *ngFor="let option of getFilteredBudgetHeadDDL(i)" [value]="option.HeadID">
+                                        {{option.HeadName}}
+                                    </option>
+                                </select>
                             </td>
                             <td>
                                 <input type="number" class="form-control" [(ngModel)]="item.Amount"
                                     placeholder="Enter Amount" />
                             </td>
                             <td>
-                                <label>
+                                <!-- <label>
                                     <input type="radio" name="unitwise{{ i }}" [(ngModel)]="item.IsUnitWise"
-                                        [value]="true" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" /> Yes
+                                        [value]="true" readonly [ngClass]="{'bg-gray-200': !item.isNew}" /> Yes
                                 </label>
                                 <label class="ml-2">
                                     <input type="radio" name="unitwise{{ i }}" [(ngModel)]="item.IsUnitWise"
-                                        [value]="false" [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}" /> No
-                                </label>
+                                        [value]="false" readonly [ngClass]="{'bg-gray-200': !item.isNew}" /> No
+                                </label> -->
+                                {{item.IsUnitWise == 1 ? 'Yes' : 'No'}}
                             </td>
                             <td>
                                 <input *ngIf="item.IsUnitWise" type="text" class="form-control"
                                     [(ngModel)]="item.UnitName" placeholder="Enter Unit Name" 
-                                    [readonly]="!item.isNew" [ngClass]="{'bg-gray-200': !item.isNew}"/>
+                                    readonly [ngClass]="{'bg-gray-200': !item.isNew}"/>
                             </td>
                         </tr>
 

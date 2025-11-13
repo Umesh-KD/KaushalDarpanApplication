@@ -810,4 +810,5 @@ export const MONTH_LIST = [
 
 export enum EnumITIBudgetDDLAction {
     GetBudgetTypeDDL = "GetBudgetTypeDDL",
+    GetBudgetHeadDDL = "GetBudgetHeadDDL",
 }

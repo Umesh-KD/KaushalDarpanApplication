@@ -72,6 +72,7 @@ export class BudgetDistributeComponent {
   public Remarks: string = '';
   public SelectedCollegeName: string = '';
   public TotalUtilizedBudget: number = 0;
+  public TotalCollegeTrainee: number = 0;
   constructor(
     private activatedRoute: ActivatedRoute,
     private resultService: ResultService,
@@ -397,10 +398,15 @@ export class BudgetDistributeComponent {
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       await this.budgetDistributedService.GetBudget_HeadWise(this.searchRequest)
         .then((data: any) => {
+          debugger
           data = JSON.parse(JSON.stringify(data));
           this.BudgetUtilizationsListSave = data.Data;
           this.calculateAllEstimated();
-
+          this.BudgetUtilizationsListSave.map((item: any) => {
+            if(item.HeadID == 1) {
+              item.UnitValue === this.BudgetUtilizationsListSave[0].TotalTrainee
+            }
+          })
           this.Remarks = this.BudgetUtilizationsListSave[0].Remarks;
 
           console.log(this.BudgetUtilizationsListSave, "BudgetUtilizationsList")

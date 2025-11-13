@@ -2009,4 +2009,12 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetBterPostMaster() {
+    return await this.http.get(this.APIUrl + '/GetBterPostMaster/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

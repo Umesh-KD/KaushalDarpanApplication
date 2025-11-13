@@ -578,6 +578,15 @@ export class ITIGovtEMStaffMaster {
   }
 
 
+  public async OfficeVacancyListPlanning(request: ITIOfficeVacancyModel) {
+    var body = JSON.stringify(request);
+
+    return await this.http.post(`${this.APIUrl}/OfficeVacancyListPlanning`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async DeleteOfficeVacancy(request: ITIOfficeVacancyModel) {
     var body = JSON.stringify(request);
 
