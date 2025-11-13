@@ -47,45 +47,75 @@ export class CandidatePersonalDetailsComponent {
   ) {}
   async ngOnInit() {
     this.PersonalDetailForm = this.formBuilder.group({
-      // SSOID: ['', Validators.required],
-      CandidateName: ['', Validators.required],
-      FatherName: ['', Validators.required],
-      MotherName: ['', Validators.required],
-      GenderId: [0, [DropdownValidators]],
-      DOB: ['', Validators.required],
-      CategoryA_ID: [0, [DropdownValidators]],
-      CategoryB_ID: [0, [DropdownValidators]],
-      MobileNo: ['', Validators.required],
-      Email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
-      // Address1: ['', Validators.required],
-      // Address2: ['', Validators.required],
-      // Address3: [''],
-      // StateID: [0, [DropdownValidators]],
-      // DistrictID: [0, [DropdownValidators]],
-      // BlockID: [0, [DropdownValidators]],
-      // Pincode: ['', Validators.required],
-      AadharNo: ['', Validators.required],
-      // JanAadharNo: ['', Validators.required],
-      RollNumber: ['', Validators.required],
-      Designation: ['', Validators.required],
-      // Trade: ['', Validators.required],
-      MeritNo: ['', Validators.required],
-      SelectionCategoryID: [0, [DropdownValidators]],
+      CandidateName: [{ value: '', disabled: true }, Validators.required],
+      FatherName: [{ value: '', disabled: true }, Validators.required],
+      MotherName: [{ value: '', disabled: true }, Validators.required],
+      GenderId: [{ value: 0, disabled: true }, [DropdownValidators]],
+      DOB: [{ value: '', disabled: true }, Validators.required],
+      CategoryA_ID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      CategoryB_ID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      MobileNo: [{ value: '', disabled: true }, Validators.required],
+      Email: [{ value: '', disabled: true }, [Validators.pattern(GlobalConstants.EmailPattern)]],
+      AadharNo: [{ value: '', disabled: true }, Validators.required],
+      RollNumber: [{ value: '', disabled: true }, Validators.required],
+      Designation: [{ value: '', disabled: true }, Validators.required],
+      MeritNo: [{ value: '', disabled: true }, Validators.required],
+      SelectionCategoryID: [{ value: 0, disabled: true }, [DropdownValidators]],
       HomeDistrictID: [0, [DropdownValidators]],
-      Remark: [''],
-      IsPH: [''],
-      IsSportsPerson: [''],
-      IsExServicemen: [''],
-      IsShahidDependent: [''],
-      IsAnyIncurableDiseases: [''],
-      IsTSP: [''],
-      IsSpouseInSameService: [''],
-      
-      ReligionID: [0, [DropdownValidators]],
-      NationalityID: [0, [DropdownValidators]],
+      Remark: [{ value: '', disabled: true }],
+      IsPH: [{ value: '', disabled: true }],
+      IsSportsPerson: [{ value: '', disabled: true }],
+      IsExServicemen: [{ value: '', disabled: true }],
+      IsShahidDependent: [{ value: '', disabled: true }],
+      IsAnyIncurableDiseases: [{ value: '', disabled: true }],
+      IsTSP: [{ value: '', disabled: true }],
+      IsSpouseInSameService: [{ value: '', disabled: true }],
+      ReligionID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      NationalityID: [{ value: 0, disabled: true }, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
-      IsMinority: ['',],
+      IsMinority: [{ value: '', disabled: true }]
     });
+
+    //this.PersonalDetailForm = this.formBuilder.group({
+    //  // SSOID: ['', Validators.required],
+    //  CandidateName: ['', Validators.required],
+    //  FatherName: ['', Validators.required],
+    //  MotherName: ['', Validators.required],
+    //  GenderId: [0, [DropdownValidators]],
+    //  DOB: ['', Validators.required],
+    //  CategoryA_ID: [0, [DropdownValidators]],
+    //  CategoryB_ID: [0, [DropdownValidators]],
+    //  MobileNo: ['', Validators.required],
+    //  Email: ['', [Validators.pattern(GlobalConstants.EmailPattern)]],
+    //  // Address1: ['', Validators.required],
+    //  // Address2: ['', Validators.required],
+    //  // Address3: [''],
+    //  // StateID: [0, [DropdownValidators]],
+    //  // DistrictID: [0, [DropdownValidators]],
+    //  // BlockID: [0, [DropdownValidators]],
+    //  // Pincode: ['', Validators.required],
+    //  AadharNo: ['', Validators.required],
+    //  // JanAadharNo: ['', Validators.required],
+    //  RollNumber: ['', Validators.required],
+    //  Designation: ['', Validators.required],
+    //  // Trade: ['', Validators.required],
+    //  MeritNo: ['', Validators.required],
+    //  SelectionCategoryID: [0, [DropdownValidators]],
+    //  HomeDistrictID: [0, [DropdownValidators]],
+    //  Remark: [''],
+    //  IsPH: [''],
+    //  IsSportsPerson: [''],
+    //  IsExServicemen: [''],
+    //  IsShahidDependent: [''],
+    //  IsAnyIncurableDiseases: [''],
+    //  IsTSP: [''],
+    //  IsSpouseInSameService: [''],
+      
+    //  ReligionID: [0, [DropdownValidators]],
+    //  NationalityID: [0, [DropdownValidators]],
+    //  MaritalID: [0, [DropdownValidators]],
+    //  IsMinority: ['',],
+    //});
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     await this.GetMasterDDL();
@@ -93,6 +123,10 @@ export class CandidatePersonalDetailsComponent {
     await this.GetApplicationDataByID_Counselling();
 
     const Designation = this.PersonalDetailForm.get('Designation');
+
+
+   
+
 Designation?.disable();
   }
 
