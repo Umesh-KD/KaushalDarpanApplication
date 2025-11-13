@@ -788,7 +788,7 @@
               <label for="txtAbc" class="text-gray-800 text-sm font-medium inline-block mb-1">
                 ABC ID <span class="StarMarking">*</span>
               </label>
-              <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc"
+              <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
               <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors.required">
