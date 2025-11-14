@@ -131,19 +131,22 @@ export class RevealuationComponent {
   async submitRollDob(stepper: MatStepper): Promise<void> {
     debugger;
 
+    this.searchRequest.RollNo = 1432;
+    this.searchRequest.DOB = '2001-05-27';
+
+    if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
+      this.Swal2.Confirmation('Roll Number and Date of Birth are required '
+        , async (result: any) => {
+
+        });
+      return;
+    }
+
+
     this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
       if (result.isConfirmed) {
         try {
-          //this.searchRequest.RollNo = 2881;
-          //this.searchRequest.DOB = '2006-10-04';
-
-          if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
-            this.Swal2.Confirmation('Please fill in both Roll Number and Date of Birth.'
-              + 'Missing Information', async (result: any) => {
-
-            });
-            return;
-          }
+        
 
           const data: any = await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest);
 
