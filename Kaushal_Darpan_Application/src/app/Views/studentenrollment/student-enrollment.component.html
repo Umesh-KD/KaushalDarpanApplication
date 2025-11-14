@@ -457,7 +457,7 @@
               </table>
             </div>
             <div class="text-center flex items-center justify-center">
-              <button type="button" *ngIf="(StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForEnrollment || StudentProfileDetailsData[0]['EnrollTransactionId']>0")
+              <button type="button" *ngIf="(StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForEnrollment || StudentProfileDetailsData[0]['EnrollTransactionId']>0)"
                       class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">
                 Download Enrollment Form<i class="ti ti-download"></i>
               </button>
