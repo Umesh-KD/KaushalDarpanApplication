@@ -235,7 +235,7 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
-    if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited) {
+    if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {
       this.isShowImageDeleteButton = false;
       return;
     }
