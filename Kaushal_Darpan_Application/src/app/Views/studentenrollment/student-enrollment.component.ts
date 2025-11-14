@@ -235,6 +235,7 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
+    debugger
     if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {
       this.isShowImageDeleteButton = false;
       return;
@@ -542,12 +543,14 @@ export class StudentEnrollmentComponent {
 
   //get edit student
   async GetPreExam_StudentMaster(StudentID: number) {
+    this.showImageDeleteButton();
+    
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
     var Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     var EndTermID = this.sSOLoginDataModel.EndTermID
     this.StudentFilterStatusId = this.request.StudentFilterStatusId
     var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
-    debugger
+    
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0, FileNameWithDynamicPath)
@@ -603,7 +606,10 @@ export class StudentEnrollmentComponent {
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.Papers = data['Data']['Papers'];
-          this.requestStudent.StudentFilterStatusId = this.StudentFilterStatusId;
+
+
+          this.requestStudent.StudentFilterStatusId = this.StudentFilterStatusId;// hide delete of image
+          this.showImageDeleteButton();
 
           // document
           this.requestStudent.Dis_StudentPhoto = data['Data']['Dis_StudentPhoto'];
