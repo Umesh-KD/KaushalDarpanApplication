@@ -370,7 +370,7 @@
                   <i class="ti ti-pencil"></i>
                 </a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin" href="javascript:void(0);"
+                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon" href="javascript:void(0);"
                    title="Edit Student Enrollment" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
                 </a>
