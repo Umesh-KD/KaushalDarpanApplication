@@ -24,10 +24,11 @@ import { GlobalConstants } from '../../../Common/GlobalConstants';
     standalone: false
 })
 export class CounsellingAllotmentListComponent implements OnInit {
-   designations = GlobalConstants.designationList; // Access the designations constant
+   //designations = GlobalConstants.designationList; // Access the designations constant
 
   
   public StudentList: any = [];
+  public designations: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CounsellingAllotmentListModel();
   // public instituteId:int=0;
@@ -103,33 +104,40 @@ SelectedStudent:any = {};
       });
   //  await this.GetTradeDDL();
     await this.GetCounsellingAllotmentList(1);
+
+    await this.commonMasterService.GetDDLCounselling_Qualification()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.designations = data['Data'];
+      }, (error: any) => console.error(error)
+      );
+
        
   }
 
 
-    getTradeByDegree(designationId:number) {
-                console.log(designationId)
+ async getTradeByDegree(designationId: number) {
+    debugger;
+    console.log('Designation ID:', designationId);
 
-    
     try {
-      this.loaderService.requestStarted(); 
-        this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
-          console.log(data)
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.DDL_CounsellingTradelist(designationId)
+        .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.TradeDDLList = data['Data'];  
-          console.log('TradeDDLList',this.TradeDDLList);
-          
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
+          this.TradeDDLList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    } catch (ex) {
+      console.error('Exception:', ex);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
 
   async GetTradeDDL() {
     try {

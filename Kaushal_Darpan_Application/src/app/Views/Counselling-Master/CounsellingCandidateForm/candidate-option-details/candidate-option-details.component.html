@@ -14,8 +14,7 @@
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">व्यवसाय का नाम (Trade): <span class="StarMarking">*</span></label>
           <select class="form-select" name="TradeId" id="TradeId" formControlName="TradeId"
                   [(ngModel)]="formData.TradeId" (change)="GetInstituteList()">
-            <option value="0">--Choose Option--</option>
-            <option *ngFor="let item of TradeList" value="{{item.TradeId}}">
+             <option *ngFor="let item of TradeList" value="{{item.TradeId}}">
               {{item.TradeName}}
             </option>
           </select>
@@ -27,34 +26,34 @@
         </div>
 
         <!-- <div>
-          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">संस्थान का नाम (Name of Institute): <span class="StarMarking">*</span></label>
-          <select class="form-select" name="InstituteID" id="InstituteID" formControlName="InstituteID"
-                  [(ngModel)]="formData.InstituteID">
-            <option value="0">--Choose Option--</option>
-            <option *ngFor="let item of InstituteList" value="{{item.InstituteID}}">
-              {{item.InstituteName}}
-            </option>
-          </select>
-          <div *ngIf="isSubmitted&&_OptionsFormGroup.InstituteID.errors" class="text-danger">
-            <p *ngIf="!_OptionsFormGroup.InstituteID.errors.DropdownValidators">
-              <i aria-hidden="true"></i>This field is required .!
-            </p>
-          </div>
-        </div> -->
+    <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">संस्थान का नाम (Name of Institute): <span class="StarMarking">*</span></label>
+    <select class="form-select" name="InstituteID" id="InstituteID" formControlName="InstituteID"
+            [(ngModel)]="formData.InstituteID">
+      <option value="0">--Choose Option--</option>
+      <option *ngFor="let item of InstituteList" value="{{item.InstituteID}}">
+        {{item.InstituteName}}
+      </option>
+    </select>
+    <div *ngIf="isSubmitted&&_OptionsFormGroup.InstituteID.errors" class="text-danger">
+      <p *ngIf="!_OptionsFormGroup.InstituteID.errors.DropdownValidators">
+        <i aria-hidden="true"></i>This field is required .!
+      </p>
+    </div>
+  </div> -->
 
         <div class="mb-8">
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">संस्थान का नाम (Name of Institute):<span class="text-danger">*</span></label>
           <ng-multiselect-dropdown #multiSelect [placeholder]="'Choose Option'"
-                                  [settings]="settingsMultiselect"
-                                  [data]="InstituteList"
-                                  [disabled]="false"
-                                  (onFilterChange)="onFilterChange($event)"
-                                  (onDropDownClose)="onDropDownClose($event)"
-                                  (onSelect)="onItemSelect($event)"
-                                  (onDeSelect)="onDeSelect($event)"
-                                  (onSelectAll)="onSelectAll($event)"
-                                  (onDeSelectAll)="onDeSelectAll($event)"
-                                  formControlName="InstituteList">
+                                   [settings]="settingsMultiselect"
+                                   [data]="InstituteList"
+                                   [disabled]="false"
+                                   (onFilterChange)="onFilterChange($event)"
+                                   (onDropDownClose)="onDropDownClose($event)"
+                                   (onSelect)="onItemSelect($event)"
+                                   (onDeSelect)="onDeSelect($event)"
+                                   (onSelectAll)="onSelectAll($event)"
+                                   (onDeSelectAll)="onDeSelectAll($event)"
+                                   formControlName="InstituteList">
           </ng-multiselect-dropdown>
           <div *ngIf="isSubmitted&&_OptionsFormGroup.InstituteList.errors" class="text-danger">
             <p *ngIf="!_OptionsFormGroup.InstituteList.errors.DropdownValidators">
@@ -62,7 +61,37 @@
             </p>
           </div>
         </div>
-        
+
+        <!--<span> {{this.request.IsTSP}}</span>-->
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is TSP <span class="StarMarking">*</span></label>
+          <div class="flex gap-4">
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="true" formControlName="IsTSP"
+                     [(ngModel)]="request.IsTSP" />
+              <span>Yes</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+              <input type="radio" name="IsTSP" [value]="false" formControlName="IsTSP"
+                     [(ngModel)]="request.IsTSP" />
+              <span>No</span>
+            </label>
+          </div>
+
+         
+        </div>
+        <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            योग्यता (Qualification):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="Designation"
+                 formControlName="Designation" [(ngModel)]="request.Designation" />
+          
+        </div>
+
+
+
         <div class="pt-30">
           <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
             <i class="ti ti-plus"></i> Add Choice

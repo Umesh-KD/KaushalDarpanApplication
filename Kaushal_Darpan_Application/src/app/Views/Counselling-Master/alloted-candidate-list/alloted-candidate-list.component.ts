@@ -23,7 +23,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './alloted-candidate-list.component.css'
 })
 export class AllotedCandidateListComponent {
-       designations = GlobalConstants.designationList; // Access the designations constant
+       //designations = GlobalConstants.designationList; // Access the designations constant
 
   sSOLoginDataModel = new SSOLoginDataModel();
   request = new CounsellingAllottedListSearchModel();
@@ -35,7 +35,7 @@ export class AllotedCandidateListComponent {
   public AllottedCandidateList: any[] = [];
   public TradeDDLList: any = [];
   public InstituteList: any = [];
-
+  public designations: any = [];
   public isSubmitted: boolean = false
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
@@ -70,33 +70,60 @@ export class AllotedCandidateListComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+
+    await this.commonFunctionService.GetDDLCounselling_Qualification()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.designations = data['Data'];
+      }, (error: any) => console.error(error)
+      );
     // await this.GetTradeList();
   }
 
+    async getTradeByDegree(designationId: number) {
+    debugger;
+    console.log('Designation ID:', designationId);
 
-    getTradeByDegree(designationId:number) {
-                console.log(designationId)
-
-    
     try {
-      this.loaderService.requestStarted(); 
-        this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
-          console.log(data)
+      this.loaderService.requestStarted();
+
+      await this.commonFunctionService.DDL_CounsellingTradelist(designationId)
+        .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.TradeDDLList = data['Data'];  
-          console.log('TradeDDLList',this.TradeDDLList);
-          
-        }, error => console.error(error));
-    }
-    catch (Ex) {
-      console.log(Ex);
-    }
-    finally {
+          this.TradeDDLList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    } catch (ex) {
+      console.error('Exception:', ex);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+  //  getTradeByDegree(designationId:number) {
+  //              console.log(designationId)
+
+    
+  //  try {
+  //    this.loaderService.requestStarted(); 
+  //      this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
+  //        console.log(data)
+  //        data = JSON.parse(JSON.stringify(data));
+  //        this.TradeDDLList = data['Data'];  
+  //        console.log('TradeDDLList',this.TradeDDLList);
+          
+  //      }, error => console.error(error));
+  //  }
+  //  catch (Ex) {
+  //    console.log(Ex);
+  //  }
+  //  finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
 
 
   async GetTradeList() {

@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { EnumDepartment, EnumStatus } from '../../../../Common/GlobalConstants';
-import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -29,11 +29,12 @@ export class CandidateOptionDetailsComponent {
   public deleteOptionReq = new Counselling_OptionFormDataModel();
   public childpriorityChangeReq = new InstituteListDataModel_Coun();
   public childDeleteOptionReq = new InstituteListDataModel_Coun();
-
+  public appRequest = new CounsellingApplicationSearchModel();
   public TradeList: any = []
   public InstituteList: any = []
   public AddedChoices: Counselling_OptionFormDataModel[] = []
 
+  public request = new CounsellingApplicationFormDataModel();
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public settingsMultiselect: object = {};
@@ -73,9 +74,11 @@ export class CandidateOptionDetailsComponent {
     };
 
     this.OptionsFormGroup = this.formBuilder.group({
-        TradeId: ['', [DropdownValidators]],
+        TradeId: [{value: 0 }, [DropdownValidators]],
         // InstituteID: ['', [DropdownValidators]],
-        InstituteList: ['', ],
+      InstituteList: ['',],
+      Designation: [{ value: '', disabled: true }],
+      IsTSP: [{ value: '', disabled: true }],
       });
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -87,10 +90,34 @@ export class CandidateOptionDetailsComponent {
     this.formData.DepartmentID = EnumDepartment.BTER;
 
     await this.GetTradeList();
+    await this.GetApplicationDataByID_Counselling();
     await this.Counselling_GetOptionDetailsByID();
+   
   }
 
   get _OptionsFormGroup() { return this.OptionsFormGroup.controls; }
+
+
+  async GetApplicationDataByID_Counselling() {
+    
+    try {
+      this.appRequest.CandidateId = this.CandidateID;
+      await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          // this.toastr.success(data.Message);
+          this.request = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   async GetTradeList() {
     try {
@@ -101,6 +128,8 @@ export class CandidateOptionDetailsComponent {
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
+         this.formData.TradeId=data.Data[0].TradeId;
+         this.GetInstituteList();
         console.log('TradeList check',this.TradeList);
         
       })
@@ -145,12 +174,18 @@ export class CandidateOptionDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message)
-          await this.Counselling_GetOptionDetailsByID();
+      
           this.OptionsFormGroup.reset();
           this.formData.TradeId = 0;
           this.formData.InstituteID = 0;
           this.formData.InstituteList = [];
           this.isSubmitted = false;
+          this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+          this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+          this.formData.DepartmentID = EnumDepartment.BTER;
+          await this.GetTradeList();
+           await this.GetApplicationDataByID_Counselling();
+          await this.Counselling_GetOptionDetailsByID();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
@@ -163,6 +198,7 @@ export class CandidateOptionDetailsComponent {
   }
 
   async Counselling_GetOptionDetailsByID() {
+    
     try {
       this.searchReq.CandidateID = this.CandidateID;
       await this.counsellingApplicationFormService.Counselling_GetOptionDetailsByID(this.searchReq).then(async (data: any) => {

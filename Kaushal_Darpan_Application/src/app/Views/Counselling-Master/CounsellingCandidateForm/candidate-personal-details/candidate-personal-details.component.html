@@ -225,7 +225,7 @@
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
         <div>
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
+            श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking">*</span>
           </label>
           <select class="form-select" formControlName="CategoryA_ID" [(ngModel)]="request.CategoryA_ID">
             <option value="0">--Select--</option>
@@ -239,13 +239,13 @@
         </div>
         <div *ngIf="request.GenderId == 98">
           <label for="CategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            श्रेणी बी(Category B)(Widow/Divorcee/Single Mother) :<span class="StarMarking">*</span>
+            श्रेणी बी(Category B)(Widow/Divorcee/Single Women) :<span class="StarMarking">*</span>
           </label>
           <select class="form-select" formControlName="CategoryB_ID" [(ngModel)]="request.CategoryB_ID">
             <option value="0">--Select--</option>
             <option value="1">Widow</option>
             <option value="2">Divorcee</option>
-            <option value="3">Single Woman</option>
+            <option value="3">Single Women</option>
             <option value="4">None of above</option>
             <!-- <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option> -->
           </select>
@@ -258,7 +258,7 @@
 
         <div>
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC) :<span class="StarMarking">*</span>
+            चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking">*</span>
           </label>
           <select class="form-select" formControlName="SelectionCategoryID" [(ngModel)]="request.SelectionCategoryID">
             <option value="0">--Select--</option>

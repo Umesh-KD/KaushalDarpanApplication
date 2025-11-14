@@ -50,30 +50,30 @@ export class CandidatePersonalDetailsComponent {
       CandidateName: [{ value: '', disabled: true }, Validators.required],
       FatherName: [{ value: '', disabled: true }, Validators.required],
       MotherName: [{ value: '', disabled: true }, Validators.required],
-      GenderId: [{ value: 0, disabled: true }, [DropdownValidators]],
+      GenderId: [{ value: 0,disabled: true }, [DropdownValidators]],
       DOB: [{ value: '', disabled: true }, Validators.required],
-      CategoryA_ID: [{ value: 0, disabled: true }, [DropdownValidators]],
-      CategoryB_ID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      CategoryA_ID: [{ value: 0 }, [DropdownValidators]],
+      CategoryB_ID: [{ value: 0}, [DropdownValidators]],
       MobileNo: [{ value: '', disabled: true }, Validators.required],
       Email: [{ value: '', disabled: true }, [Validators.pattern(GlobalConstants.EmailPattern)]],
       AadharNo: [{ value: '', disabled: true }, Validators.required],
       RollNumber: [{ value: '', disabled: true }, Validators.required],
       Designation: [{ value: '', disabled: true }, Validators.required],
       MeritNo: [{ value: '', disabled: true }, Validators.required],
-      SelectionCategoryID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      SelectionCategoryID: [{ value: 0 }, [DropdownValidators]],
       HomeDistrictID: [0, [DropdownValidators]],
       Remark: [{ value: '', disabled: true }],
-      IsPH: [{ value: '', disabled: true }],
-      IsSportsPerson: [{ value: '', disabled: true }],
-      IsExServicemen: [{ value: '', disabled: true }],
-      IsShahidDependent: [{ value: '', disabled: true }],
-      IsAnyIncurableDiseases: [{ value: '', disabled: true }],
+      IsPH: [{ value: '' }],
+      IsSportsPerson: [{ value: ''}],
+      IsExServicemen: [{ value: '' }],
+      IsShahidDependent: [{ value: '' }],
+      IsAnyIncurableDiseases: [{ value: '' }],
       IsTSP: [{ value: '', disabled: true }],
-      IsSpouseInSameService: [{ value: '', disabled: true }],
-      ReligionID: [{ value: 0, disabled: true }, [DropdownValidators]],
-      NationalityID: [{ value: 0, disabled: true }, [DropdownValidators]],
+      IsSpouseInSameService: [{ value: '' }],
+      ReligionID: [{ value: 0 }, [DropdownValidators]],
+      NationalityID: [{ value: 0  }, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
-      IsMinority: [{ value: '', disabled: true }]
+      IsMinority: [{ value: '' }]
     });
 
     //this.PersonalDetailForm = this.formBuilder.group({
@@ -165,14 +165,16 @@ Designation?.disable();
         }, (error: any) => console.error(error)
       );
 
-      await this.commonMasterService.CasteCategoryA()
+      await this.commonMasterService.DDL_AllCasteCategoryA()
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          /*  console.log(data, 'ggg');*/
           this.CategoryAlist = data['Data'];
-
         }, (error: any) => console.error(error)
         );
+
+
+
+    
       await this.commonMasterService.GetCommonMasterDDLByType('Nationality')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
