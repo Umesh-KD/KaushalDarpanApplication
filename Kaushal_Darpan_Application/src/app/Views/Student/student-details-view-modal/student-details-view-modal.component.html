@@ -101,8 +101,16 @@
               <tr *ngFor="let item of documentDetails;">
                 <td>{{item.DisplayColumnNameEn}}</td>
                 <td>
-                  <img alt="{{item.ColumnName}}" *ngIf="item.FileName!=''"
-                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                  <!-- when data by application master-->
+                  <!--<img *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited"
+                  alt="{{item.ColumnName}}"
+                  src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{item.FileName}}"
+                  class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">-->
+
+                  <!-- when data by student master (*ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited")-->
+                  <img 
+                       alt="{{item.ColumnName}}"
+                       src="{{appsettingConfig.StaticFileRootPathURL}}/{{item.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{item.FileName}}"
                        class="img-rounded" id="{{item.ColumnName}}" style="max-width:135px;max-height:160px;">
                 </td>
               </tr>
@@ -143,7 +151,6 @@
             </div>
             <div class="text-center flex items-center justify-center">
               <!-- <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.SelectedForEnrollment && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.VerifiedForEnrollment" class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">Download Enrollment Form<i class="ti ti-download"></i></button> -->
-
               <!-- <button type="button" *ngIf="StudentProfileDetailsData[0].status!=_enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status!=_enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0]['EnrollTransactionId']>0" class="btn bg-success text-white" (click)="GetStudentFeeReceipt(StudentProfileDetailsData[0]['EnrollTransactionId'])">Download Fee Receipt<i class="ti ti-download"></i></button> -->
 
               <button type="button" (click)="CloseViewStudentDetails()" class="btn bg-danger text-white">Cancel<i class="ti ti-x"></i></button>

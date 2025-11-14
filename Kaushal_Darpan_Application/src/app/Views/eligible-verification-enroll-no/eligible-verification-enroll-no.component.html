@@ -159,7 +159,7 @@
               </td>
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                  <a href="javascript:void(0);" title="View Details" (click)="openViewStudentDetailsPopup(row.StudentID,row.StudentExamID)"><i class="ti ti-eye"></i></a>
+                  <a href="javascript:void(0);" title="View Details" (click)="openViewStudentDetailsPopup(row.StudentID)"><i class="ti ti-eye"></i></a>
                 </div>
 
               </td>
@@ -215,7 +215,7 @@
       </div>
       <div class="card-body">
         <p class="text-center">
-          <span class="mobile-text">Enter the OTP you received at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
+          <span class="mobile-text">Enter the OTP you recevied at  <b class="text-success">+91 {{MobileNo  | mobileMask}}</b></span>
         </p>
         <div class="mt-4">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enter OTP</label>
@@ -232,4 +232,4 @@
   </div>
 </ng-template>
 
-<app-student-exam-details-view-modal #MyModel_ViewStudentExam></app-student-exam-details-view-modal>
+<app-student-details-view-modal #MyModel_ViewStudent></app-student-details-view-modal>
