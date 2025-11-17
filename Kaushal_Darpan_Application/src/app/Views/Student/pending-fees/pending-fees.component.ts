@@ -28,6 +28,7 @@ export class PendingFeesComponent implements OnInit {
   public isSubmitted: boolean = false;
   public UserID: number = 0;
   public SemesterName: string = '';
+  public isExamFee: boolean = false
 
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new StudentSearchModel();
@@ -47,6 +48,7 @@ export class PendingFeesComponent implements OnInit {
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   MapKeyEng: number = 0;
+  MapKey_enroll: number = 0;
   public DateConfigSetting: any = [];
   constructor(private commonMasterService: CommonFunctionService,
     private studentService: StudentService,
@@ -118,12 +120,15 @@ export class PendingFeesComponent implements OnInit {
 
             if (this.StudentDetailsModelList.length > 1) {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
-                [enumExamStudentStatus.SelectedForExamination].includes(f.ExamStudentStatus) ||
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
             }
             else {
               this.isShowSelected = false;
+            }
+
+            if(this.StudentDetailsModelList[0]?.ExamStudentStatus == enumExamStudentStatus.VerifiedForExamination) {
+              this.isExamFee = true
             }
           }
         }, (error: any) => console.error(error)
@@ -201,62 +206,67 @@ export class PendingFeesComponent implements OnInit {
   }
 
   async PayEnrollmentFee(item: StudentDetailsModel) {
-    this.emitraRequest = new EmitraRequestDetails();
-    //Set Parameters for emitra
-    this.emitraRequest.Amount = Number(item.FeeAmount)
-    this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
-    this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
-    this.emitraRequest.ServiceID = item.ServiceID.toString();
-    this.emitraRequest.UserName = item.StudentName;
-    this.emitraRequest.MobileNo = item.MobileNo;
-    this.emitraRequest.StudentID = item.StudentID;
-    this.emitraRequest.SemesterID = item.SemesterID;
-    this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
-    this.emitraRequest.DepartmentID = EnumDepartment.BTER;
-    this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
-    this.emitraRequest.ID = item.ID;
-    this.emitraRequest.USEREMAIL = item.Email ?? "";
-    //student details
-    this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
+    const isValid = await this.ValidateEnrollmentDate(item.CourseType, item.FinancialYearID, item.EndTermID);
+    if (isValid) {
+      this.emitraRequest = new EmitraRequestDetails();
+      //Set Parameters for emitra
+      this.emitraRequest.Amount = Number(item.FeeAmount)
+      this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
+      this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
+      this.emitraRequest.ServiceID = item.ServiceID.toString();
+      this.emitraRequest.UserName = item.StudentName;
+      this.emitraRequest.MobileNo = item.MobileNo;
+      this.emitraRequest.StudentID = item.StudentID;
+      this.emitraRequest.SemesterID = item.SemesterID;
+      this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
+      this.emitraRequest.DepartmentID = EnumDepartment.BTER;
+      this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
+      this.emitraRequest.ID = item.ID;
+      this.emitraRequest.USEREMAIL = item.Email ?? "";
+      //student details
+      this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
 
-    this.emitraRequest.StudentFeesTransactionItems.push({
-      itemAmount: Number(item.FeeAmount ?? 0),
-      status: item.ExamStudentStatus,
-      transactionApplicationID: item.StudentSemesterID,
-      tranSemesterID: item.SemesterID
-    } as StudentFeesTransactionItems);
+      this.emitraRequest.StudentFeesTransactionItems.push({
+        itemAmount: Number(item.FeeAmount ?? 0),
+        status: item.ExamStudentStatus,
+        transactionApplicationID: item.StudentSemesterID,
+        tranSemesterID: item.SemesterID
+      } as StudentFeesTransactionItems);
 
 
-    this.loaderService.requestStarted();
-    try {
-      // old EmitraPayment
-      await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['SuccessMessage'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (data.State == EnumStatus.Success) {
-            await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
-          }
-          else {
-            this.toastr.error(this.ErrorMessage)
-          }
-        })
-    }
-    catch (ex) { console.log(ex) }
-    finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
+      this.loaderService.requestStarted();
+      try {
+        // old EmitraPayment
+        await this.emitraPaymentService.EnrollmentExaminationFeePayment(this.emitraRequest)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['SuccessMessage'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (data.State == EnumStatus.Success) {
+              await this.RedirectEmitraPaymentRequest(data.Data.MERCHANTCODE, data.Data.ENCDATA, data.Data.PaymentRequestURL)
+            }
+            else {
+              this.toastr.error(this.ErrorMessage)
+            }
+          })
+      }
+      catch (ex) { console.log(ex) }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    } else {
+      this.sweetAlert2.Info('Enrollment Fee Date Is Not Open Yet Please Try Again');
     }
   }
 
   async PayExamFee(item: StudentDetailsModel, IsMultiPayment = false) {
 
     const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
-    //if (isValid)
-    if (1) {
+    if (isValid)
+     {
       debugger
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
@@ -480,7 +490,7 @@ export class PendingFeesComponent implements OnInit {
 
   async ValidateExamDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
     try {
-
+      debugger
       const data =
       {
         DepartmentID: 1,
@@ -498,6 +508,38 @@ export class PendingFeesComponent implements OnInit {
       console.log(this.DateConfigSetting, 'DATAAAAA')
 
       if (this.MapKeyEng == 1) {
+        return true; // Success case
+      }
+      else {
+        return false; // Success case
+      }
+
+    } catch (error) {
+      console.error(error);
+      return false; // Failure case
+    }
+  }
+
+  async ValidateEnrollmentDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
+    try {
+      debugger
+      const data =
+      {
+        DepartmentID: 1,
+        CourseTypeId: Eng_NonEng,
+        AcademicYearID: FinancialYearID,
+        EndTermID: EndTermID,
+        Key: "Enrolled Fee",
+        SSOID: this.sSOLoginDataModel.SSOID
+      };
+
+      const response = await this.commonMasterService.GetDateConfigSetting(data);
+      const parsedData = JSON.parse(JSON.stringify(response));
+      this.DateConfigSetting = parsedData['Data'][0];
+      this.MapKey_enroll = this.DateConfigSetting["Enrolled Fee"];
+      console.log(this.DateConfigSetting, 'DATAAAAA')
+
+      if (this.MapKey_enroll == 1) {
         return true; // Success case
       }
       else {

@@ -28,13 +28,14 @@ export class ImportCounsellingVacanciesComponent {
   public StudentOptionListToExport: any = [];
   public VacancyDataList: any = [];
   public InstitutelistDDL: any = [];
-  public TradeListDDL: any = [];
+  public TradeDDLList: any = [];
   public searchRequest = new CounsellingVacancySearchModel();
   public request = new EditVacancyDataModel();
 
   public importFile: any;
   public ImportExcelList: any = [];
   public selectedFile: File | null = null;
+  public designations: any = [];
 
   modalRef1: NgbModalRef | null=null;
   closeResult: string | undefined;
@@ -64,7 +65,7 @@ export class ImportCounsellingVacanciesComponent {
     private Router: Router,
     private modalService: NgbModal,
     private fb: FormBuilder,
-    private activatedRoute: ActivatedRoute,
+    private commonFunctionService: CommonFunctionService,
     private apprenticeshipService: ITIApprenticeshipService
   ) { }
 
@@ -77,8 +78,67 @@ export class ImportCounsellingVacanciesComponent {
     });
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetInstituteMaster();
-    await this.GetTradeList();
+    // await this.GetTradeList();
     await this.GetCounsellingVacancyData();
+
+
+    await this.commonMasterService.GetDDLCounselling_Qualification()
+    .then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.designations = data['Data'];
+    }, (error: any) => console.error(error)
+    );
+
+
+  }
+
+  async getTradeByDegree(designationId: number) {
+    debugger;
+    console.log('Designation ID:', designationId);
+
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.DDL_CounsellingTradelist(designationId)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.TradeDDLList = data['Data'];
+        }, (error: any) => console.error(error)
+        );
+    } catch (ex) {
+      console.error('Exception:', ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetTradeDDL() {
+    try {
+      this.loaderService.requestStarted();
+      //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
+      //await this.commonFunctionService.StreamMaster()
+      await this.commonFunctionService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
+        .then((data: any) => {
+          console.log(data)
+          data = JSON.parse(JSON.stringify(data));
+          //this.TradeDDLList = data['Data'];
+          //console.log(this.TradeDDLList)
+          // const selectOption = { ID: -1, Name: '--Select--' };
+          // this.TradeDDLList = [selectOption, ...data['Data']];  
+          this.TradeDDLList = data['Data'];  
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   get formEditData() { return this.EditDataFormGroup.controls; }
@@ -323,18 +383,18 @@ export class ImportCounsellingVacanciesComponent {
     }
   }
 
-  async GetTradeList() {
-    try {
-      const request: any = {};
-      request.action = "_getAllData";
-      await this.commonMasterService.TradeListGetAllData(request).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.TradeListDDL = data['Data'];
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async GetTradeList() {
+  //   try {
+  //     const request: any = {};
+  //     request.action = "_getAllData";
+  //     await this.commonMasterService.TradeListGetAllData(request).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       this.TradeListDDL = data['Data'];
+  //     })
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   CloseModal() {
     this.modalService.dismissAll();

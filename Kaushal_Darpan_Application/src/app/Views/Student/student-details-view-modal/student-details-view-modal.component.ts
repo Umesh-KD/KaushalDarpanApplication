@@ -7,7 +7,7 @@ import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { enumExamStudentStatus } from '../../../Common/GlobalConstants';
+import { enumExamStudentStatus, EnumFileUpload } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-student-details-view-modal',
@@ -53,6 +53,7 @@ export class StudentDetailsViewModalComponent {
       model.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       model.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       model.EndTermID = this.sSOLoginDataModel.EndTermID;
+      model.FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath;
       //
       await this.commonMasterService.ViewStudentDetails(model)
         .then((data: any) => {

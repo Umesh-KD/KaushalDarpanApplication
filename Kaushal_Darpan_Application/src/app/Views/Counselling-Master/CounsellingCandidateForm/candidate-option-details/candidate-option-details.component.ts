@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { EnumDepartment, EnumStatus } from '../../../../Common/GlobalConstants';
-import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
+import { Counselling_DropdownDataModel, Counselling_OptionFormDataModel, CounsellingApplicationFormDataModel, CounsellingApplicationSearchModel, InstituteListDataModel_Coun } from '../../../../Models/CounsellingApplicationFormDataModel';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -29,11 +29,12 @@ export class CandidateOptionDetailsComponent {
   public deleteOptionReq = new Counselling_OptionFormDataModel();
   public childpriorityChangeReq = new InstituteListDataModel_Coun();
   public childDeleteOptionReq = new InstituteListDataModel_Coun();
-
+  public appRequest = new CounsellingApplicationSearchModel();
   public TradeList: any = []
   public InstituteList: any = []
   public AddedChoices: Counselling_OptionFormDataModel[] = []
 
+  public request = new CounsellingApplicationFormDataModel();
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   public settingsMultiselect: object = {};
@@ -73,9 +74,12 @@ export class CandidateOptionDetailsComponent {
     };
 
     this.OptionsFormGroup = this.formBuilder.group({
-        TradeId: ['', [DropdownValidators]],
+        TradeId: [{value: 0 }, [DropdownValidators]],
         // InstituteID: ['', [DropdownValidators]],
-        InstituteList: ['', ],
+      InstituteList: ['',],
+      Designation: [{ value: '', disabled: true }],
+      MeritNo: [{ value: '', disabled: true }],
+      IsTSP: [{ value: '', disabled: true }],
       });
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
     this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -86,11 +90,36 @@ export class CandidateOptionDetailsComponent {
     
     this.formData.DepartmentID = EnumDepartment.BTER;
 
+   
+    await this.GetApplicationDataByID_Counselling();
     await this.GetTradeList();
     await this.Counselling_GetOptionDetailsByID();
+   
   }
 
   get _OptionsFormGroup() { return this.OptionsFormGroup.controls; }
+
+
+  async GetApplicationDataByID_Counselling() {
+    
+    try {
+      this.appRequest.CandidateId = this.CandidateID;
+      await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State === EnumStatus.Success) {
+          // this.toastr.success(data.Message);
+          this.request = data.Data
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message);
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   async GetTradeList() {
     try {
@@ -101,6 +130,8 @@ export class CandidateOptionDetailsComponent {
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
+         this.formData.TradeId=data.Data[0].TradeId;
+         this.GetInstituteList();
         console.log('TradeList check',this.TradeList);
         
       })
@@ -108,15 +139,39 @@ export class CandidateOptionDetailsComponent {
       console.error(error)
     }
   }
-
+  // async GetInstituteList() {
+  //   try {
+  //     this.tradeRequest.Action = 'GetCollegeListByTradeDesignationTSP'
+  //           this.tradeRequest.CandidateID = this.CandidateID;
+  //           console.log('CandidateID check',this.tradeRequest.CandidateID);
+  //           this.tradeRequest.Designation=this.request.Designation;
+  //           this.tradeRequest.IsTSP=this.request.IsTSP;
+  //           this.tradeRequest.TradeID=this.formData.TradeId; 
+  //     await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       this.TradeList = data.Data;
+  //        this.formData.TradeId=data.Data[0].TradeId;
+  //        this.GetInstituteList();
+  //       console.log('TradeList check',this.TradeList);
+        
+  //     })
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
   async GetInstituteList() {
     try {
-      this.tradeRequest.Action = 'GetCollegeList'
-      this.tradeRequest.TradeID = this.formData.TradeId
+      this.tradeRequest.Action = 'GetCollegeListByTradeDesignationTSP'
       this.tradeRequest.CandidateID = this.CandidateID;
+      console.log('CandidateID check',this.tradeRequest.CandidateID);
+      this.tradeRequest.Designation=this.request.Designation;
+      this.tradeRequest.IsTSP=(this.request.IsTSP == false ? 0: 1);
+      this.tradeRequest.TradeID=this.formData.TradeId; 
 
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        console.log('Institute List Length:'+ data.Data.length)
+        console.log('Institute List:'+  data.Data)
         this.InstituteList = data.Data;
         this.InstituteList = this.InstituteList.map((item: any, index: number) => ({
           ...item,
@@ -127,7 +182,24 @@ export class CandidateOptionDetailsComponent {
       console.error(error)
     }
   }
+  // async GetInstituteList() {
+  //   try {
+  //     this.tradeRequest.Action = 'GetCollegeList'
+  //     this.tradeRequest.TradeID = this.formData.TradeId
+  //     this.tradeRequest.CandidateID = this.CandidateID;
 
+  //     await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
+  //       data = JSON.parse(JSON.stringify(data));
+  //       this.InstituteList = data.Data;
+  //       this.InstituteList = this.InstituteList.map((item: any, index: number) => ({
+  //         ...item,
+  //         DisplayText: `${index + 1}. ${item.InstituteName}`
+  //       }));
+  //     })
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
   async AddChoice() {
     if(this.OptionsFormGroup.invalid) {
       this.toastr.error("Please fill all the required fields");
@@ -145,12 +217,18 @@ export class CandidateOptionDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message)
-          await this.Counselling_GetOptionDetailsByID();
+      
           this.OptionsFormGroup.reset();
           this.formData.TradeId = 0;
           this.formData.InstituteID = 0;
           this.formData.InstituteList = [];
           this.isSubmitted = false;
+          this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
+          this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+          this.formData.DepartmentID = EnumDepartment.BTER;
+          await this.GetTradeList();
+           await this.GetApplicationDataByID_Counselling();
+          await this.Counselling_GetOptionDetailsByID();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
@@ -163,6 +241,7 @@ export class CandidateOptionDetailsComponent {
   }
 
   async Counselling_GetOptionDetailsByID() {
+    
     try {
       this.searchReq.CandidateID = this.CandidateID;
       await this.counsellingApplicationFormService.Counselling_GetOptionDetailsByID(this.searchReq).then(async (data: any) => {
@@ -263,10 +342,16 @@ export class CandidateOptionDetailsComponent {
   }
 
   async SaveAndNext() {
-    if(this.AddedChoices.length == 0){
-      this.toastr.error ("Please add at least one option");
+    console.log('this.AddedChoices.length ',this.AddedChoices?.[0]?.InstituteList?.length ?? 0  ); 
+    console.log('this.InstituteList.length ',this.InstituteList.length );
+    if ((this.AddedChoices?.[0]?.InstituteList?.length ?? 0) !== (this.InstituteList?.length ?? 0)) {
+      this.toastr.error("Please Select all Institute options");
       return;
-    }
+  }
+    // if(this.AddedChoices.length == 0){
+    //   this.toastr.error ("Please add at least one option");
+    //   return;
+    // }
     this.formSubmitSuccess.emit(true);
     this.tabChange.emit(3)
   }

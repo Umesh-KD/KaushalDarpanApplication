@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
 import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
-import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType } from '../../../Common/GlobalConstants';
+import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType, EnumCourseType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -150,6 +150,8 @@ export class PreExamStudentExaminationComponent {
   public PromoteStatusList: any[] = [];
   public StudentExamTypeList: any[] = [];
 
+  public _EnumCourseType = EnumCourseType;
+
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
     private loaderService: LoaderService,
@@ -229,7 +231,8 @@ export class PreExamStudentExaminationComponent {
         txtMobileNo: [''],
         SessionType: [''],
         PromoteStatus: [''],
-        StudentExamType: ['']
+        StudentExamType: [''],
+        txtAbc: ['']
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
@@ -319,7 +322,7 @@ export class PreExamStudentExaminationComponent {
 
     if (isNaN(_studentFilterStatusId) == false) {
       this.request.StudentFilterStatusId = _studentFilterStatusId;
-      this.btn_SearchClick();
+      await this.btn_SearchClick();
     }
 
 
@@ -542,6 +545,8 @@ export class PreExamStudentExaminationComponent {
   }
 
   async GetPreExamStudent() {
+
+    debugger
     try {
       this.isSubmitted = true;
       //session
@@ -920,7 +925,7 @@ export class PreExamStudentExaminationComponent {
     //debugger
     let needCheckOptionalSubjectAdded = false;
     // check optional subject already added or not for condition base
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.Principal)
       && [4, 5, 6].includes(SemesterID) && StudentTypeID == 1) {
       needCheckOptionalSubjectAdded = true;
     }
@@ -2165,7 +2170,6 @@ export class PreExamStudentExaminationComponent {
   }
 
   async SaveOptionalSubjectData() {
-    ;
 
     if (this.optionalSubjectList.filter((x: any) => x.SubjectID == 0)?.length > 0) {
       this.toastr.error("Please choose all optional subject");
@@ -2196,7 +2200,7 @@ export class PreExamStudentExaminationComponent {
         })
         .catch((error: any) => {
           console.error(error);
-          this.toastr.error('Failed to save optinal subject!');
+          this.toastr.error('Failed to save optional subject!');
         });
     }
     catch (ex) {

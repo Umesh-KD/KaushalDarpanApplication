@@ -43,7 +43,8 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
   SemesterMasterDDL: any[] = [];
   DayList: any[] = [];
   SubjectMasterDDL: any[] = [];
-  GetSectionData: any[] = [];
+  AssignedTeacher_SSOList: any[] = [];
+  AssignedTeacher_SSOUpdatedList: any[] = [];
   InstituteMasterDDL: any[] = [];
   DistrictMasterDDL: any[] = [];
   ExaminerDDL: any[] = [];
@@ -122,13 +123,14 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     //});
 
     this.TableForm = this.fb.group({
-      SSOID: ['', Validators.required],
+      SSOID: ['0', Validators.required],
       From_Date: ['', Validators.required],
       To_Date: ['', Validators.required]
     });
 
     
     this.getMasterData();
+    this.AssignedTeacher_SSOData();
    
     this.ReAssignTeacherFormGroup = this.fb.group({
       SSOID: ['', Validators.required],
@@ -188,16 +190,49 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     })
   }
 
+  
+
+
+  async AssignedTeacher_SSOData(){
+    debugger
+    // const GetSemesterID = this.TableForm.get('SemesterID')?.value;
+    let obj={
+      InstituteID:this.sSOLoginDataModel.InstituteID,
+      DepartmentID:this.sSOLoginDataModel.DepartmentID
+    }
+    // GetBranchSectionAcRosterData_SSOData
+    await this.staffMasterService.GetAssignedTeacher_SSOData(obj)
+    .then((data:any)=>{
+      data=JSON.parse(JSON.stringify(data));
+      this.AssignedTeacher_SSOList=data.Data;
+
+    },(error:any)=>console.error(error)
+  );
+
+      // await this.staffMasterService.GetBranchSectionAcRosterData(obj)
+      // .then((data: any) => {
+      //   data = JSON.parse(JSON.stringify(data));
+      //   this.GetSectionData = data.Data;
+      //   this.allSections = data.Data;
+      //   this.GetSectionData = [...this.allSections];
+      // }, (error: any) => console.error(error)
+      // );
+
+  }
 
 
   async ReAssignTeacherForAttendance() {
     try {
       debugger
+      
       this.isSubmitted = true;
       if (this.TableForm.invalid) return;
 
       this.filterModel.InstituteId = this.sSOLoginDataModel.InstituteID;
       this.filterModel.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      console.log(this.filterModel);
+      console.log(this.TableForm.value);
+      console.log(this.filterModel.SSOID);
       //if (this.TableForm.invalid) {
       //  this.toastr.warning("Please select Semester or Stream !")
       //  return;
@@ -473,6 +508,7 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
   async ReAssignTeacherFor(content: any) {
     debugger;
 
+    console.log(this.AssignedTeacher_SSOList);
     // ✅ Check if at least one record is selected
     const selectedRecords = this.dataSource.data.filter((x: any) => x.isSelected);
 
@@ -488,6 +524,12 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     }
 
     const selectedRecord = selectedRecords[0];
+
+    if(selectedRecord.StaffID){
+      this.AssignedTeacher_SSOUpdatedList=this.AssignedTeacher_SSOList.filter(
+        (x:any)=>x.ID!=selectedRecord.StaffID
+      );
+    }
     // If valid, continue with modal logic
     this.ReAssignSaveData.From_Date = this.filterModel.From_Date;
     this.ReAssignSaveData.To_Date = this.filterModel.To_Date;
@@ -496,7 +538,7 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     this.ReAssignSaveData.rdID = selectedRecord.rdID;
     this.ReAssignSaveData.SSOIDBY = this.sSOLoginDataModel.SSOID;
 
-
+    console.log(this.AssignedTeacher_SSOUpdatedList);
     try {
       await this.modalService
         .open(content, {

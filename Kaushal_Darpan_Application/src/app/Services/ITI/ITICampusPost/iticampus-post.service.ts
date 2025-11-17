@@ -32,8 +32,9 @@ export class ItiCampusPostService {
   //    ).toPromise();
   //}
 
-  public async GetAllData(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number) {
-    return await this.http.get(this.APIUrl + "/GetAllData" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID, this.headersOptions)
+  public async GetAllData(CompanyID: number, CollegeID: number, Status: string, DepartmentID: number, RoleID: number, Flag:string='') {
+   debugger
+    return await this.http.get(this.APIUrl + "/GetAllData" + "/" + CompanyID + "/" + CollegeID + "/" + Status + "/" + DepartmentID + "/" + RoleID + "/" + Flag, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

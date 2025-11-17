@@ -235,6 +235,13 @@
               <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
+            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
+                   formControlName="txtAbc">
+          </div>
+
+
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
@@ -370,11 +377,11 @@
                   <i class="ti ti-pencil"></i>
                 </a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin" href="javascript:void(0);"
+                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon" href="javascript:void(0);"
                    title="Edit Student Enrollment" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
                 </a>
-                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID)" class="bg-gray-200"
+                <a href="javascript:void(0);" *ngIf="checkStatusForOptional(row.status) && row.StudentTypeID==_enumStudentType.Reg && [4,5,6].includes(row.SemesterID) && this.sSOLoginDataModel.Eng_NonEng==_EnumCourseType.Engineering" class="bg-gray-200"
                    title="Assign Optional Subject" (click)="StudentOptionalSubjectModelView(OptionalSubjectModal, row.StudentID,row.StudentExamID)">
                   <i class="fa fa-file-o"></i>
                 </a>
@@ -582,7 +589,7 @@
             <div class="text-center flex items-center justify-center">
 
               <button type="button"
-                      *ngIf="StudentProfileDetailsData[0].status != _enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status != _enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status != _enumExamStudentStatus.New_Addimited && StudentProfileDetailsData[0]['ExamTransactionId']==0"
+                      *ngIf="(StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForExamination || StudentProfileDetailsData[0]['ExamTransactionId']>0)"
                       class="btn bg-info text-white"
                       (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">
                 Download Examination Form <i class="ti ti-download"></i>

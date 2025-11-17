@@ -2017,4 +2017,29 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetDDLCounselling_Qualification() {
+
+    return await this.http.get(this.APIUrl + '/GetDDLCounselling_Qualification/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DDL_AllCasteCategoryA() {
+
+    return await this.http.get(this.APIUrl + '/DDL_AllCasteCategoryA/', this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DDL_CounsellingTradelist(designationId: number = 0) {
+
+    return await this.http.get(this.APIUrl + '/DDL_CounsellingTradelist/' + designationId, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+  
 }

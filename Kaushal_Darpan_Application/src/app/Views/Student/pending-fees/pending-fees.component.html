@@ -16,7 +16,12 @@
             <th class="text-left">Semester</th>
             <th class="text-left">Enrollment No.</th>
             <th class="text-left">Roll No</th>
-            <th class="text-left">(Enroll + Exam) Fee Amt. (INR)</th>
+            <th class="text-left"  *ngIf="isExamFee">
+                Exam Fee Amt. (INR)
+              </th>
+              <th class="text-left"  *ngIf="!isExamFee">
+                (Enroll + Exam) Fee Amt. (INR)
+              </th>
             <th class="text-left">End Term</th>
             <th class="text-left">Status</th>
             <!--<th class="text-left">Last Date</th>-->
@@ -28,14 +33,17 @@
           <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
             <td>{{idx+1}}</td>
             <td *ngIf="isShowSelected">
-              <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
+              <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected"
+                 [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}"
+                  name="chk_Selected{{idx+1}}">
             </td>
             <td>{{row.StudentName}}</td>
             <td>{{row.StreamName}}</td>
             <td>{{row.Semester}}</td>
             <td>{{row.EnrollmentNo}}</td>
             <td>{{row.RollNo}}</td>
-            <td>{{row.EnrollFeeAmount}} + {{row.FeeAmount}}</td>
+            <td *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination">{{row.FeeAmount}}</td>
+              <td *ngIf="row.ExamStudentStatus!=enumExamStudentStatus.VerifiedForExamination">{{row.EnrollFeeAmount}} + {{row.FeeAmount}}</td>
             <td>{{row.EndTermName}}</td>
             <td>{{row.StrStudenetStatus}}</td>
             <td>{{row.Subjects}}</td>

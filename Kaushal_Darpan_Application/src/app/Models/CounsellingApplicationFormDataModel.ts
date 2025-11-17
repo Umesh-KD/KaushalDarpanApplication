@@ -113,6 +113,8 @@ export class Counselling_DropdownDataModel extends RequestBaseModel {
     public TradeID?: number = 0;
     public InstituteID?: number = 0;
     public CandidateID?: number = 0;
+    public Designation?: string = '';
+    public IsTSP?: number = 0;
 }
 
 export class CounsellingApplicationPreviewDataModel {

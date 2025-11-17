@@ -151,7 +151,8 @@ export class StudentEnrollmentComponent {
         ddlbridege: [''],
         ddlExamCategoryID: [''],
         txtStudentName: [''],
-        txtMobileNo: ['']
+        txtMobileNo: [''],
+        txtAbc :['']
       })
 
     this.EditStudentDataFormGroup = this.formBuilder.group(
@@ -205,7 +206,7 @@ export class StudentEnrollmentComponent {
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
 
 
-      debugger
+    debugger
     /*this.GetPageName(this.currentTab);*/
 
     this.UserID = this.sSOLoginDataModel.UserID
@@ -225,7 +226,7 @@ export class StudentEnrollmentComponent {
     await this.GetMasterData();
 
     await this.GetDateConfig();
-    
+
     if (isNaN(statusID) == false) {
       this.request.StudentFilterStatusId = statusID;
       await this.GetPreExamStudent();
@@ -235,14 +236,14 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
-    if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited) {
+    debugger
+    if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {
       this.isShowImageDeleteButton = false;
       return;
     }
-    if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
-      this.isShowImageDeleteButton = true
-    } else if (this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng) {
-      this.isShowImageDeleteButton = false
+    // role
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
+      this.isShowImageDeleteButton = true;
     } else {
       this.isShowImageDeleteButton = false
     }
@@ -543,15 +544,17 @@ export class StudentEnrollmentComponent {
 
   //get edit student
   async GetPreExam_StudentMaster(StudentID: number) {
+    this.showImageDeleteButton();
+    
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
     var Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     var EndTermID = this.sSOLoginDataModel.EndTermID
     this.StudentFilterStatusId = this.request.StudentFilterStatusId
     var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
-    debugger
+    
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0,FileNameWithDynamicPath)
+      await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0, FileNameWithDynamicPath)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.requestStudent = data['Data'];
@@ -604,7 +607,10 @@ export class StudentEnrollmentComponent {
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.JanAadharMemberId = data['Data']['JanAadharMemberId'];
           this.requestStudent.Papers = data['Data']['Papers'];
-          this.requestStudent.StudentFilterStatusId = this.StudentFilterStatusId;
+
+
+          this.requestStudent.StudentFilterStatusId = this.StudentFilterStatusId;// hide delete of image
+          this.showImageDeleteButton();
 
           // document
           this.requestStudent.Dis_StudentPhoto = data['Data']['Dis_StudentPhoto'];
@@ -833,8 +839,8 @@ export class StudentEnrollmentComponent {
     // Reject at BTER any stage
     if (this.status != enumExamStudentStatus.RejectatBTER) {
       //verified for enrollment for each edit student
-      if(this.sSOLoginDataModel.RoleID == EnumRole.ACP || this.sSOLoginDataModel.RoleID == EnumRole.ACP_NonEng){
-        if(this.request.StudentFilterStatusId == enumExamStudentStatus.SelectedForEnrollment && this.status == enumExamStudentStatus.SelectedForEnrollment){
+      if (this.sSOLoginDataModel.RoleID == EnumRole.ACP || this.sSOLoginDataModel.RoleID == EnumRole.ACP_NonEng) {
+        if (this.request.StudentFilterStatusId == enumExamStudentStatus.SelectedForEnrollment && this.status == enumExamStudentStatus.SelectedForEnrollment) {
           this.toastr.error("Student Already Marked as 'Selected for Enrollment'!");
           return;
         }
@@ -1464,7 +1470,7 @@ export class StudentEnrollmentComponent {
         MinFileSize: item.MinFileSize ?? "",
         MaxFileSize: item.MaxFileSize ?? "",
         FolderName: item.FolderName ?? "",
-        FilePrefix: this.requestStudent.FinancialYearName+"/"+this.requestStudent.CourseTypeID+"/"+this.requestStudent.StudentID ,
+        FilePrefix: this.requestStudent.FinancialYearName + "/" + this.requestStudent.CourseTypeID + "/" + this.requestStudent.StudentID,
         //IsCopy: true 
         FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
       }
@@ -1472,7 +1478,7 @@ export class StudentEnrollmentComponent {
       //call
       await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
         .then((data: any) => {
-          
+
           //
           if (data.State == EnumStatus.Success) {
             //add/update document in js list
@@ -1611,50 +1617,50 @@ export class StudentEnrollmentComponent {
 
   async SendForSMSEnrollmentStudent() {
     // confirm
-      debugger
-        try {
-          this.isSubmitted = true;
-          this.loaderService.requestStarted();
-          // Filter out only the selected students
-          var SMSrequest: ForSMSEnrollmentStudentMarkedModel[] = [];
-          const selectedStudents = this.PreExamStudentData.filter(x => x.Selected);
-          selectedStudents.forEach(x => {
-            SMSrequest.push({
-              StudentId: x.StudentID,
-              Status: this.request.StudentFilterStatusId,
-              RoleId: this.sSOLoginDataModel.RoleID,
-              EndTermID: this.sSOLoginDataModel.EndTermID,
-              DepartmentID: this.sSOLoginDataModel.DepartmentID,
-              Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-              RoleID: this.sSOLoginDataModel.RoleID,
-              ApplicationNo: x.ApplicationID?.toString() || "",
-              MobileNo: x.MobileNo,
-              MessageType: "Bter_EnrollmentForStudent"
+    debugger
+    try {
+      this.isSubmitted = true;
+      this.loaderService.requestStarted();
+      // Filter out only the selected students
+      var SMSrequest: ForSMSEnrollmentStudentMarkedModel[] = [];
+      const selectedStudents = this.PreExamStudentData.filter(x => x.Selected);
+      selectedStudents.forEach(x => {
+        SMSrequest.push({
+          StudentId: x.StudentID,
+          Status: this.request.StudentFilterStatusId,
+          RoleId: this.sSOLoginDataModel.RoleID,
+          EndTermID: this.sSOLoginDataModel.EndTermID,
+          DepartmentID: this.sSOLoginDataModel.DepartmentID,
+          Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+          RoleID: this.sSOLoginDataModel.RoleID,
+          ApplicationNo: x.ApplicationID?.toString() || "",
+          MobileNo: x.MobileNo,
+          MessageType: "Bter_EnrollmentForStudent"
 
-            })
-          });
-          // Call service to save student exam status
-          this.sMSMailService.SendSMSForStudentEnrollmentData(SMSrequest)
-            .then(async (data: any) => {
-              this.State = data['State'];
-              this.Message = data['Message'];
-              this.ErrorMessage = data['ErrorMessage'];
-              //
-              if (this.State == EnumStatus.Success) {
-                //this.toastr.success(this.Message)
-                /*await this.GetPreExamStudent();*/
-              }
-              else if (this.State == EnumStatus.Warning) {
-                //this.toastr.warning(this.Message)
-              }
-              else {
-                console.log(this.ErrorMessage)
-              }
-            })
-        } catch (ex) {
-          console.log(ex);
-        } 
-     
+        })
+      });
+      // Call service to save student exam status
+      this.sMSMailService.SendSMSForStudentEnrollmentData(SMSrequest)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          if (this.State == EnumStatus.Success) {
+            //this.toastr.success(this.Message)
+            /*await this.GetPreExamStudent();*/
+          }
+          else if (this.State == EnumStatus.Warning) {
+            //this.toastr.warning(this.Message)
+          }
+          else {
+            console.log(this.ErrorMessage)
+          }
+        })
+    } catch (ex) {
+      console.log(ex);
+    }
+
   }
 
   async VerifiedSendForSMSEnrollmentStudent() {
@@ -1672,7 +1678,7 @@ export class StudentEnrollmentComponent {
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
         RoleID: this.sSOLoginDataModel.RoleID,
         ApplicationNo: this.requestStudent.ApplicationID?.toString() || "",
-        MobileNo: this.requestStudent.MobileNo, 
+        MobileNo: this.requestStudent.MobileNo,
         MessageType: "Bter_EnrollmentForStudent"
       }];
 

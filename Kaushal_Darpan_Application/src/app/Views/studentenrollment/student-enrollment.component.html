@@ -33,12 +33,12 @@
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
             <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
-                    formControlName="ddlInstituteID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
-                {{item.InstituteName}}
-              </option>
-            </select>-->
+            formControlName="ddlInstituteID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+        {{item.InstituteName}}
+      </option>
+    </select>-->
             <ng-select [(ngModel)]="request.InstituteID"
                        formControlName="ddlInstituteID" [clearable]="false">
               <ng-option [value]="0" selected>--All--</ng-option>
@@ -49,21 +49,21 @@
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
-            <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
-              formControlName="ddlFinancialYearID">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
-                {{
-                item.FinancialYearName
-                }}
-              </option>
-            </select>
-            <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
-                  aria-hidden="true"></i>This field is required.</p>
-            </div>
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
+      formControlName="ddlFinancialYearID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
+        {{
+        item.FinancialYearName
+        }}
+      </option>
+    </select>
+    <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
+      <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
+          aria-hidden="true"></i>This field is required.</p>
+    </div>
+  </div>-->
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
@@ -76,9 +76,9 @@
               }
             </ng-select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
 
           <div>
@@ -89,9 +89,9 @@
               <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
             <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-              <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-                field is required.</p>
-            </div>-->
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
@@ -114,6 +114,7 @@
             <input class="form-input" type="text" id="StudentExamMobile" [(ngModel)]="request.MobileNo"
                    formControlName="txtMobileNo">
           </div>
+         
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
@@ -125,19 +126,30 @@
               <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
+            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
+                   formControlName="txtAbc">
+          </div>
+
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="btn_Clear()">Clear</button>
           </div>
           <!--&& paginatedInTableData[0]?.IsReturnHistory == 290-->
-          <div></div>
+          <div>
+
+          </div>
           <div class="alert alert-warning" *ngIf="paginatedInTableData?.length > 0 && paginatedInTableData[0]?.IsReturnHistory == 290">
             Remark: {{ paginatedInTableData[0]?.Remark}},<br /> Created By: {{paginatedInTableData[0]?.RemarkCreatedBy}},<br /> Remark Date: {{paginatedInTableData[0]?.RemarkDate | date: 'dd/MM/yyyy'}}
           </div>
 
 
+
+
         </div>
+
         <div class="verify-notice" *ngIf="request.StudentFilterStatusId==_enumExamStudentStatus.SelectedForEnrollment">
           <span><b>Note:</b> Please Verify each student before 'Fee Pay'.</span>
         </div>
@@ -457,7 +469,7 @@
               </table>
             </div>
             <div class="text-center flex items-center justify-center">
-              <button type="button" *ngIf="StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForEnrollment"
+              <button type="button" *ngIf="(StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForEnrollment || StudentProfileDetailsData[0]['EnrollTransactionId']>0)"
                       class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">
                 Download Enrollment Form<i class="ti ti-download"></i>
               </button>
