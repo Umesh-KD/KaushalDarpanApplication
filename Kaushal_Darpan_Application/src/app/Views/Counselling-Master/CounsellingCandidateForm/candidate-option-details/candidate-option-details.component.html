@@ -91,7 +91,16 @@
           
         </div>
 
+      
 
+        <div>
+          <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
+            मेरिट नंबर (Merit Number):<span class="StarMarking">*</span>
+          </label>
+          <input type="text" class="form-input" id="MeritNo"
+                 formControlName="MeritNo" [(ngModel)]="request.MeritNo" />
+          
+        </div>
 
         <div class="pt-30">
           <button type="button" class="btn bg-primary text-white" (click)="AddChoice()">
