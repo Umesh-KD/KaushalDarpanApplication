@@ -582,7 +582,7 @@
             <div class="text-center flex items-center justify-center">
 
               <button type="button"
-                      *ngIf="StudentProfileDetailsData[0].status != _enumExamStudentStatus.RejectatBTER && StudentProfileDetailsData[0].status != _enumExamStudentStatus.Addimited && StudentProfileDetailsData[0].status != _enumExamStudentStatus.New_Addimited && (StudentProfileDetailsData[0]['ExamTransactionId']==0 || StudentProfileDetailsData[0]['EnrollTransactionId']>0)"
+                      *ngIf="(StudentProfileDetailsData[0].status == _enumExamStudentStatus.VerifiedForExamination || StudentProfileDetailsData[0]['ExamTransactionId']>0)"
                       class="btn bg-info text-white"
                       (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">
                 Download Examination Form <i class="ti ti-download"></i>

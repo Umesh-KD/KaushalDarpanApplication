@@ -49,8 +49,10 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   public isSubmitted: boolean = false
   public isShowSelected: boolean = false;
   MapKeyEng: number = 0;
+  MapKey_enroll: number = 0;
   public DateConfigSetting: any = [];
   public PDFURL: string = "";
+  public isExamFee: boolean = false
 
 
   constructor(private loaderService: LoaderService,
@@ -171,12 +173,16 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.StudentDetailsModelList = data['Data'];
-
+            
             if (this.StudentDetailsModelList.length > 1) {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
 
+            }
+
+            if(this.StudentDetailsModelList[0]?.ExamStudentStatus == enumExamStudentStatus.VerifiedForExamination) {
+              this.isExamFee = true
             }
           }
         }, (error: any) => console.error(error)
@@ -335,76 +341,82 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   }
 
   async PayEnrollmentFee(item: StudentDetailsModel) {
-    this.emitraRequest = new EmitraRequestDetails();
-    //Set Parameters for emitra
-    this.emitraRequest.Amount = Number(item.FeeAmount);
-    this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
-    this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
-    this.emitraRequest.ServiceID = item.ServiceID.toString();
-    this.emitraRequest.UserName = item.StudentName;
-    this.emitraRequest.MobileNo = item.MobileNo;
-    this.emitraRequest.StudentID = item.StudentID;
-    this.emitraRequest.SemesterID = item.SemesterID;
-    this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
-    this.emitraRequest.DepartmentID = EnumDepartment.BTER;
-    //student details
-    this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-    this.emitraRequest.IsKiosk = true;
-    this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
-    this.emitraRequest.ID = item.ID;
-    this.emitraRequest.FormCommision = item.FormCommision;
-    this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
+    const isValid = await this.ValidateEnrollmentDate(item.CourseType, item.FinancialYearID, item.EndTermID);
+    if (isValid) {
+      this.emitraRequest = new EmitraRequestDetails();
+      //Set Parameters for emitra
+      this.emitraRequest.Amount = Number(item.FeeAmount);
+      this.emitraRequest.EnrollFeeAmount = Number(item.EnrollFeeAmount);
+      this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
+      this.emitraRequest.ServiceID = item.ServiceID.toString();
+      this.emitraRequest.UserName = item.StudentName;
+      this.emitraRequest.MobileNo = item.MobileNo;
+      this.emitraRequest.StudentID = item.StudentID;
+      this.emitraRequest.SemesterID = item.SemesterID;
+      this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
+      this.emitraRequest.DepartmentID = EnumDepartment.BTER;
+      //student details
+      this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
+      this.emitraRequest.IsKiosk = true;
+      this.emitraRequest.FeeFor = EnumFeeFor.EnrollMentFee;
+      this.emitraRequest.ID = item.ID;
+      this.emitraRequest.FormCommision = item.FormCommision;
+      this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
 
 
-    this.emitraRequest.StudentFeesTransactionItems.push({
-      itemAmount: Number(item.FeeAmount ?? 0),
-      status: item.ExamStudentStatus,
-      transactionApplicationID: item.StudentSemesterID,
-      tranSemesterID: item.SemesterID
-    } as StudentFeesTransactionItems);
+      this.emitraRequest.StudentFeesTransactionItems.push({
+        itemAmount: Number(item.FeeAmount ?? 0),
+        status: item.ExamStudentStatus,
+        transactionApplicationID: item.StudentSemesterID,
+        tranSemesterID: item.SemesterID
+      } as StudentFeesTransactionItems);
 
 
-    this.loaderService.requestStarted();
+      this.loaderService.requestStarted();
 
-    try {
-      // back to back emitra kiyosk
-      await this.emitraPaymentService.EnrollmentExaminationFeePaymentByKiyosk(this.emitraRequest)
-        .then(async (data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          this.PDFURL = data['PDFURL'];
+      try {
+        // back to back emitra kiyosk
+        await this.emitraPaymentService.EnrollmentExaminationFeePaymentByKiyosk(this.emitraRequest)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            this.PDFURL = data['PDFURL'];
 
-          if (data.State == EnumStatus.Success) {
-            this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
-              if (result.isConfirmed) {
-                try {
-                  //sms code missiog
-                  //await this.SendApplicationMessage();
-                  window.open(this.PDFURL, '_blank');
-                  setTimeout(function () { window.location.reload(); }, 200)
+            if (data.State == EnumStatus.Success) {
+              this.sweetAlert2.ConfirmationSuccess("Thank you! Your payment was successful.", async (result: any) => {
+                if (result.isConfirmed) {
+                  try {
+                    //sms code missiog
+                    //await this.SendApplicationMessage();
+                    window.open(this.PDFURL, '_blank');
+                    setTimeout(function () { window.location.reload(); }, 200)
+                  }
+                  catch (ex) {
+                    console.log(ex)
+                  }
                 }
-                catch (ex) {
-                  console.log(ex)
+                else {
+                  let displayMessage = this.Message ?? this.ErrorMessage;
+                  this.toastrService.error(displayMessage);
                 }
-              }
-              else {
-                let displayMessage = this.Message ?? this.ErrorMessage;
-                this.toastrService.error(displayMessage);
-              }
-            });
-            //open
-          }
-          else {
-            let displayMessage = this.Message ?? this.ErrorMessage;
-            this.toastrService.error(displayMessage)
-          }
-        });
+              });
+              //open
+            }
+            else {
+              let displayMessage = this.Message ?? this.ErrorMessage;
+              this.toastrService.error(displayMessage)
+            }
+          });
+      }
+      catch (ex) {
+        console.log(ex)
+      }
+    } else {
+      this.sweetAlert2.Info('Enrollment Fee Date Is Not Open Yet Please Try Again');
     }
-    catch (ex) {
-      console.log(ex)
-    }
+    
   }
 
 
@@ -647,4 +659,35 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     }
   }
 
+  async ValidateEnrollmentDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
+    try {
+      debugger
+      const data =
+      {
+        DepartmentID: 1,
+        CourseTypeId: Eng_NonEng,
+        AcademicYearID: FinancialYearID,
+        EndTermID: EndTermID,
+        Key: "Enrolled Fee",
+        SSOID: this.sSOLoginDataModel.SSOID
+      };
+
+      const response = await this.commonMasterService.GetDateConfigSetting(data);
+      const parsedData = JSON.parse(JSON.stringify(response));
+      this.DateConfigSetting = parsedData['Data'][0];
+      this.MapKey_enroll = this.DateConfigSetting["Enrolled Fee"];
+      console.log(this.DateConfigSetting, 'DATAAAAA')
+
+      if (this.MapKey_enroll == 1) {
+        return true; // Success case
+      }
+      else {
+        return false; // Success case
+      }
+
+    } catch (error) {
+      console.error(error);
+      return false; // Failure case
+    }
+  }
 }

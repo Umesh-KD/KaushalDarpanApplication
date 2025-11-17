@@ -72,7 +72,7 @@ export class StudentMasterModel {
   public IPAddress: string = '';
   public SemesterID: number = 0;
   public StudentTypeID: number = 0;
-  public ABCID: string | null = null;
+  public ABCID?: string | null = null;
 
   public BhamashahNo: string = '';
   public JanAadharMemberId: string = '';
