@@ -109,7 +109,20 @@ export class ItiReportDataModel {
   public LeaseOrderCopy: string = ''
   public NodalPostAddresss: string = ''
   public Ward: string = ''
+  public NodalOrderDate: string = ''
+  public NodalOrderNo: string = ''
+  public PlotHouseBuildingNo: string = ''
+  public LandMark: string = ''
+  public AreaLocalitySector: string = ''
+  public StreetRoadLane: string = ''
+  public ConsumerName: string = ''
+  public ContractDemand: string = ''
+  public SubDivOffice: string = ''
+  public SanctionLoad: string = ''
   public OrderTypeID:number=0
+  public Ownership:number=0
+  public ConnectionType:number=0
+  public DISCOM:number=0
 
 }
 

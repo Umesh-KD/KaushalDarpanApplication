@@ -298,6 +298,14 @@ export class StaffMasterService {
       ).toPromise();
   }
 
+  public async GetAssignedTeacher_SSOData(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAssignedTeacher_SSOData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
 
 
