@@ -151,7 +151,8 @@ export class StudentEnrollmentComponent {
         ddlbridege: [''],
         ddlExamCategoryID: [''],
         txtStudentName: [''],
-        txtMobileNo: ['']
+        txtMobileNo: [''],
+        txtAbc :['']
       })
 
     this.EditStudentDataFormGroup = this.formBuilder.group(

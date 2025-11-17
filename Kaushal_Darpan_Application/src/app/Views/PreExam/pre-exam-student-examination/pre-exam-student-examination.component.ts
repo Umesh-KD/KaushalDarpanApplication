@@ -231,7 +231,8 @@ export class PreExamStudentExaminationComponent {
         txtMobileNo: [''],
         SessionType: [''],
         PromoteStatus: [''],
-        StudentExamType: ['']
+        StudentExamType: [''],
+        txtAbc: ['']
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
@@ -544,6 +545,8 @@ export class PreExamStudentExaminationComponent {
   }
 
   async GetPreExamStudent() {
+
+    debugger
     try {
       this.isSubmitted = true;
       //session
