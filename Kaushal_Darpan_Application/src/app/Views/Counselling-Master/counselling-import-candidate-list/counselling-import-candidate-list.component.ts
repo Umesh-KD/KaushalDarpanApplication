@@ -133,10 +133,12 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
   ImportExcelFile(file: File): void {
     let mesg = '';
+    debugger;
     this.counsellingImportCandidateListService.SampleImportExcelFile(file)
       .then((data: any) => {
-
+        debugger;
         data = JSON.parse(JSON.stringify(data));
+        console.log(data);
         if (data.State === EnumStatus.Success) {
 
           // Assign data to model

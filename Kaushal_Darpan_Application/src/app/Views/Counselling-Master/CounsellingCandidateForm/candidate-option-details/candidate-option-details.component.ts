@@ -299,10 +299,16 @@ export class CandidateOptionDetailsComponent {
   }
 
   async SaveAndNext() {
-    if(this.AddedChoices.length == 0){
-      this.toastr.error ("Please add at least one option");
+    console.log('this.AddedChoices.length ',this.AddedChoices?.[0]?.InstituteList?.length ?? 0  ); 
+    console.log('this.InstituteList.length ',this.InstituteList.length );
+    if ((this.AddedChoices?.[0]?.InstituteList?.length ?? 0) !== (this.InstituteList?.length ?? 0)) {
+      this.toastr.error("Please Select all Institute options");
       return;
-    }
+  }
+    // if(this.AddedChoices.length == 0){
+    //   this.toastr.error ("Please add at least one option");
+    //   return;
+    // }
     this.formSubmitSuccess.emit(true);
     this.tabChange.emit(3)
   }

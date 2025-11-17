@@ -35,6 +35,13 @@
             </div>
             <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
                 <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Qualification :</label>
+                    <select class="form-select" id="Designation" name="Designation" [(ngModel)]="searchRequest.Designation" (change)="getTradeByDegree($event.target.value)" >
+                      <option value="0">Choose Option</option>
+                      <option *ngFor="let item of designations" [value]="item.id"  >{{item.name}}</option>
+                    </select>
+                </div>
+                <!-- <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade: </label>
                     <select class="form-select"
                             name="TradeID"
@@ -44,7 +51,19 @@
                         {{ item.TradeName }}
                         </option>
                     </select>
+                </div> -->
+
+
+                
+                
+                <div>
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
+                    <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="searchRequest.TradeID" >
+                      <option value="0">Choose Option</option>
+                      <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
+                    </select>
                 </div>
+               
                 <div>
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
                     <select class="form-select"
