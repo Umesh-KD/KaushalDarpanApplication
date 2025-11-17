@@ -68,7 +68,7 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left">
-                <span *ngIf="isShowSelected" class="text-left">Select</span>Sr. No.
+                <span *ngIf="isShowSelected" class="text-left">Select | </span>Sr. No.
               </th>
               <th class="text-left">Name</th>
               <th class="text-left">Stream Name</th>
@@ -92,7 +92,9 @@
             <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
               <td>
                 <span *ngIf="isShowSelected">
-                  <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
+                  <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected"
+                     [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}"
+                      name="chk_Selected{{idx+1}}">
                 </span>
                 {{idx+1}}
               </td>

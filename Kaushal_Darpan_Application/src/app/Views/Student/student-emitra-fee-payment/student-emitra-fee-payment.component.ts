@@ -181,6 +181,12 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
 
             }
 
+            if(this.isShowSelected) {
+              this.StudentDetailsModelList.forEach(row => {
+                row.IsSelected = true;
+              })
+            }
+
             if(this.StudentDetailsModelList[0]?.ExamStudentStatus == enumExamStudentStatus.VerifiedForExamination) {
               this.isExamFee = true
             }
