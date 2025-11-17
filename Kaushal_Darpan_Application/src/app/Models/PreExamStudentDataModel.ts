@@ -24,6 +24,8 @@ export class PreExamStudentDataModel extends RequestBaseModel {
 
   public TradeSchemeID: number = 0;
   public StudentExamTypeID: number = 0;
+  public AbcId: string = '';
+  
 }
 
 export class PreExam_UpdateEnrollmentNoModel extends RequestBaseModel {

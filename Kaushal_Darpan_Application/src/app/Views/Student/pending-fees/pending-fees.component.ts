@@ -28,6 +28,7 @@ export class PendingFeesComponent implements OnInit {
   public isSubmitted: boolean = false;
   public UserID: number = 0;
   public SemesterName: string = '';
+  public isExamFee: boolean = false
 
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new StudentSearchModel();
@@ -119,12 +120,15 @@ export class PendingFeesComponent implements OnInit {
 
             if (this.StudentDetailsModelList.length > 1) {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
-                [enumExamStudentStatus.SelectedForExamination].includes(f.ExamStudentStatus) ||
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
             }
             else {
               this.isShowSelected = false;
+            }
+
+            if(this.StudentDetailsModelList[0]?.ExamStudentStatus == enumExamStudentStatus.VerifiedForExamination) {
+              this.isExamFee = true
             }
           }
         }, (error: any) => console.error(error)
@@ -486,7 +490,7 @@ export class PendingFeesComponent implements OnInit {
 
   async ValidateExamDate(Eng_NonEng: number = 0, FinancialYearID: number = 0, EndTermID: number = 0): Promise<boolean> {
     try {
-
+      debugger
       const data =
       {
         DepartmentID: 1,
