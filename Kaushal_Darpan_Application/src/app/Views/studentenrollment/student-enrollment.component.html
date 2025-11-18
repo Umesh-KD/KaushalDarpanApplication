@@ -907,7 +907,7 @@
           <div class="flex justify-between flex-wrap items-center mb-3 mt-4 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i> Qualification Details</b>
             <!-- Add Qualification Button -->
-            <!--<button *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited" class="btn btn-primary" (click)="addQualification()"><i class="ti ti-circle-plus"></i> Add More</button>-->
+            <button title="add more qualification" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited" class="px-3 py-2 rounded text-white bg-green-600 hover:bg-green-700 flex items-center gap-1" (click)="addQualification(requestStudent.StudentID)"><i class="ti ti-circle-plus"></i> Add More</button>
           </div>
 
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
@@ -928,67 +928,67 @@
                   <tr *ngFor="let row of requestStudent.QualificationDetails;let idx=index;">
 
                     <td>
-                      <input type="text" class="form-input " id="txtQualification" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                      <input type="text" class="form-input " id="txtQualification" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
                              name="Qualification" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.Qualification"
-                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.Qualification">
+                             [class.error]="row.IsNew==true && this.isSubmitted && !row.Qualification">
 
-                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.Qualification">
+                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.Qualification">
                         This field is required!
                       </small>
 
                     </td>
                     <td>
                       <select class="form-select " id="ddlBoard" name="ddlBoard" [(ngModel)]="row.ClassBoard"
-                              [ngModelOptions]="{standalone: true}" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
-                              [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.ClassBoard">
+                              [ngModelOptions]="{standalone: true}" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
+                              [class.error]="row.IsNew==true && this.isSubmitted && !row.ClassBoard">
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of BoardMasterList" value="{{item.ID}}">{{item.Name}}</option>
                       </select>
 
-                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.ClassBoard">
+                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.ClassBoard">
                         This field is required!
                       </small>
                     </td>
 
                     <td>
-                      <input type="text" class="form-input " id="txtClassSubject" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                      <input type="text" class="form-input " id="txtClassSubject" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
                              name="txtClassSubject" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.ClassSubject"
-                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.ClassSubject">
+                             [class.error]="row.IsNew==true && this.isSubmitted && !row.ClassSubject">
 
-                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.ClassSubject">
+                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.ClassSubject">
                         This field is required!
                       </small>
 
                     </td>
                     <td>
-                      <select class="form-select " id="ddlPassingYear" name="ddlPassingYear" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                      <select class="form-select " id="ddlPassingYear" name="ddlPassingYear" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
                               [(ngModel)]="row.PasssingYear" [ngModelOptions]="{standalone: true}"
-                              [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.PasssingYear">
+                              [class.error]="row.IsNew==true && this.isSubmitted && !row.PasssingYear">
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of PassingYearList" value="{{item.Year}}">{{item.Year}}</option>
                       </select>
 
-                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.PasssingYear">
+                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.PasssingYear">
                         This field is required!
                       </small>
                     </td>
                     <td>
-                      <input type="text" class="form-input " id="txtClassPercentage" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                      <input type="text" class="form-input " id="txtClassPercentage" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
                              name="txtClassPercentage" [ngModelOptions]="{standalone: true}"
                              [(ngModel)]="row.ClassPercentage"
-                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && (!row.ClassPercentage || row.ClassPercentage == 0)" maxlength="5">
+                             [class.error]="row.IsNew==true && this.isSubmitted && (!row.ClassPercentage || row.ClassPercentage == 0)" maxlength="5">
 
-                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && (!row.ClassPercentage || row.ClassPercentage == 0)">
+                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && (!row.ClassPercentage || row.ClassPercentage == 0)">
                         This field is required!
                       </small>
                     </td>
 
                     <!-- Delete Button -->
-                    <!--<td>
-                      <button class="btn btn-danger" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited && row.StudentQualificationID==0" (click)="deleteQualification(idx)">
+                    <td>
+                      <button title="delete qualification" class="p-2 rounded bg-red-600 hover:bg-red-700 text-white" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited && row.IsNew==true" (click)="deleteQualification(idx)">
                         <i class="ti ti-trash"></i>
                       </button>
-                    </td>-->
+                    </td>
                   </tr>
 
                 </tbody>

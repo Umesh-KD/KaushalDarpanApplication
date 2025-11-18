@@ -728,11 +728,12 @@ export class StudentEnrollmentComponent {
     this.requestStudent.EnrollmentNo = this.requestStudent.EnrollmentNo || '0';
     this.requestStudent.StudentExamStatus = this.requestStudent.StudentExamStatus || '0';
 
-    if (!(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
-      this.toastr.error("Invalid Action!");
-      return;
-    }
+    //if (!(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+    //  || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
+    //  this.toastr.error("Invalid Action!");
+    //  //return;
+    //}
+
     if (this.IsVerified == true) {
       this.requestStudent.status = this._enumExamStudentStatus.VerifiedForEnrollment;
     }
@@ -1708,13 +1709,17 @@ export class StudentEnrollmentComponent {
   }
 
   // Add a new qualification row to the QualificationDetails array
-  addQualification() {
-    const newQualification = new M_StudentMaster_QualificationDetailsModel();
+  addQualification(StudentID: number) {
+    //debugger
+    let newQualification = new M_StudentMaster_QualificationDetailsModel();
+    newQualification.StudentID = StudentID;
+    newQualification.IsNew = true;
     this.requestStudent.QualificationDetails.push(newQualification);
   }
 
   // Delete a qualification row by index
   deleteQualification(index: number) {
+    //debugger
     this.requestStudent.QualificationDetails.splice(index, 1);
   }
 
@@ -1725,7 +1730,7 @@ export class StudentEnrollmentComponent {
 
     this.requestStudent.QualificationDetails.forEach(row => {
       let _isValid = true;
-      if (this.request.StudentFilterStatusId != this._enumExamStudentStatus.Addimited && row.StudentQualificationID == 0) { // only validate editable rows
+      if (this.request.StudentFilterStatusId != this._enumExamStudentStatus.Addimited && row.IsNew == true) { // only validate editable rows
         _isValid =
           !row.Qualification ||
           !row.ClassBoard ||
