@@ -87,7 +87,7 @@ export class ItiPromoteStudentComponent {
     await this.GetDateConfig();
     await this.checkspecialendterm()
     if (this.isspecialendterm == true) {
-      this.request.PromoteStatusID = this._PromoteStatus.Reg;
+      this.request.PromoteStatusID = 2
     }
   }
 
@@ -446,7 +446,7 @@ export class ItiPromoteStudentComponent {
           console.log(ex);
         }
       }
-    });
+    }); 
   }
 
 

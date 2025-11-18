@@ -206,7 +206,7 @@ export class StudentEnrollmentComponent {
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
 
 
-    debugger
+    //debugger
     /*this.GetPageName(this.currentTab);*/
 
     this.UserID = this.sSOLoginDataModel.UserID
@@ -236,7 +236,7 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
-    debugger
+    //debugger
     if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {
       this.isShowImageDeleteButton = false;
       return;
@@ -413,7 +413,7 @@ export class StudentEnrollmentComponent {
   //get student data
   async GetPreExamStudent() {
     try {
-      debugger;
+      //debugger;
       this.isSubmitted = true;
       //session
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -545,13 +545,13 @@ export class StudentEnrollmentComponent {
   //get edit student
   async GetPreExam_StudentMaster(StudentID: number) {
     this.showImageDeleteButton();
-    
+
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
     var Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     var EndTermID = this.sSOLoginDataModel.EndTermID
     this.StudentFilterStatusId = this.request.StudentFilterStatusId
     var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
-    
+
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0, FileNameWithDynamicPath)
@@ -682,7 +682,6 @@ export class StudentEnrollmentComponent {
 
   // save edited student
   async SaveData_EditStudentDetails() {
-    //debugger;
 
     // not allowed for all filter
     if (this.request.StudentFilterStatusId == 0) {
@@ -698,7 +697,8 @@ export class StudentEnrollmentComponent {
       this.resetValidationSubCastCategoryA(false);
     }
 
-    this.isSubmitted = true;
+    this.isSubmitted = true;//for validation errors
+
     if (this.requestStudent.StudentFilterStatusId == enumExamStudentStatus.Addimited) {
       this.requestStudent.StudentID = this.requestStudent.ApplicationID;
     } else {
@@ -708,6 +708,11 @@ export class StudentEnrollmentComponent {
 
     //form
     if (this.EditStudentDataFormGroup.invalid) {
+      return;
+    }
+
+    //qualification custome
+    if (!this.isValidQualifications()) {
       return;
     }
 
@@ -947,7 +952,7 @@ export class StudentEnrollmentComponent {
               this.State = data['State'];
               this.Message = data['Message'];
               this.ErrorMessage = data['ErrorMessage'];
-              debugger
+              //debugger
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
                 this.SendForSMSEnrollmentStudent();
@@ -1617,7 +1622,7 @@ export class StudentEnrollmentComponent {
 
   async SendForSMSEnrollmentStudent() {
     // confirm
-    debugger
+    //debugger
     try {
       this.isSubmitted = true;
       this.loaderService.requestStarted();
@@ -1702,5 +1707,41 @@ export class StudentEnrollmentComponent {
     }
   }
 
+  // Add a new qualification row to the QualificationDetails array
+  addQualification() {
+    const newQualification = new M_StudentMaster_QualificationDetailsModel();
+    this.requestStudent.QualificationDetails.push(newQualification);
+  }
+
+  // Delete a qualification row by index
+  deleteQualification(index: number) {
+    this.requestStudent.QualificationDetails.splice(index, 1);
+  }
+
+  // validate qualifications
+  isValidQualifications(): boolean {
+    //debugger
+    let isValid = true;
+
+    this.requestStudent.QualificationDetails.forEach(row => {
+      let _isValid = true;
+      if (row.StudentQualificationID == 0) { // only validate editable rows
+        _isValid =
+          !row.Qualification ||
+          !row.ClassBoard ||
+          !row.ClassSubject ||
+          !row.PasssingYear ||
+          !row.ClassPercentage ||
+          row.ClassPercentage == 0;
+
+        if (_isValid) {
+          isValid = false;
+          return;
+        }
+      }
+    });
+
+    return isValid;
+  }
 
 }

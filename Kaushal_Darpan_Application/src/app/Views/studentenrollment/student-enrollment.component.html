@@ -906,6 +906,8 @@
           </div>
           <div class="flex justify-between flex-wrap items-center mb-3 mt-4 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i> Qualification Details</b>
+            <!-- Add Qualification Button -->
+            <!--<button *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited" class="btn btn-primary" (click)="addQualification()"><i class="ti ti-circle-plus"></i> Add More</button>-->
           </div>
 
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
@@ -918,38 +920,75 @@
                     <th class="text-left">Stream/Subject</th>
                     <th class="text-left">Passing Year</th>
                     <th class="text-left">Percentage</th>
+                    <th class="text-left">Actions</th> <!-- Column for Actions -->
                   </tr>
                 </thead>
                 <tbody>
 
                   <tr *ngFor="let row of requestStudent.QualificationDetails;let idx=index;">
 
-                    <td>{{row.Qualification}}</td>
                     <td>
-                      <select class="form-select disabled" id="ddlBoard" name="ddlBoard" [(ngModel)]="row.ClassBoard"
-                              [ngModelOptions]="{standalone: true}" disabled>
+                      <input type="text" class="form-input " id="txtQualification" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                             name="Qualification" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.Qualification"
+                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.Qualification">
+
+                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.Qualification">
+                        This field is required!
+                      </small>
+
+                    </td>
+                    <td>
+                      <select class="form-select " id="ddlBoard" name="ddlBoard" [(ngModel)]="row.ClassBoard"
+                              [ngModelOptions]="{standalone: true}" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                              [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.ClassBoard">
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of BoardMasterList" value="{{item.ID}}">{{item.Name}}</option>
                       </select>
+
+                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.ClassBoard">
+                        This field is required!
+                      </small>
                     </td>
 
                     <td>
-                      <input type="text" class="form-input disabled" disabled id="txtClassSubject"
-                             name="txtClassSubject" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.ClassSubject">
+                      <input type="text" class="form-input " id="txtClassSubject" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                             name="txtClassSubject" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.ClassSubject"
+                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.ClassSubject">
+
+                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.ClassSubject">
+                        This field is required!
+                      </small>
 
                     </td>
                     <td>
-                      <select class="form-select disabled" id="ddlPassingYear" disabled name="ddlPassingYear"
-                              [(ngModel)]="row.PasssingYear" [ngModelOptions]="{standalone: true}">
+                      <select class="form-select " id="ddlPassingYear" name="ddlPassingYear" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
+                              [(ngModel)]="row.PasssingYear" [ngModelOptions]="{standalone: true}"
+                              [class.error]="row.StudentQualificationID==0 && this.isSubmitted && !row.PasssingYear">
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of PassingYearList" value="{{item.Year}}">{{item.Year}}</option>
                       </select>
+
+                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && !row.PasssingYear">
+                        This field is required!
+                      </small>
                     </td>
                     <td>
-                      <input type="text" class="form-input disabled" id="txtClassPercentage" disabled
+                      <input type="text" class="form-input " id="txtClassPercentage" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.StudentQualificationID>0"
                              name="txtClassPercentage" [ngModelOptions]="{standalone: true}"
-                             [(ngModel)]="row.ClassPercentage">
+                             [(ngModel)]="row.ClassPercentage"
+                             [class.error]="row.StudentQualificationID==0 && this.isSubmitted && (!row.ClassPercentage || row.ClassPercentage == 0)" maxlength="5">
+
+                      <small class="text-red-500" *ngIf="row.StudentQualificationID==0 && this.isSubmitted  && (!row.ClassPercentage || row.ClassPercentage == 0)">
+                        This field is required!
+                      </small>
                     </td>
+
+                    <!-- Delete Button -->
+                    <!--<td>
+                      <button class="btn btn-danger" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited && row.StudentQualificationID==0" (click)="deleteQualification(idx)">
+                        <i class="ti ti-trash"></i>
+                      </button>
+                    </td>-->
                   </tr>
 
                 </tbody>
