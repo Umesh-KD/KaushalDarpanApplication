@@ -12,7 +12,7 @@
           <b>Note:</b> अभ्यर्थी Option Form में सबसे पहले अपनी स्वयं की प्राथमिकताएँ (Own Preference) चुनें। उसके बाद ‘Select All’ का चयन करके ‘Save and Next’ पर क्लिक करें। सभी संस्थानों (Institute) का चयन करना अनिवार्य है।
         </div>
         <div>
-          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">व्यवसाय का नाम (Trade): <span class="StarMarking">*</span></label>
+          <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">व्यवसाय / विषय का नाम (Trade / Subject): <span class="StarMarking">*</span></label>
           <select class="form-select" name="TradeId" id="TradeId" formControlName="TradeId"
                   [(ngModel)]="formData.TradeId" (change)="GetInstituteList()">
             <option *ngFor="let item of TradeList" value="{{item.TradeId}}">
@@ -82,7 +82,7 @@
 
          
         </div>
-        <div>
+        <div *ngIf="request.Designation != '0' && request.Designation != null && request.Designation != undefined">
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
             योग्यता श्रेणी (Qualification Category):<span class="StarMarking">*</span>
           </label>
@@ -122,7 +122,7 @@
       <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
         <tr>
           <th>Priority</th>
-          <th class="text-left">Trade Name</th>
+          <th class="text-left">Trade / Subject Name</th>
           <th class="text-left">Name of College</th>
           <th>Action</th>
         </tr>
