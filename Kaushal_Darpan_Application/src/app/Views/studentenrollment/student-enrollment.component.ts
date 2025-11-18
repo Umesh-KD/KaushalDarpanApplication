@@ -1725,7 +1725,7 @@ export class StudentEnrollmentComponent {
 
     this.requestStudent.QualificationDetails.forEach(row => {
       let _isValid = true;
-      if (row.StudentQualificationID == 0) { // only validate editable rows
+      if (this.request.StudentFilterStatusId != this._enumExamStudentStatus.Addimited && row.StudentQualificationID == 0) { // only validate editable rows
         _isValid =
           !row.Qualification ||
           !row.ClassBoard ||
