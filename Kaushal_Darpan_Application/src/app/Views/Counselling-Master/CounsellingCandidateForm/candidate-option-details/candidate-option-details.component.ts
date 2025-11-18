@@ -124,9 +124,8 @@ export class CandidateOptionDetailsComponent {
   async GetTradeList() {
     try {
       this.tradeRequest.Action = 'GetTradeList'
-            this.tradeRequest.CandidateID = this.CandidateID;
-                console.log('CandidateID check',this.tradeRequest.CandidateID);
-
+      this.tradeRequest.CandidateID = this.CandidateID;
+      console.log('CandidateID check',this.tradeRequest.CandidateID);
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
@@ -167,7 +166,7 @@ export class CandidateOptionDetailsComponent {
       this.tradeRequest.Designation=this.request.Designation;
       this.tradeRequest.IsTSP=(this.request.IsTSP == false ? 0: 1);
       this.tradeRequest.TradeID=this.formData.TradeId; 
-
+      debugger
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log('Institute List Length:'+ data.Data.length)
@@ -342,6 +341,7 @@ export class CandidateOptionDetailsComponent {
   }
 
   async SaveAndNext() {
+    debugger;
     console.log('this.AddedChoices.length ',this.AddedChoices?.[0]?.InstituteList?.length ?? 0  ); 
     console.log('this.InstituteList.length ',this.InstituteList.length );
     if ((this.AddedChoices?.[0]?.InstituteList?.length ?? 0) !== (this.InstituteList?.length ?? 0)) {
@@ -396,6 +396,7 @@ export class CandidateOptionDetailsComponent {
   }
 
   onSelectAll(items: InstituteListDataModel_Coun[]) {
+    debugger
     this.formData.InstituteList = [...items];
     this.updatePriorityList();
   }

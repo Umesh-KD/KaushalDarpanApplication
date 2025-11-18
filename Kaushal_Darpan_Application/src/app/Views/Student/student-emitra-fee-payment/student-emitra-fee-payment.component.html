@@ -55,7 +55,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="isShowGrid">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div>
-        <button *ngIf="isShowSelected" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
+        <button *ngIf="isShowSelected && !isOnClickExamFeePay" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
       </div>
 
     </div>
@@ -113,11 +113,27 @@
               <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
             </td>-->
               <td class="text-center">
-                <button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForEnrollment" class="btn bg-success text-white btn-sm" (click)="PayEnrollmentFee(row)" type="button">Pay Enroll Fee </button>
+                <button 
+                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForEnrollment && !isOnClickEnrollFeePay" 
+                  class="btn bg-success text-white btn-sm" 
+                  (click)="PayEnrollmentFee(row)" 
+                  type="button">Pay Enroll Fee 
+                </button>
                 <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.Enrolled && row.FeeStatus=='PENDING'" class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Check Pay Status </button>-->
 
-                <button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination" class="btn bg-success text-white btn-sm" (click)="PayExamFee(row)" type="button">Pay Exam Fee </button>
-                <button class="btn bg-success text-white btn-sm" (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" type="button">View History</button>
+                <button 
+                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination && !isOnClickExamFeePay" 
+                  class="btn bg-success text-white btn-sm" 
+                  (click)="PayExamFee(row)" 
+                  type="button">Pay Exam Fee 
+                </button>
+
+                <button 
+                  class="btn bg-success text-white btn-sm" 
+                  (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" 
+                  type="button">View History
+                </button>
+
               </td>
             </tr>
             <tr *ngIf="StudentDetailsModelList?.length === 0"><td colspan="15"> No Pending Fee Found</td></tr>
