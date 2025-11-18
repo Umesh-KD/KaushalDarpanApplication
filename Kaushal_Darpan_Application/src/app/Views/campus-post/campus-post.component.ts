@@ -656,7 +656,11 @@ export class CampusPostComponent implements OnInit {
       this.toastr.error("Please Select Branch")
     }
     if (this.EligibilityCriteriaForm.invalid) {
-      return 
+      return ;
+    }
+    if(this.request_EligibilityCriteriaModel.CampusType==''||this.request_EligibilityCriteriaModel.CampusType=='0'){
+      this.toastr.error("Please Select Campus Level");
+      return ;
     }
     
     //Show Loading

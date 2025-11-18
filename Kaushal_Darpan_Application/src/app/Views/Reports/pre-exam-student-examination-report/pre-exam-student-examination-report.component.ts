@@ -33,12 +33,12 @@ import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel } from '../../../M
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
 @Component({
-  selector: 'app-pre-exam-student-examination',
-  templateUrl: './pre-exam-student-examination.component.html',
-  styleUrls: ['./pre-exam-student-examination.component.css'],
+  selector: 'app-pre-exam-student-examination-report',
+  templateUrl: './pre-exam-student-examination-report.component.html',
+  styleUrls: ['./pre-exam-student-examination-report.component.css'],
   standalone: false
 })
-export class PreExamStudentExaminationComponent {
+export class PreExamStudentExaminationReportComponent {
   public _GlobalConstants: any = GlobalConstants;
   public State: number = -1;
   public Message: any = [];
@@ -556,7 +556,7 @@ export class PreExamStudentExaminationComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       //call
       this.loaderService.requestStarted();
-      await this.preExamStudentExaminationService.GetPreExamStudent(this.request)
+      await this.preExamStudentExaminationService.GetPreExamStudentReport(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           //
@@ -2210,16 +2210,13 @@ export class PreExamStudentExaminationComponent {
   checkStatusForOptional(status: number) {
     if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
       return ([
-        enumExamStudentStatus.SelectedForExamination,
-        enumExamStudentStatus.VerifiedForExamination,
-        enumExamStudentStatus.ExaminationFeesPaid
+        enumExamStudentStatus.SelectedForExamination
       ]).includes(status);
     }
     else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       return ([
         enumExamStudentStatus.SelectedForExamination,
-        enumExamStudentStatus.VerifiedForExamination,
-        enumExamStudentStatus.ExaminationFeesPaid
+        enumExamStudentStatus.VerifiedForExamination
       ]).includes(status);
     }
     return false;

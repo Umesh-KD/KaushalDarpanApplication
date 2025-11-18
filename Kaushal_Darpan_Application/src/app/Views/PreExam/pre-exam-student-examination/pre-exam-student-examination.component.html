@@ -223,6 +223,11 @@
               <option *ngFor="let item of PromoteStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
+            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
+                   formControlName="txtAbc">
+          </div>
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
@@ -235,11 +240,11 @@
               <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
             <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
                    formControlName="txtAbc">
-          </div>
+          </div>-->
 
 
 
@@ -377,7 +382,7 @@
                   <i class="ti ti-pencil"></i>
                 </a>
 
-                <a *ngIf="sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon" href="javascript:void(0);"
+                <a *ngIf="row.StudentTypeID==_enumStudentType.Reg && row.status!=_enumExamStudentStatus.EligibleForExamination && row.status!=_enumExamStudentStatus.NewEligibleForExamination && (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)" href="javascript:void(0);"
                    title="Edit Student Enrollment" (click)="EditEnrollmentNo(MyModel_EditEnrollmentNo, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-clipboard-text"></i>
                 </a>

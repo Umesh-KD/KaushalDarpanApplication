@@ -323,6 +323,9 @@ const routes: Routes = [
       { path: 'studentenrollment/:id', loadChildren: () => import('./Views/studentenrollment/student-enrollment.module').then(m => m.StudentEnrollmentModule), title: 'Student Enrollment' },
       { path: 'studentenrollmentadmitted', loadChildren: () => import('./Views/student-enrollment-admitted/student-enrollment-admitted.module').then(m => m.StudentEnrollmentAdmittedModule), title: 'Student Enrollment' },
       { path: 'ItiStudentEnrollment', loadChildren: () => import('./Views/ITI/Examination/iti-student-enrollment/iti-student-enrollment.module').then(m => m.ItiStudentEnrollmentModule), title: 'Student Enrollment' },
+      { path: 'studentenrollmentreport', loadChildren: () => import('./Views/Reports/student-enrollment-Report/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment Report' },
+      { path: 'studentexaminationreport', loadChildren: () => import('./Views/Reports/pre-exam-student-examination-report/pre-exam-student-examination-report.module').then(m => m.PreExamStudentExaminationReportModule), title: 'Pre Exam Student Examination Report' },
+
       //{ path: 'studentenrollment/:id', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'ITI Student Enrollment' },
       //{ path: 'studentenrollment/:id', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment' },
       //{ path: 'studentenrollment/:id/:instituteId', loadChildren: () => import('./Views/reports/studentenrollmentreport/student-enrollment-report.module').then(m => m.StudentEnrollmentReportModule), title: 'Student Enrollment' },
@@ -1358,6 +1361,7 @@ const routes: Routes = [
       { path: 'BudgetRequest', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-request/college-budget-request.module').then(m => m.CollegeBudgetRequestModule) },
       { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
       { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
+      { path: 'iti-bgt-uc-head', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-uc-head/budget-uc-head.module').then(m => m.BudgetUCHeadModule), title: 'Budget UC Head' },
       
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },

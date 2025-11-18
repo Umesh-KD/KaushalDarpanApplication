@@ -101,7 +101,6 @@ export class CandidateOptionDetailsComponent {
 
 
   async GetApplicationDataByID_Counselling() {
-    
     try {
       this.appRequest.CandidateId = this.CandidateID;
       await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
@@ -124,16 +123,14 @@ export class CandidateOptionDetailsComponent {
   async GetTradeList() {
     try {
       this.tradeRequest.Action = 'GetTradeList'
-            this.tradeRequest.CandidateID = this.CandidateID;
-                console.log('CandidateID check',this.tradeRequest.CandidateID);
-
+      this.tradeRequest.CandidateID = this.CandidateID;
+      console.log('CandidateID check',this.tradeRequest.CandidateID);
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
-         this.formData.TradeId=data.Data[0].TradeId;
-         this.GetInstituteList();
-        console.log('TradeList check',this.TradeList);
-        
+        this.formData.TradeId=data.Data[0].TradeId;
+        await this.GetInstituteList();
+        console.log('TradeList check',this.TradeList);        
       })
     } catch (error) {
       console.error(error)
@@ -167,7 +164,6 @@ export class CandidateOptionDetailsComponent {
       this.tradeRequest.Designation=this.request.Designation;
       this.tradeRequest.IsTSP=(this.request.IsTSP == false ? 0: 1);
       this.tradeRequest.TradeID=this.formData.TradeId; 
-
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log('Institute List Length:'+ data.Data.length)
@@ -226,8 +222,8 @@ export class CandidateOptionDetailsComponent {
           this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
           this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
           this.formData.DepartmentID = EnumDepartment.BTER;
-          await this.GetTradeList();
-           await this.GetApplicationDataByID_Counselling();
+          await this.GetApplicationDataByID_Counselling();
+          await this.GetTradeList();          
           await this.Counselling_GetOptionDetailsByID();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)

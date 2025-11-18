@@ -87,7 +87,7 @@
             <td>
               <a class="btn bg-info btn-sm text-white"
                  [routerLink]="item.totalCandidate > 0 ? ['/CounsellingSelectedOptionList'] : null"
-                 [queryParams]="item.totalCandidate > 0 ? { Id: item.tradeId, deg: item.DesignationID } : null"
+                 [queryParams]="item.totalCandidate > 0 ? { Id: item.tradeId, deg: item.degID } : null"
                  [ngStyle]="{ 'pointer-events': item.totalCandidate === 0 ? 'none' : 'auto', 'opacity': item.totalCandidate === 0 ? '0.6' : '1' }">
                 {{ item.totalCandidate }}
               </a>

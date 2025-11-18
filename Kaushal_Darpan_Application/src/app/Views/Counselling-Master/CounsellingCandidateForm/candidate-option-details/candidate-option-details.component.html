@@ -15,7 +15,7 @@
           <label for="txtParentsincomefromallsources" class="text-gray-800 text-sm font-medium inline-block mb-2">व्यवसाय का नाम (Trade): <span class="StarMarking">*</span></label>
           <select class="form-select" name="TradeId" id="TradeId" formControlName="TradeId"
                   [(ngModel)]="formData.TradeId" (change)="GetInstituteList()">
-             <option *ngFor="let item of TradeList" value="{{item.TradeId}}">
+            <option *ngFor="let item of TradeList" value="{{item.TradeId}}">
               {{item.TradeName}}
             </option>
           </select>
