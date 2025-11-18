@@ -101,7 +101,6 @@ export class CandidateOptionDetailsComponent {
 
 
   async GetApplicationDataByID_Counselling() {
-    
     try {
       this.appRequest.CandidateId = this.CandidateID;
       await this.counsellingApplicationFormService.GetApplicationDataByID_Counselling(this.appRequest).then(async (data: any) => {
@@ -129,10 +128,9 @@ export class CandidateOptionDetailsComponent {
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeList = data.Data;
-         this.formData.TradeId=data.Data[0].TradeId;
-         this.GetInstituteList();
-        console.log('TradeList check',this.TradeList);
-        
+        this.formData.TradeId=data.Data[0].TradeId;
+        await this.GetInstituteList();
+        console.log('TradeList check',this.TradeList);        
       })
     } catch (error) {
       console.error(error)
@@ -166,7 +164,6 @@ export class CandidateOptionDetailsComponent {
       this.tradeRequest.Designation=this.request.Designation;
       this.tradeRequest.IsTSP=(this.request.IsTSP == false ? 0: 1);
       this.tradeRequest.TradeID=this.formData.TradeId; 
-      debugger
       await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         console.log('Institute List Length:'+ data.Data.length)
@@ -225,8 +222,8 @@ export class CandidateOptionDetailsComponent {
           this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
           this.SSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
           this.formData.DepartmentID = EnumDepartment.BTER;
-          await this.GetTradeList();
-           await this.GetApplicationDataByID_Counselling();
+          await this.GetApplicationDataByID_Counselling();
+          await this.GetTradeList();          
           await this.Counselling_GetOptionDetailsByID();
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
@@ -341,7 +338,6 @@ export class CandidateOptionDetailsComponent {
   }
 
   async SaveAndNext() {
-    debugger;
     console.log('this.AddedChoices.length ',this.AddedChoices?.[0]?.InstituteList?.length ?? 0  ); 
     console.log('this.InstituteList.length ',this.InstituteList.length );
     if ((this.AddedChoices?.[0]?.InstituteList?.length ?? 0) !== (this.InstituteList?.length ?? 0)) {
@@ -396,7 +392,6 @@ export class CandidateOptionDetailsComponent {
   }
 
   onSelectAll(items: InstituteListDataModel_Coun[]) {
-    debugger
     this.formData.InstituteList = [...items];
     this.updatePriorityList();
   }
