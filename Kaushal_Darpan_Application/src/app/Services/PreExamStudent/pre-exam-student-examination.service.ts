@@ -35,6 +35,14 @@ export class PreExamStudentExaminationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetPreExamStudentReport(request: PreExamStudentDataModel) {
+    debugger
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetPreExamStudentReport", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
   public async GetEnrollmentCancelStudent(request: PreExamStudentDataModel) {
     const body = JSON.stringify(request);
