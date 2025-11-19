@@ -337,6 +337,8 @@ export class ITIPendingFeesComponent implements OnInit {
       this.emitraRequest.DepartmentID = EnumDepartment.ITI;
       this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
       this.emitraRequest.ID = item?.ID ?? 0;
+      this.emitraRequest.FormCommision = item.FormCommision;
+     
       //multiple data handel
       this.emitraRequest.StudentFeesTransactionItems.push({
         itemAmount: Number(item.FeeAmount ?? 0),
