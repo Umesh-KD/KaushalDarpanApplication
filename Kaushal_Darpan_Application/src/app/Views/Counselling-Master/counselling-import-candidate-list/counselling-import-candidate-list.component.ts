@@ -133,12 +133,11 @@ export class CounsellingImportCandidateListComponent implements OnInit {
 
   ImportExcelFile(file: File): void {
     let mesg = '';
-    debugger;
     this.counsellingImportCandidateListService.SampleImportExcelFile(file)
       .then((data: any) => {
-        debugger;
         data = JSON.parse(JSON.stringify(data));
-        console.log(data);
+        console.log('data lenth ',data.Data.length);
+        if (data.Data.length>=1) {
         if (data.State === EnumStatus.Success) {
 
           // Assign data to model
@@ -164,6 +163,10 @@ export class CounsellingImportCandidateListComponent implements OnInit {
           if (this.ImportExcelList.length > 0) {
             this.GetImportExcelDataPopup(this.MyModel_ViewDetails);
           }
+        }
+        }else{
+          this.toastr.error("Data Not Found");
+
         }
       });
   }

@@ -1602,9 +1602,5 @@ export class ItiPlanningComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
-  }
-
-
-
-
+  } 
 }

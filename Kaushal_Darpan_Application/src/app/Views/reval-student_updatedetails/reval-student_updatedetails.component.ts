@@ -26,6 +26,7 @@ import { ITIRevalRequestStudentDetailsModel } from '../../Models/RevaluationMode
 import { DocumentDetailsService } from '../../Common/document-details';
 import { UploadBTERFileModel, UploadFileModel } from '../../Models/UploadFileModel';
 import { AppsettingService } from '../../Common/appsetting.service';
+import { DeleteDocumentDetailsModel } from '../../Models/DeleteDocumentDetailsModel';
 
 // declare function tableToExcel(table: any, name: any, fileName: any): any;
 @Component({
@@ -559,35 +560,35 @@ debugger
 
 
 
-    // async DeleteDocument(item: any) {
-    //   try {
-    //     // delete from server folder
-    //     let deleteModel = new DeleteDocumentDetailsModel()
-    //     deleteModel.FolderName = item.FolderName ?? "";
-    //     deleteModel.FileName = item.FileName;
-    //     //call
-    //     await this.documentDetailsService.DeleteDocument(deleteModel)
-    //       .then((data: any) => {
-    //         this.State = data['State'];
-    //         this.Message = data['Message'];
-    //         this.ErrorMessage = data['ErrorMessage'];
-    //         if (data.State != EnumStatus.Error) {
-    //           //add/update document in js list
-    //           const index = this.DocumentList.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
-    //           if (index !== -1) {
-    //             this.DocumentList[index].FileName = '';
-    //             this.DocumentList[index].Dis_FileName = '';
-    //           }
-    //           console.log(this.DocumentList)
-    //         }
-    //         if (this.State == EnumStatus.Error) {
-    //           this.toastrService.error(this.ErrorMessage)
-    //         }
-    //       });
-    //   }
-    //   catch (Ex) {
-    //     console.log(Ex);
-    //   }
-    // }
+     //async DeleteDocument(item: any) {
+     //  try {
+     //    // delete from server folder
+     //    let deleteModel = new DeleteDocumentDetailsModel()
+     //    deleteModel.FolderName = item.FolderName ?? "";
+     //    deleteModel.FileName = item.FileName;
+     //    //call
+     //    await this.documentDetailsService.DeleteDocument(deleteModel)
+     //      .then((data: any) => {
+     //        this.State = data['State'];
+     //        this.Message = data['Message'];
+     //        this.ErrorMessage = data['ErrorMessage'];
+     //        if (data.State != EnumStatus.Error) {
+     //          //add/update document in js list
+     //          const index = this.DocumentList.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+     //          if (index !== -1) {
+     //            this.DocumentList[index].FileName = '';
+     //            this.DocumentList[index].Dis_FileName = '';
+     //          }
+     //          console.log(this.DocumentList)
+     //        }
+     //        if (this.State == EnumStatus.Error) {
+     //          this.toastrService.error(this.ErrorMessage)
+     //        }
+     //      });
+     //  }
+     //  catch (Ex) {
+     //    console.log(Ex);
+     //  }
+     //}
 
 }

@@ -78,6 +78,7 @@ export class AllotedCandidateListComponent {
       }, (error: any) => console.error(error)
       );
     // await this.GetTradeList();
+     await this.GetAllottedCandidateList_Counselling();
   }
 
     async getTradeByDegree(designationId: number) {

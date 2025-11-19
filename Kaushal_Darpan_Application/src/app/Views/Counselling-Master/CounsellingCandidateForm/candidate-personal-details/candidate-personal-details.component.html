@@ -5,11 +5,12 @@
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
 
         <div class="border border-red-600/20 bg-red-600/10 text-sm text-red-600 rounded-md px-4 py-3 w-full col-span-full" role="alert" id="WihoutJanadharAlert">
-          <b>नोट:</b>  कृपया सभी विवरण आवेदक के दस्तावेजों के अनुसार भरें, क्योंकि इन्हें बाद में बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं)
+          <b>नोट:</b> सभी विवरण आवेदक के दस्तावेज़ अनुसार भरे हुए हैं, इन्हे बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं)
+           <!-- कृपया सभी विवरण आवेदक के दस्तावेजों के अनुसार भरें, क्योंकि इन्हें बाद में बदला नहीं जा सकता | (तारांकित (*) फील्ड भरना अनिवार्य हैं) --> 
         </div>
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            आवेदक का नाम (Applicant's Name):<span class="StarMarking">*</span>
+            आवेदक का नाम (Applicant's Name):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <input type="text" class="form-input" id="CandidateName" value="Test Kumar" formControlName="CandidateName"
              [(ngModel)]="request.CandidateName" placeholder="Enter Candidate Name">
@@ -20,7 +21,7 @@
         
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            ईमेल (Email Address):<span class="StarMarking">*</span>
+            ईमेल (Email Address):<span class="StarMarking" style="display:none;">*</span>
             </label>
           <input type="email" class="form-input" id="Email" value="TEST@gmail.com" placeholder="Enter Applicant Email" formControlName="Email"
              [(ngModel)]="request.Email">
@@ -32,7 +33,7 @@
         </div>
         <div>
           <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            पिता का नाम (Father's Name):<span class="StarMarking">*</span>
+            पिता का नाम (Father's Name):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <input type="text" class="form-input " id="FatherName" value="Test Father Name" placeholder="Enter Father Name"
              formControlName="FatherName" [(ngModel)]="request.FatherName">
@@ -41,9 +42,9 @@
           </div>
         </div>
 
-        <div>
+        <div style="display:none;">
           <label for="txtMotherEngname" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            माता का नाम (Mother's Name):<span class="StarMarking">*</span>
+            माता का नाम (Mother's Name):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <input type="text" class="form-input" id="MotherName"value="Test Mother Name" formControlName="MotherName"
              placeholder="Enter Mother Name" [(ngModel)]="request.MotherName">
@@ -54,7 +55,7 @@
         
         <div>
           <label for="txtDOB" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            जन्म तिथि (Date of Birth):<span class="StarMarking">*</span>
+            जन्म तिथि (Date of Birth):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <input type="date" class="form-input" id="DOB"value="03/11/1995" formControlName="DOB" [(ngModel)]="request.DOB">
           <div *ngIf="isSubmitted && _PersonalDetailForm.DOB.errors" class="text-danger">
@@ -65,7 +66,7 @@
 
         <div>
           <label for="Gender" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            लिंग (Gender):<span class="StarMarking">*</span>
+            लिंग (Gender):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <select class="form-select" id="GenderId" formControlName="GenderId" [(ngModel)]="request.GenderId">
             <option value="" selected>--Select Gender--</option>
@@ -78,7 +79,7 @@
 
         <div>
           <label for="MobileNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            मोबाइल नंबर (Mobile Number):<span class="StarMarking">*</span>
+            मोबाइल नंबर (Mobile Number):<span class="StarMarking" style="display:none;">*</span>
         </label>
           <input type="text" class="form-input" id="MobileNo" value="XXXXXX3866" formControlName="MobileNo"
              [(ngModel)]="request.MobileNo" maxlength="10">
@@ -87,9 +88,9 @@
           </div>
         </div>
 
-        <div>
+        <div style="display:none;">
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            आधार संख्या (Aadhar Number):<span class="StarMarking">*</span>
+            आधार संख्या (Aadhar Number):<span class="StarMarking" style="display:none;">*</span>
           </label>
           <input type="text" (keypress)="validateNumber($event)" class="form-input" id="AadharNo"
                  formControlName="AadharNo" [(ngModel)]="request.AadharNo" [attr.maxlength]="12"
@@ -154,7 +155,7 @@
         </div> -->
         <div>
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            रोल नंबर (Roll Number):<span class="StarMarking">*</span>
+            रोल नंबर (Roll Number):<span class="StarMarking" style="display:none;">*</span>
           </label>
           <input type="text" class="form-input" id="AadharNo"
                  formControlName="RollNumber" [(ngModel)]="request.RollNumber" />
@@ -164,9 +165,9 @@
             </p>
           </div>
         </div>
-        <div>
+        <div *ngIf="request.Designation != '0' && request.Designation != null && request.Designation != undefined">
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            योग्यता (Qualification):<span class="StarMarking">*</span>
+            योग्यता श्रेणी (Qualification Category):<span class="StarMarking" style="display:none;">*</span>
           </label>
           <input type="text" class="form-input" id="Designation"
                  formControlName="Designation" [(ngModel)]="request.Designation" />
@@ -178,7 +179,7 @@
         </div>
         <!-- <div>
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            व्यवसाय (Trade):<span class="StarMarking">*</span>
+            व्यवसाय / विषय (Trade / Subject):<span class="StarMarking">*</span>
           </label>
           <input type="text" class="form-input" id="Trade"
                  formControlName="Trade" [(ngModel)]="request.Trade" />
@@ -190,7 +191,7 @@
         </div> -->
         <div>
           <label for="AadharNo" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            मेरिट नंबर (Merit Number):<span class="StarMarking">*</span>
+            मेरिट नंबर (Merit Number):<span class="StarMarking" style="display:none;">*</span>
           </label>
           <input type="text" class="form-input" id="MeritNo"
                  formControlName="MeritNo" [(ngModel)]="request.MeritNo" />
@@ -225,7 +226,7 @@
       <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-1 gap-6 mb-6">
         <div>
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking">*</span>
+            श्रेणी ए(Category A)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking" style="display:none;">*</span>
           </label>
           <select class="form-select" formControlName="CategoryA_ID" [(ngModel)]="request.CategoryA_ID">
             <option value="0">--Select--</option>
@@ -258,7 +259,7 @@
 
         <div>
           <label for="CategoryA_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-            चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking">*</span>
+            चयन श्रेणी(Selection Category)(Gen/SC/ST/OBC/MBC/EWS) :<span class="StarMarking" style="display:none;">*</span>
           </label>
           <select class="form-select" formControlName="SelectionCategoryID" [(ngModel)]="request.SelectionCategoryID">
             <option value="0">--Select--</option>

@@ -122,8 +122,9 @@ export class ReAssignTeacherForAttendanceComponent implements OnInit {
     //  AttendanceEndTime: ['']
     //});
 
+    // this.filterModel.SSOID = "0";
     this.TableForm = this.fb.group({
-      SSOID: ['0', Validators.required],
+      SSOID: ['', Validators.required],
       From_Date: ['', Validators.required],
       To_Date: ['', Validators.required]
     });

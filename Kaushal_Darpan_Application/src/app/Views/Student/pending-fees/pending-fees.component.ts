@@ -29,6 +29,8 @@ export class PendingFeesComponent implements OnInit {
   public UserID: number = 0;
   public SemesterName: string = '';
   public isExamFee: boolean = false
+  public isOnClickEnrollFeePay: boolean = false
+  public isOnClickExamFeePay: boolean = false
 
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new StudentSearchModel();
@@ -208,6 +210,7 @@ export class PendingFeesComponent implements OnInit {
   async PayEnrollmentFee(item: StudentDetailsModel) {
     const isValid = await this.ValidateEnrollmentDate(item.CourseType, item.FinancialYearID, item.EndTermID);
     if (isValid) {
+      this.isOnClickEnrollFeePay = true;
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
       this.emitraRequest.Amount = Number(item.FeeAmount)
@@ -267,7 +270,7 @@ export class PendingFeesComponent implements OnInit {
     const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
     if (isValid)
      {
-      debugger
+      this.isOnClickExamFeePay = true;
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
       this.emitraRequest.Amount = Number(item.FeeAmount);
@@ -328,6 +331,7 @@ export class PendingFeesComponent implements OnInit {
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
     if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
+      this.isOnClickExamFeePay = true;
       this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push({
