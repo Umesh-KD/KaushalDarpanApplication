@@ -117,12 +117,10 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
 
       this.searchRequest.Designation = this.Designation;
     }
-
+    await this.GetCategoryMatserDDL()
     await this.getcandidateOptionList();
     // await this.GetTradeDDL();
     await this.GetCandidateList(1);
-    await this.GetCategoryMatserDDL()
-       
   }
 
 

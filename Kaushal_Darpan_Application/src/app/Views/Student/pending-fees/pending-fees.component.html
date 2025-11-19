@@ -3,7 +3,7 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Pending Fee Details</b>
-      <button *ngIf="isShowSelected" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
+      <button *ngIf="isShowSelected && !isOnClickExamFeePay" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
     </div>
     <div class="overflow-x-auto mt-3 w-full">
       <table class="table table-border w-full table-auto" cellpadding="5">
@@ -52,10 +52,37 @@
               <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Paper</a>
             </td> -->
             <td class="text-center">
-              <button style="margin-bottom:5px" *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee" class="btn bg-success text-white btn-sm" (click)="PayEnrollmentFee(row)" type="button">Pay Enroll Fee </button>
-              <button style="margin-bottom:5px" *ngIf="row.TransactionID>0"  class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Verify Fee </button>
-              <button style="margin-bottom:5px" *ngIf="row.ServiceType==_EnumFeeFor.ExamFee" class="btn bg-success text-white btn-sm" (click)="PayExamFee(row)" type="button">Pay Exam Fee </button>
-              <button style="margin-bottom:5px" class="btn bg-success text-white btn-sm" (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" type="button">View History</button>
+              <button
+                  style="margin-bottom:5px"
+                  *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee && !isOnClickEnrollFeePay"
+                  class="btn bg-success text-white btn-sm"
+                  (click)="PayEnrollmentFee(row)" 
+                  type="button">Pay Enroll Fee 
+              </button>
+
+              <button 
+                style="margin-bottom:5px" 
+                *ngIf="row.TransactionID>0"  
+                class="btn bg-success text-white btn-sm" 
+                (click)="EmitraPaymentCheckStatus(row)" 
+                type="button">Verify Fee 
+              </button>
+
+              <button 
+                style="margin-bottom:5px" 
+                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay" 
+                class="btn bg-success text-white btn-sm" 
+                (click)="PayExamFee(row)" 
+                type="button">Pay Exam Fee 
+              </button>
+
+              <button 
+                style="margin-bottom:5px" 
+                class="btn bg-success text-white btn-sm" 
+                (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" 
+                type="button">View History
+              </button>
+
             </td>
           </tr>
           <tr *ngIf="StudentDetailsModelList?.length === 0">

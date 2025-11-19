@@ -33,12 +33,12 @@ import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel } from '../../../M
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
 @Component({
-  selector: 'app-pre-exam-student-examination',
-  templateUrl: './pre-exam-student-examination.component.html',
-  styleUrls: ['./pre-exam-student-examination.component.css'],
+  selector: 'app-pre-exam-student-examination-report',
+  templateUrl: './pre-exam-student-examination-report.component.html',
+  styleUrls: ['./pre-exam-student-examination-report.component.css'],
   standalone: false
 })
-export class PreExamStudentExaminationComponent {
+export class PreExamStudentExaminationReportComponent {
   public _GlobalConstants: any = GlobalConstants;
   public State: number = -1;
   public Message: any = [];
@@ -546,7 +546,7 @@ export class PreExamStudentExaminationComponent {
 
   async GetPreExamStudent() {
 
-    //debugger
+    debugger
     try {
       this.isSubmitted = true;
       //session
@@ -556,7 +556,7 @@ export class PreExamStudentExaminationComponent {
       this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       //call
       this.loaderService.requestStarted();
-      await this.preExamStudentExaminationService.GetPreExamStudent(this.request)
+      await this.preExamStudentExaminationService.GetPreExamStudentReport(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           //
@@ -794,7 +794,6 @@ export class PreExamStudentExaminationComponent {
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
 
           this.requestUpdateEnrollmentNo.StudentExamID = data['Data']['StudentExamID'];
-          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
 
           console.log(this.requestStudent.Papers, 'Papers')
           /*this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];*/
@@ -865,9 +864,8 @@ export class PreExamStudentExaminationComponent {
           this.requestUpdateEnrollmentNo.InstituteID = data['Data']['InstituteID'];
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
           this.requestUpdateEnrollmentNo.StudentExamID = data['Data']['StudentExamID'];
-          this.requestUpdateEnrollmentNo.IsUpdate = data['Data']['IsUpdate'];
-          this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];
-          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
+          this.requestUpdateEnrollmentNo.IsUpdate = data['Data']['IsUpdate']
+          this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo']
 
           if (data['Data']['OrderDate'] != null && data['Data']['OrderDate'] !== '') {
             const OrderDate = new Date(data['Data']['OrderDate']);
@@ -1066,7 +1064,6 @@ export class PreExamStudentExaminationComponent {
   }
 
   async SaveData_PreExam_UpdateEnrollmentNo() {
-    this.resetValidationUpdateEnrollment();
     this.isSubmitted = true;
 
     if (this.formUpdateEnrollmentNo.invalid) {
@@ -1119,7 +1116,6 @@ export class PreExamStudentExaminationComponent {
 
 
   async Revert_PreExam_UpdateEnrollmentNo() {
-    this.resetValidationUpdateEnrollment();
     this.isSubmitted = true;
 
     if (this.formUpdateEnrollmentNo.invalid) {
@@ -2214,16 +2210,13 @@ export class PreExamStudentExaminationComponent {
   checkStatusForOptional(status: number) {
     if (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon) {
       return ([
-        enumExamStudentStatus.SelectedForExamination,
-        enumExamStudentStatus.VerifiedForExamination,
-        enumExamStudentStatus.ExaminationFeesPaid
+        enumExamStudentStatus.SelectedForExamination
       ]).includes(status);
     }
     else if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
       return ([
         enumExamStudentStatus.SelectedForExamination,
-        enumExamStudentStatus.VerifiedForExamination,
-        enumExamStudentStatus.ExaminationFeesPaid
+        enumExamStudentStatus.VerifiedForExamination
       ]).includes(status);
     }
     return false;
@@ -2798,17 +2791,6 @@ export class PreExamStudentExaminationComponent {
   // convert to bool
   toBoolean(value: any): boolean {
     return !!value;  // double NOT operator converts any value to true/false
-  }
-
-  resetValidationUpdateEnrollment() {
-    // clear
-      this.formUpdateEnrollmentNo.get('ddlBranch')?.clearValidators();
-    // set
-    if (this.requestUpdateEnrollmentNo.SemesterID<=3) {
-      this.formUpdateEnrollmentNo.get('ddlBranch')?.setValidators([DropdownValidators]);
-    }
-    // update
-    this.formUpdateEnrollmentNo.get('ddlBranch')?.updateValueAndValidity();
   }
   
 }

@@ -53,7 +53,7 @@ export class CandidateFormPreviewComponent {
   public isSupp: boolean = false
   imageSrc: string | null = null;
   isError: boolean = false;
-
+  IsTermAndCondition: boolean = false;
   showFinalButton: boolean = true;
 
   closeResult: string | undefined;
@@ -94,7 +94,10 @@ export class CandidateFormPreviewComponent {
       // await this.GetDateDataList();
     }
   }
-
+ onCheckboxClick(event: Event) {
+    console.log('Checkbox clicked!', this.IsTermAndCondition);
+    
+  }
   async GetById() {
     try {
       this.loaderService.requestStarted();

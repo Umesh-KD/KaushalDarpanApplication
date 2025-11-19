@@ -1,41 +1,41 @@
 import { Component } from '@angular/core';
-import { EnumFileUpload, EnumRole, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../Common/GlobalConstants';
-import { ForSMSEnrollmentStudentMarkedModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
+import { EnumFileUpload, EnumRole, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../../Common/GlobalConstants';
+import { ForSMSEnrollmentStudentMarkedModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { DropdownValidators, notZeroValidator } from '../../Services/CustomValidators/custom-validators.service';
+import { DropdownValidators, notZeroValidator } from '../../../Services/CustomValidators/custom-validators.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
-import { StudentEnrollmentService } from '../../Services/studentenrollment/student-enrollment.service';
-import { LoaderService } from '../../Services/Loader/loader.service';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { StudentEnrollmentService } from '../../../Services/studentenrollment/student-enrollment.service';
+import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
-import { UserMasterService } from '../../Services/UserMaster/user-master.service';
-import { SweetAlert2 } from '../../Common/SweetAlert2';
+import { UserMasterService } from '../../../Services/UserMaster/user-master.service';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ActivatedRoute } from '@angular/router';
-import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../Models/PreExamStudentDataModel';
-import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
-import { SubjectSearchModel } from '../../Models/SubjectMasterDataModel';
-import { CommonSubjectDetailsMasterModel } from '../../Models/CommonSubjectDetailsMasterModel';
-import { AppsettingService } from '../../Common/appsetting.service';
-import { ReportService } from '../../Services/Report/report.service';
-import { ReportBasedModel } from '../../Models/ReportBasedDataModel';
+import { PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
+import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { ReportService } from '../../../Services/Report/report.service';
+import { ReportBasedModel } from '../../../Models/ReportBasedDataModel';
 import { HttpClient } from '@angular/common/http';
 import * as XLSX from 'xlsx';
-import { UploadBTERFileModel, UploadFileModel } from '../../Models/UploadFileModel';
-import { DeleteDocumentDetailsModel } from '../../Models/DeleteDocumentDetailsModel';
-import { ViewStudentDetailsRequestModel } from '../../Models/ViewStudentDetailsRequestModel';
-import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
-import { DocumentDetailsService } from '../../Common/document-details';
-import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
+import { UploadBTERFileModel, UploadFileModel } from '../../../Models/UploadFileModel';
+import { DeleteDocumentDetailsModel } from '../../../Models/DeleteDocumentDetailsModel';
+import { ViewStudentDetailsRequestModel } from '../../../Models/ViewStudentDetailsRequestModel';
+import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
+import { DocumentDetailsService } from '../../../Common/document-details';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { toString } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 
 @Component({
-  selector: 'app-student-enrollment',
-  templateUrl: './student-enrollment.component.html',
-  styleUrls: ['./student-enrollment.component.css'],
+  selector: 'app-student-enrollment-report',
+  templateUrl: './student-enrollment-report.component.html',
+  styleUrls: ['./student-enrollment-report.component.css'],
   standalone: false
 })
-export class StudentEnrollmentComponent {
+export class StudentEnrollmentReportComponent {
   public _GlobalConstants: any = GlobalConstants;
   public State: number = -1;
   public Message: any = [];
@@ -206,7 +206,7 @@ export class StudentEnrollmentComponent {
     let currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
 
 
-    //debugger
+    debugger
     /*this.GetPageName(this.currentTab);*/
 
     this.UserID = this.sSOLoginDataModel.UserID
@@ -236,7 +236,7 @@ export class StudentEnrollmentComponent {
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
 
   showImageDeleteButton() {
-    //debugger
+    debugger
     if (this.request.StudentFilterStatusId == this._enumExamStudentStatus.Addimited || this.request.StudentFilterStatusId == 0) {
       this.isShowImageDeleteButton = false;
       return;
@@ -413,7 +413,7 @@ export class StudentEnrollmentComponent {
   //get student data
   async GetPreExamStudent() {
     try {
-      //debugger;
+      debugger;
       this.isSubmitted = true;
       //session
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -424,7 +424,7 @@ export class StudentEnrollmentComponent {
       //call
       this.loaderService.requestStarted();
       console.log(this.request);
-      await this.studentEnrollmentService.GetPreExamStudent(this.request)
+      await this.studentEnrollmentService.GetPreExamStudentReport(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           //success
@@ -545,13 +545,13 @@ export class StudentEnrollmentComponent {
   //get edit student
   async GetPreExam_StudentMaster(StudentID: number) {
     this.showImageDeleteButton();
-
+    
     var DepartmentID = this.sSOLoginDataModel.DepartmentID
     var Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     var EndTermID = this.sSOLoginDataModel.EndTermID
     this.StudentFilterStatusId = this.request.StudentFilterStatusId
     var FileNameWithDynamicPath = EnumFileUpload.FileNameWithDynamicPath
-
+    
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.PreExam_StudentMaster(StudentID, this.request.StudentFilterStatusId, DepartmentID, Eng_NonEng, EndTermID, 0, FileNameWithDynamicPath)
@@ -635,7 +635,6 @@ export class StudentEnrollmentComponent {
           this.requestUpdateEnrollmentNo.EnrollmentNo = data['Data']['EnrollmentNo'];
           this.requestUpdateEnrollmentNo.InstituteID = data['Data']['InstituteID'];
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
-          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
 
           /*this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];*/
           const selectedSubjectIDs = this.requestStudent.commonSubjectDetails?.map((x: any) => x.SubjectId);
@@ -683,6 +682,7 @@ export class StudentEnrollmentComponent {
 
   // save edited student
   async SaveData_EditStudentDetails() {
+    //debugger;
 
     // not allowed for all filter
     if (this.request.StudentFilterStatusId == 0) {
@@ -698,8 +698,7 @@ export class StudentEnrollmentComponent {
       this.resetValidationSubCastCategoryA(false);
     }
 
-    this.isSubmitted = true;//for validation errors
-
+    this.isSubmitted = true;
     if (this.requestStudent.StudentFilterStatusId == enumExamStudentStatus.Addimited) {
       this.requestStudent.StudentID = this.requestStudent.ApplicationID;
     } else {
@@ -709,11 +708,6 @@ export class StudentEnrollmentComponent {
 
     //form
     if (this.EditStudentDataFormGroup.invalid) {
-      return;
-    }
-
-    //qualification custome
-    if (!this.isValidQualifications()) {
       return;
     }
 
@@ -729,12 +723,11 @@ export class StudentEnrollmentComponent {
     this.requestStudent.EnrollmentNo = this.requestStudent.EnrollmentNo || '0';
     this.requestStudent.StudentExamStatus = this.requestStudent.StudentExamStatus || '0';
 
-    //if (!(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
-    //  || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
-    //  this.toastr.error("Invalid Action!");
-    //  //return;
-    //}
-
+    if (!(this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon
+      || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
+      this.toastr.error("Invalid Action!");
+      return;
+    }
     if (this.IsVerified == true) {
       this.requestStudent.status = this._enumExamStudentStatus.VerifiedForEnrollment;
     }
@@ -954,7 +947,7 @@ export class StudentEnrollmentComponent {
               this.State = data['State'];
               this.Message = data['Message'];
               this.ErrorMessage = data['ErrorMessage'];
-              //debugger
+              debugger
               if (this.State == EnumStatus.Success) {
                 this.toastr.success(this.Message)
                 this.SendForSMSEnrollmentStudent();
@@ -1624,7 +1617,7 @@ export class StudentEnrollmentComponent {
 
   async SendForSMSEnrollmentStudent() {
     // confirm
-    //debugger
+    debugger
     try {
       this.isSubmitted = true;
       this.loaderService.requestStarted();
@@ -1709,45 +1702,5 @@ export class StudentEnrollmentComponent {
     }
   }
 
-  // Add a new qualification row to the QualificationDetails array
-  addQualification(StudentID: number) {
-    //debugger
-    let newQualification = new M_StudentMaster_QualificationDetailsModel();
-    newQualification.StudentID = StudentID;
-    newQualification.IsNew = true;
-    this.requestStudent.QualificationDetails.push(newQualification);
-  }
-
-  // Delete a qualification row by index
-  deleteQualification(index: number) {
-    //debugger
-    this.requestStudent.QualificationDetails.splice(index, 1);
-  }
-
-  // validate qualifications
-  isValidQualifications(): boolean {
-    //debugger
-    let isValid = true;
-
-    this.requestStudent.QualificationDetails.forEach(row => {
-      let _isValid = true;
-      if (this.request.StudentFilterStatusId != this._enumExamStudentStatus.Addimited && row.IsNew == true) { // only validate editable rows
-        _isValid =
-          !row.Qualification ||
-          !row.ClassBoard ||
-          !row.ClassSubject ||
-          !row.PasssingYear ||
-          !row.ClassPercentage ||
-          row.ClassPercentage == 0;
-
-        if (_isValid) {
-          isValid = false;
-          return;
-        }
-      }
-    });
-
-    return isValid;
-  }
 
 }

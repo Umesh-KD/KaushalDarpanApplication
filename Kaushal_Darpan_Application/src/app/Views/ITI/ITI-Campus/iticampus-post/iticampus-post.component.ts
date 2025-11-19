@@ -178,7 +178,7 @@ export class ItiCampusPostComponent implements OnInit {
       txtSalaryRemark: [''],
       ddlGender: ['',Validators.required],
       txtOtherBenefit: [''],
-      ddlCampusType: [''],
+      ddlCampusType: ['',Validators.required],
       divisionId: ['0'],
       instituteId:['0'],
       ddlInterviewType: [''],
@@ -637,13 +637,17 @@ debugger
   }
 
   async AddNewRole() {
-    
+    debugger
     this.isSubmittedItemDetails = true;
     if (this.BranchList.length < 1) {
       this.toastr.error("Please Select Branch")
     }
     if (this.EligibilityCriteriaForm.invalid) {
       return 
+    }
+    if(this.request_EligibilityCriteriaModel.CampusType == '' || this.request_EligibilityCriteriaModel.CampusType == '0'){
+       this.toastr.error("Please Select Campus Type");
+      return;
     }
     if (this.MinAge < 18) {
       this.toastr.error("Age should be more than 18 years")

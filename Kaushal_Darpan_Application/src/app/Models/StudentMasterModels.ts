@@ -124,6 +124,7 @@ export class M_StudentMaster_QualificationDetailsModel {
   public ModifyBy: number = 0;
   public ModifyDate: string = '';
   public IPAddress: string = '';
+  public IsNew?: boolean = false;
 }
 
 export class Student_DataModel {

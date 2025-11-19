@@ -219,6 +219,11 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
   
-  
+  public async GetOrderDetailsList() {
+    return await this.http.post(`${this.APIUrl}/GetSanctionOrderByID`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

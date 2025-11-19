@@ -38,8 +38,9 @@ export class PreExam_UpdateEnrollmentNoModel extends RequestBaseModel {
   public UpdatedDate: string = '';
   public CreatedBy: number = 0;
   public Action: string = ''
-  public StudentExamID: number = 0
-  public IsUpdate: boolean=false
+  public StudentExamID: number = 0;
+  public IsUpdate: boolean = false;
+  public SemesterID: number = 0;
 }
 
 export class PreExam_UpdateOptionalSubjectModel {

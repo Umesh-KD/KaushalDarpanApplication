@@ -53,6 +53,8 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   public DateConfigSetting: any = [];
   public PDFURL: string = "";
   public isExamFee: boolean = false
+  public isOnClickEnrollFeePay: boolean = false
+  public isOnClickExamFeePay: boolean = false
 
 
   constructor(private loaderService: LoaderService,
@@ -349,6 +351,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   async PayEnrollmentFee(item: StudentDetailsModel) {
     const isValid = await this.ValidateEnrollmentDate(item.CourseType, item.FinancialYearID, item.EndTermID);
     if (isValid) {
+      this.isOnClickEnrollFeePay = true;
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
       this.emitraRequest.Amount = Number(item.FeeAmount);
@@ -433,7 +436,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     //validate function
     const isValid = await this.ValidateExamDate(item.CourseType, item.FinancialYearID, item.EndTermID);
     if (isValid) {
-
+      this.isOnClickExamFeePay = true
       this.emitraRequest = new EmitraRequestDetails();
       //Set Parameters for emitra
       this.emitraRequest.Amount = Number(item.FeeAmount);

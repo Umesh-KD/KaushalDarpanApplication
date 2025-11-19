@@ -15,11 +15,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--<div>
-          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Special Annexure-2</a>
-          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Main Annexure-2</a>
-          <a href="javascript:void(0);" class="btn bg-success btn-sm text-white"><i class="ti ti-download"></i>Full Data</a>
-        </div>-->
+       
       </div>
       <form [formGroup]="SearchStudentDataFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
@@ -32,13 +28,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
-            <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.InstituteID"
-            formControlName="ddlInstituteID">
-      <option value="0">--All--</option>
-      <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
-        {{item.InstituteName}}
-      </option>
-    </select>-->
+           
             <ng-select [(ngModel)]="request.InstituteID"
                        formControlName="ddlInstituteID" [clearable]="false">
               <ng-option [value]="0" selected>--All--</ng-option>
@@ -48,22 +38,7 @@
             </ng-select>
           </div>
 
-          <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
-    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
-      formControlName="ddlFinancialYearID">
-      <option value="0">--All--</option>
-      <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
-        {{
-        item.FinancialYearName
-        }}
-      </option>
-    </select>
-    <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
-          aria-hidden="true"></i>This field is required.</p>
-    </div>
-  </div>-->
+          
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Stream</label>
@@ -75,10 +50,7 @@
               <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
               }
             </ng-select>
-            <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
-        field is required.</p>
-    </div>-->
+           
           </div>
 
           <div>
@@ -88,10 +60,7 @@
               <option value="0">--All--</option>
               <option *ngFor="let item of SemesterMasterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
-            <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlSemesterID').errors" class="text-danger">
-      <p *ngIf="!SearchStudentDataFormGroup.get('ddlSemesterID').errors.required"><i aria-hidden="true"></i>This
-        field is required.</p>
-    </div>-->
+           
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name</label>
@@ -99,7 +68,7 @@
                    formControlName="txtStudentName">
           </div>
 
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Management Type</label>
             <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="request.ManagementTypeID"
                     formControlName="ddlManagementID">
@@ -108,30 +77,30 @@
                 {{item.InstitutionManagementType}}
               </option>
             </select>
-          </div>
-          <div>
+          </div>-->
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Mobile</label>
             <input class="form-input" type="text" id="StudentExamMobile" [(ngModel)]="request.MobileNo"
                    formControlName="txtMobileNo">
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
-            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
-                   formControlName="txtAbc">
-          </div>
-
+          </div>-->
+         
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-3">
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Status</label>
             <select class="form-select" id="StudentExamStatus" [(ngModel)]="request.StudentFilterStatusId"
                     formControlName="ddlstatus" (change)="GetPreExamStudent();">
               <option value="0">--All--</option>
               <option *ngFor="let item of StudentStatusList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-          </div>
-        
+          </div>-->
+          <!--<div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ABC ID</label>
+            <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
+                   formControlName="txtAbc">
+          </div>-->
+
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="btn_SearchClick()">Search</button>
@@ -162,7 +131,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportAnnexture()"><i class="ti ti-download"></i> Download Annexture</a>
+        <!--<a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportAnnexture()"><i class="ti ti-download"></i> Download Annexture</a>-->
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Reports in Excel</a>
         <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
@@ -174,9 +143,9 @@
     </div>
 
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-3">
-      <div class="flex">
+      <!--<div class="flex">-->
         <!--*ngIf="MapKeyEng == 1"-->
-        <select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
+        <!--<select class="form-select" id="ExamId" [(ngModel)]="status" name="ddlExamstatus" #examStatus="ngModel">
           <option value="0">Choose Mark As (*)</option>
           <option *ngFor="let item of ExamStudentStatusDDLList" [value]="item.Id">{{item.Name}}</option>
         </select>
@@ -184,10 +153,10 @@
           <p *ngIf="examStatus.errors?.required">This field is required.</p>
         </div>
         <button type="button" class="btn bg-info text-white inline-block" (click)="SaveDataMarked()">Mark</button>
-      </div>
-      <div>
+      </div>-->
+      <!--<div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
-      </div>
+      </div>-->
 
     </div>
 
@@ -195,11 +164,11 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>
+            <!--<th>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th>
+            </th>-->
             <th class="text-left">Sr.No.</th>
-            <th class="text-center" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">Action</th>
+            <!--<th class="text-center" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">Action</th>-->
             <!--sorting column-->
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
@@ -246,24 +215,24 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td>
+            <!--<td>
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
-            </td>
+            </td>-->
             <td>{{(startInTableIndex+1)+idx}}</td>
-            <td *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">
+            <!--<td *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.ReturnByAcp">
               <div class="flex actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="View Student Details"
                    (click)="ViewStudentDetails(MyModel_ViewStudent, row.StudentID)">
                   <i class="ti ti-eye" aria-hidden="true"></i>
                 </a>
                 <a href="javascript:void(0);" *ngIf="row.status!=_enumExamStudentStatus.RejectatBTER && !(sSOLoginDataModel.RoleID == _EnumRole.ACP || sSOLoginDataModel.RoleID == _EnumRole.ACP_NonEng)"
-                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">
+                   title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID)">-->
                   <!--<i class="ti ti-user"></i>-->
-                  <i class="ti ti-pencil"></i>
+                  <!--<i class="ti ti-pencil"></i>
                 </a>
               </div>
-            </td>
+            </td>-->
             <td>{{row.StudentName}}</td>
             <td align="left">{{row.FatherName}}</td>
             <td align="left">{{row.ApplicationNo}}</td>
@@ -906,8 +875,6 @@
           </div>
           <div class="flex justify-between flex-wrap items-center mb-3 mt-4 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i> Qualification Details</b>
-            <!-- Add Qualification Button -->
-            <button title="add more qualification" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited" class="px-3 py-2 rounded text-white bg-green-600 hover:bg-green-700 flex items-center gap-1" (click)="addQualification(requestStudent.StudentID)"><i class="ti ti-circle-plus"></i> Add More</button>
           </div>
 
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
@@ -920,74 +887,37 @@
                     <th class="text-left">Stream/Subject</th>
                     <th class="text-left">Passing Year</th>
                     <th class="text-left">Percentage</th>
-                    <th class="text-left">Actions</th> <!-- Column for Actions -->
                   </tr>
                 </thead>
                 <tbody>
 
                   <tr *ngFor="let row of requestStudent.QualificationDetails;let idx=index;">
 
+                    <td>{{row.Qualification}}</td>
                     <td>
-                      <input type="text" class="form-input " id="txtQualification" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
-                             name="Qualification" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.Qualification"
-                             [class.error]="row.IsNew==true && this.isSubmitted && !row.Qualification">
-
-                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.Qualification">
-                        This field is required!
-                      </small>
-
-                    </td>
-                    <td>
-                      <select class="form-select " id="ddlBoard" name="ddlBoard" [(ngModel)]="row.ClassBoard"
-                              [ngModelOptions]="{standalone: true}" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
-                              [class.error]="row.IsNew==true && this.isSubmitted && !row.ClassBoard">
+                      <select class="form-select disabled" id="ddlBoard" name="ddlBoard" [(ngModel)]="row.ClassBoard"
+                              [ngModelOptions]="{standalone: true}" disabled>
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of BoardMasterList" value="{{item.ID}}">{{item.Name}}</option>
                       </select>
-
-                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.ClassBoard">
-                        This field is required!
-                      </small>
                     </td>
 
                     <td>
-                      <input type="text" class="form-input " id="txtClassSubject" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
-                             name="txtClassSubject" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.ClassSubject"
-                             [class.error]="row.IsNew==true && this.isSubmitted && !row.ClassSubject">
-
-                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.ClassSubject">
-                        This field is required!
-                      </small>
+                      <input type="text" class="form-input disabled" disabled id="txtClassSubject"
+                             name="txtClassSubject" [ngModelOptions]="{standalone: true}" [(ngModel)]="row.ClassSubject">
 
                     </td>
                     <td>
-                      <select class="form-select " id="ddlPassingYear" name="ddlPassingYear" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
-                              [(ngModel)]="row.PasssingYear" [ngModelOptions]="{standalone: true}"
-                              [class.error]="row.IsNew==true && this.isSubmitted && !row.PasssingYear">
+                      <select class="form-select disabled" id="ddlPassingYear" disabled name="ddlPassingYear"
+                              [(ngModel)]="row.PasssingYear" [ngModelOptions]="{standalone: true}">
                         <option value="0">-- Select --</option>
                         <option *ngFor="let item of PassingYearList" value="{{item.Year}}">{{item.Year}}</option>
                       </select>
-
-                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && !row.PasssingYear">
-                        This field is required!
-                      </small>
                     </td>
                     <td>
-                      <input type="text" class="form-input " id="txtClassPercentage" [disabled]="request.StudentFilterStatusId==_enumExamStudentStatus.Addimited || row.IsNew==false"
+                      <input type="text" class="form-input disabled" id="txtClassPercentage" disabled
                              name="txtClassPercentage" [ngModelOptions]="{standalone: true}"
-                             [(ngModel)]="row.ClassPercentage"
-                             [class.error]="row.IsNew==true && this.isSubmitted && (!row.ClassPercentage || row.ClassPercentage == 0)" maxlength="5">
-
-                      <small class="text-red-500" *ngIf="row.IsNew==true && this.isSubmitted  && (!row.ClassPercentage || row.ClassPercentage == 0)">
-                        This field is required!
-                      </small>
-                    </td>
-
-                    <!-- Delete Button -->
-                    <td>
-                      <button title="delete qualification" class="p-2 rounded bg-red-600 hover:bg-red-700 text-white" *ngIf="request.StudentFilterStatusId!=_enumExamStudentStatus.Addimited && row.IsNew==true" (click)="deleteQualification(idx)">
-                        <i class="ti ti-trash"></i>
-                      </button>
+                             [(ngModel)]="row.ClassPercentage">
                     </td>
                   </tr>
 
