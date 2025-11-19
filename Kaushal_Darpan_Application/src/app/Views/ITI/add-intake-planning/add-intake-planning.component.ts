@@ -10,6 +10,8 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { ItiCollegesSearchModel, ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HiringRoleMasterService } from '../../../Services/HiringRoleMaster/hiring-role-master.service';
+import { ItiSanctionOrderList } from '../../../Models/ITI/ItiReportDataModel';
 
 @Component({
   selector: 'app-add-intake-planning',
@@ -24,6 +26,11 @@ export class AddIntakePlanningComponent {
   public isSubmitted = false;
   public tradeSearchRequest = new ItiTradeSearchModel()
   public collegeSearchRequest = new ItiCollegesSearchModel()
+
+  public OrderNoList: any = [];
+  public AcademicOrderNoList:any=[];
+  public FinancialOrderNoList:any=[];
+
   public ItiTradeListAll: any = [];
   public ItiCollegesListAll: any = [];
   public ITITradeSchemeList: any = [];
@@ -34,6 +41,8 @@ export class AddIntakePlanningComponent {
   public isCollege: boolean = false;
   public isTrade: boolean = false;
   public isTradename: boolean = false;
+
+  public ItiSanctionOrderList= new ItiSanctionOrderList();
 
   public currentDate = new Date();
 
@@ -46,7 +55,8 @@ export class AddIntakePlanningComponent {
     private toastr: ToastrService,
     private loaderService: LoaderService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private ScholarshipService: HiringRoleMasterService,
   ) { }
 
   async ngOnInit() {
@@ -55,11 +65,13 @@ export class AddIntakePlanningComponent {
         ddlCollege: ['', [DropdownValidators]],
         ddlTradeLevel: ['', [DropdownValidators]],
         ddlTrade: ['', [DropdownValidators]],
-        txtShift: ['', Validators.required],
+        // txtShift: ['', Validators.required],
         ddlLastSession: [''],
        /* ddlRemark: ['', [DropdownValidators]],*/
         ddlTradeScheme: ['', [DropdownValidators]],
         txtUnitNo: ['', Validators.required],
+        ddlAdminSanctionedID: ['', [DropdownValidators]],
+        ddlFinancialSanctionID:['',[DropdownValidators]],
        /* ddlSanctioned: ['', [DropdownValidators]],*/
       /*  OrderDate: ['', Validators.required],*/
     /*    OrderNo: ['', Validators.required],*/
@@ -76,6 +88,7 @@ export class AddIntakePlanningComponent {
     await this.GetTradeAndColleges()
     await this.GetMasterDataForDDL()
     await this.GetCollegesListAll()
+    await this.GetOrderDetailsList();
 
     this.SeatIntakeID = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
     if (this.SeatIntakeID) {
@@ -165,10 +178,57 @@ export class AddIntakePlanningComponent {
     }
   }
 
-  async onSubmit() {
+  // async onSubmit() {
+  //   debugger
+
+  //   this.isSubmitted = true;
+  //   if (this.SeatIntakeFormGroup.invalid) {
+  //     this.toastr.error("invalid Form Data")
+  //     return
+  //   }
+  //   try {
+  //     this.loaderService.requestStarted();
+
+  //     this.request.ModifyBy = this.SSOLoginDataModel.UserID;
+  //     this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
+  //     this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
+  //     this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+  //     this.request.CollegeID = this.ItiCollegesListAll.find(
+  //       (e: any) => e.ID === this.request.PlanningID
+  //     )?.CollegeID || 0;
+
+  //     this.request.ActiveStatus = true;
+  //     await this.ItiSeatIntakeService.SaveSeatIntakeData(this.request)
+  //       .then((data: any) => {
+  //         data = JSON.parse(JSON.stringify(data));
+  //         if (data.State = EnumStatus.Success) {
+  //           this.toastr.success(data.Message)
+  //           this.onReset()
+  //           this.router.navigate(['/SeatIntakePlanning'])
+  //         }
+  //         else {
+  //           this.toastr.error(data.ErrorMessage)
+  //         }
+
+  //       }, (error: any) => console.error(error)
+  //       );
+  //   }
+  //   catch (ex) {
+  //     console.log(ex);
+  //   }
+  //   finally {
+  //     setTimeout(() => {
+  //       this.loaderService.requestEnded();
+  //     }, 200);
+  //   }
+  // }
+
+
+    async onSubmit() {
     debugger
 
     this.isSubmitted = true;
+ 
     if (this.SeatIntakeFormGroup.invalid) {
       this.toastr.error("invalid Form Data")
       return
@@ -180,11 +240,15 @@ export class AddIntakePlanningComponent {
       this.request.DepartmentID = this.SSOLoginDataModel.DepartmentID;
       this.request.AcademicYearID = this.SSOLoginDataModel.FinancialYearID;
       this.request.CreatedBy = this.SSOLoginDataModel.UserID;
+
+      // this.request.FinancialSanctionID=this.SeatIntakeFormGroup.get('ddlFinancialSanctionID')?.value;
+      // this.request.AdminSanctionedID=this.SeatIntakeFormGroup.get('ddlAdminSanctionedID')?.value;
       this.request.CollegeID = this.ItiCollegesListAll.find(
-        (e: any) => e.ID === this.request.PlanningID
+        (e: any) => e.ID === Number(this.request.PlanningID)
       )?.CollegeID || 0;
 
       this.request.ActiveStatus = true;
+      console.log("request",this.request);
       await this.ItiSeatIntakeService.SaveSeatIntakeData(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -209,6 +273,7 @@ export class AddIntakePlanningComponent {
       }, 200);
     }
   }
+
 
   async onReset() {
     this.isSubmitted = false;
@@ -249,4 +314,29 @@ export class AddIntakePlanningComponent {
       });
     }
   }
+
+  async GetOrderDetailsList(){
+    debugger
+    try{
+      this.loaderService.requestStarted();
+      await this.ScholarshipService.GetsanctionOrder(this.ItiSanctionOrderList).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        // this.request = data.Data[0];
+        this.OrderNoList=data.Data;
+        this.AcademicOrderNoList=this.OrderNoList.filter((x: any) => x.OrderType==1);
+        this.FinancialOrderNoList=this.OrderNoList.filter((x:any)=>x.OrderType==2);
+       
+        console.log(this.OrderNoList, "orderlist");
+      });
+    }
+    catch (error) {
+      console.error(error);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }

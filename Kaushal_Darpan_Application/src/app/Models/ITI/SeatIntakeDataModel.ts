@@ -20,6 +20,9 @@ export class SeatIntakeDataModel {
   public OrderDate?: string = '';
 
   public AcademicYearID: number = 0;
+
+  public FinancialSanctionID: number = 0;
+  public AdminSanctionedID: number = 0;
 }
 
 export class SeatIntakeSearchModel {

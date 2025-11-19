@@ -102,6 +102,7 @@ export class CampusPostComponent implements OnInit {
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
 
+
     this.settingsMultiselect = {
       singleSelection: false,
       idField: 'StreamID',
@@ -226,7 +227,9 @@ export class CampusPostComponent implements OnInit {
 
   onStartCampusDateChange(): void {
     // Ensure the "minDate" is set to the "AgeAllowedFrom" date value
-    this.mincampusDate = this.request.CampusFromDate
+    this.mincampusDate = this.request.CampusFromDate;
+  //  this.request.CampusToDate = this.mincampusDate; 
+
   }
 
   onPassingYearChange() {
@@ -604,6 +607,28 @@ export class CampusPostComponent implements OnInit {
       return;
     }
 
+    // campus date  validation start
+    const todays = new Date();
+    const formatDate = (date: Date): string => {
+        return date.toISOString().split('T')[0]; // Example output: "2025-09-04"
+    };
+    const todayDateString = formatDate(todays);
+
+    const oneDaysLater = new Date();
+    oneDaysLater.setDate(todays.getDate() + 1);
+
+    const onedaylaterDateString = formatDate(oneDaysLater);
+    if(this.request.CampusFromDate < todayDateString ){
+      this.toastr.error("Campus From Date should be greater than or equal to today's date ");
+      return;
+    }
+    if(this.request.CampusToDate < onedaylaterDateString){
+      this.toastr.error("Campus To Date should be greater than Campus From Date");
+      return;
+    }
+
+    // campus date vaidation end 
+    
     //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
