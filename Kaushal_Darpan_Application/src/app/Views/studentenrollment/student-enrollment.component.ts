@@ -635,6 +635,7 @@ export class StudentEnrollmentComponent {
           this.requestUpdateEnrollmentNo.EnrollmentNo = data['Data']['EnrollmentNo'];
           this.requestUpdateEnrollmentNo.InstituteID = data['Data']['InstituteID'];
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
+          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
 
           /*this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];*/
           const selectedSubjectIDs = this.requestStudent.commonSubjectDetails?.map((x: any) => x.SubjectId);
