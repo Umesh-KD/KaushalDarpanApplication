@@ -51,7 +51,8 @@
           <tr>
             <th class="text-left">S No</th>
             <th class="text-left">Budget Type</th>
-            <th class="text-left">Year Name</th>
+            <th class="text-left">Budget For</th>
+            <th class="text-left">Year</th>
             <th class="text-left">Cumulative/Head Wise</th>
             <th class="text-left">Estimated Amount</th>
           </tr>
@@ -61,10 +62,10 @@
           <tr *ngFor="let row of BudgetDataList;let idx=index;">
             <td>{{idx+1}}</td>
             <td>{{row.BudgetTypeName}}</td>
+            <td>{{row.BudgetFor}}</td>
             <td>{{row.FinancialYearName}}</td>
             <td>{{row.BudgetType_Cumulative_HeadWise}}</td>
             <td>{{row.TotalAmount | number:digitsInfo:locale}}</td>
-
           </tr>
           <tr *ngIf="BudgetDataList?.length==0"><td colspan="11">No Record Found</td></tr>
         </tbody>

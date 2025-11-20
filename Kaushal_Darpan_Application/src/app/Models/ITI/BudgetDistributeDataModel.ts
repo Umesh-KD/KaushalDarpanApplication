@@ -2,11 +2,13 @@
 export class BudgetDistributeModel {
   public DistributedID?:number=0
   public CollegeID?:number=0
+  public DivisionID?:number=0
   public FinYearID?:number=0
   public DistributedType?:number=0
   public DistributedAmount?:number=0
   public CreatedBy?:number=0
   public BodgetTypeID?:number=0
+  public BudgetForID?:number=0
   public BodgetType_Cumulative_HeadWise?:number=0
   public ActionType?:string=''
   public Remarks?:string=''
@@ -26,7 +28,8 @@ export class BudgetHeadSearchFilter {
   public InstituteId?: number = 0
   public AcademicYearID?: number = 0
   public BudgetTypeID?: number = 0
-  
+  public BudgetForID?: number = 0  
+  public DivisionID?: number = 0  
 }
 
 export class BudgetHeadUtilizeList
