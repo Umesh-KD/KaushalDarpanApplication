@@ -546,7 +546,7 @@ export class PreExamStudentExaminationComponent {
 
   async GetPreExamStudent() {
 
-    debugger
+    //debugger
     try {
       this.isSubmitted = true;
       //session
@@ -794,6 +794,7 @@ export class PreExamStudentExaminationComponent {
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
 
           this.requestUpdateEnrollmentNo.StudentExamID = data['Data']['StudentExamID'];
+          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
 
           console.log(this.requestStudent.Papers, 'Papers')
           /*this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];*/
@@ -864,8 +865,9 @@ export class PreExamStudentExaminationComponent {
           this.requestUpdateEnrollmentNo.InstituteID = data['Data']['InstituteID'];
           this.requestUpdateEnrollmentNo.StreamID = data['Data']['StreamID'];
           this.requestUpdateEnrollmentNo.StudentExamID = data['Data']['StudentExamID'];
-          this.requestUpdateEnrollmentNo.IsUpdate = data['Data']['IsUpdate']
-          this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo']
+          this.requestUpdateEnrollmentNo.IsUpdate = data['Data']['IsUpdate'];
+          this.requestUpdateEnrollmentNo.OrderNo = data['Data']['OrderNo'];
+          this.requestUpdateEnrollmentNo.SemesterID = data['Data']['SemesterID'];
 
           if (data['Data']['OrderDate'] != null && data['Data']['OrderDate'] !== '') {
             const OrderDate = new Date(data['Data']['OrderDate']);
@@ -1064,6 +1066,7 @@ export class PreExamStudentExaminationComponent {
   }
 
   async SaveData_PreExam_UpdateEnrollmentNo() {
+    this.resetValidationUpdateEnrollment();
     this.isSubmitted = true;
 
     if (this.formUpdateEnrollmentNo.invalid) {
@@ -1116,6 +1119,7 @@ export class PreExamStudentExaminationComponent {
 
 
   async Revert_PreExam_UpdateEnrollmentNo() {
+    this.resetValidationUpdateEnrollment();
     this.isSubmitted = true;
 
     if (this.formUpdateEnrollmentNo.invalid) {
@@ -2794,6 +2798,17 @@ export class PreExamStudentExaminationComponent {
   // convert to bool
   toBoolean(value: any): boolean {
     return !!value;  // double NOT operator converts any value to true/false
+  }
+
+  resetValidationUpdateEnrollment() {
+    // clear
+      this.formUpdateEnrollmentNo.get('ddlBranch')?.clearValidators();
+    // set
+    if (this.requestUpdateEnrollmentNo.SemesterID<=3) {
+      this.formUpdateEnrollmentNo.get('ddlBranch')?.setValidators([DropdownValidators]);
+    }
+    // update
+    this.formUpdateEnrollmentNo.get('ddlBranch')?.updateValueAndValidity();
   }
   
 }

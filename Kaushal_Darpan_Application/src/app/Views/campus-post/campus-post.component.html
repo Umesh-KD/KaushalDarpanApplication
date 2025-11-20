@@ -677,7 +677,7 @@
               Campus From Date : <span class="StarMarking">*</span>
             </label>
             <input formControlName="txtCampusFromDate" class="form-input" placeholder="txtCampusFromDate" type="date"
-                   id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate" (change)="onStartCampusDateChange()">
+                   id="txtCampusFromDate" [(ngModel)]="request.CampusFromDate" (change)="onStartCampusDateChange()" [min]="minDate">
             <div *ngIf="isSubmitted&&form.txtCampusFromDate.errors" class="text-danger">
               <p *ngIf="form.txtCampusFromDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
             </div>

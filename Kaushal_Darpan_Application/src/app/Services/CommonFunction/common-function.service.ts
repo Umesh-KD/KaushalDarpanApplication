@@ -30,7 +30,7 @@ import { THTE_DropdownDataModel } from '../../Models/TeacherHigherEducationAppli
 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'  
 })
 export class CommonFunctionService {
   readonly APIUrl = this.appsettingConfig.apiURL + "CommonFunction";

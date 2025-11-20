@@ -583,7 +583,7 @@ export class ITIDateConfigurationComponent implements OnInit, OnDestroy {
       this.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       await this.userMasterService.GetUserMobileNoForOTP(this.RoleID, this.DepartmentID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.sSOLoginDataModel.Mobileno = data.Data["MobileNo"];
+       //this.sSOLoginDataModel.Mobileno = data.Data["MobileNo"];
 
       }, (error: any) => console.error(error))
     }
