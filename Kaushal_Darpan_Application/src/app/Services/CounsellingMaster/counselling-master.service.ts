@@ -144,4 +144,11 @@ export class CounsellingMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetAllottedCandidateList_CounsellingReport(searchRequest: CounsellingAllottedListSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllottedCandidateList_CounsellingReport`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

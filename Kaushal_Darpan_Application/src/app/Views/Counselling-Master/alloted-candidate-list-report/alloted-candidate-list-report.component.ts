@@ -106,32 +106,7 @@ export class AllotedCandidateListReportComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
-  }
-  //  getTradeByDegree(designationId:number) {
-  //              console.log(designationId)
-
-    
-  //  try {
-  //    this.loaderService.requestStarted(); 
-  //      this.commonFunctionService.ItiTradecouncelling(designationId).then((data: any) => {
-  //        console.log(data)
-  //        data = JSON.parse(JSON.stringify(data));
-  //        this.TradeDDLList = data['Data'];  
-  //        console.log('TradeDDLList',this.TradeDDLList);
-          
-  //      }, error => console.error(error));
-  //  }
-  //  catch (Ex) {
-  //    console.log(Ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-
+  } 
   async GetTradeList() {
     try {
       this.tradeRequest.Action = 'GetTradeList'
@@ -149,7 +124,7 @@ export class AllotedCandidateListReportComponent {
       
       const request: any = {};
       request.action = "GetITIGovtInstituteDDL";
-      await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
+      await this.counsellingMasterService.GetAllottedCandidateList_CounsellingReport(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.InstitutelistDDL = data['Data'];
       })
@@ -157,21 +132,14 @@ export class AllotedCandidateListReportComponent {
       console.log(error);
     }
   }
-  async GetInstituteOptionList() {
-    try {
-      this.tradeRequest.Action = 'ChangeInstituteDDLList'
-      this.tradeRequest.TradeID = this.request.TradeID
-      await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.InstituteList = data.Data;
-      })
-    } catch (error) {
-      console.error(error)
-    }
+  async OnchangeTrade() {
+     await this.GetInstituteMaster();  
+     await this.GetAllottedCandidateList_Counselling();
   }
-
   async ClearSearchData() {
     this.request.TradeID = 0;
+    this.request.InstituteID = 0;
+    this.searchRequest.DesignationID=0;
   }
 
   async btn_SearchClick() {
@@ -180,7 +148,8 @@ export class AllotedCandidateListReportComponent {
 
   async GetAllottedCandidateList_Counselling() {
     try {
-      await this.counsellingMasterService.GetAllottedCandidateList_Counselling(this.request)
+      this.request.action="GetAllottedCandidate";
+      await this.counsellingMasterService.GetAllottedCandidateList_CounsellingReport(this.request)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if(data.State === EnumStatus.Success) {
@@ -200,134 +169,7 @@ export class AllotedCandidateListReportComponent {
     } catch (error) {
       console.error(error)
     }
-  }
-
-  async editAllottedInstitute(content: any, row: any) {
-    await this.GetInstituteOptionList();
-    this.editInstituteReq.CandidateID = row.CandidateID
-    this.editInstituteReq.OptionID = row.OptionID
-    this.editInstituteReq.AllotmentID = row.AllotmentID
-    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'sm', keyboard: true, centered: true });
-  }
-
-  CloseModal_EditAllottedInstitute() {
-    this.modalService.dismissAll();
-    this.editInstituteReq = new EditInstituteDataModel_Counselling()
-  }
-
-  async OpenOTPModal_EditInstitute() {
-    this.Swal2.Confirmation(`Are you sure you want to Change Allotted Institute!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          // do work
-          await this.SaveData_EditAllottedInstitute();
-        }
-      }
-    );
-  }
-
-  async SaveData_EditAllottedInstitute() {
-    try {
-      this.editInstituteReq.ModifyBy = this.sSOLoginDataModel.UserID
-      await this.counsellingMasterService.SaveFinalInstituteAllotment_Counselling(this.editInstituteReq).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.GetAllottedCandidateList_Counselling();
-          this.CloseModal_EditAllottedInstitute();
-        } else if(data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  async OpenOTPModal_GenerateAllotmentOrder() {
-    
-    let anySelected = this.AllottedCandidateList.some((x: any) => x.Selected == true);
-    if(!anySelected) {
-      this.toastr.error("Please select at least one candidate.");
-      return;
-    }
-
-    this.Swal2.Confirmation(`Are you sure you want to Generate Allotment Order for Selected Candidates!`,
-      async (result: any) => {
-        if (result.isConfirmed) {
-          this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
-
-          // await for open model
-          await this.childComponent.OpenOTPPopup();
-
-          // await OTP verification
-          await this.childComponent.waitForVerification();
-
-          // do work
-          await this.GenerateAllotmentOrder_Counselling();
-        }
-      }
-    );
-  }
-
-
-  async GenerateAllotmentOrder_Counselling() {
-    let selected = this.AllottedCandidateList.filter((x: any) => x.Selected == true);
-
-    if(selected.length == 0) {
-      this.toastr.error("Please select at least one candidate.");
-      return;
-    }
-    selected.forEach((x: any) => {
-      x.ModifyBy = this.sSOLoginDataModel.UserID
-    })
-    try {
-      await this.counsellingMasterService.GenerateAllotmentOrder_Counselling(selected).then(async (data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-          await this.DownloadFile(data.Data, 'file download');
-          await this.GetAllottedCandidateList_Counselling();
-        } else if(data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
-        }
-      })
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-    DownloadFile(FileName: string, DownloadfileName: any): void {
-
-    const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + FileName;; // Replace with your URL
-    // Fetch the file as a blob
-    this.http.get(fileUrl, { responseType: 'blob' }).subscribe((blob) => {
-      const downloadLink = document.createElement('a');
-      const url = window.URL.createObjectURL(blob);
-      downloadLink.href = url;
-      downloadLink.download = this.generateFileName('pdf'); // Set the desired file name
-      downloadLink.click();
-      // Clean up the object URL
-      window.URL.revokeObjectURL(url);
-    });
-  }
-  generateFileName(extension: string): string {
-    const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
-    return `file_${timestamp}.${extension}`;
-  }
-
+  } 
   //table feature
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));

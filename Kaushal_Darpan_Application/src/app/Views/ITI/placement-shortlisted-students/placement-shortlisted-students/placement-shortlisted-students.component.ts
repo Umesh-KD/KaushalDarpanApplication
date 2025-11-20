@@ -226,6 +226,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
   }
   // export
   public async ExcelExport() {
+    debugger
     if (this.StudentList.length > 0) {
       tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
     }
@@ -248,4 +249,6 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       item.Marked = this.AllSelect;
     }
   }
+
+
 }
