@@ -1157,7 +1157,7 @@
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3">
 
 
-            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon ) && (requestStudent.status != _enumExamStudentStatus.VerifiedForExamination && requestStudent.His_StatusId == 0)">
+            <div *ngIf="(this.sSOLoginDataModel.RoleID==_EnumRole.Principal || this.sSOLoginDataModel.RoleID==_EnumRole.PrincipalNon ) && requestStudent.His_StatusId == 0">
               <!-- Label for "Verified For Examination" -->
               <label class="text-gray-800 text-sm font-bold inline-block mb-1">Verified For Examination</label>
               <!-- Radio button options for Yes or No -->
