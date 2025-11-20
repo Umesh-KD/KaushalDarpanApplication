@@ -1,0 +1,449 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 1">
+        BTER
+      </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 2">
+        ITI
+      </a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Dashboard</a>
+    </div>
+  </div>
+  <!--<button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>-->
+</div>
+<div *ngIf="IsShowDashboard">
+  <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="Profilebox flex justify-between">
+
+          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
+          <div class="profilePic">
+            <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+                 [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
+
+          </div>
+          <div class="userInfos">
+            <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-3">
+              <div>
+                <label>Name:</label>
+                <span>{{ProfileLists.StudentName}} ({{ProfileLists.StudentNameHindi}})</span>
+              </div>
+              <div>
+                <label>Father Name: </label>
+                <span>{{ProfileLists.FatherName}} ({{ProfileLists.FatherNameHindi}})</span>
+              </div>
+              <div>
+                <label>Mother Name: </label>
+                <span>{{ProfileLists.MotherName}} ({{ProfileLists.MotherNameHindi}})</span>
+              </div>
+              <div>
+                <label>Date Of Birth : </label>
+                <span>{{ProfileLists.Dis_DOB}}</span>
+              </div>
+              <div>
+                <label>Email : </label>
+                <span>{{ProfileLists.Email}}</span>
+              </div>
+              <div>
+                <label>Phone : </label>
+                <span>{{ProfileLists.MobileNo}}</span>
+              </div>
+              <div>
+                <label>Gender : </label>
+                <span>{{ProfileLists.GenderName}}</span>
+              </div>
+              <div>
+                <label>Institute Name : </label>
+                <span>({{ProfileLists.InstituteCode}}) {{ProfileLists.InstituteName}}</span>
+              </div>
+              <div>
+                <label>{{sSOLoginDataModel.DepartmentID == 2?"Trade Name":"Stream Name"}}   : </label>
+                <span>({{ProfileLists.StreamCode}}) {{ProfileLists.StreamName}}</span>
+              </div>
+              <!--<div>
+                <label>Semester : </label>
+                <span>{{ProfileLists.SemesterName}}</span>
+              </div>-->
+              <div>
+                <label>Enrollment No : </label>
+                <span>{{ProfileLists.EnrollmentNo}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+
+        <form [formGroup]="CompanyMasterFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
+            
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>Update Student Qualification</b>
+          </div>
+          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
+                    [(ngModel)]="request.Name" formControlName="Name">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Website <span class="StarMarking">*</span>
+              </label>
+              <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
+                    [(ngModel)]="request.Website" formControlName="Website">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                State <span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlState" class="form-select" id="ddlState" [(ngModel)]="request.StateID"
+                      (change)="ddlState_Change()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlState.errors" class="text-danger">
+                <p *ngIf="!_CompanyMasterFormGroup.ddlState.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlDistrict" class="form-select" id="ddlDistrict" [(ngModel)]="request.DistrictID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlDistrict.errors" class="text-danger">
+                <p *ngIf="!_CompanyMasterFormGroup.ddlDistrict.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Company Type<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlCompanyType" class="form-select" id="ddlCompanyType" [(ngModel)]="request.CompanyTypeId">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlCompanyType.errors" class="text-danger">
+                <p *ngIf="!_CompanyMasterFormGroup.ddlCompanyType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div> -->
+
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
+              <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+              </div>
+            </div> -->
+
+            <!-- <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
+              <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div> -->
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Address <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
+                    [(ngModel)]="request.Address" formControlName="Address">
+              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
+                <p *ngIf="_CompanyMasterFormGroup.Address.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="fileStudentPhoto">Photograph</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                      id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
+                <label for="fileStudentPhoto">
+                  <span>Choose File</span>
+                  {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
+                    *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+            (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+            <i class="ti ti-trash"></i>
+          </a>-->
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </form>
+
+        <!-- to add multiple hr  -->
+
+        <form [formGroup]="HrMasterFormGroup" id="HrMasterFormGroup" class="form-horizontal mt-6">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>{{key===1 && flag!=1? ' Add HR Details' : key===2 && flag==1? 'View HR Details': ' Edit HR Details'}}</b>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="personRequest.Name" formControlName="Name">
+              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Name.errors" class="text-danger">
+                <p *ngIf="_HrMasterFormGroup.Name.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email <span class="StarMarking">*</span></label>
+              <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="personRequest.EmailId" formControlName="EmailId">
+              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.EmailId.errors" class="text-danger">
+                <p *ngIf="_HrMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+                <p *ngIf="_HrMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number <span class="StarMarking">*</span></label>
+              <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="personRequest.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
+              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.MobileNo.errors" class="text-danger">
+                <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="resetHrDetails()">
+                  <i class="ti ti-refresh"></i> Reset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5">Added HR Details </b>
+            </div>
+
+            <div class="overflow-auto">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Name</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of request.ListCompanyHRDetails; let idx=index;" >
+                    <td class="text-center">{{idx+1}}</td>
+                    <td class="text-center">{{row.Name}}</td>
+                    <td class="text-center">{{row.MobileNo}}</td>
+                    <td class="text-center">{{row.EmailId}}</td>
+                    <td class="text-center">
+                      <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
+                        <i class="ti ti-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <!-- add final save button  -->
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div *ngIf="flag!=1" class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key===1? 'Submit':'Update'}}</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+    <!-- @if(this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER) -->
+    <!-- { -->
+    <!-- Pending Fees Module -->
+    <!-- <app-pending-fees></app-pending-fees> -->
+
+    <!-- Semester Details -->
+    <!-- <app-semester-details></app-semester-details> -->
+
+    <!-- } -->
+    <!-- @else if(this.sSOLoginDataModel.DepartmentID ==_EnumDepartment.ITI) -->
+    <!-- { -->
+
+    <!-- <app-itipending-fees>  </app-itipending-fees> -->
+
+    <!-- } -->
+</div>
+
+
+
+
+<!-- <ng-template #modal_ApplyNow let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Proceed With </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body p-5">
+        <div class="p-6">
+          <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-8">
+            <div>
+              <h2 class="text-center text-4xl">Apply for Admissions</h2>
+            </div>
+          </div>
+          <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6 loginBox mt-8">
+            <a (click)="Redirect(_EnumDepartment.BTER)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">Polytechnic Admission<i class="ti ti-chevron-right"></i></a>
+            <a (click)="Redirect(_EnumDepartment.ITI)" class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer">ITI <i class="ti ti-chevron-right"></i></a>
+            <a class="btn bg-info btn-lg text-white text-center text-3xl py-4 c-pointer" (click)="closeModal()">DCE <i class="ti ti-chevron-right"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
+
+
+<!-- <ng-template #modal_StudetnCourseType let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between  items-center">
+        <b class="text-2xl"><i class="fa fa-plus"></i>&nbsp;Please Select Department </b>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card-body">
+        <div class="p-6">
+
+          <div class="grid xl:grid-cols-12 loginBox">
+            <table class="table table-border w-full table-auto" cellpadding="5">
+              <tr>
+                <td>
+                  Sr No
+                </td>
+                <td>
+                  Department
+                </td>
+                <td>
+                  Action
+                </td>
+              </tr>
+              <tr *ngFor="let item of StudantCourseList;let idx=index;">
+                <td>
+
+                  {{idx+1}}
+                </td>
+                <td>
+                  {{item.DepartmentName}}
+                </td>
+                <td>
+                  <a href="javascript:void(0);" class="btn bg-info btn-sm text-white text-center c-pointer" (click)="SetStudentDepartment(item)">Proceed <i class="ti ti-chevron-right"></i></a>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template> -->
+
+
+
+<!-- <div *ngIf="sSOLoginDataModel.DepartmentID==_EnumDepartment.BTER"  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light w-full  pointer-event" data-bs-toggle="collapse" data-bs-target="#multiCollapseExample1" aria-expanded="true" aria-controls="multiCollapseExample1">
+  <b class="text-1xl-5"><i class="ti ti-list"></i>Enrollment Cancellation Request</b>
+</div> -->
+
+
+
+<!-- <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-2 gap-2 mb-6 allStatics">
+  <ng-container *ngFor="let item of StudantDashboardList; let i = index">
+    <div class="card" *ngIf="item.ListType=='Cancel'">
+      <div class="p-5">
+        <span class="material-symbols-rounded float-end text-3xl text-default-400">{{item.SRC}}</span>
+        <h6 class="text-muted text-sm uppercase"><br />{{item.TotalText}}</h6>
+        <h3 class="text-2xl mb-3" data-plugin="counterup">{{item.TotalCount}}</h3>
+
+        <a [routerLink]="[item.URL]" [queryParams]="{Status: item.Status,tab:item.ShortORDER}"
+           class="block w-full text-center gap-1.5 py-0.5 px-1.5 text-xs font-medium bg-success text-white rounded me-1">
+          View
+          All <i class="ti ti-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</div> -->
+
+

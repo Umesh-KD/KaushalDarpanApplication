@@ -1003,18 +1003,12 @@ export class PreExamStudentExaminationComponent {
     this.requestStudent.CreatedBy = this.sSOLoginDataModel.UserID;
     this.requestStudent.RoleID = this.sSOLoginDataModel.RoleID;
 
-    if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && this.requestStudent.status == enumExamStudentStatus.SelectedForEnrollment) {
-      this.requestStudent.status = enumExamStudentStatus.VerifiedForEnrollment// verified for enrollment(bter) 
-    }
-    else if (this.IsVerified && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) && this.requestStudent.status == enumExamStudentStatus.SelectedForExamination) {
-      this.requestStudent.status = enumExamStudentStatus.VerifiedForExamination// verified for examination(principle)
-    }
-    else {
-      this.requestStudent.status = 0;
-    }
-    console.log(this.requestStudent.status, '4')
+    debugger
 
     // verified
+    if (this.IsVerified) {
+      this.requestStudent.status = enumExamStudentStatus.VerifiedForExamination// verified for examination(principle)
+    }
     this.requestStudent.IsVerified = this.IsVerified;
 
     //

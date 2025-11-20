@@ -13,6 +13,8 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 // import { ITIPlacementShortlistedStudentsService } from '../../../../Services/ITIPlacementShortlistedStudents/itiplacement-shortlisted-students.service';
 import { ITIPlacementShortlistedStudentsService } from '../../../../Services/ITIPlacementShortlistedStudents/itiplacement-shortlisted-students.service';
+import * as XLSX from 'xlsx';
+
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
 @Component({
@@ -250,5 +252,23 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     }
   }
 
-
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email','Mobile','Email Address','Marked','UploadedResume','Selected','HiringRole','CampusPostID'
+    ];
+    const filteredData = this.StudentList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
+  }
 }

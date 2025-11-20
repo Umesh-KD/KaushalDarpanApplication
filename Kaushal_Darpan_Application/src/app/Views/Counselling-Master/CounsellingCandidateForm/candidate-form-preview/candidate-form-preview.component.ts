@@ -61,6 +61,7 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
+  public currentDate = new Date();
   constructor(
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
@@ -269,71 +270,9 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
   Changetab(index: number) {
     this.formSubmitSuccess.emit(true)
     this.tabChange.emit(index)
-  }
-  downloadPDF() {
-    debugger
-    const element = document.getElementById('PreviewPDF');
+  } 
 
-    if (!element) {
-      this.toastr.error('Preview section not found!');
-      return;
-    }
-
-    html2canvas(element, 
-                {  scale: 2,
-                    useCORS: true,
-                    allowTaint: false,
-                    logging: false ,
-                    windowWidth: element.scrollWidth,
-                    windowHeight: element.scrollHeight
-                }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-
-      const imgWidth = 210;
-      const pageHeight = 295;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('Application_Preview.pdf');
-    });
-  }
-   public downloadPDF1() {
-      const margin = 10;
-      const pageWidth = 210 - 2 * margin;
-      const pageHeight = 200 - 2 * margin;
-  
-      const doc = new jsPDF({
-        orientation: 'p',
-        unit: 'mm',
-        format: [210, 300],
-      });
-  
-      const pdfTable = this.pdfTable.nativeElement;
-  
-      doc.html(pdfTable, {
-        callback: function (doc) {
-          doc.save('Application_Preview.pdf');
-        },
-        x: margin,
-        y: margin,
-        width: pageWidth,
-        windowWidth: pdfTable.scrollWidth,
-      });
-    }
-    downloadPDF2() {
+downloadPDF2() {
   const element = document.getElementById('PreviewPDF');
 
   if (!element) {
@@ -341,75 +280,48 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
     return;
   }
 
-  html2canvas(element, {
-    scale: 1.5,
-    useCORS: true,
-    allowTaint: false,
-    backgroundColor: '#ffffff',
-    logging: false,
-    windowWidth: element.scrollWidth,
-    windowHeight: element.scrollHeight
-  }).then((canvas) => {
-    // Create PNG data URL first (preserve transparency if needed)
-    const pngData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 10; // mm
 
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgWidth = 230;
-    const pageHeight = 500;
+
+  html2canvas(element, {
+    scale: 3,         // Better clarity
+    useCORS: true,
+    allowTaint: true,
+    logging: false
+  }).then((canvas) => {
+
+    const imgData = canvas.toDataURL('image/png');
+
+    // Calculating A4 width scale
+    const imgWidth = pageWidth;
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
     let heightLeft = imgHeight;
     let position = 0;
 
-    // Debugging / quick checks
-    try {
-      if (!pngData || typeof pngData !== 'string') {
-        throw new Error('Empty or invalid image data URL');
-      }
-      if (!pngData.startsWith('data:image/png')) {
-        console.warn('Expected PNG data URL but got:', pngData.slice(0, 50));
-      }
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
 
-      // Try to add PNG first
-      try {
-        pdf.addImage(pngData, 'PNG', 0, position, imgWidth, imgHeight);
-      } catch (pngErr) {
-        // If PNG fails (corrupt/incomplete), fallback to JPEG (more robust)
-        console.warn('PNG addImage failed, falling back to JPEG. Error:', pngErr);
-        const jpegData = canvas.toDataURL('image/jpeg', 1.0);
-        if (!jpegData || !jpegData.startsWith('data:image/jpeg')) {
-          throw new Error('JPEG fallback generation failed');
-        }
-        pdf.addImage(jpegData, 'JPEG', 0, position, imgWidth, imgHeight);
-      }
+    heightLeft -= pageHeight;
 
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-
-        // reuse same fallback logic per page (PNG may still fail)
-        try {
-          pdf.addImage(pngData, 'PNG', 0, position, imgWidth, imgHeight);
-        } catch {
-          const jpegData = canvas.toDataURL('image/jpeg', 1.0);
-          pdf.addImage(jpegData, 'JPEG', 0, position, imgWidth, imgHeight);
-        }
-        heightLeft -= pageHeight;
-      }
-
-      pdf.save('Application_Preview.pdf');
-    } catch (err) {
-      console.error('PDF creation final error:', err);
-      this.toastr.error('Error creating PDF. See console for details.');
-
-      // Helpful hint: open image data in new tab to visually inspect it
-      // (uncomment if you want to quickly check the image in browser)
-      // window.open(pngData, '_blank');
     }
-  }).catch((err) => {
-    console.error('html2canvas error:', err);
-    this.toastr.error('Failed to render preview for PDF (html2canvas error).');
+
+    pdf.save(`Application_Preview.pdf`);
   });
 }
+
+
+async PreviewViewDetails(content: any) {
+    //  await this.GetById();
+    // await this.GetInstituteOptionList_Counselling(item)
+    this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
+  }
 
 }

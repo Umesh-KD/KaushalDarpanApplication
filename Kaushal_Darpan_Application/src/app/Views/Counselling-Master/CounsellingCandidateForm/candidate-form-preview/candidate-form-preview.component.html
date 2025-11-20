@@ -240,25 +240,46 @@
     <!-- *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))" -->
     <button type="button" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
     </button>
-    <button type="button" style="display:none;" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="downloadPDF2();"><i class="ti ti-download"></i>Preview & Download
+    <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="ViewDetails(MyModel_ViewDetailsPDF);"><i class="ti ti-eye"></i>Preview & Download
     </button>
   </div>
 </div>
-<div class="card tab-panels " style="display:none;" id="PreviewPDF">
+
+<ng-template #MyModel_ViewDetailsPDF let-modal
+  class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <div class="card">
+      <div class="card-header flex justify-between items-center">
+        <!-- <b><i class="fa fa-plus"></i>&nbsp; आवेदन पत्र का पूर्वावलोकन (Application Form Preview)</b> -->
+        <button type="button" class="btn bg-info text-white" (click)="downloadPDF2();"><i class="ti ti-download"></i>Download</button>
+        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="card tab-panels " id="PreviewPDF">
   <div class="card-body p-5">
     <div class="mb-6"> 
+<div class="flex justify-center items-center my-4" style="margin: 0 0 25px 0 ;">
+  <b class="text-1xl-5">आवेदन फार्म (Application Form)</b>
+</div>
+     <div class="flex justify-between items-center w-full">
+  <h4 *ngIf="request.ApplicationNo" class="flex">
+    Application No: {{ request.ApplicationNo }}
+  </h4>
 
+  <h4 *ngIf="request.ApplicationNo" class="flex">
+    Generated on Date: {{ currentDate | date:'dd-MM-yyyy hh:mm a' }}
+  </h4>
+</div>
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
       </div>
 
-      <h4 class="flex" *ngIf="request.ApplicationNo!='' && request.ApplicationNo!=null">Application No:{{request.ApplicationNo}}</h4>
+      
       <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
         <div class="col-span-2 text-center" style="text-align:center !important" *ngFor="let item of filteredDocumentDetails;">
           <img appImageError="assets/images/dummyImg.jpg"
                [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
                class="imgSignSelf"
-               alt="{{item.ColumnName}}" />
+               alt="{{item.ColumnName}}" crossOrigin="anonymous"/>
           <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
         </div>
 
@@ -457,14 +478,14 @@
           <tr class="text-left">
             <th>Sr. No.</th>
             <th>Pending Data</th>
-            <th>Action</th>
+            <!-- <th>Action</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of request.PendingDataModel  let idx=index; ">
             <td>{{idx+1}}</td>
             <td>{{item.Pending}}</td>
-            <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td>
+            <!-- <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td> -->
           </tr>
         </tbody>
       </table>
@@ -472,6 +493,12 @@
  
   </div>
 </div>
+<div class="card-footer flex justify-between items-center">
+ <button type="button" class="btn bg-info text-white" (click)="downloadPDF2();"><i class="ti ti-download"></i>Download</button>
+</div>
+    </div>
+  </div>
+</ng-template>
  <!-- && sSOLoginDataModel.RoleID == _EnumRole.Admin && sSOLoginDataModel.RoleID == _EnumRole.AdminNon -->
 <div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
   <div class="bg-white rounded-lg shadow-xl relative p-4 overflow-hidden flex flex-col" style="width:60%;height:90%;">

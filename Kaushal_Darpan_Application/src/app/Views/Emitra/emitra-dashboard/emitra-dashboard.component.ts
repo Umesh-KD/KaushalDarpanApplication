@@ -67,7 +67,7 @@ export class EmitraDashboardComponent implements OnInit {
       { TabName: 'Apply Online', TabNameHI: '  ऑनलाइन आवेदन   करें ', TabIcon: 'ti ti-license', component: ApplyNowComponent, ServiceID: EnumEmitraService.BTER_DegreeNonENG_Emitra_AppplicationFeeService, DepartmentID: 1 },
 
 
-      { TabName: 'Fill ITI Fees', TabNameHI: 'आईटीआई फीस भरें', TabIcon: 'ti ti-license', component: StudentEmitraITIFeePaymentComponent, DepartmentID: 2, ServiceID: EnumEmitraService.ITIExamFees },
+      { TabName: 'Fill ITI Exam Fees', TabNameHI: 'आईटीआई परीक्षा फीस भरें', TabIcon: 'ti ti-license', component: StudentEmitraITIFeePaymentComponent, DepartmentID: 2, ServiceID: EnumEmitraService.ITIExamFees },
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.ITiApplicationFee, DepartmentID: 1 },
 
       { TabName: 'FILL Fee using challan', TabNameHI: 'चालान के माध्यम से शुल्क भरें', TabIcon: 'ti ti-exchange', component: FeePaidByChallanComponent, ServiceID: EnumEmitraService.BTER_DeplomaENG_AppplicationFeeService, DepartmentID: 1 },

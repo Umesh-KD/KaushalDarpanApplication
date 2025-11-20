@@ -340,7 +340,7 @@ const routes: Routes = [
       { path: 'documentdetailsform', loadChildren: () => import('./Views/ITI/document-details-form-tab/document-details-form-tab.module').then(m => m.DocumentDetailsFormTabModule), title: 'Document Details' },
       { path: 'optionsform', loadChildren: () => import('./Views/ITI/option-form-tab/option-form-tab.module').then(m => m.OptionFormTabModule), title: 'Options' },
       { path: 'Itipreviewform', loadChildren: () => import('./Views/ITI/preview-form-tab/preview-form-tab.module').then(m => m.PreviewFormTabModule), title: 'ITI Preview' },
-      // { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
+      //  { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
 
       { path: 'Applicationform', loadChildren: () => import('./Views/Polytechnic/application-form/application-form.module').then(m => m.ApplicationFormModule), title: 'BTER-Application Form' },
       { path: 'QualificationForm', loadChildren: () => import('./Views/Polytechnic/qualification-form/qualification-form.module').then(m => m.QualificationFormModule), title: 'Qualifications' },
@@ -1484,7 +1484,9 @@ const routes: Routes = [
       {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
-     
+      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
+      
+
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
      
 
