@@ -536,11 +536,7 @@ export enum EnumRenumerationExaminer
 export enum EnumEmitraService {
   ITIEmitraFormService = 3161,
   ITiApplicationFee = 3162,
-
-  ITIExamFees = 1111,
-
-
-
+  ITIExamFees = 2876,
   BTER_DeplomaENG_AllotmentFeeService = 2526,
   BTER_DeplomaENG_AppplicationFeeService = 3160,
   BTER_DeplomaENG_Emitra_AppplicationFeeService = 3159,
@@ -572,6 +568,7 @@ export enum EnumEmitraService {
 
   BTER_ExamFees_ENG = 7330,
   BTER_ExamFees_NonENG = 7350
+
 
 
 }

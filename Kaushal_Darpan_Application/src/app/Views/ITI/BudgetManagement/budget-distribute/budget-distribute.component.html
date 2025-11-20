@@ -30,9 +30,26 @@
       </div>
 
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Budget Type:<span class="StarMarking">*</span> </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.BudgetTypeID">
+              <option value="0">--- Select ---</option>
+              <option *ngFor="let item of ddlBudgetTypeList" [value]="item.BudgetTypeID">
+                  {{item.BudgetTypeName}}
+              </option>
+          </select>
+        </div>
 
         <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget For:<span class="StarMarking">*</span></label>
+          <select class="form-select" id="BudgetForID" [(ngModel)]="searchRequest.BudgetForID" (change)="ChangeBudgetFor()">
+              <option value="0">--Select--</option>
+              <option value="1">Zone Office</option>
+              <option value="2">ITI Institutes</option>                            
+          </select>
+        </div>
+
+        <div *ngIf="searchRequest.BudgetForID == 2">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
           <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollegeID">
             <option value="0">Choose Option</option>
@@ -42,8 +59,20 @@
           </select>
         </div>
 
+        <div *ngIf="searchRequest.BudgetForID == 1">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Zone: </label>
+          <select class="form-select"
+            name="DivisionID"
+            [(ngModel)]="searchRequest.DivisionID">
+            <option [ngValue]="0">Choose option</option>
+            <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
+            {{ item.Name }}
+            </option>
+          </select>
+        </div>
+
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Buget Type: </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Buget Type (Main/Supplement): </label>
           <select class="form-select w-full" name="ddlDistributedType" [(ngModel)]="searchRequest.DistributedType">
             <option value="0">ALL</option>
             <option value="1">Main Budget</option>
@@ -86,7 +115,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">S No</th>
-            <th class="text-left">College Details</th>
+            <th class="text-left">{{searchRequest.BudgetForID == 1 ? 'Zone Office' : 'College Details'}}</th>
             <th class="text-left">Budget Type</th>
             <th class="text-left">Budget Amount</th>
             <th class="text-left">Utilized Amount</th>
@@ -97,10 +126,13 @@
         <tbody>
           <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
             <td>{{idx+1}}</td>
-            <td>
+            <td *ngIf="searchRequest.BudgetForID == 2">
               {{row.CollegeName}}<br>
               <strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
               <strong>Email:</strong> {{row.Email}}
+            </td>
+            <td *ngIf="searchRequest.BudgetForID == 1">
+              {{row.DivisionNameEnglish}}<br>
             </td>
             <td>{{row.BudgetType}}</td>
             <td>{{row.Amount | number:digitsInfo:locale}}</td>

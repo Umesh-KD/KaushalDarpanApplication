@@ -12,6 +12,7 @@ import { PlacementShortlistedStuSearch, PlacementShortListStudentResponseModel }
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../Common/appsetting.service';
+import * as XLSX from 'xlsx';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -238,12 +239,7 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
       }, 200);
     }
   }
-  // export
-  public async ExcelExport() {
-    if (this.StudentList.length > 0) {
-      tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
-    }
-  }
+
   //
   refreshBranchRefValidation(isValidate: boolean) {
     // clear
@@ -261,5 +257,32 @@ export class PlacementShortlistedStudentsComponent implements OnInit {
     for (let item of this.StudentList) {
       item.Marked = this.AllSelect;
     }
+  }
+
+    // export
+  public async ExcelExport() {
+    if (this.StudentList.length > 0) {
+      tableToExcel("tbl_placementStudent", "Students", "PlacementStudent");
+    }
+  }
+
+  exportToExcel(): void {
+    const unwantedColumns = [
+      'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email','Mobile','Email Address','Marked','UploadedResume','Selected','HiringRole','CampusPostID'
+    ];
+    const filteredData = this.StudentList.map((item: any) => {
+      const filteredItem: any = {};
+      Object.keys(item).forEach(key => {
+        if (!unwantedColumns.includes(key)) {
+          filteredItem[key] = item[key];
+        }
+      });
+      return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'ShortlistStudentData.xlsx');
   }
 }

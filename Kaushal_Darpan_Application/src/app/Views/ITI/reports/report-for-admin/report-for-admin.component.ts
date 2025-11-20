@@ -88,7 +88,7 @@ export class ReportedStudentReportComponent {
   }
 
   async GetAllotedSeatByCollegeList() {
-
+debugger
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
 
     try {
