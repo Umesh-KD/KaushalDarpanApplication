@@ -135,7 +135,7 @@ export class CollegeBudgetListComponent {
     try {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
+      this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -335,7 +335,7 @@ export class CollegeBudgetListComponent {
   async BudgetUtilize() {
     try {
       this.loaderService.requestStarted();
-
+      debugger
       if (!this.validateUtilizationList()) {
         this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
         return; // stop submission
@@ -351,6 +351,7 @@ export class CollegeBudgetListComponent {
       this.BudgetUtilizationsList.forEach(item => {
         item.Remarks = remarkValue;
         item.CreatedBy = this.sSOLoginDataModel.UserID;
+        item.DistributedID = this.searchRequest.DistributedID;
       });
 
       this.TotalUtilizedBudget = this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
@@ -400,7 +401,7 @@ export class CollegeBudgetListComponent {
     try {
         ;
       this.searchRequest.DistributedID = row.DistributedID
-      this.GetBudgetUtilizationsList();
+      await this.GetBudgetUtilizationsList();
       await this.modalService
         .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(

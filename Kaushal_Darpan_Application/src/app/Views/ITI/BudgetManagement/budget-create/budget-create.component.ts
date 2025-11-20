@@ -50,7 +50,6 @@ export class BudgetCreateComponent {
     this.BudgetCreateForm = this.formBuilder.group({
       BudgetTypeName: ['', Validators.required],
       BudgetTypeID: ['', [DropdownValidators]],
-      AcademicYearID: ['', [DropdownValidators]],
       BudgetType_Cumulative_HeadWise: ['', [DropdownValidators]],
       BudgetForID: ['', [DropdownValidators]],
       CumulativeAmount: ['', Validators.required],
@@ -166,6 +165,7 @@ export class BudgetCreateComponent {
   async SaveBudget(){
     this.request.BudgetHeadList = this.BudgetHeadList;
     this.request.UserID = this.sSOLoginDataModel.UserID
+    this.request.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     this.request.DistributedType = 1
     if(this.request.BudgetType_Cumulative_HeadWise == 1) {
       this.request.TotalAmount = this.request.CumulativeAmount

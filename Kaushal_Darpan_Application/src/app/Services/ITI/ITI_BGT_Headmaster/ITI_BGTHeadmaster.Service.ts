@@ -68,4 +68,35 @@ export class ITI_BGTHeadmasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async SaveUCHeadData_ITI_BGT(request: ITI_BGT_HeadMasterDataModel) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/SaveUCHeadData_ITI_BGT", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetUCHeadData_ITI_BGT(request: ITI_BGT_HeadMasterSearchModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetUCHeadData_ITI_BGT`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetUCHeadDataById_ITI_BGT(id: number) {
+    return await this.http.get(`${this.APIUrl}/GetUCHeadDataById_ITI_BGT/${id}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async DeleteUCHeadById_ITI_BGT(HeadId: number, UserID: number) {
+    debugger
+    return await this.http.delete(`${this.APIUrl}/DeleteUCHeadById_ITI_BGT/${HeadId}/${UserID}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

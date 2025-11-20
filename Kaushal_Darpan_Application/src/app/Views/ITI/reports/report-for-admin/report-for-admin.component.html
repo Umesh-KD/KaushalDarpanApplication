@@ -90,20 +90,37 @@
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
               <th class="text-left" rowspan="2">#</th>
-              <th class="text-left" rowspan="2">Application ID</th>
+              <!-- <th class="text-left" rowspan="2">Application ID</th>
               <th class="text-left" rowspan="2">Reporting Date and Time</th>
               <th class="text-left" rowspan="2">State Registration Number</th>
-              <th class="text-left" rowspan="2">Status</th>
+              <th class="text-left" rowspan="2">Status</th> -->
+              <th class="text-left" rowspan="2">App_No</th>
+              <th class="text-left" rowspan="2">Inst_Code</th>
+              <th class="text-left" rowspan="2">T_Code</th>
+              <th class="text-left" rowspan="2">Shift</th>
+               <th class="text-left" rowspan="2">Unit</th>
+              <th class="text-left" rowspan="2">Phase</th>
+              <th class="text-left" rowspan="2">ReportingTime</th>
+              <th class="text-left" rowspan="2">State_Reg_no</th>
             </tr>
 
           </thead>
           <tbody>
             <tr *ngFor="let item of paginatedInTableData | tableSearchFilter:Table_SearchText;let idx=index;">
               <td>{{ (startInTableIndex+1) + idx }}</td>
-              <td>{{ item.ApplicationID }}</td>
+              <!-- <td>{{ item.ApplicationID }}</td>
               <td>{{ item.ReportingDate | date:'dd-MM-yyyy , HH:mm:ss' }}</td>
               <td>{{ item.StateRegistrationNumber }}</td>
-              <td>{{ item.Status }}</td>
+              <td>{{ item.Status }}</td> -->
+
+               <td>{{ item.App_No }}</td>
+              <td>{{ item.Inst_Code }}</td>
+              <td>{{ item.T_Code }}</td>
+              <td>{{ item.Shift }}</td>
+               <td>{{ item.Unit }}</td>
+              <td>{{ item.Phase}}</td>
+              <td>{{ item.ReportingTime }}</td>
+              <td>{{ item.State_Reg_no }}</td>
             </tr>
           </tbody>
         </table>

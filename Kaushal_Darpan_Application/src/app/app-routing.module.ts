@@ -1362,6 +1362,7 @@ const routes: Routes = [
       { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
       { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
       { path: 'iti-bgt-uc-head', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-uc-head/budget-uc-head.module').then(m => m.BudgetUCHeadModule), title: 'Budget UC Head' },
+      { path: 'itibudgetmaster', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-master/budget-master.module').then(m => m.BudgetMasterModule), title: 'ITI Budget Master' },
       
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },

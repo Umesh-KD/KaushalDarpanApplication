@@ -682,10 +682,60 @@ export class CounsellingImportCandidateListComponent implements OnInit {
         };
 
         autoFitColumns(ws, filteredData);
+        //Step 4: Generate Abbreviation Sheet
+          const sampleItem = dataExcel[0];
+      const filteredKeys = Object.keys(sampleItem)
+        .filter(key => !unwantedColumns.includes(key));
 
-        // Step 4: Create workbook and save file
+      // Create abbreviations automatically
+        const actualHeaders = [
+          "CandidateName",
+          "CandidateFatherName",
+          "MobileNo",
+          "Email",
+          "SSOID",
+          "SelectedTrade",
+          "Qualification",
+          "Gender",
+          "Roll_No",
+          "App_No",
+          "Aadhar_Number",
+          "DOB",
+          "Candidate_Cat",
+          "Selected_cat",
+          "IsTSP",
+          "MeritNo"
+        ];
+        const abbreviationMap: any = {
+        CandidateName: "Mandatory - Name of Candidate",
+        CandidateFatherName: "Mandatory - Father Name of Candidate",
+        MobileNo: "Mandatory - 10 Digit Mobile Number",
+        Email: "Mandatory - E-Mail Address",
+        SSOID: "Non - Mandatory - SSO ID of Candidate",
+        SelectedTrade: "Mandatory - Three Character Trade Code e.g. 231 / 227",
+        Qualification: "Mandatory - NTC/NAC or DEGREE/DIPLOMA",
+        Gender: "Mandatory - MALE / FEMALE / TRANSGENDER",
+        Roll_No: "Non - Mandatory - Roll Number of Student",
+        App_No: "Non - Mandatory - Application Number of Student",
+        Aadhar_Number: "Mandatory - 12 Digit Adhar Number",
+        DOB: "Mandatory - Date of Birth (dd-mm-yyyy i.e. 01/01/2002)",
+        Candidate_Cat: "Mandatory - Caste Category Code: GEN/OBC/ST/SC/EWS/MBC/MIN",
+        Selected_cat: "Mandatory - Caste Category Code: GEN/OBC/ST/SC/EWS/MBC/MIN",
+        IsTSP: "Mandatory - For TSP: 1 / For NONTSP: 0",
+        MeritNo: "Non - Mandatory -Merit Number in Digit"
+        }; 
+      const abbreviationData = actualHeaders.map(key => {
+        return [key, abbreviationMap[key] || ""];
+      });
+      // Convert to sheet
+      const wsAbbr: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet([
+        ["ColumnInSheet1", "Abbrevation"],
+        ...abbreviationData
+      ]);
+        // Step 5: Create workbook and save file
         const wb: XLSX.WorkBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+        XLSX.utils.book_append_sheet(wb, wsAbbr, 'Sheet2');
         XLSX.writeFile(wb, this.generateFileNameYearly('xlsx'));
 
       } else {

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, EventEmitter, Output, Renderer2 } from '@angular/core';
+import { Component, EventEmitter, Output, Renderer2, ElementRef, inject, ViewChild  } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -39,7 +39,7 @@ export class CandidateFormPreviewComponent {
   public DocumentList: Counselling_DocumentDetailsModel[] = []
   public filteredDocumentDetails: any = []
   public InstituteOptionList: any = []
-
+public instituteDetails: InstituteListDataModel_Coun[] = []
   @Output() tabChange: EventEmitter<number> = new EventEmitter<number>();
   @Output() formSubmitSuccess = new EventEmitter<boolean>();
   _EnumRole = EnumRole;
@@ -60,7 +60,7 @@ export class CandidateFormPreviewComponent {
 
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-
+  @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
   constructor(
     private loaderService: LoaderService,
     private commonMasterService: CommonFunctionService,
@@ -114,7 +114,12 @@ export class CandidateFormPreviewComponent {
               this.request.OptionViewData = data['Data']['OptionViewData']
               this.request.DocumentDetailList = data['Data']['DocumentDetailList']
               this.request.PendingDataModel = data['Data']['PendingDataModel']
-
+              this.request.InstituteDetailList = data['Data']['InstituteDetailList']
+              console.log("this.request.InstituteDetailList"+this.request.InstituteDetailList);
+              
+              if(this.request.InstituteDetailList && this.request.InstituteDetailList.length > 0) {
+                this.instituteDetails= this.request.InstituteDetailList;
+              }
               if(this.request.PendingDataModel && this.request.PendingDataModel.length > 0) {
                 this.IsShowIncompleteData = true;
               }
@@ -265,36 +270,146 @@ export class CandidateFormPreviewComponent {
     this.formSubmitSuccess.emit(true)
     this.tabChange.emit(index)
   }
-//   downloadPDF() {
-//   const element = document.getElementById('Preview');
+  downloadPDF() {
+    debugger
+    const element = document.getElementById('PreviewPDF');
 
-//   if (!element) {
-//     this.toastr.error('Preview section not found!');
-//     return;
-//   }
+    if (!element) {
+      this.toastr.error('Preview section not found!');
+      return;
+    }
 
-//   html2canvas(element, { scale: 2 }).then((canvas) => {
-//     const imgData = canvas.toDataURL('image/png');
-//     const pdf = new jsPDF('p', 'mm', 'a4');
+    html2canvas(element, 
+                {  scale: 2,
+                    useCORS: true,
+                    allowTaint: false,
+                    logging: false ,
+                    windowWidth: element.scrollWidth,
+                    windowHeight: element.scrollHeight
+                }).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
 
-//     const imgWidth = 210;
-//     const pageHeight = 295;
-//     const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgWidth = 210;
+      const pageHeight = 295;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-//     let heightLeft = imgHeight;
-//     let position = 0;
+      let heightLeft = imgHeight;
+      let position = 0;
 
-//     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-//     heightLeft -= pageHeight;
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
 
-//     while (heightLeft > 0) {
-//       position = heightLeft - imgHeight;
-//       pdf.addPage();
-//       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-//       heightLeft -= pageHeight;
-//     }
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
 
-//     pdf.save('Application_Preview.pdf');
-//   });
-// }
+      pdf.save('Application_Preview.pdf');
+    });
+  }
+   public downloadPDF1() {
+      const margin = 10;
+      const pageWidth = 210 - 2 * margin;
+      const pageHeight = 200 - 2 * margin;
+  
+      const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: [210, 300],
+      });
+  
+      const pdfTable = this.pdfTable.nativeElement;
+  
+      doc.html(pdfTable, {
+        callback: function (doc) {
+          doc.save('Application_Preview.pdf');
+        },
+        x: margin,
+        y: margin,
+        width: pageWidth,
+        windowWidth: pdfTable.scrollWidth,
+      });
+    }
+    downloadPDF2() {
+  const element = document.getElementById('PreviewPDF');
+
+  if (!element) {
+    this.toastr.error('Preview section not found!');
+    return;
+  }
+
+  html2canvas(element, {
+    scale: 1.5,
+    useCORS: true,
+    allowTaint: false,
+    backgroundColor: '#ffffff',
+    logging: false,
+    windowWidth: element.scrollWidth,
+    windowHeight: element.scrollHeight
+  }).then((canvas) => {
+    // Create PNG data URL first (preserve transparency if needed)
+    const pngData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 230;
+    const pageHeight = 500;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    // Debugging / quick checks
+    try {
+      if (!pngData || typeof pngData !== 'string') {
+        throw new Error('Empty or invalid image data URL');
+      }
+      if (!pngData.startsWith('data:image/png')) {
+        console.warn('Expected PNG data URL but got:', pngData.slice(0, 50));
+      }
+
+      // Try to add PNG first
+      try {
+        pdf.addImage(pngData, 'PNG', 0, position, imgWidth, imgHeight);
+      } catch (pngErr) {
+        // If PNG fails (corrupt/incomplete), fallback to JPEG (more robust)
+        console.warn('PNG addImage failed, falling back to JPEG. Error:', pngErr);
+        const jpegData = canvas.toDataURL('image/jpeg', 1.0);
+        if (!jpegData || !jpegData.startsWith('data:image/jpeg')) {
+          throw new Error('JPEG fallback generation failed');
+        }
+        pdf.addImage(jpegData, 'JPEG', 0, position, imgWidth, imgHeight);
+      }
+
+      heightLeft -= pageHeight;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+
+        // reuse same fallback logic per page (PNG may still fail)
+        try {
+          pdf.addImage(pngData, 'PNG', 0, position, imgWidth, imgHeight);
+        } catch {
+          const jpegData = canvas.toDataURL('image/jpeg', 1.0);
+          pdf.addImage(jpegData, 'JPEG', 0, position, imgWidth, imgHeight);
+        }
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save('Application_Preview.pdf');
+    } catch (err) {
+      console.error('PDF creation final error:', err);
+      this.toastr.error('Error creating PDF. See console for details.');
+
+      // Helpful hint: open image data in new tab to visually inspect it
+      // (uncomment if you want to quickly check the image in browser)
+      // window.open(pngData, '_blank');
+    }
+  }).catch((err) => {
+    console.error('html2canvas error:', err);
+    this.toastr.error('Failed to render preview for PDF (html2canvas error).');
+  });
+}
+
 }

@@ -11,7 +11,9 @@ export class ITI_BGT_HeadMasterDataModel {
 
   public CreatedBy?: string = '';
   public ModifyBy: number = 0;
-
+  public FinYearID?: number = 0;
+  public BudgetTypeID?: number = 0;
+  public BudgetForID?: number = 0;
   public IPAddress: string = '0.0.0.0';
 
 }
@@ -24,4 +26,7 @@ export class ITI_BGT_HeadMasterSearchModel {
   public Uid?: string = '';
   public roleID?: number = 0;
   public InstituteID: number = 0;
+  public FinYearID?: number = 0;
+  public BudgetTypeID?: number = 0;
+  public BudgetForID?: number = 0;
 }

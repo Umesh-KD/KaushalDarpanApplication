@@ -8,7 +8,7 @@ import * as XLSX from 'xlsx';
 import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-import { EnumRole, GlobalConstants, EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumRole, GlobalConstants, EnumStatus, EnumITIBudgetDDLAction } from '../../../../Common/GlobalConstants';
 import { StudentExamDetails } from '../../../../Models/DashboardCardModel';
 import { DownloadMarksheetSearchModel } from '../../../../Models/DownloadMarksheetDataModel';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
@@ -23,6 +23,8 @@ import { ItiCollegesSearchModel } from '../../../../Models/CommonMasterDataModel
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BudgetDistributeModel, BudgetHeadSearchFilter } from '../../../../Models/ITI/BudgetDistributeDataModel';
 import { BudgetDistributedService } from '../../../../Services/BudgetDistributed/budget-distributed.service';
+import { ITIBudgetDropdownDataModel } from '../../../../Models/ITI/ITIBudgetCreateDataModel';
+import { ITIBudgetCreateService } from '../../../../Services/ITI/ITIBudgetCreate/itibudget-create.service';
 
 @Component({
   selector: 'app-budget-distribute',
@@ -36,6 +38,7 @@ export class BudgetDistributeComponent {
   public searchRequest = new BudgetHeadSearchFilter();
   public collegeRequest = new ItiCollegesSearchModel();
   public Request = new BudgetDistributeModel();
+  public ddlSearchRequest = new ITIBudgetDropdownDataModel();
   sSOLoginDataModel: any;
   public isLoading: boolean = false;
   public State: number = 0;
@@ -64,9 +67,10 @@ export class BudgetDistributeComponent {
   public DistrictMasterList: any = [];
   public CollegeMasterList: any = [];
   public TradeMasterList: any = [];
-
+  public Divisionlist: any = [];
   public BudgetUtilizationsList: any[] = [];
   public BudgetUtilizationsListSave: any[] = [];
+  public ddlBudgetTypeList: any = [];
   public ColegeAmount: string = '';
   public CollegeName: string = '';
   public Remarks: string = '';
@@ -87,8 +91,8 @@ export class BudgetDistributeComponent {
     private http: HttpClient,
     private menuService: MenuService,
     public ReportServices: ReportService,
-    private formBuilder: FormBuilder
-
+    private formBuilder: FormBuilder,
+    private budgetCreateService: ITIBudgetCreateService,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -101,10 +105,9 @@ export class BudgetDistributeComponent {
       Remark: ['', Validators.required],
 
     })
-
-    await this.GetList();
+    await this.GetBudgetTypeDDL();
+    // await this.GetList();
     await this.ddlITITrade();
-    await this.ddlITIColleges();
   }
 
 
@@ -132,7 +135,30 @@ export class BudgetDistributeComponent {
     }
   }
 
+  async GetBudgetTypeDDL() {
+    try {
+      this.ddlSearchRequest.Action = EnumITIBudgetDDLAction.GetBudgetTypeDDL
+      await this.budgetCreateService.GetITIBudgetDropdown(this.ddlSearchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.ddlBudgetTypeList = data.Data
+          this.ddlBudgetTypeList = this.ddlBudgetTypeList.filter((x: any) => x.BudgetTypeID != 1)
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
+  async GetDivisionMaster() {   
+    try {
+      await this.commonMasterService.GetDivisionMaster().then((data: any) => {
+        this.Divisionlist = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   async ddlITITrade() {
     try {
@@ -156,12 +182,22 @@ export class BudgetDistributeComponent {
     }
   }
 
+  async ChangeBudgetFor() {
+    if(this.searchRequest.BudgetForID == 1) {
+      await this.GetDivisionMaster();
+      await this.GetList();
+    } else if(this.searchRequest.BudgetForID == 2) {
+      await this.ddlITIColleges();
+      await this.GetList();
+    }
+  }
 
   async GetList() {
     try {
        ;
       this.searchRequest.CollegeID
       this.loaderService.requestStarted();
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       await this.budgetDistributedService.GetAllBudgetManagementData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -335,7 +371,7 @@ export class BudgetDistributeComponent {
   async GetBudgetUtilizationsList() {
     try {
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
+      this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -389,16 +425,15 @@ export class BudgetDistributeComponent {
   async GetBudget_HeadWise(collegeID: number) {
     try {
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.searchRequest.AcademicYearID = 9; 
+      this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID; 
       this.searchRequest.ActionName = "GetHeadWiseBudget";
-      this.searchRequest.BudgetTypeID = 2;
       this.searchRequest.InstituteId = collegeID;
+      this.searchRequest.DivisionID = collegeID;
 
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       await this.budgetDistributedService.GetBudget_HeadWise(this.searchRequest)
         .then((data: any) => {
-          debugger
           data = JSON.parse(JSON.stringify(data));
           this.BudgetUtilizationsListSave = data.Data;
           this.calculateAllEstimated();
@@ -455,7 +490,7 @@ export class BudgetDistributeComponent {
     try {
        ;
       this.searchRequest.DistributedID = row.DistributedID
-      this.GetBudgetUtilizationsList();
+      await this.GetBudgetUtilizationsList();
       await this.modalService
         .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(
@@ -476,10 +511,16 @@ export class BudgetDistributeComponent {
   async openModal(content: any, row: any, indexNum: number) {
     console.log(row, 'RowData');
     try {
-       ;
-      this.Request.CollegeID = row.CollegeId
       // await this.GetBudgetUtilizationsList_Save();
-      await this.GetBudget_HeadWise(row.CollegeId);
+      var id: number = 0
+      if(this.searchRequest.BudgetForID == 1) {
+        id = row.DivisionID;
+        this.Request.DivisionID = row.DivisionID
+      } else if(this.searchRequest.BudgetForID == 2) {
+        id = row.CollegeId
+        this.Request.CollegeID = row.CollegeId
+      }
+      await this.GetBudget_HeadWise(id);
       await this.modalService
         .open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(
@@ -525,7 +566,11 @@ export class BudgetDistributeComponent {
       this.BudgetUtilizationsListSave.forEach(item => {
         item.Remarks = remarkValue;
         item.CreatedBy = this.sSOLoginDataModel.UserID;
-        item.CollegeID = this.Request.CollegeID
+        if(this.searchRequest.BudgetForID == 1) {
+          item.DivisionID = this.Request.DivisionID
+        } else if(this.searchRequest.BudgetForID == 2) {
+          item.DivisionID = this.Request.CollegeID
+        }
       });
 
       this.TotalUtilizedBudget = this.BudgetUtilizationsListSave?.reduce((sum, item) => sum + (item.AllotAmount || 0), 0) || 0
@@ -541,7 +586,8 @@ export class BudgetDistributeComponent {
       this.Request.FinYearID = this.sSOLoginDataModel.FinancialYearID
       this.Request.DistributedType = 1
       this.Request.ActionType = 'INSERT'
-      this.Request.BodgetTypeID = 2
+      this.Request.BodgetTypeID = this.searchRequest.BudgetTypeID
+      this.Request.BudgetForID = this.searchRequest.BudgetForID
 
       await this.budgetDistributedService.SaveBudgetUtilization_Admin(this.Request)
         .then((data: any) => {

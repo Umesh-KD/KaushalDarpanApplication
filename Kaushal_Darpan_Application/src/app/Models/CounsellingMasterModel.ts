@@ -30,7 +30,7 @@ export class CounsellingAllottedListSearchModel {
   public action?: string = '';
   public ApplicationNo?: string = '';
   public CandidateName?: string = '';
-  public MobileNo?: string = '';
+  public MobileNo?: string = ''; 
 }
 
 
