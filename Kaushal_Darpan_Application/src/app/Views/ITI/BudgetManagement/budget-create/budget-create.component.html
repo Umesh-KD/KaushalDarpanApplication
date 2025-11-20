@@ -50,7 +50,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Session Year:<span class="StarMarking">*</span></label>
                         <select class="form-select" id="AcademicYearID" [(ngModel)]="request.AcademicYearID" formControlName="AcademicYearID">
                             <option value="0">--All--</option>
@@ -62,7 +62,7 @@
                             <i aria-hidden="true"></i> This field is required.!
                             </p>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget For:<span class="StarMarking">*</span></label>
@@ -70,10 +70,8 @@
                             [(ngModel)]="request.BudgetForID"
                             formControlName="BudgetForID">
                             <option value="0">--Select--</option>
-                            <option value="1">RCVT</option>
-                            <option value="2">College</option>
-                            <option value="3">Zonal</option>
-                            <option value="4">All of Above</option>
+                            <option value="1">Zone Office</option>
+                            <option value="2">ITI Institutes</option>                            
                         </select>
                         <div *ngIf="isSubmitted &&_BudgetCreateForm.BudgetForID.errors" class="text-danger">
                             <p *ngIf="!_BudgetCreateForm.BudgetForID.errors.required">
