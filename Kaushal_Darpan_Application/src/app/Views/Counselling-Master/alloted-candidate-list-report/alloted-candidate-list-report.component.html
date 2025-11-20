@@ -32,6 +32,17 @@
               <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
             </select>
         </div>
+        <div style="display:none;">
+                    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
+                    <select class="form-select"
+                            name="InstituteID"
+                            [(ngModel)]="request.InstituteID">
+                        <option [ngValue]="0">Choose option</option>
+                        <option *ngFor="let item of InstitutelistDDL" [ngValue]="item.InstituteID">
+                        {{ item.Name }}
+                        </option>
+                    </select>
+        </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllottedCandidateList_Counselling()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
@@ -45,10 +56,11 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <button type="button"
+           <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
+        <!-- <button type="button"
              class="btn bg-info text-white inline-block"
              (click)="OpenOTPModal_GenerateAllotmentOrder()">Generate Allotment Order
-        </button>
+        </button> -->
         <!-- <select id="ddlConter" class="form-select couterDropDown me-2" [(ngModel)]="pageInTableSize" (change)="loadInTable()">
           <option value="50">50</option>
           <option value="100">100</option>
@@ -87,9 +99,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">
+            <!-- <th class="text-left">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
-            </th>
+            </th> -->
             <th class="text-left">Sr.No.</th>
             <th class="text-left">Application No</th>  
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
@@ -101,15 +113,15 @@
             <th class="text-left">Trade Name</th>
             <th class="text-left">Allotted Institute</th>
             <th class="text-left">Final Allotted Institute</th>
-            <th>Action</th>
+            <!-- <th>Action</th> -->
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td align="left">
+            <!-- <td align="left">
               <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
                      #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
-            </td>
+            </td> -->
             <td align="left">{{(startInTableIndex+1)+idx}}</td>         
             <td align="left">{{row.ApplicationNo}}</td>   
             <td align="left">{{row.CandidateName}}</td>
@@ -118,14 +130,14 @@
             <td align="left">{{row.TradeName}}</td>
             <td align="left">{{row.AllottedInstitute}}</td>
             <td align="left">{{row.FinalAllottedInstitute}}</td>
-            <td align="left">
+            <!-- <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
                 <a href="javascript:void(0)"
                     (click)="editAllottedInstitute(MyModel_EditAllottedInstitute, row)" title="Edit Allotted Institute">
                   <i class="ti ti-pencil"></i>
                 </a>
               </div>
-            </td>
+            </td> -->
           </tr>
         </tbody>
       </table>

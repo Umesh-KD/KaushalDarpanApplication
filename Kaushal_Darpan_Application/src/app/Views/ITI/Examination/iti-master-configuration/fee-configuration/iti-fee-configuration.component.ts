@@ -415,7 +415,7 @@ export class ITIFeeConfigurationComponent implements OnInit
         this.TypeMasterDDL = data.Data;
         if (this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_NCVT || this.sSOLoginDataModel.RoleID == EnumRole.ITIAdmin_SCVT
         ) {
-          this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5)
+          //this.TypeMasterDDL = this.TypeMasterDDL.filter((e: any) => e.ID == 5)
         } 
       }, (error: any) => console.error(error))
     }

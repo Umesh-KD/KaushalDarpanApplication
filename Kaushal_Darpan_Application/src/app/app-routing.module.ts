@@ -1362,6 +1362,7 @@ const routes: Routes = [
       { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
       { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
       { path: 'iti-bgt-uc-head', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-uc-head/budget-uc-head.module').then(m => m.BudgetUCHeadModule), title: 'Budget UC Head' },
+      { path: 'itibudgetmaster', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-master/budget-master.module').then(m => m.BudgetMasterModule), title: 'ITI Budget Master' },
       
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },
@@ -1473,6 +1474,7 @@ const routes: Routes = [
       { path: 'CounsellingSelectedOptionList/:Id', loadChildren: () => import('./Views/Counselling-Master/counselling-selectedoptionlist/counselling-selectedoptionlist.module').then(m => m.CounsellingSelectedOptionListModule), title: 'Counselling Selected OptionList' },
       { path: 'CandidateApplicationList', loadChildren: () => import('./Views/Counselling-Master/candidate-application-list/candidate-application-list.module').then(m => m.CandidateApplicationListModule) },
       { path: 'alloted-candidate-list', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list/alloted-candidate-list.module').then(m => m.AllotedCandidateListModule), title: 'Alloted Candidate List' },
+      { path: 'alloted-candidate-list-report', loadChildren: () => import('./Views/Counselling-Master/alloted-candidate-list-report/alloted-candidate-list-report.module').then(m => m.AllotedCandidateListReportModule), title: 'Alloted Candidate List' },
       {path: 'CounsellingImportCandidateList', loadChildren: () => import('./Views/Counselling-Master/counselling-import-candidate-list/counselling-import-candidate-list.module').then(m => m.CounsellingImportCandidateListModule), title: 'Import Candidate List'},
       {path: 'EditImportedCandidateList', loadChildren: () => import('./Views/Counselling-Master/edit-imported-candidate-list/edit-imported-candidate-list.module').then(m => m.EditImportedCandidateListModule), title: 'Edit Import Candidate List'},
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},

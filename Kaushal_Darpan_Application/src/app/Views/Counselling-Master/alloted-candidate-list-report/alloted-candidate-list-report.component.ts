@@ -15,14 +15,16 @@ import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient } from '@angular/common/http';
-
+import { ITIApprenticeshipService } from '../../../Services/ITI/ITI-Apprenticeship/iti-apprenticeship.service';
+import { ITI_ApprenticeshipSearchModel } from '../../../Models/ITI/ITI_ApprenticeshipDataModel';
+import * as XLSX from 'xlsx'; 
 @Component({
-  selector: 'app-alloted-candidate-list',
+  selector: 'app-alloted-candidate-list-report',
   standalone: false,
-  templateUrl: './alloted-candidate-list.component.html',
-  styleUrl: './alloted-candidate-list.component.css'
+  templateUrl: './alloted-candidate-list-report.component.html',
+  styleUrl: './alloted-candidate-list-report.component.css'
 })
-export class AllotedCandidateListComponent {
+export class AllotedCandidateListReportComponent {
        //designations = GlobalConstants.designationList; // Access the designations constant
 
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -51,6 +53,7 @@ export class AllotedCandidateListComponent {
   public endInTableIndex: number = 0;
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
+  public InstitutelistDDL: any = [];
   //end table feature default
 
   constructor(
@@ -65,6 +68,7 @@ export class AllotedCandidateListComponent {
     private counsellingMasterService: CounsellingMasterService,
     private appsettingConfig: AppsettingService,
     private http: HttpClient,
+     private apprenticeshipService: ITIApprenticeshipService,
   ) { }
 
   async ngOnInit() {
@@ -77,6 +81,7 @@ export class AllotedCandidateListComponent {
         this.designations = data['Data'];
       }, (error: any) => console.error(error)
       );
+      await this.GetInstituteMaster();
     // await this.GetTradeList();
      await this.GetAllottedCandidateList_Counselling();
   }
@@ -139,6 +144,19 @@ export class AllotedCandidateListComponent {
     }
   }
 
+  async GetInstituteMaster() {
+    try {
+      
+      const request: any = {};
+      request.action = "GetITIGovtInstituteDDL";
+      await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstitutelistDDL = data['Data'];
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  }
   async GetInstituteOptionList() {
     try {
       this.tradeRequest.Action = 'ChangeInstituteDDLList'
@@ -407,5 +425,22 @@ export class AllotedCandidateListComponent {
     this.AllInTableSelect = this.AllottedCandidateList.every(r => r.Selected);
   }
   // end table feature
-
+  exportToExcel(): void {
+      const unwantedColumns = [
+       'AllotmentID','CandidateID','TradeID'	,'AllottedInstituteID'	,'AllotmentStatus',	'OptionID'	,'FinalAllottedInstituteID'  
+      ];
+      const filteredData = this.AllottedCandidateList.map((item: any) => {
+        const filteredItem: any = {};
+        Object.keys(item).forEach(key => {
+          if (!unwantedColumns.includes(key)) {
+            filteredItem[key] = item[key];
+          }
+        });
+        return filteredItem;
+      });
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+      XLSX.writeFile(wb, 'CounsellingStudents_List.xlsx');
+    }
 }

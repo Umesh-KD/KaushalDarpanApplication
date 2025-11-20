@@ -238,8 +238,7 @@
                    title="Edit Student Details" (click)="EditStudentData(MyModel_EditStudentDetails, row.StudentID,row.StudentExamID)">
                   <i class="ti ti-user"></i>
                 </a>
-                <a href="javascript:void(0);" *ngIf="
-         this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal && row.isPublish==0"
+                <a href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal && row.isPublish==0 && row.IsShowFaButton==1 "
                    title="Edit Attendence Details" (click)="ViewAttendenceModal(AttendenceModal, row)">
                   <i class="ti ti-list"></i>
                 </a>

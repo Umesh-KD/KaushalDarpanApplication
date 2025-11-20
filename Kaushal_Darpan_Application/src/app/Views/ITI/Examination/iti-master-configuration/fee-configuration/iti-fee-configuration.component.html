@@ -63,7 +63,7 @@
             </div>
           </div>
           <div *ngIf="(request?.TypeID==5 ||request?.TypeID==_EnumConfigurationType.BackFee || _EnumConfigurationType.BackFeeYearly) && !ShowValidColumn()">
-            <label>Stream</label><span class="StarMarking">*</span>
+            <label>Trade</label><span class="StarMarking">*</span>
             <select class="form-select" id="ddlStream" formControlName="ddlStream"
                     [(ngModel)]="request.StreamID">
               <option value="0">ALL</option>

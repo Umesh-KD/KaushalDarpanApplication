@@ -217,11 +217,12 @@
       </table>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-6" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)">
       <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5">घोषणा (Undertaking)</b>
       </div>
-      <div class="w-full">
+      <!-- <div class="w-full" *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))"> -->
+      <div class="w-full" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)">
         <label>
           <input type="checkbox" class="mb-3 me-3" [(ngModel)]="IsTermAndCondition"     (click)="onCheckboxClick($event)" />
          मेरे द्वारा यह प्रमाणित किया जाता है कि मैंने विकल्प पत्र भरने से पूर्व नियुक्ति के सम्बन्ध में सभी दिशा निर्देश एवम नियम भली भांति से पढ़ लिए हैं | 
@@ -236,8 +237,8 @@
     </div>
   </div>
 </div>
-<div class="card-footer text-center"
-   *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))">
+<div class="card-footer text-center" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)">
+   <!-- *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))" -->
   <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
   </button>
 </div>
