@@ -110,18 +110,37 @@
         <form [formGroup]="BGTHeadForm" (ngSubmit)="addUCHeadmaster()">
           <div class="mb-8">
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-                <div>
-                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Name</label>
-                  <input type="text" formControlName="HeadName" class="form-input" placeholder="Enter Head Name" >
-                </div>
-                <div>
-                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Code</label>
-                  <input type="text" formControlName="HeadCode" class="form-input" placeholder="Enter Head Code" >
-                </div>
-                <div>
-                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Description</label>
-                  <textarea class="form-input resize-none w-full" formControlName="HeadDescription" rows="4" placeholder="Enter Head Description"></textarea>
-                </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Budget Type:<span class="StarMarking">*</span> </label>
+                <select class="form-select w-full" name="ddlCollegeID" formControlName="BudgetTypeID">
+                    <option value="0">--- Select ---</option>
+                    <option *ngFor="let item of ddlBudgetTypeList" [value]="item.BudgetTypeID">
+                        {{item.BudgetTypeName}}
+                    </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Budget For:<span class="StarMarking">*</span></label>
+                <select class="form-select" id="BudgetForID" formControlName="BudgetForID">
+                    <option value="0">--Select--</option>
+                    <option value="1">Zone Office</option>
+                    <option value="2">ITI Institutes</option>                            
+                </select>
+              </div>
+              
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Name</label>
+                <input type="text" formControlName="HeadName" class="form-input" placeholder="Enter Head Name" >
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Code</label>
+                <input type="text" formControlName="HeadCode" class="form-input" placeholder="Enter Head Code" >
+              </div>
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Head Description</label>
+                <textarea class="form-input resize-none w-full" formControlName="HeadDescription" rows="4" placeholder="Enter Head Description"></textarea>
+              </div>
             </div>
           </div>
           <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">

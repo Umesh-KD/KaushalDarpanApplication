@@ -4,12 +4,15 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
-import { EnumStatus } from '../../../../Common/GlobalConstants';
+import { EnumITIBudgetDDLAction, EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ITI_BGT_HeadMasterDataModel, ITI_BGT_HeadMasterSearchModel } from '../../../../Models/ITI/ItiBGTHeadMasterDataModel';
 import { ITI_BGTHeadmasterService } from '../../../../Services/ITI/ITI_BGT_Headmaster/ITI_BGTHeadmaster.Service';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
+import { ITIBudgetDropdownDataModel } from '../../../../Models/ITI/ITIBudgetCreateDataModel';
+import { ITIBudgetCreateService } from '../../../../Services/ITI/ITIBudgetCreate/itibudget-create.service';
 
 @Component({
   selector: 'app-budget-uc-head',
@@ -23,8 +26,10 @@ export class BudgetUCHeadComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ITI_BGT_HeadMasterSearchModel();
   public request = new ITI_BGT_HeadMasterDataModel()
+  public ddlSearchRequest = new ITIBudgetDropdownDataModel();
 
   public UCHeadDataList: any = [];
+  public ddlBudgetTypeList: any = [];
 
   modalReference: NgbModalRef | undefined;
 
@@ -37,20 +42,40 @@ export class BudgetUCHeadComponent {
     private Swal2: SweetAlert2,
     private commonMasterService: CommonFunctionService,
     private ItiBGTHeadmasterServices: ITI_BGTHeadmasterService,
+    private budgetCreateService: ITIBudgetCreateService,
   ) {}
 
   async ngOnInit() {
     this.BGTHeadForm=this.formBuilder.group({
       HeadId: ['0'],
+      BudgetTypeID: ['0', [DropdownValidators]],
+      BudgetForID: ['0', [DropdownValidators]],
       HeadName: ['', Validators.required],
       HeadCode: ['', Validators.required],
       HeadDescription: ['']
     })
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetBudgetTypeDDL();
     await this.getUCHeadDataList();
   }
 
   get _BGTHeadForm() { return this.BGTHeadForm.controls; }
+
+  async GetBudgetTypeDDL() {
+    try {
+      this.ddlSearchRequest.Action = EnumITIBudgetDDLAction.GetBudgetTypeDDL
+      await this.budgetCreateService.GetITIBudgetDropdown(this.ddlSearchRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.ddlBudgetTypeList = data.Data
+          this.ddlBudgetTypeList = this.ddlBudgetTypeList.filter((x: any) => x.BudgetTypeID != 1)
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   async ViewandUpdate(content: any, id : number = 0) {
     if(id > 0) {
       await this.GetUCHeadDataById_ITI_BGT(id);
