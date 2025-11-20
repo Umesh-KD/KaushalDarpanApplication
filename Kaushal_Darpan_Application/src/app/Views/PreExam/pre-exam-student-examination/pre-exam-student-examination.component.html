@@ -608,7 +608,7 @@
                       StudentProfileDetailsData[0].status != _enumExamStudentStatus.New_Addimited && 
                       StudentProfileDetailsData[0]['ExamTransactionId']>0" 
                 class="btn bg-success text-white" 
-                (click)="GetStudentFeeReceipt(StudentProfileDetailsData[0]['ExamTransactionId'])">Download Fee Receipt
+                (click)="GetStudentFeeReceipt(StudentProfileDetailsData[0]['ExamTransactionId'],StudentProfileDetailsData[0]['StudentExamID'])">Download Fee Receipt
                 <i class="ti ti-download"></i>
               </button>
 

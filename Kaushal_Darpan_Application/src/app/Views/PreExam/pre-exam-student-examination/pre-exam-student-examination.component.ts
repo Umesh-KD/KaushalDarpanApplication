@@ -2098,11 +2098,11 @@ export class PreExamStudentExaminationComponent {
     return `file_${timestamp}.${extension}`;
   }
 
-  async GetStudentFeeReceipt(TransactionId: any) {
+  async GetStudentFeeReceipt(TransactionId: any, StudentExamID: number) {
     try {
       this.loaderService.requestStarted();
 
-      await this.reportService.GetStudentFeeReceipt(TransactionId)
+      await this.reportService.GetStudentFeeReceipt(TransactionId, StudentExamID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);
