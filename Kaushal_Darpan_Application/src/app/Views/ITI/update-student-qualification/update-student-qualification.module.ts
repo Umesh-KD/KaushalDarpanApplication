@@ -11,7 +11,7 @@ import { ITIPendingFeesModule } from '../../Student/itipending-fees/itipending-f
 import { UpdateStudentQualificationComponent } from './update-student-qualification.component';
 
 @NgModule({
-  declarations: [UpdateStudentQualificationComponent, ImageErrorDirective],
+  declarations: [UpdateStudentQualificationComponent],
   imports: [
     CommonModule,
     UpdateStudentQualificationRoutingModule,
