@@ -384,8 +384,10 @@ export class ITIPendingFeesComponent implements OnInit {
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
-    if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
+    if (this.StudentDetailsModelList.some(f => f.IsSelected == true))
+    {
       this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
+
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push({
           itemAmount: Number(item.FeeAmount ?? 0),
@@ -414,11 +416,12 @@ export class ITIPendingFeesComponent implements OnInit {
             this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
             this.emitraRequest.ExamStudentStatus = this.studentDetailsModel.ExamStudentStatus;
             this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
-
-
+            this.emitraRequest.DepartmentID = EnumDepartment.ITI;
+            this.emitraRequest.FeeFor = EnumFeeFor.ExamFee;
+            this.emitraRequest.ID = this.studentDetailsModel.ID ?? 0;
+            this.emitraRequest.FormCommision = this.studentDetailsModel.FormCommision;
 
             this.loaderService.requestStarted();
-
             try {
               await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
                 .then(async (data: any) => {
@@ -453,13 +456,14 @@ export class ITIPendingFeesComponent implements OnInit {
 
   }
 
-
   async MultiPayment()
   {
+    debugger;
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
-    if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
+    if (this.StudentDetailsModelList.some(f => f.IsSelected == true))
+    {
       this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push({
@@ -546,7 +550,8 @@ export class ITIPendingFeesComponent implements OnInit {
 
   async EmitraPaymentCheckStatus(item: StudentDetailsModel) { console.log(item); }
 
-  RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any) {
+  RedirectEmitraPaymentRequest(pMERCHANTCODE: any, pENCDATA: any, pServiceURL: any)
+  {
     var form = document.createElement("form");
     form.setAttribute("method", "post");
     form.setAttribute("action", pServiceURL);

@@ -27,8 +27,16 @@
           <tr *ngFor="let row of StudentDetailsModelList ; let idx=index;">
             <td>{{idx+1}}</td>
             <td *ngIf="isShowSelected">
+             
               <input type="checkbox" class="checkboxSize" [checked]="row.IsSelected" [(ngModel)]="row.IsSelected" id="chk_Selected{{idx+1}}" name="chk_Selected{{idx+1}}">
+
+
             </td>
+        
+
+
+
+
             <td>{{row.StudentName}}</td>
             <td>{{row.StreamName}}</td>
             <td>{{row.Semester}}</td>
@@ -38,12 +46,11 @@
             <td>{{row.StrStudenetStatus}}</td>
             <td><span class="text-danger"><b>{{row.LastDate}}</b></span></td>
             <!--<td class="text-Center">
-              <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
-            </td>-->
+    <a class="text-Center" (click)="openModal(modal_viewPaper,row)" href="javascript:void(0);">View Subject</a>
+  </td>-->
             <td class="text-center">
               <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.EligibleForEnrollment" class="btn bg-success text-white btn-sm" (click)="PayEnrollmentFee(row)" type="button">Pay Enroll Fee </button>-->
               <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.Enrolled && row.FeeStatus=='PENDING'" class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Check Pay Status </button>-->
-
               <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.EligibleForExamination || row.ExamStudentStatus==enumExamStudentStatus.NewEligibleForExamination " class="btn bg-success text-white btn-sm" (click)="PayExamFee(row)" type="button">Pay Exam Fee </button>-->
 
 
