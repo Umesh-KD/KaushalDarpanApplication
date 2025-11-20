@@ -163,6 +163,7 @@ export class CounsellingApplicationPreviewDataModel {
     IsAnyIncurableDiseases?: boolean = false;
     GenderName?: string = '';
     SelectionCategory?: string = '';
+    InstituteDetailList?: InstituteListDataModel_Coun[] = [];
 }
 
 export class OptionviewData_Counselling {

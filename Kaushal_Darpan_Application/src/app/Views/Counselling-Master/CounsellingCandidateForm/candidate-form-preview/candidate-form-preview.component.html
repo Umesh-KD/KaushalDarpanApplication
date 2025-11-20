@@ -236,11 +236,241 @@
     <div class="w-full text-center mt-4 flex align-center justify-center">
     </div>
   </div>
+  <div class="card-footer text-center" >
+    <!-- *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))" -->
+    <button type="button" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
+    </button>
+    <button type="button" style="display:none;" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="downloadPDF2();"><i class="ti ti-download"></i>Preview & Download
+    </button>
+  </div>
 </div>
-<div class="card-footer text-center" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)">
-   <!-- *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))" -->
-  <button type="button" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
-  </button>
+<div class="card tab-panels " style="display:none;" id="PreviewPDF">
+  <div class="card-body p-5">
+    <div class="mb-6"> 
+
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">व्यक्तिगत विवरण (Personal Details)</b>
+      </div>
+
+      <h4 class="flex" *ngIf="request.ApplicationNo!='' && request.ApplicationNo!=null">Application No:{{request.ApplicationNo}}</h4>
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div class="col-span-2 text-center" style="text-align:center !important" *ngFor="let item of filteredDocumentDetails;">
+          <img appImageError="assets/images/dummyImg.jpg"
+               [src]="item.FileName!=''?appsettingConfig.StaticFileRootPathURL+'/'+item.FolderName+'/'+item.FileName:'assets/images/dummyImg.jpg'"
+               class="imgSignSelf"
+               alt="{{item.ColumnName}}" />
+          <div class="text-center col-span-2" style="text-align:center !important">{{item.ColumnName}}</div>
+        </div>
+
+        <div><b>आवेदक का नाम (Applicant's Name):</b></div>
+        <div>{{request.CandidateName}}</div>
+
+        <div><b>पिता का नाम (Father's Name):</b></div>
+        <div>{{request.FatherName}}</div>
+
+        <div style="display:none;"><b>माता का नाम (Mother's Name):</b></div>
+        <div style="display:none;">{{request.MotherName}}</div>
+
+        <div><b>लिंग (Gender):</b></div>
+        <div>{{request.GenderName}}</div>
+
+        <div><b>धर्म  (Religion):</b></div>
+        <div>{{request.Religion}}</div>
+
+        <div><b>वैवाहिक स्थिति(Marital Status):</b></div>
+        <div>{{request.MaritalStatusName}}</div>
+
+        <div><b>जन्म तिथि (Date of Birth):</b></div>
+        <div>{{request.DOB}}</div>
+
+        <div><b>ईमेल (Email Address):</b></div>
+        <div>{{request.Email}}</div>
+
+        <div><b>मोबाइल नंबर (Mobile Number):</b></div>
+        <div>{{request.MobileNo}}</div>
+
+        <div>
+          <b>आरक्षण श्रेणी(Reservation Category):</b>
+        </div>
+        <div>{{request.CategoryA}}</div>
+
+        <div>
+          <b>श्रेणी बी(Category B):</b>
+        </div>
+        <div>{{request.CategoryB}}</div>
+
+        <div style="display:none;"><b>पहचान पत्र नंबर (Number of ID Proof):</b></div>
+        <div style="display:none;">{{request.AadharNo}}</div>
+
+        <div><b>चयन श्रेणी (Selection Category):</b></div>
+        <div>{{request.SelectionCategory}}</div>
+
+        <div><b>TSP है(Is TSP):</b></div>
+        <div>{{request.IsTSP == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>Ex-Servicemen है(Is Ex Servicemen):</b></div>
+        <div>{{request.IsExServicemen == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>Sports Person है(Is Sports Person):</b></div>
+        <div>{{request.IsSportsPerson == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>क्या पति/पत्नी एक ही सेवा में हैं?(Is Spouse In Same Service):</b></div>
+        <div>{{request.IsSpouseInSameService == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>शहीद आश्रित हैं?(Is Shahid Dependent):</b></div>
+        <div>{{request.IsShahidDependent == true ? 'Yes' : 'No'}}</div>
+
+        <div><b>क्या माता/पिता/जीवनसाथी को कोई असाध्य रोग है?(Is Any Incurable Diseases to Mother/Father/Spouse):</b></div>
+        <div>{{request.IsAnyIncurableDiseases == true ? 'Yes' : 'No'}}</div>
+
+      </div>
+    </div>
+    <!-- <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">पते का विवरण (Address Details)</b>
+      </div>
+
+      <div class="grid xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-6 detailsList">
+        <div><b>पता पंक्ति 1 (Address Line 1):</b></div>
+        <div>{{request.AddressLine1  }}</div>
+
+        <div><b>पता पंक्ति 2 (Address Line 2):</b></div>
+        <div>{{request.AddressLine2}}</div>
+
+        <div><b>पता पंक्ति 3 (Address Line 3):</b></div>
+        <div>{{request.AddressLine3  }}</div>
+
+        <div><b>राज्य (State):</b></div>
+        <div>{{request.StateName  }}</div>
+
+        <div><b>जिला (District):</b></div>
+        <div>{{request.DistrictName  }}</div>
+
+        <div><b>ब्लॉक/तहसील (Block/Tehsil):</b></div>
+        <div>{{request.BlockName    }}</div>
+
+        <div><b>पिन कोड (Pincode):</b></div>
+        <div>{{request.Pincode  }}</div>
+      </div>
+
+    </div> -->
+
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">विकल्प(Option Form)</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr class="text-left">
+              <th>Priority</th>
+              <th>Trade / Subject Name</th>
+              <!-- <th>Name of College</th> -->
+              <!-- <th>college Type</th> -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of request.OptionViewData; let idx = index">
+              <td>{{idx+1}}</td>
+              <td>{{item.TradeName}}</td>
+              <!-- <td>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
+                  <a href="javascript:void(0)" title="View"
+                    (click)="ViewDetails(MyModel_ViewDetails, item)"><i class="ti ti-eye"></i> 
+                  </a>
+                </div>
+              </td> -->
+              <!-- <td>{{item.College_TypeName}}</td> -->
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="mb-6">
+      <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5">Selected Institute List</b>
+      </div>
+      <div class="overflow-auto">
+        <table class="w-full table-border" cellpadding="5">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+
+            <tr class="text-left">
+              <th>Priority</th>
+              <th>Institue Name</th> 
+            </tr>
+          </thead>
+          <tbody>
+                 <tr *ngFor="let row of instituteDetails; let i = index">
+                  <td class="text-center">{{ row.Priority }}</td>
+                  <td class="text-center">{{ row.InstituteName }}</td>                  
+                </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light ">
+      <b class="text-1xl-5">
+        <span class="ti ti-download"></span>&nbsp;
+        अपलोड किए गए दस्तावेज़ (Uploaded Documents)
+      </b>
+    </div>
+    <div class="overflow-auto mb-6">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Document Name</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr *ngFor="let dOC of request.DocumentDetailList;  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>
+              <a href="javascript:void(0)"
+                 (click)="openPdfModal(appsettingConfig.StaticFileRootPathURL + '/' + dOC.FolderName + '/' + dOC.FileName)"
+                 class="text-success">
+                {{ dOC.DisplayColumnNameEn }}
+              </a>
+            </td>
+          </tr>
+          <tr *ngIf="request.DocumentDetailList?.length==null">
+            <td colspan="7">No Document Uploaded</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex justify-between items-center mb-3 p-3 py-2 bg-light" *ngIf="IsShowIncompleteData">
+      <b class="text-1xl-5">अधूरा डेटा (Incomplete Data)</b>
+    </div>
+
+    <div class="overflow-auto" *ngIf="IsShowIncompleteData">
+      <table class="w-full table-border" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+          <tr class="text-left">
+            <th>Sr. No.</th>
+            <th>Pending Data</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of request.PendingDataModel  let idx=index; ">
+            <td>{{idx+1}}</td>
+            <td>{{item.Pending}}</td>
+            <td><button class="btn bg-info text-white" (click)="Changetab(item.Index)" type="button">Click here for upload</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+ 
+  </div>
 </div>
  <!-- && sSOLoginDataModel.RoleID == _EnumRole.Admin && sSOLoginDataModel.RoleID == _EnumRole.AdminNon -->
 <div *ngIf="showPdfModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 DocViewers">
