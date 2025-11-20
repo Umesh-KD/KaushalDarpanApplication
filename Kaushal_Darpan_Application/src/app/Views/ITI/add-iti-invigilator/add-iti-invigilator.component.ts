@@ -199,6 +199,10 @@ public TimeTableID:number=0
   async ResetControls() {
     this.isSubmitted = false
     this.AppointExaminerFromGroup.reset()
+    this.TimeTableID = 0
+    this.request.InvigilatorID = 0
+    this.request.TimeTableID = 0
+
 /*    this.request = new AppointmentExaminerDataModel()*/
   }
 
@@ -340,6 +344,7 @@ public TimeTableID:number=0
     if (this.modalRef) {
       this.modalRef.close();
     }
+   
   }
 
 
