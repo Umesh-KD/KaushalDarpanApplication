@@ -447,7 +447,8 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
-    if (this.StudentDetailsModelList.some(f => f.IsSelected == true)) {
+    if (this.StudentDetailsModelList.some(f => f.IsSelected == true))
+    {
       this.StudentDetailsModelList.filter(f => f.IsSelected == true).forEach(item => {
         this.totalAmount += Number(item.FeeAmount);
         this.emitraRequest.StudentFeesTransactionItems.push
@@ -543,7 +544,8 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
         this.toastrService.warning('Payment amount is greater then 0')
       }
     }
-    else {
+    else
+    {
       this.toastrService.warning('Please Select One Record ')
     }
 
