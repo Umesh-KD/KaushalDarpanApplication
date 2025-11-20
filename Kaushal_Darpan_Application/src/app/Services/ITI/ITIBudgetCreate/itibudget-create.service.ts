@@ -53,4 +53,12 @@ export class ITIBudgetCreateService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetBudgetData(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/GetBudgetData`, body, this.headersOptions1)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

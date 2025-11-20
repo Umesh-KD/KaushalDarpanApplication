@@ -162,6 +162,7 @@ export class BudgetDistributeComponent {
        ;
       this.searchRequest.CollegeID
       this.loaderService.requestStarted();
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       await this.budgetDistributedService.GetAllBudgetManagementData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -335,7 +336,7 @@ export class BudgetDistributeComponent {
   async GetBudgetUtilizationsList() {
     try {
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      this.searchRequest.ActionName = "GetCollegeUtilizationbyID";
+      this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -455,7 +456,7 @@ export class BudgetDistributeComponent {
     try {
        ;
       this.searchRequest.DistributedID = row.DistributedID
-      this.GetBudgetUtilizationsList();
+      await this.GetBudgetUtilizationsList();
       await this.modalService
         .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
         .result.then(
