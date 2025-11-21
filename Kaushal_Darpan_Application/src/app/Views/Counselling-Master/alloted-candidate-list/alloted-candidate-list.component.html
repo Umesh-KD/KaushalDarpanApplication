@@ -158,7 +158,7 @@
       <div class="card-body">
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
             <div>
-                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade :</label>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Institute :</label>
                 <select class="form-select" id="InstituteID" name="InstituteID" [(ngModel)]="editInstituteReq.InstituteID" >
                     <option value="0">--- Choose Option ---</option>
                     <option *ngFor="let item of InstituteList" [ngValue]="item.InstituteID">{{item.InstituteName}} - ({{item.VacantSeats}})</option>
