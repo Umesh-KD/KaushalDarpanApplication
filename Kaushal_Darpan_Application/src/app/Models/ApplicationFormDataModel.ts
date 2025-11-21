@@ -46,6 +46,7 @@ export class LateralEntryQualificationModel {
 
   public BranchID?: number = 0
   public CoreBranchID?: number = 0
+  public OtherDoc?:string=''
 }
 
 export class Lateralsubject {

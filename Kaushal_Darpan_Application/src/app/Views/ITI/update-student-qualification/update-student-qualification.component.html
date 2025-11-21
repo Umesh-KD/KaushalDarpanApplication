@@ -339,6 +339,28 @@
                      formControlName="txtpercentage" [(ngModel)]="request.Percentage" [value]="calculatedPercentage">
             </div>
 
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              for="fileStudentPhoto">Upload Document</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto" type="file" (change)="UploadDocument($event)" />
+                <label for="filepanPhoto">                         
+                  <span>Choose File</span>
+                  {{ request.OtherDoc === '' ? 'No File Chosen' : request.OtherDoc }}
+                </label>
+                <div class="flex" *ngIf="request.OtherDoc !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/AdditionalQualification//{{request.OtherDoc}}"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                     (click)="DeleteDocument(row)">
+                    <i class="ti ti-trash"></i>
+                  </a>-->
+                </div>
+              </div>
+            </div>
+
+
           </div>
 
           <div class="mt-2">

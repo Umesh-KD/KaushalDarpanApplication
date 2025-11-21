@@ -17,6 +17,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { LateralEntryQualificationModel, QualificationDataModel } from '../../../Models/ApplicationFormDataModel';
 import { BterApplicationForm } from '../../../Services/BterApplicationForm/bterApplication.service';
+import { UploadFileModel } from '../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../Common/document-details';
 
 
 @Component({
@@ -33,7 +35,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
   public Message: string = '';
   public ErrorMessage: string = '';
-  public State: boolean = false;
+  public State: number = 0;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public isOtherQuali:boolean=false;
@@ -49,6 +51,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
   public qualificationList:LateralEntryQualificationModel[]=[];
 
   public otherQualification:string='';
+  public otherdoc:string='';
 
 
   public StudantCourseList: StudentDetailsModel[] = [];
@@ -84,6 +87,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
     private Swal2: SweetAlert2, 
     private route: Router,
     private ApplicationService: BterApplicationForm,
+    private documentDetailsService: DocumentDetailsService, 
   ) { }
   
   async ngOnInit()
@@ -459,13 +463,6 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
     const personExists = this.qualificationList.some(person =>
       person.Qualification === this.request.Qualification
-      // && person.BoardID === this.request.BoardID
-     
-      // && person.PassingID === this.request.PassingID
-      // && person.MarkType === this.request.MarkType
-      // && person.AggMaxMark === this.request.AggMaxMark
-      // && person.AggObtMark === this.request.AggObtMark      
-      // && person.Percentage === this.request.Percentage     
 
     );
 
@@ -481,6 +478,43 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
     // this.request.ConcernPersonDetails.push(this.personRequest);
   
+  }
+
+
+  async UploadDocument(event: any) {
+    try {
+      //upload model
+       let uploadModel = new UploadFileModel();
+      //uploadModel.FileExtention = item.FileExtention ?? "";
+      //uploadModel.MinFileSize = item.MinFileSize ?? "";
+     // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+      uploadModel.FolderName = "ITI/AdditionalQualification/";
+
+     
+      //call
+      debugger
+      await this.documentDetailsService.UploadDocument(event, uploadModel)
+        .then((data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          if (this.State == EnumStatus.Success) {
+        
+            this.request.OtherDoc=data.Data[0].FileName;       
+            event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+            this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
   }
 
 
@@ -516,6 +550,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
         // this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         let obj={
           StudentID:this.sSOLoginDataModel.UserID,
+          OtherDoc:this.otherdoc,
           QualificationList:this.qualificationList
         }
   
@@ -604,7 +639,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
   async resetcurrentDetails() {
 
     this.otherQualification='';
-
+    this.request.OtherDoc='';
     this.request.Qualification='';
     this.otherQualification='';
     this.request.StateID = 0;
