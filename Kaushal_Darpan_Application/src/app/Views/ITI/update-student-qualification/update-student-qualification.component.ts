@@ -13,7 +13,10 @@ import { AppsettingService } from '../../../Common/appsetting.service';
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
 import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { LateralEntryQualificationModel, QualificationDataModel } from '../../../Models/ApplicationFormDataModel';
+import { BterApplicationForm } from '../../../Services/BterApplicationForm/bterApplication.service';
 
 
 @Component({
@@ -33,15 +36,27 @@ export class UpdateStudentQualificationComponent implements OnInit {
   public State: boolean = false;
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public isOtherQuali:boolean=false;
+
   public UserID: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new StudentSearchModel();
   public StudantDashboardList: StudentDashboardModel[] = [];
+  public PassingYearList: any = [];
+  public BoardList: any = [];
+  public marktypelist:any=[];
+
+  public qualificationList:LateralEntryQualificationModel[]=[];
+
+  public otherQualification:string='';
+
 
   public StudantCourseList: StudentDetailsModel[] = [];
+  public request = new LateralEntryQualificationModel();
 
   public _EnumDepartment = EnumDepartment;
   public IsShowDashboard: boolean = false;
+  public isqualificationformSubmitted:boolean=false;
 
  public qualificationForm!: FormGroup;
   
@@ -55,6 +70,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
   @ViewChild('modal_StudetnCourseType') modal_GenrateOTP: any;
   constructor(
+    private formBuilder: FormBuilder,
     private commonMasterService: CommonFunctionService,
     private studentService: StudentService,
     private toastr: ToastrService,
@@ -66,7 +82,8 @@ export class UpdateStudentQualificationComponent implements OnInit {
     private modalService: NgbModal, 
     public appsettingConfig: AppsettingService, 
     private Swal2: SweetAlert2, 
-    private route: Router
+    private route: Router,
+    private ApplicationService: BterApplicationForm,
   ) { }
   
   async ngOnInit()
@@ -83,6 +100,20 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
     //}, 'OK');
     //return;
+
+
+    this.qualificationForm = this.formBuilder.group(
+      {
+        txtotherQualification:[''],
+        ddlqualification: ['',Validators.required],
+        txtAggregateMaximumMarks: ['', [DropdownValidators]],
+          txtAggregateMarksObtained: ['', [DropdownValidators]],
+        txtpercentage: [{ value: '', disabled: true }],
+        ddlBoardID: ['', [DropdownValidators]],
+        ddlPassyear: ['', [DropdownValidators]],
+        ddlMarksType: ['', [DropdownValidators]],
+      });
+
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.sSOLoginDataModel.UserType == EnumUserType.STUDENT || this.sSOLoginDataModel.UserType == EnumUserType.CITIZEN)
     {
@@ -120,26 +151,16 @@ export class UpdateStudentQualificationComponent implements OnInit {
       else
       {
         this.IsShowDashboard = true;
+        await this.calculatePercentage();
+        await this.GetMarktYPEDDL();
+        await this.GetPassingYearDDL();
         await this.GetStudentDashboard();
         await this.GetProfileDashboard();
+        await this.loadDropdownData('Board');
       }
 
-      // Initialize the form group and form controls with validators
-    this.qualificationForm = new FormGroup({
-      qualification: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      classBoard: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      classSubject: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
-      passingYear: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{4}$')]),
-      classDocument: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      classAgMaxMarks: new FormControl('', [Validators.required, Validators.min(0)]),
-      classPercentage: new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]),
-      classAgObtMarks: new FormControl('', [Validators.required, Validators.min(0)]),
-      otherDoc: new FormControl('', [Validators.required, Validators.maxLength(200)]),
-      remark: new FormControl('', [Validators.required, Validators.maxLength(1000)]),
-      activeStatus: new FormControl(false),
-      deleteStatus: new FormControl(false),
-    });
 
+  
     }
     //else {
     //  //Redirect To Emitra Application
@@ -156,6 +177,67 @@ export class UpdateStudentQualificationComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  
+  async loadDropdownData(MasterCode: string) {
+    debugger
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      switch (MasterCode) {
+        case 'Board':
+          this.BoardList = data['Data'];
+          console.log(this.BoardList)
+          break;
+        default:
+          break;
+      }
+    });
+  }
+
+  
+  async GetPassingYearDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.AdmissionPassingYear()
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data, 'ggg');
+          this.PassingYearList = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  
+  async GetMarktYPEDDL() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterDDLByType('MarksType')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          this.marktypelist = data['Data'];
+
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
   async GetStudentCourses() {
@@ -270,6 +352,9 @@ export class UpdateStudentQualificationComponent implements OnInit {
       return `with: ${reason}`;
     }
   }
+
+  
+  get _QualificationForm() { return this.qualificationForm.controls; }
   SetStudentDepartment(item: any)
   {
     this.sSOLoginDataModel.StudentID = item.StudentID;
@@ -301,6 +386,243 @@ export class UpdateStudentQualificationComponent implements OnInit {
     }
   }
   
+
+
+
+
+  calculatePercentage(): void {
+    debugger
+    // this.request.MarkType= this.qualificationForm.value.ddlMarksType;
+    let maxMarks = this.request.AggMaxMark;
+    // this.request.AggMaxMark=this.qualificationForm.get('txtAggregateMaximumMarks')?.value;
+    // this.request.AggMaxMark=this.qualificationForm.get('txtAggregateMaximumMarks')?.value;
+    const marksObtained = this.request.AggObtMark;
+    if (Number(this.request.AggObtMark) > Number(this.request.AggMaxMark)) {
+      this.request.Percentage = '';
+      this.request.AggObtMark = 0;
+      this.toastr.warning('Marks Obtained cannot be greater than Maximum Marks.');
+      return;
+    }
+    if (this.request.MarkType == 84) {
+      maxMarks = 10
+      this.request.AggMaxMark = 10
+      this.qualificationForm.get('txtAggregateMaximumMarks')?.disable();
+      if (this.request.AggObtMark > 10) {
+        this.request.AggObtMark = 0;
+        this.request.Percentage = '';
+        return
+      }
+      if (maxMarks && marksObtained && marksObtained <= maxMarks) {
+        const percentage = marksObtained * 9.5;
+        if(percentage < 33){
+          this.toastr.warning('Aggregate Marks Obtained cannot be less than 33%');
+          this.request.Percentage = '';
+          this.request.AggObtMark = 0;
+        } else {
+          this.request.Percentage = percentage.toFixed(2);
+        }
+      } else {
+        this.request.Percentage = '';
+      }
+    } else if (this.request.MarkType == 83)
+    {
+      this.qualificationForm.get('txtAggregateMaximumMarks')?.enable();
+      if (maxMarks && marksObtained && Number( marksObtained) <= Number(maxMarks))
+      {
+        const percentage = (marksObtained / maxMarks) * 100;
+        if(percentage < 33){
+          this.toastr.warning('Aggregate Marks Obtained cannot be less than 33%');
+          this.request.Percentage = '';
+          this.request.AggObtMark = 0;
+        } else {
+          this.request.Percentage = percentage.toFixed(2);
+        }
+        
+      } else {
+        this.request.Percentage = '';
+      }
+     
+    }
+  }
+
+  async AddMoreDetails() {
+      debugger
+    this.isqualificationformSubmitted = true;
+    if(this.qualificationForm.invalid) {
+      this.toastr.error("Please fill all the required fields of Qualification Form")
+      return;
+    }
+
+    if(this.request.Qualification=="1"){
+      this.request.Qualification=this.otherQualification;
+    }
+
+    const personExists = this.qualificationList.some(person =>
+      person.Qualification === this.request.Qualification
+      // && person.BoardID === this.request.BoardID
+     
+      // && person.PassingID === this.request.PassingID
+      // && person.MarkType === this.request.MarkType
+      // && person.AggMaxMark === this.request.AggMaxMark
+      // && person.AggObtMark === this.request.AggObtMark      
+      // && person.Percentage === this.request.Percentage     
+
+    );
+
+
+    if (!personExists) {
+      this.qualificationList.push(this.request);
+      this.request = new LateralEntryQualificationModel();
+      this.isqualificationformSubmitted = false;
+    } else {
+      this.toastr.error("Qualification already exists with the same Field");
+      return
+    }
+
+    // this.request.ConcernPersonDetails.push(this.personRequest);
+  
+  }
+
+
+  async Delete_Qualification(idx:number){
+    try{
+      this.qualificationList.splice(idx,1);
+    }
+    catch(error){
+      console.log(error);
+    }
+  }
+
+
+    // get detail by id
+    async SaveData() {
+      debugger
+      try {
+        this.isSubmitted = true;
+        // if (this.qualificationForm.invalid) {
+        //   console.log("errro")
+        //   return
+        // }
+  
+        if(this.qualificationList.length<=0){
+          this.toastr.error("Please add at least one Qualification details");
+          return
+        }
+        this.isLoading = true;
+  
+        this.loaderService.requestStarted();
+  
+        // this.request.ModifyBy = this.sSOLoginDataModel.UserID;
+        // this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        let obj={
+          StudentID:this.sSOLoginDataModel.UserID,
+          QualificationList:this.qualificationList
+        }
+  
+  
+        //save
+        await this.ApplicationService.UpdateStudentQualificationDetails(obj)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            console.log(data);
+            // this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+  
+            if (data.State = EnumStatus.Success) {
+              this.toastr.success(this.Message)
+              this.ResetControls();
+              // this.routers.navigate(['/CompanyMaster']);
+            }
+            else {
+              this.toastr.error(this.ErrorMessage)
+            }
+  
+          }, (error: any) => console.error(error)
+          );
+      }
+      catch (ex) {
+        console.log(ex);
+      }
+      finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
+      }
+    }
+  
+
+  
+  validateNumber(event: KeyboardEvent) {
+    const allowedKeys = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'];
+
+
+    if (this.request.MarkType == 84) {
+     
+
+      if (!/^[0-9.]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    }
+    else {
+      
+      if (!/^[0-9]$/.test(event.key) && !allowedKeys.includes(event.key)) {
+        event.preventDefault();
+      }
+    }
+
+  }
+ 
+  numberOnly(event: KeyboardEvent): boolean {
+
+    const charCode = (event.which) ? event.which : event.keyCode;
+
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+
+      return false;
+
+    }
+
+    return true;
+
+  }
+
+
+  OnQulaificationChange(){
+    debugger
+    // isOtherQuali
+    if(this.request.Qualification =="1"){
+      this.isOtherQuali=true;
+    }
+    else{
+      this.isOtherQuali=false;
+    }
+      
+  }
+
+
+  async resetcurrentDetails() {
+
+    this.otherQualification='';
+
+    this.request.Qualification='';
+    this.otherQualification='';
+    this.request.StateID = 0;
+    this.request.BoardID = 0;
+    this.request.PassingID = '';
+    this.request.RollNumber = '';
+    this.request.MarkType = 0;
+    this.request.AggMaxMark = 0;
+    this.request.Percentage = '';
+    this.request.AggObtMark = 0;
+
+  }
+
+  async ResetControls(){
+    this.qualificationList=[];
+  }
+
+
   
 
 }
