@@ -146,7 +146,7 @@ deletedContracts: any[] = [];
               else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
               }
               fileUrl = `data:${mimeType};base64,${r.fileBase64}`;
-              console.log("File URL :"+fileUrl);
+              console.log("File Name :"+r.fileName);
             }
             grouped[r.InstituteID].contracts.push({
             date: r.ContractDate.split('T')[0],  // remove time part

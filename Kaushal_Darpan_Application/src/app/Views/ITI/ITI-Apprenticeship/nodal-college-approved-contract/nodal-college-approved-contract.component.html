@@ -158,7 +158,7 @@
                  class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
                  (change)="onFileSelect($event, c, row)"
                  accept=".pdf,.jpg,.jpeg,.png" />
-<a *ngIf="c.fileBase64" [href]="c.fileBase64" target="_blank">{{ c.fileName }}</a>
+<a *ngIf="c.fileUrl" [href]="c.fileUrl" target="_blank">{{ c.fileName }}</a>
           <button type="button"
                   class="btn btn-danger"
                   (click)="removeContract(row, i)">X</button>
