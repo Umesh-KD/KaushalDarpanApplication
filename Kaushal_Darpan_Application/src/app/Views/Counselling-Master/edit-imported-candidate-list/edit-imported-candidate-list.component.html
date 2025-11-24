@@ -97,7 +97,7 @@
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Trade  {{request.TradeName}}
+              Trade / Subject  {{request.TradeName}}
             </label>
             <input type="text" class="form-input" placeholder="Enter Trade" id="Trade" name="Trade"
                   [(ngModel)]="request.Trade" formControlName="Trade" disabled>
@@ -108,7 +108,7 @@
               </p>
             </div>
           </div>
-          <div>
+          <div *ngIf="request.Designation != '0'">
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Designation  
             </label>
