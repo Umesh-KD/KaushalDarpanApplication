@@ -91,7 +91,17 @@
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+      <div>
+        <a 
+          href="javascript:void(0);" 
+          class="btn bg-info btn-sm text-white" 
+          (click)="Approve_CollegeBudgetAllot()">
+          <i class="ti ti-download"></i> Approve Selected
+        </a>
+
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
+      </div>
+      
     </div>
     <div class="grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-1 gap-6">
       <div class="">
@@ -107,13 +117,21 @@
       <div class="">
       </div>
       <div class="">
-        <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " />
+        <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " /> -->
       </div>
     </div>
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
+            <th>
+              <input 
+                type="checkbox" 
+                class="checkboxSize" 
+                [(ngModel)]="AllInTableSelect" 
+                (change)="selectInTableAllCheckbox()" 
+                *ngIf="paginatedInTableData?.length > 0"/>
+            </th>
             <th class="text-left">S No</th>
             <th class="text-left">{{searchRequest.BudgetForID == 1 ? 'Zone Office' : 'College Details'}}</th>
             <th class="text-left">Budget Type</th>
@@ -124,8 +142,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of paginatedInTableData | tableSearchFilter:Table_SearchText; let idx=index;">
-            <td>{{idx+1}}</td>
+          <tr *ngFor="let row of paginatedInTableData; let idx=index;">
+            <td>
+              <input 
+                type="checkbox" 
+                class="checkboxSize" 
+                [(ngModel)]="row.Selected"
+                #checkboxInTableSeletedSingle 
+                (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
+                *ngIf="row.Amount > 0">
+            </td>
+            <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
               {{row.CollegeName}}<br>
               <strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
@@ -141,7 +168,11 @@
             </td>
             <td>{{row.Remark}}</td>
             <td>
-              <button type="button" class="btn bg-info text-white me-1" (click)="openModal(modal_AddInsitute, row, idx)">
+              <button 
+                type="button" 
+                class="btn bg-info text-white me-1" 
+                (click)="openModal(modal_AddInsitute, row, idx)"
+                *ngIf="row.Amount == 0 || row.Amount == '' || row.Amount == null || row.Amount == undefined">
                 Add Budget
               </button>
             </td>
@@ -150,71 +181,22 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <div class="p-3 paginationBox flex items-center justify-end w-full">
-    <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
-    <div class="paginationBoxItems flex items-center">
-      <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
-      <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
-      <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
-             [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
-      <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
-      <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
-      <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+    <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+        <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+        <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+               [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+        <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+        <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+        <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+      </div>
     </div>
+    <!--end pagination-->
   </div>
-
 </div>
-
-
-
-<!-- <ng-template #modal_AddInsitute let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
-  <form [formGroup]="AddStaffBasicDetailFromGroup" id="AddStaffBasicDetailFromGroup" class="form-horizontal">
-    <div class="card">
-      <div class="card-header flex justify-between items-center">
-        <b><i class="fa fa-plus"></i>&nbsp;ASSIGN BUDGET FOR - <b> ({{CollegeName}})</b></b>
-        <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
-      </div>
-
-      <div class="card-body" style="height:200px">
-        <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Total Amount:<span class="StarMarking">*</span> </label>
-            <input class="form-input" type="number" placeholder="Enter Total Amount" formControlName="Amount" id="Amount"
-                   [(ngModel)]="Request.DistributedAmount">
-            <div *ngIf="isSubmitted && _BudgetFormGroup.Amount.errors" class="text-danger">
-              <p *ngIf="_BudgetFormGroup.Amount.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-          </div>
-
-          <div>
-            <label>Remarks <span class="StarMarking">*</span></label>
-            <textarea type="text" class="form-input" placeholder="Enter Rmarks" formControlName="Remark"
-                      id="Remark" name="Remark" [(ngModel)]="Request.Remarks"></textarea>
-            <div *ngIf="isSubmitted && _BudgetFormGroup.Remark.errors" class="text-danger">
-              <p *ngIf="_BudgetFormGroup.Remark.errors.required">
-                <i aria-hidden="true"></i> This field is
-                required.!
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-          <div class="text-center">
-            <button type="button" class="btn bg-info text-white mt-6" (click)="AssignBudget()">Submit</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
-              <i class="ti ti-refresh"></i> Reset
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </form>
-</ng-template> -->
 
 <ng-template #modal_AddUtilize let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
   <div class="card">

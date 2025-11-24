@@ -78,7 +78,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">S No</th>
-            <th class="text-left">College Name</th>
+            <th class="text-left">Zone/College Name</th>
             <th class="text-left">Year Name</th>
             <th class="text-left">Budget Type</th>
             <th class="text-left">Alloted Amount</th>
@@ -168,7 +168,7 @@
               <div *ngIf="item.UploadedFileName">
                 <small>Selected: {{ item.UploadedFileName }}</small>
               </div>
-              <p *ngIf="isFileMissing(item)" class="text-danger"> <i aria-hidden="true"></i> This field is required.!</p>
+              <p class="text-danger"> <i aria-hidden="true"></i> This field is required.!</p>
             </td>
           </tr>
         </tbody>
@@ -177,18 +177,36 @@
         <tfoot>
           <tr>
             <td colspan="2"><b>Total Utilized Amount</b></td>
-            <td  colspan="2"><b [class]="getTotalUtilizationAmount()>ColegeAmount?'text-danger':'text-success'">{{ getTotalUtilizationAmount() | number: '1.2-2' }}</b></td>
+            <td  colspan="1"><b [class]="getTotalUtilizationAmount()>ColegeAmount?'text-danger':'text-success'">{{ getTotalUtilizationAmount() | number: '1.2-2' }}</b></td>
             <td></td> <!-- Keep column alignment -->
           </tr>
           <tr>
             <td colspan="2"><b>Remaining Amount</b></td>
-            <td  colspan="2"><b [class]="getRemainingAmount()>ColegeAmount?'text-danger':'text-success'">{{ getRemainingAmount() | number: '1.2-2' }}</b></td>
+            <td  colspan="1"><b [class]="getRemainingAmount()>ColegeAmount?'text-danger':'text-success'">{{ getRemainingAmount() | number: '1.2-2' }}</b></td>
             <td></td> <!-- Keep column alignment -->
+          </tr>
+          <tr>
+            <td colspan="2"><b>Upload Document</b></td>
+            <td  colspan="1">
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="commonFile" type="file" (change)="onFilechange($event ,'commonFile')" [(ngModel)]="CommonFile">
+                <label for="commonFile">
+                  <span>Choose File</span>
+                  {{CommonFile == '' ? 'No File Choosen' : CommonFileName}}
+                </label>
+                <div class="flex">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL + 'ITI/BudgetRequest/' + CommonFile}}"
+                     *ngIf="CommonFileName !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                </div>
+              </div>
+            </td>
+            
           </tr>
 
           <tr>
             <label for="remark"><strong>Remark:</strong></label>
-            <td colspan="4">
+            <td colspan="3">
               <textarea id="remark"
                         [(ngModel)]="Remarks"
                         name="Remarks"

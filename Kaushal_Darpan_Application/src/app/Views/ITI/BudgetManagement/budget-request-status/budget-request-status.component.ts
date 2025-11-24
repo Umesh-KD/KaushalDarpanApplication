@@ -59,11 +59,16 @@ export class BudgetRequestStatusComponent
     try {
       this.BudgetModel.CreatedBy = this.ssoLoginDataModel.UserID;
       this.BudgetModel.FinYearID = this.ssoLoginDataModel.FinancialYearID;
-      this.BudgetModel.CollegeID = this.ssoLoginDataModel.InstituteID;
+      this.BudgetModel.RoleID = this.ssoLoginDataModel.RoleID;
       this.BudgetModel.RequestID = 0;
       if (this.ssoLoginDataModel.RoleID == 20 || this.ssoLoginDataModel.RoleID == 43) {
+        this.BudgetModel.CollegeID = this.ssoLoginDataModel.InstituteID;
         this.BudgetModel.ActionName = "GETRecordByCompanyID";
-      } else {
+      } else if(this.ssoLoginDataModel.RoleID == 97) {
+        this.BudgetModel.DivisionID = this.ssoLoginDataModel.DistrictID;
+        this.BudgetModel.ActionName = "GETRecordByDivisionID";
+      }
+       else {
         this.BudgetModel.ActionName = "GETLIST";
       }
       

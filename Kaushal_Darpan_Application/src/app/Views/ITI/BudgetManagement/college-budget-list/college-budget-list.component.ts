@@ -15,6 +15,7 @@ import { MenuService } from '../../../../Services/Menu/menu.service';
 import { ReportService } from '../../../../Services/Report/report.service';
 import { ResultService } from '../../../../Services/Results/result.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 @Component({
   selector: 'app-college-budget-list',
@@ -59,6 +60,8 @@ export class CollegeBudgetListComponent {
   public ColegeAmount: number = 0;
   public Remarks: string = '';
   public TotalUtilizedBudget: number = 0;
+  public CommonFile: any;
+  public CommonFileName: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -101,12 +104,17 @@ export class CollegeBudgetListComponent {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
 
-      if (this.searchRequest.CollegeID == 0) {
-        this.searchRequest.ActionName = "GetList";
-      }
-      else {
+      if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+        this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
         this.searchRequest.ActionName = "GetDataByCollegeID";
+      } else if(this.sSOLoginDataModel.RoleID == 97) {
+        this.searchRequest.DivisionID = this.sSOLoginDataModel.DistrictID;
+        this.searchRequest.ActionName = "GetZonelList";
+        this.searchRequest.FinYearID = 9;
+      } else {
+        this.searchRequest.ActionName = "GetList";
       }
 
       this.loaderService.requestStarted();
@@ -135,6 +143,9 @@ export class CollegeBudgetListComponent {
     try {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+      if(this.sSOLoginDataModel.RoleID == 97) {
+        this.searchRequest.FinYearID = 9;
+      }
       this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();
@@ -273,6 +284,8 @@ export class CollegeBudgetListComponent {
   //  }
   //}
 
+
+
   async onFileSelected(event: any, index: number) {
     try {
         ;
@@ -319,6 +332,64 @@ export class CollegeBudgetListComponent {
       /*setTimeout(() => {*/
       this.loaderService.requestEnded();
       /*  }, 200);*/
+    }
+  }
+
+  async onFilechange(event: any, name: string) {
+    debugger;
+    try {
+      const file: File = event.target.files[0];
+      if (file) {
+
+        // Type validation
+        if (['application/pdf'].includes(file.type)) {
+          // Size validation
+          if (file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
+          }
+        }
+        else {
+          this.toastr.error('Select Only pdf file');
+          this.CommonFile = '';
+          this.CommonFileName = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/BudgetRequest";
+
+        //Upload to server folder
+        await this.commonMasterService.UploadDocument(file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+
+              if(name == "commonFile") {
+                this.BudgetUtilizationsList.forEach((item:any) => {
+                  item.CommonFile = data['Data'][0]["FileName"];
+                  item.CommonFileName = data['Data'][0]["Dis_FileName"];
+                })
+              }
+            }
+
+            if (data.State === EnumStatus.Error) {
+              this.toastr.error(data.ErrorMessage);
+
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
     }
   }
 
@@ -398,13 +469,17 @@ export class CollegeBudgetListComponent {
   {
     this.ColegeAmount = row.Amount
     console.log(row, 'RowData');
+    debugger
     try {
-        ;
       this.searchRequest.DistributedID = row.DistributedID
+      this.searchRequest.BudgetForID = row.BudgetFor
+      this.searchRequest.BudgetTypeID = row.BudgetTypeID
       await this.GetBudgetUtilizationsList();
-      await this.modalService
-        .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
-        .result.then(
+      if(this.BudgetUtilizationsList.length == 0) {
+        this.toastr.warning("UC Data Not found");
+        return
+      }
+      await this.modalService.open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then(
           (result) => {
             this.closeResult = `Closed with: ${result}`;
           },
@@ -428,7 +503,6 @@ export class CollegeBudgetListComponent {
     }
   }
   CloseModal() {
-
     this.modalService.dismissAll();
     // Reset dropdown ready flag
 

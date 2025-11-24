@@ -47,17 +47,7 @@ export class BudgetDistributeComponent {
   public AddmissionList: any[] = [];
   modalService = inject(NgbModal);
   closeResult: string | undefined;
-  //table feature default
-  public paginatedInTableData: any[] = [];//copy of main data
-  public currentInTablePage: number = 1;
-  public pageInTableSize: string = "50";
-  public totalInTablePage: number = 0;
-  public sortInTableColumn: string = '';
-  public sortInTableDirection: string = 'asc';
-  public startInTableIndex: number = 0;
-  public endInTableIndex: number = 0;
-  public AllInTableSelect: boolean = false;
-  public totalInTableRecord: number = 0;
+
   public filteredStatusList: any[] = [];
   public Table_SearchText: string = "";
   public isSubmitted: boolean = false;
@@ -77,6 +67,19 @@ export class BudgetDistributeComponent {
   public SelectedCollegeName: string = '';
   public TotalUtilizedBudget: number = 0;
   public TotalCollegeTrainee: number = 0;
+
+    //table feature default
+  public paginatedInTableData: any[] = [];
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
   constructor(
     private activatedRoute: ActivatedRoute,
     private resultService: ResultService,
@@ -221,72 +224,6 @@ export class BudgetDistributeComponent {
 
 
   get _AddStaffBasicDetailFromGroup() { return this.AddStaffBasicDetailFromGroup.controls; }
-
-
-  loadInTable() {
-    this.resetInTableValiable();
-    this.calculateInTableTotalPage();
-    this.updateInTablePaginatedData();
-  }
-
-
-  //table feature 
-  calculateInTableTotalPage() {
-    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
-  }
-  // (replace org. list here)
-  updateInTablePaginatedData() {
-    this.loaderService.requestStarted();
-    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
-    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
-    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
-    this.paginatedInTableData = [...this.AddmissionList].slice(this.startInTableIndex, this.endInTableIndex);
-    this.loaderService.requestEnded();
-  }
-  previousInTablePage() {
-    if (this.currentInTablePage > 1) {
-      this.currentInTablePage--;
-      this.updateInTablePaginatedData();
-    }
-  }
-  nextInTablePage() {
-    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.currentInTablePage++;
-      this.updateInTablePaginatedData();
-    }
-  }
-  firstInTablePage() {
-    if (this.currentInTablePage > 1) {
-      this.currentInTablePage = 1;
-      this.updateInTablePaginatedData();
-    }
-  }
-  lastInTablePage() {
-    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.currentInTablePage = this.totalInTablePage;
-      this.updateInTablePaginatedData();
-    }
-  }
-  randamInTablePage() {
-    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
-      this.currentInTablePage = 1;
-    }
-    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
-      this.updateInTablePaginatedData();
-    }
-  }
-
-  resetInTableValiable() {
-    //this.paginatedInTableData = [];//copy of main data
-    this.currentInTablePage = 1;
-    this.totalInTablePage = 0;
-    this.sortInTableColumn = '';
-    this.sortInTableDirection = 'asc';
-    this.startInTableIndex = 0;
-    this.endInTableIndex = 0;
-    this.totalInTableRecord = this.AddmissionList.length;
-  }
-
 
   onResetClick() {
     this.searchRequest.CollegeID = 0;
@@ -436,11 +373,14 @@ export class BudgetDistributeComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.BudgetUtilizationsListSave = data.Data;
-          this.calculateAllEstimated();
-          this.BudgetUtilizationsListSave.map((item: any) => {
-            if(item.HeadID == 1) {
-              item.UnitValue === this.BudgetUtilizationsListSave[0].TotalTrainee
-            }
+          // this.calculateAllEstimated();
+          // this.BudgetUtilizationsListSave.map((item: any) => {
+          //   if(item.HeadID == 1) {
+          //     item.UnitValue === this.BudgetUtilizationsListSave[0].TotalTrainee
+          //   }
+          // })
+          this.BudgetUtilizationsListSave.forEach((item: any) => {
+            item.AllotAmount = item.EstimatedAmount
           })
           this.Remarks = this.BudgetUtilizationsListSave[0].Remarks;
 
@@ -461,6 +401,7 @@ export class BudgetDistributeComponent {
     if (item.IsUnitWise) {
       // multiply Amount * UnitValue
       item.EstimatedAmount = (Number(item.Amount) || 0) * (Number(item.UnitValue) || 0);
+      item.AllotAmount = item.EstimatedAmount
     } else {
       // just take Amount as Estimated
       item.EstimatedAmount = Number(item.Amount) || 0;
@@ -556,6 +497,7 @@ export class BudgetDistributeComponent {
 
   async BudgetUtilize() {
     try {
+      debugger
       this.loaderService.requestStarted();
       const remarkValue = this.Remarks;
       if (!this.Remarks || this.Remarks.trim() === '') {
@@ -616,4 +558,128 @@ export class BudgetDistributeComponent {
       }, 200);
     }
   }
+
+  async Approve_CollegeBudgetAllot() {
+    try {
+      const anySelected = this.AddmissionList.some(row => row.Selected);
+      if(!anySelected) {
+        this.toastr.warning('Please select at least one row.');
+        return;
+      }
+      const selected = this.AddmissionList.filter(row => row.Selected);
+      selected.forEach(row => {
+        row.ModifyBy = this.sSOLoginDataModel.UserID
+      })
+      await this.budgetDistributedService.Approve_CollegeBudgetAllot(selected).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State = EnumStatus.Success) {
+          this.toastr.success(data.Message)
+          this.GetList();
+        } else if (data.State = EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  //table feature 
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org. list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.AddmissionList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org. list here)
+  async sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.AddmissionList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.AddmissionList.length;
+  }
+  // (replace org. list here)
+  get totalInTableSelected(): number {
+    return this.AddmissionList.filter(x => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.AddmissionList.forEach(x => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.AddmissionList.filter(x => x.DistributedID == item.DistributedID);
+    data.forEach(x => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.AddmissionList.every(r => r.Selected);
+  }
+  // end table feature
 }
