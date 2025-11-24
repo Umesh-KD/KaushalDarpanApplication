@@ -31,6 +31,7 @@ export class BudgetHeadSearchFilter {
   public BudgetForID?: number = 0  
   public DivisionID?: number = 0  
   public RoleID?: number = 0  
+  public Status?: number = 0  
 }
 
 export class BudgetHeadUtilizeList

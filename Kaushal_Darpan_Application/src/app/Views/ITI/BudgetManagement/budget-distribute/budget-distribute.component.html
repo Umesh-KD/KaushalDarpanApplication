@@ -151,7 +151,7 @@
                 [(ngModel)]="row.Selected"
                 #checkboxInTableSeletedSingle 
                 (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
-                *ngIf="row.Amount > 0 && row.Status == 0">
+                *ngIf="row.Status == 0 && row.Amount > 0" />
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
@@ -174,9 +174,26 @@
                 type="button" 
                 class="btn bg-info text-white me-1" 
                 (click)="openModal(modal_AddInsitute, row, idx)"
-                *ngIf="row.Amount == 0 || row.Amount == '' || row.Amount == null || row.Amount == undefined">
+                *ngIf="row.Status == 0">
                 Add Budget
               </button>
+
+              <a 
+                href="{{appsettingConfig.StaticFileRootPathURL + 'ITI/BudgetRequest/' + row.CommonFile}}"
+                class="btn bg-primary text-white m-0" 
+                target="_blank"
+                *ngIf="row.Status == 2">
+                <i class="ti ti-eye"></i>
+              </a>
+
+              <a 
+                (click)="UnlockUtilization_ITI_BGT(row)"
+                class="btn bg-primary text-white m-0" 
+                target="_blank"
+                *ngIf="row.Status == 2">
+                <i class="ti ti-lock-open"></i>
+              </a>
+
             </td>
           </tr>
           <tr *ngIf="paginatedInTableData?.length==0"><td colspan="11">No Record Found</td></tr>
@@ -269,9 +286,9 @@
     </div>
 
     <div class="card-body">
-      <div class="card-header flex justify-between items-center">
+      <!-- <div class="card-header flex justify-between items-center">
         <b>TotalTrainee : {{BudgetUtilizationsListSave[0]?.TotalTrainee}}</b>
-      </div>
+      </div> -->
       <!-- {{BudgetUtilizationsListSave | json}} -->
       <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">

@@ -25,6 +25,7 @@ import { BudgetDistributeModel, BudgetHeadSearchFilter } from '../../../../Model
 import { BudgetDistributedService } from '../../../../Services/BudgetDistributed/budget-distributed.service';
 import { ITIBudgetDropdownDataModel } from '../../../../Models/ITI/ITIBudgetCreateDataModel';
 import { ITIBudgetCreateService } from '../../../../Services/ITI/ITIBudgetCreate/itibudget-create.service';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-budget-distribute',
@@ -96,6 +97,7 @@ export class BudgetDistributeComponent {
     public ReportServices: ReportService,
     private formBuilder: FormBuilder,
     private budgetCreateService: ITIBudgetCreateService,
+    private Swal2: SweetAlert2,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -586,6 +588,34 @@ export class BudgetDistributeComponent {
     }
   }
 
+  async UnlockUtilization_ITI_BGT(row: any) {
+
+    this.Swal2.Confirmation(`Are you sure you want to Save & Lock Utilization!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            const unlockReq: any = {}
+            unlockReq.DistributedID = row.DistributedID;
+            unlockReq.UserID = this.sSOLoginDataModel.UserID;
+            await this.budgetDistributedService.UnlockUtilization_ITI_BGT(unlockReq).then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              if(data.State === EnumStatus.Success) {
+                this.toastr.success(data.Message)
+                await this.GetList();
+              } else if(data.State === EnumStatus.Warning) {
+                this.toastr.warning(data.Message)
+              } else {
+                this.toastr.error(data.ErrorMessage)
+              }
+            })
+          } catch (error) {
+            console.error(error);
+          }
+        }
+      }
+    );    
+  }
+
   //table feature 
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
@@ -669,7 +699,9 @@ export class BudgetDistributeComponent {
   //checked all (replace org. list here)
   selectInTableAllCheckbox() {
     this.AddmissionList.forEach(x => {
-      x.Selected = this.AllInTableSelect;
+      if (x.Status == 0 && x.Amount > 0) {
+        x.Selected = this.AllInTableSelect;
+      }
     });
   }
   //checked single (replace org. list here)
