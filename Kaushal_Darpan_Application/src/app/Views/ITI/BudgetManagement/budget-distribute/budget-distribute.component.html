@@ -137,6 +137,7 @@
             <th class="text-left">Budget Type</th>
             <th class="text-left">Budget Amount</th>
             <th class="text-left">Utilized Amount</th>
+            <th class="text-left">Status</th>
             <th class="text-left">Remark</th>
             <th class="text-left">Action</th>
           </tr>
@@ -150,7 +151,7 @@
                 [(ngModel)]="row.Selected"
                 #checkboxInTableSeletedSingle 
                 (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
-                *ngIf="row.Amount > 0">
+                *ngIf="row.Amount > 0 && row.Status == 0">
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
@@ -166,6 +167,7 @@
             <td (click)="Utilize(modal_AddUtilize, row, idx)" style="cursor: pointer; color: #0d6efd; text-decoration: none;">
               {{row.UtilizationAmount | number:digitsInfo:locale}}
             </td>
+            <td>{{row.StatusName}}</td>
             <td>{{row.Remark}}</td>
             <td>
               <button 
