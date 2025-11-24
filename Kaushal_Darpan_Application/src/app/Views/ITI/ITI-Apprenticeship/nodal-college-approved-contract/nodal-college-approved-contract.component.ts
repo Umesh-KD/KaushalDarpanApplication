@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,NgModule } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -9,19 +9,19 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { EnumRole, EnumStatus, MONTH_LIST } from '../../../../Common/GlobalConstants';
 import { ITIApprenticeshipService } from '../../../../Services/ITI/ITI-Apprenticeship/iti-apprenticeship.service';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-
 @Component({
   selector: 'app-nodal-college-approved-contract',
   standalone: false,
   templateUrl: './nodal-college-approved-contract.component.html',
   styleUrl: './nodal-college-approved-contract.component.css'
 })
+ 
 export class NodalCollegeApprovedContractComponent {
   public sSOLoginDataModel = new SSOLoginDataModel();
   public request : any = {};
 
   CollegeApprovedContractForm!: FormGroup;
-
+InstitutelistNew: InstituteRow[] = [];
   public Divisionlist: any = [];
   public Districtlist: any = [];
   public Institutelist: any = [];
@@ -42,11 +42,11 @@ export class NodalCollegeApprovedContractComponent {
 
   async ngOnInit() {
     this.CollegeApprovedContractForm = this.formBuilder.group({
-      DivisionID: ['', [DropdownValidators]],
-      DistrictID: ['', [DropdownValidators]],
+      DivisionID: [{ value: '', disabled: true }, [DropdownValidators]],
+      DistrictID: [{ value: '', disabled: true }, [DropdownValidators]],
       MonthID: ['', [DropdownValidators]],
     })
-      
+   
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDivisionMaster();
     this.request.DistrictID = this.sSOLoginDataModel.DistrictID
@@ -112,10 +112,15 @@ export class NodalCollegeApprovedContractComponent {
       await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.Institutelist = data['Data'];
+        this.InstitutelistNew = data['Data'];
       })
     } catch (error) {
       console.log(error);
     }
+    this.InstitutelistNew = this.InstitutelistNew.map((row: InstituteRow) => ({
+  ...row,
+  showContractFields: false
+}));
   }
 
   async DivisionData_ByDistrict() {
@@ -174,5 +179,14 @@ export class NodalCollegeApprovedContractComponent {
     this.Institutelist = [];
     this.request.MonthID = 0;
   }
-  
+  openCalendar(index: number) {
+   
+}
+}
+ interface InstituteRow {
+  InstituteID: number;
+  Name: string;
+  No_Of_Contract?: number;
+  ContractDate?: string;
+  showContractFields?: boolean;
 }

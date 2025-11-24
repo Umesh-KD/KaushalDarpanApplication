@@ -9,6 +9,7 @@ import { SemesterDetailsModule } from '../../Student/semester-details/semester-d
 import { ImageErrorDirective } from '../../../Common/image-error.directive';
 import { ITIPendingFeesModule } from '../../Student/itipending-fees/itipending-fees.module';
 import { UpdateStudentQualificationComponent } from './update-student-qualification.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [UpdateStudentQualificationComponent],
@@ -16,6 +17,8 @@ import { UpdateStudentQualificationComponent } from './update-student-qualificat
     CommonModule,
     UpdateStudentQualificationRoutingModule,
     LoaderModule,
+    FormsModule,
+    ReactiveFormsModule,
     PendingFeesModule,
     SemesterDetailsModule, ITIPendingFeesModule
    

@@ -699,7 +699,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
           "Gender",
           "Roll_No",
           "App_No",
-          "Aadhar_Number",
+          // "Aadhar_Number",
           "DOB",
           "Candidate_Cat",
           "Selected_cat",
@@ -712,12 +712,12 @@ export class CounsellingImportCandidateListComponent implements OnInit {
         MobileNo: "Mandatory - 10 Digit Mobile Number",
         Email: "Mandatory - E-Mail Address",
         SSOID: "Non - Mandatory - SSO ID of Candidate",
-        SelectedTrade: "Mandatory - Three Character Trade Code e.g. 231 / 227",
+        SelectedTrade: "Mandatory - Three Character Trade Code e.g. 231 / 227, For Subject: ED/ES/IT/WC",
         Qualification: "Mandatory - NTC/NAC or DEGREE/DIPLOMA",
         Gender: "Mandatory - MALE / FEMALE / TRANSGENDER",
-        Roll_No: "Non - Mandatory - Roll Number of Student",
-        App_No: "Non - Mandatory - Application Number of Student",
-        Aadhar_Number: "Mandatory - 12 Digit Adhar Number",
+        Roll_No: "Mandatory - Roll Number of Student",
+        App_No: "Mandatory - Application Number of Student",
+        // Aadhar_Number: "Mandatory - 12 Digit Adhar Number",
         DOB: "Mandatory - Date of Birth (dd-mm-yyyy i.e. 01/01/2002)",
         Candidate_Cat: "Mandatory - Caste Category Code: GEN/OBC/ST/SC/EWS/MBC/MIN",
         Selected_cat: "Mandatory - Caste Category Code: GEN/OBC/ST/SC/EWS/MBC/MIN",
@@ -754,7 +754,7 @@ export class CounsellingImportCandidateListComponent implements OnInit {
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
-  // (replace org.list here)
+  // (replace org.list here) 
   updateInTablePaginatedData() {
     this.loaderService.requestStarted();
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);

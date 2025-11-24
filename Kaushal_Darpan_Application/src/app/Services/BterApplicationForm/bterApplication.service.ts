@@ -240,4 +240,21 @@ export class BterApplicationForm {
       ).toPromise();
   }
 
+
+
+
+
+
+  // ------------------------------------------Student Qualification update Service-------------------------------------------------------------------------
+
+   //save data
+   public async UpdateStudentQualificationDetails(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UpdateStudentQualificationDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
 }
