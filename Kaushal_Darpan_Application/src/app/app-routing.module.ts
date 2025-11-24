@@ -1320,8 +1320,7 @@ const routes: Routes = [
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'CenterSuperitendentExamReport', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report-master/center-superitendent-exam-report-master.module').then(m => m.CenterSuperitendentExamReportMasterModule) },
-      { path: 'ItiBGTHeadmaster', loadChildren: () => import('./Views/ITI/iti-bgt-headmaster/iti-bgt-headmaster.module').then(m => m.ItiBGTHeadMasterModule) },
-
+      
       { path: 'iti-remunerationInvigilatorApproved-list', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-list/iti-admin-remunerationInvigilator-list.module').then(m => m.ItiAdminRemunerationInvigilatorlistModule), title: 'Invigilation Remuneration Approved list' },
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'statistics-report', loadChildren: () => import('./Views/Reports/bter-statistics-reports/bter-statistics-reports.module').then(m => m.StatisticsReportsModule), title: 'Statistics-report' },
@@ -1363,7 +1362,8 @@ const routes: Routes = [
       { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
       { path: 'iti-bgt-uc-head', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-uc-head/budget-uc-head.module').then(m => m.BudgetUCHeadModule), title: 'Budget UC Head' },
       { path: 'itibudgetmaster', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-master/budget-master.module').then(m => m.BudgetMasterModule), title: 'ITI Budget Master' },
-      
+      { path: 'ItiBGTHeadmaster', loadChildren: () => import('./Views/ITI/iti-bgt-headmaster/iti-bgt-headmaster.module').then(m => m.ItiBGTHeadMasterModule) },
+
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },
       { path: 'PrincipalDispatchRevalGroup', loadChildren: () => import('./Views/DispatchManagementReval/principal-dispatch-reval-group/principal-dispatch-reval-group.module').then(m => m.PrincipalDispatchRevalGroupModule) },

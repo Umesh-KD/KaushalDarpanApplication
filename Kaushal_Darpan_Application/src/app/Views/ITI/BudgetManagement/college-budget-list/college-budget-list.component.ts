@@ -16,6 +16,7 @@ import { ReportService } from '../../../../Services/Report/report.service';
 import { ResultService } from '../../../../Services/Results/result.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-college-budget-list',
@@ -77,8 +78,8 @@ export class CollegeBudgetListComponent {
     private http: HttpClient,
     private menuService: MenuService,
     public ReportServices: ReportService,
-    private formBuilder: FormBuilder
-
+    private formBuilder: FormBuilder,
+    private Swal2: SweetAlert2,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -239,19 +240,10 @@ export class CollegeBudgetListComponent {
   }
 
 
-  //onResetClick() {
-  //  this.searchRequest.DistrictID = 0;
-  //  this.searchRequest.DivisionID = 0;
-  //  this.searchRequest.CourseTypeID = 0;
-  //  this.searchRequest.ITICollegeID = 0;
-  //  this.searchRequest.ITITradeID = 0;
-  //  this.searchRequest.ITICode = '';
-  //  this.searchRequest.TradeCode = '';
-  //  this.searchRequest.StatusID = 0;
-  //  this.AddmissionList = [];
-  //  this.paginatedInTableData = [];
-  //  this.GetList();
-  //}
+  onResetClick() {
+   this.searchRequest.Status = 0;
+   this.GetList();
+  }
 
 
   //exportToExcel(): void {
@@ -371,18 +363,13 @@ export class CollegeBudgetListComponent {
             if (data.State === EnumStatus.Success) {
 
               if(name == "commonFile") {
-                this.BudgetUtilizationsList.forEach((item:any) => {
-                  item.CommonFile = data['Data'][0]["FileName"];
-                  item.CommonFileName = data['Data'][0]["Dis_FileName"];
-                })
+                this.CommonFile = data['Data'][0]["FileName"];
+                this.CommonFileName = data['Data'][0]["Dis_FileName"];
               }
-            }
-
-            if (data.State === EnumStatus.Error) {
-              this.toastr.error(data.ErrorMessage);
-
             } else if (data.State === EnumStatus.Warning) {
               this.toastr.warning(data.ErrorMessage);
+            } else {
+              this.toastr.error(data.ErrorMessage);
             }
           });
       }
@@ -403,26 +390,41 @@ export class CollegeBudgetListComponent {
     );
   }
 
+  async SaveAndLock() {
+    if (!this.Remarks || this.Remarks.trim() === '') {
+      this.toastr.warning("Please fill in the remark before submitting.");
+      return; // stop execution
+    }
+
+    if(this.CommonFile == ''){
+      this.toastr.error("Please upload common document");
+      return;
+    }
+
+    this.Swal2.Confirmation(`Are you sure you want to Save & Lock Utilization!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          await this.BudgetUtilize();
+        }
+      }
+    );
+  }
+
   async BudgetUtilize() {
     try {
       this.loaderService.requestStarted();
       debugger
-      if (!this.validateUtilizationList()) {
-        this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
-        return; // stop submission
-      }
+      // if (!this.validateUtilizationList()) {
+      //   this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
+      //   return; // stop submission
+      // }
 
-      const remarkValue = this.Remarks;
-      if (!this.Remarks || this.Remarks.trim() === '') {
-        this.toastr.warning("Please fill in the remark before submitting.");
-        return; // stop execution
-      }
-
-      // or any string you want to apply to all
       this.BudgetUtilizationsList.forEach(item => {
-        item.Remarks = remarkValue;
+        item.Remarks = this.Remarks;
         item.CreatedBy = this.sSOLoginDataModel.UserID;
         item.DistributedID = this.searchRequest.DistributedID;
+        item.CommonFile = this.CommonFile;
+        item.CommonFileName = this.CommonFileName;
       });
 
       this.TotalUtilizedBudget = this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
@@ -503,6 +505,8 @@ export class CollegeBudgetListComponent {
     }
   }
   CloseModal() {
+    this.CommonFile = '';
+    this.CommonFileName = '';
     this.modalService.dismissAll();
     // Reset dropdown ready flag
 

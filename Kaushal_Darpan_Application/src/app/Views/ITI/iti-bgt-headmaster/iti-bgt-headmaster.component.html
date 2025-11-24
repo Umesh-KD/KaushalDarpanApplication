@@ -92,14 +92,13 @@
           <tr>
 
             <th class="text-left">Sr No</th>
-            <th class="text-center">Head Name</th>
-             <th class="text-center">Head Code</th>
-             <th class="text-center">Head Description</th>
-             <!-- <th class="text-center" *ngIf="sSOLoginDataModel.RoleID === 16 || sSOLoginDataModel.RoleID === 17">DOB</th> -->
-             <!-- <th class="text-center" *ngIf="sSOLoginDataModel.RoleID === 17">Category</th>
-             <th class="text-center" *ngIf="sSOLoginDataModel.RoleID === 17">City</th>
-             <th class="text-center" *ngIf="sSOLoginDataModel.RoleID === 17">Created At</th> -->
-            <th class="text-center">Action</th>
+            <th class="text-left">Head Name</th>
+             <th class="text-left">Head Code</th>
+             <th class="text-left">Head Description</th>
+             <th class="text-left">Is Unit Wise</th>
+             <th class="text-left">Unit Name</th>
+             <th class="text-left">Unit Value</th>
+            <th class="text-left">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -109,6 +108,9 @@
             <td>{{item.HeadName}}</td>
             <td>{{item.HeadCode}}</td>
             <td>{{item.HeadDescription}}
+            <td>{{item.IsUnitWise == 1 ? 'YES' : 'NO'}}
+            <td>{{item.UnitName}}
+            <td>{{item.UnitValue}}
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> 
                  <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_UpdateExaminer,item.HeadId)"   title="Edit"><i class="ti ti-pencil"></i></a>
@@ -174,6 +176,11 @@
                 <div *ngIf="BGTHeadForm.get('IsUnitWise')?.value">
                   <label class="text-gray-800 text-sm font-medium inline-block mb-1">Unit Name</label>
                   <input type="text" formControlName="UnitName" class="form-input" placeholder="Enter Unit Name" >
+                </div>
+
+                <div *ngIf="BGTHeadForm.get('IsUnitWise')?.value">
+                  <label class="text-gray-800 text-sm font-medium inline-block mb-1">Unit Value</label>
+                  <input type="text" formControlName="UnitValue" class="form-input" placeholder="Enter Unit Name" >
                 </div>
 
                 <div>
