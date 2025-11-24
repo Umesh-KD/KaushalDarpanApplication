@@ -151,7 +151,7 @@
                 [(ngModel)]="row.Selected"
                 #checkboxInTableSeletedSingle 
                 (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
-                *ngIf="row.Status == 0 && row.Amount > 0">
+                *ngIf="row.Status == 0 && row.Amount > 0" />
             </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
