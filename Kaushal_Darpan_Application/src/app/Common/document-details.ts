@@ -21,7 +21,7 @@ export class DocumentDetailsService {
   //document
   async UploadDocument(event: any, uploadModel: UploadFileModel) {
     try {
-      const file: File = event.target.files[0];
+      const file: File = event.target.files[0]; 
       if (file)
       {
         let fileValue = event.target.value;

@@ -33,7 +33,13 @@ export class NodalCollegeApprovedContractComponent {
   months = MONTH_LIST;
   //deletedContracts: number[] = [];
 deletedContracts: any[] = [];
-  constructor(
+minDate: string = '';
+maxDate: string = '';
+ public Message: string = '';
+ public ErrorMessage: string = '';
+ public State: any = false;
+
+constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
     private loaderService: LoaderService,
@@ -108,7 +114,16 @@ deletedContracts: any[] = [];
         this.toastr.error('Please select correct month as You cannot select future or present month');
         return;
       } 
+      const month = this.request.MonthID;
+      const year = new Date().getFullYear(); // or your selected AcademicYear
 
+      if (month > 0) {
+        const start = new Date(year, month - 1, 1);
+        const end = new Date(year, month, 0); // last day of month
+
+        this.minDate = start.toISOString().split('T')[0];
+        this.maxDate = end.toISOString().split('T')[0];
+      }
       const request: any = {};
       request.DistrictID = this.request.DistrictID;
       request.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -117,11 +132,7 @@ deletedContracts: any[] = [];
       request.action = "GetInstituteList";
       await this.apprenticeshipService.GetITI_InstituteList_Apprenticeship(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        // this.Institutelist = data['Data']; 
-        // this.Institutelist = data['Data'].map((row: any) => ({
-        //   ...row,
-        //   contracts: [] as ContractEntry[]
-        // }));
+
         const rows = data['Data'];
         const grouped: any = {};
         rows.forEach((r: any) => {
@@ -129,24 +140,18 @@ deletedContracts: any[] = [];
             grouped[r.InstituteID] = {
             InstituteID: r.InstituteID,
             Name: r.Name,
+            allowZero: r.allowZero,
             contracts: []
             };
           }
           debugger;
           if (r.ContractDate) {
              let fileUrl = null;
+             let base64= null;
              debugger;
-            if (r.fileBase64) {
-              // Detect MIME type by file extension
-              let mimeType = 'application/octet-stream'; // default
-              if (r.fileName) {
-              const ext = r.fileName.split('.').pop()?.toLowerCase();
-              if (ext === 'pdf') mimeType = 'application/pdf';
-              else if (ext === 'png') mimeType = 'image/png';
-              else if (ext === 'jpg' || ext === 'jpeg') mimeType = 'image/jpeg';
-              }
-              fileUrl = `data:${mimeType};base64,${r.fileBase64}`;
-              console.log("File URL :"+fileUrl);
+            if (r.fileName) { 
+              fileUrl =  r.fileUrl
+              console.log("File Name :"+r.fileName);
             }
             grouped[r.InstituteID].contracts.push({
             date: r.ContractDate.split('T')[0],  // remove time part
@@ -230,8 +235,9 @@ async SaveDataNew() {
   // Add modified rows
   this.Institutelist.forEach((inst:any) => {
     inst.contracts
-      .filter((c:any) => c.count > 0)
+      .filter((c:any) => inst.allowZero || c.count > 0)
       .forEach((c:any) => {
+        
         payload.push({
           InstituteID: inst.InstituteID,
           MonthID: this.request.MonthID,
@@ -246,7 +252,8 @@ async SaveDataNew() {
            // FILE DATA (SAFE FOR JSON)
           FileBase64: c.fileBase64 || null,
           FileName: c.fileName || null,
-          FileUrls: c.fileUrl || null
+          FileUrls: c.fileUrl || null,
+          allowZero:((inst.allowZero) ? 1 : 0)
         });
       });
   });
@@ -288,7 +295,7 @@ if (!confirm("Are you sure you want to save these contract entries?")) {
   const value = Number(contract.count);
     // Block zero value
     if (value === 0) {
-      alert("'No of Contract' cannot be 0.");
+      this.toastr.warning("No of Contract' cannot be 0.");
       contract.count = null;        // Clear the value 
       inputRef.value = '';  
       return;
@@ -296,7 +303,7 @@ if (!confirm("Are you sure you want to save these contract entries?")) {
 
     // Optional: Block negative values
     if (value < 0) {
-      alert("Value cannot be negative.");
+      this.toastr.warning("Value cannot be negative.");
       contract.count = null;
       inputRef.value = '';  
     }
@@ -304,23 +311,24 @@ if (!confirm("Are you sure you want to save these contract entries?")) {
 onDateChange(selectedDate: string, row: any) {
   if (!selectedDate) return;
   // 1️⃣ Check if date already exists
+  row.date = selectedDate; 
   const existing = row.contracts.find((c: ContractEntry) => c.date === selectedDate);
 
   // 👉 If user selects SAME DATE → allow it, but DO NOT add new row
-  if (existing) {
-    alert("Date Already Selected.");
+  if (existing) { 
+    this.toastr.warning("Date Already Selected.");
     return;  
   }
 
 // 1️⃣ Check if last contract entry exists AND its count is empty
   if (row.contracts.length > 0) {
     const last = row.contracts[row.contracts.length - 1];
-    if (last.count === null || last.count === undefined || last.count === '') {
-      alert("Please enter 'No of Contract' before selecting a new date.");
+    if (last.count === null || last.count === undefined || last.count === '') { 
+      this.toastr.warning("Please enter 'No of Contract' before selecting a new date.");
       return; // ❌ Stop adding new entry
     }
-    if (Number(last.count) === 0) {
-      alert("'No of Contract' cannot be 0. Please enter a valid value.");
+    if (Number(last.count) === 0) { 
+      this.toastr.warning("'No of Contract' cannot be 0. Please enter a valid value.");
       return;
     }
   }
@@ -331,8 +339,30 @@ onDateChange(selectedDate: string, row: any) {
     date: selectedDate,
     count: null
   });
-}
+} 
+onAllowZeroChange(row: any, event: any) {
+  // If checkbox is checked but date is NOT selected
+  if (event.target.checked && (!row.date || row.date === "")) {
+    this.toastr.error("Please select date first.");
 
+    // Uncheck checkbox
+    row.allowZero = false;
+
+    return;
+  }
+
+  // If date exists and checkbox is checked → set counts to 0
+  if (row.allowZero) {
+    row.contracts.forEach((c: any) => {
+      c.count = 0;
+    });
+  }
+  else{
+     row.contracts.forEach((c: any) => {
+      c.count = null;
+    });
+  }
+}
 removeContract(row: any, index: number) {
   if (!confirm("Are you sure you want to remove this contract?")) {
     return; // ❌ User cancelled
@@ -358,22 +388,13 @@ removeContract(row: any, index: number) {
 onFileSelect(event: any, contract: any) {
   const file = event.target.files[0];
   if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    contract.fileBase64 = reader.result;  // Base64 string
-    contract.fileName = file.name;        // Original name
-    contract.fileUrl = reader.result as string;
-    console.log("contract.fileUrl:"+contract.fileUrl);
-  };
-  reader.readAsDataURL(file);             // Convert to Base64
-  // this.UploadDocument(file, file.name, file.name).then((res: any) => {
-  //   // Suppose server returns the accessible file URL
-  //   contract.fileUrl = res.fileUrl;  // e.g., "/uploads/contracts/contract1.pdf"
-  //   console.log("File uploaded, URL:", contract.fileUrl);
-  // });
+  console.log("file.name:"+file.name);
+   this.UploadDocument(event, file.name, file.name,contract).then((res: any) => {
+  }); 
+ 
 }
-async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
+async UploadDocument(event: any, FileName: any, Dis_FileName:any, contract: any) {
+  debugger;
   try {
     let uploadModel: UploadFileModel = {
       FileName: FileName ?? "",
@@ -385,12 +406,33 @@ async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
     }
     await this.documentDetailsService.UploadDocument(event, uploadModel)
       .then((data: any) => { 
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          console.log("Upload Document Data:"+JSON.stringify(data));
+      
+
+          debugger;
+          if (this.State == EnumStatus.Success) {
+          console.log("File Path: "+this.appsettingConfig.StaticFileRootPathURL+'/'+data.Data[0].FilePath);
+          console.log("File Name: "+data.Data[0].FileName);
+           contract.fileUrl = this.appsettingConfig.StaticFileRootPathURL+'/'+data.Data[0].FilePath;
+           contract.fileName = data.Data[0].FileName;
+          event.target.value = null;
+          }
+          if (this.State == EnumStatus.Error) {
+          this.toastr.error(this.ErrorMessage)
+          }
+          else if (this.State == EnumStatus.Warning) {
+          this.toastr.warning(this.ErrorMessage)
+          }
       });
   }
   catch (Ex) {
     console.log(Ex);
   }
-}
+} 
 }
  
 interface ContractEntry {
