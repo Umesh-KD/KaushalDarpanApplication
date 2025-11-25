@@ -65,6 +65,7 @@ export class ListItiTradeComponent {
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
+
     this.getTradetblListList()
 
     this.GetTradeTypesList();
@@ -72,6 +73,7 @@ export class ListItiTradeComponent {
 
   async GetTradeTypesList()
   {
+
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetTradeTypesList().then((data: any) => {
@@ -90,6 +92,9 @@ export class ListItiTradeComponent {
   async getTradetblListList() {
     try {
       this.loaderService.requestStarted();
+      if (this.sSOLoginDataModel.RoleID == 42) {
+        this.searchRequest.TradeTypeId=1
+      }
       //this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       //const roleId = this.sSOLoginDataModel?.RoleID ?? 0;
       //this.searchRequest.IsAddmission = roleId === 16;

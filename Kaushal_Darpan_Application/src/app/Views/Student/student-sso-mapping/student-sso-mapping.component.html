@@ -49,7 +49,7 @@
           </div>
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No<span class="StarMarking">*</span> </label>
-            <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " formControlName="txtMobileNo" [(ngModel)]="searchRequest.MobileNumber">
+            <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " maxlength="10" formControlName="txtMobileNo" [(ngModel)]="searchRequest.MobileNumber">
             <div *ngIf="isSubmitted && _searchssoform.txtMobileNo.errors" class="text-danger">
               <p *ngIf="_searchssoform.txtMobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
             </div>
