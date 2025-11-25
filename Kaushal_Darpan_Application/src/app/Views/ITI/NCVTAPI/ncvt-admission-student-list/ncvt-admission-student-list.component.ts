@@ -62,42 +62,123 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
   }
 
 
-  async exportToExcel() {
+  //async exportToExcel() {
 
-    this.searchRequest.PageNumber = this.pageNo
-    this.searchRequest.PageSize = this.pageSize
-    this.searchRequest.SortColumn = this.sortColumn
-    this.searchRequest.SortOrder = this.sortOrder
-    this.searchRequest.UserID = this.sSOLoginDataModel.UserID
-    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+  //  this.searchRequest.PageNumber = this.pageNo
+  //  this.searchRequest.PageSize = this.pageSize
+  //  this.searchRequest.SortColumn = this.sortColumn
+  //  this.searchRequest.SortOrder = this.sortOrder
+  //  this.searchRequest.UserID = this.sSOLoginDataModel.UserID
+  //  this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
+  //  this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+  //  // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
+  //  this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+  //  this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+  //  this.searchRequest.action = "NcvtAdmissionStudentExcelList";
+
+  //  await this.ItiDataMasterService.GetStudentCorrectionListData(this.searchRequest).then((data: any) => {
+  //    data = JSON.parse(JSON.stringify(data));
+  //    this.StudentList1 = data.Data;
+
+
+
+  //    console.log(this.StudentList1)
+  //  }, (error: any) => console.error(error))
+
+  //  const unwantedColumns = [
+  //    'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+  //    'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'RecordStatus',
+  //     'createddate', 'CollegeID', 'AcedmicYearID',
+  //     'Gender', 'AID', 'StudentID', 'TraineeName', 'DateOfBirth1', 'Category1', 'FatherGuardianName1'
+  //  ];
+
+  //  const columnOrder = [
+  //    'SrNo','CollegeName','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
+  //    ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType','ErrorDescription'
+
+  //  ];
+
+  //  const filteredData = this.StudentList1.map((item: any) => {
+  //    const filteredItem: any = {};
+  //    Object.keys(item).forEach(key => {
+  //      if (!unwantedColumns.includes(key)) {
+  //        filteredItem[key] = item[key];
+  //      }
+  //    });
+  //    return filteredItem;
+  //  });
+
+  //  // Create worksheet from filtered data
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+
+  //  // Calculate column widths based on max length of content in each column
+  //  const columnWidths = columnOrder.map((column) => ({
+  //    wch:
+  //      Math.max(
+  //        column.length, // Header length
+  //        ...filteredData.map((item: any) =>
+  //          item[column] ? item[column].toString().length : 0
+  //        ) // Max content length
+  //      ) + 2, // Add extra padding
+  //  }));
+
+  //  // Apply column widths
+  //  ws['!cols'] = columnWidths;
+
+  //  // Apply header styling (bold + background color)
+  //  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
+  //  if (range.s && range.e) {
+  //    for (let col = range.s.c; col <= range.e.c; col++) {
+  //      const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
+  //      if (!ws[cellAddress]) continue;
+
+  //      // Bold the header text and apply a background color
+  //      ws[cellAddress].s = {
+  //        font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
+  //        fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
+  //        alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
+  //      };
+  //    }
+  //  }
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  //  XLSX.writeFile(wb, 'Applicant_Data_2025-11-21T11_54_12.345Z.xlsx');
+  //}
+
+
+
+
+  async exportToExcel() {
+    this.searchRequest.PageNumber = this.pageNo;
+    this.searchRequest.PageSize = this.pageSize;
+    this.searchRequest.SortColumn = this.sortColumn;
+    this.searchRequest.SortOrder = this.sortOrder;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-    // if(this.sSOLoginDataModel.RoleID === EnumRole.Principal_SCVT) {
-    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-    this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID
+    this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+    this.searchRequest.DistrictID = this.sSOLoginDataModel.DistrictID;
     this.searchRequest.action = "NcvtAdmissionStudentExcelList";
 
     await this.ItiDataMasterService.GetStudentCorrectionListData(this.searchRequest).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StudentList1 = data.Data;
-
-  
-
-      console.log(this.StudentList1)
-    }, (error: any) => console.error(error))
+      console.log(this.StudentList1);
+    }, (error: any) => console.error(error));
 
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID', 'RecordStatus',
-       'createddate', 'CollegeID', 'AcedmicYearID',
-       'Gender', 'AID', 'StudentID', 'TraineeName', 'DateOfBirth1', 'Category1', 'FatherGuardianName1'
+      'createddate', 'CollegeID', 'AcedmicYearID',
+      'Gender', 'AID', 'StudentID', 'TraineeName', 'DateOfBirth1', 'Category1', 'FatherGuardianName1'
     ];
 
     const columnOrder = [
-      'SrNo','CollegeName','Name','UIDNumber','DateOfBirth','GenderName','Category','FatherGuardianName','MotherName','MobileNumber','EmailID'
-      ,'HighestQualification','Trade','Shift','Shift','PersonwithDisability','PWDcategory','EconomicWeakerSection','TraineeType','ErrorDescription'
-
+      'SrNo', 'CollegeName', 'Name', 'UIDNumber', 'DateOfBirth', 'GenderName', 'Category', 'FatherGuardianName', 'MotherName', 'MobileNumber', 'EmailID',
+      'HighestQualification', 'Trade', 'Shift', 'PersonwithDisability', 'PWDcategory', 'EconomicWeakerSection', 'TraineeType', 'ErrorDescription'
     ];
 
+    // filter unwanted columns
     const filteredData = this.StudentList1.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -107,43 +188,72 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
       });
       return filteredItem;
     });
-    
-    // Create worksheet from filtered data
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
 
-    // Calculate column widths based on max length of content in each column
+    const orderedData = filteredData.map((row: any) => {
+      const orderedRow: any = {};
+      columnOrder.forEach(col => {
+        if (row.hasOwnProperty(col)) {
+          orderedRow[col] = row[col];
+        } else {
+          
+        }
+      });
+    
+      Object.keys(row).forEach(k => {
+        if (!columnOrder.includes(k)) orderedRow[k] = row[k];
+      });
+      return orderedRow;
+    });
+
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(orderedData);
+
     const columnWidths = columnOrder.map((column) => ({
       wch:
         Math.max(
           column.length, // Header length
-          ...filteredData.map((item: any) =>
+          ...orderedData.map((item: any) =>
             item[column] ? item[column].toString().length : 0
-          ) // Max content length
-        ) + 2, // Add extra padding
+          )
+        ) + 2,
     }));
 
-    // Apply column widths
+    const extraCols = Object.keys(orderedData[0] || {}).filter(k => !columnOrder.includes(k));
+    extraCols.forEach(col => {
+      columnWidths.push({
+        wch: Math.max(col.length, ...orderedData.map((item: any) => item[col] ? item[col].toString().length : 0)) + 2
+      });
+    });
+
     ws['!cols'] = columnWidths;
 
-    // Apply header styling (bold + background color)
     const range = XLSX.utils.decode_range(ws['!ref'] || 'A1');
     if (range.s && range.e) {
       for (let col = range.s.c; col <= range.e.c; col++) {
         const cellAddress = XLSX.utils.encode_col(col) + '1'; // First row (headers)
         if (!ws[cellAddress]) continue;
 
-        // Bold the header text and apply a background color
         ws[cellAddress].s = {
-          font: { bold: true, color: { rgb: 'FFFFFF' } }, // Bold text, white color
-          fill: { fgColor: { rgb: '#f3f3f3' } }, // Light background color
-          alignment: { horizontal: 'center', vertical: 'center' }, // Center-align text
+          font: { bold: true, color: { rgb: 'FFFFFF' } },
+          fill: { fgColor: { rgb: '#f3f3f3' } },
+          alignment: { horizontal: 'center', vertical: 'center' },
         };
       }
     }
+
+    const now = new Date();
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+    let sheetName = `Applicant_Data_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`; // e.g. Applicant_Data_2025-11-21
+    if (sheetName.length > 31) sheetName = sheetName.substring(0, 31);
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'StudentListData.xlsx');
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+    const fileName = `Applicant_Data_${dateStr}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   }
+
 
   async GetStudentCorrectionListData(i: any) {
     debugger
