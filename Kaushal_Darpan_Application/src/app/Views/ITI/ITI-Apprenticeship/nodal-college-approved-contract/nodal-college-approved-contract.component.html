@@ -128,41 +128,74 @@
       <td class="text-left">{{ row.Name }}</td>
       <td>
         <input type="date"
-               class="form-control"
+               class="form-control" 
                (change)="onDateChange($event.target.value, row)">
+               <label class="ml-2 text-sm" style="padding-left:100px !important;">
+    <input type="checkbox"
+           [(ngModel)]="row.allowZero"
+           name="allowZero_{{idx}}"
+           (change)="onAllowZeroChange(row, $event)" />
+    No Contract
+  </label>
       </td>
 
       <!-- Empty cell to align table -->
       <!-- <td></td> -->
     </tr>
-
+    <tr *ngIf="row.contracts?.length > 0" >
+        <td></td>
+        <td colspan="2" style="background-color: lavender;">
+            <!-- Contract Labels Row -->
+<div *ngIf="row.contracts?.length > 0" class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 font-semibold mb-2">
+    <div>Date</div>
+    <div style="margin-left: 100px !important;">No of Contract</div>
+    <div style="margin-left: 100px !important;">Upload Document</div>
+    <div style="margin-left: 100px !important;">Download Document</div>
+    <div style="margin-left: 100px !important;">Action</div>
+</div>
+        </td>
+    </tr>
     <!-- ROW 2 : No of Contracts (full row below Name + Date) -->
-    <tr>
+    <tr *ngIf="row.contracts?.length > 0" >
       <td></td> <!-- blank for Sr No alignment -->
       <td colspan="2">
 
         <div *ngFor="let c of row.contracts; let i = index" class="flex items-center gap-2 mb-2">
-
-          <span class="text-sm">{{ c.date }}</span>
-
-          <input type="number" #cnt
-                 [(ngModel)]="c.count"
-                 name="contract_{{ row.InstituteID }}_{{ i }}"
-                 min="0"
-                 step="0.01"
-                 class="form-control"
-                 (ngModelChange)="onContractChange(c, row, cnt)"
-                 placeholder="No of Contract"/>
- <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
-          <input type="file"
-                 class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
-                 (change)="onFileSelect($event, c, row)"
-                 accept=".pdf,.jpg,.jpeg,.png" />
-<a *ngIf="c.fileUrl" [href]="c.fileUrl" target="_blank">{{ c.fileName }}</a>
-          <button type="button"
-                  class="btn btn-danger"
-                  (click)="removeContract(row, i)">X</button>
-
+            <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                <div>
+                    <span class="text-sm">{{ c.date }}</span>
+                </div>
+                <div>
+                    <input type="number" #cnt
+                    [(ngModel)]="c.count"
+                    name="contract_{{ row.InstituteID }}_{{ i }}"
+                    min="0"
+                    step="0.01"
+                    class="form-control"
+                    (ngModelChange)="onContractChange(c, row, cnt)"
+                    placeholder="No of Contract" style="margin-left:100px !important;"/>
+                </div>
+                <div>
+                    <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
+                    <input type="file"
+                    class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
+                    (change)="onFileSelect($event, c, row)"
+                    accept=".pdf,.jpg,.jpeg,.png" style="margin-left:100px !important;width:200px !important;"/> 
+                </div>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                      <!-- class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 text-white hover:bg-blue-500" -->
+                    <a *ngIf="c?.fileUrl" [href]="c.fileUrl" target="_blank" style="margin-left:100px !important;border:1px blue !important;" 
+                         class="w-8 h-8 flex items-center justify-center rounded-full 
+              border border-white text-white 
+              bg-blue-500 hover:bg-blue-600">
+                    <i class="ti ti-download"  style="color:white !important;"></i></a>
+                </div>
+                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
+                    <button type="button" 
+                    class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-500"
+                    (click)="removeContract(row, i)" style="margin-left:100px !important;"><i class="ti ti-trash"></i></button> 
+                </div>
+            </div>  
         </div>
 
       </td>
