@@ -381,6 +381,7 @@ export class EMPrincipleStaffComponent {
 
 
   async GetHostelData() {
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetHostelDDL(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.InstituteID).then((data: any) => {
@@ -478,6 +479,7 @@ async GetTechnicianDll() {
   }
 
   async StaffLevelChild() {
+    debugger
     this.formData.StaffLevelChildID = 0;
     this.AddValidationStaffLevelNon();
     this.formData.Show_StaffLevelChild = true;
@@ -488,6 +490,7 @@ async GetTechnicianDll() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     try {
       this.loaderService.requestStarted();
+      debugger
       await this.StaffMasterService.StaffLevelChild(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -633,6 +636,7 @@ async GetTechnicianDll() {
   }
 
   async GetChangeTechcian() {
+    debugger
     if (this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelChildID == this._ITIGovtEM_EnumStaffLevelChild.LabIncharge) {
       this.AddStaffBasicDetailFromGroup.controls['Technician'].setValidators([DropdownValidators]);
     } else {
@@ -649,7 +653,25 @@ async GetTechnicianDll() {
     }
     else {
       this.AddStaffBasicDetailFromGroup.controls['Hostel'].clearValidators();
+      this.formData.multiHostelIDs = "";
+      this.formData.HostelIDs = [];
     }
+
+
+    //DEEPAK APPLY CONDITION TEC WAR
+    if (this.formData.StaffLevelChildID == 25 && this.formData.StaffTypeID == this._ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4) {
+      await this.GetHostelData();
+
+      this.AddStaffBasicDetailFromGroup.controls['Hostel'].setValidators([Validators.required]);
+    }
+    else {
+      this.AddStaffBasicDetailFromGroup.controls['Hostel'].clearValidators();
+      this.formData.multiHostelIDs = "";
+      this.formData.HostelIDs = [];
+    }
+    ////DEEPAK APPLY CONDITION TEC WAR
+
+
    
     this.AddStaffBasicDetailFromGroup.controls['Hostel'].updateValueAndValidity();
 
