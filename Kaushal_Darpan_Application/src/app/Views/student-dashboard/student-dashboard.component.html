@@ -23,8 +23,24 @@
 
           <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
           <div class="profilePic">
-            <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
-                 [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
+            <!--<img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+       [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
+
+  <img *ngIf="ProfileLists.DepartmentID==2" [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
+       [src]="appsettingConfig.StaticFileRootPathURL +  ProfileLists.FileName" />-->
+        
+
+            <ng-container *ngIf="ProfileLists.DepartmentID == 2; else otherImage">
+              <img [alt]="ProfileLists.StudentName"
+                   appImageError="assets/images/dummyImg.jpg"
+                   [src]="appsettingConfig.StaticFileRootPathURL + ProfileLists.FileName" />
+            </ng-container>
+
+            <ng-template #otherImage>
+              <img [alt]="ProfileLists.StudentName"
+                   appImageError="assets/images/dummyImg.jpg"
+                   [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
+            </ng-template>
 
           </div>
           <div class="userInfos">
