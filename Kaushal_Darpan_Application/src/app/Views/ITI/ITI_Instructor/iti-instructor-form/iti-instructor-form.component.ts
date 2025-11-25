@@ -31,6 +31,7 @@ import { ITIGovtEMStaffMaster } from '../../../../Services/ITIGovtEMStaffMaster/
 import { ApplicationStudentDatamodel, IStudentJanAadharDetailModel, JanAadharMemberDetails } from '../../../../Models/StudentJanAadharDetailModel';
 import { Qualification10thDetailsDataModel, Qualification12thDetailsDataModel, Qualification8thDetailsDataModel } from '../../../../Models/ITIFormDataModel';
 import Swal from 'sweetalert2';
+import { QualificationDDLDataModel } from '../../../../Models/CommonMasterDataModel';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class ItiInstructorFormComponent {
   public isSSOVisible: boolean = false;
   public isEmp: boolean = false;
   public showAadhaar: boolean = false;
+  public IsCITScertified: boolean = false;
   public showJanAadhaar: boolean = false;
   public ResidenceList: any = []
   public CompanyMasterDDLList: any[] = [];
@@ -107,6 +109,7 @@ export class ItiInstructorFormComponent {
   public CategoryDlist: any = []
   public isSupplement: boolean = false
   public isedu: boolean = false
+  public isTec: boolean = false
   public NationalityList: any = []
   public ReligionList: any = []
   public category_CList: any = []
@@ -164,7 +167,14 @@ export class ItiInstructorFormComponent {
   public formData10th = new Qualification10thDetailsDataModel()
   public formData12th = new Qualification12thDetailsDataModel()
   public ExaminationPassed: any = [];
- 
+  public ExaminationPassed2: any = [];
+  public QualificationModel = new QualificationDDLDataModel();
+  public QualificationDDL : any=[]
+  public QualificationDetailsLevelDDL = new QualificationDDLDataModel();
+  public isInstructor: boolean = false
+  allQualificationDDL: any[] = [];    
+  ITITradeList: any[] = [];   
+  StreamList: any[] = [];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -244,6 +254,7 @@ export class ItiInstructorFormComponent {
       PropUrbanRural: [''],
       City: ['', Validators.required],
       villageID: [''],
+      PermanentDocument: [''],   // aad new 19/11/2025
 
 
       // Correspondence Address
@@ -283,12 +294,16 @@ export class ItiInstructorFormComponent {
       Employer_Address: [''],
       Tan_No: [''],
       Aadhar: ['', Validators.required, Validators.pattern(GlobalConstants.AadhaarPattern)],
+      AadharDocument: [''],   /// aad new 19/11/2025
       JanAadhar: [''],
       Employment_From: [''],
       Employment_To: [''],
       Basic_Pay: [''],
       EmploymentDocument: [''],
-      TehsilName: ['']
+      TehsilName: [''],
+      PostHeld: [''],
+      BasicSalaryDocument: [''],
+      EmployeeCode: ['']
     });
 
     this.EducationForm = this.formBuilder.group({
@@ -299,24 +314,32 @@ export class ItiInstructorFormComponent {
       Education_Percentage: ['', [Validators.min(0), Validators.max(100)]],
       Education_CGPA: [''],
       EducationDocument: ['', Validators.required],
-      MarksType: ['', Validators.required]
-     
+      MarksTypeID: ['', Validators.required]
+    
     });
 
 
     this.TechnicalForm = this.formBuilder.group({
-      Tech_Exam: ['', Validators.required],
+      // Tech_Exam: ['', Validators.required],
+      QualificationName: ['', Validators.required],
+      QualificationLevel: ['', Validators.required],
       Tech_Board: ['', Validators.required],
-      Tech_Subjects: ['', Validators.required],
+     // Tech_Subjects: ['', Validators.required],
+      StreamName: [''],
+      StreamID: [''],
       Tech_Year: ['', [Validators.pattern('^[0-9]{4}$')]],
       Tech_Percentage: ['', [Validators.min(0), Validators.max(100)]],
-      Tech_CGPA: [''],
+      Tech_CGPA: ['', [Validators.min(0), Validators.max(10)]],
+     // Tech_MarksTypeID: [''],
       TechDocument: ['', Validators.required],
-      MarksType: ['', Validators.required]
+      Tech_MarksTypeID: ['', Validators.required],
+      CITSCertified: [''],
+      CITSCertifiedDocument: ['']
     });
 
 
     this.EmploymentForm = this.formBuilder.group({
+      PanDocument: [''],
       Pan_No: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/)]],
       Employee_Type: ['', Validators.required],
       Employer_Name: ['', Validators.required],
@@ -327,10 +350,12 @@ export class ItiInstructorFormComponent {
       Employment_From: ['', Validators.required],
       Employment_To: ['', Validators.required],
       Basic_Pay: ['', Validators.required],
-      EmploymentDocument: ['', Validators.required]
+      EmploymentDocument: ['', Validators.required],
+      PostHeld: [''],
+      BasicSalaryDocument: [''],
+      EmployeeCode: ['']
     });
     const today = new Date();
-    // Convert to yyyy-MM-dd format for input[type=date]
     this.maxDate = today.toISOString().split('T')[0];
     debugger
 
@@ -347,16 +372,18 @@ export class ItiInstructorFormComponent {
     if (this.urlId != '' && this.urlId != null && this.urlId != undefined) {
       await this.GetById(this.urlId)
     }
-    this.GetInstituteCategoryList();
-    this.GetManagmentType();
-    this.GetStateMaterData()
-    this.GetLateralCourse();
-    this.GetPassingYearDDL();
-    this.BoardDropdownData('Board');
-    this.GetcOmmonData();
+    await this.GetInstituteCategoryList();
+    await this.GetManagmentType();
+    await this.GetStateMaterData()
+    await this.GetLateralCourse();
+    await this.GetPassingYearDDL();
+    await this.BoardDropdownData('Board');
+    await this.GetcOmmonData();
+    await this.QualificationDetailsLevel();
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
+  get _EmploymentForm() { return this.EmploymentForm.controls; }
   get _EducationForm() { return this.EducationForm.controls; }
 
   async ddlDistrict_Change() {
@@ -521,60 +548,113 @@ export class ItiInstructorFormComponent {
   }
 
 
-
   addEducationQualification() {
-    this.isedu=true
+    this.isedu = true;
+
     if (this.EducationForm.invalid) {
       alert("Please fill required fields before adding");
       return;
     }
 
+    const MarksTypeID = String(this.educationRequest.MarksTypeID).trim(); 
+
+    if (MarksTypeID === '0') { 
+      const perc = Number(this.educationRequest.Education_Percentage);
+      if (isNaN(perc) || perc < 0 || perc > 100) {
+        alert("Percentage must be between 0 and 100");
+        return;
+      }
+    } else if (MarksTypeID === '1') { 
+      const cgpa = Number(this.educationRequest.Education_CGPA);
+      if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+        alert("CGPA must be between 0 and 10");
+        return;
+      }
+    } else {
+      alert("Please select Marks Type");
+      return;
+    }
+    debugger
     this.educationList.push({
       EducationDocument: this.educationRequest.EducationDocument,
       Education_Board: this.educationRequest.Education_Board,
-      Education_CGPA: this.educationRequest.Education_CGPA,
+      Education_CGPA: MarksTypeID === '1' ? this.educationRequest.Education_CGPA : null,
       Education_Exam: this.educationRequest.Education_Exam,
-      Education_Percentage: this.educationRequest.Education_Percentage,
+      Education_Percentage: MarksTypeID === '0' ? this.educationRequest.Education_Percentage : null,
       Education_Subjects: this.educationRequest.Education_Subjects,
       Education_Year: this.educationRequest.Education_Year,
-      MarksType: this.educationRequest.MarksType,
-      MarkTypeName: this.educationRequest.MarksType == '1' ? 'Percentage' : 'CGPA'
-        
-
+      MarksTypeID: MarksTypeID,
+      MarkTypeName: MarksTypeID === '0' ? 'Percentage' : 'CGPA'
     });
-    console.log(this.educationList)
-    this.educationRequest = new ITI_InstructorEducationalQualification();
 
+    console.log('education data ==>', this.educationList);
+
+    this.educationRequest = new ITI_InstructorEducationalQualification();
     this.EducationForm.reset();
-    this.isedu=false
+    this.isedu = false;
   }
+
+
 
   removeEducation(index: number) {
     this.educationList.splice(index, 1);
   }
 
+
   addTechQualification() {
-    if (!this.techRequest.Tech_Exam || !this.techRequest.Tech_Board) {
+
+    if (!this.techRequest.QualificationID) {
       alert("Please fill required fields before adding");
       return;
     }
+
+    if (this.techRequest.Tech_MarksTypeID == '1') {
+      const cgpa = Number(this.techRequest.Tech_CGPA);
+
+      if (isNaN(cgpa) || cgpa < 0 || cgpa > 10) {
+        alert("CGPA must be between 0 and 10");
+        return;
+      }
+    }
+
+    if (this.techRequest.Tech_MarksTypeID == '0') {
+      const perc = Number(this.techRequest.Tech_Percentage);
+
+      if (isNaN(perc) || perc < 0 || perc > 100) {
+        alert("Percentage must be between 0 and 100");
+        return;
+      }
+    }
+
+    const QualificationName = this.QualificationDDL.find(
+      (q: any) => q.QualificationID == this.techRequest.QualificationID
+    )?.QualificationName || '';
+    const StreamName = this.StreamList.find(
+      (q: any) => q.StreamID == this.techRequest.StreamID
+    )?.StreamName || '';
 
     this.techRequestList.push({
       TechDocument: this.techRequest.TechDocument,
       Tech_Board: this.techRequest.Tech_Board,
       Tech_CGPA: this.techRequest.Tech_CGPA,
-      Tech_Exam: this.techRequest.Tech_Exam,
+
+      Tech_MarksTypeID: this.techRequest.Tech_MarksTypeID,  // Set Mark type Id 
+      QualificationLevel: this.techRequest.QualificationLevel,
+      QualificationID: this.techRequest.QualificationID,
       Tech_Percentage: this.techRequest.Tech_Percentage,
-      Tech_Subjects: this.techRequest.Tech_Subjects,
+      StreamID: this.techRequest.StreamID,
       Tech_Year: this.techRequest.Tech_Year,
-      MarksType: this.techRequest.MarksType,
-      MarkTypeName: this.techRequest.MarksType == '1' ? 'Percentage' : 'CGPA'
-});
+      MarkTypeName: this.techRequest.Tech_MarksTypeID == '0' ? 'Percentage' : 'CGPA',
 
+      CITSCertified: this.techRequest.CITSCertified,
+      CITSCertifiedDocument: this.techRequest.CITSCertifiedDocument,
+      QualificationName: QualificationName,
+      StreamName: StreamName
+    });
 
-  
     this.TechnicalForm.reset();
   }
+
 
   removeTech(index: number) {
     this.techRequestList.splice(index, 1);
@@ -582,6 +662,7 @@ export class ItiInstructorFormComponent {
 
 
   addEmployeeQualification() {
+    debugger
     if (this.EmploymentForm.invalid) {
       alert("Please fill required fields before adding");
       return;
@@ -660,70 +741,12 @@ export class ItiInstructorFormComponent {
   }
 
 
-  //async onSubmit() {
-
-  //  debugger;
-
-  //  console.log('Form submitted:iinstructor', this.InstructorForm.value);
-  //  this.isLoading = true;
-  //  this.isSubmitted = true;
-  //  this.loaderService.requestStarted();
-
-  //  try {
-
-
-  //    if (this.InstructorForm.valid) {
-
-  //      var ssoid = this.request.Uid
-  //      this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-  //      this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
-  //      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
-  //      this.request.Uid = ssoid
-  //      this.request.EmploymentDetails = this.employeeRequestList;
-  //      this.request.TechnicalQualifications = this.techRequestList;
-  //      this.request.EducationalQualifications = this.educationList;
-
-  //      await this.ItiInstructorService.SaveInstructorData(this.request)
-  //        .then((response: any) => {
-  //          this.State = response['State'];
-  //          this.Message = response['Message'];
-  //          this.ErrorMessage = response['ErrorMessage'];
-
-  //          if (this.State == EnumStatus.Success) {
-  //            this.toastr.success(this.Message);
-  //          }
-  //          else {
-  //            this.toastr.error(this.ErrorMessage)
-  //          }
-  //          console.log('Response from service:', response);
-  //        });
-  //      console.log('Request Data:', this.request);
-  //    } else {
-  //      console.log('Form is invalid');
-  //      console.log(this.InstructorForm.errors);
-  //      this.InstructorForm.markAllAsTouched();
-  //    }
-  //  }
-  //  catch (ex) { console.log(ex) }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //      this.isLoading = false;
-
-  //    }, 200);
-  //  }
-  //}
 
  
   async onSubmit() {
-
+    debugger
     this.isSubmitted = true;
 
-    //if (!this.InstructorForm.get('Name')?.value || !this.InstructorForm.get('FatherName')?.value) {
-    //  this.toastr.warning('Name and Father Name are required fields!');
-    //  this.InstructorForm.markAllAsTouched();
-    //  return;
-    //}
     this.request.Aadhar = this.InstructorForm.value.Aadhar
     if (this.request.IsDomicile == true && this.request.JanAadhar == '') {
       this.toastr.warning("Please Add Janaadhar Number ")
@@ -803,6 +826,7 @@ export class ItiInstructorFormComponent {
 
 
   async GetById(ID: string) {
+    debugger
 
     try {
       if (ID == "") {
@@ -973,21 +997,6 @@ export class ItiInstructorFormComponent {
               this.request.JanAadhar = parsedData.JanaadhaarId,
               this.request.Uid = SSOID
 
-            //this.InstructorForm.get('Uid')?.disable();
-            //this.InstructorForm.patchValue({
-            //  Name: this.request.Name,
-            //  Mobile: this.request.Mobile,
-            //  Gender: this.request.Gender,
-            //  Dob: this.request.Dob,
-            //  Email: this.request.Email,
-            //  pincode: this.request.pincode,
-            //  Correspondence_PlotHouseBuildingNo: this.request.Correspondence_PlotHouseBuildingNo,
-            //  ddlState: this.request.ddlState,
-            //  Aadhar: this.request.Aadhar,
-            //  JanAadhar: this.request.JanAadhar,
-            //  Uid: this.request.Uid
-
-            //});
 
           }
           else {
@@ -1006,42 +1015,7 @@ export class ItiInstructorFormComponent {
       }, 200);
     }
   }
-
-
-  //async GetDetailsByJanAadhaar() {
-
-  //  if (this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
-  //    this.toastr.error("Invalid Janadhar Details")
-  //  }
-  //  try {
-  //    this.loaderService.requestStarted();
-  //    await this.StudentJanAadharDetailService.JanAadhaarMembersList(this.request.JanAadhar)
-
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        if (data.State === EnumStatus.Success) {
-  //          this.AdharMemberList = data.Data;
-  //          console.log('Jan adhar Details ==>',this.AdharMemberList);
-  //          this.request.Name = data['Data']['NAME'];
-  //          console.log(this.request, "request");
-  //        } else if (data.State === EnumStatus.Warning) {
-  //          this.toastr.warning(data.Message + " Please check Janadhar/ Adhar Number again")
-  //        } else {
-  //          this.toastr.error(data.ErrorMessage)
-  //        }
-  //      }, (error: any) => console.error(error)
-  //      );
-  //  }
-  //  catch (ex) {
-  //    console.log(ex);
-  //  }
-  //  finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
+   
   async GetDetailsByJanAadhaar() {
 
 
@@ -1289,6 +1263,21 @@ export class ItiInstructorFormComponent {
               else if (Type == "EmpType") {
                 this.employeeRequest.EmploymentDocument = data['Data'][0]["FileName"];
               }
+              else if (Type == "Aadhar") {
+                this.request.AadharDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "PermanentDocument") {
+                this.request.PermanentDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "Basicsalary") {
+                this.employeeRequest.BasicSalaryDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "PanDoc") {
+                this.employeeRequest.panDocument = data['Data'][0]["FileName"];
+              }
+              else if (Type == "CITS") {
+                this.techRequest.CITSCertifiedDocument = data['Data'][0]["FileName"];
+              }
 
 
               event.target.value = null;
@@ -1372,52 +1361,11 @@ export class ItiInstructorFormComponent {
 
 
   
-  //onMarksTypeChange(): void {
-  //  debugger
-  //  const selectedType = this.EducationForm.get('MarksType')?.value;
-  //  console.log('Selected Marks Type:', selectedType);
-
-  //  if (selectedType === 'Percentage') {
-  //    // clear CGPA
-  //    this.EducationForm.patchValue({ Education_CGPA: null });
-  //  } else if (selectedType === 'CGPA') {
-  //    // clear Percentage
-  //    this.EducationForm.patchValue({ Education_Percentage: null });
-  //  }
-  //}
-
+  
 
 
   
   sameAsPermanent: boolean = true;
-
-  //onCopyCorrespondenceToggle() {
-  //  debugger
-  //  if (this.sameAsPermanent) {
-  //    // Copy all permanent address fields to correspondence
-  //    this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
-  //    this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
-  //    this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
-  //    this.request.Correspondence_LandMark = this.request.LandMark;
-  //    this.request.Correspondence_ddlState = this.request.ddlState;
-  //    this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
-  //    this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
-  //    this.request.Correspondence_City = this.request.City;
-  //    this.request.Correspondence_pincode = this.request.pincode;
-  //  } else {
-  //    // When unchecked, enable and clear correspondence fields
-  //    this.request.Correspondence_PlotHouseBuildingNo = '';
-  //    this.request.Correspondence_StreetRoadLane = '';
-  //    this.request.Correspondence_AreaLocalitySector = '';
-  //    this.request.Correspondence_LandMark = '';
-  //    this.request.Correspondence_ddlState = '';
-  //    this.request.Correspondence_ddlDistrict = '';
-  //    this.request.Correspondence_PropTehsilID = '';
-  //    this.request.Correspondence_City = '';
-  //    this.request.Correspondence_pincode = '';
-  //  }
-  //}
-  
 
  async onCopyCorrespondenceToggle() {
     debugger;
@@ -1466,22 +1414,39 @@ export class ItiInstructorFormComponent {
     }
   }
 
-
-
-
   onMarksTypeChange() {
-    debugger
-    const selectedType = this.EducationForm.get('MarksType')?.value;
+    const selectedType = this.TechnicalForm.get('Tech_MarksTypeID')?.value;
+
+    const cgpaCtrl = this.TechnicalForm.get('Tech_CGPA');
+    const percCtrl = this.TechnicalForm.get('Tech_Percentage');
+
+    cgpaCtrl?.clearValidators();
+    percCtrl?.clearValidators();
 
     if (selectedType == '1') {
-      this.EducationForm.get('Education_CGPA')?.reset();
-    } else if (selectedType == '2') {
-      this.EducationForm.get('Education_Percentage')?.reset();
+      percCtrl?.reset();
+      cgpaCtrl?.setValidators([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(10)     // CGPA cannot exceed 10
+      ]);
     }
+    else if (selectedType == '0') {
+      cgpaCtrl?.reset();
+      percCtrl?.setValidators([
+        Validators.required,
+        Validators.min(0),
+        Validators.max(100)
+      ]);
+    }
+
+    cgpaCtrl?.updateValueAndValidity();
+    percCtrl?.updateValueAndValidity();
   }
 
 
-  async GetcOmmonData() {
+
+  async GetcOmmonData1() {
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterDDLByType('ExamOfLevel')
@@ -1501,6 +1466,69 @@ export class ItiInstructorFormComponent {
     }
   }
 
+
+  async GetcOmmonData() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.GetCommonMasterDDLByType('ExamOfLevel')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          const allItems = data['Data'];
+          const allowed = ['8TH', '10TH', '10+2'];
+          this.ExaminationPassed = allItems.filter((x: any) =>
+            allowed.includes(x.Name.toUpperCase())
+          );
+          console.log('Filtered Examination Passed ==> ', this.ExaminationPassed);
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetcOmmonData22() {
+    try {
+      this.loaderService.requestStarted();
+
+      await this.commonMasterService.GetCommonMasterDDLByType('ExamOfLevel')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          const allItems = data['Data'];
+
+          // Items you want to show
+          const allowed = [
+            'DIPLOMA',
+            'DEGREE',
+            'POST GRADUATION',
+            'ANY OTHER'
+          ];
+
+          // Filter only allowed items
+          this.ExaminationPassed2 = allItems.filter((x: any) =>
+            allowed.includes(x.Name.toUpperCase())
+          );
+
+          console.log('Filtered Examination Passed ==> ', this.ExaminationPassed2);
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
   onPanInput(event: any) {
     event.target.value = event.target.value.toUpperCase();
     this.EmploymentForm.get('Pan_No')?.setValue(event.target.value, { emitEvent: false });
@@ -1512,6 +1540,114 @@ export class ItiInstructorFormComponent {
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
+
+  async onExamChange(selectedValue: string) {
+    if (!selectedValue) {
+      const ctrl = this.EducationForm.get('Education_Subjects');
+      if (ctrl?.disabled) ctrl.enable({ emitEvent: false });
+      return;
+    }
+
+    const sel = (selectedValue || '').trim().toUpperCase();
+    const autoExams = ['8TH', '10TH'];
+    if (autoExams.includes(sel)) {
+      const value = 'All Subject';
+      this.educationRequest.Education_Subjects = value;
+      const ctrl = this.EducationForm.get('Education_Subjects');
+      ctrl?.setValue(value, { emitEvent: false });
+      ctrl?.disable({ emitEvent: false });
+    }
+    else if (sel === '10+2') {
+      this.educationRequest.Education_Subjects = '';
+
+      const ctrl = this.EducationForm.get('Education_Subjects');
+      ctrl?.enable({ emitEvent: false });
+      ctrl?.setValue('', { emitEvent: false });
+    }
+    else {
+      const ctrl = this.EducationForm.get('Education_Subjects');
+      if (ctrl?.disabled) ctrl.enable({ emitEvent: false });
+    }
+  }
+
+
+  async QualificationDetailsLevel() {
+
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.QualificationDetailsDDL(this.QualificationDetailsLevelDDL).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.QualificationDetailsLevelDDL = data.Data;
+        console.log("GetQualificationLevel ==>", this.QualificationDetailsLevelDDL);
+      })
+
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  async GetcOmmonData2() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.QualificationDDL = data.Data;
+        console.log("GetQualificationDDL ==>", this.QualificationDDL);
+      })
+
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async examinationPass(selectedLevel: string='') {
+
+    const level = selectedLevel ?? this.techRequest.QualificationLevel;
+
+    this.techRequest.QualificationName = '';
+    this.QualificationModel.QualificationLevel = level
+
+    await this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.QualificationDDL = data.Data;
+      console.log("GetQualificationDDL ==>", this.QualificationDDL);
+    })
+
+  }
+
+  async streamddl(selectedstream: string = '') {
+
+    const level = selectedstream ?? this.techRequest.QualificationLevel;
+
+    this.techRequest.Tech_Board = '';
+    var Department:number = 0
+
+    if (selectedstream == 'BTER') {
+      Department = 1
+    } else {
+      Department = 2
+    }
+
+    await this.commonMasterService.StreamMaster(Department)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamList = data['Data'];
+        console.log('Stream List ==> ', this.StreamList);
+      }, error => console.error(error));
+  }
+
+
 }
 
 

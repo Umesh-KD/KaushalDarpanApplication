@@ -8047,3 +8047,8 @@ span.main-heading {
 .upload-input-man a {
   border-radius: 0 5px 5px 0 !important;
 }
+
+.invalid-field {
+  border: 1px solid red !important;
+  background-color: #ffe6e6 !important;
+}

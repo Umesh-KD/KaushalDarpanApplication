@@ -81,6 +81,8 @@ export class ITI_InstructorDataModel {
   public DepartmentID?: string = '';
   public EmploymentDocument?: string = '';
   public TehsilName?: string = '';
+  public AadharDocument?: string = '';
+  public PermanentDocument?: string = '';
 
   // Parent should hold child tables
   public EducationalQualifications?: ITI_InstructorEducationalQualification[] = [];
@@ -93,11 +95,14 @@ export class ITI_InstructorEducationalQualification {
   public Education_Board?: string = '';
   public Education_Year?: string = '';
   public Education_Subjects?: string = '';
-  public Education_Percentage?: string = '';
+  public Education_Percentage?: number | null = null;
   public EducationDocument?: string = '';
-  public MarksType?: string = '';
-  public Education_CGPA?: string= '';
+  public MarksTypeID?: string = '';
+  public Education_CGPA?: number | null = null;
+
   public MarkTypeName?: string= '';
+  //public CITSCertified?: string= '';
+  //public CITSCertifiedDocument?: string= '';
 }
 
 export class ITI_InstructorEmploymentDetails {
@@ -110,6 +115,12 @@ export class ITI_InstructorEmploymentDetails {
   public Employment_To?: string = '';
   public Basic_Pay?: number ;
   public EmploymentDocument?: string = '';
+  public BasicSalaryDocument?: string = '';
+  public panDocument?: string = '';
+  public PostHeld?: number = 0;
+  public EmployeeCode?: string = '';
+
+
   //public IsDomicile: boolean = false;
   //public Aadhar: string = '';
   //public JanAadhar: string = '';
@@ -119,12 +130,21 @@ export class ITI_InstructorTechnicalQualification {
   public Tech_Exam?: string;
   public Tech_Board?: string;
   public Tech_Subjects?: string;
+  public StreamName?: string;
+  public StreamID?: string;
+  public techRequest?: number = 0;
   public Tech_Year?: string;
   public Tech_Percentage?: number;
   public Tech_CGPA?: number;
   public TechDocument?: string = '';
   public MarksType?: string = '';
   public MarkTypeName?: string = '';
+  public CITSCertified?: string = '';
+  public CITSCertifiedDocument?: string = '';
+  public QualificationLevel?: string = '';
+  public QualificationName?: string = '';
+  public QualificationID?: number = 0;
+  public Tech_MarksTypeID?: string = '';
 }
 
 
