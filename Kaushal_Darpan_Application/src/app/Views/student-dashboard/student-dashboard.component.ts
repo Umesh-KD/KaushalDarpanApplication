@@ -105,9 +105,10 @@ export class StudentDashboardComponent implements OnInit {
           this.sSOLoginDataModel.DepartmentID = this.StudantCourseList[0]?.DepartmentID;
           localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
           this.IsShowDashboard = true;
-          //changes 
-          await this.GetStudentDashboard();
+          //changes
           await this.GetProfileDashboard();
+          await this.GetStudentDashboard();
+ 
           this.route.navigateByUrl('/dashboard');
         //  window.open("/dashboard", "_Self")
         }
@@ -119,8 +120,9 @@ export class StudentDashboardComponent implements OnInit {
       else
       {
         this.IsShowDashboard = true;
-        await this.GetStudentDashboard();
         await this.GetProfileDashboard();
+        await this.GetStudentDashboard();
+   
       }
     }
     //else {

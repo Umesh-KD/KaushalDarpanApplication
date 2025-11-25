@@ -290,7 +290,9 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
     }
   }
 
-  async GetTransactionDetailsSemesterWise(content: any, item: StudentDetailsModel) {
+  async GetTransactionDetailsSemesterWise(content: any, item: StudentDetailsModel)
+  {
+    debugger;
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -301,9 +303,9 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.SemesterID = item.SemesterID;
-      this.searchRequest.studentId = item.StudentID;
+      this.searchRequest.StudentID = item.StudentID;
 
-      this.searchRequest.action = '_GetTransactionDetailsSemesterWise';
+      this.searchRequest.action = '_GetTransactionDetailsSemesterWise_ITI';
       await this.emitraPaymentService.GetTransactionDetailsActionWise(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -502,7 +504,7 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
             this.emitraRequest.ApplicationIdEnc = "0";
             this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID.toString();
             this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
-            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
+            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo ?? '';
             this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
             this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
             this.emitraRequest.ExamStudentStatus = this.studentDetailsModel.ExamStudentStatus;
@@ -517,6 +519,7 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
             this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
             this.emitraRequest.KIOSKCODE = this.sSOLoginDataModel.KIOSKCODE;
             this.emitraRequest.FormCommision = this.studentDetailsModel?.FormCommision ?? 0;
+
             this.loaderService.requestStarted();
             try
             {
