@@ -111,11 +111,13 @@
       </div>
       <div class="overflow-x-auto mt-3">
         <table class="table table-border w-full table-auto" cellpadding="5">
-          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5:border-b-gray-700 h-10">
             <tr>
               <th class="text-left">#</th>
-              <th class="text-left">Id                 </th>
-              <th class="text-left">Student exam id    </th>
+              <th class="text-left">Institute name     </th>
+              <th class="text-left">Trade name        </th>
+              <th class="text-left">Name               </th>
+              <th class="text-left">Father name        </th>
               <th class="text-left">Reg No.              </th>
               <th class="text-left">Roll No            </th>
               <th class="text-left">Exam Type          </th>
@@ -127,18 +129,8 @@
               <th class="text-left">Trade code         </th>
               <th class="text-left">Course duration    </th>
               <th class="text-left">Practical          </th>
-              <th class="text-left">Paper1             </th>
-              <th class="text-left">Paper2             </th>
-              <th class="text-left">Paper3             </th>
-              <th class="text-left">Paper4             </th>
-              <th class="text-left">Name               </th>
-              <th class="text-left">Father name        </th>
-              <th class="text-left">Institute id       </th>
-              <th class="text-left">Institute name     </th>
-              <th class="text-left">Stream id          </th>
-              <th class="text-left">Stream name        </th>
-              <th class="text-left">Trade type         </th>
-              <th class="text-left">Trade scheme type  </th>
+
+
               <th class="text-left">Exam Fees          </th>
               <th class="text-left">Exam Fees Status   </th>
             </tr>
@@ -146,8 +138,10 @@
           <tbody>
             <tr *ngFor="let item of NCVTData | tableSearchFilter:Table_SearchText;let idx=index;">
               <td class="{{item.SeatNotAvailable}}">{{(pageSize * (pageNo - 1))+(idx+1)}}</td>
-              <th class="text-left">{{item.id                }} </th>
-              <th class="text-left">{{item.student_exam_id   }} </th>
+              <th class="text-left">{{item.institute_name    }} </th>
+              <th class="text-left">{{item.stream_name       }} </th>
+              <th class="text-left">{{item.Name              }} </th>
+              <th class="text-left">{{item.father_name       }} </th>
               <th class="text-left">{{item.RegNo             }} </th>
               <th class="text-left">{{item.roll_no           }} </th>
               <th class="text-left">{{item.Exam_Type         }} </th>
@@ -159,18 +153,9 @@
               <th class="text-left">{{item.Trade_code        }} </th>
               <th class="text-left">{{item.Course_duration   }} </th>
               <th class="text-left">{{item.Practical         }} </th>
-              <th class="text-left">{{item.Paper1            }} </th>
-              <th class="text-left">{{item.Paper2            }} </th>
-              <th class="text-left">{{item.paper3            }} </th>
-              <th class="text-left">{{item.paper4            }} </th>
-              <th class="text-left">{{item.Name              }} </th>
-              <th class="text-left">{{item.father_name       }} </th>
-              <th class="text-left">{{item.institute_id      }} </th>
-              <th class="text-left">{{item.institute_name    }} </th>
-              <th class="text-left">{{item.stream_id         }} </th>
-              <th class="text-left">{{item.stream_name       }} </th>
-              <th class="text-left">{{item.trade_type        }} </th>
-              <th class="text-left">{{item.trade_scheme_type }} </th>
+
+
+
               <th class="text-left">{{item.Exam_Fees         }} </th>
               <th class="text-left">{{item.Exam_Fees_Status  }} </th>
             </tr>

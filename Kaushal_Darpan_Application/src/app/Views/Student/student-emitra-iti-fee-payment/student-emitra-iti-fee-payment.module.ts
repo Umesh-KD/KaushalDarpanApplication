@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { StudentEmitraITIFeePaymentRoutingModule } from './student-emitra-iti-fee-payment-routing.module';
 import { StudentEmitraITIFeePaymentComponent } from './student-emitra-iti-fee-payment.component';
 import { LoaderModule } from '../../Shared/loader/loader.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     StudentEmitraITIFeePaymentRoutingModule,
-    LoaderModule, FormsModule
+    LoaderModule, FormsModule, ReactiveFormsModule
   ]
 })
 export class StudentEmitraITIFeePaymentModule { }

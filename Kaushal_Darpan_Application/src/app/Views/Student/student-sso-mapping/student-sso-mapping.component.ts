@@ -44,7 +44,7 @@ export class StudentSsoMappingComponent implements OnInit, OnDestroy {
   public searchssoform!: FormGroup
   public OTP: string = '';
   public GeneratedOTP: string = '';
-  public MobileNo: string = '';
+  public MobileNo?: string = ''
   sSOLoginDataModel = new SSOLoginDataModel();
   public isSubmitted: boolean = false
   encryptedParam!: string;
@@ -88,6 +88,7 @@ export class StudentSsoMappingComponent implements OnInit, OnDestroy {
       DOB: ['', Validators.required],
       ddlDepartment: ['', [DropdownValidators]]
     })
+
     this.BTER = this.encryptParameter(this._EnumDepartment.BTER);
     this.ITI = this.encryptParameter(this._EnumDepartment.ITI)
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -231,6 +232,7 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
           this.searchRequest.studentId = this.studentDetailsModel.StudentID;
           this.searchRequest.StudentID = this.studentDetailsModel.StudentID;
           this.searchRequest.ssoId = this.sSOLoginDataModel.SSOID;
+          this.searchRequest.MobileNumber = this.MobileNo
       /*    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;*/
           this.loaderService.requestStarted();
           await this.studentService.UpdateStudentSsoMapping(this.searchRequest)
@@ -314,13 +316,22 @@ this.searchRequest.DepartmentID == EnumDepartment.ITI ? "_GetStudentForSsoMappin
   async openModalGenerateOTP(content: any, item: StudentDetailsModel) {
     this.OTP = '';
     this.MobileNo = '';
+   
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.MobileNo = item.MobileNo;
-    this.studentDetailsModel = item;
+    if (this.searchRequest.DepartmentID == 1) {
+      this.MobileNo = item.MobileNo;
+      this.studentDetailsModel = item;
+    } else {
+      this.MobileNo = this.searchRequest.MobileNumber
+      this.studentDetailsModel = item;
+      this.studentDetailsModel.MobileNo = this.searchRequest.MobileNumber
+    }
+   
+
     this.SendOTP();
   }
 

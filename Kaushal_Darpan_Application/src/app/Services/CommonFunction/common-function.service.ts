@@ -1218,6 +1218,16 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async QualificationDetailsDDL(searchRequest: QualificationDDLDataModel) {
+    var body = JSON.stringify(searchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/QualificationDetailsDDL', body, { 'headers': headers })
+
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async SessionConfiguration(request: SessionConfigModelModel) {
     const body = JSON.stringify(request);
     return await this.http.post(this.APIUrl + "/SessionConfiguration", body, this.headersOptions)
@@ -2041,5 +2051,6 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
   
 }
