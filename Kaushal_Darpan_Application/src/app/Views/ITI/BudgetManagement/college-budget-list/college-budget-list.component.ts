@@ -15,6 +15,8 @@ import { MenuService } from '../../../../Services/Menu/menu.service';
 import { ReportService } from '../../../../Services/Report/report.service';
 import { ResultService } from '../../../../Services/Results/result.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
   selector: 'app-college-budget-list',
@@ -59,6 +61,8 @@ export class CollegeBudgetListComponent {
   public ColegeAmount: number = 0;
   public Remarks: string = '';
   public TotalUtilizedBudget: number = 0;
+  public CommonFile: any;
+  public CommonFileName: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -74,8 +78,8 @@ export class CollegeBudgetListComponent {
     private http: HttpClient,
     private menuService: MenuService,
     public ReportServices: ReportService,
-    private formBuilder: FormBuilder
-
+    private formBuilder: FormBuilder,
+    private Swal2: SweetAlert2,
   ) {
     // Get user data from localStorage
     this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -101,12 +105,17 @@ export class CollegeBudgetListComponent {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
       this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
 
-      if (this.searchRequest.CollegeID == 0) {
-        this.searchRequest.ActionName = "GetList";
-      }
-      else {
+      if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43) {
+        this.searchRequest.CollegeID = this.sSOLoginDataModel.InstituteID;
         this.searchRequest.ActionName = "GetDataByCollegeID";
+      } else if(this.sSOLoginDataModel.RoleID == 97) {
+        this.searchRequest.DivisionID = this.sSOLoginDataModel.DistrictID;
+        this.searchRequest.ActionName = "GetZonelList";
+        this.searchRequest.FinYearID = 9;
+      } else {
+        this.searchRequest.ActionName = "GetList";
       }
 
       this.loaderService.requestStarted();
@@ -135,6 +144,9 @@ export class CollegeBudgetListComponent {
     try {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+      if(this.sSOLoginDataModel.RoleID == 97) {
+        this.searchRequest.FinYearID = 9;
+      }
       this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();
@@ -228,19 +240,10 @@ export class CollegeBudgetListComponent {
   }
 
 
-  //onResetClick() {
-  //  this.searchRequest.DistrictID = 0;
-  //  this.searchRequest.DivisionID = 0;
-  //  this.searchRequest.CourseTypeID = 0;
-  //  this.searchRequest.ITICollegeID = 0;
-  //  this.searchRequest.ITITradeID = 0;
-  //  this.searchRequest.ITICode = '';
-  //  this.searchRequest.TradeCode = '';
-  //  this.searchRequest.StatusID = 0;
-  //  this.AddmissionList = [];
-  //  this.paginatedInTableData = [];
-  //  this.GetList();
-  //}
+  onResetClick() {
+   this.searchRequest.Status = 0;
+   this.GetList();
+  }
 
 
   //exportToExcel(): void {
@@ -272,6 +275,8 @@ export class CollegeBudgetListComponent {
   //    this.BudgetUtilizationsList[index].UploadedFileName = file.name;
   //  }
   //}
+
+
 
   async onFileSelected(event: any, index: number) {
     try {
@@ -322,6 +327,59 @@ export class CollegeBudgetListComponent {
     }
   }
 
+  async onFilechange(event: any, name: string) {
+    debugger;
+    try {
+      const file: File = event.target.files[0];
+      if (file) {
+
+        // Type validation
+        if (['application/pdf'].includes(file.type)) {
+          // Size validation
+          if (file.size > 2000000) {
+            this.toastr.error('Select less than 2MB File');
+            return;
+          }
+        }
+        else {
+          this.toastr.error('Select Only pdf file');
+          this.CommonFile = '';
+          this.CommonFileName = '';
+          event.target.value = null;
+          return;
+        }
+
+        //upload model
+        let uploadModel = new UploadFileModel();
+        uploadModel.FileExtention = file.type ?? "";
+        uploadModel.MinFileSize = "";
+        uploadModel.MaxFileSize = "2000000";
+        uploadModel.FolderName = "ITI/BudgetRequest";
+
+        //Upload to server folder
+        await this.commonMasterService.UploadDocument(file, uploadModel)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if (data.State === EnumStatus.Success) {
+
+              if(name == "commonFile") {
+                this.CommonFile = data['Data'][0]["FileName"];
+                this.CommonFileName = data['Data'][0]["Dis_FileName"];
+              }
+            } else if (data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.ErrorMessage);
+            } else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          });
+      }
+    } catch (Ex) {
+      console.log(Ex);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
   isFileMissing(item: any): boolean {
     return (item.UtilizationAmount || 0) > 0 && !item.UploadedFileName;
   }
@@ -332,26 +390,41 @@ export class CollegeBudgetListComponent {
     );
   }
 
+  async SaveAndLock() {
+    if (!this.Remarks || this.Remarks.trim() === '') {
+      this.toastr.warning("Please fill in the remark before submitting.");
+      return; // stop execution
+    }
+
+    if(this.CommonFile == ''){
+      this.toastr.error("Please upload common document");
+      return;
+    }
+
+    this.Swal2.Confirmation(`Are you sure you want to Save & Lock Utilization!`,
+      async (result: any) => {
+        if (result.isConfirmed) {
+          await this.BudgetUtilize();
+        }
+      }
+    );
+  }
+
   async BudgetUtilize() {
     try {
       this.loaderService.requestStarted();
       debugger
-      if (!this.validateUtilizationList()) {
-        this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
-        return; // stop submission
-      }
+      // if (!this.validateUtilizationList()) {
+      //   this.toastr.error('Please upload a file for all items with Utilization Amount greater than 0.');
+      //   return; // stop submission
+      // }
 
-      const remarkValue = this.Remarks;
-      if (!this.Remarks || this.Remarks.trim() === '') {
-        this.toastr.warning("Please fill in the remark before submitting.");
-        return; // stop execution
-      }
-
-      // or any string you want to apply to all
       this.BudgetUtilizationsList.forEach(item => {
-        item.Remarks = remarkValue;
+        item.Remarks = this.Remarks;
         item.CreatedBy = this.sSOLoginDataModel.UserID;
         item.DistributedID = this.searchRequest.DistributedID;
+        item.CommonFile = this.CommonFile;
+        item.CommonFileName = this.CommonFileName;
       });
 
       this.TotalUtilizedBudget = this.BudgetUtilizationsList?.reduce((sum, item) => sum + (item.UtilizationAmount || 0), 0) || 0
@@ -398,13 +471,17 @@ export class CollegeBudgetListComponent {
   {
     this.ColegeAmount = row.Amount
     console.log(row, 'RowData');
+    debugger
     try {
-        ;
       this.searchRequest.DistributedID = row.DistributedID
+      this.searchRequest.BudgetForID = row.BudgetFor
+      this.searchRequest.BudgetTypeID = row.BudgetTypeID
       await this.GetBudgetUtilizationsList();
-      await this.modalService
-        .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
-        .result.then(
+      if(this.BudgetUtilizationsList.length == 0) {
+        this.toastr.warning("UC Data Not found");
+        return
+      }
+      await this.modalService.open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then(
           (result) => {
             this.closeResult = `Closed with: ${result}`;
           },
@@ -428,7 +505,8 @@ export class CollegeBudgetListComponent {
     }
   }
   CloseModal() {
-
+    this.CommonFile = '';
+    this.CommonFileName = '';
     this.modalService.dismissAll();
     // Reset dropdown ready flag
 

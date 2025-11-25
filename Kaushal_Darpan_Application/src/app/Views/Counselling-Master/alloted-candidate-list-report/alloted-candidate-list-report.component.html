@@ -26,13 +26,13 @@
         </div>
          <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Select Trade :</label>
-            <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="request.TradeID"
-                 (change)="OnchangeTrade()">
+            <select class="form-select" id="TradeID" name="TradeID" [(ngModel)]="request.TradeID" (change)="GetAllottedCandidateList_Counselling()"> 
+                 <!-- (change)="OnchangeTrade()"> -->
               <option value="0">--- Choose Option ---</option>
               <option *ngFor="let item of TradeDDLList" [ngValue]="item.TradeId">{{item.TradeName}}</option>
             </select>
         </div>
-        <div>
+        <div style="display:none;">
                     <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Name of ITI: </label>
                     <select class="form-select"
                             name="InstituteID"
@@ -80,13 +80,19 @@
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>            
+            </th>    
+              <th class="text-left" >Father's Name</th>          
+              <th class="text-left" >Gender</th>          
             <th class="text-left">DOB</th>            
             <th class="text-left">SSOID</th>
+            <th class="text-left">Qualification</th>
+            <th class="text-left">Roll Number</th>
+            <th class="text-left">Category</th>
+            <th class="text-left">Selected Category</th>
             <th class="text-left">Trade Name</th>
             <th class="text-left">Allotted Institute</th>
-            <th class="text-left">Final Allotted Institute</th>
-       
+            <th class="text-left" style="display: none;">Final Allotted Institute</th>
+            <th class="text-left">IsTSP</th>
           </tr>
         </thead>
         <tbody>
@@ -94,11 +100,18 @@
             <td align="left">{{(startInTableIndex+1)+idx}}</td>         
             <td align="left">{{row.ApplicationNo}}</td>   
             <td align="left">{{row.CandidateName}}</td>
+            <td align="left">{{row.FatherName}}</td>
+            <td align="left">{{row.Gender}}</td>
             <td align="left">{{row.DOB | date:'yyyy-MM-dd'}}</td>
             <td align="left">{{row.SSOID}}</td>
+            <td align="left">{{row.Designation}}</td>
+            <td align="left">{{row.RollNumber}}</td>
+            <td align="left">{{row.Category}}</td>
+            <td align="left">{{row.SelectedCategory}}</td>
             <td align="left">{{row.TradeName}}</td>
             <td align="left">{{row.AllottedInstitute}}</td>
-            <td align="left">{{row.FinalAllottedInstitute}}</td> 
+            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
+            <td align="left">{{row.IsTSP}}</td>
           </tr>
         </tbody>
       </table>

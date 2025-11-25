@@ -178,32 +178,59 @@
 
 
       </div>
-      <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
-        <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.HostelWarden">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel <span class="StarMarking">*</span></label>
+      <!--{{isSSOVisible}}
+      {{formData.StaffLevelChildID}}-->
 
-          <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
-                                   [formControl]="_AddStaffBasicDetailFromGroup.Hostel" [settings]="settingsMultiselect"
-                                   [data]="HostelList"
-                                   [(ngModel)]="formData.HostelIDs"
-                                   [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
-                                   (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
-          </ng-multiselect-dropdown>
 
-          <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Hostel.errors" class="text-danger">
-            <p *ngIf="_AddStaffBasicDetailFromGroup.Hostel.errors.required">
-              <i aria-hidden="true"></i>
-              This
-              field is
-              required.!
-            </p>
-          </div>
-        </div>
-        <div>
-          <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="OnFormSubmit()">Submit</button>
-          <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
+    <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-2 grid-cols-1 gap-3 AddStaffBox">
+      <div *ngIf="formData.StaffLevelChildID == _ITIGovtEM_EnumStaffLevelChild.HostelWarden">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel <span class="StarMarking">*</span></label>
+
+        <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                                 [formControl]="_AddStaffBasicDetailFromGroup.Hostel" [settings]="settingsMultiselect"
+                                 [data]="HostelList"
+                                 [(ngModel)]="formData.HostelIDs"
+                                 [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
+                                 (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+        </ng-multiselect-dropdown>
+
+        <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Hostel.errors" class="text-danger">
+          <p *ngIf="_AddStaffBasicDetailFromGroup.Hostel.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
         </div>
       </div>
+      <!--{{formData.HostelIDs|json}}-->
+      <div *ngIf="formData.StaffLevelChildID == 25  && this.formData.StaffTypeID == _ITIGovtEM_EnumStaffType.Teaching && this.formData.StaffLevelID == 4">
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hostel <span class="StarMarking">*</span></label>
+
+        <ng-multiselect-dropdown [ngModelOptions]="{standalone: true}" [placeholder]="'Choose Option'"
+                                 [formControl]="_AddStaffBasicDetailFromGroup.Hostel" [settings]="settingsMultiselect"
+                                 [data]="HostelList"
+                                 [(ngModel)]="formData.HostelIDs"
+                                 [disabled]="false" (onSelect)="onItemSelect($event)" (onDeSelectAlls)="onDeSelectAll($event)"
+                                 (onSelectAll)="onSelectAll($event)" (onDeSelects)="onDeSelects($event)" (onDropDownCloses)="onDropDownCloses($event)">
+        </ng-multiselect-dropdown>
+
+        <div *ngIf="isSubmitted && _AddStaffBasicDetailFromGroup.Hostel.errors" class="text-danger">
+          <p *ngIf="_AddStaffBasicDetailFromGroup.Hostel.errors.required">
+            <i aria-hidden="true"></i>
+            This
+            field is
+            required.!
+          </p>
+        </div>
+      </div>
+
+
+      <div>
+        <button class="btn bg-success text-white mt-6" id="btnSave" type="button" (click)="OnFormSubmit()">Submit</button>
+        <button class="btn bg-danger text-white mt-6" type="button" (click)="ResetControls()">Cancel</button>
+      </div>
+    </div>
 
     </form>
 

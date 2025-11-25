@@ -73,7 +73,15 @@ export class CollegeBudgetRequestComponent implements OnInit {
       this.BudgetModel.RoleId = this.ssoLoginDataModel.EndTermID;
       this.BudgetModel.DepartmentID = this.ssoLoginDataModel.DepartmentID;
       this.BudgetModel.Eng_NonEng = this.ssoLoginDataModel.Eng_NonEng;
-      this.BudgetModel.CollegeId = this.ssoLoginDataModel.InstituteID;
+      this.BudgetModel.RoleID = this.ssoLoginDataModel.RoleID;
+      if(this.ssoLoginDataModel.RoleID == 20 || this.ssoLoginDataModel.RoleID == 43) {
+        this.BudgetModel.CollegeId = this.ssoLoginDataModel.InstituteID;
+        this.BudgetModel.BudgetForID = 2;
+      } else if(this.ssoLoginDataModel.RoleID == 97) {
+        this.BudgetModel.DivisionID = this.ssoLoginDataModel.DistrictID;
+        this.BudgetModel.BudgetForID = 1;
+      }
+      
       this.BudgetModel.Action = "Insert";
       console.log("request at saveData", this.BudgetModel)
       await this.budgetDistributedService.SaveBudgetRequest(this.BudgetModel)

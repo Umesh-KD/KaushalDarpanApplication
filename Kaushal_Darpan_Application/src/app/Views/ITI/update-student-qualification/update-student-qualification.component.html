@@ -21,12 +21,12 @@
       <div class="card-body">
         <div class="Profilebox flex justify-between">
 
-          <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
+          <!-- <p style="display:none">{{appsettingConfig.StaticFileRootPathURL}}/{{ProfileLists.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{ProfileLists.FileName}}</p>
           <div class="profilePic">
             <img [alt]="ProfileLists.StudentName" appImageError="assets/images/dummyImg.jpg"
                  [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
 
-          </div>
+          </div> -->
           <div class="userInfos">
             <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-3">
               <div>
@@ -85,7 +85,7 @@
     <div class="card-body p-5">
       <div class="mb-8">
 
-        <form [formGroup]="CompanyMasterFormGroup" id="ComapnyMasterFormGroup" class="form-horizontal">
+        <!-- <form [formGroup]="qualificationForm" id="qualificationForm" class="form-horizontal">
             
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
             <b class="text-1xl-5"><i class="ti ti-plus"></i>Update Student Qualification</b>
@@ -97,7 +97,7 @@
               </label>
               <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
                     [(ngModel)]="request.Name" formControlName="Name">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
                 <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
@@ -111,15 +111,13 @@
               </label>
               <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
                     [(ngModel)]="request.Website" formControlName="Website">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
                 <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
               </div>
             </div>
-
-
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -130,7 +128,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlState.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlState.errors" class="text-danger">
                 <p *ngIf="!_CompanyMasterFormGroup.ddlState.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -146,7 +144,7 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlDistrict.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlDistrict.errors" class="text-danger">
                 <p *ngIf="!_CompanyMasterFormGroup.ddlDistrict.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
@@ -162,40 +160,13 @@
                 <option value="0">--Select--</option>
                 <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
               </select>
-              <div *ngIf="isSubmitted&&_CompanyMasterFormGroup.ddlCompanyType.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlCompanyType.errors" class="text-danger">
                 <p *ngIf="!_CompanyMasterFormGroup.ddlCompanyType.errors.DropdownValidators">
                   <i aria-hidden="true"></i>This
                   field is required .!
                 </p>
               </div>
-            </div>
-
-
-            <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Name <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="request.HRName" formControlName="HRName">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.HRName.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.HRName.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
-            </div> -->
-
-            <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Email <span class="StarMarking">*</span></label>
-              <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="request.EmailId" formControlName="EmailId">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.EmailId.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-                <p *ngIf="_CompanyMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
-              </div>
-            </div> -->
-
-            <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Hr Mobile Number <span class="StarMarking">*</span></label>
-              <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="request.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.MobileNo.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
-            </div> -->
-
+            </div>   
 
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -203,7 +174,7 @@
               </label>
               <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
                     [(ngModel)]="request.Address" formControlName="Address">
-              <div *ngIf="isSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
+              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
                 <p *ngIf="_CompanyMasterFormGroup.Address.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
@@ -223,27 +194,23 @@
                 <div class="flex">
                   <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
                     *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-            (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
-            <i class="ti ti-trash"></i>
-          </a>-->
                 </div>
               </div>
             </div>
 
           </div>
 
-        </form>
+        </form> -->
 
         <!-- to add multiple hr  -->
 
-        <form [formGroup]="HrMasterFormGroup" id="HrMasterFormGroup" class="form-horizontal mt-6">
+        <form [formGroup]="qualificationForm" id="qualificationForm" class="form-horizontal mt-6">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i>{{key===1 && flag!=1? ' Add HR Details' : key===2 && flag==1? 'View HR Details': ' Edit HR Details'}}</b>
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>Update Student Qualification Details</b>
           </div>
           <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
 
-            <div>
+            <!-- <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
               <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="personRequest.Name" formControlName="Name">
               <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Name.errors" class="text-danger">
@@ -266,21 +233,148 @@
               <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.MobileNo.errors" class="text-danger">
                 <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
               </div>
+            </div> -->
+
+            <div>
+              <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="Board" formControlName="ddlqualification" [(ngModel)]="request.Qualification" (change)="OnQulaificationChange()">
+                <option value="0">--Select--</option>
+                <option value="8">8th</option>
+                <option value="10">10th</option>
+                <option value="12">12th</option>
+                <option value="1">Other</option>
+                <!-- <option *ngFor="let item of BoardList" value="{{item.ID}}">{{item.Name}}</option> -->
+              </select>
+              <div *ngIf="isqualificationformSubmitted &&_QualificationForm.ddlqualification.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlqualification.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="isOtherQuali">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Name of Qualification<span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Name of Qualification" id="txtotherQualification"
+                    [(ngModel)]="otherQualification" formControlName="txtotherQualification">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.txtotherQualification.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.txtotherQualification.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
             </div>
 
             <div>
-              <div class="text-center">
-                <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreMembers()">Add More</button>
-                <button type="button" class="btn bg-danger text-white mt-6" (click)="resetHrDetails()">
-                  <i class="ti ti-refresh"></i> Reset
-                </button>
+              <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">Board:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="Board" formControlName="ddlBoardID" [(ngModel)]="request.BoardID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of BoardList" value="{{item.ID}}">{{item.Name}}</option>
+
+
+              </select>
+              <div *ngIf="isqualificationformSubmitted&&_QualificationForm.ddlBoardID.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlBoardID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
               </div>
+            </div>
+
+            <div>
+              <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">Year of Passing:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassyear" [(ngModel)]="request.PassingID" (change)="passingYearValidation()">
+                <option value="">Select Passing Year</option>
+                <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
+              </select>
+              <div *ngIf="isqualificationformSubmitted&&_QualificationForm.ddlPassyear.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlPassyear.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <!-- <div>
+              <label for="txtRollNumber" class="text-gray-800 text-sm font-medium inline-block mb-2">Roll Number:<span class="StarMarking">*</span></label>
+              <input type="text" class="form-input" id="txtRollNumber" placeholder="Enter Roll Number" (keypress)="numberOnly($event)" formControlName="txtRollNumber" [(ngModel)]="request.RollNumber">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.txtRollNumber.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.txtRollNumber.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div> -->
+
+            <div>
+              <label for="ddlMarksType" class="text-gray-800 text-sm font-medium inline-block mb-2">Marks Type:<span class="StarMarking">*</span></label>
+              <select class="form-select" id="ddlMarksType" formControlName="ddlMarksType" [(ngModel)]="request.MarkType" (change)="calculatePercentage()">
+                <option selected value="0">Select Marks Type</option>
+                <option *ngFor="let item of marktypelist" value="{{item.ID}}">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isqualificationformSubmitted&&_QualificationForm.ddlMarksType.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.ddlMarksType.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtAggregateMaximumMarks" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Maximum Marks:<span class="StarMarking">*</span></label>
+              <input maxlength="4" (keypress)="validateNumber($event)" type="text" class="form-input" id="txtAggregateMaximumMarks" placeholder="Enter Aggregate Maximum Marks"
+                     formControlName="txtAggregateMaximumMarks" [(ngModel)]="request.AggMaxMark" (change)="calculatePercentage()">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.txtAggregateMaximumMarks.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.txtAggregateMaximumMarks.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Aggregate Marks Obtained:<span class="StarMarking">*</span></label>
+              <input type="text" maxlength="4" (keypress)="validateNumber($event)" class="form-input" id="txtAggregateMarksObtained" placeholder="Enter Aggregate Marks Obtained"
+                     formControlName="txtAggregateMarksObtained" [(ngModel)]="request.AggObtMark" (blur)="calculatePercentage()">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.txtAggregateMarksObtained.errors" class="text-danger">
+                <p *ngIf="!_QualificationForm.txtAggregateMarksObtained.errors.DropdownValidators"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div>
+              <label for="txtAggregateMarksObtained" class="text-gray-800 text-sm font-medium inline-block mb-2">Per(%):</label>
+              <input type="text" class="form-input" disabled id="txtAggregateMarksObtained" placeholder="Automatic Percentage calculate"
+                     formControlName="txtpercentage" [(ngModel)]="request.Percentage" [value]="calculatedPercentage">
+            </div>
+
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              for="fileStudentPhoto">Upload Document</label>
+              <div class="flex fileUploader">
+                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                       id="filepanPhoto" type="file" (change)="UploadDocument($event)" />
+                <label for="filepanPhoto">                         
+                  <span>Choose File</span>
+                  {{ request.OtherDoc === '' ? 'No File Chosen' : request.OtherDoc }}
+                </label>
+                <div class="flex" *ngIf="request.OtherDoc !== ''">
+                  <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/AdditionalQualification//{{request.OtherDoc}}"
+                     class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                     (click)="DeleteDocument(row)">
+                    <i class="ti ti-trash"></i>
+                  </a>-->
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="mt-2">
+            <div class="text-center">
+              <button type="button" class="btn bg-info text-white mt-6" (click)="AddMoreDetails()">Add More</button>
+              <button type="button" class="btn bg-danger text-white mt-6" (click)="resetcurrentDetails()">
+                <i class="ti ti-refresh"></i> Reset
+              </button>
             </div>
           </div>
 
           <div class="mt-6">
             <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
-              <b class="text-1xl-5">Added HR Details </b>
+              <b class="text-1xl-5">Added Qualifications</b>
             </div>
 
             <div class="overflow-auto">
@@ -288,20 +382,26 @@
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
                   <tr>
                     <th>Sr No</th>
-                    <th>Name</th>
-                    <th>Contact No</th>
-                    <th>Email</th>
+                    <th>Qulaification</th>
+                    <!-- <th>Board</th> -->
+                    <th>Year Of Passing</th>
+                    <th>Aggregate Maximum Marks</th>
+                    <th>Aggregate Marks Obtained</th>
+                    <th>Percentage</th>
                     <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let row of request.ListCompanyHRDetails; let idx=index;" >
+                  <tr *ngFor="let row of qualificationList; let idx=index;" >
                     <td class="text-center">{{idx+1}}</td>
-                    <td class="text-center">{{row.Name}}</td>
-                    <td class="text-center">{{row.MobileNo}}</td>
-                    <td class="text-center">{{row.EmailId}}</td>
+                    <td class="text-center">{{row.Qualification}}</td>
+                    <!-- <td class="text-center">{{row.BoardName}}</td> -->
+                    <td class="text-center">{{row.PassingID}}</td>
+                    <td class="text-center">{{row.AggMaxMark}}</td>
+                    <td class="text-center">{{row.AggObtMark}}</td>
+                    <td class="text-center">{{row.Percentage}}</td>
                     <td class="text-center">
-                      <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Hr(idx)">
+                      <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_Qualification(idx)">
                         <i class="ti ti-trash"></i>
                       </button>
                     </td>
@@ -319,7 +419,7 @@
       <!-- add final save button  -->
       <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
         <div *ngIf="flag!=1" class="text-center">
-          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">{{key===1? 'Submit':'Update'}}</button>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Update Details</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
             <i class="ti ti-refresh"></i> Reset
           </button>

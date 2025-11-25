@@ -69,37 +69,111 @@
         </div>
 
         <div class="overflow-auto max-height500" *ngIf="Institutelist?.length > 0">
+               <!-- <input type="number"
+                                    [(ngModel)]="row.No_Of_Contract"
+                                    name="Institute_{{row.InstituteID}}"
+                                    min="0"
+                                    step="0.01"
+                                    required
+                                    class="form-control"/> -->
             <table class="w-full table-border" cellpadding="5">
                 <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
 
                     <tr>
                         <th class="text-left">Sr No</th>
                         <th class="text-left">Name of ITI</th>
-
-                        <th class="text-left">No of Contract</th>
+                        <th class="text-left">Date</th>
+                        <!-- <th class="text-left">No of Contract</th> -->
                     </tr>
 
                 </thead>
-                <tbody>
+                <!-- <tbody>
                     <tr *ngFor="let row of Institutelist; let idx = index;">
                         <td class="text-left">{{idx+1}}</td>
                         <td class="text-left">{{row.Name}}</td>
-
+                            <td>
+        <input type="date"
+               class="form-control"
+               (change)="onDateChange($event.target.value, row)">
+      </td>
                         <td>
-                            <input type="number"
-                                    [(ngModel)]="row.No_Of_Contract"
-                                    name="Institute_{{row.InstituteID}}"
-                                    min="0"
-                                    step="0.01"
-                                    required
-                                    class="form-control"/>
+                         
+                                    <div *ngFor="let c of row.contracts; let i = index" class="flex items-center gap-2 mb-2">
+          <span class="text-sm">{{ c.date }}</span>
+
+          <input type="number"  #cnt
+                 [(ngModel)]="c.count"
+                 name="contract_{{row.InstituteID}}_{{i}}"
+                 min="0"
+                 step="0.01"
+                 class="form-control"
+                  (ngModelChange)="onContractChange(c, row, cnt)"
+                 placeholder="No of Contract"/>
+
+          <button type="button"
+                  class="btn btn-danger"
+                  (click)="removeContract(row, i)">
+            X
+          </button>
+        </div>
                         </td>
                     </tr>
-                </tbody>
+                </tbody> -->
+                <tbody>
+  <ng-container *ngFor="let row of Institutelist; let idx = index;">
+
+    <!-- ROW 1 : Sr No | Name | Date -->
+    <tr>
+      <td class="text-left">{{ idx + 1 }}</td>
+      <td class="text-left">{{ row.Name }}</td>
+      <td>
+        <input type="date"
+               class="form-control"
+               (change)="onDateChange($event.target.value, row)">
+      </td>
+
+      <!-- Empty cell to align table -->
+      <!-- <td></td> -->
+    </tr>
+
+    <!-- ROW 2 : No of Contracts (full row below Name + Date) -->
+    <tr>
+      <td></td> <!-- blank for Sr No alignment -->
+      <td colspan="2">
+
+        <div *ngFor="let c of row.contracts; let i = index" class="flex items-center gap-2 mb-2">
+
+          <span class="text-sm">{{ c.date }}</span>
+
+          <input type="number" #cnt
+                 [(ngModel)]="c.count"
+                 name="contract_{{ row.InstituteID }}_{{ i }}"
+                 min="0"
+                 step="0.01"
+                 class="form-control"
+                 (ngModelChange)="onContractChange(c, row, cnt)"
+                 placeholder="No of Contract"/>
+ <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
+          <input type="file"
+                 class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
+                 (change)="onFileSelect($event, c, row)"
+                 accept=".pdf,.jpg,.jpeg,.png" />
+<a *ngIf="c.fileBase64" [href]="c.fileBase64" target="_blank">{{ c.fileName }}</a>
+          <button type="button"
+                  class="btn btn-danger"
+                  (click)="removeContract(row, i)">X</button>
+
+        </div>
+
+      </td>
+    </tr>
+
+  </ng-container>
+</tbody>
             </table>
         </div>
         <div class="flex justify-center">
-            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDataNew()">Submit</button>
             <!-- <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white mt-6 me-1">
                 <i class="ti ti-refresh"></i> Reset
             </button> -->

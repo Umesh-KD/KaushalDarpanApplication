@@ -231,6 +231,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
+        console.log("_GetcandidateList:"+JSON.stringify(data));
         this.StudentList = data.Data;
 
         this.totalRecord=this.StudentList[0]?.TotalRecords;

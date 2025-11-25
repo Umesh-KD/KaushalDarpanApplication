@@ -30,6 +30,8 @@ export class BudgetHeadSearchFilter {
   public BudgetTypeID?: number = 0
   public BudgetForID?: number = 0  
   public DivisionID?: number = 0  
+  public RoleID?: number = 0  
+  public Status?: number = 0  
 }
 
 export class BudgetHeadUtilizeList
@@ -54,7 +56,10 @@ export class BudgetRequestModel {
   public DepartmentID: number = 0;
   public Eng_NonEng: number = 0;
   public CollegeId: number = 0;
+  public DivisionID?: number = 0;
   public StatusId: number = 0;
+  public RoleID?: number = 0;
+  public BudgetForID?: number = 0;
   public Action: string = '';
 }
 
