@@ -385,12 +385,15 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
       this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
       this.emitraRequest.ServiceID = item.ServiceID.toString();
       this.emitraRequest.UserName = item.StudentName;
-      this.emitraRequest.MobileNo = item.MobileNo;
+      this.emitraRequest.MobileNo = item.MobileNo??'';
       this.emitraRequest.StudentID = item.StudentID;
       this.emitraRequest.SemesterID = item.SemesterID;
       this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
       this.emitraRequest.DepartmentID = EnumDepartment.ITI;
       this.emitraRequest.ID = item.ID;
+
+      this.emitraRequest.FormCommision = item?.FormCommision??0;
+ 
       //common
       this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
       this.emitraRequest.IsKiosk = true;
@@ -513,7 +516,7 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
             this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
             this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
             this.emitraRequest.KIOSKCODE = this.sSOLoginDataModel.KIOSKCODE;
-
+            this.emitraRequest.FormCommision = this.studentDetailsModel?.FormCommision ?? 0;
             this.loaderService.requestStarted();
             try
             {
