@@ -85,6 +85,9 @@ export class InternalPracticalExamAttendanceComponent {
   async getExamStudentData() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
+    this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+    this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+    this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
     try {
       this.loaderService.requestStarted();
 
