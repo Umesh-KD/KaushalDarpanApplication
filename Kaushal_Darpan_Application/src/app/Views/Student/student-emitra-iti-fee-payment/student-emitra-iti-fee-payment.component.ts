@@ -11,6 +11,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { StudentService } from '../../../Services/Student/student.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-student-emitra-iti-fee-payment',
@@ -50,13 +51,28 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
   public PDFURL: string = '';
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public searchssoform!: FormGroup
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService,
     private emitraPaymentService: EmitraPaymentService,
-    private sweetAlert2: SweetAlert2
+    private sweetAlert2: SweetAlert2, private formBuilder: FormBuilder, 
   ) { }
 
   async ngOnInit() {
+
+    //this.searchssoform =
+    //  this.formBuilder.group({
+    //  txtApplicationNo: ['', Validators.required]
+    //})
+
+
+    this.searchssoform = this.formBuilder.group({
+      txtApplicationNo: ['', Validators.required],
+      txtMobileNo: [''],
+      DOB: ['']
+    })
+
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -69,6 +85,8 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
   async onSearchClick() {
     await this.GetAllDataActionWise();
   }
+
+  get _searchssoform() { return this.searchssoform.controls; }
 
   async ResetControl() {
     this.SemesterID = 0;
@@ -131,6 +149,13 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
 
 
   async GetAllDataActionWise() {
+
+
+    this.isSubmitted = true
+    if (this.searchssoform.invalid) {
+      return
+    }
+
     this.isShowGrid = true;
     this.searchRequest.action = "_PendingFeesForEmitra";
 

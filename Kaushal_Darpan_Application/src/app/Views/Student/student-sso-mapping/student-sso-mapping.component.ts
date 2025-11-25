@@ -88,6 +88,7 @@ export class StudentSsoMappingComponent implements OnInit, OnDestroy {
       DOB: ['', Validators.required],
       ddlDepartment: ['', [DropdownValidators]]
     })
+
     this.BTER = this.encryptParameter(this._EnumDepartment.BTER);
     this.ITI = this.encryptParameter(this._EnumDepartment.ITI)
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));

@@ -241,8 +241,8 @@ export class ImportDataComponent implements OnInit {
     }
     try {
 
-      this.searchRequest2.FinancialYearID = this.SSOLoginDataModel.FinancialYearID_Session;
-      this.searchRequest2.EndTermID = this.SSOLoginDataModel.EndTermID_Session;
+      this.searchRequest2.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
+      this.searchRequest2.EndTermID = this.SSOLoginDataModel.EndTermID;
       this.searchRequest2.PageNumber = this.pageNo
       this.searchRequest2.PageSize = this.pageSize
       this.searchRequest2.Action = "ImportedData";
