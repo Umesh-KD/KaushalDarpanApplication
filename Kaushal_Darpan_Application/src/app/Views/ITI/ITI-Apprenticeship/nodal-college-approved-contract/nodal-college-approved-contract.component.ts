@@ -12,6 +12,7 @@ import { DropdownValidators } from '../../../../Services/CustomValidators/custom
 import { UploadBTERFileModel, UploadFileModel } from '../../../../Models/UploadFileModel';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { DocumentDetailsService } from '../../../../Common/document-details';
+
 @Component({
   selector: 'app-nodal-college-approved-contract',
   standalone: false,
@@ -49,7 +50,7 @@ constructor(
     private formBuilder: FormBuilder,
     private apprenticeshipService: ITIApprenticeshipService,
     private documentDetailsService: DocumentDetailsService,
-    public appsettingConfig: AppsettingService
+    public appsettingConfig: AppsettingService,
   ) { }
 
   async ngOnInit() {
@@ -267,24 +268,34 @@ async SaveDataNew() {
     return;
   }
   console.log("Payload:", payload);
-if (!confirm("Are you sure you want to save these contract entries?")) {
-    return;
-  }
-  try {
-    await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(payload).then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
-          this.toastr.success(data.Message);
-        } else if(data.State === EnumStatus.Warning) {
-          this.toastr.warning(data.Message);
-        } else {
-          this.toastr.error(data.ErrorMessage);
+  // if (!confirm("Are you sure you want to save these contract entries?")) {
+  //   return;
+  // }
+    this.Swal2.Confirmation("Are you sure? <br/> you want to save these contract entries.",
+    async (result: any) => {
+      if (!result.isConfirmed) { 
+        return;
+      }
+      else{
+        try {
+            await this.apprenticeshipService.SaveCollegeApprovedContract_Appr(payload).then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            if(data.State === EnumStatus.Success) {
+              this.toastr.success(data.Message);
+            } 
+            else if(data.State === EnumStatus.Warning) {
+              this.toastr.warning(data.Message);
+            } 
+            else {
+              this.toastr.error(data.ErrorMessage);
+            }
+          });
+        } catch (err) {
+        console.log(err);
         }
-      });
-
-  } catch (err) {
-    console.log(err);
-  }
+      }
+    });
+ 
 }
 
   async onChange() {
@@ -364,9 +375,15 @@ onAllowZeroChange(row: any, event: any) {
   }
 }
 removeContract(row: any, index: number) {
-  if (!confirm("Are you sure you want to remove this contract?")) {
-    return; // ❌ User cancelled
-  }
+  // if (!confirm("Are you sure you want to remove this contract?")) {
+  //   return; // ❌ User cancelled
+  // }
+  this.Swal2.Confirmation("Are you sure? <br/> you want to remove this contract.",
+  async (result: any) => {
+    if (!result.isConfirmed) { 
+      return;
+    }
+  });
   const removed = row.contracts[index]; 
 
   if (removed) {
