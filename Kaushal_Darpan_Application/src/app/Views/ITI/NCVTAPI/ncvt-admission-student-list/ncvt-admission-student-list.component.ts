@@ -163,7 +163,7 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
     await this.ItiDataMasterService.GetStudentCorrectionListData(this.searchRequest).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.StudentList1 = data.Data;
-      console.log(this.StudentList1);
+      console.log('excel data ==>',this.StudentList1);
     }, (error: any) => console.error(error));
 
     const unwantedColumns = [
@@ -174,8 +174,10 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
     ];
 
     const columnOrder = [
-      'SrNo', 'CollegeName', 'Name', 'UIDNumber', 'DateOfBirth', 'GenderName', 'Category', 'FatherGuardianName', 'MotherName', 'MobileNumber', 'EmailID',
-      'HighestQualification', 'Trade', 'Shift', 'PersonwithDisability', 'PWDcategory', 'EconomicWeakerSection', 'TraineeType', 'ErrorDescription'
+      'SrNo', 'DistrictNameEnglish', 'DivisionNameEnglish', 'CollegeName', 'Name', 'UIDNumber', 'DateOfBirth', 'GenderName', 'Category',
+      'FatherGuardianName', 'MotherName', 'MobileNumber', 'EmailID',
+      'HighestQualification', 'Trade', 'Shift', 'PersonwithDisability', 'PWDcategory',
+      'EconomicWeakerSection', 'TraineeType', 'ErrorDescription'
     ];
 
     // filter unwanted columns
@@ -244,15 +246,17 @@ export class NcvtAdmissionStudentListComponent implements OnInit {
     const pad = (n: number) => n.toString().padStart(2, '0');
     const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
 
-    let sheetName = `Applicant_Data_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`; // e.g. Applicant_Data_2025-11-21
+    let sheetName = `NCVTError_Data_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`; 
     if (sheetName.length > 31) sheetName = sheetName.substring(0, 31);
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
 
-    const fileName = `Applicant_Data_${dateStr}.xlsx`;
+    const fileName = `NCVTError_Data_${dateStr}.xlsx`;
     XLSX.writeFile(wb, fileName);
   }
+
+
 
 
   async GetStudentCorrectionListData(i: any) {
