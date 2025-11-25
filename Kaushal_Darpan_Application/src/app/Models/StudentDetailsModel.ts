@@ -6,7 +6,7 @@ export class StudentDetailsModel {
   public FatherName: string = '';
   public MotherName: string = '';
   public Gender?: string = '';
-  public MobileNo: string = '';
+  public MobileNo?: string = '';
   public Email?: string = '';
   public StreamName: string = '';
   public Semester: string = '';
