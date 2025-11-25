@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
 import { HttpClient } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
@@ -44,6 +44,7 @@ export class BudgetCreateComponent {
     private formBuilder: FormBuilder,
     private budgetCreateService: ITIBudgetCreateService,
     private budgetDistributedService: BudgetDistributedService,
+    private router: Router,
   ) { }
 
   async ngOnInit() {
@@ -180,6 +181,11 @@ export class BudgetCreateComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.toastr.success(data.Message)
+          this.router.navigate(['/itibudgetmaster']);
+        } else if (data.State === EnumStatus.Warning) {
+          this.toastr.error(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
         }
       })
     } catch (error) {

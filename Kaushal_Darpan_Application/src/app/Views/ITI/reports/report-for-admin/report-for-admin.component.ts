@@ -132,7 +132,11 @@ debugger
     const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.AllotedSeatList);
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    const fileName = `AllotedSeatByCollegeList_Class.xlsx`;
+    const timestamp = new Date().toISOString().replace(/:/g, "_"); 
+    // example: 2025-11-21T06_10_09.761Z
+  
+    const fileName = `ReportedData_${timestamp}.xlsx`;
+  
     XLSX.writeFile(wb, fileName);
   }
 

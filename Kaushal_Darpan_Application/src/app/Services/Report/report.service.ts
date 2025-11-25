@@ -78,8 +78,8 @@ export class ReportService {
       ).toPromise();
   }
 
-  public async GetStudentFeeReceipt(ApplicationNo: any) {
-    return await this.http.get(this.APIUrl + "/GetStudentFeeReceipt/" + ApplicationNo, this.headersOptions)
+  public async GetStudentFeeReceipt(ApplicationNo: any, StudentExamID: number = 0) {
+    return await this.http.get(this.APIUrl + "/GetStudentFeeReceipt/" + ApplicationNo + "/" + StudentExamID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

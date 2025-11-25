@@ -11,7 +11,7 @@ import { ITIPendingFeesModule } from '../Student/itipending-fees/itipending-fees
 import { StudentDashboardComponent } from './student-dashboard.component';
 
 @NgModule({
-  declarations: [StudentDashboardComponent, ImageErrorDirective],
+  declarations: [StudentDashboardComponent],
   imports: [
     CommonModule,
     StudentDashboardRoutingModule,

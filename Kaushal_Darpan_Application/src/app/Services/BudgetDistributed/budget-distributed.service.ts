@@ -100,4 +100,20 @@ export class BudgetDistributedService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async Approve_CollegeBudgetAllot(request: any[]) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/Approve_CollegeBudgetAllot`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async UnlockUtilization_ITI_BGT(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/UnlockUtilization_ITI_BGT`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

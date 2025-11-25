@@ -151,6 +151,21 @@ export class AllotedCandidateListComponent {
       console.error(error)
     }
   }
+  async GetInstituteOptionList4Popup(_Tradeid:number) {
+    try {
+      this.tradeRequest.Action = 'ChangeInstituteDDLList'
+      //this.tradeRequest.TradeID = this.request.TradeID
+      console.log("_Tradeid :"+_Tradeid)
+      this.tradeRequest.TradeID=_Tradeid;
+      await this.counsellingApplicationFormService.Counselling_GetDropdownByAction(this.tradeRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.InstituteList = data.Data;
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
 
   async ClearSearchData() {
     this.request.TradeID = 0;
@@ -185,7 +200,8 @@ export class AllotedCandidateListComponent {
   }
 
   async editAllottedInstitute(content: any, row: any) {
-    await this.GetInstituteOptionList();
+    //await this.GetInstituteOptionList();
+    await this.GetInstituteOptionList4Popup(row.TradeID);
     this.editInstituteReq.CandidateID = row.CandidateID
     this.editInstituteReq.OptionID = row.OptionID
     this.editInstituteReq.AllotmentID = row.AllotmentID

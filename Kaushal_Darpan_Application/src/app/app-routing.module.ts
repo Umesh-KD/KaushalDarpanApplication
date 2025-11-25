@@ -340,7 +340,7 @@ const routes: Routes = [
       { path: 'documentdetailsform', loadChildren: () => import('./Views/ITI/document-details-form-tab/document-details-form-tab.module').then(m => m.DocumentDetailsFormTabModule), title: 'Document Details' },
       { path: 'optionsform', loadChildren: () => import('./Views/ITI/option-form-tab/option-form-tab.module').then(m => m.OptionFormTabModule), title: 'Options' },
       { path: 'Itipreviewform', loadChildren: () => import('./Views/ITI/preview-form-tab/preview-form-tab.module').then(m => m.PreviewFormTabModule), title: 'ITI Preview' },
-      // { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
+      //  { path: 'qualificationform', loadChildren: () => import('./Views/ITI/qualification-tab/qualification-tab.module').then(m => m.QualificationTabModule) },
 
       { path: 'Applicationform', loadChildren: () => import('./Views/Polytechnic/application-form/application-form.module').then(m => m.ApplicationFormModule), title: 'BTER-Application Form' },
       { path: 'QualificationForm', loadChildren: () => import('./Views/Polytechnic/qualification-form/qualification-form.module').then(m => m.QualificationFormModule), title: 'Qualifications' },
@@ -625,7 +625,7 @@ const routes: Routes = [
       { path: 'AddITITimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/add-ititime-table/add-ititime-table.module').then(m => m.AddITITimeTableModule) },
       { path: 'ItiTimeTable', loadChildren: () => import('./Views/ITI/ITITimeTable/ititime-table/ititime-table.module').then(m => m.ITITimeTableModule), title: "ITI TimeTable" },
       // { path: 'ItiResult/:url', loadChildren: () => import('./Views/ITI/results/iti-result/iti-result.module').then(m => m.ItiResultModule), title: "ITI Result" },
-      { path: 'result/:url', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
+      //{ path: 'result/:url', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
       { path: 'result', loadChildren: () => import('./Views/result/result/result.module').then(m => m.ResultModule), title: "Result" },
 
 
@@ -1320,8 +1320,7 @@ const routes: Routes = [
       { path: 'center-superitendent-exam-report', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'center-superitendent-exam-report/:id', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report/center-superitendent-exam-report.module').then(m => m.CenterSuperitendentExamReportModule) },
       { path: 'CenterSuperitendentExamReport', loadChildren: () => import('./Views/ITI/center-superitendent-exam-report-master/center-superitendent-exam-report-master.module').then(m => m.CenterSuperitendentExamReportMasterModule) },
-      { path: 'ItiBGTHeadmaster', loadChildren: () => import('./Views/ITI/iti-bgt-headmaster/iti-bgt-headmaster.module').then(m => m.ItiBGTHeadMasterModule) },
-
+      
       { path: 'iti-remunerationInvigilatorApproved-list', loadChildren: () => import('./Views/ITI/iti-admin-remunerationInvigilator-list/iti-admin-remunerationInvigilator-list.module').then(m => m.ItiAdminRemunerationInvigilatorlistModule), title: 'Invigilation Remuneration Approved list' },
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'statistics-report', loadChildren: () => import('./Views/Reports/bter-statistics-reports/bter-statistics-reports.module').then(m => m.StatisticsReportsModule), title: 'Statistics-report' },
@@ -1363,7 +1362,8 @@ const routes: Routes = [
       { path: 'create-budget', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-create/budget-create.module').then(m => m.BudgetCreateModule), title: 'Budget Create' },
       { path: 'iti-bgt-uc-head', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-uc-head/budget-uc-head.module').then(m => m.BudgetUCHeadModule), title: 'Budget UC Head' },
       { path: 'itibudgetmaster', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-master/budget-master.module').then(m => m.BudgetMasterModule), title: 'ITI Budget Master' },
-      
+      { path: 'ItiBGTHeadmaster', loadChildren: () => import('./Views/ITI/iti-bgt-headmaster/iti-bgt-headmaster.module').then(m => m.ItiBGTHeadMasterModule) },
+
       { path: 'DispatchToInstituteReval', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-to-institute-reval/dispatch-to-institute-reval.module').then(m => m.DispatchToInstituteRevalModule) },
       { path: 'DispatchGroupRevalList', loadChildren: () => import('./Views/DispatchManagementReval/dispatch-group-reval-list/dispatch-group-reval-list.module').then(m => m.DispatchGroupRevalListModule) },
       { path: 'PrincipalDispatchRevalGroup', loadChildren: () => import('./Views/DispatchManagementReval/principal-dispatch-reval-group/principal-dispatch-reval-group.module').then(m => m.PrincipalDispatchRevalGroupModule) },
@@ -1484,7 +1484,9 @@ const routes: Routes = [
       {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
-     
+      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
+      
+
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
      
 

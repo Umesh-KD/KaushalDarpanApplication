@@ -47,6 +47,8 @@ export class BudgetMasterComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.BudgetDataList = data.Data
+        } else if(data.State == EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
         } else {
           this.toastr.error(data.ErrorMessage)
         }

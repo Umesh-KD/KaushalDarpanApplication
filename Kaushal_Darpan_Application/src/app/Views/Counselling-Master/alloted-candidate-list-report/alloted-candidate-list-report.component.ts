@@ -269,7 +269,7 @@ export class AllotedCandidateListReportComponent {
   // end table feature
   exportToExcel(): void {
       const unwantedColumns = [
-       'AllotmentID','CandidateID','TradeID'	,'AllottedInstituteID'	,'AllotmentStatus',	'OptionID'	,'FinalAllottedInstituteID'  
+       'AllotmentID','CandidateID','TradeID'	,'AllottedInstituteID'	,'AllotmentStatus',	'OptionID'	,'FinalAllottedInstituteID' ,'FinalAllottedInstitute'
       ];
       const filteredData = this.AllottedCandidateList.map((item: any) => {
         const filteredItem: any = {};
