@@ -41,15 +41,15 @@
         <option [value]="0">--Select--</option>
         <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
       </select>
-    </div>
+    </div>-->
 
     <div>
       <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers</label>
       <select class="form-select" [(ngModel)]="filterModel.StaffID" name="Teachers">
-        <option [value]="0">--Select--</option>
+        <option [value]="">--Select--</option>
         <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
       </select>
-    </div>-->
+    </div>
 
       <div>
         <button type="submit" (click)="GetAllRosterDisplay()" class="btn bg-info text-white mt-6">Search</button>

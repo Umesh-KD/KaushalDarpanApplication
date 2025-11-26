@@ -1356,6 +1356,7 @@ const routes: Routes = [
       { path: 'fresherRegistrationReportlist', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/fresher-registration-report-list/fresher-registration-report-list.module').then(m => m.fresherRegistrationReportListModule) },
 
       { path: 'BudgetDistribute', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-distribute/budget-distribute.module').then(m => m.BudgetDistributeModule) },
+      { path: 'Budget-Report', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-report/budget-report.module').then(m => m.BudgetReportModule) },
       { path: 'CollegeBudgetList', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-list/college-budget-list.module').then(m => m.CollegeBudgetListModule) },
       { path: 'BudgetRequest', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-request/college-budget-request.module').then(m => m.CollegeBudgetRequestModule) },
       { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },
