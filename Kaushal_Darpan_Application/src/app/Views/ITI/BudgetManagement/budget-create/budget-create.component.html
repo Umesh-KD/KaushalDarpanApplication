@@ -164,6 +164,11 @@
                                     [(ngModel)]="item.UnitName" placeholder="Enter Unit Name" 
                                     readonly [ngClass]="{'bg-gray-200': !item.isNew}"/>
                             </td>
+
+                            <td>
+                                <input *ngIf="item.IsUnitWise" type="text" class="form-control"
+                                    [(ngModel)]="item.UnitValue" placeholder="Enter Unit Value" />
+                            </td>
                         </tr>
 
                         <!-- If no data -->
