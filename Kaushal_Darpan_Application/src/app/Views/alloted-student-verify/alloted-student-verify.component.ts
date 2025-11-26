@@ -90,22 +90,29 @@ export class AllotedStudentVerifyComponent {
 
 
 
-  constructor(private commonMasterService: CommonFunctionService,
+  constructor(
+    private commonMasterService: CommonFunctionService,
     private loaderService: LoaderService,
     private toastr: ToastrService,
     private Swal2: SweetAlert2,
     private activatedRoute: ActivatedRoute,
     public appsettingConfig: AppsettingService,
     public allotedStudentVerifyService: AllotedStudentVerifyService,
-  ) {
-
-  }
+  ) { }
 
   async ngOnInit() {
-
+    debugger
     //session
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
+    // getting info from route and load data accordingly
+    const status = Number(this.activatedRoute.snapshot.queryParamMap.get('status'));
+    const tab = Number(this.activatedRoute.snapshot.queryParamMap.get('tab'));
+    if (status !== null && tab !== null && tab !== 0) {
+      this.studentApplicationRequest.status = +status
+      await this.GetAdmittedStudentToVerify();
+    } else {
+      this.studentApplicationRequest.status = 0
+    }
     //load data
     await this.GetMasterData();
   }
