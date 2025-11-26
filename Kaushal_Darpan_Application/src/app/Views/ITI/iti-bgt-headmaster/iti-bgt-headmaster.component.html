@@ -97,7 +97,6 @@
              <th class="text-left">Head Description</th>
              <th class="text-left">Is Unit Wise</th>
              <th class="text-left">Unit Name</th>
-             <th class="text-left">Unit Value</th>
             <th class="text-left">Action</th>
           </tr>
         </thead>
@@ -110,7 +109,6 @@
             <td>{{item.HeadDescription}}
             <td>{{item.IsUnitWise == 1 ? 'YES' : 'NO'}}
             <td>{{item.UnitName}}
-            <td>{{item.UnitValue}}
             <td align="left">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important"> 
                  <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_UpdateExaminer,item.HeadId)"   title="Edit"><i class="ti ti-pencil"></i></a>

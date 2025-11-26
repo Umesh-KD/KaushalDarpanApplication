@@ -229,8 +229,7 @@ export class BudgetDistributeComponent {
 
   onResetClick() {
     this.searchRequest.CollegeID = 0;
-    this.searchRequest.DistributedID
-      = 0;
+    this.searchRequest.DistributedID = 0;
     this.AddmissionList = [];
     this.paginatedInTableData = [];
     this.GetList();
@@ -368,7 +367,7 @@ export class BudgetDistributeComponent {
       this.searchRequest.ActionName = "GetHeadWiseBudget";
       this.searchRequest.InstituteId = collegeID;
       this.searchRequest.DivisionID = collegeID;
-
+      debugger
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       await this.budgetDistributedService.GetBudget_HeadWise(this.searchRequest)
@@ -453,9 +452,11 @@ export class BudgetDistributeComponent {
 
   async openModal(content: any, row: any, indexNum: number) {
     console.log(row, 'RowData');
+    debugger
     try {
       // await this.GetBudgetUtilizationsList_Save();
       var id: number = 0
+      this.Request.DistributedID = row.DistributedID
       if(this.searchRequest.BudgetForID == 1) {
         id = row.DivisionID;
         this.Request.DivisionID = row.DivisionID
@@ -490,7 +491,7 @@ export class BudgetDistributeComponent {
     }
   }
   CloseModal() {
-
+    this.Request.DistributedID = 0;
     this.modalService.dismissAll();
     // Reset dropdown ready flag
 
@@ -529,7 +530,7 @@ export class BudgetDistributeComponent {
       this.Request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.Request.FinYearID = this.sSOLoginDataModel.FinancialYearID
       this.Request.DistributedType = 1
-      this.Request.ActionType = 'INSERT'
+      this.Request.ActionType = this.Request.DistributedID == 0 ? "INSERT" : "UPDATE";
       this.Request.BodgetTypeID = this.searchRequest.BudgetTypeID
       this.Request.BudgetForID = this.searchRequest.BudgetForID
 
