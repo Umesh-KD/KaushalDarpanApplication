@@ -701,6 +701,7 @@ export class RosteComponent implements OnInit {
         element.SemesterID === newSection.SemesterID &&
         element.StreamID === newSection.StreamID &&
         element.SectionID.some(id => newSection.SectionID.includes(id)) &&
+        element.DayID === newSection.DayID &&
         timeOverlap
       );
     });
@@ -719,7 +720,8 @@ export class RosteComponent implements OnInit {
       if (
         timeOverlap &&
         element.SemesterID === newSection.SemesterID &&
-        element.StreamID === newSection.StreamID
+        element.StreamID === newSection.StreamID &&
+        element.DayID === newSection.DayID
       ) {
         if (isSemesterOneOrTwo(newSection.SemesterID)) {
           // For semesters 1 or 2, allow ONLY if room is the SAME for same subject & overlapping section
@@ -763,7 +765,10 @@ export class RosteComponent implements OnInit {
 
       const timeOverlap = (startNum < existingEnd && endNum > existingStart);
 
-      return timeOverlap;
+      return (
+        element.DayID === newSection.DayID &&
+        timeOverlap
+      );
     });
 
     if (globalTeacherConflict) {
@@ -792,7 +797,7 @@ export class RosteComponent implements OnInit {
         }
 
         // For other semesters or cases, reject if room matches and overlapping time
-        return element.RoomNo === newSection.RoomNo;
+        return (element.RoomNo === newSection.RoomNo && element.DayID === newSection.DayID);
       }
 
       return false;

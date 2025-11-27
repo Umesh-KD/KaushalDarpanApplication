@@ -17,5 +17,6 @@ export class ITINCVTDataModel {
   public CollegeCode: string = '0';
   public TradeId:      number = 0;
   public TradeCode:     string = '0';
+  public PaymentSuccess:     string = '0';
 
 }

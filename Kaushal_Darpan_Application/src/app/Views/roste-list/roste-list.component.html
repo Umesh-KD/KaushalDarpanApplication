@@ -41,15 +41,23 @@
         <option [value]="0">--Select--</option>
         <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
       </select>
-    </div>
-
-    <div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers</label>
-      <select class="form-select" [(ngModel)]="filterModel.StaffID" name="Teachers">
-        <option [value]="0">--Select--</option>
-        <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
-      </select>
     </div>-->
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers</label>
+        <select class="form-select" [(ngModel)]="filterModel.StaffID" name="Teachers">
+          <option [value]="">--Select--</option>
+          <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Day</label>
+        <select class="form-select" [(ngModel)]="filterModel.DayID" name="DayID" (change)="onChangeDay($event)">
+          <option [value]="">--Select--</option>
+          <option *ngFor="let item of DayList" [value]="item.DayID">{{ item.DayName}}</option>
+        </select>
+      </div>
 
       <div>
         <button type="submit" (click)="GetAllRosterDisplay()" class="btn bg-info text-white mt-6">Search</button>
@@ -138,8 +146,9 @@
                 <th>Semester</th>
                 <th>Stream</th>
                
-                <th>Group</th>
+                <!-- <th>Group</th> -->
                 <th>Teacher / Class Total</th>
+                <th>Sections</th>
                 <!--<th>09:00-10:00</th>
                 <th>10:00-11:00</th>
                 <th>11:00-12:00</th>
@@ -159,7 +168,8 @@
                 <td>{{ row.SemesterName }}</td>
                 <td>{{ row.StreamName }}</td>
               
-                <td>{{ row.GroupName }}</td>
+                <!-- <td>{{ row.GroupName }}</td> -->
+                <td>{{ row.TeacherClassTotal }}</td>
                 <td>{{ row.TeacherClassTotal }}</td>
              
                 <td *ngFor="let col of timeColumns">{{ row[col] || '' }}</td>

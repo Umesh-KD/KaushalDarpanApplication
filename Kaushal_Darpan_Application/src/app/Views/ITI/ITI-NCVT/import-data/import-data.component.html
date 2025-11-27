@@ -22,70 +22,82 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Enter Search Criteria</b>
         </div>
-        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
-            <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getITICollege()">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By College:
-            </label>
-            <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-              Search By Trade:
-            </label>
-            <select class="form-select" [(ngModel)]="searchRequest.TradeID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
-            <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
-          </div>
-
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
-            <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
-          </div>
-
-
-
-          <!--<div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-          Alltmet Type
-        </label>
-        <select class="form-select" (change)="AllotmentChange()" [(ngModel)]="searchRequest.AllotmentMasterId">
-          <option value="0">Choose Option</option>
-          <option value="1">IMC Allotment</option>
-          <option value="2">First Allotment</option>
-          <option value="4">Second Allotment</option>
-          <option value="6">Internal Sliding</option>
-        </select>
-      </div>-->
-          <div>
-            <button type="button" class="btn bg-info text-white mt-6" (click)="GetNCVTUPLOADED(1)">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
-          </div>
-
-
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Type:</label>
+          <select class="form-select" [(ngModel)]="searchRequest.ManagementTypeId" (change)="getITICollege()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITIManagementType" [value]="item.ID">{{item.Name}}</option>
+          </select>
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By College:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Search By Trade:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.TradeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ListITITrade" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By College Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.CollegeCode" placeholder="Search By College Code:">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By Trade Code:</label>
+          <input type="text" class="form-input" [(ngModel)]="searchRequest.TradeCode" placeholder="Search By Trade Code">
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Exam Fees Status:
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.PaymentSuccess ">
+            <option value="">Choose Option</option>
+            <option value="-1">ALL</option>
+            <option value="0">Pending</option>
+            <option value="1">Paid</option>
+
+          </select>
+        </div>
+
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+      Alltmet Type
+    </label>
+    <select class="form-select" (change)="AllotmentChange()" [(ngModel)]="searchRequest.AllotmentMasterId">
+      <option value="0">Choose Option</option>
+      <option value="1">IMC Allotment</option>
+      <option value="2">First Allotment</option>
+      <option value="4">Second Allotment</option>
+      <option value="6">Internal Sliding</option>
+    </select>
+  </div>-->
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetNCVTUPLOADED(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="onReset()">Reset</button>
+        </div>
+
+
+      </div>
       </div>
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
         <div class="flex justify-end flex-wrap items-center">
 
-          <a href="javascript:void(0)" (click)="OpenSeatMatrix(MyModel_SeatMatrix)" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Import Exam Data</a>
+          <!--<a href="javascript:void(0)" (click)="OpenSeatMatrix(MyModel_SeatMatrix)" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Import Exam Data</a>-->
           <a href="javascript:void(0)" (click)="exportExcelData()" class="btn bg-info btn-sm text-white me-2"><i class="ti ti-download"></i> Download</a>
 
         </div>

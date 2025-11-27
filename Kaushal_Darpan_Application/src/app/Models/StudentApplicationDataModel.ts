@@ -9,6 +9,7 @@ export class StudentApplicationModel extends RequestBaseModel {
   InstituteID: number = 0;
   StreamID: number = 0;
   SemesterID: number = 0;
+  status?: number = 0;
   Selected: boolean = false;
 }
 export class StudentApplicationSaveModel extends ResponseBaseModel {

@@ -129,6 +129,7 @@
                             <th class="text-left">Amount</th>
                             <th class="text-left">Is Unit Wise</th>
                             <th class="text-left">Unit Name</th>
+                            <th class="text-left">Unit Value</th>
                         </tr>
                     </thead>
 
@@ -163,6 +164,11 @@
                                 <input *ngIf="item.IsUnitWise" type="text" class="form-control"
                                     [(ngModel)]="item.UnitName" placeholder="Enter Unit Name" 
                                     readonly [ngClass]="{'bg-gray-200': !item.isNew}"/>
+                            </td>
+
+                            <td>
+                                <input *ngIf="item.IsUnitWise" type="text" class="form-control"
+                                    [(ngModel)]="item.UnitValue" placeholder="Enter Unit Value" />
                             </td>
                         </tr>
 
