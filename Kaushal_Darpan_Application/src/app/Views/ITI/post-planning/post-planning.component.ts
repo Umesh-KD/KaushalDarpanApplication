@@ -17,6 +17,7 @@ import { ItiSeatIntakeService } from '../../../Services/ITI/ItiSeatIntake/iti-se
 import { BTERCollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
 import { ITIGovtEMStaffMaster } from '../../../Services/ITIGovtEMStaffMaster/ITIGovtEMStaffMaster.service';
 import { ITIOfficeVacancyModel } from '../../../Models/ITIGovtEMStaffMasterDataModel';
+import { ItiTradeSearchModel } from '../../../Models/CommonMasterDataModel';
 
 @Component({
   selector: 'app-post-planning',
@@ -31,7 +32,7 @@ export class PostPlanningComponent {
   public SearchData = new ITIOfficeVacancyModel();
   public isSubmitted: boolean = false;
   public ItiCollegesListAll: any = [];
-
+  public tradeSearchRequest = new ItiTradeSearchModel()
   public deleteRequest = new ITIOfficeVacancyModel();
 
   public isLoading: boolean = false;
@@ -46,6 +47,7 @@ export class PostPlanningComponent {
   public OfficeList: any[] = [];
   public PostList: any = [];
   public StaffTypeList: any[] = []
+  public TradeList: any[] = []
   public sSOLoginDataModel = new SSOLoginDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
@@ -98,6 +100,7 @@ export class PostPlanningComponent {
       InstituteID: [0, []],
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
+      TradeID: [0,],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
       Comments: ['']
     });
@@ -109,7 +112,8 @@ export class PostPlanningComponent {
       StaffTypeID: [0, [DropdownValidators]],
       DesignationID: [0, [DropdownValidators]],
       TotalSeatID: ['', [Validators.required, Validators.min(0), Validators.max(99), Validators.pattern("^[0-9]*$")]],
-      Comments: ['']
+      Comments: [''],
+      TradeID: [0,],
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -119,6 +123,7 @@ export class PostPlanningComponent {
     await this.GetOfficeList();
     await this.GetInstitute();
     await this.GetStaffTypeData();
+    await this.GetTradeData();
     /* await this.GetPostList();*/
     console.log(this.sSOLoginDataModel);
   }
@@ -145,47 +150,34 @@ export class PostPlanningComponent {
       this.toastr.warning("Please fill all required fields before adding.");
       return;
     }
-    await this.commonMasterService.DDL_ITI_GovtEMDDLOfficeVacancy(this.sSOLoginDataModel.DepartmentID, 0)
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.OfficeList = data['Data'];
-        console.log(this.OfficeList, "OfficeList");
-      }, error => console.error(error));
-
-    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.InstituteMasterDDLList = data.Data;
-      console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
-    })
 
 
-    await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
-      data = JSON.parse(JSON.stringify(data));
-      this.StaffTypeList = data.Data;
-      console.log("StaffTypeList", this.StaffTypeList);
-    });
+    if (formValues.StaffTypeID == 2 && !formValues.TradeID) {
+      this.toastr.warning("Please fill all required fields before adding.");
+      return;
+    }
 
 
-    const data: any = await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID);
-    this.PostList = data['Data'];
+ 
+
 
 
     const getoffice = this.OfficeList.find((item: any) => item.ID == formValues.OfficeID);
     const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
-
+    const gettrade = this.TradeList.find((item4: any) => item4.Id == formValues.TradeID);
 
 
     const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
 
     let getinstitute = [];
 
-    if (formValues.InstituteID && formValues.InstituteID !== 0) {
-      getinstitute = this.InstituteMasterDDLList.filter((item2: any) => item2.InstituteID == formValues.InstituteID) || [];
+    if (formValues.ddlCollege && formValues.ddlCollege !== 0) {
+      getinstitute = this.ItiCollegesListAll.filter((item2: any) => item2.ID == formValues.ddlCollege) || [];
     } else {
       getinstitute = [];
     }
 
-    const getinstituteName = getinstitute.length > 0 ? getinstitute[0].InstituteName : '';
+    const getinstituteName = getinstitute.length > 0 ? getinstitute[0].Name : '';
 
     console.log(getinstituteName);
 
@@ -214,6 +206,8 @@ export class PostPlanningComponent {
       InstituteName: getinstituteName,
       StaffTypeName: getstaffType.Name,
       PostedSeat: 0,
+      TradeID: formValues.TradeID,
+      TradeName: gettrade.TradeName,
       Index: this.tempIndex++
     };
 
@@ -224,6 +218,7 @@ export class PostPlanningComponent {
     this.toastr.success("Vacancy added successfully.");
 
     this.AddOfficeVacancyForm.reset(); // Reset form after adding
+    this.formData.PlanningID=0
   }
 
 
@@ -431,7 +426,7 @@ export class PostPlanningComponent {
 
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      await this.commonMasterService.GetCommonMasterData('PostType').then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StaffTypeList = data.Data;
         console.log("StaffTypeList", this.StaffTypeList);
@@ -445,6 +440,54 @@ export class PostPlanningComponent {
     }
   }
 
+
+  async GetTradeData() {
+
+    this.tradeSearchRequest.action = '_getAllData'
+    this.tradeSearchRequest.TradeLevel = 0
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.TradeList = data.Data
+        console.log(this.TradeList, "ItiTradeListAll")
+      })
+
+      //this.collegeSearchRequest.action = '_getAllData'
+      //await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.ItiCollegesListAll = data.Data
+      //  console.log(this.ItiCollegesListAll, "ItiCollegesListAll")
+      //})
+    } catch (error) {
+      console.error(error)
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+  //async GetTradeData() {
+
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.().then((data: any) => {
+  //      data = JSON.parse(JSON.stringify(data));
+  //      this.TradeList = data.Data;
+  //      console.log("StaffTypeList", this.StaffTypeList);
+  //    });
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    setTimeout(() => {
+  //      this.loaderService.requestEnded();
+  //    }, 200);
+  //  }
+  //}
+
+
   async fillupDesignation() {
 
 
@@ -453,8 +496,9 @@ export class PostPlanningComponent {
 
   async GetPostList() {
     try {
+
       this.loaderService.requestStarted();
-      const data: any = await this.commonMasterService.GetITIPostDepartmentWise(this.sSOLoginDataModel.DepartmentID);
+      const data: any = await this.commonMasterService.GetCommonMasterData('PostMaster', this.formData.StaffTypeID);
       this.PostList = data['Data'];
       //this.PostList = this.PostList.filter((item: any) => item.TypeID == this.formData.StaffTypeID);
       // Keep original list for filtering later

@@ -155,6 +155,7 @@ export class SeatIntakePlanningComponent {
     this.tradeSearchRequest.action = '_getAllData'
     try {
       this.loaderService.requestStarted();
+      this.tradeSearchRequest.CollegeID = this.searchRequest.CollegeID
       await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeListAll = data.Data
@@ -165,6 +166,10 @@ export class SeatIntakePlanningComponent {
       //console.log("selectedCollegeTypeID", selectedCollegeTypeID);
       this.collegeSearchRequest.action = '_getAllData'
       this.collegeSearchRequest.ManagementTypeID = selectedCollegeTypeID;
+      if (this.collegeSearchRequest.ManagementTypeID == null) {
+        this.collegeSearchRequest.ManagementTypeID=0
+      }
+      this.collegeSearchRequest.DistrictID = this.searchRequest.DistrictID
       await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiCollegesListAll = data.Data

@@ -18,6 +18,8 @@ export class SeatIntakeDataModel {
 
   public OrderNo?: string = '';
   public OrderDate?: string = '';
+  public FinancialOrderDate?: string = '';
+  public AdminOrderDate?: string = '';
 
   public AcademicYearID: number = 0;
 
