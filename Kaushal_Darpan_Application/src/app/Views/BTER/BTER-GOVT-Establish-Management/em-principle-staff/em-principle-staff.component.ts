@@ -278,7 +278,7 @@ export class EMPrincipleStaffComponent {
 
           let parsedData = JSON.parse(response.Data); // parse string inside Data
           if (parsedData != null) {
-            this.DuplicateCheck(this.requestSSoApi.SSOID);
+            // this.DuplicateCheck(this.requestSSoApi.SSOID);     commented by ramesh after discussion with Umesh sir
             //this.formData.Displayname = parsedData.displayName
             this.isSSOVisible = true;
             this.formData.Displayname = parsedData.displayName;

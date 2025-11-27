@@ -1519,7 +1519,7 @@ export class ItiCollegeReportComponent {
 
 
   resetConstructionDetails() {
-    this.request.ConstructionAgency = '';
+    ///this.request.ConstructionAgency = '';
     this.request.PDName = '';
     this.request.ContractorName = '';
     this.request.PDMobile = '';

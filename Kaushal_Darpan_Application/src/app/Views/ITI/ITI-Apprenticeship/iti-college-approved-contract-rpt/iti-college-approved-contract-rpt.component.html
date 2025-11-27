@@ -1,0 +1,187 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Aprroved Contract Report</h4>
+
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI College
+                Aprroved Contract Report</a>
+        </div>
+    </div>
+</div>
+<!-- Page Title End -->
+ <div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-list"></i> ITI College Aprroved Contract</b>
+                <div class="flex justify-end flex-wrap items-center">
+                    <!-- <a routerLink="/iti-apprenticeship" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a> -->
+                </div>
+            </div>
+            <form [formGroup]="CollegeApprovedContractForm">
+                <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Zone: </label>
+                        <select class="form-select"
+                                name="DivisionID"
+                                [(ngModel)]="this.request.DivisionID"
+                                (change)="GetDistictData()"
+                                formControlName="DivisionID">
+                            <option [ngValue]="0">Choose option</option>
+                            <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
+                            {{ item.Name }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
+                        <select class="form-select "
+                                [(ngModel)]="this.request.DistrictID"
+                                formControlName="DistrictID"
+                                (change)="onChange()">
+                            <option value="0">Choose option</option>
+                            <option *ngFor="let item of Districtlist" [value]="item.ID">
+                            {{item.Name}}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Financial Year: </label>
+                        <select class="form-select"
+                                name="FinancialYearID"
+                                [(ngModel)]="this.request.FinancialYearID"
+                                (change)="GetInstituteMaster()"
+                                formControlName="FinancialYearID">
+                            <option [ngValue]="0">Choose option</option>
+                            <option *ngFor="let item of FinancialYearList" [ngValue]="item.FinancialYearID">
+                            {{ item.FinancialYearName }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" style="margin-top:35px !important;" *ngIf="Institutelist?.length > 0">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Export Execl
+      </a>
+      </div>
+    </div>
+        </div>
+         <div class="overflow-auto max-height500" *ngIf="Institutelist?.length > 0">
+            <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                     <tr>
+                        <th class="text-left">Sr No</th>
+                        <th class="text-left">Name of ITI</th>
+                        <th class="text-left">Division</th> 
+                        <th class="text-left">District</th> 
+                        <th class="text-left">Financial Year</th> 
+                        <th class="text-left">Jan</th>
+                        <th class="text-left">Feb</th>
+                        <th class="text-left">Mar</th>
+                        <th class="text-left">Apr</th>
+                        <th class="text-left">May</th>
+                        <th class="text-left">Jun</th>
+                        <th class="text-left">Jul</th>
+                        <th class="text-left">Aug</th>
+                        <th class="text-left">Sep</th>
+                        <th class="text-left">Oct</th>
+                        <th class="text-left">Nov</th>
+                        <th class="text-left">Dec</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let row of Institutelist; let idx = index;">
+                        <tr>
+                            <td class="text-left">{{ idx + 1 }}</td>
+                            <td class="text-left">{{ row.Name }}</td>
+                            <td class="text-left">{{ row.Division }}</td>
+                            <td class="text-left">{{ row.District }}</td>
+                            <td class="text-left">{{ row.FinancialYear }}</td>
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Jan > 0; else nrmlJan">
+                                <a [routerLink]="['/iticollegeapprovedcontractrpt', 0, row.InstituteID, 1]">{{ row.Jan }}</a>
+                                </ng-container>
+                                <ng-template #nrmlJan>{{ row.Jan }}</ng-template> 
+                            </td>
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Feb > 0; else nrmlFeb">
+                                <a href="javascript:void(0)">{{ row.Feb }}</a>
+                                </ng-container>
+                                <ng-template #nrmlFeb>{{ row.Feb }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Mar > 0; else nrmlMar">
+                                <a href="javascript:void(0)">{{ row.Mar }}</a>
+                                </ng-container>
+                                <ng-template #nrmlMar>{{ row.Mar }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Apr > 0; else nrmlApr">
+                                <a href="javascript:void(0)">{{ row.Apr }}</a>
+                                </ng-container>
+                                <ng-template #nrmlApr>{{ row.Apr }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.May > 0; else nrmlMay">
+                                <a href="javascript:void(0)">{{ row.May }}</a>
+                                </ng-container>
+                                <ng-template #nrmlMay>{{ row.May }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Jun > 0; else nrmlJun">
+                                <a href="javascript:void(0)">{{ row.Jun }}</a>
+                                </ng-container>
+                                <ng-template #nrmlJun>{{ row.Jun }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Jul > 0; else nrmlJul">
+                                <a href="javascript:void(0)">{{ row.Jul }}</a>
+                                </ng-container>
+                                <ng-template #nrmlJul>{{ row.Jul }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Aug > 0; else nrmlAug">
+                                <a href="javascript:void(0)">{{ row.Aug }}</a>
+                                </ng-container>
+                                <ng-template #nrmlAug>{{ row.Aug }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Sep > 0; else nrmlSep">
+                                <a href="javascript:void(0)">{{ row.Sep }}</a>
+                                </ng-container>
+                                <ng-template #nrmlSep>{{ row.Sep }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Oct > 0; else nrmlOct">
+                                <a href="javascript:void(0)">{{ row.Oct }}</a>
+                                </ng-container>
+                                <ng-template #nrmlOct>{{ row.Oct }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Nov > 0; else nrmlNov">
+                                <a href="javascript:void(0)">{{ row.Nov }}</a>
+                                </ng-container>
+                                <ng-template #nrmlNov>{{ row.Nov }}</ng-template> 
+                            </td> 
+                            <td class="text-left">
+                                <ng-container *ngIf="row.Dec > 0; else nrmlDec">
+                                <a href="javascript:void(0)">{{ row.Dec }}</a>
+                                </ng-container>
+                                <ng-template #nrmlDec>{{ row.Dec }}</ng-template> 
+                            </td>  
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+         </div>
+    </div>
+ </div>
