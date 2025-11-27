@@ -74,7 +74,8 @@ export class EmitraFeeTransactionHistoryComponent {
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     console.log("this.sSOLoginDataModel", this.sSOLoginDataModel);
-    this.searchRequest.DepartmentID = EnumDepartment.BTER;
+
+    this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;;
     this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID;
     this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
     this.searchRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
@@ -167,7 +168,7 @@ export class EmitraFeeTransactionHistoryComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
-      this.searchRequest.DepartmentID = 0;
+    
       await this.StudentFeesTransactionHistoryRptService.GetEmitraFeesTransactionHistory(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));

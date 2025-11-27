@@ -192,7 +192,7 @@
                 <span *ngSwitchCase="'SUCCESS'" class="badge bg-success">{{ item.TransctionStatus }}</span>
                 <span *ngSwitchCase="'FAILED'" class="badge bg-danger">{{ item.TransctionStatus }}</span>
                 <span *ngSwitchCase="'PENDING'" class="badge bg-warning text-dark">{{ item.TransctionStatus }}</span>
-                <span *ngSwitchDefault class="badge bg-info text-dark">{{ item.TransctionStatus }}</span>
+                <span *ngSwitchDefault class="badge bg-info text-dark">Pending</span>
               </span>
             </td>
             <td>{{item.TransctionDate | date:'dd-MM-yyyy'}}</td>
