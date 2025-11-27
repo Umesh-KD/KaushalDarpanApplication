@@ -101,6 +101,23 @@
       <b class="text-1xl-5"><i class="ti ti-list"></i> Hostel Room /Seat List</b>
 
     </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="itemsPerPage" (change)="updatePagination()">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+      </div>
+      <div class="">
+        <!-- <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" /> -->
+      </div>
+    </div>
 
     <div class="overflow-x-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5">
