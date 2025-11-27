@@ -126,7 +126,7 @@ export class RosteListComponent implements OnInit {
       AttendanceStartTime: [''],
       AttendanceEndTime: ['']
     });
-
+    this.DayListBind();
     
     this.getMasterData();
    /* this.GetAllRosterDisplay();*/
@@ -134,8 +134,19 @@ export class RosteListComponent implements OnInit {
   }
   get formTable() { return this.TableForm.controls; }
 
+  DayListBind() {
+    this.DayList = [     
+      { DayID: 2, DayName: 'Monday' },
+      { DayID: 3, DayName: 'Tuesday' },
+      { DayID: 4, DayName: 'Wednesday' },
+      { DayID: 5, DayName: 'Thursday' },
+      { DayID: 6, DayName: 'Friday' },
+      { DayID: 7, DayName: 'Saturday' },
+      { DayID: 1, DayName: 'Sunday' },
+    ];
+  }
+
   async getMasterData() {
-    debugger
     try {
 
       await this.GetStaff_InstituteWise();
@@ -183,11 +194,17 @@ export class RosteListComponent implements OnInit {
     })
   }
 
+  onChangeDay(event: any) {
+    const value = event.target.value;
+    console.log("Selected:", value);
+    // Convert to number (optional but recommended)
+    this.filterModel.DayID = Number(value);
+    console.log("Updated Model:", this.filterModel.DayID);
+  }
 
 
   async GetAllRosterDisplay() {
     try {
-      debugger
       if (this.TableForm.invalid) {
         this.toastr.warning("Please select Semester or Stream !")
         return;
@@ -269,7 +286,6 @@ export class RosteListComponent implements OnInit {
     });
     const GetstreamId = this.TableForm.get('StreamID')?.value;
     const GetSemesterID = this.TableForm.get('SemesterID')?.value;
-    debugger
     let obj = {
       Action: "GET_BY_ID",
       DepartmentID: this.sSOLoginDataModel.DepartmentID,
@@ -448,7 +464,6 @@ export class RosteListComponent implements OnInit {
 
   async GenerateTimetableData(content: any) {
     this.isSubmitted = true;
-    debugger
     // Open only once, store reference
     this.modalRef1 = this.modalService.open(content, {
       size: 'xl',
@@ -515,7 +530,6 @@ export class RosteListComponent implements OnInit {
   }
 
   async GetRosterDisplay_PDFTimeTablePDF() {
-    debugger
     try {
 
       this.loaderService.requestStarted();
@@ -547,7 +561,6 @@ export class RosteListComponent implements OnInit {
           this.Message = data['Message'];
           this.ErrorMessage = data['ErrorMessage'];
           data = JSON.parse(JSON.stringify(data));
-          debugger
           if (data && data.Data) {
             const base64 = data.Data;
 
