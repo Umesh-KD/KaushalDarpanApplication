@@ -4,13 +4,13 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Budget Management</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Budget Management Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
 
-      <a routerLink="" class="text-sm font-medium text-slate-700" aria-current="page">ITI Budget Management</a>
+      <a routerLink="" class="text-sm font-medium text-slate-700" aria-current="page">ITI Budget Management Report</a>
     </div>
   </div>
 
@@ -25,7 +25,6 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div>
-          <!--<a routerLink="/ITIGovtEMZonalOfficeMaster" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Office</a>-->
         </div>
       </div>
 
@@ -72,7 +71,7 @@
         </div>
 
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Budget Type (Main/Supplement): </label>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Buget Type (Main/Supplement): </label>
           <select class="form-select w-full" name="ddlDistributedType" [(ngModel)]="searchRequest.DistributedType">
             <option value="0">ALL</option>
             <option value="1">Main Budget</option>
@@ -95,7 +94,7 @@
         <a 
           href="javascript:void(0);" 
           class="btn bg-info btn-sm text-white" 
-          (click)="Approve_CollegeBudgetAllot()">
+          (click)="AllotedReport()">
           <i class="ti ti-download"></i> Approve Selected
         </a>
 
@@ -124,14 +123,14 @@
       <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>
+            <!--<th>
               <input 
                 type="checkbox" 
                 class="checkboxSize" 
                 [(ngModel)]="AllInTableSelect" 
                 (change)="selectInTableAllCheckbox()" 
                 *ngIf="paginatedInTableData?.length > 0"/>
-            </th>
+            </th>-->
             <th class="text-left">S No</th>
             <th class="text-left">{{searchRequest.BudgetForID == 1 ? 'Zone Office' : 'College Details'}}</th>
             <th class="text-left">Budget Type</th>
@@ -144,7 +143,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <td>
+            <!--<td>
               <input 
                 type="checkbox" 
                 class="checkboxSize" 
@@ -152,15 +151,15 @@
                 #checkboxInTableSeletedSingle 
                 (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
                 *ngIf="row.Status == 0 && row.Amount > 0" />
-            </td>
+            </td>-->
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
               {{row.CollegeName}}<br>
-              <strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
-              <strong>Email:</strong> {{row.Email}}
+              <!--<strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
+              <strong>Email:</strong> {{row.Email}}-->
             </td>
             <td *ngIf="searchRequest.BudgetForID == 1">
-              {{row.DivisionNameEnglish}}<br>
+              {{row.CollegeName}}<br>
             </td>
             <td>{{row.BudgetType}}</td>
             <td>{{row.Amount | number:digitsInfo:locale}}</td>
@@ -186,13 +185,7 @@
                 <i class="ti ti-eye"></i>
               </a>
 
-              <a 
-                (click)="UnlockUtilization_ITI_BGT(row)"
-                class="btn bg-primary text-white m-0" 
-                target="_blank"
-                *ngIf="row.Status == 2">
-                <i class="ti ti-lock-open"></i>
-              </a>
+              
 
             </td>
           </tr>

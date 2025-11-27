@@ -1046,6 +1046,8 @@ const routes: Routes = [
       { path: 'iti-apprenticeship', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship/iti-Apprenticeship.module').then(m => m.ITIApprenticeshipModule), title: 'ITI Apprenticeship' },
       { path: 'iti-apprenticeship-report', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-apprenticeship-report/iti-apprenticeship-report.module').then(m => m.ITIApprenticeshipReportModule), title: 'ITI Apprenticeship Report' },
       { path: 'iti-college-approved-contract', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/nodal-college-approved-contract/nodal-college-approved-contract.module').then(m => m.NodalCollegeApprovedContractModule), title: 'ITI College Approved Contracts' },
+      { path: 'iti-college-approved-contract-rpt', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-college-approved-contract-rpt/iti-college-approved-contract-rpt.module').then(m => m.ItiCollegeApprovedContractRPTModule), title: 'ITI College Approved Contracts Report' },
+      { path: 'iticollegeapprovedcontractrpt/:id/:instituteId/:monthId', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/iti-college-approved-contract-rptdetails/iti-college-approved-contract-rptdetails.module').then(m => m.ItiCollegeApprovedContractRPTDetailsModule), title: 'Pre Exam Student Examination' },
       { path: 'college-approved-contract-list', loadChildren: () => import('./Views/ITI/ITI-Apprenticeship/college-approved-contract-list-admin/college-approved-contract-list-admin.module').then(m => m.CollegeApprovedContractListAdminModule), title: 'ITI College Approved Contracts' },
 
       { path: 'add-public-info', loadChildren: () => import('./Views/PublicInfo/add-public-info/add-public-info.module').then(m => m.AddPublicInfoModule) },
@@ -1356,6 +1358,7 @@ const routes: Routes = [
       { path: 'fresherRegistrationReportlist', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/fresher-registration-report-list/fresher-registration-report-list.module').then(m => m.fresherRegistrationReportListModule) },
 
       { path: 'BudgetDistribute', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-distribute/budget-distribute.module').then(m => m.BudgetDistributeModule) },
+      { path: 'Budget-Report', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-report/budget-report.module').then(m => m.BudgetReportModule) },
       { path: 'CollegeBudgetList', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-list/college-budget-list.module').then(m => m.CollegeBudgetListModule) },
       { path: 'BudgetRequest', loadChildren: () => import('./Views/ITI/BudgetManagement/college-budget-request/college-budget-request.module').then(m => m.CollegeBudgetRequestModule) },
       { path: 'budgetrequeststatus', loadChildren: () => import('./Views/ITI/BudgetManagement/budget-request-status/budget-request-status.module').then(m => m.BudgetRequestStatusModule) },

@@ -77,10 +77,14 @@ export class BranchWiseHodComponent {
     //  data = JSON.parse(JSON.stringify(data));
     //  this.StreamMasterDDL = data.Data;
     //})
-
+    await this.SemesterMaster();
+    
+  }
+  async  SemesterMaster() {
     await this.commonMasterService.SemesterMaster().then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.SemesterMasterDDL = data.Data;
+      console.log('Semester Master DDL List ===>', this.SemesterMasterDDL)
     })
   }
 

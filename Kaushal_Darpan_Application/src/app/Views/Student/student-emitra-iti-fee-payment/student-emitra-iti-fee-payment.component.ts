@@ -11,6 +11,7 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { EmitraPaymentService } from '../../../Services/EmitraPayment/emitra-payment.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { StudentService } from '../../../Services/Student/student.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-student-emitra-iti-fee-payment',
@@ -50,13 +51,28 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
   public PDFURL: string = '';
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
+  public searchssoform!: FormGroup
   constructor(private loaderService: LoaderService, private commonservice: CommonFunctionService,
     private studentService: StudentService, private modalService: NgbModal, private toastrService: ToastrService,
     private emitraPaymentService: EmitraPaymentService,
-    private sweetAlert2: SweetAlert2
+    private sweetAlert2: SweetAlert2, private formBuilder: FormBuilder, 
   ) { }
 
   async ngOnInit() {
+
+    //this.searchssoform =
+    //  this.formBuilder.group({
+    //  txtApplicationNo: ['', Validators.required]
+    //})
+
+
+    this.searchssoform = this.formBuilder.group({
+      txtApplicationNo: ['', Validators.required],
+      txtMobileNo: [''],
+      DOB: ['']
+    })
+
+
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -69,6 +85,8 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
   async onSearchClick() {
     await this.GetAllDataActionWise();
   }
+
+  get _searchssoform() { return this.searchssoform.controls; }
 
   async ResetControl() {
     this.SemesterID = 0;
@@ -131,6 +149,13 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
 
 
   async GetAllDataActionWise() {
+
+
+    this.isSubmitted = true
+    if (this.searchssoform.invalid) {
+      return
+    }
+
     this.isShowGrid = true;
     this.searchRequest.action = "_PendingFeesForEmitra";
 
@@ -265,7 +290,9 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
     }
   }
 
-  async GetTransactionDetailsSemesterWise(content: any, item: StudentDetailsModel) {
+  async GetTransactionDetailsSemesterWise(content: any, item: StudentDetailsModel)
+  {
+    debugger;
     this.modalService.open(content, { size: 'xl', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -276,9 +303,9 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.SemesterID = item.SemesterID;
-      this.searchRequest.studentId = item.StudentID;
+      this.searchRequest.StudentID = item.StudentID;
 
-      this.searchRequest.action = '_GetTransactionDetailsSemesterWise';
+      this.searchRequest.action = '_GetTransactionDetailsSemesterWise_ITI';
       await this.emitraPaymentService.GetTransactionDetailsActionWise(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -360,12 +387,15 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
       this.emitraRequest.ApplicationIdEnc = item.StudentSemesterID.toString();
       this.emitraRequest.ServiceID = item.ServiceID.toString();
       this.emitraRequest.UserName = item.StudentName;
-      this.emitraRequest.MobileNo = item.MobileNo;
+      this.emitraRequest.MobileNo = item.MobileNo??'';
       this.emitraRequest.StudentID = item.StudentID;
       this.emitraRequest.SemesterID = item.SemesterID;
       this.emitraRequest.ExamStudentStatus = item.ExamStudentStatus;
       this.emitraRequest.DepartmentID = EnumDepartment.ITI;
       this.emitraRequest.ID = item.ID;
+
+      this.emitraRequest.FormCommision = item?.FormCommision??0;
+ 
       //common
       this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
       this.emitraRequest.IsKiosk = true;
@@ -474,7 +504,7 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
             this.emitraRequest.ApplicationIdEnc = "0";
             this.emitraRequest.ServiceID = this.studentDetailsModel.ServiceID.toString();
             this.emitraRequest.UserName = this.studentDetailsModel.StudentName;
-            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo;
+            this.emitraRequest.MobileNo = this.studentDetailsModel.MobileNo ?? '';
             this.emitraRequest.StudentID = this.studentDetailsModel.StudentID;
             this.emitraRequest.SemesterID = this.studentDetailsModel.SemesterID;
             this.emitraRequest.ExamStudentStatus = this.studentDetailsModel.ExamStudentStatus;
@@ -488,6 +518,7 @@ export class StudentEmitraITIFeePaymentComponent implements OnInit {
             this.emitraRequest.SsoID = this.sSOLoginDataModel.SSOID;
             this.emitraRequest.SSoToken = this.sSOLoginDataModel.SSoToken;
             this.emitraRequest.KIOSKCODE = this.sSOLoginDataModel.KIOSKCODE;
+            this.emitraRequest.FormCommision = this.studentDetailsModel?.FormCommision ?? 0;
 
             this.loaderService.requestStarted();
             try

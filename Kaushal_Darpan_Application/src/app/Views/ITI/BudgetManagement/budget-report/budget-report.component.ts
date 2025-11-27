@@ -28,14 +28,13 @@ import { ITIBudgetCreateService } from '../../../../Services/ITI/ITIBudgetCreate
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 
 @Component({
-  selector: 'app-budget-distribute',
+  selector: 'app-budget-report',
   standalone: false,
-  templateUrl: './budget-distribute.component.html',
-  styleUrl: './budget-distribute.component.css'
+  templateUrl: './budget-report.component.html',
+  styleUrl: './budget-report.component.css'
 })
-export class BudgetDistributeComponent {
+export class BudgetReportComponent {
   public AddStaffBasicDetailFromGroup!: FormGroup;
-  /*public searchRequest = new ITIAddmissionWomenReportSearchModel();*/
   public searchRequest = new BudgetHeadSearchFilter();
   public collegeRequest = new ItiCollegesSearchModel();
   public Request = new BudgetDistributeModel();
@@ -182,6 +181,7 @@ export class BudgetDistributeComponent {
     }
     finally {
       setTimeout(() => {
+
         this.loaderService.requestEnded();
       }, 200);
     }
@@ -198,12 +198,13 @@ export class BudgetDistributeComponent {
   }
 
   async GetList() {
+    debugger
     try {
        ;
       this.searchRequest.CollegeID
       this.loaderService.requestStarted();
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      await this.budgetDistributedService.GetAllBudgetManagementData(this.searchRequest)
+      await this.budgetDistributedService.GetAllBudgetReportData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.AddmissionList = data.Data;
@@ -229,7 +230,8 @@ export class BudgetDistributeComponent {
 
   onResetClick() {
     this.searchRequest.CollegeID = 0;
-    this.searchRequest.DistributedID = 0;
+    this.searchRequest.DistributedID
+      = 0;
     this.AddmissionList = [];
     this.paginatedInTableData = [];
     this.GetList();
@@ -367,7 +369,7 @@ export class BudgetDistributeComponent {
       this.searchRequest.ActionName = "GetHeadWiseBudget";
       this.searchRequest.InstituteId = collegeID;
       this.searchRequest.DivisionID = collegeID;
-      debugger
+
       this.loaderService.requestStarted();
       // this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       await this.budgetDistributedService.GetBudget_HeadWise(this.searchRequest)
@@ -452,11 +454,9 @@ export class BudgetDistributeComponent {
 
   async openModal(content: any, row: any, indexNum: number) {
     console.log(row, 'RowData');
-    debugger
     try {
       // await this.GetBudgetUtilizationsList_Save();
       var id: number = 0
-      this.Request.DistributedID = row.DistributedID
       if(this.searchRequest.BudgetForID == 1) {
         id = row.DivisionID;
         this.Request.DivisionID = row.DivisionID
@@ -491,7 +491,7 @@ export class BudgetDistributeComponent {
     }
   }
   CloseModal() {
-    this.Request.DistributedID = 0;
+
     this.modalService.dismissAll();
     // Reset dropdown ready flag
 
@@ -530,7 +530,7 @@ export class BudgetDistributeComponent {
       this.Request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.Request.FinYearID = this.sSOLoginDataModel.FinancialYearID
       this.Request.DistributedType = 1
-      this.Request.ActionType = this.Request.DistributedID == 0 ? "INSERT" : "UPDATE";
+      this.Request.ActionType = 'INSERT'
       this.Request.BodgetTypeID = this.searchRequest.BudgetTypeID
       this.Request.BudgetForID = this.searchRequest.BudgetForID
 
@@ -715,4 +715,86 @@ export class BudgetDistributeComponent {
     this.AllInTableSelect = this.AddmissionList.every(r => r.Selected);
   }
   // end table feature
+
+
+
+  async AllotedReport() {
+    debugger
+    try {
+      this.loaderService.requestStarted(); 
+
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+
+      const resp: any = await this.budgetDistributedService
+        .GetAllBudgetReportData(this.searchRequest)
+        .then((data: any) => JSON.parse(JSON.stringify(data)))
+        .catch(err => { throw err; });
+
+      this.AddmissionList = resp?.Data ?? [];
+      this.isVisibleList = true;
+      this.isVisibleDownload = true;
+      this.loadInTable();
+      console.log(this.AddmissionList, "AddmissionList");
+
+      const unwantedColumns = [
+        'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+        'TotalRecords', 'DepartmentID', 'SomeInternalFlag' 
+      ];
+
+      const columnOrder = [
+        'DistributedID', 'BudgetType', 'Amount', 'UtilizationAmount', 'StatusName', 'Status', 'CollegeName', 'Remark'
+      ];
+
+      const filteredData = this.AddmissionList.map((item: any) => {
+        const out: any = {};
+        Object.keys(item).forEach(k => {
+          if (!unwantedColumns.includes(k)) {
+            out[k] = item[k];
+          }
+        });
+        return out;
+      });
+
+      const orderedData = filteredData.map((row: any) => {
+        const orderedRow: any = {};
+        columnOrder.forEach(col => {
+          orderedRow[col] = row.hasOwnProperty(col) ? row[col] : '';
+        });
+        Object.keys(row).forEach(k => {
+          if (!columnOrder.includes(k)) orderedRow[k] = row[k];
+        });
+        return orderedRow;
+      });
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(orderedData);
+      const cols = Object.keys(orderedData[0] || {}).map(col => ({
+        wch: Math.max(
+          col.length,
+          ...orderedData.map((r: any) => (r[col] ? r[col].toString().length : 0))
+        ) + 2
+      }));
+      ws['!cols'] = cols;
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+      // Sheet name (<=31 chars)
+      let sheetName = `Alloted_Budget_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      if (sheetName.length > 31) sheetName = sheetName.substring(0, 31);
+
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+      const fileName = `Alloted_BudgetReport_${dateStr}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+
+    } catch (ex) {
+      console.error('AllotedReport error', ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }

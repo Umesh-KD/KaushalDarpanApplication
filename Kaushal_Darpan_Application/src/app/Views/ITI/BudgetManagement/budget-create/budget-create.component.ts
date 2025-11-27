@@ -119,6 +119,7 @@ export class BudgetCreateComponent {
       Amount: null,
       IsUnitWise: false,
       UnitName: '',
+      UnitValue: 0,
       isNew: true
     });
   }

@@ -3,27 +3,34 @@
 <div class="card">
   <div class="card-body p-5">
     <div class="mb-8">
-      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-        <b class="text-1xl-5"><i class="ti ti-search"></i> Search Application  </b>
-      </div>
-      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.</label>
-          <input type="text" class="form-input" placeholder="Enter Application/Enrollment No" [(ngModel)]="searchRequest.ApplicationNo">
+      <form [formGroup]="searchssoform">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+          <b class="text-1xl-5"><i class="ti ti-search"></i> Search Application  </b>
         </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No </label>
-          <input type="text" class="form-input" placeholder="Enter Enter Mobile 10 Digit " [(ngModel)]="searchRequest.MobileNumber">
+        <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Application /Enrollment No.</label>
+            <input type="text" class="form-input" formControlName="txtApplicationNo" placeholder="Enter Application/Enrollment No" [(ngModel)]="searchRequest.ApplicationNo">
+
+            <div *ngIf="isSubmitted && _searchssoform.txtApplicationNo.errors" class="text-danger">
+              <p *ngIf="_searchssoform.txtApplicationNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+            </div>
+
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No </label>
+            <input type="number" class="form-input"  formControlName="txtMobileNo" maxlength="10" placeholder="Enter Enter Mobile 10 Digit " [(ngModel)]="searchRequest.MobileNumber">
+          </div>
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB</label>
+            <input type="date" class="form-input" min="1000-01-01" max="9999-12-31" formControlName="DOB" placeholder="Enter Select DOB" [(ngModel)]="searchRequest.DOB">
+          </div>
+          <div>
+            <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
+            <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
+          </div>
         </div>
-        <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">DOB</label>
-          <input type="date" class="form-input" placeholder="Enter Select DOB" [(ngModel)]="searchRequest.DOB">
-        </div>
-        <div>
-          <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="onSearchClick()"><i class="ti ti-search"></i>Search</button>
-          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white"><i class="ti ti-refresh"></i> Reset</button>
-        </div>
-      </div>
+        </form>
     </div>
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="isShowGrid">
@@ -40,12 +47,11 @@
               <th class="text-left">#</th>
               <th *ngIf="isShowSelected" class="text-left">Select</th>
               <th class="text-left">Name</th>
-              <th class="text-left">Stream Name</th>
+              <th class="text-left">Trade Name</th>
               <th class="text-left">Semester</th>
               <th class="text-left">Enrollment No.</th>
               <th class="text-left">Roll No</th>
               <th class="text-left">Amt. (INR)</th>
-              <th class="text-left">End Term</th>
               <th class="text-left">Status</th>
               <th class="text-left">Last Date</th>
               <!--<th class="text-left">View Subject</th>-->
@@ -64,7 +70,6 @@
               <td>{{row.EnrollmentNo}}</td>
               <td>{{row.RollNo}}</td>
               <td>{{row.FeeAmount}}</td>
-              <td>{{row.EndTermName}}</td>
               <td>{{row.StrStudenetStatus}}</td>
               <td><span class="text-danger"><b>{{row.LastDate}}</b></span></td>
               <!--<td class="text-Center">

@@ -118,7 +118,6 @@ export class ItiBGTHeadmasterComponent{
       HeadDescription: [''],
       IsUnitWise: [''],
       UnitName: [''],
-      UnitValue: [''],
     })
       // console.log("im in")
     this.searchForm = this.fb.group({

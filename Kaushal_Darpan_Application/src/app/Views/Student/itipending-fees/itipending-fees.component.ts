@@ -195,7 +195,7 @@ export class ITIPendingFeesComponent implements OnInit {
       this.searchRequest.SemesterID = item.SemesterID;
       this.searchRequest.studentId = item.StudentID;
 
-      this.searchRequest.action = '_GetTransactionDetailsSemesterWise';
+      this.searchRequest.action = '_GetTransactionDetailsSemesterWise_ITI';
       //await this.emitraPaymentService.GetTransactionDetailsActionWise(this.searchRequest)
       await this.studentService.GetITIStudentDeatilsByAction(this.searchRequest)
         .then((data: any) => {

@@ -45,7 +45,7 @@ export class RoomSeatMasterComponent {
   public isFormVisible: boolean = false;
   public isUpdate: boolean = false;
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 50;
   paginatedHostelList: any[] = [];
   @ViewChild('hostelNameRef') hostelNameElement!: ElementRef;
 

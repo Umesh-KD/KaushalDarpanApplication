@@ -32,7 +32,7 @@
             <select class="form-select" id="ddlDepartment" formControlName="ddlDepartment" [(ngModel)]="searchRequest.DepartmentID">
               <option value="0" selected>--Select Department--</option>
               <option value="{{_EnumDepartment.BTER}}">Polytechnic</option>
-              <option value="{{_EnumDepartment.ITI}}  ">ITI</option>
+              <option value="{{_EnumDepartment.ITI}}">ITI</option>
 
             </select>
             <div *ngIf="isSubmitted && _searchssoform.ddlDepartment.errors" class="text-danger">

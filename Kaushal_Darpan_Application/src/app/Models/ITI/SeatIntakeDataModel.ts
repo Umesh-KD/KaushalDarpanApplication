@@ -73,6 +73,7 @@ export class ITICollegeTradeSearchModel {
   public MinPercentageInMath: string = '';
   public ReportingStatus: number = 0;
   public MinPercentageInScience: string = '';
+  public PaymentSuccess: string = '';
 }
 export class SeatIntakePopUpSearchModel {
   public OrderDate: string = '';

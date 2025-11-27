@@ -782,8 +782,8 @@ export class ItiInstructorFormComponent {
         const ssoid = this.request.Uid;
 
         //this.request = this.InstructorForm.value as ITI_InstructorDataModel;
-        this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString();
-        this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID.toString();
+        this.request.CreatedBy = this.sSOLoginDataModel.UserID.toString()??'';
+        this.request.DepartmentID ='2'
         this.request.Uid = ssoid;
         this.request.EmploymentDetails = this.employeeRequestList;
         this.request.TechnicalQualifications = this.techRequestList;

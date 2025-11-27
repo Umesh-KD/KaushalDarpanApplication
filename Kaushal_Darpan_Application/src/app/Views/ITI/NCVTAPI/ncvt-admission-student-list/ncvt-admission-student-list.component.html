@@ -86,18 +86,20 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr. No.</th>
-            <th class="text-left">SR Number</th>
+            <th class="text-left">District Name</th>
+            <th class="text-left">Division Name</th>
             <th class="text-left">College Name</th>
+            <th class="text-left">SR Number</th>
             <th class="text-left">Name</th>
             <th class="text-left">Date of Birth</th>
             <th class="text-left">Gender</th>
             <th class="text-left">Father/Guardian Name</th>
             <!-- <th class="text-left">Mother Name</th> -->
             <th class="text-left">Category</th>
-            
+
             <th class="text-left">Mobile Number</th>
             <th class="text-left">Email ID</th>
-            
+
             <th class="text-left">Trade</th>
             <th class="text-left">Shift</th>
             <th class="text-left">Unit</th>
@@ -108,18 +110,20 @@
         <tbody>
           <tr *ngFor="let item of StudentList | tableSearchFilter:Table_SearchText; let idx = index">
             <td>{{ idx + 1 }}</td>
-            <td>{{ item.StateRegNumber }}</td>
+            <td>{{ item.DistrictNameEnglish }}</td>
+            <td>{{ item.DivisionNameEnglish }}</td>
             <td>{{ item.CollegeName }}</td>
+            <td>{{ item.StateRegNumber }}</td>
             <td>{{ item.Name }}</td>
             <td>{{ item.DateOfBirth | date: 'yyyy-MM-dd' }}</td>
             <td>{{ item.GenderName }}</td>
             <td>{{ item.FatherGuardianName }}</td>
             <!-- <td>{{ item.MotherName }}</td> -->
             <td>{{ item.Category }}</td>
-            
+
             <td>{{ item.MobileNumber }}</td>
             <td>{{ item.EmailID }}</td>
-            
+
             <td>{{ item.Trade }}</td>
             <td>{{ item.Shift }}</td>
             <td>{{ item.Unit }}</td>
