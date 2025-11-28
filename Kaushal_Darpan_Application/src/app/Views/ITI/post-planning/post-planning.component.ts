@@ -207,7 +207,7 @@ export class PostPlanningComponent {
       StaffTypeName: getstaffType.Name,
       PostedSeat: 0,
       TradeID: formValues.TradeID,
-      TradeName: gettrade.TradeName,
+      TradeName: gettrade.TradeName||'',
       Index: this.tempIndex++
     };
 
