@@ -70,6 +70,10 @@ export class AddIntakePlanningComponent {
        /* ddlRemark: ['', [DropdownValidators]],*/
         ddlTradeScheme: ['', [DropdownValidators]],
         txtUnitNo: ['', Validators.required],
+        FinancialOrderDate: [{ value: '', disabled: true }],
+        AdminOrderDate: [{ value: '', disabled: true }],
+
+
         ddlAdminSanctionedID: ['', [DropdownValidators]],
         ddlFinancialSanctionID:['',[DropdownValidators]],
        /* ddlSanctioned: ['', [DropdownValidators]],*/
@@ -88,7 +92,7 @@ export class AddIntakePlanningComponent {
     await this.GetTradeAndColleges()
     await this.GetMasterDataForDDL()
     await this.GetCollegesListAll()
-    await this.GetOrderDetailsList();
+/*    await this.GetOrderDetailsList();*/
 
     this.SeatIntakeID = Number(this.route.snapshot.queryParamMap.get('id')?.toString());
     if (this.SeatIntakeID) {
@@ -224,6 +228,9 @@ export class AddIntakePlanningComponent {
   // }
 
 
+
+
+
     async onSubmit() {
     debugger
 
@@ -249,7 +256,7 @@ export class AddIntakePlanningComponent {
 
       this.request.ActiveStatus = true;
       console.log("request",this.request);
-      await this.ItiSeatIntakeService.SaveSeatIntakeData(this.request)
+      await this.ItiSeatIntakeService.SaveSeatIntakePlanning(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State = EnumStatus.Success) {
@@ -283,13 +290,16 @@ export class AddIntakePlanningComponent {
   async GetByID(id: number) {
     try {
       this.loaderService.requestStarted();
-      await this.ItiSeatIntakeService.GetByID(id).then((data: any) => {
+      await this.ItiSeatIntakeService.GetByIdPlanning(id).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.request = data.Data;
-        this.request.TradeSchemeID = data.data['TradeSchemeID']
+      // this.request.TradeSchemeID = data.data['TradeSchemeID']
         this.SeatIntakeFormGroup.get('ddlCollege')?.disable();
         this.SeatIntakeFormGroup.get('ddlTradeLevel')?.disable();
         this.SeatIntakeFormGroup.get('ddlTrade')?.disable();
+        this.GetOrderDetailsList()
+        this.request.TradeSchemeID = data.data['TradeSchemeID']
+
         console.log(this.request, "request")
         this.OnTradeSchemechange()
       });
@@ -319,12 +329,14 @@ export class AddIntakePlanningComponent {
     debugger
     try{
       this.loaderService.requestStarted();
+      this.ItiSanctionOrderList.InstituteID = this.request.PlanningID
+
       await this.ScholarshipService.GetsanctionOrder(this.ItiSanctionOrderList).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         // this.request = data.Data[0];
         this.OrderNoList=data.Data;
-        this.AcademicOrderNoList=this.OrderNoList.filter((x: any) => x.OrderType==1);
-        this.FinancialOrderNoList=this.OrderNoList.filter((x:any)=>x.OrderType==2);
+        this.AcademicOrderNoList=this.OrderNoList.filter((x: any) => x.ParentID==1);
+        this.FinancialOrderNoList = this.OrderNoList.filter((x: any) => x.ParentID ==2);
        
         console.log(this.OrderNoList, "orderlist");
       });
@@ -336,6 +348,26 @@ export class AddIntakePlanningComponent {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
+    }
+  }
+
+
+  async OnOrderChange( type: number) {
+    debugger
+    if (type == 1) {
+      const item = this.AcademicOrderNoList.find(
+        (e: any) => e.ID == this.request.AdminSanctionedID
+      );
+
+      this.request.AdminOrderDate = item?.OrderDate ?? '';
+
+    }
+    if (type == 2) {
+      const item = this.FinancialOrderNoList.find(
+        (e: any) => e.ID == this.request.FinancialSanctionID
+      );
+
+      this.request.FinancialOrderDate = item?.OrderDate ?? '';
     }
   }
 

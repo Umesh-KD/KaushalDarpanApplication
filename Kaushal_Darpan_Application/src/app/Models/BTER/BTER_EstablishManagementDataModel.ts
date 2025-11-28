@@ -550,4 +550,6 @@ export class OfficeVacancyModel {
   public InstituteName: string = '';
   public StaffTypeName: string = '';
   public PostedSeat: number = 0;
+  public TradeID: number = 0
+  public TradeName: string = ''
 }

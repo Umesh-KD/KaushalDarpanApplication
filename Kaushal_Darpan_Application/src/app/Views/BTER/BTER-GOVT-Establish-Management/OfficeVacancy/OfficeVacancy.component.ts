@@ -206,7 +206,9 @@ export class OfficeVacancyComponent implements OnInit {
       StaffTypeName: getstaffType.Name,
       PostedSeat: 0,
       PlanningID:0,
-      Index: this.tempIndex++
+      Index: this.tempIndex++,
+      TradeID: 0,
+      TradeName:''
     };
 
     console.log('Vacancy being added:', vacancyData);

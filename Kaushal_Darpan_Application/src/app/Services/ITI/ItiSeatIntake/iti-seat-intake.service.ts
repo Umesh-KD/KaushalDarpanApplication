@@ -61,6 +61,15 @@ export class ItiSeatIntakeService {
       ).toPromise();
   }
 
+
+  public async GetByIdPlanning(id: number) {
+    return await this.http.get(`${this.APIUrl}/GetByIdPlanning/${id}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async DeleteById(id: number, UserId: number) {
     return await this.http.post(`${this.APIUrl}/DeleteDataByID/${id}/${UserId}`, this.headersOptions)
       .pipe(
@@ -221,6 +230,15 @@ export class ItiSeatIntakeService {
   
   public async GetOrderDetailsList() {
     return await this.http.post(`${this.APIUrl}/GetSanctionOrderByID`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+  public async SaveSeatIntakePlanning(request: SeatIntakeDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/CollegeTradeMasterData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

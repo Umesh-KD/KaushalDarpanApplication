@@ -158,7 +158,7 @@ export class PaidFeesComponent implements OnInit
     try
     {
       this.loaderService.requestStarted();
-      await this.reportService.GetStudentFeeReceipt(item.TransactionId)
+      await this.reportService.GetStudentFeeReceipt(item.TransactionId, item.StudentExamID)
         .then((data: any) =>
         {
           data = JSON.parse(JSON.stringify(data));
