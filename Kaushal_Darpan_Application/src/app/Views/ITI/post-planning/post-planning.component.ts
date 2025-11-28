@@ -188,7 +188,7 @@ export class PostPlanningComponent {
       OfficeID: formValues.OfficeID,
       StaffTypeID: formValues.StaffTypeID,
       TotalSeatID: formValues.TotalSeatID,
-      PlanningID: formValues.ddlCollege,
+      PlanningID: formValues.ddlCollege||0,
       EndTermID: this.sSOLoginDataModel.EndTermID,
       CreatedBy: this.sSOLoginDataModel.UserID,
       DepartmentID: 1,
@@ -207,7 +207,7 @@ export class PostPlanningComponent {
       StaffTypeName: getstaffType.Name,
       PostedSeat: 0,
       TradeID: formValues.TradeID,
-      TradeName: gettrade.TradeName,
+      TradeName: gettrade?.TradeName||'',
       Index: this.tempIndex++
     };
 

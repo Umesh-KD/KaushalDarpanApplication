@@ -257,10 +257,31 @@ export class MasterLayoutComponent implements OnInit {
       }
     }
     await this.ChangeCSS();
-    this.router.navigate(['/dashboard']).then(() => {
-      window.location.reload();
+
+
+    // Force reload route, no browser refresh
+    //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    //this.router.onSameUrlNavigation = 'reload';
+    //this.router.navigate(['/dashboard']);
+
+    this.reloadRoute()
+
+    //this.router.navigate(['/dashboard']).then(() => {
+    //  window.location.reload();
+    //});
+  }
+
+  reloadRoute() {
+    const currentUrl = this.router.url;
+
+    this.router.navigateByUrl('/__refresh__', { skipLocationChange: true }).then(() => {
+      this.router.navigate([currentUrl]);
     });
   }
+
+
+
+
   ngOnDestroy() {
     // Unsubscribe to prevent memory leaks
     if (this.isMobileSubscription) {
@@ -355,7 +376,7 @@ export class MasterLayoutComponent implements OnInit {
     localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
     //redirect
     //window.open('/dashboard', "_self");
-    console.log(this.sSOLoginDataModel, "SOLoginDataModel")
+   
     await this.ChangeRolenFY()
 
   }
