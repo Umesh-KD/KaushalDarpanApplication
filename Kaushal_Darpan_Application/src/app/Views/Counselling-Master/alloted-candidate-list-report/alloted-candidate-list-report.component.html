@@ -81,37 +81,52 @@
               Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
             </th>    
-              <th class="text-left" >Father's Name</th>          
-              <th class="text-left" >Gender</th>          
+            <th class="text-left name-col" >Father's Name</th>          
+            <th class="text-left name-col" >Gender</th>          
             <th class="text-left">DOB</th>            
             <th class="text-left">SSOID</th>
             <th class="text-left">Qualification</th>
             <th class="text-left">Roll Number</th>
             <th class="text-left">Category</th>
-            <th class="text-left">Selected Category</th>
-            <th class="text-left">Trade Name</th>
-            <th class="text-left">Allotted Institute</th>
-            <th class="text-left" style="display: none;">Final Allotted Institute</th>
+            <th class="text-left">Selected Category</th> 
+            <th class="text-left">Category-B</th>
+            <th class="text-left">Is Physical Handi capped</th>
+            <th class="text-left">Is Ex-Service men</th>
+            <th class="text-left">Is Sports Person</th>
+            <th class="text-left">Is Shahid Dependent</th>
+            <th class="text-left">Is Any Incurable Diseases</th>
+            <th class="text-left">Is Spouse In Same Service</th> 
             <th class="text-left">IsTSP</th>
+            <th class="text-left name-col">Trade Name</th>
+            <th class="text-left allotted-col">Allotted Institute</th>
+            <th class="text-left" style="display: none;">Final Allotted Institute</th> 
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;"> 
             <td align="left">{{(startInTableIndex+1)+idx}}</td>         
             <td align="left">{{row.ApplicationNo}}</td>   
-            <td align="left">{{row.CandidateName}}</td>
-            <td align="left">{{row.FatherName}}</td>
+            <td align="left" class="name-col">{{row.CandidateName}}</td>
+            <td align="left" class="name-col">{{row.FatherName}}</td>
             <td align="left">{{row.Gender}}</td>
-            <td align="left">{{row.DOB | date:'yyyy-MM-dd'}}</td>
+            <!-- <td align="left">{{row.DOB | date:'yyyy-MM-dd'}}</td> -->
+            <td align="left">{{row.DOB | date:'dd/MM/yyyy'}}</td>
             <td align="left">{{row.SSOID}}</td>
             <td align="left">{{row.Designation}}</td>
             <td align="left">{{row.RollNumber}}</td>
             <td align="left">{{row.Category}}</td>
-            <td align="left">{{row.SelectedCategory}}</td>
-            <td align="left">{{row.TradeName}}</td>
-            <td align="left">{{row.AllottedInstitute}}</td>
-            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
+            <td align="left">{{row.SelectedCategory}}</td>           
+            <td align="left">{{row.CategoryB}}</td>
+            <td align="left">{{row.IsPhysicalHandicapped}}</td>
+            <td align="left">{{row.IsExServicemen}}</td>
+            <td align="left">{{row.IsSportsPerson}}</td>
+            <td align="left">{{row.IsShahidDependent}}</td>
+            <td align="left">{{row.IsAnyIncurableDiseases}}</td>
+            <td align="left">{{row.IsSpouseInSameService}}</td>
             <td align="left">{{row.IsTSP}}</td>
+            <td align="left" class="name-col">{{row.TradeName}}</td>
+            <td align="left" class="allotted-col">{{row.AllottedInstitute}}</td>
+            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
           </tr>
         </tbody>
       </table>
