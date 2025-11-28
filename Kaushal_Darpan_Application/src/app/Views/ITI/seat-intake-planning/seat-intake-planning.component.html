@@ -1,12 +1,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Intakes</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Intakes Planning</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dasboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/SeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes</a>
+      <a routerLink="/SeatIntakesList" class="text-sm font-medium text-slate-700" aria-current="page">Intakes Planning</a>
     </div>
   </div>
 </div>
@@ -24,7 +24,7 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search By District:</label>
-            <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID">
+            <select class="form-select" formControlName="ddlDistrict" [(ngModel)]="searchRequest.DistrictID" (change)="GetTradeAndColleges()">
               <option value="0">---Choose District---</option>
               <option *ngFor="let item of DistrictList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
@@ -58,7 +58,7 @@
               <option *ngFor="let item of ITITradeSchemeList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
           </div>
-          <div>
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Remark:
             </label>
@@ -66,8 +66,8 @@
               <option value="0">Choose Option</option>
               <option *ngFor="let item of ITIRemarkList" value="{{item.ID}}">{{item.Name}}</option>
             </select>
-          </div>
-          <div>
+          </div>-->
+          <!--<div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Search By Shift:
             </label>
@@ -78,7 +78,7 @@
               Search By Unit No:
             </label>
             <input type="text" class="form-input" placeholder="Search By Unit No" formControlName="txtUnitNo" [(ngModel)]="searchRequest.UnitNo">
-          </div>
+          </div>-->
          
      
 
@@ -104,8 +104,8 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
-        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>
+        <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white me-2" (click)="ExportActiveSeatIntake()"><i class="ti ti-download"></i> Active Intake For Admission</a>
+        <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Intake Execl</a>-->
         <!--<a href="javascript:void(0);" class="btn btn-sm bg-info text-white"><i class="ti ti-download"></i> Export Intake</a>-->
       </div>
     </div>
@@ -153,11 +153,15 @@
             <!--<th class="text-left">Only For Women</th>-->
             <!--<th class="text-left">Min Percentage In Science</th>
             <th class="text-left">Min Percentage In Math</th>-->
-            <th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
+            <!--<th class="text-left" title="Click to sorting" (click)="sortInTableData('Shift')">
               Shift
               <span class="shortingSpan" *ngIf="sortInTableColumn=='Shift'" [innerHTML]="sortInTableDirectionAero"></span>
-            </th>
+            </th>-->
             <th class="text-left">Unit Number</th>
+            <th class="text-left">Administrative Order No</th>
+            <th class="text-left">Administrative Order Date</th>
+            <th class="text-left">Financial Order No</th>
+            <th class="text-left">Financial Order Date</th>
             <!--<th class="text-left">Sanctioned</th>-->
             <!--<th class="text-left">Last Session</th>
             <th class="text-left">Duration</th>-->
@@ -180,33 +184,38 @@
             <!--<td align="left">{{row.Remark}}</td>-->
             <!--<td align="left">{{row.OnlyForWomen}}</td>-->
             <!--<td align="left">{{row.MinPercentageInScience}}</td>
-            <td align="left">{{row.MinPercentageInMath}}</td>-->
-            <td align="left">{{row.Shift}}</td>
+  <td align="left">{{row.MinPercentageInMath}}</td>-->
+            <!--<td align="left">{{row.Shift}}</td>-->
             <td align="left">{{row.Unit_no}}</td>
+            <td align="left">{{row.AdminOrderNo}}</td>
+            <td align="left">{{row.AdmSanctionDate}}</td>
+
+            <td align="left">{{row.FinancialOrderNo}}</td>
+            <td align="left">{{row.FinancialOrderDate}}</td>
             <!--<td align="left">{{row.Sanctioned}}</td>
-            <td align="left">{{row.LastSessionStr}}</td>
-            <td align="left">{{row.DurationYear}}</td>-->
+  <td align="left">{{row.LastSessionStr}}</td>
+  <td align="left">{{row.DurationYear}}</td>-->
             <td align="left">{{row.NoOfSanctionedSeats}}</td>
             <!--<td align="left">{{row.OrderNo}}</td>
-            <td align="left">{{row.OrderDate}}</td>
-            <td align="left">{{row.LastUpdated}}</td>
-            <td align="left">	{{ row.ActiveOrderNo }}{{ row.ActiveOrderDate }}{{ row.InActiveOrderNo }}{{ row.InActiveOrderDate }} </td>-->
+  <td align="left">{{row.OrderDate}}</td>
+  <td align="left">{{row.LastUpdated}}</td>
+  <td align="left">	{{ row.ActiveOrderNo }}{{ row.ActiveOrderDate }}{{ row.InActiveOrderNo }}{{ row.InActiveOrderDate }} </td>-->
             <!--<td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-              <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
-                <!--<label class="block">Status</label>-->
-                <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
-                  <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (click)="onToggleChange($event , row.SeatIntakeID, row.ActiveStatus)">
-                  <span class="toggleIcon">
-                    <span class="toggleTitle">{{ row.ActiveStatus === 1 ? '' : '' }}</span>
-                  </span>
-                </label>
-              </div>
-            </td>-->
+    <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3">-->
+            <!--<label class="block">Status</label>-->
+            <!--<label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
+        <input class="sr-only peer" type="checkbox" id="Active" [checked]="row.ActiveStatus == 1" (click)="onToggleChange($event , row.SeatIntakeID, row.ActiveStatus)">
+        <span class="toggleIcon">
+          <span class="toggleTitle">{{ row.ActiveStatus === 1 ? '' : '' }}</span>
+        </span>
+      </label>
+    </div>
+  </td>-->
 
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <a href="javascript:void(0);" title="Edit" [routerLink]="'/AddIntakePlanning'" [queryParams]="{id:row.SeatIntakeID}"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.SeatIntakeID)"><i class="ti ti-trash"></i></a>
+                <!--<a href="javascript:void(0);" title="Delete" (click)="DeleteById(row.SeatIntakeID)"><i class="ti ti-trash"></i></a>-->
               </div>
             </td>
           </tr>

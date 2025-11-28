@@ -26,7 +26,7 @@
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ItiCollegesListAll" value="{{item.ID}}">{{item.Name}}</option>
           </select>
-         
+
         </div>
 
 
@@ -39,14 +39,13 @@
         </div>
 
         <!-- Institute (shows only when OfficeID == 11) -->
-        <div *ngIf="formData.OfficeID == 11">
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
-          <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
-            <option value="0">--Select--</option>
-            <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
-        </div>
-
+        <!--<div *ngIf="formData.OfficeID == 11">
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
+    <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
+      <option value="0">--Select--</option>
+      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+    </select>
+  </div>-->
         <!-- Staff Type -->
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff Type <span class="StarMarking">*</span></label>
@@ -57,6 +56,19 @@
         </div>
 
         <!-- Post -->
+
+
+        <div *ngIf="formData.StaffTypeID==2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+          <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+          </select>
+
+        </div>
+
+
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post <span class="StarMarking">*</span></label>
           <select class="form-select" [(ngModel)]="formData.DesignationID" formControlName="DesignationID">
@@ -104,6 +116,7 @@
             <th>Office Name</th>
             <th>Staff Type</th>
             <th>Institute Name</th>
+            <th>Trade Name</th>
             <th>Designation Name</th>
             <th>Total Seat</th>
             <th>Posted Seat</th>
@@ -118,6 +131,7 @@
             <td>{{ leave.OfficeName }}</td>
             <td>{{ leave.StaffTypeName }}</td>
             <td>{{ leave.InstituteName }}</td>
+            <td>{{ leave.TradeName }}</td>
             <td>{{ leave.DesignationName }}</td>
             <td>{{ leave.TotalSeatID }}</td>
             <td>{{ leave.PostedSeat }}</td>
@@ -205,6 +219,17 @@
               </p>
             </div>
           </div>
+
+          <div *ngIf="formData.StaffTypeID==2">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: <span class="StarMarking">*</span></label>
+            <select class="form-select" formControlName="TradeID" [(ngModel)]="formData.TradeID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of TradeList" value="{{item.Id}}">{{item.TradeName}}</option>
+            </select>
+
+          </div>
+
+
           <!--{{formData.PostedSeat|json}}-->
           <!--{{formData.DesignationID|json}}-->
           <div>

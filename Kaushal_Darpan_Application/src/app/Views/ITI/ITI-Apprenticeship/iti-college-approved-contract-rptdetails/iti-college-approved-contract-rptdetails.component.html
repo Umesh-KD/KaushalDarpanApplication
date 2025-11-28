@@ -1,0 +1,68 @@
+<!-- Page Title Start -->
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+    <div>
+        <h4 class="text-slate-900 text-lg font-medium mb-2">ITI College Aprroved Contract Report</h4>
+
+        <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Dashboard</a>
+            <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+            <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI College
+                Aprroved Contract Report</a>
+        </div>
+    </div>
+</div>
+<!-- Page Title End -->
+ <div class="card">
+    <div class="card-body p-5">
+        <div class="mb-8">
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+                <b class="text-1xl-5"><i class="ti ti-list"></i> ITI College Aprroved Contract Monthly Details</b>
+                <div class="flex justify-end flex-wrap items-center">
+                    <a routerLink="/iti-college-approved-contract-rpt" class="btn bg-dark btn-sm text-white me-2"><i class="ti ti-chevron-left"></i>Back</a>
+                </div>
+            </div> 
+            <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" style="margin-top:35px !important;" *ngIf="Institutelist?.length > 0">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <div class="flex justify-between flex-wrap items-center">
+      <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <i class="ti ti-download"></i> Export Execl
+      </a>
+      </div>
+    </div>
+        </div>
+         <div class="overflow-auto max-height500" *ngIf="Institutelist?.length > 0">
+            <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                     <tr>
+                        <th class="text-left">Sr No</th>
+                        <th class="text-left">Name of ITI</th>
+                        <th class="text-left">Financial Year</th>
+                        <th class="text-left">Month</th>
+                        <th class="text-left">Contract Date </th>
+                        <th class="text-left">No. Of Contract</th> 
+                        <th class="text-left">Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let row of Institutelist; let idx = index;">
+                        <tr>
+                            <td class="text-left">{{ idx + 1 }}</td>
+                            <td class="text-left">{{ row.Name }}</td>
+                            <td class="text-left">{{ row.FinancialYear }}</td>
+                            <td class="text-left">{{ row.Month }}</td>
+                            <td class="text-left">{{ row.ContractDate }}</td>
+                            <td class="text-left">{{ row.No_Of_Contract }}</td> 
+                            <td class="text-left">  
+                                <a *ngIf="row?.fileUrl" [href]="row.fileUrl" target="_blank" style="margin-left:100px !important;border:1px blue !important;" 
+                                    class="w-8 h-8 flex items-center justify-center rounded-full 
+                                    border border-white text-white 
+                                    bg-blue-500 hover:bg-blue-600">
+                                <i class="ti ti-download"  style="color:white !important;"></i></a>
+                            </td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+         </div>
+    </div>
+ </div>
