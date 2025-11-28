@@ -474,6 +474,7 @@ export class GenerateRollnumberITIComponent {
 
         this.OTP = '';
         this.MobileNo = '';
+        this.MobileNo = this.sSOLoginDataModel.Mobileno
         this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
           this.closeResult = `Closed with: ${result}`;
         }, (reason) => {
