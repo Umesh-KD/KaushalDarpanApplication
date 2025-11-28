@@ -239,7 +239,7 @@
                   <i class="ti ti-user"></i>
                 </a>
                 <a href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.ITIPrincipal && row.isPublish==0 && row.IsShowFaButton==1 "
-                   title="Edit Attendence Details" (click)="ViewAttendenceModal(AttendenceModal, row)">
+                   title="Update Eligibility Status" (click)="ViewAttendenceModal(AttendenceModal, row)">
                   <i class="ti ti-list"></i>
                 </a>
                 <a style="display:none" href="javascript:void(0);" *ngIf="this.sSOLoginDataModel.RoleID==_EnumRole.Principal_NCVT
@@ -1153,12 +1153,12 @@
     <form [formGroup]="AttendenceFormGroup" class="form-horizontal">
       <div class="card">
         <div class="card-header flex justify-between items-center">
-          <b><i class="fa fa-plus"></i>&nbsp;Update Attendence</b>
+          <b><i  class="fa fa-list"></i>&nbsp;Update  Eligibility Status</b>
           <button class="btn bg-info text-white" (click)="CloseModal()"><i class="ti ti-x"></i></button>
         </div>
         <div class="card-body">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5">Update Attendence ({{attendence.StudentName}}) </b>
+            <b class="text-1xl-5">Update Eligibility Status ({{attendence.StudentName}}) </b>
             <b [style.color]="this.AttendancePercentage <= 80 ? 'red' : 'green'"> Attendence: {{this.AttendancePercentage}} %</b>
           </div>
 
