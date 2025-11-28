@@ -497,8 +497,8 @@
                 </tbody>
               </table>
             </div>
-            <div *ngIf="this.sSOLoginDataModel.RoleID !=_EnumRole.Principal_NCVT && this.sSOLoginDataModel.RoleID !=_EnumRole.ITIPrincipal" class="text-center flex items-center justify-center">
-              <button type="button"  class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">Download Examination Form<i class="ti ti-download"></i></button>
+            <div class="text-center flex items-center justify-center">
+              <!--<button type="button"  class="btn bg-info text-white" (click)="GetStudentEnrolled(StudentProfileDetailsData[0])">Download Examination Form<i class="ti ti-download"></i></button>-->
               <button type="button" *ngIf="StudentProfileDetailsData[0]['ExamTransactionId']>0" class="btn bg-success text-white" (click)="GetITIStudentFeeReceipt(StudentProfileDetailsData[0]['ExamTransactionId'])">Download Fee Receipt<i class="ti ti-download"></i></button>
               <button type="button" (click)="CloseViewStudentDetails()" class="btn bg-danger text-white">Cancel<i class="ti ti-x"></i></button>
             </div>
