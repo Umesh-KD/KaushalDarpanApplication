@@ -167,6 +167,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
     this.searchRequest.MobileNumber == this.searchRequest.MobileNumber?.trim();
     this.searchRequest.ApplicationNo == this.searchRequest.ApplicationNo?.trim();
     this.searchRequest.DOB == this.searchRequest.DOB?.trim();
+    this.searchRequest.ServiceID = this.sSOLoginDataModel.ServiceID;
     this.StudentDetailsModelList = [];
     try {
       this.loaderService.requestStarted();
