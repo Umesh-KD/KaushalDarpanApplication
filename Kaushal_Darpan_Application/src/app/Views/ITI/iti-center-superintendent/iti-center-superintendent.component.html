@@ -50,19 +50,19 @@
         <b class="text-1xl-5">
           <i class="ti ti-list"></i> Search Results
         </b>
-        <div *ngIf="sSOLoginDataModel.Eng_NonEng==2" class="inline-flex items-center text-white btn-sm">
+        <!--<div *ngIf="sSOLoginDataModel.Eng_NonEng==2" class="inline-flex items-center text-white btn-sm">-->
           <!-- Button for status 15 only -->
-          <button *ngIf="this.CenterMasterList?.length > 0 && this.Status === 0 || this.Status === undefined || this.Status === 15 || this.Status === 11 "
+          <!--<button *ngIf="this.CenterMasterList?.length > 0 && this.Status === 0 || this.Status === undefined || this.Status === 15 || this.Status === 11 "
                   type="button" class="btn bg-info text-white me-1"
                   (click)="downloadPDF('order')">
             <i class="ti ti-download"></i> Generate Draft of Order
-          </button>
+          </button>-->
 
 
 
           <!-- Forward to Verify button for status 11 -->
           <!-- Button for statuses 12, 13, 14 -->
-          <button *ngIf="this.CenterMasterList?.length > 0 && Status === 11"
+          <!--<button *ngIf="this.CenterMasterList?.length > 0 && Status === 11"
                   type="button" class="btn bg-info text-white me-1"
                   (click)="DownloadPDF1()">
             <i class="ti ti-eye"></i>Publish Center Superintendent Order
@@ -73,7 +73,7 @@
             <i class="ti ti-eye"></i>Download Order List
           </button>
 
-          <a href="javascript:void(0);" class="btn bg-info text-white me-1" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Execl</a>
+          <a href="javascript:void(0);" class="btn bg-info text-white me-1" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Execl</a>-->
 
           <!--<button *ngIf="this.CenterMasterList?.length > 0 &&  GetStatusCenterSuperintendentData?.Status === 11"
           type="button" class="btn bg-info text-white me-1"
@@ -81,9 +81,9 @@
     <i class="ti ti-download"></i> Forward to Verify
   </button>-->
 
-        </div>
+        <!--</div>-->
 
-        <div *ngIf="sSOLoginDataModel.Eng_NonEng==1" class="inline-flex items-center text-white btn-sm">
+        <div class="inline-flex items-center text-white btn-sm">
           <!-- Button for status 15 only -->
           <button *ngIf="this.CenterMasterList?.length > 0 && this.Status === 0 || this.Status === undefined || this.Status === 15 || this.Status === 11"
                   type="button" class="btn bg-info text-white me-1"

@@ -60,6 +60,7 @@ export class GenerateRollData extends RequestBaseModel
 export class DownloadnRollNoModel
 {
   public InstituteID: number = 0;
+  public CenterID: number = 0;
   public StreamID: number = 0;
   public SemesterID: number = 0;
   public DepartmentID: number = 0;

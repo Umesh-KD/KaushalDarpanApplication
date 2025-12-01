@@ -35,6 +35,7 @@ import { TabulationReportSearchModel } from '../../models/bter/TabulationReportM
 
 
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -961,6 +962,14 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async DownloadITIStudentRollNumberBulk_CenterWise(request: DownloadnRollNoModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/DownloadITIStudentRollNumberBulk_CenterWise`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async DownloadITIStudentRollNumberBulk_CollegeWise(request: DownloadnRollNoModel) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/DownloadITIStudentRollNumber_CollageWise`, body, this.headersOptions)
@@ -968,6 +977,9 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
 
   public async GetITIAddmissionStatisticsDataList(request: ITIAddmissionReportSearchModel) {
 
