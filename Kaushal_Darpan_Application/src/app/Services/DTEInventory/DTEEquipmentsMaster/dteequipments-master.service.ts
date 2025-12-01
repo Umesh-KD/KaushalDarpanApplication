@@ -57,7 +57,14 @@ export class DTEEquipmentsMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-
+//Get 
+  public async GetEquipmentByItemType(request: any) {
+    const body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + "/GetEquipmentByItemType", request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
  

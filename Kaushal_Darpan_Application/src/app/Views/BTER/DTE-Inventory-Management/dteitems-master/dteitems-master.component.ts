@@ -30,8 +30,9 @@ import { AppsettingService } from '../../../../Common/appsetting.service';
   standalone: false
 })
 export class DteItemsMasterComponent {
-  public Searchrequest = new DTEItemsSearchModel()
-  public Revertrequest = new itemStatusRevertModel()
+  //public Searchrequest = new DTEItemsSearchModel()
+  public Searchrequest = new DTEItemsSearchModel();
+  public Revertrequest = new itemStatusRevertModel();
   public searchTradeRequest = new ITITradeSearchModel();
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
@@ -136,7 +137,9 @@ export class DteItemsMasterComponent {
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
-      await this.equipmentsService.GetAllData(this.Searchrequest)
+       console.log("ItemType:"+this.Searchrequest.ItemType);
+     // await this.equipmentsService.GetAllData(this.Searchrequest)GetEquipmentByItemType
+     await this.equipmentsService.GetEquipmentByItemType(this.Searchrequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -421,6 +424,44 @@ export class DteItemsMasterComponent {
     this.Revertrequest.Remark = '';
     this.isSubmitted = false;
   }
+// async GetItemListType() {
+    
+//     try {
+//       this.loaderService.requestStarted(); 
+//       const searchdata: DTEItemsSearchModel = {
+//         DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
+//         EndTermID: this.sSOLoginDataModel.EndTermID || 0,
+//         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
+//         RoleID: this.sSOLoginDataModel.RoleID || 0,
+//         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
+//         ItemType: this.Searchrequest.ItemType || 0,
+//         EquipmentsId: 0,
+//         OfficeID: 0,
+//         StatusID: 0,
 
+//       };
+
+//       const data: any = await this.dteItemsMasterService.GetItemListType(searchdata);
+
+//       if (data && data.State === EnumStatus.Success) {
+//         this.CategoryDDLList = data.Data.map((x: any) => ({
+//           ItemCategoryID: x.ItemCategoryID,
+//           ItemCategoryName: x.ItemCategoryName
+//         }));
+
+//         this.Searchrequests.ItemCategoryId = 0; // reset
+//         this.ItemsDDLList = []; // reset
+//         this.SelectedItems = [];
+//       } else {
+//         this.CategoryDDLList = [];
+//         this.ItemsDDLList = [];
+//         this.SelectedItems=[];
+//       }
+//     } catch (Ex) {
+//       console.error("Error in GetItemListType:", Ex);
+//     } finally {
+//       this.loaderService.requestEnded();
+//     }
+//   }
 
 }

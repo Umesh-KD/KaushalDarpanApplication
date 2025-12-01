@@ -86,7 +86,8 @@ export class DteAddItemsMasterComponent {
           Validators.pattern(/^\d+$/) // fewer than 6 digits
         ]
       ],
-      IdentificationMark: ['', Validators.required],
+      //IdentificationMark: ['', Validators.required], //Made Non-Mandatory  Date 01 Dec 2025
+      IdentificationMark: [''],
       CampanyName: ['', Validators.required],
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['', [DropdownValidators]],
@@ -94,6 +95,12 @@ export class DteAddItemsMasterComponent {
       UnitId: [0],
       voucherdate: ['', Validators.required],
       abbreviation: [''],
+      receiptbookfolio: [''],
+      issuedate: [''],
+      IndentNo: [''],
+      issuebookfoliodate: [''],
+      txtQuantityIssued: ['0'],
+      txtQuantityBalance: [''],
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -247,6 +254,26 @@ export class DteAddItemsMasterComponent {
           }
           this.request.UnitId = data['Data']["unitId"];
           this.request.abbreviation = data['Data']["abbreviation"];
+          this.request.receiptbookfolio=data['Data']["ReceiptBookFolio"];
+          const rawissueDate = data['Data']["IssueDate"];
+
+          if (rawissueDate) {
+            const dateObj = new Date(rawissueDate);
+            this.request.issuedate = dateObj.toISOString().substring(0, 10);
+          } else {
+            this.request.issuedate = '';
+          } 
+          this.request.IndentNo=data['Data']["IndentNo"];
+
+          const rawissueboolfolioDate = data['Data']["IssueBookFolioDate"];
+          if (rawissueboolfolioDate) {
+            const dateObj = new Date(rawissueboolfolioDate);
+            this.request.issuebookfoliodate = dateObj.toISOString().substring(0, 10);
+          } else {
+            this.request.issuebookfoliodate = '';
+          }  
+          this.request.QuantityIssued=data['Data']["QuantityIssued"];
+          this.request.QuantityBalance=data['Data']["QuantityBalance"];
           const btnSave = document.getElementById('btnSave');
           if (btnSave) btnSave.innerHTML = "Update";
 
@@ -445,8 +472,17 @@ export class DteAddItemsMasterComponent {
     input.value = numericValue.toString();
     this.request.Quantity = numericValue;
     this.calculateTotalPrice();
+    this.onQuantityChange(event);
   }
-  
+  onQuantityChange(event: Event): void {
+  const qty = this.AddItemsRequestFormGroup.get('txtQuantity')?.value || 0;
+  const issued = this.AddItemsRequestFormGroup.get('txtQuantityIssued')?.value || 0;
+
+  this.AddItemsRequestFormGroup.patchValue(
+    { txtQuantityBalance: qty - issued },
+    { emitEvent: false }
+  );
+}
 
 
   async ResetControl() {
