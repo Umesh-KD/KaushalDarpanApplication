@@ -129,7 +129,8 @@ export class ITIDispatchAdminCenterSuperintendentbundleListComponent implements 
 
   async GetAllData() {
     try {
-        this.loaderService.requestStarted();
+      this.loaderService.requestStarted();
+      this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       await this.dispatchService.GetITI_Dispatch_Showbundle(this.Searchrequest)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
@@ -186,6 +187,7 @@ export class ITIDispatchAdminCenterSuperintendentbundleListComponent implements 
     this.request.RollNoFrom = '';
     this.request.RollNoTo = '';
     this.request.AppointExaminerID = 0;
+
 
 
     this.modalRef = this.modalService.open(content, {
