@@ -124,13 +124,22 @@ export class AddSeatIntakesComponent implements OnInit {
     
     this.tradeSearchRequest.action = '_getAllData'
     this.tradeSearchRequest.TradeLevel = this.request.TradeLevel
+    this.tradeSearchRequest.CollegeID = this.request.CollegeID
     try {
       this.loaderService.requestStarted();
-      await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
+      //await this.commonFunctionService.TradeListGetAllData(this.tradeSearchRequest).then((data: any) => {
+      //  data = JSON.parse(JSON.stringify(data));
+      //  this.ItiTradeListAll = data.Data
+      //  console.log(this.ItiTradeListAll, "ItiTradeListAll")
+      //})
+
+      await this.commonFunctionService.GetCollegeTradeMaster(this.tradeSearchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.ItiTradeListAll = data.Data
+       
         console.log(this.ItiTradeListAll, "ItiTradeListAll")
       })
+
 
       //this.collegeSearchRequest.action = '_getAllData'
       //await this.commonFunctionService.ItiCollegesGetAllData(this.collegeSearchRequest).then((data: any) => {
@@ -164,6 +173,16 @@ export class AddSeatIntakesComponent implements OnInit {
       }, 200);
     }
   }
+
+  async GetTradeDetails(value: number = 0) {
+    this.request.TradeSchemeID = 0
+    const Item = this.ItiTradeListAll.find((x: any) => x.Id == this.request.TradeID)
+    this.request.TradeSchemeID = Item.TradeSchemeID
+    this.SeatIntakeFormGroup.controls['ddlTradeScheme'].disable();
+
+
+  }
+
 
   async onSubmit() {
     debugger

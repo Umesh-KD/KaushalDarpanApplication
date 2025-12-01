@@ -89,6 +89,8 @@ export class CampusPostMaster_Action {
   public PostCollegeID: number = 0;
   public Dis_SuspendDoc: string = '';
   public SuspendDocumnet: string = '';
+  public OrderNo?: string = '';
+  public OrderDate?: string = '';
 }
 
 

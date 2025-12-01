@@ -21,6 +21,7 @@ export interface UploadBTERFileModel {
   MaxFileSize?: string;
   Password?: string;
   IsCopy?: boolean;
+  IsRejectAtBter?: boolean;
   FileNameWithDynamicPath?: number;
   FilePrefix?: string;
 }

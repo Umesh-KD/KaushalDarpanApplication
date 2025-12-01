@@ -57,7 +57,7 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Trade:<span class="StarMarking">*</span>
               </label>
-              <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID">
+              <select class="form-select" formControlName="ddlTrade" [(ngModel)]="request.TradeID" (change)="GetTradeDetails($event.target.value)">
                 <option value="0">Choose Option</option>
                 <option *ngFor="let item of ItiTradeListAll" value="{{item.Id}}">{{item.TradeName}}</option>
               </select>
