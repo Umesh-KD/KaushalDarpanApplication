@@ -2052,5 +2052,15 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-  
+  public async GetCollegeTradeMaster(tradeSearchRequest: ItiTradeSearchModel) {
+    var body = JSON.stringify(tradeSearchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/GetCollegeTradeMaster', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
 }
