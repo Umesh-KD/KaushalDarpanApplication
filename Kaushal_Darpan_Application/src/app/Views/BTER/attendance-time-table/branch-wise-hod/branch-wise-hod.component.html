@@ -52,9 +52,11 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Semester <span class="StarMarking">*</span></label>
           <ng-select [(ngModel)]="request.SemesterID" (change)="onSemesterChange($event)" formControlName="SemesterID" [clearable]="false">
             <ng-option [value]="0">--Select--</ng-option>
-            @for (item of SemesterMasterDDL; track item.SemesterID) {
+            <ng-option [value]="1">1st, 2nd Semester</ng-option>
+            <ng-option [value]="3">3rd, 4th, 5th Semester</ng-option>
+            <!-- @for (item of SemesterMasterDDL; track item.SemesterID) {
             <ng-option [value]="item.SemesterID">{{item.SemesterName}}</ng-option>
-            }
+            } -->
           </ng-select>
           
         </div>

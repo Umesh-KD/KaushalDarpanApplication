@@ -89,7 +89,7 @@ export class BranchWiseHodComponent {
   }
 
   async loadData() {
-
+    debugger
     await this.guestRoomManagmentService.GuestStaffProfile(this.searchRequestGuestStaffProfileSearchModel)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -146,6 +146,9 @@ export class BranchWiseHodComponent {
       this.request.Action = "GETALL";
       this.request.StreamID = 0;
       this.request.StreamIDs = this.IIPMasterFormGroup.value.StreamIDs?.join(',');
+      this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -208,9 +211,6 @@ export class BranchWiseHodComponent {
   async SaveData() {
     try {
       this.isSubmitted = true;
-      debugger
-
-
       const formValue = this.IIPMasterFormGroup.value;
 
       if (!formValue.SemesterID || formValue.SemesterID === 0) {
@@ -248,8 +248,9 @@ export class BranchWiseHodComponent {
       this.request.UserID = this.sSOLoginDataModel.UserID;
       this.request.RoleID = this.sSOLoginDataModel.RoleID;
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID;
+      this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
       this.request.SemesterID = this.IIPMasterFormGroup.value.SemesterID;
-
+      debugger
 
       await this.staffMasterService.AllBranchHOD(this.request)
         .then((data: any) => {
@@ -407,6 +408,14 @@ export class BranchWiseHodComponent {
 
 
   async onSemesterChange(event: any) {
+    if (this.request.SemesterID == 1) {
+      this.request.SemesterIDs = "1,2";
+    } 
+    else if (this.request.SemesterID == 3) {
+      this.request.SemesterIDs = "3,4,5";
+    }
+
+    debugger
     if (this.request.SemesterID && this.request.SemesterID != 0) {
       debugger
       await this.commonMasterService.StreamMaster(

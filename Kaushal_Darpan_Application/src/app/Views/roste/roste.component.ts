@@ -415,6 +415,7 @@ export class RosteComponent implements OnInit {
   }
 
   saveAttendance() {
+    debugger;
     this.isSubmitted = true;
     if (this.AddedSectionList.length == 0) {
       this.toastr.warning('Please select at least one row');
@@ -785,7 +786,8 @@ export class RosteComponent implements OnInit {
       if (
         timeOverlap &&
         element.SemesterID === newSection.SemesterID &&
-        element.StreamID === newSection.StreamID
+        element.StreamID === newSection.StreamID &&
+        element.DayID === newSection.DayID
       ) {
         if (isSemesterOneOrTwo(newSection.SemesterID)) {
           // For semesters 1 or 2, allow only if subject AND room both match
