@@ -3,7 +3,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
 import { CollegeMasterDataModels } from '../../Models/CollegeMasterDataModels';
-import { PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
+import { ITIPlacementReportSearchModels, PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 //import { CollegeMasteDataModels } from '../../Models/CollegeMasterDataModels';
 
@@ -37,4 +37,18 @@ export class PlacementReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  /*------------------------------------------------ITI Placement--------------------------------------------------------*/
+
+
+    public async GetITIAllData(searchRequest: ITIPlacementReportSearchModels) {
+    const body = JSON.stringify(searchRequest);
+
+    return await this.http.post(`${this.APIUrl}/GetITIAllData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
