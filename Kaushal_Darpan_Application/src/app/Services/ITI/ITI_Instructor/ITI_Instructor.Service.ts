@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel, ITI_InstructorDataAssignSearchModel } from '../../../Models/ITI/ItiInstructorDataModel';
+import { ITI_InstructorDataModel, ITI_InstructorDataSearchModel, ITI_InstructorGridDataSearchModel, ITI_InstructorDataBindSearchModel, ITI_InstructorDataAssignSearchModel, ITI_Instructor_TechCITSDetailsSearchModel } from '../../../Models/ITI/ItiInstructorDataModel';
 
 
 
@@ -114,6 +114,14 @@ export class ITI_InstructorService {
       ).toPromise();
   }
 
+  public async GetAllTechCITSDetails(request: ITI_Instructor_TechCITSDetailsSearchModel) {
+    const body = JSON.stringify(request);
+
+    return await this.http.post(this.APIUrl + "/GetAllTechCITSDetails", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 
 }
