@@ -114,7 +114,7 @@
             </td>-->
               <td class="text-center">
                 <button 
-                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForEnrollment && !isOnClickEnrollFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')" 
+                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForEnrollment && !isOnClickEnrollFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')" 
                   class="btn bg-success text-white btn-sm" 
                   (click)="PayEnrollmentFee(row)" 
                   type="button">Pay Enroll Fee 
@@ -122,7 +122,7 @@
                 <!--<button *ngIf="row.ExamStudentStatus==enumExamStudentStatus.Enrolled && row.FeeStatus=='PENDING'" class="btn bg-success text-white btn-sm" (click)="EmitraPaymentCheckStatus(row)" type="button">Check Pay Status </button>-->
 
                 <button 
-                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')" 
+                  *ngIf="row.ExamStudentStatus==enumExamStudentStatus.VerifiedForExamination && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')" 
                   class="btn bg-success text-white btn-sm" 
                   (click)="PayExamFee(row)" 
                   type="button">Pay Exam Fee 

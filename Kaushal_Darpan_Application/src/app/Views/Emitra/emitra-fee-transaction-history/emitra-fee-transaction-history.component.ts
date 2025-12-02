@@ -294,7 +294,7 @@ export class EmitraFeeTransactionHistoryComponent {
   }
   //checked single (replace org. list here)
   selectInTableSingleCheckbox(isSelected: boolean, item: any) {
-    const data = this.StudentFeesTransactionHistoryList.filter(x => x.StudentID == item.StudentID);
+    const data = this.StudentFeesTransactionHistoryList.filter(x => x.TransactionId == item.TransactionId);
     data.forEach(x => {
       x.Selected = isSelected;
     });
@@ -302,6 +302,7 @@ export class EmitraFeeTransactionHistoryComponent {
     this.AllInTableSelect = this.StudentFeesTransactionHistoryList.every(r => r.Selected);
   }
   // end table feature
+
 
 
   exportToExcel(): void {

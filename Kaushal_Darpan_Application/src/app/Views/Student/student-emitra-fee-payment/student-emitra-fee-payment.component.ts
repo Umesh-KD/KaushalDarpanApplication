@@ -188,7 +188,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
               );
 
               this.isShowSelectedTransStatus = this.StudentDetailsModelList.every(f => {
-                f.TransctionStatus == '' || f.TransctionStatus == 'FAILED'
+                f.TransctionStatus == '' || f.TransctionStatus == 'failed'
               });
 
             }

@@ -148,6 +148,9 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
+            <th>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
+            </th>
             <th class="text-left">#</th>
             <th class="text-left">Institute Name</th>
             <th class="text-left">Student Name</th>
@@ -177,6 +180,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let item of paginatedInTableData ;let idx=index;">
+            
+            <td>
+              <input type="checkbox" class="checkboxSize" [(ngModel)]="row.Selected"
+                     #checkboxInTableSeletedSingle (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)">
+            </td>
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td>{{item.InstituteName}}</td>
             <td>{{item.StudentName}}</td>

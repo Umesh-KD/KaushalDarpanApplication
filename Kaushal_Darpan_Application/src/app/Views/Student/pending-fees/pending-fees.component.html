@@ -54,7 +54,7 @@
             <td class="text-center">
               <button
                   style="margin-bottom:5px"
-                  *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee && !isOnClickEnrollFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')"
+                  *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee && !isOnClickEnrollFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')"
                   class="btn bg-success text-white btn-sm"
                   (click)="PayEnrollmentFee(row)" 
                   type="button">Pay Enroll Fee 
@@ -70,7 +70,7 @@
 
               <button 
                 style="margin-bottom:5px" 
-                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')" 
+                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'failed')" 
                 class="btn bg-success text-white btn-sm" 
                 (click)="PayExamFee(row)" 
                 type="button">Pay Exam Fee 
@@ -80,7 +80,7 @@
                 style="margin-bottom:5px" 
                 class="btn bg-success text-white btn-sm" 
                 (click)="GetTransactionDetailsSemesterWise(modal_viewTransaction,row)" 
-                type="button">View History
+                type="button">View History 
               </button>
 
             </td>

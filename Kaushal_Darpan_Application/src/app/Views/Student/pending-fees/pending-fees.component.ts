@@ -120,14 +120,14 @@ export class PendingFeesComponent implements OnInit {
           console.log(data);
           if (data.State == EnumStatus.Success) {
             this.StudentDetailsModelList = data['Data'];
-
+            debugger
             if (this.StudentDetailsModelList.length > 1) {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
 
               this.isShowSelectedTransStatus = this.StudentDetailsModelList.every(f => {
-                f.TransctionStatus == '' || f.TransctionStatus == 'FAILED'
+                f.TransctionStatus == '' || f.TransctionStatus == 'failed'
               });
             }
             else {
