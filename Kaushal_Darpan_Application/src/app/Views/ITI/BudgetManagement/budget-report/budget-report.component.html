@@ -83,19 +83,22 @@
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetClick()"><i class="ti ti-refresh"></i>Reset</button>
         </div>
       </div>
-
-
     </div>
 
 
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-3">
       <b class="text-1xl-5"><i class="ti ti-list"></i>List</b>
       <div>
+        <a href="javascript:void(0);"
+           class="btn bg-info btn-sm text-white"
+           (click)="GetAllUCUtilizationReportData()">
+          <i class="ti ti-download"></i> UC Utilization Report
+        </a>
         <a 
           href="javascript:void(0);" 
           class="btn bg-info btn-sm text-white" 
           (click)="AllotedReport()">
-          <i class="ti ti-download"></i> Approve Selected
+          <i class="ti ti-download"></i> Alloted Amount
         </a>
 
         <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Export Execl</a>
@@ -116,21 +119,13 @@
       <div class="">
       </div>
       <div class="">
-        <!-- <input class="form-input" placeholder="Search..." [(ngModel)]="Table_SearchText " /> -->
       </div>
     </div>
     <div class="overflow-auto mt-3">
       <table class="table table-border w-full table-auto" cellpadding="5" style="white-space:nowrap;">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <!--<th>
-              <input 
-                type="checkbox" 
-                class="checkboxSize" 
-                [(ngModel)]="AllInTableSelect" 
-                (change)="selectInTableAllCheckbox()" 
-                *ngIf="paginatedInTableData?.length > 0"/>
-            </th>-->
+           
             <th class="text-left">S No</th>
             <th class="text-left">{{searchRequest.BudgetForID == 1 ? 'Zone Office' : 'College Details'}}</th>
             <th class="text-left">Budget Type</th>
@@ -143,20 +138,11 @@
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;">
-            <!--<td>
-              <input 
-                type="checkbox" 
-                class="checkboxSize" 
-                [(ngModel)]="row.Selected"
-                #checkboxInTableSeletedSingle 
-                (change)="selectInTableSingleCheckbox(checkboxInTableSeletedSingle.checked,row)"
-                *ngIf="row.Status == 0 && row.Amount > 0" />
-            </td>-->
+           
             <td>{{(startInTableIndex+1)+idx}}</td>
             <td *ngIf="searchRequest.BudgetForID == 2">
               {{row.CollegeName}}<br>
-              <!--<strong>Mobile:</strong> {{row.PrincipalMobile}}<br>
-              <strong>Email:</strong> {{row.Email}}-->
+              
             </td>
             <td *ngIf="searchRequest.BudgetForID == 1">
               {{row.CollegeName}}<br>

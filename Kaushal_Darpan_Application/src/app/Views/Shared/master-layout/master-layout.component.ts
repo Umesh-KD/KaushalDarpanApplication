@@ -683,7 +683,7 @@ export class MasterLayoutComponent implements OnInit {
         }
         else {
           //window.location.href = 'https://sso.rajasthan.gov.in/'
-          window.location.replace('https://sso.rajasthan.gov.in/');
+          window.location.replace('https://ssotest.rajasthan.gov.in');
         }
       // await this.loaderService.requestStarted();
       //await this.menuService.SSOLogout(this.appsettingConfig.BacktoSSOURL_Logout?.toString());
@@ -702,7 +702,8 @@ export class MasterLayoutComponent implements OnInit {
     localStorage.clear();
     try {
       this.loaderService.requestStarted();
-      await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
+      //await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
+      await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
       this.modalService.dismissAll();
     }
     catch (Ex) {

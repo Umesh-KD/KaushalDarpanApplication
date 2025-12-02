@@ -426,6 +426,7 @@ export class StudentEnrollmentComponent {
 
   //get student data
   async GetPreExamStudent() {
+    debugger
     try {
       //debugger;
       this.isSubmitted = true;

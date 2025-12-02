@@ -194,12 +194,12 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
         //   this.searchRequest.DOB = this.StudentDataEnrollmentWise.DOB;
         // }
         
-        if(this.StudentDataEnrollmentWise?.EnrollmentNo!=null && this.StudentDataEnrollmentWise?.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise?.DOB!=null && this.StudentDataEnrollmentWise?.DOB.length>0)
+        if (this.StudentDataEnrollmentWise?.EnrollmentNo != null && this.StudentDataEnrollmentWise?.EnrollmentNo.length > 0 && this.searchRequest?.DOB != null && this.searchRequest?.DOB.length>0)
         {
           this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise?.EnrollmentNo.trim();
           // Convert DOB to yyyy-MM-dd
           // const dob=new Date(this.StudentDataEnrollmentWise.DOB);
-          const dob=new Date(this.StudentDataEnrollmentWise?.DOB);
+          const dob = new Date(this.searchRequest?.DOB);
           const year = dob.getFullYear();
           const month = ('0' + (dob.getMonth() + 1)).slice(-2);
           const day = ('0' + dob.getDate()).slice(-2);
@@ -237,11 +237,11 @@ export class StudentPlacementMappingComponent implements OnInit, OnDestroy {
 
     this.searchRequest.DepartmentID = this.searchRequest.DepartmentID;
 
-    if(this.StudentDataEnrollmentWise?.EnrollmentNo!=null && this.StudentDataEnrollmentWise?.EnrollmentNo.length>0 && this.StudentDataEnrollmentWise?.DOB!=null && this.StudentDataEnrollmentWise?.DOB.length>0)
+    if (this.StudentDataEnrollmentWise?.EnrollmentNo != null && this.StudentDataEnrollmentWise?.EnrollmentNo.length > 0 && this.searchRequest?.DOB != null && this.searchRequest?.DOB.length>0)
     {
       this.searchRequest.ApplicationNo = this.StudentDataEnrollmentWise?.EnrollmentNo.trim();
       // Convert DOB to yyyy-MM-dd
-      const dob=new Date(this.StudentDataEnrollmentWise?.DOB);
+      const dob = new Date(this.searchRequest?.DOB);
       const year = dob.getFullYear();
       const month = ('0' + (dob.getMonth() + 1)).slice(-2);
       const day = ('0' + dob.getDate()).slice(-2);
