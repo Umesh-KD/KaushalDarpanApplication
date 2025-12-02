@@ -45,6 +45,7 @@ export class PendingFeesComponent implements OnInit {
   public StudenetTranList: [] = [];
   public StudentSubjectList: [] = [];
   public isShowSelected: boolean = false;
+  public isShowSelectedTransStatus: boolean = false;
   public totalAmount: number = 0;
   //Modal Boostrap.
   closeResult: string | undefined;
@@ -124,6 +125,10 @@ export class PendingFeesComponent implements OnInit {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
+
+              this.isShowSelectedTransStatus = this.StudentDetailsModelList.every(f => {
+                f.TransctionStatus == '' || f.TransctionStatus == 'FAILED'
+              });
             }
             else {
               this.isShowSelected = false;

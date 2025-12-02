@@ -3,7 +3,7 @@
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-plus"></i>Pending Fee Details</b>
-      <button *ngIf="isShowSelected && !isOnClickExamFeePay" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
+      <button *ngIf="isShowSelected && !isOnClickExamFeePay && !isShowSelectedTransStatus" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
     </div>
     <div class="overflow-x-auto mt-3 w-full">
       <table class="table table-border w-full table-auto" cellpadding="5">
@@ -54,7 +54,7 @@
             <td class="text-center">
               <button
                   style="margin-bottom:5px"
-                  *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee && !isOnClickEnrollFeePay"
+                  *ngIf="row.ServiceType==_EnumFeeFor.EnrollMentFee && !isOnClickEnrollFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')"
                   class="btn bg-success text-white btn-sm"
                   (click)="PayEnrollmentFee(row)" 
                   type="button">Pay Enroll Fee 
@@ -70,7 +70,7 @@
 
               <button 
                 style="margin-bottom:5px" 
-                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay" 
+                *ngIf="row.ServiceType==_EnumFeeFor.ExamFee && !isOnClickExamFeePay && (row.TransctionStatus=='' || row.TransctionStatus == 'FAILED')" 
                 class="btn bg-success text-white btn-sm" 
                 (click)="PayExamFee(row)" 
                 type="button">Pay Exam Fee 

@@ -55,7 +55,7 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light" *ngIf="isShowGrid">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div>
-        <button *ngIf="isShowSelected && !isOnClickExamFeePay" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
+        <button *ngIf="isShowSelected && !isOnClickExamFeePay && !isShowSelectedTransStatus" (click)="MultiPayment()" class="btn bg-info btn-sm text-white">Pay Selected</button>
       </div>
 
     </div>
