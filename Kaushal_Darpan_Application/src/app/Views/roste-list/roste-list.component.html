@@ -14,23 +14,15 @@
           <option *ngFor="let item of SemesterMasterDDL" [value]="item.SemesterID">{{ item.SemesterName}}</option>
         </select>
 
-        <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger text-sm mt-1">
-          <p *ngIf="formTable.SemesterID.errors.required">This field is required.</p>
-        </div>
-
       </div>
 
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch </label>
-        <select class="form-select" [(ngModel)]="filterModel.StreamID" name="StreamID" formControlName="StreamID">
+        <select class="form-select" [(ngModel)]="filterModel.StreamID" name="StreamID" formControlName="StreamID" (change)="getSubjectMasterDDL()">
           <option [value]="0">--Select--</option>
           <option *ngFor="let item of StreamMasterDDL" [value]="item.StreamID">{{ item.StreamName}}</option>
         </select>
-
-        <div *ngIf="isSubmitted && formTable.SemesterID.errors" class="text-danger text-sm mt-1">
-          <p *ngIf="formTable.SemesterID.errors.required">This field is required.</p>
-        </div>
 
       </div>
 
@@ -44,16 +36,18 @@
     </div>-->
 
       <div>
-        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers</label>
-        <select class="form-select" [(ngModel)]="filterModel.StaffID" name="Teachers">
-          <option [value]="">--Select--</option>
-          <option *ngFor="let item of SubjectMasterDDL" [value]="item.ID">{{ item.Name}}</option>
-        </select>
-      </div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Teachers </label>
+          <select class="form-select" formControlName="StaffID" [(ngModel)]="filterModel.StaffID">
+            <option [value]="0">--Select--</option>
+            @for (item of ExaminerDDL; track item.StaffID) {
+            <option [value]="item.StaffID">{{item.Name}}</option>
+            }
+          </select>
+        </div>
 
       <div>
         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Day</label>
-        <select class="form-select" [(ngModel)]="filterModel.DayID" name="DayID" (change)="onChangeDay($event)">
+        <select class="form-select" [(ngModel)]="filterModel.DayID" name="DayID" (change)="onChangeDay($event)" formControlName="DayID">
           <option [value]="">--Select--</option>
           <option *ngFor="let item of DayList" [value]="item.DayID">{{ item.DayName}}</option>
         </select>
@@ -170,7 +164,7 @@
               
                 <!-- <td>{{ row.GroupName }}</td> -->
                 <td>{{ row.TeacherClassTotal }}</td>
-                <td>{{ row.TeacherClassTotal }}</td>
+                <td>{{ row.section.split('-').slice(2).join('-') }}</td>
              
                 <td *ngFor="let col of timeColumns">{{ row[col] || '' }}</td>
               </tr>
