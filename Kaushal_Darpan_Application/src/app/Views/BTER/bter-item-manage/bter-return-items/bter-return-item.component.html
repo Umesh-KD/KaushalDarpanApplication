@@ -151,14 +151,15 @@
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issue To</th>
             <th class="text-left">Equipment Working</th> 
+            <!-- <th class="text-left">Is Eligible For Auction</th> -->
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let i=index;">
             <td align="left">
               <input type="checkbox" [(ngModel)]="item.Selected" />
             </td>
-            <td align="left">{{ idx+1}}</td>
+            <td align="left">{{ i+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
             <td align="left">{{ item.Quantity}}</td>
@@ -182,6 +183,17 @@
                 </div>
                    
               </td>
+              <!-- <td class="border p-2">
+                <label>
+
+                  <ng-container *ngIf="ItemMasterList[i]?.equipmentStatus === 2 || item.get('equipmentStatus')?.value === '2'">
+                    <input type="checkbox"
+                           formControlName="isOption"
+                           (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
+                    Is Auction
+                  </ng-container>
+                </label>
+              </td> -->
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">

@@ -98,7 +98,7 @@
             </div>
           </div>
         </div>
-        <div>
+        <div *ngIf="sSOLoginDataModel.RoleID != EnumRole.Principal">
           <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                  for="fileIndentPhoto">Upload Indent Document<span class="StarMarking">*</span></label>
           <div class="flex fileUploader">
@@ -126,14 +126,15 @@
             </div>
           </div>
         </div>
-        <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
-          <div class="text-center">
+         <div class="text-center">
             <button type="submit" class="btn bg-info text-white mt-6 me-1">Submit</button>
             <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
               <i class="ti ti-refresh"></i> Reset
             </button>
           </div>
-        </div>
+        <!-- <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+         
+        </div> -->
       </div>
 
 

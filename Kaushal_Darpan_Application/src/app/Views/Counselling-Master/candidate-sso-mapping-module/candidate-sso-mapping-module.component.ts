@@ -219,11 +219,12 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
               data = JSON.parse(JSON.stringify(data));
               if (data.State == EnumStatus.Success)
               {
-                this.toastrService.success('CandateMapped Mapped Successfully');
+                this.toastrService.success(data.Message);
                 //Set User cookie
                 this.sSOLoginDataModel.CandidateID = this.searchRequest.CandidateId;
                 localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
                 this.cookieService.set('LoginStatus', "OK");
+                this.modalService.dismissAll();
                 setTimeout(() => {
                   this.router.navigate(['/CandidateApplicationList']);
                 }, 1000);
