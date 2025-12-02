@@ -41,6 +41,8 @@ export class EmitraFeeTransactionHistoryComponent {
   sSOLoginDataModel = new SSOLoginDataModel();
   public SemesterMasterDDLList: any = []
   public StreamMasterDDLList: any = []
+  selectedItems: any[] = [];
+  masterSelected: boolean = false;
 
   //table feature default
   public paginatedInTableData: any[] = [];//copy of main data
@@ -377,4 +379,88 @@ export class EmitraFeeTransactionHistoryComponent {
     return `${timestamp}${timestamp2}.${extension}`;
   }
 
+  checkUncheckAll() {
+    for (let item of this.paginatedInTableData) {
+      item.isSelected = this.masterSelected;
+    }
+    this.isAllSelected();
+  }
+
+  // On any checkbox change, sync the master checkbox and selected list
+  isAllSelected() {
+    this.masterSelected = this.paginatedInTableData.every((item) => item.isSelected);
+    this.selectedItems = this.paginatedInTableData
+      .filter((item) => item.isSelected)
+      .map((item) => ({
+        TransactionId: item.TransactionId,
+        ApplicationID: item.ApplicationID,
+        PRN: item.PRN,
+        PaidAmount: item.PaidAmount,
+        subsidyserviceid: item.subsidyserviceid,
+        DepartmentID: item.DepartmentID
+      }));
+
+    console.log(this.selectedItems);
+  }
+  selectAll() {
+    this.paginatedInTableData.forEach((item: any) => {
+      item.isSelected = this.masterSelected;
+    });
+
+    this.isAllSelected();
+  }
+
+  async VerifyAllSelected() {
+    debugger;
+    try {
+      for (const item of this.selectedItems) {
+        let obj: TransactionStatusDataModel = {
+          TransactionID: item.TransactionId,
+          DepartmentID: item.DepartmentID,
+          PRN: item.PRN,
+          ServiceID: item.subsidyserviceid,
+          ApplicationID: item.ApplicationID?.toString() ?? "",
+          AMOUNT: item.PaidAmount,
+          RPPTXNID: "",
+          SubOrderID: "",
+          CreatedBy: this.sSOLoginDataModel.UserID,
+          SSOID: this.sSOLoginDataModel.SSOID,
+          ExamStudentStatus: 0
+        };
+        await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
+          .then(async (data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.State = data['State'];
+            this.Message = data['SuccessMessage'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (data.State == EnumStatus.Success) {
+              if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
+                if (data.Data?.PRN) {
+                  this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
+                  await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+                }
+              } else {
+                this.toastr.error(this.Message);
+              }
+            } else {
+              this.toastr.error(this.ErrorMessage);
+            }
+          })
+
+          .catch(err => {
+            console.error('Payment check failed for one item:', err);
+            this.toastr.error('Payment check failed for one item');
+          });
+      }
+      this.selectedItems = [];
+    } catch (ex) {
+      console.error('Unexpected error:', ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+  }
 }
