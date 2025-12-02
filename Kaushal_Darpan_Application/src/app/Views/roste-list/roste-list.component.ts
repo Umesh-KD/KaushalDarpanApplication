@@ -117,8 +117,8 @@ export class RosteListComponent implements OnInit {
     this.filterModel.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
     this.filterModel.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.TableForm = this.fb.group({
-      SemesterID: [null, [Validators.required, DropdownValidators]], // initialize with null
-      StreamID: [null, [Validators.required, DropdownValidators]],   // initialize with null
+      SemesterID: [0, ],
+      StreamID: [0, ],
       DayID: [0, []],
       SectionID: [[]],
       SubjectID: [0, []],
@@ -171,9 +171,10 @@ export class RosteListComponent implements OnInit {
     }
   }
 
-  async getSubjectMasterDDL(ID: any, SemesterID: any) {
-    if (ID && SemesterID != "" && SemesterID != null) {
-      this.commonMasterService.SubjectMaster_StreamIDWise(ID, this.sSOLoginDataModel.DepartmentID, SemesterID).then((data: any) => {
+  async getSubjectMasterDDL() {
+
+    if (this.filterModel.SemesterID && this.filterModel.StreamID) {
+      this.commonMasterService.SubjectMaster_StreamIDWise(this.filterModel.StreamID, this.sSOLoginDataModel.DepartmentID, this.filterModel.SemesterID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.SubjectMasterDDL = data.Data;
       })
@@ -302,12 +303,6 @@ export class RosteListComponent implements OnInit {
         this.GetSectionData = [...this.allSections];
       }, (error: any) => console.error(error)
       );
-
-
-
-
-
-    this.getSubjectMasterDDL(this.TableForm.get('StreamID')?.value, this.TableForm.get('SemesterID')?.value)
 
   }
 
@@ -480,11 +475,13 @@ export class RosteListComponent implements OnInit {
         this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
       }
     );
+
     this._RosterDisplayTimeTableDataModel.EndTermID = this.sSOLoginDataModel.EndTermID;
     this._RosterDisplayTimeTableDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
     this._RosterDisplayTimeTableDataModel.SemesterID = 0;
     this._RosterDisplayTimeTableDataModel.StreamID = this.filterModel.StreamID;
     this._RosterDisplayTimeTableDataModel.SubjectID = 0;
+    
     await this.GetRosterDisplay_PDFTimeTablePDF();
 
     await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
@@ -534,6 +531,9 @@ export class RosteListComponent implements OnInit {
 
       this.loaderService.requestStarted();
 
+      debugger;
+
+      this._RosterDisplayTimeTableDataModel.StaffID=this.filterModel.StaffID;
 
       await this.attendanceServiceService.GetRosterDisplay_PDFTimeTable(this._RosterDisplayTimeTableDataModel)
         .then((data: any) => {
@@ -574,9 +574,18 @@ export class RosteListComponent implements OnInit {
             const blob = new Blob([byteArray], { type: 'application/pdf' });
             const blobUrl = URL.createObjectURL(blob);
 
+            const today = new Date();
+
+            // Format date as DD-MM-YYYY
+            const dd = String(today.getDate()).padStart(2, '0');
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const yyyy = today.getFullYear();
+
+            const formattedDate = `${dd}-${mm}-${yyyy}`;
+
             const link = document.createElement('a');
             link.href = blobUrl;
-            link.download =   'RosterDisplay_PDFTimeTable.pdf';
+            link.download =   `RosterDisplay_PDFTimeTable_${formattedDate}.pdf`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
