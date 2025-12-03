@@ -134,6 +134,7 @@
             <th class="text-left">IssueBookFolioDate</th> 
             <th class="text-left">QuantityIssued</th>
             <th class="text-left">QuantityBalance</th>
+            <th class="text-left">Bill Document</th>
             <th class="text-center">Action</th> 
           </tr>
         </thead>
@@ -147,6 +148,7 @@
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.EquipmentsName}}</td>
             <td align="left">{{item.InitialQuantity}}</td>
+
             <td align="left">
               <span style="cursor: pointer; color: blue;" (click)="navigateToEdit(item.ItemId)"
                     *ngIf="sSOLoginDataModel.RoleID == EnumRole.StoreKeeper
@@ -186,6 +188,12 @@
             <td align="left">{{item.IssueBookFolioDate}}</td>
             <td align="left">{{item.QuantityIssued}}</td>
             <td align="left">{{item.QuantityBalance}}</td>
+            <td align="left">
+               <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + item.BillFilePath }}"
+               *ngIf="item.BillFileName" class="btn bg-primary text-white m-0" target="_blank">
+              <i class="ti ti-eye"></i>
+            </a>
+            </td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                 <button *ngIf="sSOLoginDataModel.RoleID == EnumRole.Admin

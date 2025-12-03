@@ -18,7 +18,10 @@ import { DTEItemCategoriesMasterService } from '../../../../../Services/DTEInven
 import { DteItemsMasterService } from '../../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
 import { CommonFunctionService } from '../../../../../Services/CommonFunction/common-function.service';
 import { DteItemUnitMasterService } from '../../../../../Services/DTEInventory/DTEItemUnitMaster/DTEItemunit-master.service';
-
+import { DocumentDetailsService } from '../../../../../Common/document-details';
+import { DeleteDocumentDetailsModel } from '../../../../../Models/DeleteDocumentDetailsModel';
+import { UploadBTERFileModel, UploadFileModel } from '../../../../../Models/UploadFileModel';
+import { AppsettingService } from '../../../../../Common/appsetting.service';
 @Component({
   selector: 'app-dteadd-items-master',
   templateUrl: './dteadd-items-master.component.html',
@@ -49,7 +52,11 @@ export class DteAddItemsMasterComponent {
   _EnumRole = EnumRole;
   public UnitMasterList: any = [];
   todayDate: string = new Date().toISOString().split('T')[0];
-
+  public Dis_FileName: string = '';
+  public FileName: string = '';
+  public FilePath: string = '';
+  isFileError: boolean = false;
+  public Specification: string ='';
   constructor(
     private toastr: ToastrService,
     private dteItemUnitMasterService: DteItemUnitMasterService,
@@ -63,6 +70,8 @@ export class DteAddItemsMasterComponent {
     private activatedRoute: ActivatedRoute,
     private routers: Router,
     private Swal2: SweetAlert2,
+    private documentDetailsService: DocumentDetailsService,
+    public appsettingConfig: AppsettingService,
     private modalService: NgbModal) { }
 
   async ngOnInit() {
@@ -101,6 +110,7 @@ export class DteAddItemsMasterComponent {
       issuebookfoliodate: [''],
       txtQuantityIssued: ['0'],
       txtQuantityBalance: [''],
+      BillDocument: ['', Validators.required],
     });
 
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
@@ -160,6 +170,7 @@ export class DteAddItemsMasterComponent {
         });
       return;
     }
+  
     //Show Loading
     this.loaderService.requestStarted();
     this.isLoading = true;
@@ -186,6 +197,9 @@ export class DteAddItemsMasterComponent {
       } else {
         this.request.Status = 0
       }
+      this.request.BillFileName = this.FileName;
+      this.request.BillFilePath = 'StockRegisterBillUpload/' + this.FileName;
+
       await this.itemService.SaveData(this.request)
         .then((data: any) => {
           this.State = data['State'];
@@ -243,7 +257,11 @@ export class DteAddItemsMasterComponent {
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
           this.request.IsConsume = data['Data']["IsConsume"];
-         
+          this.request.BillFileName=data['Data']["BillFileName"];
+          this.request.BillFilePath=data['Data']["BillFilePath"];
+          this.FileName=data['Data']["BillFileName"];
+          this.FilePath=data['Data']["BillFilePath"];
+          this.Dis_FileName=data['Data']["BillFileName"];
           const rawDate = data['Data']["voucherdate"];
 
           if (rawDate) {
@@ -347,7 +365,7 @@ export class DteAddItemsMasterComponent {
       this.loaderService.requestStarted();
       const selectedCategoryId = this.AddItemsRequestFormGroup.value.ItemCategoryId;
 
-      const defaultEquipment = { ID: 0, Name: '-- Select Equipment --', IsConsume: 0, UnitId: 0 };
+      const defaultEquipment = { ID: 0, Name: '-- Select Equipment --', IsConsume: 0, UnitId: 0,Specification:'' };
 
       if (!selectedCategoryId || selectedCategoryId === 0) {
         this.EquipmentsDDLList = [defaultEquipment];
@@ -356,6 +374,7 @@ export class DteAddItemsMasterComponent {
         this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
         this.request.UnitId = 0;
         this.request.IsConsume = 0;
+        this.Specification='';
         return;
       }
 
@@ -365,7 +384,7 @@ export class DteAddItemsMasterComponent {
       this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(0);
       this.request.UnitId = 0;
       this.request.IsConsume = 0;
-
+      this.Specification='';
       const data = await this.commonFunctionService.GetDteEquipment_Branch_Wise_CategoryWise(selectedCategoryId);
       const parsedData = JSON.parse(JSON.stringify(data))?.Data || [];
 
@@ -387,9 +406,11 @@ export class DteAddItemsMasterComponent {
     if (selectedEquipment) {
       this.request.IsConsume = selectedEquipment.IsConsume || 0;
       this.request.UnitId = selectedEquipment.UnitId || 0;
+      this.Specification=selectedEquipment.Specification || '';
     } else {
       this.request.IsConsume = 0;
       this.request.UnitId = 0;
+      this.Specification='';
     }
 
     this.AddItemsRequestFormGroup.controls['IsConsume'].setValue(this.request.IsConsume);
@@ -500,7 +521,14 @@ export class DteAddItemsMasterComponent {
       EquipmentsId: null,
       UnitId: null,
       voucherdate: '',
-      Abbreviation: ''
+      Abbreviation: '',
+      receiptbookfolio:'',
+      issuedate: '',
+      IndentNo: '',
+      issuebookfoliodate: '',
+      txtQuantityIssued: '0',
+      txtQuantityBalance: '',
+       BillDocument: ''
     });
 
     this.EquipmentsDDLList = [];
@@ -549,5 +577,67 @@ export class DteAddItemsMasterComponent {
   openDatePicker(event: any) {
     event.target.showPicker();
   }
-
+  async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
+      try { 
+        let uploadModel: UploadFileModel = {
+          FileName: FileName ?? "",
+          FileExtention: "",
+          MinFileSize: "20kb",
+          MaxFileSize: "50mb",
+          FolderName:"StockRegisterBillUpload",
+     
+        }
+        await this.documentDetailsService.UploadDocument(event, uploadModel)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            //
+            
+            if (this.State == EnumStatus.Success) {
+                this.FileName = data.Data[0].FileName;
+                this.Dis_FileName = data.Data[0].Dis_FileName; 
+                  this.AddItemsRequestFormGroup
+              .get('BillDocument')
+              ?.setValue(this.FileName);
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+    async DeleteDocument(item: any) {
+      try {
+        let deleteModel = new DeleteDocumentDetailsModel()
+        deleteModel.FolderName =  "Students";
+        deleteModel.FileName = item;
+        await this.documentDetailsService.DeleteDocument(deleteModel)
+          .then((data: any) => {
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+            if (data.State != EnumStatus.Error) {
+              
+                this.FileName = '';
+                this.Dis_FileName = ''; 
+                 this.AddItemsRequestFormGroup.get('BillDocument')?.reset(); 
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+          });
+      }
+      catch (Ex) {
+        console.log(Ex);
+      }
+    }
+  
 }

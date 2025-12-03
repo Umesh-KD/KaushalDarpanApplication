@@ -182,6 +182,7 @@ export class ItiInstructorFormComponent {
   allQualificationDDL: any[] = [];    
   ITITradeList: any[] = [];   
   StreamList: any[] = [];
+  CITSStreamList: any[] = [];
   formData = new ITI_InstructorTechnicalCITSQualification()
   modalReference: NgbModalRef | undefined;
   public TechCITSId: number = 0;
@@ -348,10 +349,12 @@ export class ItiInstructorFormComponent {
       Tech_MarksTypeID: ['', Validators.required],
       //CITSCertified: [''],
       CITSCertified: ['0', Validators.required],
-      Tech_CITSCertifiedDocument: [''],
+      Tech_CITSCertifiedDocument: ['', Validators.required],
 
       Tech_CITSTrade: [''],
-      Tech_CITSYear: ['']
+      Tech_CITSYear: [''],
+
+      OtherCITSQualification: this.formBuilder.array([])
     });
 
 
@@ -400,7 +403,8 @@ export class ItiInstructorFormComponent {
     await this.BoardDropdownData('Board');
     await this.GetcOmmonData();
     await this.QualificationDetailsLevel();
-    await this.EduQualificationDetailsLevel()
+    await this.EduQualificationDetailsLevel();
+    await this.GetCITSTrade();
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
@@ -411,7 +415,6 @@ export class ItiInstructorFormComponent {
 
     try {
       this.loaderService.requestStarted();
-      debugger
       await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -517,7 +520,6 @@ export class ItiInstructorFormComponent {
   async ddlState_Change() {
     console.log("State changed - (", this.InstructorForm.value.ddlState, ")");
 
-    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
@@ -545,7 +547,6 @@ export class ItiInstructorFormComponent {
   async ddlState_Changeid() {
     console.log("State changed - (", this.InstructorForm.value.ddlState, ")");
 
-    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(Number(this.InstructorForm.value.ddlState))
@@ -570,7 +571,6 @@ export class ItiInstructorFormComponent {
 
 
   addEducationQualification() {
-    debugger
     this.isedu = true;
     if (this.EducationForm.invalid) {
       alert("Please fill required fields before adding");
@@ -598,7 +598,6 @@ export class ItiInstructorFormComponent {
       (q: any) => q.QualificationID == this.educationRequest.EduQualificationID
     )
 
-    debugger
     this.educationList.push({
       EducationDocument: this.educationRequest.EducationDocument,
       Education_Board: this.educationRequest.Education_Board,
@@ -627,37 +626,37 @@ export class ItiInstructorFormComponent {
   }
 
 
+
   addTechQualificationCITS() {
-    debugger
+    //if (!this.searchtechCITSRequest.Tech_CITSTrade) {
+    //  alert("Please fill required fields before adding");
+    //  return;
+    //}
     this.formData.OtherCITSQualification.push(new ITI_InstructorTechnicalCITSQualificationList());
   }
-
-
-  removeTechQualificationCITS(index: number) {
-    debugger
-    this.formData.OtherCITSQualification.splice(index, 1);
+  removeTechQualificationCITS(i: number) {
+    this.formData.OtherCITSQualification.splice(i, 1);
   }
 
-  async ViewCTISTechQualification(content: any, id: number) {
-    debugger
+
+  async ViewCTISTechQualification(content: any, id: number, index: number) {
+    this.formData.OtherCITSQualification = this.techRequestList[index].OtherCITSQualification;
     this.TechCITSId = id;
     this.searchtechCITSRequest.TechCITSId = this.TechCITSId;
     if (this.request.ID != 0) {
       await this.ViewCTISTechQualificationDetails()
     }
- 
     this.modalReference = this.modalService.open(content, { backdrop: 'static', size: 'xl', keyboard: true, centered: true });
-
   }
+
+  
+
   CloseModalPopup() {
     this.modalService.dismissAll();
     this.TechCITSId = 0;
   }
 
-
   async ViewCTISTechQualificationDetails() {
-    debugger
-    
       try {
         this.loaderService.requestStarted();
         await this.ItiInstructorService.GetAllTechCITSDetails(this.searchtechCITSRequest).then((data: any) => {
@@ -665,7 +664,6 @@ export class ItiInstructorFormComponent {
           console.log("getbyid", data)
           if (data.State == EnumStatus.Success) {
             this.formData.OtherCITSQualification = data['Data']['Table'];
-            debugger
           }
         })
       } catch (error) {
@@ -679,12 +677,9 @@ export class ItiInstructorFormComponent {
 
  
   async UploadDocument(event: any, item: any) {
-    debugger
     try {
        let uploadModel = new UploadFileModel();
       uploadModel.FolderName = "ITI/Instructor/";
-
-      debugger
       await this.documentDetailsService.UploadDocument(event, uploadModel)
         .then((data: any) => {
           this.State = data['State'];
@@ -692,6 +687,7 @@ export class ItiInstructorFormComponent {
           this.ErrorMessage = data['ErrorMessage'];
        
           if (this.State == EnumStatus.Success) {
+            
             item.Tech_CITSCertifiedDocument =data.Data[0].FileName;
             event.target.value = null;
           }
@@ -710,7 +706,6 @@ export class ItiInstructorFormComponent {
 
 
   addTechQualification() {
-    debugger
     if (!this.techRequest.QualificationID) {
       alert("Please fill required fields before adding");
       return;
@@ -750,7 +745,6 @@ export class ItiInstructorFormComponent {
       Tech_CITSYear: this.techRequest.Tech_CITSYear,
       Tech_CITSTrade: this.techRequest.Tech_CITSTrade,
       MarkTypeName: this.techRequest.Tech_MarksTypeID == '0' ? 'Percentage' : 'CGPA',
-      
       CITSCertified: this.techRequest.CITSCertified,
       Tech_CITSCertifiedDocument: this.techRequest.Tech_CITSCertifiedDocument,
       QualificationName: QualificationName,
@@ -758,8 +752,29 @@ export class ItiInstructorFormComponent {
       OtherCITSQualification: this.formData.OtherCITSQualification
     });
     console.log('Request List===>',this.techRequestList)
+    this.formData.OtherCITSQualification = [new ITI_InstructorTechnicalCITSQualificationList()];
 
-    this.TechnicalForm.reset();
+
+    this.TechnicalForm.reset({
+      QualificationName: '',
+      QualificationLevel: '',
+      Tech_Board: '',
+      StreamName: '',
+      StreamID: '',
+      Tech_Year: '',
+      Tech_Percentage: '',
+      Tech_CGPA: '',
+      TechDocument: null,
+      Tech_MarksTypeID: '',
+      CITSCertified: '0',   
+      Tech_CITSCertifiedDocument: '',
+      Tech_CITSTrade: '',
+      Tech_CITSYear: ''
+    });
+
+
+    //this.TechnicalForm.reset();
+    this.techRequest.TechDocument = '';
   }
 
 
@@ -780,7 +795,6 @@ export class ItiInstructorFormComponent {
 
 
   addEmployeeQualification() {
-    debugger
     if (this.EmploymentForm.invalid) {
       alert("Please fill required fields before adding");
       return;
@@ -862,7 +876,6 @@ export class ItiInstructorFormComponent {
 
  
   async onSubmit() {
-    debugger
     this.isSubmitted = true;
 
     this.request.Aadhar = this.InstructorForm.value.Aadhar
@@ -958,8 +971,6 @@ export class ItiInstructorFormComponent {
           if (data['Data']['Table'] && data['Data']['Table'].length === 0) {
 
             await this.SSOIDGetSomeDetails(ID)
-
-            debugger
             if (this.isSSOVisible) {
               this.InstructorForm.get('Uid')?.disable();
 
@@ -989,7 +1000,6 @@ export class ItiInstructorFormComponent {
             if (data['Data']['Table1'] && data['Data']['Table1'].length > 0) {
               this.educationList = data['Data']['Table1']
             }
-            debugger
             if (data['Data']['Table2'] && data['Data']['Table2'].length > 0) {
               this.employeeRequestList = data['Data']['Table2']
             }
@@ -1044,17 +1054,11 @@ export class ItiInstructorFormComponent {
             });
             this.request.ddlDistrict = this.InstructorForm.value.ddlDistrict
             console.log(this.request, "sdas")
-
-
-            debugger
             if (this.isSSOVisible) {
               this.InstructorForm.get('Uid')?.disable();
-
             } else {
               this.InstructorForm.get('Uid')?.enable();
             }
-
-
           }
 
   
@@ -1158,8 +1162,6 @@ export class ItiInstructorFormComponent {
   }
    
   async GetDetailsByJanAadhaar() {
-
-
     if (!this.request.JanAadhar || this.request.JanAadhar.length < 10 || this.request.JanAadhar.length > 12) {
       this.toastr.error("Invalid Jan Aadhaar Number");
       return;
@@ -1268,7 +1270,6 @@ export class ItiInstructorFormComponent {
         this.ResposeOTPModel.OTP = this.OTP;
         await this.StudentJanAadharDetailService.VerifyOTP(this.ResposeOTPModel)
           .then(async (data: any) => {
-            debugger
             data = JSON.parse(JSON.stringify(data));
             console.log(data);
             if (this.State == EnumStatus.Success) {
@@ -1416,9 +1417,9 @@ export class ItiInstructorFormComponent {
               else if (Type == "PanDoc") {
                 this.employeeRequest.panDocument = data['Data'][0]["FileName"];
               }
-              else if (Type == "CITS") {
-                this.techRequest.Tech_CITSCertifiedDocument = data['Data'][0]["FileName"];
-              }
+              //else if (Type == "CITS") {
+              //  this.techRequest.Tech_CITSCertifiedDocument = data['Data'][0]["FileName"];
+              //}
 
 
               event.target.value = null;
@@ -1485,9 +1486,6 @@ export class ItiInstructorFormComponent {
       }, 200);
     }
   }
-
-
-
   async BoardDropdownData(MasterCode: string) {
     this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
       switch (MasterCode) {
@@ -1500,17 +1498,9 @@ export class ItiInstructorFormComponent {
     });
   }
 
-
-  
-  
-
-
-  
   sameAsPermanent: boolean = true;
 
  async onCopyCorrespondenceToggle() {
-    debugger;
-
     if (this.sameAsPermanent) {
       this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
       this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
@@ -1557,13 +1547,10 @@ export class ItiInstructorFormComponent {
 
   onMarksTypeChange() {
     const selectedType = this.TechnicalForm.get('Tech_MarksTypeID')?.value;
-
     const cgpaCtrl = this.TechnicalForm.get('Tech_CGPA');
     const percCtrl = this.TechnicalForm.get('Tech_Percentage');
-
     cgpaCtrl?.clearValidators();
     percCtrl?.clearValidators();
-
     if (selectedType == '1') {
       percCtrl?.reset();
       cgpaCtrl?.setValidators([
@@ -1611,7 +1598,6 @@ export class ItiInstructorFormComponent {
   async GetcOmmonData() {
     try {
       this.loaderService.requestStarted();
-
       await this.commonMasterService.GetCommonMasterDDLByType('ExamOfLevel')
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -1877,7 +1863,6 @@ export class ItiInstructorFormComponent {
 
 
   onFileChange(event: Event, type: string) {
-    debugger
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       const file = input.files[0];
@@ -1948,7 +1933,6 @@ export class ItiInstructorFormComponent {
 
     const name = (selected?.QualificationName ?? '').toString().trim().toLowerCase();
 
-    // --- existing subject logic ---
     const autoExams = ['middle school', 'secondary'];
     const subjectsCtrl = this.EducationForm.get('Education_Subjects');
 
@@ -1965,19 +1949,14 @@ export class ItiInstructorFormComponent {
       if (subjectsCtrl?.disabled) subjectsCtrl.enable({ emitEvent: false });
     }
 
-    // --- NEW: handle OTHER selection ---
-    // we accept both 'other' text or if you want match by ID, compare selectedId to the known OTHER id
     if (name === 'other') {
       this.showOtherExam = true;
 
-      // add required validator only when OTHER selected
       this.EducationForm.get('OtherExaminationPassed')?.setValidators([Validators.required]);
       this.EducationForm.get('OtherExaminationPassed')?.updateValueAndValidity({ emitEvent: false });
 
-      // clear previous value if any
       this.EducationForm.get('OtherExaminationPassed')?.setValue('', { emitEvent: false });
     } else {
-      // hide textbox and remove validation when not OTHER
       if (this.showOtherExam) {
         this.showOtherExam = false;
         this.EducationForm.get('OtherExaminationPassed')?.clearValidators();
@@ -1987,6 +1966,17 @@ export class ItiInstructorFormComponent {
     }
   }
 
+  async GetCITSTrade() {
+    var Department: number = 0
+    Department = 2
+    
+  await this.commonMasterService.StreamMaster(Department)
+  .then((data: any) => {
+    data = JSON.parse(JSON.stringify(data));
+    this.CITSStreamList = data['Data'];
+    console.log('Stream List ==> ', this.CITSStreamList);
+  }, error => console.error(error));
+  }
 
 }
 

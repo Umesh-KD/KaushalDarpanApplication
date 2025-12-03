@@ -220,5 +220,9 @@ export class ITI_InstructorDataAssignSearchModel {
 
 export class ITI_Instructor_TechCITSDetailsSearchModel {
 
-  TechCITSId?: number = 0
+  TechCITSId?: number = 0;
+  public tech_TechDetailsID?: number = 0;
+  public Tech_CITSCertifiedDocument?: string = '';
+  public Tech_CITSTrade?: string = '';
+  public Tech_CITSYear?: string = '';
 }
