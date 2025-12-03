@@ -151,7 +151,7 @@
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issue To</th>
             <th class="text-left">Equipment Working</th> 
-            <!-- <th class="text-left">Is Eligible For Auction</th> -->
+            <th class="text-left">Is Eligible For Auction</th>
           </tr>
         </thead>
         <tbody>
@@ -183,17 +183,26 @@
                 </div>
                    
               </td>
-              <!-- <td class="border p-2">
+              <td class="border p-2">
                 <label>
-
-                  <ng-container *ngIf="ItemMasterList[i]?.equipmentStatus === 2 || item.get('equipmentStatus')?.value === '2'">
+                      <ng-container
+                          *ngIf="
+                          item.Selected &&
+                          (
+                          ItemMasterList[i]?.equipmentStatus === 2 ||
+                          item.equipmentStatus === '2' ||
+                          item.equipmentStatus === 2
+                          );
+                          else notSelected"
+                      >
+                      <!-- formControlName="isOption" -->
                     <input type="checkbox"
-                           formControlName="isOption"
+                           name="isOption" [(ngModel)]="item.isOption"
                            (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
                     Is Auction
                   </ng-container>
                 </label>
-              </td> -->
+              </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">

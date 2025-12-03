@@ -72,6 +72,7 @@ export class DteItemsMasterComponent {
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
+    this.Searchrequest.ItemType = 0; 
     await this.GetEquipmentDDL();
     await this.GetAllData();
     await this.GetTradeDDL();
@@ -86,6 +87,7 @@ export class DteItemsMasterComponent {
       this.Searchrequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.Searchrequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID
+      
            debugger;
       await this.dteItemsMasterService.GetAllData(this.Searchrequest)
         .then((data: any) => {

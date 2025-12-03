@@ -35,6 +35,8 @@ export class ItemsDataModels {
   public issuebookfoliodate: string = '';
   public QuantityIssued: number | null = 0;
   public QuantityBalance: number | null = null;
+  public BillFileName : string = '';
+  public BillFilePath : string = '';
   
 }
 export class ItemsSearchModel {
@@ -46,7 +48,7 @@ export class ItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
-  public ItemType: number = 0;
+  public ItemType: number = 0; 
 }
 
 export class ItemsDetailsModel {
