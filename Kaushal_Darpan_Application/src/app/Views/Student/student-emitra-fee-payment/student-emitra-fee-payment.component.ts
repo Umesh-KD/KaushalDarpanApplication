@@ -55,6 +55,7 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   public isExamFee: boolean = false
   public isOnClickEnrollFeePay: boolean = false
   public isOnClickExamFeePay: boolean = false
+  public isShowSelectedTransStatus: boolean = false
 
 
   constructor(private loaderService: LoaderService,
@@ -94,7 +95,11 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
   get _searchssoform() { return this.searchssoform.controls; }
 
 
-  async onSearchClick() { await this.GetAllDataActionWise(); }
+  async onSearchClick() { 
+    this.isOnClickExamFeePay = false;
+    this.isOnClickEnrollFeePay = false;
+    await this.GetAllDataActionWise(); 
+  }
 
   async ResetControl() {
     this.SemesterID = 0;
@@ -181,6 +186,10 @@ export class StudentEmitraFeePaymentComponent implements OnInit {
               this.isShowSelected = this.StudentDetailsModelList.every(f =>
                 [enumExamStudentStatus.VerifiedForExamination].includes(f.ExamStudentStatus)
               );
+
+              this.isShowSelectedTransStatus = this.StudentDetailsModelList.every(f => {
+                f.TransctionStatus == '' || f.TransctionStatus == 'failed'
+              });
 
             }
 

@@ -718,83 +718,200 @@ export class BudgetReportComponent {
 
 
 
-  async AllotedReport() {
-    debugger
-    try {
-      this.loaderService.requestStarted(); 
 
+
+  async AllotedReport(): Promise<void> {
+    debugger;
+    this.loaderService.requestStarted();
+
+    try {
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
 
-      const resp: any = await this.budgetDistributedService
-        .GetAllBudgetReportData(this.searchRequest)
-        .then((data: any) => JSON.parse(JSON.stringify(data)))
-        .catch(err => { throw err; });
+      const resp: any = await this.budgetDistributedService.GetAllotedReportData(this.searchRequest);
+      const rows: any[] = resp?.Data ?? []; 
 
-      this.AddmissionList = resp?.Data ?? [];
-      this.isVisibleList = true;
-      this.isVisibleDownload = true;
-      this.loadInTable();
-      console.log(this.AddmissionList, "AddmissionList");
+      if (!Array.isArray(rows) || rows.length === 0) {
+        this.toastr.error('No data to export');
+        return;
+      }
 
       const unwantedColumns = [
         'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-        'TotalRecords', 'DepartmentID', 'SomeInternalFlag' 
+        'TotalRecords', 'DepartmentID', 'SomeInternalFlag'
       ];
 
-      const columnOrder = [
-        'DistributedID', 'BudgetType', 'Amount', 'UtilizationAmount', 'StatusName', 'Status', 'CollegeName', 'Remark'
-      ];
+      const priorityCols = ['SRNo', 'CodeAndName'];
 
-      const filteredData = this.AddmissionList.map((item: any) => {
-        const out: any = {};
-        Object.keys(item).forEach(k => {
-          if (!unwantedColumns.includes(k)) {
-            out[k] = item[k];
+      const seen = new Set<string>();
+      const allColumns: string[] = [];
+      for (const row of rows) {
+        Object.keys(row).forEach(k => {
+          if (!seen.has(k) && !unwantedColumns.includes(k)) {
+            seen.add(k);
+            allColumns.push(k);
           }
         });
-        return out;
-      });
+      }
 
-      const orderedData = filteredData.map((row: any) => {
+      if (!allColumns.includes('SRNo')) {
+        allColumns.unshift('SRNo');
+      }
+
+      const columnOrder: string[] = [];
+      for (const pc of priorityCols) {
+        if (allColumns.includes(pc) && !columnOrder.includes(pc)) columnOrder.push(pc);
+      }
+      for (const c of allColumns) {
+        if (!columnOrder.includes(c)) columnOrder.push(c);
+      }
+
+      const orderedData = rows.map((item: any, index: number) => {
         const orderedRow: any = {};
         columnOrder.forEach(col => {
-          orderedRow[col] = row.hasOwnProperty(col) ? row[col] : '';
-        });
-        Object.keys(row).forEach(k => {
-          if (!columnOrder.includes(k)) orderedRow[k] = row[k];
+          if (col === 'SRNo') {
+            orderedRow[col] = index + 1; 
+          } else {
+            orderedRow[col] = Object.prototype.hasOwnProperty.call(item, col) ? item[col] : '';
+          }
         });
         return orderedRow;
       });
 
+      if (orderedData.length === 0) {
+        const headerRow: any = {};
+        columnOrder.forEach(col => headerRow[col] = '');
+        orderedData.push(headerRow);
+      }
+
       const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(orderedData);
-      const cols = Object.keys(orderedData[0] || {}).map(col => ({
-        wch: Math.max(
-          col.length,
-          ...orderedData.map((r: any) => (r[col] ? r[col].toString().length : 0))
-        ) + 2
-      }));
+      const cols = Object.keys(orderedData[0] || {}).map(col => {
+        const maxCellLen = Math.max(
+          col.toString().length,
+          ...orderedData.map((r: any) => {
+            const v = r[col];
+            return v === null || v === undefined ? 0 : v.toString().length;
+          })
+        );
+        return { wch: maxCellLen + 2 };
+      });
       ws['!cols'] = cols;
       const wb: XLSX.WorkBook = XLSX.utils.book_new();
       const now = new Date();
       const pad = (n: number) => n.toString().padStart(2, '0');
-      const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
-
-      // Sheet name (<=31 chars)
       let sheetName = `Alloted_Budget_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
       if (sheetName.length > 31) sheetName = sheetName.substring(0, 31);
-
       XLSX.utils.book_append_sheet(wb, ws, sheetName);
 
+      const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
       const fileName = `Alloted_BudgetReport_${dateStr}.xlsx`;
       XLSX.writeFile(wb, fileName);
 
     } catch (ex) {
       console.error('AllotedReport error', ex);
+      this.toastr.error('Export failed. See console for details.');
     } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
       }, 200);
     }
   }
+
+  async GetAllUCUtilizationReportData(): Promise<void> {
+    debugger;
+    this.loaderService.requestStarted();
+
+    try {
+      this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
+
+      const resp: any = await this.budgetDistributedService.GetAllUCUtilizationReportData(this.searchRequest);
+      const rows: any[] = resp?.Data ?? []; 
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        this.toastr.error('No data to export');
+        return;
+      }
+
+      const unwantedColumns = [
+        'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
+        'TotalRecords', 'DepartmentID', 'SomeInternalFlag'
+      ];
+
+      const priorityCols = ['SRNo', 'CodeAndName'];
+
+      const seen = new Set<string>();
+      const allColumns: string[] = [];
+      for (const row of rows) {
+        Object.keys(row).forEach(k => {
+          if (!seen.has(k) && !unwantedColumns.includes(k)) {
+            seen.add(k);
+            allColumns.push(k);
+          }
+        });
+      }
+
+      if (!allColumns.includes('SRNo')) {
+        allColumns.unshift('SRNo');
+      }
+
+      const columnOrder: string[] = [];
+      for (const pc of priorityCols) {
+        if (allColumns.includes(pc) && !columnOrder.includes(pc)) columnOrder.push(pc);
+      }
+      for (const c of allColumns) {
+        if (!columnOrder.includes(c)) columnOrder.push(c);
+      }
+
+      const orderedData = rows.map((item: any, index: number) => {
+        const orderedRow: any = {};
+        columnOrder.forEach(col => {
+          if (col === 'SRNo') {
+            orderedRow[col] = index + 1; 
+          } else {
+            orderedRow[col] = Object.prototype.hasOwnProperty.call(item, col) ? item[col] : '';
+          }
+        });
+        return orderedRow;
+      });
+
+      if (orderedData.length === 0) {
+        const headerRow: any = {};
+        columnOrder.forEach(col => headerRow[col] = '');
+        orderedData.push(headerRow);
+      }
+
+      const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(orderedData);
+      const cols = Object.keys(orderedData[0] || {}).map(col => {
+        const maxCellLen = Math.max(
+          col.toString().length,
+          ...orderedData.map((r: any) => {
+            const v = r[col];
+            return v === null || v === undefined ? 0 : v.toString().length;
+          })
+        );
+        return { wch: maxCellLen + 2 };
+      });
+      ws['!cols'] = cols;
+      const wb: XLSX.WorkBook = XLSX.utils.book_new();
+      const now = new Date();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      let sheetName = `UCUtilizationReportData_${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+      if (sheetName.length > 31) sheetName = sheetName.substring(0, 31);
+      XLSX.utils.book_append_sheet(wb, ws, sheetName);
+
+      const dateStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      const fileName = `UCUtilizationReportData_${dateStr}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+
+    } catch (ex) {
+      console.error('UCUtilizationReportData error', ex);
+      this.toastr.error('Export failed. See console for details.');
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
 
 }
