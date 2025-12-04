@@ -12,6 +12,8 @@ import { CommonFunctionService } from '../../../Services/CommonFunction/common-f
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ITIAdminUserService } from '../../../Services/ITI/ITI-Admin-User/itiadmin-user.service';
 import { ITIAdminUserDetailModel, ITIAdminUserSearchModel } from '../../../Models/ITI/ITIAdminUserDataModel';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
+import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 
 @Component({
   selector: 'app-itiadmin-user',
@@ -37,7 +39,9 @@ export class ITIAdminUserComponent {
   public AdminUserList: any = [];
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
-
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public Isverifed: boolean = false
+  public _enumrole = EnumRole
   constructor(private commonMasterService: CommonFunctionService,
     private adminUserService: ITIAdminUserService,
     private formBuilder: FormBuilder,
@@ -51,10 +55,13 @@ export class ITIAdminUserComponent {
 
     this.AdminUserFormGroup = this.formBuilder.group(
       {
-        txtUserName: ['', Validators.required],
+        txtUserName: [{ value: '', disabled: true }, Validators.required],
+
         txtUserEmail: ['', Validators.required],
+        RoleID: ['', [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
-        txtMobileNo: ['', Validators.required],
+        //txtMobileNo: ['', Validators.required],
+        txtMobileNo: [{ value: '', disabled: true }, Validators.required],
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -77,7 +84,16 @@ export class ITIAdminUserComponent {
 
   async SaveData() {
     try {
-      ;
+      if (this.Isverifed == false) {
+
+        this.toastr.error("Please Enter Valid SSOID")
+        return
+      }
+      if (this.request.SSOID == '') {
+        this.toastr.error("Please Enter Valid SSOID")
+        return
+      }
+
       this.isSubmitted = true;
       if (this.AdminUserFormGroup.invalid) {
         console.log("errro")
@@ -88,10 +104,9 @@ export class ITIAdminUserComponent {
       this.request.ModifyBy = this.sSOLoginDataModel.UserID;
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
-        this.request.InstituteID = this.sSOLoginDataModel.InstituteID
-      }
 
+        this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+      
       //save
       await this.adminUserService.SaveData(this.request)
         .then((data: any) => {
@@ -138,9 +153,9 @@ export class ITIAdminUserComponent {
       this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
       this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID
       this.sSOLoginDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
-      if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
+    
         this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
-      }
+      
 
       this.loaderService.requestStarted();
       await this.adminUserService.GetAllData(this.searchRequest).then((data: any) => {
@@ -262,4 +277,67 @@ export class ITIAdminUserComponent {
         }
       });
   }
+
+
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    this.Isverifed = false
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID");
+      this.request.SSOID = ''
+      this.request.MobileNo = ''
+      this.request.Email = ''
+      this.request.Name = ''
+      return;
+    }
+
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+
+
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+            this.request.Name = parsedData.displayName;
+            this.request.MobileNo = parsedData.mobile;
+            this.request.SSOID = parsedData.SSOID;
+            this.request.Email = parsedData.mailPersonal;
+            this.Isverifed = true
+
+          }
+          else {
+            this.toastr.error("Record Not Found");
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
+  }
+
+
 }

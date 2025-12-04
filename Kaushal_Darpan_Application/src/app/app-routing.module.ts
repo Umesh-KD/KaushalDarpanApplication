@@ -492,7 +492,7 @@ const routes: Routes = [
       { path: 'ITIStudentFeesTransactionHistoryRpt', loadChildren: () => import('./Views/ITI/itistudent-fees-transaction-history/itistudent-fees-transaction-history.module').then(m => m.ITIStudentFeesTransactionHistoryModule), title: 'ITI Student Fees Transaction History Report' },
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
-      { path: 'ITIAdminUser', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'ITI Admin User' },
+      { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
       { path: 'master-configuration', loadChildren: () => import('./Views/master-configuration/master-configuration.module').then(m => m.MasterConfigurationModule), title: 'Master Configuration' },
       { path: 'master-configuration-bter', loadChildren: () => import('./Views/master-configuration-bter/master-configuration-bter.module').then(m => m.MasterConfigurationBTERModule), title: 'Master Configuration' },
       { path: 'RevaluationTab', loadChildren: () => import('./Views/Student/revaluation-tab/revaluation-tab.module').then(m => m.RevaluationTabModule) },
@@ -1646,6 +1646,7 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
+  { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
   
 
 
