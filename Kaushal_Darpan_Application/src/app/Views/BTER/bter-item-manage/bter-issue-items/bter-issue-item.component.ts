@@ -72,6 +72,9 @@ export class AddBterIssueItemComponent {
   public ItemsDataList: any = []; 
   public selectedDataList: any[] = [];
   public staff_ID:number =0;
+  public ItemMasterList: any = [];
+  public ItemMasterList1: any = [];
+  isFileError: boolean = false;
   constructor(
     private commonMasterService: CommonFunctionService,
     private toastr: ToastrService,
@@ -483,7 +486,7 @@ export class AddBterIssueItemComponent {
     
   try {
     this.loaderService.requestStarted();
-     
+     debugger;
     const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -575,6 +578,11 @@ export class AddBterIssueItemComponent {
       this.toastr.error("Please select at least one Staff!");
       return;
     }
+    if (!this.FileName || this.FileName.trim() === '') {
+      this.isFileError = true;
+      this.toastr.error('Please upload document');
+      return;
+    }
     this.SelectedItems.forEach((element: any) => {
       element.FileName = this.FileName, element.Dis_FileName = this.Dis_FileName,
         element.InstituteID = this.sSOLoginDataModel.InstituteID,
@@ -605,7 +613,7 @@ export class AddBterIssueItemComponent {
           this.toastr.success(data.Message);
           this.AddItemList = [];
 
-
+          this.BindItem_list();
           this.SelectedItems = [];
           this.AddItemList = [];
           this.Searchrequests = {
@@ -637,6 +645,7 @@ export class AddBterIssueItemComponent {
           this.toastr.error(data.ErrorMessage);
         }
       })
+      
     } catch (error) {
       console.log(error);
     } finally {
@@ -667,7 +676,7 @@ export class AddBterIssueItemComponent {
 }
 
   async UploadDocument(event: any, FileName: any, Dis_FileName:any) {
-    try {
+    try { 
       let uploadModel: UploadFileModel = {
         FileName: FileName ?? "",
         FileExtention: "",
@@ -845,6 +854,11 @@ export class AddBterIssueItemComponent {
       });
       return;
     }
+    if (!this.FileName || this.FileName.trim() === '') {
+      this.isFileError = true;
+      this.toastr.error('Please upload document');
+      return;
+    }
     this.selectedDataList = this.ItemsDataList.filter((item:any) => item.Selected);
     this.selectedDataList = this.ItemsDataList .filter((item: any) => item.Selected).map((item: any) => ({
       ...item,
@@ -906,5 +920,47 @@ export class AddBterIssueItemComponent {
         this.isLoading = false;
       }, 200);
     }
+  }
+  async GetAllDataIssuedItems() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+
+      this.Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      this.Searchrequests.TradeId = this.Searchrequests.TradeId;
+      this.Searchrequests.staffID = this.Searchrequests.staffID;
+      this.Searchrequests.actionName='GetIssueItemList';
+     // this.Searchrequest.staffID = 1;
+
+      await this.bterInventoryService.GetAllInventoryIssueReturnItemList(this.Searchrequests)
+        .then((data: any) => {
+          if (data) {
+            this.State = data.State;
+            this.Message = data.Message;
+            this.ErrorMessage = data.ErrorMessage;
+            this.ItemMasterList = data.Data || [];
+            this.ItemMasterList1 = data.Data || [];
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+      console.log('Item Master List ',this.ItemMasterList)
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  async ShowIssuedItemsList(content: any, itemId:any,staffId:any) {
+    
+     await this.GetAllDataIssuedItems();
+
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+
+    return;
   }
 }

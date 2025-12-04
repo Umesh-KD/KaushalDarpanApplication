@@ -119,8 +119,23 @@ export class BudgetDistributedService {
 
   public async GetAllBudgetReportData(searchRequest: BudgetHeadSearchFilter) {
     var body = JSON.stringify(searchRequest);
-    //return await this.http.post(`${this.APIUrl}/GetAllBudgetManagementData`, body, this.headersOptions)
     return await this.http.post(`${this.APIUrl}/GetAllBudgetReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllotedReportData(searchRequest: BudgetHeadSearchFilter) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllotedReportData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async GetAllUCUtilizationReportData(searchRequest: BudgetHeadSearchFilter) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetAllUCUtilizationReportData`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

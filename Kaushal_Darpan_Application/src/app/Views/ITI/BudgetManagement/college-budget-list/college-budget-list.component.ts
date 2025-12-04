@@ -113,7 +113,6 @@ export class CollegeBudgetListComponent {
       } else if(this.sSOLoginDataModel.RoleID == 97) {
         this.searchRequest.DivisionID = this.sSOLoginDataModel.DistrictID;
         this.searchRequest.ActionName = "GetZonelList";
-        this.searchRequest.FinYearID = 9;
       } else {
         this.searchRequest.ActionName = "GetList";
       }
@@ -144,9 +143,6 @@ export class CollegeBudgetListComponent {
     try {
         ;
       this.searchRequest.FinYearID = this.sSOLoginDataModel.FinancialYearID;
-      if(this.sSOLoginDataModel.RoleID == 97) {
-        this.searchRequest.FinYearID = 9;
-      }
       this.searchRequest.ActionName = "GetCollegeUCHeadUtilization";
 
       this.loaderService.requestStarted();

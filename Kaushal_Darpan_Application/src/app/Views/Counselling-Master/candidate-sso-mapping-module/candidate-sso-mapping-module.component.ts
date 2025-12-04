@@ -19,7 +19,7 @@ import { DateConfigurationModel } from '../../../Models/DateConfigurationDataMod
 import { Router } from '@angular/router';
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
-
+import { EnumRole } from '../../../Common/GlobalConstants';
 @Component({
   selector: 'app-candidate-sso-mapping-module',
   standalone: false,
@@ -61,6 +61,7 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
   modalReference: NgbModalRef | undefined;
   ShowBTERApply: boolean = false;
   dateConfiguration = new DateConfigurationModel();
+  _EnumRole = EnumRole;
   constructor(
     private loaderService: LoaderService,
     private encryptionService: EncryptionService,
@@ -219,11 +220,13 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
               data = JSON.parse(JSON.stringify(data));
               if (data.State == EnumStatus.Success)
               {
-                this.toastrService.success('CandateMapped Mapped Successfully');
+                this.toastrService.success(data.Message);
                 //Set User cookie
                 this.sSOLoginDataModel.CandidateID = this.searchRequest.CandidateId;
+                this.sSOLoginDataModel.RoleID=this._EnumRole.CandidateRole;
                 localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
                 this.cookieService.set('LoginStatus', "OK");
+                this.modalService.dismissAll();
                 setTimeout(() => {
                   this.router.navigate(['/CandidateApplicationList']);
                 }, 1000);

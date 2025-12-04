@@ -1,7 +1,7 @@
 export class ITI_InstructorDataModel {
   // Personal Details
   public InstituteID?: number=0;
-  public id?:  number = 0;
+  public ID?:  number = 0;
   public Uid?:  string = '';
   public JanAadharMemberID?:  string = '';
   public Name?:  string = '';
@@ -99,16 +99,21 @@ export class ITI_InstructorEducationalQualification {
   public EducationDocument?: string = '';
   public MarksTypeID?: string = '';
   public Education_CGPA?: number | null = null;
-
+  public EduQualificationName?: string = '';
+  public EduQualificationID?: number = 0;
+  public EduQualificationLevel?: string = '';
+  public EduOtherExaminationPassed?: string = '';
   public MarkTypeName?: string= '';
   //public CITSCertified?: string= '';
   //public CITSCertifiedDocument?: string= '';
 }
 
+
 export class ITI_InstructorEmploymentDetails {
   public Pan_No?: string = '';
   public Employee_Type?: string = '';
   public Employer_Name?: string = '';
+  public Name?: string = '';
   public Employer_Address?: string = '';
   public Tan_No?: string = '';
   public Employment_From?: string = '';
@@ -119,6 +124,7 @@ export class ITI_InstructorEmploymentDetails {
   public panDocument?: string = '';
   public PostHeld?: number = 0;
   public EmployeeCode?: string = '';
+  public Employer_Registration?: string = '';
 
 
   //public IsDomicile: boolean = false;
@@ -140,11 +146,48 @@ export class ITI_InstructorTechnicalQualification {
   public MarksType?: string = '';
   public MarkTypeName?: string = '';
   public CITSCertified?: string = '';
+  public Tech_CITSCertifiedDocument?: string = '';
+  public QualificationLevel?: string = '';
+  public QualificationName?: string = '';
+  public QualificationID?: number = 0;
+  public Tech_MarksTypeID?: string = '';
+  public Tech_CITSTrade?: string = '';
+  public Tech_CITSYear?: string = '';
+  public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];
+}
+
+
+
+export class ITI_InstructorTechnicalCITSQualificationList {
+  public Tech_CITSId?: number = 0;
+  public tech_TechDetailsID?: number = 0;
+  public Tech_CITSCertifiedDocument?: string = '';
+  public Tech_CITSTrade?: string = '';
+  public Tech_CITSYear?: string = '';
+}
+
+
+export class ITI_InstructorTechnicalCITSQualification {
+  public Tech_Exam?: string;
+  public Tech_Board?: string;
+  public Tech_Subjects?: string;
+  public StreamName?: string;
+  public StreamID?: string;
+  public techRequest?: number = 0;
+  public Tech_Year?: string;
+  public Tech_Percentage?: number;
+  public Tech_CGPA?: number;
+  public TechDocument?: string = '';
+  public MarksType?: string = '';
+  public MarkTypeName?: string = '';
+  public CITSCertified?: string = '';
   public CITSCertifiedDocument?: string = '';
   public QualificationLevel?: string = '';
   public QualificationName?: string = '';
   public QualificationID?: number = 0;
   public Tech_MarksTypeID?: string = '';
+  public OtherCITSQualification: ITI_InstructorTechnicalCITSQualificationList[] = [new ITI_InstructorTechnicalCITSQualificationList()];
+  
 }
 
 
@@ -175,3 +218,11 @@ export class ITI_InstructorDataAssignSearchModel {
 
 }
 
+export class ITI_Instructor_TechCITSDetailsSearchModel {
+
+  TechCITSId?: number = 0;
+  public tech_TechDetailsID?: number = 0;
+  public Tech_CITSCertifiedDocument?: string = '';
+  public Tech_CITSTrade?: string = '';
+  public Tech_CITSYear?: string = '';
+}

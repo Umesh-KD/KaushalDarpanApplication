@@ -17,6 +17,15 @@ export class PlacementDashboardModel {
 
 
 // ---------------------ITI DASHBOARD--------------------------
+
+export class ITIPlacementReportSearchModels {
+  public Id: number = 0
+  public Gender: string = ''
+  public StudentName: string = ''
+  public DepartmentID: number = 0
+  public Eng_NonEng: number = 0
+  public CollegeID: number = 0
+}
 export class ITIPlacementDashboardModel {
   public DepartmentID:number=0
   public CollegeID: number = 0
@@ -25,3 +34,4 @@ export class ITIPlacementDashboardModel {
   public RoleId: number = 0
 
 }
+

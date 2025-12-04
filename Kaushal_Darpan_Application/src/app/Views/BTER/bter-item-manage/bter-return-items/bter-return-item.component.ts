@@ -378,7 +378,8 @@ async confirmReturnNew() {
           const state = data?.State;
           const message = data?.Message;
           const errorMessage = data?.ErrorMessage;
-
+          console.log("errorMessage:"+errorMessage)
+          debugger;
           if (state === EnumStatus.Success) {
             this.toastr.success(message || "Items returned successfully", "", {
               toastClass: "ngx-toastr my-update-toast",

@@ -27,6 +27,7 @@ export class DTEItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
+  public ItemType: number = 0;
 }
 
 export class DTEItemsSearchModel1 {
@@ -88,6 +89,7 @@ export class inventoryIssueHistorySearchModel {
   public IssuedId: number = 0;
   public StreamID: number = 0;  
   public LabID? : number = 0;
+  public actionName? : string='';
 }
 export class inventoryIssueHistoryITISearchModel {
   public InstituteID: number = 0;
@@ -150,6 +152,8 @@ export class ItemsDetails {
   public EquipmentCode: number = 0;
   public ItemDetailsId: number = 0;
   public TransactionID: number = 0;
+  public isOption: boolean=false;
+  public AuctionStatus: number = 0;
 }
 export class itemReturnModel {
   public ItemCount: number = 0;

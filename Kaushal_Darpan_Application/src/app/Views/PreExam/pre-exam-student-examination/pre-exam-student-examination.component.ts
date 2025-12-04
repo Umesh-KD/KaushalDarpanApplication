@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
 import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
 import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType, EnumCourseType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { CommonSubjectDetailsMasterModel } from '../../../Models/CommonSubjectDetailsMasterModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
@@ -29,6 +29,7 @@ import { DataPagingListModel } from '../../../Models/DataPagingListModel';
 import { AfterViewInit } from '@angular/core';
 import { CommonDDLSubjectCodeMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel } from '../../../Models/GenerateAdmitCardDataModel';
+import { CampusPostMaster_Action } from '../../../Models/CampusPostDataModel';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -151,6 +152,14 @@ export class PreExamStudentExaminationComponent {
   public StudentExamTypeList: any[] = [];
 
   public _EnumCourseType = EnumCourseType;
+
+  @ViewChild('MyModel_Action') myModalTemplate!: TemplateRef<any>;
+  public IsRejectAtBter: boolean = false;
+  public IsFormActionSubmitted: boolean = false;
+  public requestRejectDoc: any;
+  formAction!: FormGroup;
+  requestAction = new CampusPostMaster_Action();
+  public RejectDocumentDetail: any = []
 
   constructor(private commonMasterService: CommonFunctionService,
     private preExamStudentExaminationService: PreExamStudentExaminationService,
@@ -283,6 +292,13 @@ export class PreExamStudentExaminationComponent {
         txtOrderDate: ['', Validators.required],
         txtUpdatedDate: ['', Validators.required]
       })
+
+    this.formAction = this.formBuilder.group({
+        txtActionRemarks: ['', Validators.required],
+        OrderNo: ['', Validators.required],
+        OrderDate: ['', Validators.required],
+      })
+
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
@@ -334,7 +350,7 @@ export class PreExamStudentExaminationComponent {
   get EditStudentDataform() { return this.EditStudentDataFormGroup.controls; }
   get FormUEM() { return this.formUpdateEnrollmentNo.controls; }
   get _OptionalSubjectFormGroup() { return this.OptionalSubjectFormGroup.controls; }
-
+  get FormAction() { return this.formAction.controls; }
 
   setMinDate(): void {
     const today = new Date();
@@ -1195,7 +1211,7 @@ export class PreExamStudentExaminationComponent {
       // reject at BTER (at any level)
       if (this.status == enumExamStudentStatus.RejectatBTER) {
         if (this.request.StudentFilterStatusId != enumExamStudentStatus.RejectatBTER && this.request.StudentFilterStatusId != enumExamStudentStatus.Dropout && this.request.StudentFilterStatusId != enumExamStudentStatus.Detained && (this.sSOLoginDataModel.RoleID == EnumRole.Admin || this.sSOLoginDataModel.RoleID == EnumRole.AdminNon)) {
-          await this.SaveRejectAtBTER();
+          await this.openModal_RejectStudent();
         }
         else {
           this.toastr.error("Please do not choose 'Reject at BTER' Mark As with 'Reject at BTER' status!");
@@ -1406,60 +1422,66 @@ export class PreExamStudentExaminationComponent {
   }
   // Reject At BTER
   async SaveRejectAtBTER() {
-    // confirm
-    this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
 
-      //confirmed
-      if (result.isConfirmed) {
-        try {
-          this.isSubmitted = true;
-          this.loaderService.requestStarted();
-          // Filter out only the selected students
-          var request: StudentMarkedModel[] = [];
-          const selectedStudents = this.PreExamStudentData.filter(x => x.Selected);
-          selectedStudents.forEach(x => {
-            request.push({
-              StudentId: x.StudentID,
-              Status: this.status,
-              StudentFilterStatusId: this.request.StudentFilterStatusId,
-              ModifyBy: this.sSOLoginDataModel.UserID,
-              RoleId: this.sSOLoginDataModel.RoleID,
-              Marked: x.Selected,
-              StudentExamID: x.StudentExamID,
-              EndTermID: this.sSOLoginDataModel.EndTermID,
-              DepartmentID: this.sSOLoginDataModel.DepartmentID,
-              Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-              RoleID: this.sSOLoginDataModel.RoleID
-            })
-          });
-          // Call service to save student exam status
-          await this.preExamStudentExaminationService.SaveRejectAtBTER(request)
-            .then(async (data: any) => {
-              this.State = data['State'];
-              this.Message = data['Message'];
-              this.ErrorMessage = data['ErrorMessage'];
-              //
-              if (this.State == EnumStatus.Success) {
-                this.toastr.success(this.Message)
-                await this.GetPreExamStudent();
-              }
-              else if (this.State == EnumStatus.Warning) {
-                this.toastr.warning(this.Message)
-              }
-              else {
-                this.toastr.error(this.ErrorMessage)
-              }
-            })
-        } catch (ex) {
-          console.log(ex);
-        } finally {
-          setTimeout(() => {
-            this.loaderService.requestEnded();
-            this.isSubmitted = false;
-          }, 200);
-        }
-      }
-    });
+    this.IsFormActionSubmitted = true;
+    if(this.formAction.invalid){
+      this.toastr.error("Please fill required fields")
+      return
+    }
+    
+    try {
+      this.isSubmitted = true;
+      this.loaderService.requestStarted();
+      // Filter out only the selected students
+      var request: StudentMarkedModel[] = [];
+      const selectedStudents = this.PreExamStudentData.filter(x => x.Selected);
+      selectedStudents.forEach(x => {
+        request.push({
+          StudentId: x.StudentID,
+          Status: this.status,
+          StudentFilterStatusId: this.request.StudentFilterStatusId,
+          ModifyBy: this.sSOLoginDataModel.UserID,
+          RoleId: this.sSOLoginDataModel.RoleID,
+          Marked: x.Selected,
+          StudentExamID: x.StudentExamID,
+          EndTermID: this.sSOLoginDataModel.EndTermID,
+          DepartmentID: this.sSOLoginDataModel.DepartmentID,
+          Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+          RoleID: this.sSOLoginDataModel.RoleID,
+          Remark: this.requestAction.ActionRemarks,
+          RejectDocName: this.requestAction.SuspendDocumnet,
+          Dis_RejectDocName: this.requestAction.Dis_SuspendDoc,
+          OrderNo: this.requestAction.OrderNo,
+          OrderDate: this.requestAction.OrderDate,
+        })
+      });
+      // Call service to save student exam status
+      await this.preExamStudentExaminationService.SaveRejectAtBTER(request)
+        .then(async (data: any) => {
+          this.State = data['State'];
+          this.Message = data['Message'];
+          this.ErrorMessage = data['ErrorMessage'];
+          //
+          if (this.State == EnumStatus.Success) {
+            this.toastr.success(this.Message)
+            this.CloseModalPopup();
+            await this.GetPreExamStudent();
+          }
+          else if (this.State == EnumStatus.Warning) {
+            this.toastr.warning(this.Message)
+          }
+          else {
+            this.toastr.error(this.ErrorMessage)
+          }
+        })
+    } catch (ex) {
+      console.log(ex);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+        this.isSubmitted = false;
+      }, 200);
+    }
   }
   // DropOut
   async SaveDropout() {
@@ -2805,4 +2827,134 @@ export class PreExamStudentExaminationComponent {
     this.formUpdateEnrollmentNo.get('ddlBranch')?.updateValueAndValidity();
   }
   
+  async RejectAtBter_Remark() {
+    this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
+
+      //confirmed
+      if (result.isConfirmed) {
+        await this.openModal_RejectStudent();
+      }
+    });
+  }
+
+  async openModal_RejectStudent() {
+    try {
+      await this.GetDocumentDetails_RejectAtBter()
+      this.IsRejectAtBter = true;
+
+      const today: Date = new Date();
+      const year = today.getFullYear();
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');  // Adding leading zero
+      const day = today.getDate().toString().padStart(2, '0');  // Adding leading zero
+      const formattedDate = `${year}-${month}-${day}`;
+
+      this.requestAction.OrderDate = formattedDate
+
+      // Open the modal template
+      const modalOptions: NgbModalOptions = {
+        size: 'md'  // Set the size of the modal to 'md' (medium)
+      };
+      const modalRef = this.modalService.open(this.myModalTemplate, modalOptions);
+      modalRef.result.then(
+        (result) => {
+          console.log('Modal closed with result:', result);
+        },
+        (reason) => {
+          console.log('Modal dismissed with reason:', reason);
+        }
+      );
+    } catch (error) {
+      console.error('Error opening modal:', error);
+    }
+  }
+
+  CloseModalPopup() {
+    this.requestAction = new CampusPostMaster_Action();
+    this.IsFormActionSubmitted = false;
+    this.modalService.dismissAll();
+  }
+
+  async OnClickRejectStudent() {
+    await this.SaveRejectAtBTER();
+  }
+
+  async GetDocumentDetails_RejectAtBter() {
+    try {
+      debugger
+      var request: any = {}
+      request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      request.FileNameWithDynamicPath = 1
+      await this.commonMasterService.GetDocumentDetails_RejectAtBter(request).then(async (data: any) => {
+        if(data.State === EnumStatus.Success) {
+          this.RejectDocumentDetail = data.Data
+          this.requestRejectDoc = this.RejectDocumentDetail[0]
+        } else if(data.State === EnumStatus.Warning) {
+          this.toastr.warning(data.Message)
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async UploadDocument_RejectAtBter(event: any, name: any) {
+    try {
+      //upload model
+      // let uploadModel = new UploadFileModel();
+      // uploadModel.FileExtention = item.FileExtention ?? "";
+      // uploadModel.MinFileSize = item.MinFileSize ?? "";
+      // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
+      // uploadModel.FolderName = item.FolderName ?? "";
+      debugger
+      let uploadModel: UploadBTERFileModel = {
+        AcademicYear: this.requestRejectDoc.AcademicYear?.toString() ?? "0",
+        DepartmentID: '1',
+        EndTermID: this.requestRejectDoc.EndTermID?.toString() ?? "0",
+        Eng_NonEng: this.requestRejectDoc.CourseType?.toString() ?? "0",
+        FileName: this.requestRejectDoc.ColumnName ?? "",
+        FileExtention: this.requestRejectDoc.FileExtention ?? "",
+        MinFileSize: this.requestRejectDoc.MinFileSize ?? "",
+        MaxFileSize: this.requestRejectDoc.MaxFileSize ?? "",
+        FolderName: this.requestRejectDoc.FolderName ?? "",
+        FilePrefix: this.requestRejectDoc.AcademicYearName + "/" + this.sSOLoginDataModel.Eng_NonEng + "/" + GlobalConstants.RejectAtBter,
+        //IsCopy: true 
+        FileNameWithDynamicPath: EnumFileUpload.FileNameWithDynamicPath,
+        IsRejectAtBter: true,
+      }
+
+      //call
+      await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
+        .then((data: any) => {
+          debugger
+          //
+          if (data.State == EnumStatus.Success) {
+            //add/update document in js list
+            // const index = this.requestStudent.DocumentDetails.findIndex((x: any) => x.DocumentMasterID == item.DocumentMasterID && x.DocumentDetailsID == item.DocumentDetailsID);
+            // if (index !== -1) {
+            //   this.requestStudent.DocumentDetails[index].FileName = data.Data[0].FileName;
+            //   this.requestStudent.DocumentDetails[index].Dis_FileName = data.Data[0].Dis_FileName;
+            // }
+            if(name=="rejectPhoto") {
+              this.requestAction.SuspendDocumnet = data.Data[0]['FileName']
+              this.requestAction.Dis_SuspendDoc = data.Data[0]['Dis_FileName']
+            }
+              
+            console.log(this.requestStudent.DocumentDetails)
+            //reset file type
+            event.target.value = null;
+          }
+          if (data.State == EnumStatus.Error) {
+            this.toastr.error(data.ErrorMessage)
+          }
+          else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning(data.ErrorMessage)
+          }
+        });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+  }
 }
