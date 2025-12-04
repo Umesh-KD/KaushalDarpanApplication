@@ -71,6 +71,7 @@ export class PreExamStudentExaminationComponent {
   public settingsMultiselect: object = {};
   public commonSubjectDetails: CommonSubjectDetailsMasterModel[] = [];
   public Student_DataList: Student_DataModel[] = []
+  public rejectAtBter_StudentDetails: any = []
   public statusID: number = 0
   public InstituteID: number = 0
   public showSubject: boolean = false
@@ -2955,6 +2956,33 @@ export class PreExamStudentExaminationComponent {
     }
     catch (Ex) {
       console.log(Ex);
+    }
+  }
+
+  async OpenRejectViewModal(content: any, StudentID: number, StudentExamID: number) {
+    await this.GetRejectAtBter_StudentDetails(StudentID, StudentExamID);
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason: any) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  async GetRejectAtBter_StudentDetails( StudentID: number, StudentExamID: number) {
+    const request: any = {}
+    request.StudentID = StudentID
+    request.StudentExamID = StudentExamID
+    try {
+      await this.preExamStudentExaminationService.GetRejectAtBter_StudentDetails(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.rejectAtBter_StudentDetails = data.Data[0]
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 }
