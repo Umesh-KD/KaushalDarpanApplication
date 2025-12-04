@@ -255,4 +255,12 @@ export class PreExamStudentExaminationService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetRejectAtBter_StudentDetails(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetRejectAtBter_StudentDetails`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

@@ -218,7 +218,7 @@ export class PaperCountReportComponent implements OnInit {
       this.requestData.StudentTypeID = !isNaN(Number(this.filter.StudentType)) ? Number(this.filter.StudentType) : 0;
       this.requestData.SemesterID = !isNaN(Number(this.groupForm.value.SemesterID)) ? Number(this.groupForm.value.SemesterID) : 0;
       this.requestData.StreamID = !isNaN(Number(this.filter.StreamID)) ? Number(this.filter.StreamID) : 0;
-      this.requestData.CourseTypeID = !isNaN(Number(this.filter.CourseType)) ? Number(this.filter.CourseType) : 0;
+      this.requestData.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng;
       this.requestData.InstituteID = !isNaN(Number(this.filter.Institute)) ? Number(this.filter.Institute) : 0;
       this.requestData.EndTermID = !isNaN(Number(this.groupForm.value.EndTerm)) ? Number(this.groupForm.value.EndTerm) : 0;
       this.requestData.CategaryCast = '';

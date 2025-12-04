@@ -9,3 +9,10 @@ export interface CollegesWiseExaminationRptsModel {
   SixthYear: number;
   Examination: number;
 }
+
+export class CollegesWiseExaminationRptSearchModel {
+  public DepartmentID?: number = 0
+  public EndTermID?: number = 0
+  public AcademicYearID?: number = 0
+  public CourseTypeID?: number = 0
+}

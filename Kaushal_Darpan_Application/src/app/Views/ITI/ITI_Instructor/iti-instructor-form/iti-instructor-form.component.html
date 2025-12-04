@@ -616,7 +616,7 @@
                           [ngClass]="{ 'bg-gray-200 text-gray-700 cursor-not-allowed': isViewMode }"
                           [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}"
                           (change)="onExamChange($event.target.value)">
-                    <option value="">-- Select Examination --</option>
+                    <option value="0">-- Select Examination --</option>
                     <option *ngFor="let item of eduQualificationDDL" [value]="item.QualificationID">
                       {{ item.QualificationName }}
                     </option>
@@ -885,17 +885,14 @@
                     <label for="StreamID" class="text-gray-800 text-sm font-medium inline-block mb-2">
                       Stream/Trade:
                     </label>
-
                     <select class="form-select"
                             id="StreamID"
                             formControlName="StreamID"
                             [(ngModel)]="techRequest.StreamID"
                             [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-
                       <option [ngValue]="0">---Select Board---</option>
-                      <option *ngFor="let item of StreamList" [value]="item.StreamID">{{ item.StreamName }}</option>
+                      <option *ngFor="let s of StreamList" [value]="s.StreamID">{{ s.StreamName }}</option>
                     </select>
-
                   </div>
 
 
@@ -911,11 +908,9 @@
                             formControlName="Tech_Year"
                             [(ngModel)]="techRequest.Tech_Year"
                             [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
-
-                      <option value="0" selected>Select Year of Passing</option>
+                      <option value="" selected>Select Year of Passing</option>
                       <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
                     </select>
-
                     <div *ngIf="isSubmitted && TechnicalForm.controls.Tech_Year.errors" class="text-danger">
                       <p>
                         <i aria-hidden="true"></i>Enter Valid Year .!
@@ -963,11 +958,12 @@
                         <span>Choose File</span>
                         {{techRequest.TechDocument === '' ? 'No File Choosen' : techRequest.TechDocument}}
                       </label>
+
                       <div class="flex">
                         <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + techRequest.TechDocument}}"
-                           *ngIf="this.techRequest.TechDocument !='' "
+                           *ngIf="this.techRequest.TechDocument !=''"
                            class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                      </div>
+                      </div>          
                     </div>
 
                     <div *ngIf="isSubmitted && TechnicalForm.controls.TechDocument.errors" class="text-danger">
@@ -1025,18 +1021,27 @@
                           <tr *ngFor="let item of formData.OtherCITSQualification; let i = index">
                             <td>
                               <select class="form-select" [(ngModel)]="item.Tech_CITSYear" [ngModelOptions]="{standalone: true}">
-                                <option value="0" selected>Select Year of Passing</option>
+                                <option value="" selected>Select Year of Passing</option>
                                 <option *ngFor="let yr of PassingYearList" [value]="yr.Year">{{yr.Year}}</option>
                               </select>
+                              <div *ngIf="item.Tech_CITSYear.errors" class="text-danger">
+                                <p>
+                                  <i aria-hidden="true"></i>This field is required .!
+                                </p>
+                              </div>
                             </td>
 
                             <td>
-                              <select class="form-select" [(ngModel)]="item.Tech_CITSTrade" [ngModelOptions]="{standalone: true}">
-                                <option value="0" selected>Select Trade</option>
-                                <option value="1">Trade1</option>
-                                <option value="2">Trade2</option>
-                                <option value="3">Trade3</option>
+                              <select class="form-select" [(ngModel)]="item.Tech_CITSTrade" [ngModelOptions]="{standalone: true}"
+                                      [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}">
+                                <option [ngValue]="">---Select Board---</option>
+                                <option *ngFor="let i of CITSStreamList" [value]="i.StreamID">{{ i.StreamName }}</option>
                               </select>
+                              <div *ngIf="item.Tech_CITSTrade.errors" class="text-danger">
+                                <p>
+                                  <i aria-hidden="true"></i>This field is required .!
+                                </p>
+                              </div>
                             </td>
 
                             <td>
@@ -1051,23 +1056,29 @@
                                   <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/Instructor//{{item.Tech_CITSCertifiedDocument}}"
                                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                                 </div>
+                                <div *ngIf="item.Tech_CITSCertifiedDocument.errors" class="text-danger">
+                                  <p>
+                                    <i aria-hidden="true"></i>This field is required .!
+                                  </p>
+                                </div>
                               </div>
                             </td>
 
                             <td class="p-2 border text-center">
-                              <button type="button"
-                                      class="btn bg-danger text-white btn-sm"
-                                      *ngIf="formData.OtherCITSQualification.length > 1 && i !== formData.OtherCITSQualification.length - 1"
-                                      (click)="removeTechQualificationCITS(i)">
-                                <span class="fa fa-remove"></span>&nbsp; Remove
-                              </button>
                               <button type="button"
                                       class="btn bg-info text-white btn-sm"
                                       *ngIf="i === formData.OtherCITSQualification.length - 1"
                                       (click)="addTechQualificationCITS()">
                                 <i class="ti ti-plus"></i> Add CITS More
                               </button>
-                          </tr>
+                              <button type="button"
+                                      class="btn bg-danger text-white btn-sm"
+                                      *ngIf="formData.OtherCITSQualification.length > 1 && i !== formData.OtherCITSQualification.length - 1"
+                                      (click)="removeTechQualificationCITS(i)">
+                                <span class="fa fa-remove"></span>&nbsp; Remove
+                              </button>
+
+</tr>
                         </tbody>
                       </table>
                     </div>
@@ -1111,14 +1122,14 @@
                       {{ tech.Tech_MarksTypeID == '0' ? tech.Tech_Percentage : tech.Tech_CGPA }}
                     </td>
                     <td>
-                      <a href="javascript:void(0);" title="Download">
+                      <a href="javascript:void(0);" title="CITS Certified" class="btn bg-primary text-white btn-sm">
                         <i class="ti ti-eye"
-                           (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID)"></i>
+                           (click)="ViewCTISTechQualification(MyModel_ViewCTISTechQualification, tech.ID,i)"></i>
                       </a>
                     </td>
                     <td>
                       <a *ngIf="tech.TechDocument"
-                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + tech.TechDocument}}"
+                         href="{{appsettingConfig.StaticFileRootPathURL + '/' + tech.TechDocument}}" title="Download"
                          target="_blank" class="btn bg-primary text-white btn-sm">
                         <i class="ti ti-eye"></i>
                       </a>
