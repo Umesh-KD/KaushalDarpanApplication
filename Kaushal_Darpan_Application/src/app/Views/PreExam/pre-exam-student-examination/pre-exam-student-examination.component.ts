@@ -2841,6 +2841,15 @@ export class PreExamStudentExaminationComponent {
     try {
       await this.GetDocumentDetails_RejectAtBter()
       this.IsRejectAtBter = true;
+
+      const today: Date = new Date();
+      const year = today.getFullYear();
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');  // Adding leading zero
+      const day = today.getDate().toString().padStart(2, '0');  // Adding leading zero
+      const formattedDate = `${year}-${month}-${day}`;
+
+      this.requestAction.OrderDate = formattedDate
+
       // Open the modal template
       const modalOptions: NgbModalOptions = {
         size: 'md'  // Set the size of the modal to 'md' (medium)

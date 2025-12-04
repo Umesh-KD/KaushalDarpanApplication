@@ -1562,7 +1562,7 @@
 
               <div>
                 <label for="OrderNo" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                  Order No<span class="StarMarking">*</span>
+                  UO Note Number<span class="StarMarking">*</span>
                 </label>
                 <input type="text" class="form-input" id="OrderNo" name="OrderNo"
                        formControlName="OrderNo" [(ngModel)]="requestAction.OrderNo">
@@ -1575,7 +1575,7 @@
 
               <div>
                 <label for="OrderDate" class="text-gray-800 text-sm font-medium inline-block mb-1">
-                  Order Date<span class="StarMarking">*</span>
+                  UO Note Date<span class="StarMarking">*</span>
                 </label>
                 <input type="date" class="form-input" id="OrderDate" name="OrderDate"
                        formControlName="OrderDate" [(ngModel)]="requestAction.OrderDate">
@@ -1605,7 +1605,7 @@
             </div>
             <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
               <div>
-                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1">Action Remarks<span class="StarMarking">*</span></label>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1"> Remarks<span class="StarMarking">*</span></label>
                 <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemarks"></textarea>
                 <div *ngIf="IsFormActionSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
                   <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
