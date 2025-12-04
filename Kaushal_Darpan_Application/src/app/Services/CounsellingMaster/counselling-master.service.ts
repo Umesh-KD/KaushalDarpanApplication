@@ -45,7 +45,14 @@ export class CounsellingMasterService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
- 
+   public async GetCounsellingAllotmentListExcel(searchRequest: CounsellingAllotmentListModel) {
+    debugger;
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetCounsellingAllotmentListExcel`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
     //Get studetn list eligible for placement all data
   public async GetCandidateList(searchRequest: CounsellingAllotmentListModel) {
     var body = JSON.stringify(searchRequest);
