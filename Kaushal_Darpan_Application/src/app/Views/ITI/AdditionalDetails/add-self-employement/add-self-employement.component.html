@@ -36,10 +36,10 @@
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Enrollment No. <span class="StarMarking">*</span>
               </label>
-              <input type="text" class="form-input" placeholder="Enter Company Name" id="CompanyName" name="CompanyName"
-                    [(ngModel)]="request.CompanyName" formControlName="CompanyName">
-              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.CompanyName.errors" class="text-danger">
-                <p *ngIf="_EmployementDetailFormGroup.CompanyName.errors?.required">
+              <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
+                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.EnrollmentNo.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.EnrollmentNo.errors?.required">
                   <i aria-hidden="true"></i> This field is
                   required.!
                 </p>
