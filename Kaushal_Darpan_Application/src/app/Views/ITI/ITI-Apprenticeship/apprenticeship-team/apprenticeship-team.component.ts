@@ -184,7 +184,7 @@ export class ApprenticeshipTeamComponent {
     //this.requestMember.DistrictName = this.DistrictMasterDDL.find((x: any) => x.ID == this.requestMember.DistrictID)?.Name;
     //this.requestMember.InstituteName = this.InstituteMasterDDL.find((x: any) => x.Id == this.requestMember.InstituteID)?.Name;
     this.requestMember.StaffName = this.formData.Name
-    this.requestMember.StaffID = data.Data;
+    this.requestMember.StaffID = data.Data??0;
     this.requestMember.SSOID = this.requestSSoApi.SSOID;
 
     console.log(this.requestMember);

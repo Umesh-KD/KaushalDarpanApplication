@@ -3,6 +3,7 @@ import { StudentDetailUpdateModel } from '../../Models/StudentDetailUpdateModel'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
+import { StudentEmploymentDetailsModel } from '../../Models/CompanyMasterDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +48,45 @@ export class StudentdetailUpdateService {
       ).toPromise();
   }
 
+
+
+  // ----------------------------------- Student Details -------------------------------------
+
+    public async GetAllData(searchRequest: StudentDetailUpdateModel) {
+      const body = JSON.stringify(searchRequest);
+  
+      return await this.http.post(`${this.APIUrl}/GetAllData`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+
+    
+    public async GetStudentEmployementData(searchRequest: StudentEmploymentDetailsModel) {
+      const body = JSON.stringify(searchRequest);
+  
+      return await this.http.post(`${this.APIUrl}/GetStudentEmployementData`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+
+    public async SaveEmployementData(request:any) {
+        var body = JSON.stringify(request);
+        return await this.http.post(`${this.APIUrl}/SaveEmployementData`, body, this.headersOptions)
+          .pipe(
+            catchError(this.handleErrorObservable)
+          ).toPromise();
+    }
+
+    public async Delete_StudEmployementByID(ID: number, userId: number) {
+    var body = JSON.stringify({ "AID": ID, "ModifyBy": userId });
+    return await this.http.post(`${this.APIUrl}/Delete_StudEmployementByID/${ID}/${userId}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

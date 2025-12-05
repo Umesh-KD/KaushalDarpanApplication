@@ -132,3 +132,38 @@ export class PlacementStudentListSearchModel {
   public SortColumn: string = '';
   public action:string='';
 }
+
+
+
+// --------------------------------ADD-SELF-EMPLOYEMENT------------------------------------------
+
+export class StudentEmploymentDetailsModel {
+  public AID: number = 0;
+  public StudentID: number = 0;
+
+  public CompanyType: string = '';           // self / firm
+  public CompanyName: string = '';
+  public StateID: number = 0;
+  public DistrictID: number = 0;
+  public CompanyAddress: string = '';
+
+  public JobType: string = '';               // fulltime / parttime
+  public Experience: string = '';            // current / past
+
+  public WorkingFromDate: string = '';       // DATE - stored as string in Angular
+  public WorkingToDate: string = '';
+
+  public SalaryType: string = '';            // stipend / ctc / salary
+  public SalaryAmount: number = 0;
+
+  public ActiveStatus: boolean = true;
+  public DeleteStatus: boolean = false;
+
+  public RTS: string = '';                   // datetime
+  public CreatedBy: number = 0;
+  public ModifyBy: number = 0;
+  public ModifyDate: string = '';
+  public IPAddress: string = '';
+
+  public DepartmentID: number = 0;
+}

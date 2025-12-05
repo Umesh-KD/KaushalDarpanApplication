@@ -206,7 +206,6 @@
                 <div *ngIf="isSubmitted && _InstructorForm.Gender.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
               <div>
@@ -216,7 +215,7 @@
                   <option value="">--Select--</option>
                   <option value="Married">Married</option>
                   <option value="Unmarried">Unmarried</option>
-                  <option value="Divorce">Divorce</option>
+                  <option value="Divorce">Divorcee</option>
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.MaritalStatus.errors" class="text-danger">
@@ -352,16 +351,13 @@
                 </label>
                 <select class="form-select" id="ddlState" name="State" [(ngModel)]="this.request.ddlState" formControlName="ddlState" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}"
                         (change)="ddlState_Change()">
-
                   <option *ngIf="InstructorForm.controls['ddlState'].value === '' || InstructorForm.controls['ddlState'].value === '0'" value="0">--Select--</option>
                   <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
-
                 </select>
 
                 <div *ngIf="isSubmitted && _InstructorForm.ddlState.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
               <div *ngIf="isSSOVisible">
@@ -373,11 +369,9 @@
                   <option *ngIf="InstructorForm.controls['ddlDistrict'].value === '' || InstructorForm.controls['ddlDistrict'].value === '0' || InstructorForm.controls['ddlDistrict'].value === 'undefined'" value="0">--Select--</option>
                   <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
-
                 <div *ngIf="isSubmitted && _InstructorForm.ddlDistrict.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
 
@@ -387,11 +381,9 @@
                   <option *ngIf="InstructorForm.controls['PropTehsilID'].value === '' || InstructorForm.controls['PropTehsilID'].value === '0'" value="0">--Select--</option>
                   <option *ngFor="let item of TehsilMasterList" [value]="item.ID">{{item.Name}}</option>
                 </select>
-
                 <div *ngIf="isSubmitted && _InstructorForm.PropTehsilID.errors" class="text-danger">
                   <p><i aria-hidden="true"></i>This field is required .!</p>
                 </div>
-
               </div>
 
               <div *ngIf="isSSOVisible">
@@ -439,27 +431,21 @@
                        class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                   </div>
                 </div>
-
                 <div *ngIf="isSubmitted && _InstructorForm.PermanentDocument.errors" class="text-danger">
                   <p>
                     <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
-
               </div>
-
-
             </div>
-
             <div *ngIf="isSSOVisible" class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light mt-4">
               <b class="text-1xl-5"><i class="ti ti-plus"></i> Address Details (Correspondence)</b>
-
               <div *ngIf="isSSOVisible" class="flex items-center gap-2 mt-4">
                 <input id="sameAsPermanent"
                        type="checkbox"
                        class="form-checkbox"
                        [(ngModel)]="sameAsPermanent"
-                       (change)="onCopyCorrespondenceToggle()" />
+                       (change)="toggleAddress($event)" />
                 <label for="sameAsPermanent" class="text-sm">Same as Permanent Address</label>
               </div>
             </div>
@@ -471,7 +457,6 @@
                 <input type="text" class="form-input"
                        [(ngModel)]="request.Correspondence_PlotHouseBuildingNo"
                        formControlName="Correspondence_PlotHouseBuildingNo"
-                       [disabled]="sameAsPermanent || isViewMode"
                        placeholder="Enter Plot/House/Building No" />
               </div>
 
@@ -881,7 +866,7 @@
                   </div>
 
 
-                  <div *ngIf="techRequest.QualificationLevel=='Diploma'">
+                  <div *ngIf="techRequest.QualificationLevel=='Diploma/Certificate Course'">
                     <label for="StreamID" class="text-gray-800 text-sm font-medium inline-block mb-2">
                       Stream/Trade:
                     </label>
@@ -976,8 +961,8 @@
 
 
                   <div class="mb-3 d-flex align-items-center">
-                    <label class="me-3 mb-0" style="width: 200px;">
-                      Whether CITS Certified :<span class="StarMarking">*</span>
+                    <label class="me-3 mb-0" style="width: 201px;">
+                      Whether CITS/NAC Certified :<span class="StarMarking">*</span>
                     </label>
                     <div class="d-flex align-items-center gap-4">
                       <div class="form-check form-check-inline">
@@ -1011,8 +996,8 @@
                         <thead>
                           <tr>
                             <th>Year</th>
-                            <th>Trade</th>
-                            <th>CITS Certified</th>
+                            <th style="width:500px">Trade</th>
+                            <th>CITS/NAC Certified</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -1024,10 +1009,8 @@
                                 <option value="" selected>Select Year of Passing</option>
                                 <option *ngFor="let yr of PassingYearList" [value]="yr.Year">{{yr.Year}}</option>
                               </select>
-                              <div *ngIf="item.Tech_CITSYear.errors" class="text-danger">
-                                <p>
-                                  <i aria-hidden="true"></i>This field is required .!
-                                </p>
+                              <div *ngIf="item.errors?.Tech_CITSYear" class="text-danger">
+                                <p>This field is required!</p>
                               </div>
                             </td>
 
@@ -1037,10 +1020,8 @@
                                 <option [ngValue]="">---Select Board---</option>
                                 <option *ngFor="let i of CITSStreamList" [value]="i.StreamID">{{ i.StreamName }}</option>
                               </select>
-                              <div *ngIf="item.Tech_CITSTrade.errors" class="text-danger">
-                                <p>
-                                  <i aria-hidden="true"></i>This field is required .!
-                                </p>
+                              <div *ngIf="item.errors?.Tech_CITSTrade" class="text-danger">
+                                <p>This field is required!</p>
                               </div>
                             </td>
 
@@ -1056,11 +1037,10 @@
                                   <a href="{{appsettingConfig.StaticFileRootPathURL}}/ITI/Instructor//{{item.Tech_CITSCertifiedDocument}}"
                                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                                 </div>
-                                <div *ngIf="item.Tech_CITSCertifiedDocument.errors" class="text-danger">
-                                  <p>
-                                    <i aria-hidden="true"></i>This field is required .!
-                                  </p>
-                                </div>
+
+                              </div>
+                              <div *ngIf="item.errors?.Tech_CITSCertifiedDocument" class="text-danger">
+                                <p>This field is required!</p>
                               </div>
                             </td>
 
@@ -1077,8 +1057,8 @@
                                       (click)="removeTechQualificationCITS(i)">
                                 <span class="fa fa-remove"></span>&nbsp; Remove
                               </button>
-
-</tr>
+                            </td>
+                          </tr>
                         </tbody>
                       </table>
                     </div>
@@ -1217,21 +1197,20 @@
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
-                <!--<div>
+                <div>
                   <label>Name of Employer<span class="StarMarking">*</span></label>
-                  <input readonly [readonly]="true" class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="this.employeeRequest.Name" formControlName="Name" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />-->
-                  <!--<input readonly class="form-input" type="text" [(ngModel)]="this.request.Name" formControlName="Name" placeholder="Enter Name" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />-->
-                  <!--<div *ngIf="isEmp && _InstructorForm.Name.errors" class="text-danger">
+                  <input class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="employeeRequest.Employer_Name" formControlName="Employer_Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <div *ngIf="isEmp && EmploymentForm.controls.Employer_Name.errors" class="text-danger">
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
-                </div>-->
-                <div>
+                </div>
+                <!--<div>
     <label>Name of Employer<span class="StarMarking">*</span></label>
     <input class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="employeeRequest.Employer_Name" formControlName="Employer_Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
     <div *ngIf="isEmp && EmploymentForm.controls.Employer_Name.errors" class="text-danger">
       <p><i aria-hidden="true"></i>This field is required .!</p>
     </div>
-  </div>
+  </div>-->
                 <div>
                   <label>Employer Address<span class="StarMarking">*</span></label>
                   <input class="form-input" placeholder=" Enter Employee Address " [(ngModel)]="employeeRequest.Employer_Address" formControlName="Employer_Address" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
@@ -1240,33 +1219,6 @@
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
                 </div>
-
-                <!--<div>
-    <label>Employer Registration</label>
-    <select class="form-select" [(ngModel)]="employeeRequest.Employer_Registration" formControlName="Employer_Registration" [disabled]="isViewMode" [ngClass]="{'bg-gray-200': isViewMode}" [ngStyle]="isViewMode ? { 'pointer-events': 'none' } : {}">
-      <option value="">--Select--</option>
-      <option value="TAN">TAN</option>
-      <option value="GSTIN">GSTIN</option>
-      <option value="EPFO">EPFO Establishment No</option>
-      <option value="ESIC">ESIC Registration No</option>
-      <option value="CIN">CIN</option>
-
-    </select>
-    <div *ngIf="isEmp && EmploymentForm.controls.Employee_Type.errors" class="text-danger">
-      <p><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
-  </div>
-
-
-
-
-  <div>
-    <label>TAN of Employer<span class="StarMarking">*</span></label>
-    <input maxlength="10" class="form-input" placeholder=" Enter Employee TAN no " [(ngModel)]="employeeRequest.Tan_No" formControlName="Tan_No" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-    <div *ngIf="isEmp && EmploymentForm.controls.Tan_No.errors" class="text-danger">
-      <p><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
-  </div>-->
 
                 <div>
                   <label>Employer Registration Type</label>
@@ -1284,7 +1236,6 @@
                     <p>This field is required .!</p>
                   </div>
                 </div>
-
                 <div>
                   <label>{{ dynamicLabel }}<span class="StarMarking">*</span></label>
 
@@ -1328,7 +1279,7 @@
                 <div>
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                          for="BasicSalaryDocument">
-                    Basic Salary Per Month<span class="StarMarking">*</span>
+                    Salary Document<span class="StarMarking">*</span>
                   </label>
                   <div class="flex fileUploader">
                     <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
@@ -1376,6 +1327,22 @@
                   </div>
                 </div>
 
+
+
+
+
+                <div>
+                  <label>
+                    Presently Working:
+                    <input type="checkbox" formControlName="Employer_presentlyWorking" [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" />
+                  </label>
+                  <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
+                    <p>This field is required .!</p>
+                  </div>
+                </div>
+
+
+
                 <div class="mt-2">
                   <button type="button" class="btn bg-info text-white" (click)="addEmployeeQualification()"> + Add More</button>
                 </div>
@@ -1403,6 +1370,7 @@
                     <th>Action</th>
                   </tr>
                 </thead>
+                <!--{{employeeRequestList | json}}-->
                 <tbody>
                   <tr *ngFor="let emp of employeeRequestList; let i = index">
                     <td>{{i+1}}</td>

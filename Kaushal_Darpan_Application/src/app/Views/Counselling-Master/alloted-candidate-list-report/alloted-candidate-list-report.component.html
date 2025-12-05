@@ -77,6 +77,11 @@
           <tr> 
             <th class="text-left">Sr.No.</th>
             <th class="text-left">Application No</th>  
+            <th class="text-left">Roll Number</th>
+            <th class="text-left">Qualification</th>
+             <th class="text-left name-col">Trade Name</th>
+            <th class="text-left allotted-col">Allotted Institute</th>
+            <th class="text-left" style="display: none;">Final Allotted Institute</th> 
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -84,9 +89,11 @@
             <th class="text-left name-col" >Father's Name</th>          
             <th class="text-left name-col" >Gender</th>          
             <th class="text-left">DOB</th>            
-            <th class="text-left">SSOID</th>
-            <th class="text-left">Qualification</th>
-            <th class="text-left">Roll Number</th>
+            <th class="text-left">SSOID</th> 
+            <th class="text-left">Home District</th> 
+            <th class="text-left">Nationality</th> 
+            <th class="text-left">Religion</th> 
+            <th class="text-left">Maritial Status</th>  
             <th class="text-left">Category</th>
             <th class="text-left">Selected Category</th> 
             <th class="text-left">Category-B</th>
@@ -97,23 +104,38 @@
             <th class="text-left">Is Any Incurable Diseases</th>
             <th class="text-left">Is Spouse In Same Service</th> 
             <th class="text-left">IsTSP</th>
-            <th class="text-left name-col">Trade Name</th>
-            <th class="text-left allotted-col">Allotted Institute</th>
-            <th class="text-left" style="display: none;">Final Allotted Institute</th> 
+<th class="text-left">Gender By Admin</th>
+<th class="text-left">Maritial Status By Admin</th>  
+           <th class="text-left">Category By Admin</th>
+            <th class="text-left">Selected Category By Admin</th> 
+            <th class="text-left">Category-B By Admin</th>
+            <th class="text-left">Is Physical Handi capped By Admin</th>
+            <th class="text-left">Is Ex-Service men By Admin</th>
+            <th class="text-left">Is Sports Person By Admin</th>
+            <th class="text-left">Is Shahid Dependent By Admin</th>
+            <th class="text-left">Is Any Incurable Diseases By Admin</th>
+            <th class="text-left">Is Spouse In Same Service By Admin</th> 
+            
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let row of paginatedInTableData; let idx=index;"> 
             <td align="left">{{(startInTableIndex+1)+idx}}</td>         
             <td align="left">{{row.ApplicationNo}}</td>   
+            <td align="left">{{row.RollNumber}}</td>
+            <td align="left">{{row.Designation}}</td>
+            <td align="left" class="name-col">{{row.TradeName}}</td>
+            <td align="left" class="allotted-col">{{row.AllottedInstitute}}</td>
+            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
             <td align="left" class="name-col">{{row.CandidateName}}</td>
             <td align="left" class="name-col">{{row.FatherName}}</td>
-            <td align="left">{{row.Gender}}</td>
-            <!-- <td align="left">{{row.DOB | date:'yyyy-MM-dd'}}</td> -->
+            <td align="left">{{row.Gender}}</td> 
             <td align="left">{{row.DOB | date:'dd/MM/yyyy'}}</td>
             <td align="left">{{row.SSOID}}</td>
-            <td align="left">{{row.Designation}}</td>
-            <td align="left">{{row.RollNumber}}</td>
+            <td align="left">{{row.HomeDistrict}}</td>
+            <td align="left">{{row.Nationality}}</td>
+            <td align="left">{{row.Religion}}</td>
+            <td align="left">{{row.MaritialStatus}}</td> 
             <td align="left">{{row.Category}}</td>
             <td align="left">{{row.SelectedCategory}}</td>           
             <td align="left">{{row.CategoryB}}</td>
@@ -124,9 +146,17 @@
             <td align="left">{{row.IsAnyIncurableDiseases}}</td>
             <td align="left">{{row.IsSpouseInSameService}}</td>
             <td align="left">{{row.IsTSP}}</td>
-            <td align="left" class="name-col">{{row.TradeName}}</td>
-            <td align="left" class="allotted-col">{{row.AllottedInstitute}}</td>
-            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
+            <td align="left">{{row.Gender_ByAdmin}}</td>
+            <td align="left">{{row.MaritialStatus_ByAdmin}}</td>
+            <td align="left">{{row.CategoryA_ByAdmin}}</td>
+            <td align="left">{{row.SelectionCategory_ByAdmin}}</td>
+            <td align="left">{{row.CategoryB_ByAdmin}}</td>
+            <td align="left">{{row.IsPhysicalHandicap_ByAdmin}}</td>
+            <td align="left">{{row.IsExServicemen_ByAdmin}}</td>
+            <td align="left">{{row.IsSportsPerson_ByAdmin}}</td>
+            <td align="left">{{row.IsShahidDependent_ByAdmin}}</td>
+            <td align="left">{{row.IsAnyIncurableDiseases_ByAdmin}}</td>
+            <td align="left">{{row.IsSpouseInSameService_ByAdmin}}</td>
           </tr>
         </tbody>
       </table>
