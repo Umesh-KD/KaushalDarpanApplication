@@ -150,7 +150,7 @@ export class ITIStudentPlacementConsentComponent {
           console.log(data);
           if (data['Data'].length > 0) {
             this.CampusPostDetail = data['Data'][0];
-            console.log(this.CampusPostDetail)
+            console.log("tetetetetetete",this.CampusPostDetail)
           }
           console.log(this.CampusPostDetail);
         }, (error: any) => console.error(error)

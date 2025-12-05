@@ -8,8 +8,10 @@ import * as XLSX from 'xlsx';
 import { StudentExamDetails } from '../../Models/DashboardCardModel';
 import { EnumRole } from '../../Common/GlobalConstants';
 import { PlacementReportService } from '../../Services/PlacementReport/PlacementReport.service';
+import { StudentdetailUpdateService } from '../../Services/StudentDetailUpdate/studentdetail-update.service';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { PlacementReportSearchModels } from '../../Models/PlacementDashReportModel';
+import { StudentDetailUpdateModel } from '../../Models/StudentDetailUpdateModel';
 
 @Component({
   selector: 'app-update-student-details',
@@ -21,7 +23,9 @@ export class UpdateStudentDetailsComponent implements OnInit {
   Message: string = '';
   ErrorMessage: string = '';
   State: boolean = false;
-  viewAdminDashboardList: StudentExamDetails[] = [];
+  StudentDetailList: StudentExamDetails[] = [];
+  public requestData = new StudentDetailUpdateModel();
+
   filteredData: any[] = [];
   displayedColumns: string[] = ['SrNo', 'StudentName', 'EnrollmentNo', 'InstituteName', 'InstitutionManagementType', 'Email', 'FatherName', 'DOB', 'Age', 'GenderName'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
@@ -43,7 +47,8 @@ export class UpdateStudentDetailsComponent implements OnInit {
     private PlacementDashService: PlacementReportService,
     private toastr: ToastrService,
     private activatedRoute: ActivatedRoute,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
+    private StudentdetailUpdateService:StudentdetailUpdateService
   ) {
   }
 
@@ -70,7 +75,7 @@ export class UpdateStudentDetailsComponent implements OnInit {
 
 
   // exportToExcel(): void {
-  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.viewAdminDashboardList);
+  //   const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.StudentDetailList);
   //   const wb: XLSX.WorkBook = XLSX.utils.book_new();
   //   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
   //   XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
@@ -82,7 +87,7 @@ export class UpdateStudentDetailsComponent implements OnInit {
         'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
         'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','MobileNo','Email'
       ];
-      const filteredData = this.viewAdminDashboardList.map((item: any) => {
+      const filteredData = this.StudentDetailList.map((item: any) => {
         const filteredItem: any = {};
         Object.keys(item).forEach(key => {
           if (!unwantedColumns.includes(key)) {
@@ -99,21 +104,17 @@ export class UpdateStudentDetailsComponent implements OnInit {
   
 
   async GetAllData() {
-    let requestData: PlacementReportSearchModels = {
-      DepartmentID: this.sSOLoginDataModel.DepartmentID,
-      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
-      CollegeID : this.sSOLoginDataModel.InstituteID,
-      Id: this.id,
-      Gender: '',
-      StudentName: ''
-    }
+debugger
+    this.requestData.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+    this.requestData.Eng_NonEng=this.sSOLoginDataModel.Eng_NonEng;
+    this.requestData.CreatedBy=this.sSOLoginDataModel.UserID;
 
-    await this.PlacementDashService.GetAllData(requestData)
+    await this.StudentdetailUpdateService.GetAllData(this.requestData)
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
 
-        this.viewAdminDashboardList = data['Data'];
-        this.filteredData = [...this.viewAdminDashboardList]; // Copy full dataset
+        this.StudentDetailList = data['Data'];
+        this.filteredData = [...this.StudentDetailList]; // Copy full dataset
         this.dataSource = new MatTableDataSource(this.filteredData);
         this.dataSource.sort = this.sort;
         this.totalRecords = this.filteredData.length;
@@ -136,9 +137,9 @@ export class UpdateStudentDetailsComponent implements OnInit {
     filterValue = filterValue.trim().toLowerCase();
 
     if (filterValue === "all" || filterValue === "") {
-      this.filteredData = [...this.viewAdminDashboardList]; // Reset to full dataset
+      this.filteredData = [...this.StudentDetailList]; // Reset to full dataset
     } else {
-      this.filteredData = this.viewAdminDashboardList.filter(item =>
+      this.filteredData = this.StudentDetailList.filter(item =>
         Object.values(item).some(value =>
           value != null && value.toString().toLowerCase().includes(filterValue)
         )
