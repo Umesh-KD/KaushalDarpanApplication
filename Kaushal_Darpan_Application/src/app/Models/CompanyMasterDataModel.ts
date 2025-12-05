@@ -140,6 +140,7 @@ export class PlacementStudentListSearchModel {
 export class StudentEmploymentDetailsModel {
   public AID: number = 0;
   public StudentID: number = 0;
+  public InstituteID: number = 0;
 
   public CompanyType: string = '';           // self / firm
   public CompanyName: string = '';

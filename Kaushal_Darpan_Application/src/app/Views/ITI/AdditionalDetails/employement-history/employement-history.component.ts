@@ -9,6 +9,7 @@ import {StudentdetailUpdateService} from '../../../../Services/StudentDetailUpda
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EnumRole } from '../../../../Common/GlobalConstants';
 @Component({
     selector: 'employement-history',
     templateUrl: './employement-history.component.html',
@@ -21,6 +22,8 @@ export class StudentEmployementHistoryComponent implements OnInit {
   public searchRequest = new StudentEmploymentDetailsModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+
+  public _EnumRole = EnumRole;
 
   constructor(private commonMasterService: CommonFunctionService, private companyMasterService: CompanyMasterService,
     private StudentdetailUpdateService:StudentdetailUpdateService,
@@ -55,9 +58,16 @@ export class StudentEmployementHistoryComponent implements OnInit {
   }
 
   async GetStudentEmployementData() {
+    debugger
     try {
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        if(this._EnumRole.Student== this.sSOLoginDataModel.RoleID){
+            this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
+        }
+        this.searchRequest.InstituteID=this.sSOLoginDataModel.InstituteID;
+        // this.searchRequest.StudentID=this.sSOLoginDataModel.UserID;
+
       this.loaderService.requestStarted();
       await this.StudentdetailUpdateService.GetStudentEmployementData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
