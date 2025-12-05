@@ -26,41 +26,33 @@
 
                     <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Zone: </label>
-                        <select class="form-select"
-                                name="DivisionID"
-                                [(ngModel)]="this.request.DivisionID"
-                                (change)="GetDistictData()"
-                                formControlName="DivisionID">
+                        <select class="form-select" name="DivisionID" [(ngModel)]="this.request.DivisionID"
+                            (change)="GetDistictData()" formControlName="DivisionID">
                             <option [ngValue]="0">Choose option</option>
                             <option *ngFor="let item of Divisionlist" [ngValue]="item.ID">
-                            {{ item.Name }}
+                                {{ item.Name }}
                             </option>
                         </select>
                     </div>
 
                     <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> District: </label>
-                        <select class="form-select "
-                                [(ngModel)]="this.request.DistrictID"
-                                formControlName="DistrictID"
-                                (change)="onChange()">
+                        <select class="form-select " [(ngModel)]="this.request.DistrictID" formControlName="DistrictID"
+                            (change)="onChange()">
                             <option value="0">Choose option</option>
                             <option *ngFor="let item of Districtlist" [value]="item.ID">
-                            {{item.Name}}
+                                {{item.Name}}
                             </option>
                         </select>
                     </div>
 
                     <div>
                         <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Month: </label>
-                        <select class="form-select"
-                                name="MonthID"
-                                [(ngModel)]="this.request.MonthID"
-                                (change)="GetInstituteMaster()"
-                                formControlName="MonthID">
+                        <select class="form-select" name="MonthID" [(ngModel)]="this.request.MonthID"
+                            (change)="GetInstituteMaster()" formControlName="MonthID">
                             <option [ngValue]="0">Choose option</option>
                             <option *ngFor="let item of months" [ngValue]="item.id">
-                            {{ item.name }}
+                                {{ item.name }}
                             </option>
                         </select>
                     </div>
@@ -69,7 +61,7 @@
         </div>
 
         <div class="overflow-auto max-height500" *ngIf="Institutelist?.length > 0">
-               <!-- <input type="number"
+            <!-- <input type="number"
                                     [(ngModel)]="row.No_Of_Contract"
                                     name="Institute_{{row.InstituteID}}"
                                     min="0"
@@ -120,93 +112,95 @@
                     </tr>
                 </tbody> -->
                 <tbody>
-  <ng-container *ngFor="let row of Institutelist; let idx = index;">
+                    <ng-container *ngFor="let row of Institutelist; let idx = index;">
 
-    <!-- ROW 1 : Sr No | Name | Date -->
-    <tr>
-      <td class="text-left">{{ idx + 1 }}</td>
-      <td class="text-left">{{ row.Name }}</td>
-      <td>
-        <input type="date"
-               class="form-control" 
-               (change)="onDateChange($event.target.value, row)">
-               <label class="ml-2 text-sm" style="padding-left:100px !important;">
-    <input type="checkbox"
-           [(ngModel)]="row.allowZero"
-           name="allowZero_{{idx}}"
-           (change)="onAllowZeroChange(row, $event)" />
-    No Contract
-  </label>
-      </td>
+                        <!-- ROW 1 : Sr No | Name | Date -->
+                        <tr>
+                            <td class="text-left">{{ idx + 1 }}</td>
+                            <td class="text-left">{{ row.Name }}</td>
+                            <td>
+                                <input type="date" class="form-control"
+                                    (change)="onDateChange($event.target.value, row)">
+                                <label class="ml-2 text-sm" style="padding-left:100px !important;">
+                                    <input type="checkbox" [(ngModel)]="row.allowZero" name="allowZero_{{idx}}"
+                                        (change)="onAllowZeroChange(row, $event)" />
+                                    No Contract
+                                </label>
+                            </td>
 
-      <!-- Empty cell to align table -->
-      <!-- <td></td> -->
-    </tr>
-    <tr *ngIf="row.contracts?.length > 0" >
-        <td></td>
-        <td colspan="2" style="background-color: lavender;">
-            <!-- Contract Labels Row -->
-<div *ngIf="row.contracts?.length > 0" class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 font-semibold mb-2">
-    <div>Date</div>
-    <div style="margin-left: 100px !important;">No of Contract</div>
-    <div style="margin-left: 100px !important;">Upload Document</div>
-    <div style="margin-left: 100px !important;">Download Document</div>
-    <div style="margin-left: 100px !important;">Action</div>
-</div>
-        </td>
-    </tr>
-    <!-- ROW 2 : No of Contracts (full row below Name + Date) -->
-    <tr *ngIf="row.contracts?.length > 0" >
-      <td></td> <!-- blank for Sr No alignment -->
-      <td colspan="2">
+                            <!-- Empty cell to align table -->
+                            <!-- <td></td> -->
+                        </tr>
+                        <tr *ngIf="row.contracts?.length > 0">
+                            <td></td>
+                            <td colspan="2" style="background-color: lavender;">
+                                <!-- Contract Labels Row -->
+                                <div *ngIf="row.contracts?.length > 0"
+                                    class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 font-semibold mb-2">
+                                    <div>Date</div>
+                                    <div style="margin-left: 100px !important;">No of Contract</div>
+                                    <div style="margin-left: 100px !important;">Upload Document</div>
+                                    <div style="margin-left: 100px !important;">Download Document</div>
+                                    <div style="margin-left: 100px !important;">Action</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- ROW 2 : No of Contracts (full row below Name + Date) -->
+                        <tr *ngIf="row.contracts?.length > 0">
+                            <td></td> <!-- blank for Sr No alignment -->
+                            <td colspan="2">
 
-        <div *ngFor="let c of row.contracts; let i = index" class="flex items-center gap-2 mb-2">
-            <div class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-                <div>
-                    <span class="text-sm">{{ c.date }}</span>
-                </div>
-                <div>
-                    <input type="number" #cnt
-                    [(ngModel)]="c.count"
-                    name="contract_{{ row.InstituteID }}_{{ i }}"
-                    min="0"
-                    step="0.01"
-                    class="form-control"
-                    (ngModelChange)="onContractChange(c, row, cnt)"
-                    placeholder="No of Contract" style="margin-left:100px !important;"/>
-                </div>
-                <div>
-                    <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
-                    <input type="file"
-                    class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
-                    (change)="onFileSelect($event, c, row)"
-                    accept=".pdf,.jpg,.jpeg,.png" style="margin-left:100px !important;width:200px !important;"/> 
-                </div>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                      <!-- class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 text-white hover:bg-blue-500" -->
-                    <a *ngIf="c?.fileUrl" [href]="c.fileUrl" target="_blank" style="margin-left:100px !important;border:1px blue !important;" 
-                         class="w-8 h-8 flex items-center justify-center rounded-full 
-              border border-white text-white 
-              bg-blue-500 hover:bg-blue-600">
-                    <i class="ti ti-download"  style="color:white !important;"></i></a>
-                </div>
-                <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                    <button type="button" 
-                    class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-500"
-                    (click)="removeContract(row, i)" style="margin-left:100px !important;"><i class="ti ti-trash"></i></button> 
-                </div>
-            </div>  
-        </div>
+                                <div *ngFor="let c of row.contracts; let i = index"
+                                    class="flex items-center gap-2 mb-2">
+                                    <div
+                                        class="grid 2xl:grid-cols-5 xl:grid-cols-5 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+                                        <div>
+                                            <span class="text-sm">{{ c.date }}</span>
+                                        </div>
+                                        <div>
+                                            <input type="number" #cnt [(ngModel)]="c.count"
+                                                name="contract_{{ row.InstituteID }}_{{ i }}" min="0" step="0.01"
+                                                class="form-control" (ngModelChange)="onContractChange(c, row, cnt)"
+                                                placeholder="No of Contract" style="margin-left:100px !important;" />
+                                        </div>
+                                        <div>
+                                            <!-- FILE UPLOAD CONTROL (ADDED HERE) -->
+                                            <input type="file"
+                                                class="bg-blue-500 text-white text-sm py-1 px-2 rounded-md focus:outline-none"
+                                                (change)="onFileSelect($event, c, row)" accept=".pdf,.jpg,.jpeg,.png"
+                                                style="margin-left:100px !important;width:200px !important;" />
+                                        </div>
+                                        <div class="flex align-center justify-center actionBtns w-auto"
+                                            style="width:auto !important">
+                                            <!-- class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 text-white hover:bg-blue-500" -->
+                                            <a *ngIf="c?.fileUrl" [href]="c.fileUrl" target="_blank"
+                                                style="margin-left:100px !important;border:1px blue !important;" 
+                                                class="w-8 h-8 flex items-center justify-center rounded-full border border-white text-white bg-blue-500 hover:bg-blue-600">
+                                                <i class="ti ti-download" style="color:white !important;"></i>
+                                            </a>
+                                        </div>
+                                        <div class="flex align-center justify-center actionBtns w-auto"
+                                            style="width:auto !important">
+                                            <button type="button"
+                                                class="w-8 h-8 flex items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-500"
+                                                (click)="removeContract(row, i)"
+                                                style="margin-left:100px !important;"><i
+                                                    class="ti ti-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
 
-      </td>
-    </tr>
+                            </td>
+                        </tr>
 
-  </ng-container>
-</tbody>
+                    </ng-container>
+                </tbody>
             </table>
         </div>
         <div class="flex justify-center">
-            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDataNew()">Submit</button>
+            <button type="submit" class="btn bg-info text-white mt-6 me-1" (click)="SaveDataNew()"
+                *ngIf="EntryExists == 0">Submit
+            </button>
             <!-- <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white mt-6 me-1">
                 <i class="ti ti-refresh"></i> Reset
             </button> -->

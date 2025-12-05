@@ -1,7 +1,7 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Dashboard</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Profile</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 1">
         BTER
@@ -10,7 +10,7 @@
         ITI
       </a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Dashboard</a>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Qualification</a>
     </div>
   </div>
   <!--<button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>-->
@@ -80,6 +80,9 @@
     </div>
   </div>
 
+
+
+  <!-- START to add additional qualification   -->
 
   <div class="card">
     <div class="card-body p-5">
@@ -202,7 +205,7 @@
 
         </form> -->
 
-        <!-- to add multiple hr  -->
+        <!-- to add multiple qualification  -->
 
         <form [formGroup]="qualificationForm" id="qualificationForm" class="form-horizontal mt-6">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
@@ -428,6 +431,9 @@
 
     </div>
   </div>
+  
+   <!-- END to add additional qualification   -->
+
 
     <!-- @if(this.sSOLoginDataModel.DepartmentID == _EnumDepartment.BTER) -->
     <!-- { -->

@@ -125,11 +125,8 @@ export class ITI_InstructorEmploymentDetails {
   public PostHeld?: number = 0;
   public EmployeeCode?: string = '';
   public Employer_Registration?: string = '';
+  public Employer_presentlyWorking: boolean = false;
 
-
-  //public IsDomicile: boolean = false;
-  //public Aadhar: string = '';
-  //public JanAadhar: string = '';
 }
 
 export class ITI_InstructorTechnicalQualification {
