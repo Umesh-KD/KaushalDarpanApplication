@@ -53,7 +53,7 @@ export class StudentEnrollmentComponent {
   public ExamCategoryList: any = [];
   public PreExamStudentData: StudentMasterModel[] = [];
   public PreExamStudentAnnextureData: StudentMasterModel[] = [];
-
+  public rejectAtBter_StudentDetails: any = []
   public StudentProfileDetailsData: any = [];
   public Student_QualificationDetailsData: any = [];
   public documentDetails: DocumentDetailsModel[] = [];
@@ -1826,6 +1826,15 @@ export class StudentEnrollmentComponent {
     try {
       await this.GetDocumentDetails_RejectAtBter()
       this.IsRejectAtBter = true;
+
+      const today: Date = new Date();
+      const year = today.getFullYear();
+      const month = (today.getMonth() + 1).toString().padStart(2, '0');  // Adding leading zero
+      const day = today.getDate().toString().padStart(2, '0');  // Adding leading zero
+      const formattedDate = `${year}-${month}-${day}`;
+
+      this.requestAction.OrderDate = formattedDate
+      
       // Open the modal template
       const modalOptions: NgbModalOptions = {
         size: 'md'  // Set the size of the modal to 'md' (medium)
@@ -1931,6 +1940,32 @@ export class StudentEnrollmentComponent {
     }
     catch (Ex) {
       console.log(Ex);
+    }
+  }
+
+  async OpenRejectViewModal(content: any, StudentID: number) {
+    await this.GetRejectAtBter_StudentDetails_Enrollment(StudentID);
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason: any) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  async GetRejectAtBter_StudentDetails_Enrollment( StudentID: number) {
+    const request: any = {}
+    request.StudentID = StudentID
+    try {
+      await this.studentEnrollmentService.GetRejectAtBter_StudentDetails_Enrollment(request).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.rejectAtBter_StudentDetails = data.Data[0]
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error);
     }
   }
 }

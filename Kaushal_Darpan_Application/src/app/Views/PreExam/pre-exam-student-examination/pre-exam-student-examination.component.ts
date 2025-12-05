@@ -2881,7 +2881,6 @@ export class PreExamStudentExaminationComponent {
 
   async GetDocumentDetails_RejectAtBter() {
     try {
-      debugger
       var request: any = {}
       request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       request.FileNameWithDynamicPath = 1
