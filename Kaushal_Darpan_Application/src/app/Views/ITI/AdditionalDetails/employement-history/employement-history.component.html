@@ -26,6 +26,13 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>   
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.CompanyName">
         </div>
+        <!-- for tpo only  -->
+        <div *ngIf="_EnumRole.Student!= this.sSOLoginDataModel.RoleID">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Student Enrollment No.
+          </label>   
+          <input type="text" class="form-input" placeholder="EnrollmentNo" id="EnrollmentNo" [(ngModel)]="searchRequest.EnrollmentNo">
+        </div>
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
           <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">

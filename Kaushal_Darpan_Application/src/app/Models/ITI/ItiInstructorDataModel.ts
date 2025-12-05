@@ -125,7 +125,8 @@ export class ITI_InstructorEmploymentDetails {
   public PostHeld?: number = 0;
   public EmployeeCode?: string = '';
   public Employer_Registration?: string = '';
-  public Employer_presentlyWorking: boolean = false;
+  public Employer_presentlyWorking = 'false';
+
 
 }
 

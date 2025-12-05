@@ -209,13 +209,8 @@ export class ItiInstructorFormComponent {
   ) { }
 
   async ngOnInit() {
-    //this.EducationForm = this.formBuilder.group({
-    //  MarksType: [''],
-    //  Education_Percentage: [null],
-    //  Education_CGPA: [null]
-    //});
+   
 
-  
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -369,15 +364,16 @@ export class ItiInstructorFormComponent {
       //Aadhar: [''],
       //JanAadhar: [''],
       Employment_From: ['', Validators.required],
-      Employment_To: ['', Validators.required],
+      Employment_To: [''],
       Basic_Pay: ['', Validators.required],
       EmploymentDocument: ['', Validators.required],
       PostHeld: [''],
       BasicSalaryDocument: [''],
       EmployeeCode: [''],
       Employer_Registration: [''],
-      //Employer_presentlyWorking:['1']
-      Employer_presentlyWorking: [false]
+      //Employer_presentlyWorking: [false, Validators.required],
+      Employer_presentlyWorking: ['false'],   // ← Default: No selected
+
     });
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
@@ -407,6 +403,17 @@ export class ItiInstructorFormComponent {
     await this.QualificationDetailsLevel();
     await this.EduQualificationDetailsLevel();
     await this.GetCITSTrade();
+
+
+    this.EmploymentForm.get("Employer_presentlyWorking")?.valueChanges.subscribe(val => {
+      if (val === "true") {
+        this.EmploymentForm.get("Employment_To")?.setValue(null);
+        this.EmploymentForm.get("Employment_To")?.clearValidators();
+      } else {
+        this.EmploymentForm.get("Employment_To")?.setValidators([Validators.required]);
+      }
+      this.EmploymentForm.get("Employment_To")?.updateValueAndValidity();
+    });
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
@@ -1481,11 +1488,13 @@ export class ItiInstructorFormComponent {
   }
 
   Back() {
+    debugger
     this.isSSOVisible = false;
     this.EducationForm.reset();
     this.TechnicalForm.reset();
     this.InstructorForm.reset();
     this.EmploymentForm.reset();
+    this.InstructorForm.controls['Uid'].reset(); // reset value
     this.InstructorForm.controls['Uid'].enable();
   }
 
@@ -2140,6 +2149,10 @@ export class ItiInstructorFormComponent {
     console.log('Stream List ==> ', this.CITSStreamList);
   }, error => console.error(error));
   }
+
+
+
+ 
 
 }
 

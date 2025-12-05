@@ -11,7 +11,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { IDistrictMaster_StateIDWiseDataModel, IStateMasterDataModel } from '../../../../Models/CommonMasterDataModel';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { HrMasterDataModel } from '../../../../Models/HrMasterDataModel';
 
@@ -47,6 +47,7 @@ export class AddStudentEmployementComponent implements OnInit {
   public HrMasterFormGroup!: FormGroup;
 
    public searchRequest = new StudentEmploymentDetailsModel();
+   public _EnumRole = EnumRole;
     
 
   public sSOLoginDataModel = new SSOLoginDataModel();
@@ -70,6 +71,7 @@ export class AddStudentEmployementComponent implements OnInit {
     this.EmployementDetailFormGroup = this.formBuilder.group(
       {
 
+        EnrollmentNo: [''],
         ddlCompanyType: ['',Validators.required],    // self / firm
         CompanyName: ['', Validators.required],
 
@@ -280,6 +282,19 @@ export class AddStudentEmployementComponent implements OnInit {
   async AddMore() {
       debugger
       this.isEmployementFormSubmitted = true;
+
+        // Add a condition to add a required validator for EnrollmentNo based on RoleID
+        if (this._EnumRole.Student != this.sSOLoginDataModel.RoleID) {
+          // If the role is not 'Student', make EnrollmentNo required
+          this.EmployementDetailFormGroup.get('EnrollmentNo')?.setValidators([Validators.required]);
+        } else {
+          // If the role is 'Student', make EnrollmentNo optional
+          this.EmployementDetailFormGroup.get('EnrollmentNo')?.clearValidators();
+        }
+
+            // Revalidate the form control after changing validators
+        this.EmployementDetailFormGroup.get('EnrollmentNo')?.updateValueAndValidity();
+
       // const gett= this._EmployementDetailFormGroup.ddlCompanyType.errors?.required
       if(this.EmployementDetailFormGroup.invalid) {
         this.toaster.error("Please fill all the required fields of Employement Form");
@@ -316,6 +331,14 @@ export class AddStudentEmployementComponent implements OnInit {
         this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         this.request.CreatedBy = this.sSOLoginDataModel.UserID;
 
+        if(this._EnumRole.Student== this.sSOLoginDataModel.RoleID){
+          this.request.StudentID = this.sSOLoginDataModel.StudentID;
+        }
+        this.request.InstituteID=this.sSOLoginDataModel.InstituteID;
+
+       
+
+    
         this.ListEmployementDetails.push(this.request);
         this.request = new StudentEmploymentDetailsModel();
         this.isEmployementFormSubmitted = false;
@@ -349,6 +372,8 @@ export class AddStudentEmployementComponent implements OnInit {
       let obj = {
         ListEmployementDetails: this.ListEmployementDetails
       }
+      
+
       
       await this.StudentdetailUpdateService.SaveEmployementData(obj)
         .then((data: any) => {
