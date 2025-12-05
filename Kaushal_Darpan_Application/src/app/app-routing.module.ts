@@ -1488,8 +1488,12 @@ const routes: Routes = [
       { path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
-      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
+      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
+      { path: 'student-additional-qualificationList', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
+     
+
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.routing.module').then(m => m.UpdateStudentDetailsModule), title: 'update Student Details' },
+      
       { path: 'student-employement-history', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
 
@@ -1609,8 +1613,6 @@ const routes: Routes = [
 
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
-
-      
 
     ]
   },
