@@ -1254,21 +1254,84 @@
 
 
 
+
+
+
+
+
+
+
+                <!--<div>
+    <label  class="me-3 mb-0" style="width: 201px;">Presently Working:</label>
+    <label >
+      <input type="radio" value="true" formControlName="Employer_presentlyWorking"
+             [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> Yes
+    </label>
+    <label style="margin-left: 25px;">
+      <input type="radio" value="false" formControlName="Employer_presentlyWorking"
+             [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> No
+    </label>
+    <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
+      <p>This field is required .!</p>
+    </div>
+  </div>
+
+
+  <div>
+    <label>Date of Joining<span class="StarMarking">*</span></label>
+    <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_From" formControlName="Employment_From" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+    <div *ngIf="isEmp && EmploymentForm.controls.Employment_From.errors" class="text-danger">
+      <p><i aria-hidden="true"></i>This field is required .!</p>
+    </div>
+
+  </div>
+
+  <div>
+    <label>Date of Leaving<span class="StarMarking">*</span></label>
+    <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_To" formControlName="Employment_To" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+    <div *ngIf="isEmp && EmploymentForm.controls.Employment_To.errors" class="text-danger">
+      <p><i aria-hidden="true"></i>This field is required .!</p>
+    </div>
+  </div>-->
+
+
+
+                <div>
+                  <label class="me-3 mb-0" style="width: 201px;">Presently Working:</label>
+                  <label>
+                    <input type="radio" value="true" formControlName="Employer_presentlyWorking"
+                           [(ngModel)]="employeeRequest.Employer_presentlyWorking" /> Yes
+                  </label>
+                  <label style="margin-left: 25px;">
+                    <input type="radio" value="false" formControlName="Employer_presentlyWorking"
+                           [(ngModel)]="employeeRequest.Employer_presentlyWorking" /> No
+                  </label>
+                  <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
+                    <p><i aria-hidden="true"></i>This field is required .!</p>
+                  </div>
+                </div>
+
                 <div>
                   <label>Date of Joining<span class="StarMarking">*</span></label>
-                  <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_From" formControlName="Employment_From" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+                  <input selected (click)="openDatePicker($event)" type="date" class="form-input" formControlName="Employment_From"
+                         [(ngModel)]="employeeRequest.Employment_From" />
                   <div *ngIf="isEmp && EmploymentForm.controls.Employment_From.errors" class="text-danger">
                     <p><i aria-hidden="true"></i>This field is required .!</p>
                   </div>
+                </div>
 
-                </div>
-                <div>
+                <!-- Show Date of Leaving only if radio selected = No -->
+                <div *ngIf="employeeRequest.Employer_presentlyWorking === 'false'">
                   <label>Date of Leaving<span class="StarMarking">*</span></label>
-                  <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_To" formControlName="Employment_To" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-                  <div *ngIf="isEmp && EmploymentForm.controls.Employment_To.errors" class="text-danger">
-                    <p><i aria-hidden="true"></i>This field is required .!</p>
-                  </div>
+                  <input (click)="openDatePicker($event)" type="date"  class="form-input" formControlName="Employment_To"
+                         [(ngModel)]="employeeRequest.Employment_To" />
                 </div>
+
+
+
+
+
+
                 <div>
                   <label>Basic salary per Month<span class="StarMarking">*</span></label><input class="form-input" type="number" placeholder=" Enter Basic Pay " [(ngModel)]="employeeRequest.Basic_Pay" formControlName="Basic_Pay" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
                   <div *ngIf="isEmp && EmploymentForm.controls.Basic_Pay.errors" class="text-danger">
@@ -1326,22 +1389,6 @@
                     </p>
                   </div>
                 </div>
-
-
-
-
-
-                <div>
-                  <label>
-                    Presently Working:
-                    <input type="checkbox" formControlName="Employer_presentlyWorking" [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" />
-                  </label>
-                  <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
-                    <p>This field is required .!</p>
-                  </div>
-                </div>
-
-
 
                 <div class="mt-2">
                   <button type="button" class="btn bg-info text-white" (click)="addEmployeeQualification()"> + Add More</button>
