@@ -83,9 +83,9 @@ export class EmitraFeeTransactionHistoryComponent {
     this.searchRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-    await this.getStudentFeesTransactionHistoryList();
-    this.getSemesterMasterList()
-    this.getStreamMasterList()
+    // await this.getStudentFeesTransactionHistoryList();
+    await this.getSemesterMasterList()
+    await this.getStreamMasterList()
   }
 
   async getSemesterMasterList() {
@@ -170,6 +170,10 @@ export class EmitraFeeTransactionHistoryComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng;
+      if(this.searchRequest.TransctionStatus == '') {
+        this.toastr.warning('Please select Transaction Status');
+        return
+      }
     
       await this.StudentFeesTransactionHistoryRptService.GetEmitraFeesTransactionHistory(this.searchRequest)
         .then((data: any) => {
@@ -204,7 +208,9 @@ export class EmitraFeeTransactionHistoryComponent {
     this.searchRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID
-    this.getStudentFeesTransactionHistoryList();
+    this.StudentFeesTransactionHistoryList = []
+    this.loadInTable();
+    // this.getStudentFeesTransactionHistoryList();
   }
 
   //table feature
@@ -308,6 +314,9 @@ export class EmitraFeeTransactionHistoryComponent {
 
 
   exportToExcel(): void {
+
+
+
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
@@ -412,55 +421,58 @@ export class EmitraFeeTransactionHistoryComponent {
 
   async VerifyAllSelected() {
     debugger;
-    try {
-      for (const item of this.selectedItems) {
-        let obj: TransactionStatusDataModel = {
-          TransactionID: item.TransactionId,
-          DepartmentID: item.DepartmentID,
-          PRN: item.PRN,
-          ServiceID: item.subsidyserviceid,
-          ApplicationID: item.ApplicationID?.toString() ?? "",
-          AMOUNT: item.PaidAmount,
-          RPPTXNID: "",
-          SubOrderID: "",
-          CreatedBy: this.sSOLoginDataModel.UserID,
-          SSOID: this.sSOLoginDataModel.SSOID,
-          ExamStudentStatus: 0
-        };
-        await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
-          .then(async (data: any) => {
-            data = JSON.parse(JSON.stringify(data));
-            this.State = data['State'];
-            this.Message = data['SuccessMessage'];
-            this.ErrorMessage = data['ErrorMessage'];
+    if(this.selectedItems.length > 0) {
+      try {
+        for (const item of this.selectedItems) {
+          let obj: TransactionStatusDataModel = {
+            TransactionID: item.TransactionId,
+            DepartmentID: item.DepartmentID,
+            PRN: item.PRN,
+            ServiceID: item.subsidyserviceid,
+            ApplicationID: item.ApplicationID?.toString() ?? "",
+            AMOUNT: item.PaidAmount,
+            RPPTXNID: "",
+            SubOrderID: "",
+            CreatedBy: this.sSOLoginDataModel.UserID,
+            SSOID: this.sSOLoginDataModel.SSOID,
+            ExamStudentStatus: 0
+          };
+          await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
+            .then(async (data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.State = data['State'];
+              this.Message = data['SuccessMessage'];
+              this.ErrorMessage = data['ErrorMessage'];
 
-            if (data.State == EnumStatus.Success) {
-              if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
-                if (data.Data?.PRN) {
-                  this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
-                  await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+              if (data.State == EnumStatus.Success) {
+                if (data.Data?.STATUS?.toUpperCase() === 'SUCCESS') {
+                  if (data.Data?.PRN) {
+                    this.toastr.success(`Fee Paid Successfully for PRN: ${data.Data.PRN}`);
+                    await this.getStudentFeesTransactionHistoryList(); // Refresh after each successful payment
+                  }
+                } else {
+                  this.toastr.error(this.Message);
                 }
               } else {
-                this.toastr.error(this.Message);
+                this.toastr.error(this.ErrorMessage);
               }
-            } else {
-              this.toastr.error(this.ErrorMessage);
-            }
-          })
+            })
 
-          .catch(err => {
-            console.error('Payment check failed for one item:', err);
-            this.toastr.error('Payment check failed for one item');
-          });
+            .catch(err => {
+              console.error('Payment check failed for one item:', err);
+              this.toastr.error('Payment check failed for one item');
+            });
+        }
+        this.selectedItems = [];
+      } catch (ex) {
+        console.error('Unexpected error:', ex);
+      } finally {
+        setTimeout(() => {
+          this.loaderService.requestEnded();
+        }, 200);
       }
-      this.selectedItems = [];
-    } catch (ex) {
-      console.error('Unexpected error:', ex);
-    } finally {
-      setTimeout(() => {
-        this.loaderService.requestEnded();
-      }, 200);
-    }
-
+    } else {
+      this.toastr.error('Please select at least one item.'); 
+    } 
   }
 }
