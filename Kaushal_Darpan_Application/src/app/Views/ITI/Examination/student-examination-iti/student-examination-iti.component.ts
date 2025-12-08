@@ -1779,13 +1779,15 @@ export class StudentExaminationITIComponent
     }, (reason: any) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    
+    debugger
     this.attendence.EligibilityStatus = item.EligibilityStatus;
     this.attendence.StudentExamID = item.StudentExamID
     this.attendence.StudentName = item.StudentName
     this.attendence.FaMark = item.FaMark;
     this.attendence.Remarks = item.Remarks;
     this.AttendancePercentage = item.AttendancePercentage;
+    this.attendence.ChallanDate = item.ChallanDate;
+    this.attendence.ChallanNo = item.ChallanNo;
     
 
   }
