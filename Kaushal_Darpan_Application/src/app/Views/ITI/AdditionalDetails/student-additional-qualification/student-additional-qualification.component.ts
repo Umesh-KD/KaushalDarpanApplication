@@ -10,16 +10,17 @@ import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import * as XLSX from 'xlsx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EnumRole } from '../../../../Common/GlobalConstants';
+import { StudentAdditionalQualificationModel } from '../../../../Models/ApplicationFormDataModel';
 @Component({
-    selector: 'employement-history',
-    templateUrl: './employement-history.component.html',
-    styleUrls: ['./employement-history.component.css'],
+    selector: 'student-additional-qualification',
+    templateUrl: './student-additional-qualification.component.html',
+    styleUrls: ['./student-additional-qualification.component.css'],
     standalone: false
 })
-export class StudentAdditionalQualificationComponent implements OnInit {
-  public StudEmployementList: StudentEmploymentDetailsModel[] = [];
+export class StudentAdditionalQualiComponent implements OnInit {
+  public StudAdditionalQualificationList: StudentEmploymentDetailsModel[] = [];
   public Table_SearchText: string = "";
-  public searchRequest = new StudentEmploymentDetailsModel();
+  public request = new StudentAdditionalQualificationModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
 
@@ -42,7 +43,7 @@ export class StudentAdditionalQualificationComponent implements OnInit {
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
       'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
     ];
-    const filteredData = this.StudEmployementList.map((item: any) => {
+    const filteredData = this.StudAdditionalQualificationList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
         if (!unwantedColumns.includes(key)) {
@@ -60,19 +61,19 @@ export class StudentAdditionalQualificationComponent implements OnInit {
   async GetStudentAdditionalQualiData() {
     debugger
     try {
-      // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
-        this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      // this.request.ModifyBy = this.sSOLoginDataModel.UserID
+        this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
         if(this._EnumRole.Student== this.sSOLoginDataModel.RoleID){
-            this.searchRequest.StudentID = this.sSOLoginDataModel.StudentID;
+            this.request.StudentID = this.sSOLoginDataModel.StudentID;
         }
-        this.searchRequest.InstituteID=this.sSOLoginDataModel.InstituteID;
-        // this.searchRequest.StudentID=this.sSOLoginDataModel.UserID;
+        this.request.InstituteID=this.sSOLoginDataModel.InstituteID;
+        // this.request.StudentID=this.sSOLoginDataModel.UserID;
 
       this.loaderService.requestStarted();
-      await this.StudentdetailUpdateService.GetStudentAdditionalQualiData(this.searchRequest).then((data: any) => {
+      await this.StudentdetailUpdateService.GetStudentAdditionalQualiData(this.request).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.StudEmployementList = data.Data;
-        console.log(this.StudEmployementList)
+        this.StudAdditionalQualificationList = data.Data;
+        console.log(this.StudAdditionalQualificationList)
       }, (error: any) => console.error(error))
     }
     catch (ex) {
@@ -87,8 +88,8 @@ export class StudentAdditionalQualificationComponent implements OnInit {
 
   // get all data
   async ClearSearchData() {
-    this.searchRequest.CompanyName = '';
-
+    // this.request.CompanyName = '';
+this.request.EnrollmentNo='';
     await this.GetStudentAdditionalQualiData();
   }
 
@@ -97,7 +98,6 @@ export class StudentAdditionalQualificationComponent implements OnInit {
 
   async DeleteById(ID: number) {
     debugger
-    this.searchRequest.CompanyName
     this.Swal2.Confirmation("Do you want to delete?",
       async (result: any) => {
         //confirmed
@@ -106,7 +106,7 @@ export class StudentAdditionalQualificationComponent implements OnInit {
             //Show Loading
             this.loaderService.requestStarted();
 
-            await this.StudentdetailUpdateService.Delete_StudEmployementByID(ID, this.sSOLoginDataModel.UserID)
+            await this.StudentdetailUpdateService.Delete_StudentAdditionalQualiData(ID, this.sSOLoginDataModel.UserID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);

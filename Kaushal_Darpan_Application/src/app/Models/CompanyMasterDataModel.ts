@@ -168,4 +168,5 @@ export class StudentEmploymentDetailsModel {
   public IPAddress: string = '';
 
   public DepartmentID: number = 0;
+
 }

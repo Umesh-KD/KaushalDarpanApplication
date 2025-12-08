@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { StudentEmploymentDetailsModel } from '../../Models/CompanyMasterDataModel';
+import { StudentAdditionalQualificationModel } from '../../Models/ApplicationFormDataModel';
 
 @Injectable({
   providedIn: 'root'
@@ -89,7 +90,7 @@ export class StudentdetailUpdateService {
       ).toPromise();
   }
 
-  public async GetStudentAdditionalQualiData(searchRequest: StudentEmploymentDetailsModel) {
+  public async GetStudentAdditionalQualiData(searchRequest: StudentAdditionalQualificationModel) {
       const body = JSON.stringify(searchRequest);
   
       return await this.http.post(`${this.APIUrl}/GetStudentAdditionalQualiData`, body, this.headersOptions)
@@ -97,5 +98,16 @@ export class StudentdetailUpdateService {
           catchError(this.handleErrorObservable)
         ).toPromise();
     }
+
+
+      public async Delete_StudentAdditionalQualiData(ID: number, userId: number) {
+    var body = JSON.stringify({ "AID": ID, "ModifyBy": userId });
+    return await this.http.post(`${this.APIUrl}/Delete_StudentAdditionalQualiData/${ID}/${userId}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+    
 
 }

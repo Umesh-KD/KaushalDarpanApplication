@@ -2,7 +2,7 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Additional Qualification</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Additional Details</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
@@ -22,20 +22,20 @@
         <a [routerLink]="'/add-student-employement'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-        <div>
+        <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Company Name</label>   
-          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.CompanyName">
-        </div>
+          <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="request.CompanyName">
+        </div> -->
         <!-- for tpo only  -->
         <div *ngIf="_EnumRole.Student!= this.sSOLoginDataModel.RoleID">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Student Enrollment No.
           </label>   
-          <input type="text" class="form-input" placeholder="EnrollmentNo" id="EnrollmentNo" [(ngModel)]="searchRequest.EnrollmentNo">
+          <input type="text" class="form-input" placeholder="EnrollmentNo" id="EnrollmentNo" [(ngModel)]="request.EnrollmentNo">
         </div>
         <!-- <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.Status">
             <option value="">--All--</option>
             <option value="Pending">Pending</option>
             <option value="Approved">Approved</option>
@@ -82,36 +82,31 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
               <th class="text-left">Sr No</th>
-              <th class="text-left">Company's Name</th>
-              <th class="text-left">Company's Type</th>
-              <th class="text-left">Address</th>
-              <th class="text-left">Job Type</th>
-              <th class="text-left">Experience</th>
-              <th class="text-left">Salary Type</th>
-              <th class="text-left">Amount</th>
-              <th class="text-left">Working From Date</th>
-              <th class="text-left">Working Till</th>
+              <th class="text-left">Board's Name</th>
+              <th class="text-left">Qualification</th>
+              <th class="text-left">Agg. Max Marks</th>
+              <th class="text-left">Agg. Obtained Marks</th>
+              <th class="text-left">PasssingYear</th>
+              <th class="text-left">Percentage</th>
               <th class="text-center">Action</th>
 
            
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of StudEmployementList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+          <tr *ngFor="let row of StudAdditionalQualificationList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyName}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyType}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.CompanyAddress}}</td>
-             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.JobType}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Experience}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryType}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.SalaryAmount}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingFromDate}}</td>
-            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.WorkingToDate}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.boardname}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Qualification}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ClassAgMaxMarks}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ClassAgObtMarks}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PasssingYear}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ClassPercentage}}</td>
+           
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/add-student-employement'" [queryParams]="{ID:row.AID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.AID)">
+                <a [routerLink]="'/update-student-qualification'" [queryParams]="{ID:row.StudentID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.StudentID)">
                   <i class="ti ti-trash"></i>
                 </a>
                 <!-- <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
