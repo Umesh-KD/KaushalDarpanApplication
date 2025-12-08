@@ -62,7 +62,8 @@ export class StudentExaminationITIComponent
   public Student_DataList: Student_DataModel[] = []
   public statusID: number = 0
   public showSubject: boolean = false
-
+  public EnrollmentNo:string=''
+  public Year:string=''
   request = new ITIExaminationStudentDataModel();
   Revert = new RevertDataModel();
   searchrequest = new SubjectSearchModel()
@@ -1766,6 +1767,8 @@ export class StudentExaminationITIComponent
   async ViewAttendenceModal(content: any, item: any)
   {
 
+    this.EnrollmentNo = ''
+    this.Year = ''
     this.AttendenceFormGroup.get('EligibilityStatus')?.valueChanges.subscribe(() => {
       this.AttendenceFormGroup.get('FaMark')?.updateValueAndValidity();
     });
@@ -1788,6 +1791,10 @@ export class StudentExaminationITIComponent
     this.AttendancePercentage = item.AttendancePercentage;
     this.attendence.ChallanDate = item.ChallanDate;
     this.attendence.ChallanNo = item.ChallanNo;
+
+  
+    this.EnrollmentNo = item.EnrollmentNo
+    this.Year = item.SemesterName
     
 
   }
