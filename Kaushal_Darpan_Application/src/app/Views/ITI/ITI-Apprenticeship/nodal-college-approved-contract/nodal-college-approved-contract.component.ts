@@ -39,6 +39,7 @@ maxDate: string = '';
  public Message: string = '';
  public ErrorMessage: string = '';
  public State: any = false;
+ public EntryExists: number = 0;
 
 constructor(
     private commonMasterService: CommonFunctionService,
@@ -135,6 +136,7 @@ constructor(
         data = JSON.parse(JSON.stringify(data));
 
         const rows = data['Data'];
+        this.EntryExists = rows[0].EntryExists;
         const grouped: any = {};
         rows.forEach((r: any) => {
           if (!grouped[r.InstituteID]) {
@@ -145,11 +147,9 @@ constructor(
             contracts: []
             };
           }
-          debugger;
           if (r.ContractDate) {
              let fileUrl = null;
              let base64= null;
-             debugger;
             if (r.fileName) { 
               fileUrl =  r.fileUrl
               console.log("File Name :"+r.fileName);

@@ -148,60 +148,220 @@ export class PaperCountReportComponent implements OnInit {
   }
 
 
+  //exportToExcel(): void {
+  //  debugger
+  //  this.selectedNames = this.UniqueKeys.map(column => column.name);
+  //  this.selectedNames.sort((a, b) => {
+
+  //    const specialColumns = ["SCA", "Total"];
+
+  //    const aIsSpecial = specialColumns.includes(a);
+  //    const bIsSpecial = specialColumns.includes(b);
+
+
+  //    if (aIsSpecial && bIsSpecial) return 0;
+
+
+  //    if (aIsSpecial) return 1;
+  //    if (bIsSpecial) return -1;
+
+
+  //    const isANumber = !isNaN(Number(a));
+  //    const isBNumber = !isNaN(Number(b));
+
+  //    if (isANumber && !isBNumber) return 1;
+  //    if (!isANumber && isBNumber) return -1;
+
+  //    return a.localeCompare(b);
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.GetfilteredList, { header: ['S.No', ...this.selectedNames] });
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+  // /* XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');*/
+
+  //  if (this.groupForm.value.Type == 2) {
+  //    XLSX.writeFile(wb, 'Download-Branch-And-Subject-Wise-Student-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 1) {
+  //    XLSX.writeFile(wb, 'Download-Institute-And-Subject-Wise-Student-Report.xlsx');
+  //  } else if (this.groupForm.value.Type == 0) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 5) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Reg-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 6) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 7) {
+  //    XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
+  //  }
+  //  else {
+  //    XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
+  //  }
+
+  //}
+
+  //import * as XLSX from 'xlsx-js-style';
+
+
+
+
+  //exportToExcel(): void {
+  //  debugger;
+
+  //  this.selectedNames = this.UniqueKeys.map(column => column.name);
+
+  //  this.selectedNames.sort((a, b) => {
+  //    const specialColumns = ["SCA", "Total"];
+
+  //    const aIsSpecial = specialColumns.includes(a);
+  //    const bIsSpecial = specialColumns.includes(b);
+
+  //    if (aIsSpecial && bIsSpecial) return 0;
+  //    if (aIsSpecial) return 1;
+  //    if (bIsSpecial) return -1;
+
+  //    const isANumber = !isNaN(Number(a));
+  //    const isBNumber = !isNaN(Number(b));
+
+  //    if (isANumber && !isBNumber) return 1;
+  //    if (!isANumber && isBNumber) return -1;
+
+  //    return a.localeCompare(b);
+  //  });
+
+  //  const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([], {});
+
+  //  XLSX.utils.sheet_add_aoa(
+  //    ws,
+  //    [['Engineering Yearly Examination, May 2025']],
+  //    { origin: 'B1' }
+  //  );
+
+  //  XLSX.utils.sheet_add_aoa(
+  //    ws,
+  //    [['Branch and Subject wise Student Report As On 16 May 2025']],
+  //    { origin: 'B2' }
+  //  );
+
+  //  const row1 = ['S.No', ...this.selectedNames];
+  //  XLSX.utils.sheet_add_aoa(ws, [row1], { origin: 'A3' });
+
+
+  //  debugger
+  //  const row2 = ['1', 'Total', 'Total', ...new Array(this.selectedNames.length - 1).fill('')];
+  //  XLSX.utils.sheet_add_aoa(ws, [row2], { origin: 'A4' });
+
+  //  const wb: XLSX.WorkBook = XLSX.utils.book_new();
+  //  XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+  //  if (this.groupForm.value.Type == 2) {
+  //    XLSX.writeFile(wb, 'Download-Branch-And-Subject-Wise-Student-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 1) {
+  //    XLSX.writeFile(wb, 'Download-Institute-And-Subject-Wise-Student-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 0) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 5) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Reg-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 6) {
+  //    XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
+  //  }
+  //  else if (this.groupForm.value.Type == 7) {
+  //    XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
+  //  }
+  //  else {
+  //    XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
+  //  }
+  //}
+
+
   exportToExcel(): void {
+    debugger;
 
     this.selectedNames = this.UniqueKeys.map(column => column.name);
-    this.selectedNames.sort((a, b) => {
-    
-      const specialColumns = ["SCA", "Total"];
 
+    this.selectedNames.sort((a, b) => {
+      const specialColumns = ["SCA", "Total"];
       const aIsSpecial = specialColumns.includes(a);
       const bIsSpecial = specialColumns.includes(b);
 
-      
       if (aIsSpecial && bIsSpecial) return 0;
-
-     
       if (aIsSpecial) return 1;
       if (bIsSpecial) return -1;
 
-    
       const isANumber = !isNaN(Number(a));
       const isBNumber = !isNaN(Number(b));
+      if (isANumber && !isBNumber) return 1;
+      if (!isANumber && isBNumber) return -1;
 
-      if (isANumber && !isBNumber) return 1; 
-      if (!isANumber && isBNumber) return -1; 
-
-      return a.localeCompare(b); 
+      return a.localeCompare(b);
     });
 
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.GetfilteredList, { header: ['S.No', ...this.selectedNames] });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet([], {});
+
+    XLSX.utils.sheet_add_aoa(ws, [['Engineering Semester Examination, Nov 2025']], { origin: 'A1' });
+    XLSX.utils.sheet_add_aoa(ws, [['Branch and Subject wise Student Report Nov 2025']], { origin: 'A2' });
+
+    const row1 = ['S.No', ...this.selectedNames];
+    XLSX.utils.sheet_add_aoa(ws, [row1], { origin: 'A3' });
+
+    const row2 = ['1', 'Total', 'Total', ...new Array(this.selectedNames.length - 2).fill('')];
+    XLSX.utils.sheet_add_aoa(ws, [row2], { origin: 'A4' });
+
+    const lastColumnIndex = row1.length - 1; // 0-based index
+
+    (ws as any)['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: lastColumnIndex } }, // A1 merged
+      { s: { r: 1, c: 0 }, e: { r: 1, c: lastColumnIndex } }, // A2 merged
+    ];
+
+    const centerTitle = {
+      font: { bold: true, sz: 14 },
+      alignment: { horizontal: "center", vertical: "center" }
+    };
+
+    if (ws['A1']) (ws['A1'] as any).s = centerTitle;
+    if (ws['A2']) (ws['A2'] as any).s = centerTitle;
+
+    const borderStyle = {
+      top: { style: "thin" },
+      bottom: { style: "thin" },
+      left: { style: "thin" },
+      right: { style: "thin" }
+    };
+
+    const range = XLSX.utils.decode_range(ws['!ref']!);
+
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+        if (!ws[cellRef]) continue;
+        if (!ws[cellRef].s) ws[cellRef].s = {};
+        ws[cellRef].s.border = borderStyle;
+      }
+    }
+
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-   /* XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');*/
 
-    if (this.groupForm.value.Type == 2) {
-      XLSX.writeFile(wb, 'Download-Branch-And-Subject-Wise-Student-Report.xlsx');
-    }
-    else if (this.groupForm.value.Type == 1) {
-      XLSX.writeFile(wb, 'Download-Institute-And-Subject-Wise-Student-Report.xlsx');
-    } else if (this.groupForm.value.Type == 0) {
-      XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Report.xlsx');
-    }
-    else if (this.groupForm.value.Type == 5) {
-      XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Reg-Report.xlsx');
-    }
-    else if (this.groupForm.value.Type == 6) {
-      XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
-    }
-    else if (this.groupForm.value.Type == 7) {
-      XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
-    }
-    else {
-      XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
-    }
-   
+    if (this.groupForm.value.Type == 2) XLSX.writeFile(wb, 'Download-Branch-And-Subject-Wise-Student-Report.xlsx');
+    else if (this.groupForm.value.Type == 1) XLSX.writeFile(wb, 'Download-Institute-And-Subject-Wise-Student-Report.xlsx');
+    else if (this.groupForm.value.Type == 0) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Report.xlsx');
+    else if (this.groupForm.value.Type == 5) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Reg-Report.xlsx');
+    else if (this.groupForm.value.Type == 6) XLSX.writeFile(wb, 'Download-Institute-Subject-Branch-Wise-Student-Ex-Report.xlsx');
+    else if (this.groupForm.value.Type == 7) XLSX.writeFile(wb, 'Download-Subject-Wise-Student-Count-Sem-6.xlsx');
+    else XLSX.writeFile(wb, 'Paper-Count-Report.xlsx');
   }
+
+
+
+
 
   get form() { return this.groupForm.controls; }
 

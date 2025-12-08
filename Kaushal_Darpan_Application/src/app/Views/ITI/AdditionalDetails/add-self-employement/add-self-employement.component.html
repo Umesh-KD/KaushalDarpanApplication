@@ -1,0 +1,289 @@
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Add/Edit Employement Details</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Employement History</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a routerLink="/Hrmaster" class="text-sm font-medium text-slate-700" aria-current="page">Add/Edit Employement Details</a>
+    </div>
+  </div>
+  <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
+</div>
+
+
+
+  <div class="card">
+    <div class="card-body p-5">
+      <div class="mb-8">
+
+
+        <!-- to add multiple employement details  -->
+
+        <form [formGroup]="EmployementDetailFormGroup" id="EmployementDetailFormGroup" class="form-horizontal mt-6">
+          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+            <b class="text-1xl-5"><i class="ti ti-plus"></i>{{key===1 ? ' Add Employement Details' : ' Edit Employement Details'}}</b>
+          </div>
+          <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
+
+            <div *ngIf="_EnumRole.Student!=this.sSOLoginDataModel.RoleID">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Enrollment No. <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
+                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.EnrollmentNo.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.EnrollmentNo.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Company Type<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlCompanyType" class="form-select" id="CompanyType"  (change)="OnCompanyChange()" [(ngModel)]="request.CompanyType" > 
+                <option value="">--Select--</option>
+                <option value="Self">Self</option>
+                <option value="Firm">Firm</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.ddlCompanyType.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.ddlCompanyType.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+              </div>
+            </div>
+
+            <div *ngIf="isCompanyTypeSelected">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Company Name <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Company Name" id="CompanyName" name="CompanyName"
+                    [(ngModel)]="request.CompanyName" formControlName="CompanyName">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.CompanyName.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.CompanyName.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+             <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                State <span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlStateID" class="form-select" id="StateID" [(ngModel)]="request.StateID"
+                      (change)="ddlState_Change()">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+            
+              <div *ngIf="isEmployementFormSubmitted &&_EmployementDetailFormGroup.ddlStateID.errors" class="text-danger">
+                            <p *ngIf="!_EmployementDetailFormGroup.ddlStateID.errors.required">
+                            <i aria-hidden="true"></i> This field is required.!
+                            </p>
+                        </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                District<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlDistrictID" class="form-select" id="ddlDistrictID" [(ngModel)]="request.DistrictID">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup.ddlDistrictID.errors" class="text-danger">
+                <p *ngIf="!_EmployementDetailFormGroup.ddlDistrictID.errors.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+             <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Company's Address <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
+                    [(ngModel)]="request.CompanyAddress" formControlName="CompanyAddress">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.CompanyAddress.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.CompanyAddress.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Job Type<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlJobType" class="form-select" id="ddlJobType" [(ngModel)]="request.JobType" (change)="OnCompanyChange()">
+                <option value="">--Select--</option>
+                <option value="FullTime">Full time</option>
+                <option value="PartTime">Part time</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup['ddlJobType'].errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup['ddlJobType'].errors?.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Experience<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlExperience" class="form-select" id="ddlExperience" [(ngModel)]="request.Experience" (change)="OnExperienceChange()">
+                <option value="">--Select--</option>
+                <option value="Current">Currently Working</option>
+                <option value="Past">Past Working</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup['ddlExperience'].errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup['ddlExperience'].errors?.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  Working From<span class="StarMarking">*</span>
+                </label>
+                <input type="date" class="form-input" id="WorkingFromDate" formControlName="WorkingFromDate"
+                         [(ngModel)]="request.WorkingFromDate" (change)="onAgeRangeChange()">
+                <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup.WorkingFromDate.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.WorkingFromDate.errors?.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div *ngIf="request.Experience!='Current'">
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                   Working Till<span class="StarMarking">*</span>
+                </label>
+                  <input type="date" class="form-input" id="WorkingToDate" formControlName="WorkingToDate"
+                         [(ngModel)]="request.WorkingToDate" [min]="minDate" (change)="onAgeRangeChange()">
+                  <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup.WorkingToDate.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.WorkingToDate.errors.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Salary Type<span class="StarMarking">*</span>
+              </label>
+              <select formControlName="ddlSalaryType" class="form-select" id="SalaryType" [(ngModel)]="request.SalaryType">
+                <option value="">--Select--</option>
+                <option value="Salary">Salary</option>
+                <option value="CTC">CTC</option>
+                <option value="Stipend">Stipend</option>
+              </select>
+              <div *ngIf="isEmployementFormSubmitted&&_EmployementDetailFormGroup.ddlSalaryType.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.ddlSalaryType.errors.required">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Amount per month / Annum <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Company Name" id="SalaryAmount" name="SalaryAmount" maxlength="10" (keypress)="validateNumber($event)"
+                    [(ngModel)]="request.SalaryAmount" formControlName="SalaryAmount">
+              <div *ngIf="isEmployementFormSubmitted && _EmployementDetailFormGroup.SalaryAmount.errors" class="text-danger">
+                <p *ngIf="_EmployementDetailFormGroup.SalaryAmount.errors.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="AddMore()">{{key==1? 'Add More' : 'Update'}}</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="resetFormDetails()">
+                  <i class="ti ti-refresh"></i> Reset
+                </button>
+              </div>
+          </div>
+
+          <div class="mt-6">
+            <div class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light">
+              <b class="text-1xl-5">{{key==1? 'Added Employement Details':'Updated Employement Details' }}</b>
+            </div>
+
+            <div class="overflow-auto">
+              <table class="w-full table-border" cellpadding="5">
+                <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+                  <tr>
+                    <th>Sr No</th>
+                    <th>Company's Type</th>
+                    <th>Company's Name</th>
+                    <th>Address</th>
+                    <th>Job Type</th>
+                    <th>Experience</th>
+                    <th>Salary Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of ListEmployementDetails; let idx=index;" >
+                    <td class="text-center">{{idx+1}}</td>
+                    <td class="text-center">{{row.CompanyType}}</td>
+                    <td class="text-center">{{row.CompanyName}}</td>
+                    <td class="text-center">{{row.CompanyAddress}}</td>
+                    <td class="text-center">{{row.JobType}}</td>
+                    <td class="text-center">{{row.Experience}}</td>
+                    <td class="text-center">{{row.SalaryType}}</td>
+                    <td class="text-center">{{row.SalaryAmount}}</td>
+                    <td class="text-center">
+                      <button class="btn bg-danger text-white" type="button" title="Delete" (click)="Delete_EmpDetails(idx)">
+                        <i class="ti ti-trash"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <!-- add final save button  -->
+      <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+        <div *ngIf="flag!=1" class="text-center">
+          <button type="button" class="btn bg-info text-white mt-6" (click)="SaveEmployementData()">Submit</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+

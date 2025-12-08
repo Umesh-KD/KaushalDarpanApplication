@@ -111,17 +111,17 @@
                   <tr>
                     <td rowspan="3" valign="top">
                       <div>
-                        <b>{{CampusPostDetail.CompanyName}}</b>
-                        <p>Post: {{CampusPostDetail.PostNo}}</p>
-                        <a href="{{CampusPostDetail.Website}}" target="_blank">
-                          <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail.Logo}}" />
+                        <b>{{CampusPostDetail?.CompanyName}}</b>
+                        <p>Post: {{CampusPostDetail?.PostNo}}</p>
+                        <a href="{{CampusPostDetail?.Website}}" target="_blank">
+                          <img class="img-fluid rounded-circle" src="{{appsettingConfig.StaticFileRootPathURL}}{{CampusPostDetail?.Logo}}" />
                         </a>
                       </div>
                     </td>
-                    <td><span [innerHtml]="CampusPostDetail.Requirement"></span></td>
-                    <td><span [innerHtml]="CampusPostDetail.Eligibility"></span></td>
-                    <td><span [innerHtml]="CampusPostDetail.JobDescription"></span></td>
-                    <td>{{CampusPostDetail.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail.CampusAddress}}</td>
+                    <td><span [innerHtml]="CampusPostDetail?.Requirement"></span></td>
+                    <td><span [innerHtml]="CampusPostDetail?.Eligibility"></span></td>
+                    <td><span [innerHtml]="CampusPostDetail?.JobDescription"></span></td>
+                    <td>{{CampusPostDetail?.CampusFromDate}} <br /> <i class="fa fa-map-marker"></i> {{CampusPostDetail?.CampusAddress}}</td>
 
                   </tr>
 

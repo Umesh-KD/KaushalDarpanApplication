@@ -7,7 +7,7 @@
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Counselling Master</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Counselling Allotment List </a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="pa1ge">Counselling Allotment List </a>
     </div>
   </div>
 </div>
@@ -47,12 +47,31 @@
       </div>
 
 
-    </div>
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" style="margin-left:1060px !important;" (click)="exportDetailsToExcel()"><i class="ti ti-download"></i> Export All Details</a>
-      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
-    </div>
+    </div> 
+<div class="flex items-center justify-between mb-3 p-3 py-2 bg-light">
+
+  <!-- Left Side -->
+  <b class="text-1xl-5">
+    <i class="ti ti-list"></i> Search Results
+  </b>
+
+  <!-- Right Side -->
+  <div class="flex gap-2">
+    <a href="javascript:void(0);"
+       class="btn bg-info btn-sm text-white"
+       (click)="exportDetailsToExcel()">
+      <i class="ti ti-download"></i> Export All Details
+    </a>
+
+    <a href="javascript:void(0);"
+       class="btn bg-info btn-sm text-white"
+       (click)="exportToExcel()">
+      <i class="ti ti-download"></i> Download
+    </a>
+  </div>
+
+</div>
+
     <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
       <div class="">
         <!-- [(ngModel)]="pageSize" -->

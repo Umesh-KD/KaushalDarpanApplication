@@ -209,13 +209,8 @@ export class ItiInstructorFormComponent {
   ) { }
 
   async ngOnInit() {
-    //this.EducationForm = this.formBuilder.group({
-    //  MarksType: [''],
-    //  Education_Percentage: [null],
-    //  Education_CGPA: [null]
-    //});
+   
 
-  
 
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -369,13 +364,16 @@ export class ItiInstructorFormComponent {
       //Aadhar: [''],
       //JanAadhar: [''],
       Employment_From: ['', Validators.required],
-      Employment_To: ['', Validators.required],
+      Employment_To: [''],
       Basic_Pay: ['', Validators.required],
       EmploymentDocument: ['', Validators.required],
       PostHeld: [''],
       BasicSalaryDocument: [''],
       EmployeeCode: [''],
-      Employer_Registration: ['']
+      Employer_Registration: [''],
+      //Employer_presentlyWorking: [false, Validators.required],
+      Employer_presentlyWorking: ['false'],   // ← Default: No selected
+
     });
     const today = new Date();
     this.maxDate = today.toISOString().split('T')[0];
@@ -405,6 +403,17 @@ export class ItiInstructorFormComponent {
     await this.QualificationDetailsLevel();
     await this.EduQualificationDetailsLevel();
     await this.GetCITSTrade();
+
+
+    this.EmploymentForm.get("Employer_presentlyWorking")?.valueChanges.subscribe(val => {
+      if (val === "true") {
+        this.EmploymentForm.get("Employment_To")?.setValue(null);
+        this.EmploymentForm.get("Employment_To")?.clearValidators();
+      } else {
+        this.EmploymentForm.get("Employment_To")?.setValidators([Validators.required]);
+      }
+      this.EmploymentForm.get("Employment_To")?.updateValueAndValidity();
+    });
   }
 
   get _InstructorForm() { return this.InstructorForm.controls; }
@@ -419,7 +428,7 @@ export class ItiInstructorFormComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.TehsilMasterList2 = data['Data'];
-
+          debugger
           this.request.Correspondence_PropTehsilID = '0'
         }, error => console.error(error));
 
@@ -627,12 +636,47 @@ export class ItiInstructorFormComponent {
 
 
 
+  //addTechQualificationCITS() {
+  //  this.formData.OtherCITSQualification.push(new ITI_InstructorTechnicalCITSQualificationList());
+  //}
+
   addTechQualificationCITS() {
-    //if (!this.searchtechCITSRequest.Tech_CITSTrade) {
-    //  alert("Please fill required fields before adding");
-    //  return;
-    //}
-    this.formData.OtherCITSQualification.push(new ITI_InstructorTechnicalCITSQualificationList());
+
+    const lastItem = this.formData.OtherCITSQualification[
+      this.formData.OtherCITSQualification.length - 1
+    ];
+
+    if (!this.validateCITSRow(lastItem)) {
+      return;  //  Do not add new row
+    }
+
+    //  Add new row
+    this.formData.OtherCITSQualification.push(
+      new ITI_InstructorTechnicalCITSQualificationList()
+    );
+  }
+
+  validateCITSRow(item: any): boolean {
+    let isValid = true;
+
+    item.errors = {}; // reset error object
+
+    if (!item.Tech_CITSYear || item.Tech_CITSYear === "") {
+      item.errors.Tech_CITSYear = true;
+      isValid = false;
+    }
+
+    if (!item.Tech_CITSTrade || item.Tech_CITSTrade === "") {
+      item.errors.Tech_CITSTrade = true;
+      isValid = false;
+    }
+
+    if (!item.Tech_CITSCertifiedDocument || item.Tech_CITSCertifiedDocument === "") {
+      item.errors.Tech_CITSCertifiedDocument = true;
+      isValid = false;
+    }
+
+    return isValid;
   }
   removeTechQualificationCITS(i: number) {
     this.formData.OtherCITSQualification.splice(i, 1);
@@ -843,7 +887,7 @@ export class ItiInstructorFormComponent {
     try {
       
     
- /*       this.request.Correspondence_ddlState = this.InstructorForm.value.Correspondence_ddlState*/
+        this.request.Correspondence_ddlState = this.InstructorForm.value.Correspondence_ddlState
      
      
       
@@ -1044,7 +1088,7 @@ export class ItiInstructorFormComponent {
            
               }, error => console.error(error));
          
-
+     
             this.InstructorForm.patchValue({
           
               Correspondence_PropTehsilID: this.request.Correspondence_PropTehsilID,
@@ -1121,7 +1165,7 @@ export class ItiInstructorFormComponent {
             
             this.isSSOVisible = true;
             this.request.Name = parsedData.displayName;
-            this.employeeRequest.Employer_Name = parsedData.displayName
+            //this.employeeRequest.Employer_Name = parsedData.displayName
             this.request.Mobile = parsedData.mobile;
             this.request.Email = parsedData.mailPersonal;
             this.request.Uid = parsedData.SSOID;
@@ -1444,11 +1488,13 @@ export class ItiInstructorFormComponent {
   }
 
   Back() {
+    debugger
     this.isSSOVisible = false;
     this.EducationForm.reset();
     this.TechnicalForm.reset();
     this.InstructorForm.reset();
     this.EmploymentForm.reset();
+    this.InstructorForm.controls['Uid'].reset(); // reset value
     this.InstructorForm.controls['Uid'].enable();
   }
 
@@ -1500,39 +1546,164 @@ export class ItiInstructorFormComponent {
 
   sameAsPermanent: boolean = true;
 
- async onCopyCorrespondenceToggle() {
+ //async onCopyCorrespondenceToggle() {
+ //   if (this.sameAsPermanent) {
+ //     this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
+ //     this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
+ //     this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
+ //     this.request.Correspondence_LandMark = this.request.LandMark;
+ //     this.request.Correspondence_ddlState = this.request.ddlState;
+ //     await this.ddlState_Change2()
+ //     this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+ //     await this.ddlDistrict_Change()
+ //     this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
+ //     this.request.Correspondence_City = this.request.City;
+ //     this.request.Correspondence_pincode = this.request.pincode;
+
+ //     //  Disable all correspondence fields in FormGroup (if reactive)
+ //     if (this._InstructorForm) {
+ //       Object.keys(this._InstructorForm.controls).forEach(key => {
+ //         if (key.startsWith('Correspondence_')) {
+ //           this.InstructorForm.controls[key].disable({ emitEvent: false });
+ //         }
+ //       });
+ //     }
+ //   } else {
+ //     //  Enable all correspondence fields
+ //     if (this._InstructorForm) {
+ //       Object.keys(this._InstructorForm.controls).forEach(key => {
+ //         if (key.startsWith('Correspondence_')) {
+ //           this.InstructorForm.controls[key].enable({ emitEvent: false });
+ //         }
+ //       });
+ //     }
+
+ //     //  Clear all correspondence values
+ //     this.request.Correspondence_PlotHouseBuildingNo = '';
+ //     this.request.Correspondence_StreetRoadLane = '';
+ //     this.request.Correspondence_AreaLocalitySector = '';
+ //     this.request.Correspondence_LandMark = '';
+ //     this.request.Correspondence_ddlState = '';
+ //     this.request.Correspondence_ddlDistrict = '';
+ //     this.request.Correspondence_PropTehsilID = '';
+ //     this.request.Correspondence_City = '';
+ //     this.request.Correspondence_pincode = '';
+ //   }
+  // }
+
+
+  toggleAddress(event: Event) {
+    this.sameAsPermanent = (event.target as HTMLInputElement).checked;
+
     if (this.sameAsPermanent) {
+
+      this.syncAddress();
+      this.EnableDisableCorsAddressDetail(true)
+    } else {
+
+      this.EnableDisableCorsAddressDetail(false)
+    }
+  }
+
+
+  async syncAddress() {
+    if (this.sameAsPermanent) {
+
       this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
       this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
       this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
       this.request.Correspondence_LandMark = this.request.LandMark;
       this.request.Correspondence_ddlState = this.request.ddlState;
-      await this.ddlState_Change2()
       this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
-      await this.ddlDistrict_Change()
+
+      await this.ddlState_Change2();
+      this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+
+      debugger
+      await this.commonMasterService.CityMasterDistrictWise(this.InstructorForm.value.ddlDistrict)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CityMasterDDLList = data['Data'];
+          console.log(this.CityMasterDDLList, "CityMasterDDLList")
+
+        }, error => console.error(error));
+      debugger
+      this.InstructorForm.value.Correspondence_ddlDistrict = this.request.Correspondence_ddlDistrict
+      await this.commonMasterService.TehsilMaster_DistrictIDWise(this.InstructorForm.value.Correspondence_ddlDistrict)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.TehsilMasterList2 = data['Data'];
+          debugger
+          this.request.Correspondence_PropTehsilID = '0'
+        }, error => console.error(error));
+      this.request.Correspondence_ddlState = this.request.ddlState;
+      this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
+
+      this.request.Correspondence_City = this.request.City;
+      this.request.Correspondence_pincode = this.request.pincode;
+    }
+  }
+
+  EnableDisableCorsAddressDetail(isSelected: boolean) {
+
+    const fields = [
+      'Correspondence_PlotHouseBuildingNo',
+      'Correspondence_StreetRoadLane',
+      'Correspondence_AreaLocalitySector',
+      'Correspondence_LandMark',
+      'Correspondence_ddlState',
+      'Correspondence_ddlDistrict',
+      'Correspondence_PropTehsilID',
+      'Correspondence_City',
+      'Correspondence_pincode'
+    ];
+
+    fields.forEach(field => {
+      const control = this.InstructorForm.controls[field];
+      if (control) {
+        isSelected
+          ? control.disable({ emitEvent: false })
+          : control.enable({ emitEvent: false });
+      }
+    });
+  }
+
+  async onCopyCorrespondenceToggle() {
+    debugger
+    if (this.sameAsPermanent) {
+      debugger
+      // Copy permanent → correspondence
+      this.request.Correspondence_PlotHouseBuildingNo = this.request.PlotHouseBuildingNo;
+      this.request.Correspondence_StreetRoadLane = this.request.StreetRoadLane;
+      this.request.Correspondence_AreaLocalitySector = this.request.AreaLocalitySector;
+      this.request.Correspondence_LandMark = this.request.LandMark;
+      this.request.Correspondence_ddlState = this.request.ddlState;
+
+      await this.ddlState_Change2();
+      this.request.Correspondence_ddlDistrict = this.request.ddlDistrict;
+
+      await this.ddlDistrict_Change();
       this.request.Correspondence_PropTehsilID = this.request.PropTehsilID;
       this.request.Correspondence_City = this.request.City;
       this.request.Correspondence_pincode = this.request.pincode;
-   
-      //  Disable all correspondence fields in FormGroup (if reactive)
-      if (this._InstructorForm) {
-        Object.keys(this._InstructorForm.controls).forEach(key => {
-          if (key.startsWith('Correspondence_')) {
-            this.InstructorForm.controls[key].disable({ emitEvent: false });
-          }
-        });
-      }
-    } else {
-      //  Enable all correspondence fields
-      if (this._InstructorForm) {
-        Object.keys(this._InstructorForm.controls).forEach(key => {
-          if (key.startsWith('Correspondence_')) {
-            this.InstructorForm.controls[key].enable({ emitEvent: false });
-          }
-        });
-      }
 
-      //  Clear all correspondence values
+      // Disable
+      Object.keys(this.InstructorForm.controls).forEach(key => {
+        if (key.startsWith('Correspondence_')) {
+          this.InstructorForm.controls[key].disable({ emitEvent: false });
+        }
+      });
+
+    } else {
+      
+      // Enable back
+      Object.keys(this.InstructorForm.controls).forEach(key => {
+        if (key.startsWith('Correspondence_')) {
+          this.InstructorForm.controls[key].enable({ emitEvent: false });
+        }
+      });
+      debugger
+      // Clear
       this.request.Correspondence_PlotHouseBuildingNo = '';
       this.request.Correspondence_StreetRoadLane = '';
       this.request.Correspondence_AreaLocalitySector = '';
@@ -1544,6 +1715,8 @@ export class ItiInstructorFormComponent {
       this.request.Correspondence_pincode = '';
     }
   }
+
+
 
   onMarksTypeChange() {
     const selectedType = this.TechnicalForm.get('Tech_MarksTypeID')?.value;
@@ -1765,7 +1938,7 @@ export class ItiInstructorFormComponent {
 
           data = JSON.parse(JSON.stringify(data));
 
-          const allowed = ["Diploma", "UG", "PG"];
+          const allowed = ["Diploma/Certificate Course", "Under Graduate", "Post Graduate"];
           this.QualificationDetailsLevelDDL = data.Data.filter(
             (x: any) => allowed.includes(x.QualificationLevel)
           );
@@ -1793,7 +1966,7 @@ export class ItiInstructorFormComponent {
       const fullList = data?.Data ?? [];
 
       this.EduQualificationDetailsLevelDDL = fullList.filter((x: any) =>
-        x.QualificationLevel === 'SE' || x.QualificationLevel === 'UG' || x.QualificationLevel === 'PG'
+        x.QualificationLevel === 'School Education' || x.QualificationLevel === 'Under Graduate' || x.QualificationLevel === 'Post Graduate'
       );
 
       console.log("Edu Filtered Qualification Levels ==>", this.EduQualificationDetailsLevelDDL);
@@ -1813,10 +1986,10 @@ export class ItiInstructorFormComponent {
     await this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.QualificationDDL = data.Data;
-      if (selectedLevel == 'PG') {
+      if (selectedLevel == 'Post Graduate') {
         this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 8 && e.QualificationID != 9)
       }
-      else if (selectedLevel == 'UG') {
+      else if (selectedLevel == 'Under Graduate') {
         this.QualificationDDL = this.QualificationDDL.filter((e: any) => e.QualificationID != 3 && e.QualificationID != 4)
       }
       console.log("GetQualificationDDL ==>", this.QualificationDDL);
@@ -1830,10 +2003,10 @@ export class ItiInstructorFormComponent {
     await this.commonMasterService.QualificationDDL(this.QualificationModel).then((data: any) => {
       data = JSON.parse(JSON.stringify(data));
       this.eduQualificationDDL = data.Data;
-      if (selectedLevel == 'PG') {
+      if (selectedLevel == 'Post Graduate') {
         this.eduQualificationDDL =this.eduQualificationDDL.filter((e: any) => e.QualificationID != 6 && e.QualificationID != 7)
       }
-      else if (selectedLevel == 'UG') {
+      else if (selectedLevel == 'Under Graduate') {
         this.eduQualificationDDL =this.eduQualificationDDL.filter((e: any) => e.QualificationID != 1 && e.QualificationID != 2)
       }
       console.log("edu Examination Pass ==>", this.eduQualificationDDL);
@@ -1904,16 +2077,15 @@ export class ItiInstructorFormComponent {
     }
   }
 
-  showOtherExam = false; // component property
+  showOtherExam = false; 
 
   async onExamChange(selectedId: string) {
     console.log('onExamChange called with:', selectedId);
 
-    // if nothing selected -> restore subject control
     if (!selectedId) {
       const ctrl = this.EducationForm.get('Education_Subjects');
       if (ctrl?.disabled) ctrl.enable({ emitEvent: false });
-      // also hide other textbox and clear validators
+
       this.showOtherExam = false;
       this.EducationForm.get('OtherExaminationPassed')?.clearValidators();
       this.EducationForm.get('OtherExaminationPassed')?.setValue('');
@@ -1977,6 +2149,10 @@ export class ItiInstructorFormComponent {
     console.log('Stream List ==> ', this.CITSStreamList);
   }, error => console.error(error));
   }
+
+
+
+ 
 
 }
 
