@@ -109,6 +109,8 @@ export class ItiStudentExamReportsComponent
       }, (error: any) => console.error(error));
   }
 
+
+
  
   exportToExcel(): void {
     const exportData = this.viewAdminDashboardList.map((row: any, index: number) => {
@@ -134,7 +136,11 @@ export class ItiStudentExamReportsComponent
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'CollegesWiseReports.xlsx');
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    XLSX.writeFile(wb, `Student_Examination_Report_${y}-${m}-${d}.xlsx`);
   }
 
 
