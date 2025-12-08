@@ -73,7 +73,7 @@
             <td style="font-size:24px; line-height:32px;">{{item.SemesterName}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.Exam}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.RollNo}}</td>
-            <td style="font-size:24px; line-height:32px;">{{item.RegulationSubSem1}}{{item.RegulationSubSem2}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.STUFFPapersBack}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.StudentType}}</td>
             <td style="font-size:24px; line-height:32px;">
               <span (mouseenter)="onHover(item)"
@@ -100,7 +100,7 @@
             </td>
             <td style="font-size:24px; line-height:32px;">{{item.TotalCGPA}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.TotalSGPA}}</td>
-            <td style="font-size:24px; line-height:32px;">{{item.IsPromoted === false?"Not-Registered":"Registered"}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.Promoted}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.ResultDeclareDate | date}}</td>
           </tr>
 
