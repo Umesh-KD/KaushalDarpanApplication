@@ -16,7 +16,7 @@ import { EnumRole } from '../../../../Common/GlobalConstants';
     styleUrls: ['./employement-history.component.css'],
     standalone: false
 })
-export class StudentEmployementHistoryComponent implements OnInit {
+export class StudentAdditionalQualificationComponent implements OnInit {
   public StudEmployementList: StudentEmploymentDetailsModel[] = [];
   public Table_SearchText: string = "";
   public searchRequest = new StudentEmploymentDetailsModel();
@@ -33,7 +33,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    await this.GetStudentEmployementData();
+    await this.GetStudentAdditionalQualiData();
   }
 
 
@@ -57,7 +57,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
     XLSX.writeFile(wb, 'StudEmployementListData.xlsx');
   }
 
-  async GetStudentEmployementData() {
+  async GetStudentAdditionalQualiData() {
     debugger
     try {
       // this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
@@ -69,7 +69,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
         // this.searchRequest.StudentID=this.sSOLoginDataModel.UserID;
 
       this.loaderService.requestStarted();
-      await this.StudentdetailUpdateService.GetStudentEmployementData(this.searchRequest).then((data: any) => {
+      await this.StudentdetailUpdateService.GetStudentAdditionalQualiData(this.searchRequest).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.StudEmployementList = data.Data;
         console.log(this.StudEmployementList)
@@ -89,7 +89,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
   async ClearSearchData() {
     this.searchRequest.CompanyName = '';
 
-    await this.GetStudentEmployementData();
+    await this.GetStudentAdditionalQualiData();
   }
 
 
@@ -113,7 +113,7 @@ export class StudentEmployementHistoryComponent implements OnInit {
 
                 if (data.State) {
                   this.toastr.success(data.Message)
-                  await this.GetStudentEmployementData();
+                  await this.GetStudentAdditionalQualiData();
                 }
                 else {
                   this.toastr.error(data.ErrorMessage)

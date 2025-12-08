@@ -89,4 +89,13 @@ export class StudentdetailUpdateService {
       ).toPromise();
   }
 
+  public async GetStudentAdditionalQualiData(searchRequest: StudentEmploymentDetailsModel) {
+      const body = JSON.stringify(searchRequest);
+  
+      return await this.http.post(`${this.APIUrl}/GetStudentAdditionalQualiData`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
 }
