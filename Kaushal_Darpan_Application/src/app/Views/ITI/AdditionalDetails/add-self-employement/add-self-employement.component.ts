@@ -310,7 +310,7 @@ export class AddStudentEmployementComponent implements OnInit {
         this.request.WorkingToDate=today.toISOString().split('T')[0];
       }
       
-      if(this.request.WorkingToDate<this.request.WorkingFromDate || this.request.WorkingToDate==this.request.WorkingFromDate){
+      if(this.request.WorkingToDate<this.request.WorkingFromDate ){
         this.toaster.error("Working To Date should be greater than Working From Date");
         return;
       }

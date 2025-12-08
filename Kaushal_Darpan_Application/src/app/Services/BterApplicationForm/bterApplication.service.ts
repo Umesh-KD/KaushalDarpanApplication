@@ -6,7 +6,7 @@ import { CommonSubjectMasterSearchModel } from '../../Models/CommonSubjectMaster
 import { CommonSubjectMasterModel } from '../../Models/CommonSubjectMasterModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { AppointExaminerSearchModel, AppointmentExaminerDataModel } from '../../Models/AppointExaminerDataModel';
-import { ApplicationDatamodel, BterAddressDataModel, BterDocumentsDataModel, BterOptionsDetailsDataModel, BterOtherDetailsModel, BterSearchmodel, DirectAdmissionUpdatePayment, DocumentDetailList, DTEDashApplicationSearchModel, HighestQualificationModel, QualificationDataModel } from '../../Models/ApplicationFormDataModel';
+import { ApplicationDatamodel, BterAddressDataModel, BterDocumentsDataModel, BterOptionsDetailsDataModel, BterOtherDetailsModel, BterSearchmodel, DirectAdmissionUpdatePayment, DocumentDetailList, DTEDashApplicationSearchModel, HighestQualificationModel, QualificationDataModel, StudentAdditionalQualificationModel } from '../../Models/ApplicationFormDataModel';
 import { DocumentDetailsModel } from '../../Models/DocumentDetailsModel';
 import { HighestQualificationDetailsDataModel } from '../../Models/ITIFormDataModel';
 
@@ -248,7 +248,7 @@ export class BterApplicationForm {
   // ------------------------------------------Student Qualification update Service-------------------------------------------------------------------------
 
    //save data
-   public async UpdateStudentQualificationDetails(request: any) {
+   public async UpdateStudentQualificationDetails(request: StudentAdditionalQualificationModel) {
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/UpdateStudentQualificationDetails`, body, this.headersOptions)
       .pipe(

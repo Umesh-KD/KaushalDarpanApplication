@@ -3,17 +3,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
-import { StudentEmployementHistoryComponent } from './employement-history.component';
-import { StudentEmployementHistoryRoutingModule } from './employement-history.routing.module';
+import { StudentAdditionalQualificationComponent } from './student-additional-qualification.component';
+import { StudentAdditionalQualificationRoutingModule } from './student-additional-qualification.routing.module';
 
 @NgModule({
   declarations: [
-    StudentEmployementHistoryComponent
+    StudentAdditionalQualificationComponent
   ],
   imports: [
     CommonModule,
-    StudentEmployementHistoryRoutingModule
+    StudentAdditionalQualificationRoutingModule
     , FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule
   ]
 })
-export class StudentEmployementHistoryModule { }
+export class StudentAdditionalQualificationModule { }
