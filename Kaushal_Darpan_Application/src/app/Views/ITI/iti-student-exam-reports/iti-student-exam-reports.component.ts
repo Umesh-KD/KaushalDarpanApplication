@@ -136,7 +136,6 @@ export class ItiStudentExamReportsComponent
 
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    //XLSX.writeFile(wb, 'Student_Examination_Report.xlsx');
     const now = new Date();
     const y = now.getFullYear();
     const m = String(now.getMonth() + 1).padStart(2, '0');
