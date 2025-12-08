@@ -453,7 +453,7 @@ export class ImportDataComponent implements OnInit {
           }
 
           const unwantedColumns = [
-            "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId",
+            "student_exam_id","TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId",
             "CollegeId", "TradeId", "Paper1", "Paper2", "paper4", "trade_scheme_type",
             "id", "paper3", "trade_type", "institute_id", "stream_id","stream_name"
           ];
