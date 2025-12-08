@@ -24,7 +24,7 @@ export class ItiStudentExamReportsComponent
   ErrorMessage: string = '';
   State: boolean = false;
   viewAdminDashboardList: StudentExamDetails[] = [];
-  displayedColumns: string[] = ['SrNo', 'StudentName', 'EnrollmentNo','FatherName', 'InstituteName', 'BranchName', 'SemesterName'];
+  displayedColumns: string[] = ['SrNo', 'SemesterName','StudentName', 'EnrollmentNo','FatherName', 'InstituteName', 'BranchName'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;
