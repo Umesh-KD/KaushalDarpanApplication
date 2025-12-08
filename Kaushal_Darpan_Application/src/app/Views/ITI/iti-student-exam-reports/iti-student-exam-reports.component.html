@@ -58,7 +58,14 @@
         <!-- Sr. No Column -->
         <ng-container matColumnDef="SrNo">
           <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
-          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
+          <!--<td mat-cell *matCellDef="let element; let i = index" width="80px">{{ currentPage + 1 }}</td>-->
+          <td mat-cell *matCellDef="let element; let i = index" width="80px"> {{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="SemesterName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
+          <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
         </ng-container>
 
         <ng-container matColumnDef="StudentName">
@@ -86,10 +93,7 @@
           <td mat-cell *matCellDef="let element">{{ element.BranchName }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="SemesterName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Year</th>
-          <td mat-cell *matCellDef="let element">{{ element.SemesterName }}</td>
-        </ng-container>
+
 
         <!-- Table Header and Rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

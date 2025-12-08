@@ -49,6 +49,15 @@ export class LateralEntryQualificationModel {
   public OtherDoc?:string=''
 }
 
+
+export class StudentAdditionalQualificationModel{
+  public StudentID:number=0
+  public OtherDoc?:string=''
+  public QualificationList:LateralEntryQualificationModel[]=[]
+}
+
+
+
 export class Lateralsubject {
   LateralID: number = 0
   ID: number = 0
