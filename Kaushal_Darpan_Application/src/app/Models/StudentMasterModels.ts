@@ -190,6 +190,8 @@ export class StudentAttendenceModel extends RequestBaseModel {
   public ReceiptNo:string=''
   public DepositDate:string=''
   public StudentName: string = ''
+  public ChallanNo: string = ''
+  public ChallanDate: string = ''
 
   
 }

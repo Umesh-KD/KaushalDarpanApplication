@@ -253,6 +253,8 @@ export class StudentExaminationITIComponent
         //txtEnrollmentNo: ['', Validators.required, disable: true],
 
         EligibilityStatus: ['', [DropdownValidators]],
+        ChallanNo: [''],
+        ChallanDate: [''],
 
         FaMark: ['', [Validators.required, this.conditionalFaMarkValidator('EligibilityStatus'), Validators.max(200)]],
         Remarks: ['']
@@ -1840,6 +1842,16 @@ export class StudentExaminationITIComponent
         this.toastr.error('Please Fill Remarks')
         return;
       }
+      if (this.attendence.EligibilityStatus == 238 && this.attendence.ChallanDate == '') {
+        this.toastr.error('Please Enter Challan Date')
+        return;
+      }
+
+      if (this.attendence.EligibilityStatus == 238 && this.attendence.ChallanNo == '') {
+        this.toastr.error('Please Enter Challan No')
+        return;
+      }
+
       //session
       this.attendence.EndTermID = this.sSOLoginDataModel.EndTermID;
       this.attendence.DepartmentID = this.sSOLoginDataModel.DepartmentID;
