@@ -15,4 +15,7 @@ export class CollegesWiseExaminationRptSearchModel {
   public EndTermID?: number = 0
   public AcademicYearID?: number = 0
   public CourseTypeID?: number = 0
+  public InstituteID?: number = 0
+  public SemesterID?: number = 0
+  public BranchID?: number = 0
 }
