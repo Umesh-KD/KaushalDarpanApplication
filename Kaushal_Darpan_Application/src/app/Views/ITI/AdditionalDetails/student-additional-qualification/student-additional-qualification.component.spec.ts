@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StudentAdditionalQualificationComponent } from './student-additional-qualification.component';
+import { StudentAdditionalQualiComponent } from './student-additional-qualification.component';
 
-describe('CompanyMasterComponent', () => {
-  let component: StudentAdditionalQualificationComponent;
-  let fixture: ComponentFixture<StudentAdditionalQualificationComponent>;
+describe('StudentAdditionalQualiComponent', () => {
+  let component: StudentAdditionalQualiComponent;
+  let fixture: ComponentFixture<StudentAdditionalQualiComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StudentAdditionalQualificationComponent]
+      declarations: [StudentAdditionalQualiComponent]
     });
-    fixture = TestBed.createComponent(StudentAdditionalQualificationComponent);
+    fixture = TestBed.createComponent(StudentAdditionalQualiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

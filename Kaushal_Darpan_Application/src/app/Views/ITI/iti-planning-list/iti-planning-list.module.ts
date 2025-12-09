@@ -6,7 +6,8 @@ import { ItiPlanningListComponent } from './iti-planning-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TableSearchFilterModule } from '../../../Pipes/table-search-filter.module';
 import { OTPModalModule } from '../../otpmodal/otpmodal.module';
-
+import { NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent, NgSelectModule } from '@ng-select/ng-select';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,10 @@ import { OTPModalModule } from '../../otpmodal/otpmodal.module';
     FormsModule,
     ReactiveFormsModule,
     TableSearchFilterModule,
-    OTPModalModule
+    OTPModalModule,
+    NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent,
+    MatTooltipModule,
+    TableSearchFilterModule
   ]
 })
 export class ItiPlanningListModule { }

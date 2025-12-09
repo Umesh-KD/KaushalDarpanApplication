@@ -1488,8 +1488,8 @@ const routes: Routes = [
       { path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
       { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
-      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
-      { path: 'student-additional-qualificationList', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
+      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
+      { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
      
 
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.routing.module').then(m => m.UpdateStudentDetailsModule), title: 'update Student Details' },

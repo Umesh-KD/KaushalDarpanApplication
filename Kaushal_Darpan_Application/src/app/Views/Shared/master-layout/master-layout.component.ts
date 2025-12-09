@@ -281,7 +281,6 @@ export class MasterLayoutComponent implements OnInit {
 
 
 
-
   ngOnDestroy() {
     // Unsubscribe to prevent memory leaks
     if (this.isMobileSubscription) {

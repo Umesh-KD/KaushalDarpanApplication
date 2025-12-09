@@ -622,16 +622,16 @@
 
 
             <!--<div>
-              <label for="ddlStudentTypeID" class="text-gray-800 text-sm font-medium inline-block mb-1">Regular/Ex:<span class="StarMarking">*</span></label>
-              <select class="form-select" id="ddlStudentTypeID" name="ddlStudentTypeID" [(ngModel)]="requestStudent.StudentTypeID"
-                      formControlName="ddlStudentTypeID">
-                <option value="0">-- Select --</option>
-                <option *ngFor="let item of StudentTypeMasterList" value="{{item.ID}}">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isSubmitted&&EditStudentDataform.ddlStudentTypeID.errors" class="text-danger">
-                <p *ngIf="!EditStudentDataform.ddlStudentTypeID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
-              </div>
-            </div>-->
+    <label for="ddlStudentTypeID" class="text-gray-800 text-sm font-medium inline-block mb-1">Regular/Ex:<span class="StarMarking">*</span></label>
+    <select class="form-select" id="ddlStudentTypeID" name="ddlStudentTypeID" [(ngModel)]="requestStudent.StudentTypeID"
+            formControlName="ddlStudentTypeID">
+      <option value="0">-- Select --</option>
+      <option *ngFor="let item of StudentTypeMasterList" value="{{item.ID}}">{{item.Name}}</option>
+    </select>
+    <div *ngIf="isSubmitted&&EditStudentDataform.ddlStudentTypeID.errors" class="text-danger">
+      <p *ngIf="!EditStudentDataform.ddlStudentTypeID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required .!</p>
+    </div>
+  </div>-->
 
             <div>
               <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -659,8 +659,8 @@
               <input type="text" class="form-input disabled" id="txtPapers" name="txtPapers" formControlName="txtPapers"
                      [(ngModel)]="requestStudent.Papers">
               <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtPapers.errors" class="text-danger">
-                <p *ngIf="EditStudentDataform.txtPapers.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
-              </div>-->
+      <p *ngIf="EditStudentDataform.txtPapers.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+    </div>-->
             </div>
 
 
@@ -861,6 +861,9 @@
               </div>
             </div>
             <!--/document-->
+
+
+
 
           </div>
 

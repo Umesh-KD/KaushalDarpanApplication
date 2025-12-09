@@ -23,10 +23,17 @@ export class AppsettingService {
   public SystemGeneratedPDFPathURL: string = "";
   public SessionTime: number = 600;
 
+
   //Bter
   public apiURL_Bter: string = "";
   public RootPathURL_Bter: string = "";
   public StaticFileRootPathURL_Bter: string = "";
+
+  //ITI
+
+  public DepartmentITIFolder: string = "";
+
+
 
   constructor(private httpClient: HttpClient) {
 
@@ -59,6 +66,12 @@ export class AppsettingService {
     this.StaticFileRootPathURL_Bter = appsetting?.ApiUrls?.StaticFileRootPathURL_Bter;
 
     this.DepartmentBterFolder = "BTER"
+
+    //iti
+    this.DepartmentITIFolder = "ITI"
+
+    
+    
 
     // *********do not uncomment below urls
     //local

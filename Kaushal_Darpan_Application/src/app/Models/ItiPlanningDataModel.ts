@@ -106,3 +106,9 @@ export class ItiVerificationModel {
   public Remarks: string = '';
   public UserID: number = 0;
 }
+export class ITI_PlanningCollegesSearchModel {
+  public InstituteID: number = 0;
+  public UserID: number = 0;
+  public StudentExamManagementTypeId: number = 0;
+  public CollegeID: number = 0;
+}

@@ -2,7 +2,7 @@
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ItiVerificationModel } from '../../../Models/ItiPlanningDataModel';
+import { ITI_PlanningCollegesModel, ITI_PlanningCollegesSearchModel, ItiVerificationModel } from '../../../Models/ItiPlanningDataModel';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ITIsService } from '../../../Services/ITIs/itis.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
@@ -12,6 +12,8 @@ import { ItiCollegesSearchModel } from '../../../Models/CommonMasterDataModel';
 import { ActivatedRoute } from '@angular/router';
 import { EnumRole, EnumStatus } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
+import { NgSelectModule } from '@ng-select/ng-select';
+
 
 @Component({
   selector: 'app-iti-planning-list',
@@ -40,13 +42,15 @@ export class ItiPlanningListComponent {
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
   closeResult: string | undefined;
-  public searchrequest = new ItiCollegesSearchModel()
+  public request = new ITI_PlanningCollegesSearchModel()
 
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   formAction!: FormGroup;
+  public isShowdrop: boolean = true
 
   public TodayDate = new Date()
+  public SearchStudentDataFormGroup!: FormGroup;
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute) {
@@ -73,7 +77,24 @@ export class ItiPlanningListComponent {
       this.CollegeID = this.InstituteID
 
     } else {
-      this.ApprovedStatus=0
+      this.ApprovedStatus=2
+    }
+
+
+    this.SearchStudentDataFormGroup = this.formBuilder.group(
+    {
+        StudentExamManagementTypeId: [{ value: '', disabled: false }],
+    })
+
+
+    if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
+      this.isShowdrop = true;
+
+      this.SearchStudentDataFormGroup.get('StudentExamManagementTypeId')?.disable();
+
+    } else {
+      this.isShowdrop = false;
+      this.SearchStudentDataFormGroup.get('StudentExamManagementTypeId')?.enable();
     }
 
 
@@ -83,8 +104,12 @@ export class ItiPlanningListComponent {
   }
 
   get FormAction() { return this.formAction.controls; }
- 
+
+
+
   async btn_SearchClick() {
+    debugger    
+
     try {
     
       this.loaderService.requestStarted();
@@ -135,6 +160,7 @@ export class ItiPlanningListComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CompanyMasterList = data['Data'];
+          this.request.CollegeID = 0
 
         }, error => console.error(error));
     }
@@ -154,7 +180,7 @@ export class ItiPlanningListComponent {
     this.requestAction.Status = 0;
     this.requestAction.Remarks = '';
     this.CollegeID = 0;
-    this.ApprovedStatus = 0;
+    this.ApprovedStatus = 2;
 
   }
   async ViewHistory(content: any, ID: number) {
