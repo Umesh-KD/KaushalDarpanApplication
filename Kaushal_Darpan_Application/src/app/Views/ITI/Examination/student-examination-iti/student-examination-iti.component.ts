@@ -424,12 +424,7 @@ export class StudentExaminationITIComponent
           console.log("InstitutesListForStudent", this.InstitutesListForStudent);
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.GetManagType()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.InstitutionManagementMasterList = data['Data'];
-        }, (error: any) => console.error(error));
-
+      
       //await this.commonMasterService.StreamMaster()
       //  .then((data: any) => {
       //    data = JSON.parse(JSON.stringify(data));
@@ -459,11 +454,11 @@ export class StudentExaminationITIComponent
           this.StudentStatusList = data['Data'];
         }, (error: any) => console.error(error));
 
-      await this.commonMasterService.ExamCategory()
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.ExamCategoryList = data['Data'];
-        }, (error: any) => console.error(error));
+      //await this.commonMasterService.ExamCategory()
+      //  .then((data: any) => {
+      //    data = JSON.parse(JSON.stringify(data));
+      //    this.ExamCategoryList = data['Data'];
+      //  }, (error: any) => console.error(error));
 
       await this.commonMasterService.CasteCategoryA()
         .then((data: any) => {
