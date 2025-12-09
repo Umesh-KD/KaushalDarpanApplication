@@ -174,7 +174,8 @@ const routes: Routes = [
       { path: 'PlacementDashReport/:id', loadChildren: () => import('./Views/placement-dash-report/placement-dash-report.routing.module').then(m => m.RoleMasterRoutingModule), title: 'Placement Dashboard Report' },
 
 
-      { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
+      { path: 'ITIPlacementDashboard/:id', loadChildren: () => import('./Views/ITI/placement-dashboard/placement-dashboard.module').then(m => m.ITIPlacementDashboardModule), title: 'ITI Placement Dashboard Report' },
+      { path: 'ITIPlacementDashReport/:id', loadChildren: () => import('./Views/ITI/placement-dash-report/placement-dash-report.routing.module').then(m => m.ITIPlacementDashReportModule), title: 'ITI Placement Dashboard Report' },
 
       //{ path: 'rolemenuright/:id', loadChildren: () => import('./Views/role-menu-right/role-menu-right.module').then(m => m.RoleMenuRightModule) },
       { path: 'ItiInstructorFormView', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor-form/iti-instructor-form.module').then(m => m.ItiInstructorFormModule) },
@@ -492,7 +493,7 @@ const routes: Routes = [
       { path: 'ITIStudentFeesTransactionHistoryRpt', loadChildren: () => import('./Views/ITI/itistudent-fees-transaction-history/itistudent-fees-transaction-history.module').then(m => m.ITIStudentFeesTransactionHistoryModule), title: 'ITI Student Fees Transaction History Report' },
       { path: 'application-fees-trn-history', loadChildren: () => import('./Views/Reports/application-fees-transaction-history/application-fees-transaction-history.module').then(m => m.ApplicationFeesTransactionHistoryModule), title: 'Student Fees Transaction History Report' },
       { path: 'AdminUser', loadChildren: () => import('./Views/BTER/admin-user/admin-user.module').then(m => m.AdminUserModule), title: 'Admin User' },
-      { path: 'ITIAdminUser', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'ITI Admin User' },
+      { path: 'ITIAdministrativeStaff', loadChildren: () => import('./Views/ITI/itiadmin-user/itiadmin-user.module').then(m => m.ITIAdminUserModule), title: 'Administrative Staff' },
       { path: 'master-configuration', loadChildren: () => import('./Views/master-configuration/master-configuration.module').then(m => m.MasterConfigurationModule), title: 'Master Configuration' },
       { path: 'master-configuration-bter', loadChildren: () => import('./Views/master-configuration-bter/master-configuration-bter.module').then(m => m.MasterConfigurationBTERModule), title: 'Master Configuration' },
       { path: 'RevaluationTab', loadChildren: () => import('./Views/Student/revaluation-tab/revaluation-tab.module').then(m => m.RevaluationTabModule) },
@@ -1483,12 +1484,20 @@ const routes: Routes = [
       {path: 'counselling-vacancy-Detail', loadChildren: () => import('./Views/Counselling-Master/import-counselling-vacancies/import-counselling-vacancies.module').then(m => m.ImportCounsellingVacanciesModule), title: 'Counselling Vacancies Details'},
       
       { path: 'StudentCorrectionMaster', loadChildren: () => import('./Views/StudentDataCorrectionMaster/student-correction-master.module').then(m => m.StudentCorrectionMasterModule), title: 'Student Correction Master' },
-      {path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
-      {path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
+      { path: 'EditStudentCorrection', loadChildren: () => import('./Views/edit-student-correction-master/edit-student-correction-master.module').then(m => m.EditStudentCorrectionMasterModule), title: 'Edit Student  Data'},
+      { path: 'RevalStudentDetails', loadChildren: () => import('./Views/reval-student_updatedetails/reval-student_updatedetails.module').then(m => m.RevalStudentUpdateDetailsModule), title: 'Reval Student Details'},
       { path:'Upload-Status-Check', loadChildren:()=>import('./Views/ITI/upload-trainee-logs-list/upload-trainee-logs-list.module').then(m=>m.UploadTraineeLogsListModule),title:'Trainee Logs List'},
-      {path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
-      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'Student Dashboard' },
+      { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
+      { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
+      { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
+     
+
+      { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.routing.module').then(m => m.UpdateStudentDetailsModule), title: 'update Student Details' },
       
+      { path: 'student-employement-history', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
+      { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
+
+
 
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
      
@@ -1539,6 +1548,10 @@ const routes: Routes = [
       { path: 'ReAssignTeacherLCAttendance', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
       { path: 'ReAssignTeacherLCAttendance/:streamId/:semesterId/:subjectId/:sectionId/:From_Date/:To_Date', loadChildren: () => import('./Views/BTER/attendance-time-table/student-attendance-lc/student-attendance-lc.module').then(m => m.StudentAttendanceLCModule), title: 'ReAssignTeacherLCAttendance' },
       { path: 'ReAttendanceTimeTable', loadChildren: () => import('./Views/BTER/attendance-time-table/ReAssignTimeTable/ReAssignTimeTable.module').then(m => m.ReAssignTimeTableModule), title: 'Re-Student-Attendance' },
+      { path: 'CenterRollList', loadChildren: () => import('./Views/ITI/Examination/center-roll-list/center-roll-list.module').then(m => m.CenterRollListModule), title:'Center Roll List' },
+
+
+
     ]
   },
 
@@ -1601,8 +1614,6 @@ const routes: Routes = [
       { path: 'IMCAllotmentReport/:id/:iid', loadChildren: () => import('./Views/ITI/reports/imc-allotment-report/imc-allotment-report.module').then(m => m.IMCAllotmentReportModule) },
       { path: 'iti-students-upgraded-by-upward', loadChildren: () => import('./Views/ITI/students-upgraded-by-upward/students-upgraded-by-upward.module').then(m => m.StudentUpgradedByUpwardModule), title: 'iti-students-upgraded-by-upward' },
 
-      
-
     ]
   },
 
@@ -1642,9 +1653,8 @@ const routes: Routes = [
   { path: 'PMNAM-MelaReportBeforeAfter', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report-before-after/pmnam-mela-report-before-after.module').then(m => m.PMNAMMelaReportBeforeAfterModule) },
   { path: 'PaasoutRegistrationReportList', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report-list/passout-registration-report-list.module').then(m => m.PassoutRegistrationReportListModule) },
   { path: 'Views\ITI\DirectAdmissionApply', loadChildren: () => import('./Views/ITI/direct-admission-apply/direct-admission-apply.module').then(m => m.DirectAdmissionApplyModule) },
-
-
-
+  { path: 'Views\ITI\Examination\ITIAdminStaff', loadChildren: () => import('./Views/ITI/Examination/itiadmin-staff/itiadmin-staff.module').then(m => m.ITIAdminStaffModule) },
+  
 
 
 

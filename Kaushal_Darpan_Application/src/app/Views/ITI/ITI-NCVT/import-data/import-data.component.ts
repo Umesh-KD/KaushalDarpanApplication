@@ -352,75 +352,6 @@ export class ImportDataComponent implements OnInit {
 
 
 
-  //async exportExcelData() {
-  //  if (this.totalRecord == 0) {
-  //    this.toastr.error("Please search data first.");
-  //    return;
-  //  }
-  //  try {
-  //    this.searchRequest.PageNumber = 1;
-  //    this.searchRequest.Action = 'LIST';
-
-  //    this.searchRequest.ActiveStatus = (this.ActiveStatusModel === 1);
-
-  //    this.searchRequest2.PageNumber = 1;
-  //    this.searchRequest2.PageSize = this.totalRecord;
-
-  //    this.loaderService.requestStarted();
-  //    //await this.ITICollegeTradeService.GetTradeAndColleges(this.searchRequest)
-  //    await this.ncvtService.GetNCVTExamDataFormat(this.searchRequest2)
-  //      .then((data: any) => {
-  //        data = JSON.parse(JSON.stringify(data));
-  //        console.log("ExportExcelData data", data);
-  //        if (data.State === EnumStatus.Success) {
-  //          this.DataExcel = data.Data;
-  //          console.log("MeritDataExcel", this.DataExcel);
-
-  //          const unwantedColumns = [
-  //            "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId", "CollegeId", "TradeId", "Paper1", "Paper2", "paper4", "trade_scheme_type"
-  //            , "id", "paper3","trade_type",
-
-  //          ];
-  //          const filteredData = this.DataExcel.map((item: { [x: string]: any; }) => {
-  //            const filteredItem: any = {};
-  //            Object.keys(item).forEach(key => {
-  //              if (!unwantedColumns.includes(key)) {
-  //                filteredItem[key] = item[key];
-  //              }
-  //            });
-  //            return filteredItem;
-  //          });
-
-  //          const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet( filteredData);
-  //          const wb: XLSX.WorkBook = XLSX.utils.book_new();
-  //          XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-  //          // build file name: "CollageTradeList_YYYY-MM-DD.xlsx"
-  //          const now = new Date();
-  //          const y = now.getFullYear();
-  //          const m = String(now.getMonth() + 1).padStart(2, '0');
-  //          const d = String(now.getDate()).padStart(2, '0');
-  //          const dateStr = `${y}-${m}-${d}`;
-  //          const fileName = `CollageTradeList_${dateStr}.xlsx`;
-
-  //          XLSX.writeFile(wb, fileName);
-
-  //        } else {
-  //          this.toastr.error(data.ErrorMessage);
-  //        }
-  //      }, (error: any) => console.error(error));
-  //  } catch (Ex) {
-  //    console.log(Ex);
-  //  } finally {
-  //    setTimeout(() => {
-  //      this.loaderService.requestEnded();
-  //    }, 200);
-  //  }
-  //}
-
-
-
-
   async exportExcelData() {
     if (this.totalRecord == 0) {
       this.toastr.error("Please search data first.");
@@ -453,7 +384,7 @@ export class ImportDataComponent implements OnInit {
           }
 
           const unwantedColumns = [
-            "TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId",
+            "student_exam_id","TradeSchemeId", "SeatNotAvailable", "TotalRecords", "CollegeTradeId",
             "CollegeId", "TradeId", "Paper1", "Paper2", "paper4", "trade_scheme_type",
             "id", "paper3", "trade_type", "institute_id", "stream_id","stream_name"
           ];

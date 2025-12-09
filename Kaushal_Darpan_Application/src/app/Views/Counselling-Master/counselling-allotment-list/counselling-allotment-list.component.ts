@@ -28,6 +28,7 @@ export class CounsellingAllotmentListComponent implements OnInit {
 
   
   public StudentList: any = [];
+  public StudentDetailsList: any = [];
   public designations: any = [];
   public Table_SearchText: string = "";
   public searchRequest = new CounsellingAllotmentListModel();
@@ -104,7 +105,7 @@ SelectedStudent:any = {};
       });
   //  await this.GetTradeDDL();
     await this.GetCounsellingAllotmentList(1);
-
+  //await this.GetCounsellingAllotmentListExcel();
     await this.commonMasterService.GetDDLCounselling_Qualification()
       .then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -169,7 +170,7 @@ SelectedStudent:any = {};
   exportToExcel(): void {
     const unwantedColumns = [
       'TransctionStatusBtn', 'ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress',
-      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID'
+      'TotalRecords', 'DepartmentID', 'CourseType', 'AcademicYearID', 'EndTermID','degID','tradeId'
     ];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
@@ -437,6 +438,69 @@ SelectedStudent:any = {};
       }, 200);
     }
   }
+  async exportDetailsToExcel() {
+    const unwantedColumns = [
+      'CandidateID','TradeID',"OptionID"
+    ];
+    //this.GetCounsellingAllotmentListExcel();
+     
+      this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:0
+ 
+      this.loaderService.requestStarted();
+      await this.CounsellingMasterService.GetCounsellingAllotmentListExcel(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StudentDetailsList = data.Data; 
 
+        console.log(this.StudentDetailsList)
+      }, (error: any) => console.error(error))
+
+    if (!this.StudentDetailsList || this.StudentDetailsList.length === 0) {
+    console.warn('No data to export');
+    return;
+    }
+    // const filteredData = this.StudentDetailsList.map((item: any) => {
+    //   const filteredItem: any = {};
+    //   Object.keys(item).forEach(key => {
+    //     if (!unwantedColumns.includes(key)) {
+    //       filteredItem[key] = item[key];
+    //     }
+    //   });
+    //   return filteredItem;
+    // });
+      const filteredData = this.StudentDetailsList.map((item: any) => {
+    const filteredItem: any = {};
+    Object.keys(item).forEach(key => {
+      if (!unwantedColumns.includes(key)) {
+        filteredItem[key] = item[key];
+      }
+    });
+    return filteredItem;
+  });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'StudentDetailListData.xlsx');
+  }
+  async GetCounsellingAllotmentListExcel() { 
+    try { 
+      this.searchRequest.TradeID=this.searchRequest.TradeID>0?this.searchRequest.TradeID:0
+ 
+      this.loaderService.requestStarted();
+      await this.CounsellingMasterService.GetCounsellingAllotmentListExcel(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StudentDetailsList = data.Data; 
+
+        console.log(this.StudentDetailsList)
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
 
 }

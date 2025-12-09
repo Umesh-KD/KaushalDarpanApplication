@@ -109,7 +109,7 @@ export class AddRequestDteTradeEquipmentsMappingComponent {
       ddlCategoryId: ['', [DropdownValidators]],
       ddlInstituteID: [this.sSOLoginDataModel.InstituteID, [DropdownValidators]],
       txtRemarks: ['', Validators.required],
-      fileIndentPhoto: [null, Validators.required]
+      fileIndentPhoto: [null]
     });
     this.RequestFormGroup.get('ddlInstituteID')?.disable();
     this.CategoriesRequestFormGroup = this.formBuilder.group({

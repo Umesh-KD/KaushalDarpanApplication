@@ -1,24 +1,24 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
-import { StudentDashboardModel } from '../../../Models/StudentDashboardModel';
-import { StudentSearchModel } from '../../../Models/StudentSearchModel';
-import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
+import { StudentDashboardModel } from '../../../../Models/StudentDashboardModel';
+import { StudentSearchModel } from '../../../../Models/StudentSearchModel';
+import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { ToastrService } from 'ngx-toastr';
-import { LoaderService } from '../../../Services/Loader/loader.service';
+import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { StudentService } from '../../../Services/Student/student.service';
+import { StudentService } from '../../../../Services/Student/student.service';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EnumDepartment, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../Common/GlobalConstants';
-import { AppsettingService } from '../../../Common/appsetting.service';
-import { SweetAlert2 } from '../../../Common/SweetAlert2';
-import { StudentDetailsModel } from '../../../Models/StudentDetailsModel';
-import { EncryptionService } from '../../../Services/EncryptionService/encryption-service.service';
+import { EnumDepartment, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { AppsettingService } from '../../../../Common/appsetting.service';
+import { SweetAlert2 } from '../../../../Common/SweetAlert2';
+import { StudentDetailsModel } from '../../../../Models/StudentDetailsModel';
+import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
-import { LateralEntryQualificationModel, QualificationDataModel } from '../../../Models/ApplicationFormDataModel';
-import { BterApplicationForm } from '../../../Services/BterApplicationForm/bterApplication.service';
-import { UploadFileModel } from '../../../Models/UploadFileModel';
-import { DocumentDetailsService } from '../../../Common/document-details';
+import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
+import { LateralEntryQualificationModel, QualificationDataModel, StudentAdditionalQualificationModel } from '../../../../Models/ApplicationFormDataModel';
+import { BterApplicationForm } from '../../../../Services/BterApplicationForm/bterApplication.service';
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
+import { DocumentDetailsService } from '../../../../Common/document-details';
 
 
 @Component({
@@ -56,6 +56,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
   public StudantCourseList: StudentDetailsModel[] = [];
   public request = new LateralEntryQualificationModel();
+  public req=new StudentAdditionalQualificationModel();
 
   public _EnumDepartment = EnumDepartment;
   public IsShowDashboard: boolean = false;
@@ -548,15 +549,18 @@ export class UpdateStudentQualificationComponent implements OnInit {
   
         // this.request.ModifyBy = this.sSOLoginDataModel.UserID;
         // this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        let obj={
-          StudentID:this.sSOLoginDataModel.UserID,
-          OtherDoc:this.otherdoc,
-          QualificationList:this.qualificationList
-        }
+        // let obj={
+        //   StudentID:this.sSOLoginDataModel.UserID,
+        //   OtherDoc:this.otherdoc,
+        //   QualificationList:this.qualificationList
+        // }
   
+        this.req.StudentID=this.sSOLoginDataModel.StudentID;
+        this.req.OtherDoc=this.otherdoc;
+        this.req.QualificationList=this.qualificationList;
   
         //save
-        await this.ApplicationService.UpdateStudentQualificationDetails(obj)
+        await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             console.log(data);

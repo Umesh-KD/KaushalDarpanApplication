@@ -18,13 +18,29 @@
 
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
         <div *ngIf="sSOLoginDataModel.RoleID != _enumrole.ITIPrincipal &&  sSOLoginDataModel.RoleID != _enumrole.Principal_NCVT">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name</label>
-          <select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="CollegeID">
-            <option value="0">--All--</option>
-            <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
-          </select>
+          <!--<select class="form-select" id="StudentExamManagementTypeId" [(ngModel)]="CollegeID" [searchable]="true">
+    <option value="0">--All--</option>
+    <option *ngFor="let item of CompanyMasterList" value="{{item.ID}}">{{item.Name}}</option>
+  </select>-->
+
+
+        <ng-select [(ngModel)]="request.CollegeID"
+                    [clearable]="false">
+          <ng-option [value]="0" selected>--All--</ng-option>
+          @for (item of CompanyMasterList; track item.ID) {
+          <ng-option [value]="item.ID">{{item.Name}}</ng-option>
+          }
+        </ng-select>
+
         </div>
+
+       
+
 
 
         <div>
@@ -34,23 +50,22 @@
             <option value="2">Pending For Approval</option>
             <option value="3">Approved</option>
             <option value="4">Rejected</option>
-            <!--<option value="Suspend">Suspend</option>-->
           </select>
         </div>
         <!--<div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute</label>-->
         <!--<select class="form-select" id="StudentExamInstituteId" [(ngModel)]="InstituteID">
-          <option value="0">--All--</option>
-          <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
-        </select>-->
+    <option value="0">--All--</option>
+    <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">{{item.InstituteName}}</option>
+  </select>-->
         <!--<ng-select [(ngModel)]="InstituteID"
-                   formControlName="StudentExamInstituteId" [clearable]="false">
-          <ng-option [value]="0" selected>--All--</ng-option>
-          @for (item of InstituteMasterList; track item.InstituteID) {
-          <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
-          }
-        </ng-select>
-        </div>-->
+             formControlName="StudentExamInstituteId" [clearable]="false">
+    <ng-option [value]="0" selected>--All--</ng-option>
+    @for (item of InstituteMasterList; track item.InstituteID) {
+    <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+    }
+  </ng-select>
+  </div>-->
 
 
         <div>

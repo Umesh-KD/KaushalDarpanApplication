@@ -7,6 +7,8 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
+import { CollegesWiseExaminationRptSearchModel } from '../../../Models/CollegesWiseExaminationRptsModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 
 @Component({
     selector: 'app-college-wise-reports',
@@ -18,6 +20,8 @@ export class CollegeWiseReportsComponent implements OnInit {
 
   // Data binding for College Wise Reports
   public CollegesWiseReportsModellList: CollegesWiseReportsModel[] = [];
+  public searchRequest = new CollegesWiseExaminationRptSearchModel();
+  public sSOLoginDataModel = new SSOLoginDataModel(); 
 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
@@ -42,10 +46,14 @@ export class CollegeWiseReportsComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
-  constructor(private loaderService: LoaderService, private reportService: ReportService) { }
+  constructor(
+    private loaderService: LoaderService, 
+    private reportService: ReportService
+  ) { }
 
-  ngOnInit(): void {
-    this.GetAllData();
+  async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetAllData();
   }
 
   exportToExcel(): void {
@@ -75,7 +83,10 @@ export class CollegeWiseReportsComponent implements OnInit {
     this.CollegesWiseReportsModellList = [];
     try {
       this.loaderService.requestStarted();
-      await this.reportService.GetCollegesWiseReportsData()
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
+      await this.reportService.GetCollegesWiseReportsData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {

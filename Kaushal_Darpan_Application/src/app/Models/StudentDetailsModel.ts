@@ -45,6 +45,7 @@ export class StudentDetailsModel {
   public DownloadExaminationForm: boolean = false;
   public Status: number = 0;
   public ServiceType?: string = '';
+  public TransctionStatus?: string = '';
   public FormCommision: number = 0;
 }
 

@@ -126,5 +126,11 @@ export class StudentEnrollmentService {
       ).toPromise();
   }
 
-
+  public async GetRejectAtBter_StudentDetails_Enrollment(request: any) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/GetRejectAtBter_StudentDetails_Enrollment`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

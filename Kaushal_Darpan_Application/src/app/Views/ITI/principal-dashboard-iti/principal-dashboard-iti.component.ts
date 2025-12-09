@@ -54,8 +54,7 @@ export class PrincipalDashboardITIComponent implements OnInit
 
   //Data Load
   async ngOnInit() {
-    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT))
-    {
+    if ((this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || EnumRole.Principal_NCVT) && this.sSOLoginDataModel.SelectedValue == 1) {
       await this.CheckProfileStatus();
 
       if (this.sSOLoginDataModel.EmTypeId == 1) {
@@ -70,7 +69,7 @@ export class PrincipalDashboardITIComponent implements OnInit
           window.open("/ITIUpdateCollegeProfile?id=" + this.encryptionService.encryptData(this.sSOLoginDataModel.InstituteID), "_Self")
         }, 'OK', false);
 
-      } else if (this.isfeeLoaced==0) {
+      } else if (this.isfeeLoaced == 0) {
         this.sweetAlert2.Confirmation("Your Trade fee is not locked. Please lock your college trade fee?", async (result: any) => {
           window.open("/iti-fees-peryear-list", "_Self");
         }, 'OK', false);
@@ -90,6 +89,9 @@ export class PrincipalDashboardITIComponent implements OnInit
       else {
         await this.GetAllData()
       }
+    } else {
+      await this.GetAllData()
+
     }
   
   }

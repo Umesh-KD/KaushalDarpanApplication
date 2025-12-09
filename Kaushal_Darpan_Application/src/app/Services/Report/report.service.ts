@@ -32,6 +32,8 @@ import { MarksheetLetterSearchModel } from '../../Models/MarksheetLetterDataMode
 import { RelievingLetterSearchModel } from '../../Models/ITI/UserRequestModel';
 import { CenterAllocationSearchModel } from '../../Models/CenterAllocationDataModels';
 import { TabulationReportSearchModel } from '../../models/bter/TabulationReportModel';
+import { CollegesWiseExaminationRptSearchModel } from '../../Models/CollegesWiseExaminationRptsModel';
+
 
 
 
@@ -141,8 +143,8 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetCollegesWiseReportsData() {
-    return await this.http.get(this.APIUrl + "/GetCollegesWiseReports/", this.headersOptions)
+  public async GetCollegesWiseReportsData(request: CollegesWiseExaminationRptSearchModel) {
+    return await this.http.post(this.APIUrl + "/GetCollegesWiseReports", request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -268,8 +270,8 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetCollegesWiseExaminationReportsData() {
-    return await this.http.get(this.APIUrl + "/GetCollegesWiseExaminationReports/", this.headersOptions)
+  public async GetCollegesWiseExaminationReportsData(request: CollegesWiseExaminationRptSearchModel) {
+    return await this.http.post(this.APIUrl + "/GetCollegesWiseExaminationReports", request, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
@@ -961,6 +963,14 @@ export class ReportService {
       ).toPromise();
   }
 
+  public async DownloadITIStudentRollNumberBulk_CenterWise(request: DownloadnRollNoModel) {
+    const body = JSON.stringify(request);
+    return this.http.post(`${this.APIUrl}/DownloadITIStudentRollNumberBulk_CenterWise`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async DownloadITIStudentRollNumberBulk_CollegeWise(request: DownloadnRollNoModel) {
     const body = JSON.stringify(request);
     return this.http.post(`${this.APIUrl}/DownloadITIStudentRollNumber_CollageWise`, body, this.headersOptions)
@@ -968,6 +978,9 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+
 
   public async GetITIAddmissionStatisticsDataList(request: ITIAddmissionReportSearchModel) {
 

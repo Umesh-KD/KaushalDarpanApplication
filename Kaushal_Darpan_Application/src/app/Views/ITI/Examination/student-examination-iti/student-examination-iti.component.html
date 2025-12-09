@@ -1161,21 +1161,21 @@
         </div>
         <div class="card-body">
           <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5">Update Eligibility Status ({{attendence.StudentName}}) </b>
+            <b class="text-1xl-5">Update Eligibility Status ({{attendence.StudentName}},  {{this.EnrollmentNo}},  {{Year}}) </b>
             <b [style.color]="this.AttendancePercentage <= 80 ? 'red' : 'green'"> Attendence: {{this.AttendancePercentage}} %</b>
           </div>
 
           <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
             <div>
               <label>Attendence</label><span class="StarMarking">*</span>
-                                       <select class="form-select" formControlName="EligibilityStatus"
-                                               [(ngModel)]="attendence.EligibilityStatus" (change)="ddlChangeAttendence()">
-                                         <option value="0" selected>--Select Attendence--</option>
-                              
-                                         <option *ngFor="let item of EligibilityStatusData" [value]="item.ID">
-                                           {{item.Name}}
-                                         </option>
-                                       </select> 
+              <select class="form-select" formControlName="EligibilityStatus"
+                      [(ngModel)]="attendence.EligibilityStatus" (change)="ddlChangeAttendence()">
+                <option value="0" selected>--Select Attendence--</option>
+
+                <option *ngFor="let item of EligibilityStatusData" [value]="item.ID">
+                  {{item.Name}}
+                </option>
+              </select>
 
 
               <div *ngIf="isFormSubmitted && _AttendenceFormGroup.EligibilityStatus.errors"
@@ -1205,14 +1205,56 @@
                 </p>
               </div>
             </div>
+
+
+            <div>
+              <label for="txtUpdatedDate" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Challan No<span *ngIf="attendence.EligibilityStatus==238" class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" id="Remarks" name="Remarks"
+                     formControlName="ChallanNo"
+                     [(ngModel)]="attendence.ChallanNo" placeholder="Enter Challan No">
+
+              <div *ngIf="isFormSubmitted && _AttendenceFormGroup.ChallanNo.errors"
+                   class="text-danger">
+                <p *ngIf="_AttendenceFormGroup.ChallanNo.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+
+            </div>
+
+            <div>
+              <label for="txtUpdatedDate" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Challan Date<span *ngIf="attendence.EligibilityStatus==238" class="StarMarking">*</span>
+              </label>
+              <input type="date" class="form-input" id="Remarks" name="Remarks"
+                     formControlName="ChallanDate"
+                     [(ngModel)]="attendence.ChallanDate" placeholder="Enter Challan No">
+
+              <div *ngIf="isFormSubmitted && _AttendenceFormGroup.ChallanDate.errors"
+                   class="text-danger">
+                <p *ngIf="_AttendenceFormGroup.ChallanDate.errors.required">
+                  <i aria-hidden="true"></i>This field is required.!
+                </p>
+              </div>
+
+            </div>
+
+
+
             <div>
               <label for="txtUpdatedDate" class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Remarks<span *ngIf="attendence.EligibilityStatus==239" class="StarMarking">*</span>
               </label>
               <input type="text" class="form-input" id="Remarks" name="Remarks"
-                     formControlName="Remarks"                       
-                     [(ngModel)]="attendence.Remarks" placeholder="Enter Remarks">             
+                     formControlName="Remarks"
+                     [(ngModel)]="attendence.Remarks" placeholder="Enter Remarks">
             </div>
+
+
+
+
           </div>
         </div>
 

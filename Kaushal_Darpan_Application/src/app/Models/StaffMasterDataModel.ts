@@ -214,26 +214,28 @@ export class StaffHostelListModel {
 }
 
 export class BranchHODModel {
-  public ID: number = 0;
-  public Action: string = '';
-  public SSOID: string = '';
-  public UserID: number = 0;
-  public StreamID: number = 0;
-  public CollegeID: number = 0;
-  public DepartmentID: number = 0;
-  public ActiveStatus: boolean = false;
-  public DeleteStatus: boolean = false;
-  public CreatedBy: number = 0;
-  public ModifyBy: number = 0;
-  public DisplayName: string = '';
-  public FirstName: string = '';
-  public LastName: string = '';
-  public MailPersonal: string = '';
-  public MobileNo: string = '';
-  public RoleID: number = 0;
-  public EndTermID: number = 0;
-  public SemesterID: number = 0;
-  public StreamIDs: number[] = [];
+  public ID?: number = 0;
+  public Action?: string = '';
+  public SSOID?: string = '';
+  public UserID?: number = 0;
+  public StreamID?: number = 0;
+  public CollegeID?: number = 0;
+  public DepartmentID?: number = 0;
+  public ActiveStatus?: boolean = false;
+  public DeleteStatus?: boolean = false;
+  public CreatedBy?: number = 0;
+  public ModifyBy?: number = 0;
+  public DisplayName?: string = '';
+  public FirstName?: string = '';
+  public LastName?: string = '';
+  public MailPersonal?: string = '';
+  public MobileNo?: string = '';
+  public RoleID?: number = 0;
+  public Eng_NonEng?: number = 0;
+  public EndTermID?: number = 0;
+  public SemesterID?: number = 0;
+  public StreamIDs?: number[] = [];
+  public SemesterIDs?: any;
 }
 
 export class BranchHODApplyModel {
@@ -353,6 +355,8 @@ export class RosterDisplayTimeTableDataModel {
   public ModifyBy: number = 0;
   public SemesterID: number = 0;
   public CreatedDate?: Date;
+
+  public StaffID?:number=0;
 }
 
 

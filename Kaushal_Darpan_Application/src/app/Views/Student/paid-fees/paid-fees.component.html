@@ -51,7 +51,7 @@
             <td>{{row.TransctionDate}}</td>
             <td class="text-center">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" (click)="FeeReceipt(row)" title="Download Reciept"><i class="ti ti-download"></i></a>
+                <a href="javascript:void(0);" *ngIf="row.TransctionStatus=='SUCCESS'" (click)="FeeReceipt(row)" title="Download Reciept"><i class="ti ti-download"></i></a>
               </div>
             </td>
           </tr>

@@ -576,7 +576,7 @@ export class CommonFunctionService {
   public async UploadBTERDocument(file: any, model: UploadBTERFileModel | null = null) {
     //formdata
 
-     
+     debugger
 
     const formData = new FormData();
     formData.append("file", file);
@@ -591,6 +591,7 @@ export class CommonFunctionService {
     formData.append("EndTermID", model?.EndTermID ?? "0");
     formData.append("Eng_NonEng", model?.Eng_NonEng ?? "0");
     formData.append("IsCopy", model?.IsCopy?.toString() ?? "false");
+    formData.append("IsRejectAtBter", model?.IsCopy?.toString() ?? "false");
     formData.append("FileNameWithDynamicPath", model?.FileNameWithDynamicPath?.toString() ?? "");
     formData.append("FilePrefix", model?.FilePrefix?.toString() ?? "");
 
@@ -2052,5 +2053,23 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
+  public async GetDocumentDetails_RejectAtBter(request:any) {
+
+    return await this.http.post(this.APIUrl + '/GetDocumentDetails_RejectAtBter',request, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
   
+  public async GetCollegeTradeMaster(tradeSearchRequest: ItiTradeSearchModel) {
+    var body = JSON.stringify(tradeSearchRequest);
+    const headers = { 'content-type': 'application/json' }
+    return await this.http.post(this.APIUrl + '/GetCollegeTradeMaster', body, { 'headers': headers })
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
+
 }

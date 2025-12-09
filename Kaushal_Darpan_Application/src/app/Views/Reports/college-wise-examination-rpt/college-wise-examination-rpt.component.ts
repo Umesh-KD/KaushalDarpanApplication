@@ -2,11 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';  // Import MatSort
-import { CollegesWiseExaminationRptsModel } from '../../../Models/CollegesWiseExaminationRptsModel';
+import { CollegesWiseExaminationRptSearchModel, CollegesWiseExaminationRptsModel } from '../../../Models/CollegesWiseExaminationRptsModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 
 @Component({
   selector: 'app-college-wise-examination-rpt',
@@ -16,6 +17,8 @@ import * as XLSX from 'xlsx';
 })
 export class CollegeWiseExaminationRptComponent {
   public CollegeWiseExaminationRptModellList: CollegesWiseExaminationRptsModel[] = [];
+  public searchRequest = new CollegesWiseExaminationRptSearchModel();
+  public sSOLoginDataModel = new SSOLoginDataModel(); 
   // Columns to be displayed in the table
   displayedColumns: string[] = [
     'SrNo', 'CollegeName', 'TotalStudents',
@@ -37,10 +40,14 @@ export class CollegeWiseExaminationRptComponent {
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
-  constructor(private loaderService: LoaderService, private reportService: ReportService) { }
+  constructor(
+    private loaderService: LoaderService, 
+    private reportService: ReportService
+  ) { }
 
-  ngOnInit(): void {
-    this.GetAllData();
+  async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetAllData();
   }
 
 
@@ -72,7 +79,10 @@ export class CollegeWiseExaminationRptComponent {
     this.CollegeWiseExaminationRptModellList = [];
     try {
       this.loaderService.requestStarted();
-      await this.reportService.GetCollegesWiseExaminationReportsData()
+      this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.searchRequest.CourseTypeID = this.sSOLoginDataModel.Eng_NonEng
+      await this.reportService.GetCollegesWiseExaminationReportsData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.State === EnumStatus.Success) {

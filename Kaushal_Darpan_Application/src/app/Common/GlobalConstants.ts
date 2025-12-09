@@ -14,6 +14,7 @@ export class GlobalConstants {
   public static AllotmentReceipt: string = "Reports/AllotmentReciept";
   public static ITIPaperDownload: string = "ITIUpload";  // new added 19062025
   public static ITIAdmitCardFolder: string = "/AdmitCard"; 
+  public static RejectAtBter: string = "RejectAtBter"; 
 
   // regex
   public static AadhaarPattern: RegExp = /^[2-9]{1}[0-9]{11}$/;  // Aadhaar must start with 2-9 and be 12 digits long
@@ -197,7 +198,8 @@ export enum EnumRole {
   // ITI Placement Roles 
   ITI_Placement_TPO =229,
   ITI_Placement_Admin=233,
-
+  AdministrartiveStaff=235,
+  AdministrartiveStaff2=236
 
 }
 

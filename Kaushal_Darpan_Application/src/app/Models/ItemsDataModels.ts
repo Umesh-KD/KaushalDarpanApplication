@@ -28,6 +28,16 @@ export class ItemsDataModels {
   public abbreviation: string = '';
   public batchId: string = '';
   //public Unit: number = 0;
+  
+  public receiptbookfolio: string = '';
+  public issuedate: string = '';
+  public IndentNo: string ='';
+  public issuebookfoliodate: string = '';
+  public QuantityIssued: number | null = 0;
+  public QuantityBalance: number | null = null;
+  public BillFileName : string = '';
+  public BillFilePath : string = '';
+  
 }
 export class ItemsSearchModel {
   public DepartmentID: number = 0;
@@ -38,6 +48,7 @@ export class ItemsSearchModel {
   public CollegeId: number = 0;
   public OfficeID: number = 0;
   public StatusID: number = 0;
+  public ItemType: number = 0; 
 }
 
 export class ItemsDetailsModel {

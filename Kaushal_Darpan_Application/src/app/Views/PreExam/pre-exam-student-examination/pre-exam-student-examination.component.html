@@ -391,7 +391,15 @@
                   <i class="fa fa-file-o"></i>
                 </a>
                 <!--<a *ngIf="row.AdmitCard" download target="_blank" (click)="DownloadAdmitCard()" title="Download Admit Cards"><i class="ti ti-download"></i></a>-->
-                <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" (click)="DownloadAdmitCard(row)" title="Download Admit Cards"><i class="ti ti-download"></i></a>
+                <a *ngIf="row.AdmitCard && row.IsShowAdmitCard==1" 
+                  (click)="DownloadAdmitCard(row)" title="Download Admit Cards">
+                  <i class="ti ti-download"></i>
+                </a>
+
+                <a href="javascript:void(0);" *ngIf="row.status==_enumExamStudentStatus.RejectatBTER" class="bg-gray-200"
+                   title="Reject Student Details" (click)="OpenRejectViewModal(MyModel_ViewReject, row.StudentID,row.StudentExamID)">
+                  <i class="fa fa-file-o"></i>
+                </a>
 
               </div>
             </td>
@@ -1545,3 +1553,129 @@
   </div>
 </ng-template>
 <!--Modele Strat Back Subject-->
+
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Rejection Remark</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+              <div>
+                <label for="OrderNo" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  UO Note Number<span class="StarMarking">*</span>
+                </label>
+                <input type="text" class="form-input" id="OrderNo" name="OrderNo"
+                       formControlName="OrderNo" [(ngModel)]="requestAction.OrderNo">
+                <div *ngIf="IsFormActionSubmitted&&FormAction.OrderNo.errors" class="text-danger">
+                  <p *ngIf="FormAction.OrderNo.errors.required">
+                    <i aria-hidden="true"></i> This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label for="OrderDate" class="text-gray-800 text-sm font-medium inline-block mb-1">
+                  UO Note Date<span class="StarMarking">*</span>
+                </label>
+                <input type="date" class="form-input" id="OrderDate" name="OrderDate"
+                       formControlName="OrderDate" [(ngModel)]="requestAction.OrderDate">
+                <div *ngIf="IsFormActionSubmitted&&FormAction.OrderDate.errors" class="text-danger">
+                  <p *ngIf="FormAction.OrderDate.errors.required">
+                    <i aria-hidden="true"></i> This field is required .!
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="fileStudentPhoto">Upload Document</label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="fileStudentPhoto" type="file" (change)="UploadDocument_RejectAtBter($event,'rejectPhoto')">
+                  <label for="fileStudentPhoto">
+                    <span>Choose File</span>
+                    {{requestAction.Dis_SuspendDoc === '' ? 'No File Choosen' : requestAction.Dis_SuspendDoc}}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + requestAction.SuspendDocumnet}}"
+                       *ngIf="this.requestAction.SuspendDocumnet !='' " class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="grid 12xl:grid-cols-12 xl:grid-cols-12 lg:grid-cols-12 md:grid-cols-12 grid-cols-1 gap-3">
+              <div>
+                <label for="txtActionRemarks" class="text-gray-800 text-sm font-medium inline-block mb-1"> Remarks<span class="StarMarking">*</span></label>
+                <textarea type="text" class="form-input" id="txtActionRemarks" name="txtActionRemarks" formControlName="txtActionRemarks" [(ngModel)]="requestAction.ActionRemarks"></textarea>
+                <div *ngIf="IsFormActionSubmitted&&FormAction.txtActionRemarks.errors" class="text-danger">
+                  <p *ngIf="FormAction.txtActionRemarks.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="text-center">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="OnClickRejectStudent()">Reject</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #MyModel_ViewReject let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between  items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Reject Student Details</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="card-body">
+          <div class="mb-8">
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+
+              <div class="overflow-x-auto mt-3">
+                <table class="table table-border w-full table-auto" cellpadding="5">
+                  <tr>
+                    <td>UO Note Number</td>
+                    <td>{{rejectAtBter_StudentDetails.UONoteNumber}}</td>
+                  </tr>
+                  <tr>
+                    <td>UO Note Date</td>
+                    <td>{{rejectAtBter_StudentDetails.UONoteDate}}</td>
+                  </tr>
+                  <tr>
+                    <td>Remarks</td>
+                    <td>{{rejectAtBter_StudentDetails.RejectRemark}}</td>
+                  </tr>
+                  <tr>
+                    <td>Uploaded Document</td>
+                    <td>
+                      <a class="" target="_blank"
+                        href="{{appsettingConfig.StaticFileRootPathURL}}/{{rejectAtBter_StudentDetails.FolderName}}/{{appsettingConfig.DepartmentBterFolder}}/{{rejectAtBter_StudentDetails.RejectDocName}}">
+                        {{rejectAtBter_StudentDetails.Dis_RejectDocName}}
+                      </a>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

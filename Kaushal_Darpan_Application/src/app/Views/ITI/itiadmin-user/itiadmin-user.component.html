@@ -2,12 +2,12 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Admin User</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Staff Master</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Masters</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI Admin User</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">ITI Staff Master</a>
     </div>
   </div>
 </div>
@@ -75,11 +75,11 @@
       <table class="table table-border w-full" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th>Sr. No.</th>
+            <th>Sr.No.</th>
             <th class="text-left">
               Name
             </th>
-            <th class="text-left">SSO User Name</th>
+            <th class="text-left">SSO</th>
             <th class="text-left">Email</th>
             <th class="text-left">Mobile Number</th>
             <th class="text-center">Action</th>
@@ -87,7 +87,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let Admi of AdminUserList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
-            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{idx+1}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.SSOID}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Email}}</td>
@@ -124,9 +124,44 @@
               </div>
               <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
+
+                <div>
+
+                  <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    SSO ID<span class="StarMarking">*</span>
+                  </label>
+                  <div class="flex">
+                    <input type="text" class="form-input" id="txtSSOID" placeholder="Enter SSOID" name="txtSSOID" formControlName="txtSSOID"
+                           [(ngModel)]="request.SSOID">
+
+
+
+                    <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.SSOID)">GetDetails</button>
+
+                  </div>
+
+                  <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtSSOID.errors" class="text-danger">
+                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.required">
+                      <i aria-hidden="true"></i> This field is
+                      required .!
+                    </p>
+                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.pattern">
+                      <i aria-hidden="true"></i> Please Enter valid SSSOID .!
+                    </p>
+                  </div>
+
+
+
+                </div>
+
+
+
+
+
+
                 <div>
                   <label for="txtUserName" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                    ITI Admin User Name<span class="StarMarking">*</span>
+                    Name<span class="StarMarking">*</span>
                   </label>
                   <input type="text" class="form-input" id="txtUserName" placeholder="Name" name="txtUserName" formControlName="txtUserName"
                          [(ngModel)]="request.Name">
@@ -152,22 +187,7 @@
                   </div>
                 </div>
 
-                <div>
-                  <label for="txtSSOID" class="text-gray-800 text-sm font-medium inline-block mb-2">
-                    SSO ID<span class="StarMarking">*</span>
-                  </label>
-                  <input type="text" class="form-input" id="txtSSOID" placeholder="Enter SSOID" name="txtSSOID" formControlName="txtSSOID"
-                         [(ngModel)]="request.SSOID">
-                  <div *ngIf="isSubmitted&&_AdminUserFormGroup.txtSSOID.errors" class="text-danger">
-                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.required">
-                      <i aria-hidden="true"></i> This field is
-                      required .!
-                    </p>
-                    <p *ngIf="_AdminUserFormGroup.txtSSOID.errors.pattern">
-                      <i aria-hidden="true"></i> Please Enter valid SSSOID .!
-                    </p>
-                  </div>
-                </div>
+
 
                 <div>
                   <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
@@ -183,19 +203,33 @@
                   </div>
                 </div>
 
-              </div>
-              <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
-                <div class="text-center">
-                  <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">{{ IsView ? 'Update' : 'Submit' }}</button>
-                  <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">
-                    <i class="ti ti-refresh"></i> Reset
-                  </button>
+
+                <div class="">
+                  <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    Role<span class="StarMarking">*</span>
+                  </label>
+                  <select id="ddlConter" class="form-select" [(ngModel)]="request.RoleID" formControlName="RoleID">
+                    <option value="0">--Select--</option>
+                    <option value="{{_enumrole.AdministrartiveStaff}}">Administrative Staff</option>
+                    <option value="{{_enumrole.AdministrartiveStaff2}}">Administrative Staff 2</option>
+
+                  </select>
                 </div>
 
+
               </div>
+                <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3">
+                  <div class="text-center">
+                    <button type="button" class="btn bg-info text-white mt-6" id="btnSave" (click)="SaveData()">{{ IsView ? 'Update' : 'Submit' }}</button>
+                    <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControls()">
+                      <i class="ti ti-refresh"></i> Reset
+                    </button>
+                  </div>
+
+                </div>
 
 
-            </div>
+              </div>
           </div>
 
         </div>

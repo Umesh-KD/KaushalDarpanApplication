@@ -48,8 +48,8 @@
             <th rowspan="2"  style="font-size:24px; line-height:32px;">Res</th>
             <th style="font-size:24px; line-height:32px;" >Subject Codes</th>
             <th style="font-size:24px; line-height:32px;" rowspan="2" >Earn Credit/Total Credit</th>
-            <th style="font-size:24px; line-height:32px;" rowspan="2">SGPA</th>
             <th style="font-size:24px; line-height:32px;" rowspan="2">CGPA</th>
+            <th style="font-size:24px; line-height:32px;" rowspan="2">SGPA</th>
             <th style="font-size:24px; line-height:32px;" rowspan="2">Promoted/Not Promoted</th>
             <th style="font-size:24px; line-height:32px;" rowspan="2">Result Declaration Date</th>
           </tr>
@@ -73,9 +73,18 @@
             <td style="font-size:24px; line-height:32px;">{{item.SemesterName}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.Exam}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.RollNo}}</td>
-            <td style="font-size:24px; line-height:32px;">{{item.RegulationSubSem1}}{{item.RegulationSubSem2}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.STUFFPapersBack}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.StudentType}}</td>
             <td style="font-size:24px; line-height:32px;">
+              <span (mouseenter)="onHover(item)"
+                      (mouseleave)="onMouseLeave()"
+                      [matTooltip]="tooltipText()"
+                      [matTooltipDisabled]="!tooltipText()"
+                      matTooltipPosition="above">
+                  {{ item.STUFFPapers }}
+                </span>
+            </td>
+            <!-- <td style="font-size:24px; line-height:32px;">
               <ng-container *ngFor="let item of STUFFPapersList">
                 <span (mouseenter)="onHover(item)"
                       (mouseleave)="onMouseLeave()"
@@ -85,13 +94,13 @@
                   {{ item }}
                 </span>
               </ng-container>
-            </td>
+            </td> -->
             <td style="font-size:24px; line-height:32px;">
-              {{item.EarnedCreditsSem1}}{{item.EarnedCreditsSem2}}{{item.EarnedCreditsSem3}}{{item.EarnedCreditsSem4}}{{item.EarnedCreditsSem5}}{{item.EarnedCreditsSem6}}
+              {{item.EarnedCredit}}/{{item.TotalCredit}}
             </td>
             <td style="font-size:24px; line-height:32px;">{{item.TotalCGPA}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.TotalSGPA}}</td>
-            <td style="font-size:24px; line-height:32px;">{{item.IsPromoted === false?"Not-Registered":"Registered"}}</td>
+            <td style="font-size:24px; line-height:32px;">{{item.Promoted}}</td>
             <td style="font-size:24px; line-height:32px;">{{item.ResultDeclareDate | date}}</td>
           </tr>
 
