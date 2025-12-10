@@ -201,7 +201,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
        this.req.StudentQualificationID=0;
     }
    
-    // await this.GetStudentAdditionalQualiData();
+    await this.GetStudentAdditionalQualiDataByID();
 
     //else {
     //  //Redirect To Emitra Application
@@ -236,7 +236,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
   }
 
 
-    async GetStudentAdditionalQualiData() {
+    async GetStudentAdditionalQualiDataByID() {
     debugger
     try {
       // this.request.ModifyBy = this.sSOLoginDataModel.UserID
@@ -248,7 +248,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
         // this.request.StudentID=this.sSOLoginDataModel.UserID;
 
       this.loaderService.requestStarted();
-      await this.StudentdetailUpdateService.GetStudentAdditionalQualiData(this.req).then((data: any) => {
+      await this.StudentdetailUpdateService.GetStudentAdditionalQualiDataByID(this.req.StudentQualificationID, this.sSOLoginDataModel.UserID, this.req.DepartmentID, this.key).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.request=data.Data[0];
         this.request.EnrollmentNo=data.Data[0].EnrollmentNo;
@@ -257,9 +257,9 @@ export class UpdateStudentQualificationComponent implements OnInit {
         this.request.BoardID=data.Data[0].ClassBoard;
         this.request.Qualification=data.Data[0].Qualification;
         // this.request.otherQualification=data.Data[0].Qualification;
-        this.qualificationForm.patchValue({
-          txtotherQualification:data.Data[0].Qualification
-        })
+        // this.qualificationForm.patchValue({
+        //   txtotherQualification:data.Data[0].Qualification
+        // })
         this.request.PassingID=data.Data[0].PasssingYear;
        // await this.GetMarktYPEDDL();
         if(data.Data[0].ClassAgMaxMarks>10){
