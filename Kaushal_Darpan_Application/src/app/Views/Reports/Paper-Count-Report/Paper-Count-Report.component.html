@@ -51,7 +51,10 @@
             <i class="ti ti-refresh"></i>
             Reset
           </button>
-          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info mt-6 text-white">
+          <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info mt-6 text-white" *ngIf="this.requestData.Type != 2">
+            <i class="ti ti-download"></i> Export Excel
+          </a>
+          <a href="javascript:void(0);" (click)="exportToExcelTpye2()" class="btn bg-info mt-6 text-white" *ngIf="this.requestData.Type == 2">
             <i class="ti ti-download"></i> Export Excel
           </a>
         </div>
@@ -71,14 +74,16 @@
           <tr>
             <th>S.No</th>
             <th class="text-left" *ngFor="let column of selectedNames">{{ column }}</th>
+            <th *ngIf="this.requestData.Type == 2" class="text-left">Total</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of CustomizeReportCoulmnDataPush; let idx = index;">
+          <tr *ngFor="let row of GetfilteredList; let idx = index;">
             <td>{{ idx + 1 }}</td>
             <td *ngFor="let column of selectedNames">
               {{ row[column]}}
             </td>
+            <td *ngIf="this.requestData.Type == 2">{{ row['Total'] }}</td>
           </tr>
         </tbody>
       </table>
