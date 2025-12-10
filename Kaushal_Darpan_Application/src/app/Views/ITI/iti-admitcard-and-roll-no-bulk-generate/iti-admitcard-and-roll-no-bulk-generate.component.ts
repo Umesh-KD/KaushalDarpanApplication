@@ -64,7 +64,8 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
             const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + data.Data;
             try {
 
-              try {
+              try
+              {
                 this.swat.ConfirmationSuccess("Admit Card Generated Successfully", async (result: any) => {
                   if (result.isConfirmed) {
                     try {
