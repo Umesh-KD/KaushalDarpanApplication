@@ -34,7 +34,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Search By College:
           </label>
-          <select class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
+          <select [disabled]="SSOLoginDataModel.RoleID == 43" class="form-select" [(ngModel)]="searchRequest.CollegeID" (change)="getITITrade()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ListITICollegeByManagement" [value]="item.ID">{{item.Name}}</option>
           </select>

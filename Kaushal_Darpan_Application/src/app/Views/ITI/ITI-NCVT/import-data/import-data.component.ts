@@ -103,9 +103,15 @@ export class ImportDataComponent implements OnInit {
     this.searchRequest.FinancialYearID = this.SSOLoginDataModel.FinancialYearID;
     console.log(this.SSOLoginDataModel, "SSOLoginDataModel")
 
+   await this.getITICollege();
+    if (this.SSOLoginDataModel.RoleID == 43) {
+      this.searchRequest.CollegeID = this.SSOLoginDataModel.InstituteID
+    }
     await this.GetNCVTUPLOADED(1)
+
+   
     await this.MasterFilterList();
-    this.getITICollege();
+
     this.getITITrade();
     this.AllotmentChange();
   }

@@ -15,16 +15,48 @@
 
 <div class="card">
   <div class="card-body p-5">
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
-
-    <div class="flex justify-between flex-wrap mb-2">
-      <div class="Search">
-        <mat-form-field class="example-full-width">
-          <mat-label>Filter College Name</mat-label>
-          <input matInput (input)="applyFilter($event.target.value)" placeholder="Search..." />
-        </mat-form-field>
-      </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
     </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-3">
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute Name</label>
+        <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.InstituteID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of InstituteMasterList" [value]="item.InstituteID">
+            {{item.InstituteName}}
+          </option>
+        </select> 
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Branch Name</label>
+        <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.BranchID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of StreamMasterList;" [value]="item.StreamID">
+            {{item.StreamName}}
+          </option>
+        </select> 
+      </div>
+
+      <div>
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester</label>
+        <select class="form-select" id="SubjectID" [(ngModel)]="searchRequest.SemesterID">
+          <option value="0">--All--</option>
+          <option *ngFor="let item of SemesterMasterList;" [value]="item.SemesterID">
+            {{item.SemesterName}}
+          </option>
+        </select> 
+      </div>
+
+      <div>
+        <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
+        <button type="button" class="btn bg-danger text-white mt-6" (click)="ResetFilter()">Cancel</button>
+      </div>
+
+    </div>
+    
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex justify-between flex-wrap items-center">
@@ -60,34 +92,34 @@
       </ng-container>
 
       <!-- Pending To Submitted Column -->
-      <ng-container matColumnDef="PendingToSubmitted">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Verified </th>
+      <ng-container matColumnDef="SelectedForExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending for Verification </th>
         <td mat-cell *matCellDef="let element">
-          <a [routerLink]="'/studentexamination/' + 32 +'/'+ element.InstituteID">{{element.PendingToSubmitted}}</a>
+          <a [routerLink]="'/studentexamination/' + 32 +'/'+ element.InstituteID">{{element.SelectedForExamination}}</a>
         </td>
       </ng-container>
 
       <!-- Pending To Fee Paid Column -->
-      <ng-container matColumnDef="PendingToFeePaid">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Fee Paid </th>
+      <ng-container matColumnDef="VerifiedForExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending for Fee Paid </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="'/preexamstudent/' + 34 +'/'+ element.InstituteID">{{ element.PendingToFeePaid }}</a>-->
-          <a [routerLink]="'/studentexamination/' + 34 +'/'+ element.InstituteID">{{element.PendingToFeePaid}}</a>
+          <a [routerLink]="'/studentexamination/' + 34 +'/'+ element.InstituteID">{{element.VerifiedForExamination}}</a>
         </td>
       </ng-container>
 
       <!-- Pending To Examination Column -->
-      <ng-container matColumnDef="PendingToExamination">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending To Examination </th>
+      <ng-container matColumnDef="ExaminationFeePaid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending for Eligible </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="'/preexamstudent/' + 32 +'/'+ element.InstituteID">{{ element.PendingToExamination }}</a>-->
-          <a [routerLink]="'/studentexamination/' + 10 +'/'+ element.InstituteID">{{element.PendingToExamination}}</a>
+          <a [routerLink]="'/studentexamination/' + 10 +'/'+ element.InstituteID">{{element.ExaminationFeePaid}}</a>
         </td>
       </ng-container>
 
        <!--Eligible For Examination Column--> 
       <ng-container matColumnDef="EligibleForExamination">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Eligible For Examination </th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Eligible for Examination </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="'/preexamstudent/' + 13 +'/'+ element.InstituteID">{{ element.EligibleForExamination}}</a>-->
           <a [routerLink]="'/studentexamination/' + 13 +'/'+ element.InstituteID">{{element.EligibleForExamination}}</a>

@@ -8,6 +8,7 @@ import { ReportService } from '../../../Services/Report/report.service';
 import { EnumStatus } from '../../../Common/GlobalConstants';
 import * as XLSX from 'xlsx';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 
 @Component({
   selector: 'app-college-wise-examination-rpt',
@@ -22,8 +23,8 @@ export class CollegeWiseExaminationRptComponent {
   // Columns to be displayed in the table
   displayedColumns: string[] = [
     'SrNo', 'CollegeName', 'TotalStudents',
-    'PendingToSubmitted', 'PendingToFeePaid',
-    'PendingToExamination', 'EligibleForExamination', 'FirstYearExamination', 'SecondYearExamination'
+    'SelectedForExamination', 'VerifiedForExamination',
+    'ExaminationFeePaid', 'EligibleForExamination', 'FirstYearExamination', 'SecondYearExamination'
   ];
   dataSource: MatTableDataSource<CollegesWiseExaminationRptsModel> = new MatTableDataSource();
 
@@ -39,15 +40,54 @@ export class CollegeWiseExaminationRptComponent {
   Table_SearchText: string = '';
 
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
+  public InstituteMasterList: any = [];
+  public StreamMasterList: any = [];
+  public SemesterMasterList: any = [];
 
   constructor(
     private loaderService: LoaderService, 
-    private reportService: ReportService
+    private reportService: ReportService,
+    private commonMasterService: CommonFunctionService,
   ) { }
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.GetMasterData();
     await this.GetAllData();
+  }
+
+  async GetMasterData() {
+    //debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          this.InstituteMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      await this.commonMasterService.StreamMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StreamMasterList = data['Data'];
+          this.StreamMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+
+      await this.commonMasterService.SemesterMaster(1)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.SemesterMasterList = data['Data'];
+        }, (error: any) => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 
@@ -131,6 +171,11 @@ export class CollegeWiseExaminationRptComponent {
   updatePaginationIndexes(): void {
     this.startInTableIndex = (this.currentPage - 1) * this.pageSize + 1;
     this.endInTableIndex = Math.min(this.currentPage * this.pageSize, this.totalRecords);
+  }
+
+  async ResetFilter() {
+    this.searchRequest = new CollegesWiseExaminationRptSearchModel();
+    await this.GetAllData();
   }
 
 }
