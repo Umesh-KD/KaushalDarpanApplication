@@ -250,12 +250,17 @@ export class UpdateStudentQualificationComponent implements OnInit {
       this.loaderService.requestStarted();
       await this.StudentdetailUpdateService.GetStudentAdditionalQualiDataByID(this.req.StudentQualificationID, this.sSOLoginDataModel.UserID, this.req.DepartmentID, this.key).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        this.request=data.Data[0];
+        // this.request=data.Data[0];
         this.request.EnrollmentNo=data.Data[0].EnrollmentNo;
 
          this.loadDropdownData('Board');
         this.request.BoardID=data.Data[0].ClassBoard;
-        this.request.Qualification=data.Data[0].Qualification;
+        if(data.Data[0].OtherQualification==1){
+          this.request.Qualification="1";
+          this.isOtherQuali=true;
+          this.otherQualification=data.Data[0].Qualification;
+        }
+       // this.request.Qualification=data.Data[0].Qualification;
         // this.request.otherQualification=data.Data[0].Qualification;
         // this.qualificationForm.patchValue({
         //   txtotherQualification:data.Data[0].Qualification
@@ -560,6 +565,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
     if(this.request.Qualification=="1"){
       this.request.Qualification=this.otherQualification;
+      this.request.OtherQualification=1;
     }
 
     // if(this.isTPO){
@@ -740,7 +746,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
   }
 
 
-  OnQulaificationChange(){
+  async OnQulaificationChange(){
     debugger
     // isOtherQuali
     if(this.request.Qualification =="1"){

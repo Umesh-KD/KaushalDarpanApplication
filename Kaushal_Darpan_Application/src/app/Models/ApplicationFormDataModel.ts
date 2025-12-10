@@ -74,6 +74,7 @@ export class StudentAdditionalQualificationDataModel {
   public OtherDoc?:string=''
 
   public EnrollmentNo?: string = ''
+  public OtherQualification:number=0
 }
 
 export class StudentAdditionalQualificationModel{
