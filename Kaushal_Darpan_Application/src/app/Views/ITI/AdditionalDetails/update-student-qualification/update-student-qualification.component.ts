@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { StudentService } from '../../../../Services/Student/student.service';
+import {StudentdetailUpdateService} from '../../../../Services/StudentDetailUpdate/studentdetail-update.service'
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EnumDepartment, EnumRole, EnumStatus, EnumUserType, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { AppsettingService } from '../../../../Common/appsetting.service';
@@ -15,7 +16,7 @@ import { StudentDetailsModel } from '../../../../Models/StudentDetailsModel';
 import { EncryptionService } from '../../../../Services/EncryptionService/encryption-service.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
-import { LateralEntryQualificationModel, QualificationDataModel, StudentAdditionalQualificationModel } from '../../../../Models/ApplicationFormDataModel';
+import { StudentAdditionalQualificationDataModel, QualificationDataModel, StudentAdditionalQualificationModel } from '../../../../Models/ApplicationFormDataModel';
 import { BterApplicationForm } from '../../../../Services/BterApplicationForm/bterApplication.service';
 import { UploadFileModel } from '../../../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../../../Common/document-details';
@@ -39,7 +40,10 @@ export class UpdateStudentQualificationComponent implements OnInit {
   public isLoading: boolean = false;
   public isSubmitted: boolean = false;
   public isOtherQuali:boolean=false;
+  public isTPO:boolean=false;
 
+  public key:number=0;
+  public ID:number=0;
   public UserID: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new StudentSearchModel();
@@ -48,14 +52,14 @@ export class UpdateStudentQualificationComponent implements OnInit {
   public BoardList: any = [];
   public marktypelist:any=[];
 
-  public qualificationList:LateralEntryQualificationModel[]=[];
+  public qualificationList:StudentAdditionalQualificationDataModel[]=[];
 
   public otherQualification:string='';
   public otherdoc:string='';
 
 
   public StudantCourseList: StudentDetailsModel[] = [];
-  public request = new LateralEntryQualificationModel();
+  public request = new StudentAdditionalQualificationDataModel();
   public req=new StudentAdditionalQualificationModel();
 
   public _EnumDepartment = EnumDepartment;
@@ -63,6 +67,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
   public isqualificationformSubmitted:boolean=false;
 
  public qualificationForm!: FormGroup;
+   public _EnumRole = EnumRole;
   
   //Profile View Variables Pawan
   public ProfileLists: any = {};
@@ -89,6 +94,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
     private route: Router,
     private ApplicationService: BterApplicationForm,
     private documentDetailsService: DocumentDetailsService, 
+    private StudentdetailUpdateService:StudentdetailUpdateService,
   ) { }
   
   async ngOnInit()
@@ -106,9 +112,9 @@ export class UpdateStudentQualificationComponent implements OnInit {
     //}, 'OK');
     //return;
 
-
     this.qualificationForm = this.formBuilder.group(
       {
+         EnrollmentNo: [''],
         txtotherQualification:[''],
         ddlqualification: ['',Validators.required],
         txtAggregateMaximumMarks: ['', [DropdownValidators]],
@@ -120,7 +126,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
       });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-    if (this.sSOLoginDataModel.UserType == EnumUserType.STUDENT || this.sSOLoginDataModel.UserType == EnumUserType.CITIZEN)
+    if (this.sSOLoginDataModel.UserType == EnumUserType.STUDENT || this.sSOLoginDataModel.UserType == EnumUserType.CITIZEN )
     {
 
       if (this.sSOLoginDataModel.StudentID == 0)
@@ -167,6 +173,36 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
   
     }
+    if(this.sSOLoginDataModel.RoleID==EnumRole.ITI_Placement_TPO){
+        this.isTPO=true;
+         this.sSOLoginDataModel.StudentID = this.StudantCourseList[0]?.StudentID;
+          this.sSOLoginDataModel.DepartmentID = this.StudantCourseList[0]?.DepartmentID;
+          localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel))
+          this.IsShowDashboard = true;
+          //changes 
+          await this.calculatePercentage();
+          await this.GetMarktYPEDDL();
+          await this.GetPassingYearDDL();
+          // await this.GetStudentDashboard();
+          // await this.GetProfileDashboard();
+          await this.loadDropdownData('Board');     
+    }
+
+     this.key = Number(this.router.snapshot.queryParamMap.get('key')?.toString());//student list key
+
+   //  this.key = Number(this.router.snapshot.queryParamMap.get('key')?.toString());//student list key
+    this.ID = Number(this.router.snapshot.queryParamMap.get('ID')?.toString());//student list key
+   debugger
+   
+    if(this.ID!=0 && this.ID!=null && !Number.isNaN(this.ID)){
+       this.req.StudentQualificationID=this.ID;
+    }
+    else{
+       this.req.StudentQualificationID=0;
+    }
+   
+    // await this.GetStudentAdditionalQualiData();
+
     //else {
     //  //Redirect To Emitra Application
     //  window.open('/emitradashboard', "_self");
@@ -199,6 +235,56 @@ export class UpdateStudentQualificationComponent implements OnInit {
     });
   }
 
+
+    async GetStudentAdditionalQualiData() {
+    debugger
+    try {
+      // this.request.ModifyBy = this.sSOLoginDataModel.UserID
+        this.req.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+        if(this._EnumRole.Student== this.sSOLoginDataModel.RoleID){
+            this.req.StudentID = this.sSOLoginDataModel.StudentID;
+        }
+        this.req.InstituteID=this.sSOLoginDataModel.InstituteID;
+        // this.request.StudentID=this.sSOLoginDataModel.UserID;
+
+      this.loaderService.requestStarted();
+      await this.StudentdetailUpdateService.GetStudentAdditionalQualiData(this.req).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.request=data.Data[0];
+        this.request.EnrollmentNo=data.Data[0].EnrollmentNo;
+
+         this.loadDropdownData('Board');
+        this.request.BoardID=data.Data[0].ClassBoard;
+        this.request.Qualification=data.Data[0].Qualification;
+        // this.request.otherQualification=data.Data[0].Qualification;
+        this.qualificationForm.patchValue({
+          txtotherQualification:data.Data[0].Qualification
+        })
+        this.request.PassingID=data.Data[0].PasssingYear;
+       // await this.GetMarktYPEDDL();
+        if(data.Data[0].ClassAgMaxMarks>10){
+          this.request.MarkType=83;
+        }
+        else{
+          this.request.MarkType=84;
+        }
+        this.request.AggMaxMark=data.Data[0].ClassAgMaxMarks;
+        this.request.AggObtMark=data.Data[0].ClassAgObtMarks;
+        this.request.OtherDoc=data.Data[0].OtherDoc;
+         this.calculatePercentage();
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+  
+  
   
   async GetPassingYearDDL() {
     try {
@@ -453,6 +539,20 @@ export class UpdateStudentQualificationComponent implements OnInit {
   async AddMoreDetails() {
       debugger
     this.isqualificationformSubmitted = true;
+
+     // Add a condition to add a required validator for EnrollmentNo based on RoleID
+        if (this.isTPO) {
+          // If the role is not 'Student', make EnrollmentNo required
+          this.qualificationForm.get('EnrollmentNo')?.setValidators([Validators.required]);
+        } else {
+          // If the role is 'Student', make EnrollmentNo optional
+          this.qualificationForm.get('EnrollmentNo')?.clearValidators();
+        }
+
+            // Revalidate the form control after changing validators
+        this.qualificationForm.get('EnrollmentNo')?.updateValueAndValidity();
+
+
     if(this.qualificationForm.invalid) {
       this.toastr.error("Please fill all the required fields of Qualification Form")
       return;
@@ -462,6 +562,9 @@ export class UpdateStudentQualificationComponent implements OnInit {
       this.request.Qualification=this.otherQualification;
     }
 
+    // if(this.isTPO){
+    //       this.req.QualificationList[0].RollNumber='none';
+    // }
     const personExists = this.qualificationList.some(person =>
       person.Qualification === this.request.Qualification
 
@@ -470,7 +573,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
 
     if (!personExists) {
       this.qualificationList.push(this.request);
-      this.request = new LateralEntryQualificationModel();
+      this.request = new StudentAdditionalQualificationDataModel();
       this.isqualificationformSubmitted = false;
     } else {
       this.toastr.error("Qualification already exists with the same Field");
@@ -558,7 +661,16 @@ export class UpdateStudentQualificationComponent implements OnInit {
         this.req.StudentID=this.sSOLoginDataModel.StudentID;
         this.req.OtherDoc=this.otherdoc;
         this.req.QualificationList=this.qualificationList;
-  
+        this.req.DepartmentID=this.sSOLoginDataModel.DepartmentID;
+        if(this.isTPO){
+          this.req.Modifyby = this.sSOLoginDataModel.UserID;
+        }
+        else{
+          this.req.Modifyby = this.sSOLoginDataModel.StudentID;
+        }
+        this.req.InstituteID=this.sSOLoginDataModel.InstituteID;
+
+       
         //save
         await this.ApplicationService.UpdateStudentQualificationDetails(this.req)
           .then((data: any) => {
@@ -576,6 +688,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
             else {
               this.toastr.error(this.ErrorMessage)
             }
+             this.route.navigateByUrl('/student-additional-qualification');
   
           }, (error: any) => console.error(error)
           );
@@ -649,7 +762,7 @@ export class UpdateStudentQualificationComponent implements OnInit {
     this.request.StateID = 0;
     this.request.BoardID = 0;
     this.request.PassingID = '';
-    this.request.RollNumber = '';
+    
     this.request.MarkType = 0;
     this.request.AggMaxMark = 0;
     this.request.Percentage = '';
@@ -661,6 +774,15 @@ export class UpdateStudentQualificationComponent implements OnInit {
     this.qualificationList=[];
   }
 
+
+    async Back() {
+    if (this.key == 1) {
+      this.routers.navigate(['/student-additional-qualification'])
+    }
+    else{
+      this.routers.navigate(['/student-additional-qualification'])
+    }
+  }
 
   
 

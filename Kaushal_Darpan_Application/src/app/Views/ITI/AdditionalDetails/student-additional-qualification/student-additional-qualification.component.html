@@ -19,7 +19,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <a [routerLink]="'/add-student-employement'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <a [routerLink]="'/update-student-qualification'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <!-- <div>
@@ -82,6 +82,8 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
               <th class="text-left">Sr No</th>
+              <th class="text-left">EnrollmentNo</th>
+              <th class="text-left">Student's Name</th>
               <th class="text-left">Board's Name</th>
               <th class="text-left">Qualification</th>
               <th class="text-left">Agg. Max Marks</th>
@@ -96,6 +98,8 @@
         <tbody>
           <tr *ngFor="let row of StudAdditionalQualificationList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.EnrollmentNo}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StudentName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.boardname}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.Qualification}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ClassAgMaxMarks}}</td>
@@ -105,8 +109,8 @@
            
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a [routerLink]="'/update-student-qualification'" [queryParams]="{ID:row.StudentID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.StudentID)">
+                <a [routerLink]="'/update-student-qualification'" [queryParams]="{ID:row.StudentQualificationID, key:2}" title="Edit"><i class="ti ti-pencil"></i></a>
+                <a href="javascript:void(0);" title="Delete"  (click)="DeleteById(row.StudentQualificationID)">
                   <i class="ti ti-trash"></i>
                 </a>
                 <!-- <a *ngIf="(company.Status=='Approved')" [routerLink]="'/AddCompany'" [queryParams]="{CompanyID :company.ID,key:2,flag:1}" title="View Company Details">
