@@ -237,8 +237,9 @@ export class MasterLayoutComponent implements OnInit {
   }
 
   async ChangeRolenFY() {
+    //debugger
     // set from session
-    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.RoleID = this.sSOLoginDataModel.RoleID;
     this.FinancialYearID = this.sSOLoginDataModel.FinancialYearID;
@@ -249,6 +250,7 @@ export class MasterLayoutComponent implements OnInit {
     await this.GetUserRoleList();
     await this.GetAcedmicYearList();
     await this.LoadMenu(this.sSOLoginDataModel.UserID, this.sSOLoginDataModel.RoleID);
+
     //call google translation
     if (isPlatformBrowser(this.platformId)) {
       if (typeof window.LoadData === 'function') {
@@ -256,15 +258,17 @@ export class MasterLayoutComponent implements OnInit {
 
       }
     }
+
     await this.ChangeCSS();
 
 
     // Force reload route, no browser refresh
-    //this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    //this.router.onSameUrlNavigation = 'reload';
-    //this.router.navigate(['/dashboard']);
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate(['/dashboard']);
 
-    this.reloadRoute()
+    // comment bcz other page open on different role
+    //this.reloadRoute()
 
     //this.router.navigate(['/dashboard']).then(() => {
     //  window.location.reload();
