@@ -108,6 +108,14 @@ export class StudentdetailUpdateService {
       ).toPromise();
   }
 
+
+    public async GetStudentAdditionalQualiDataByID(ID: number, userId: number, DepartmentID: number = 0, key: number = 0) {
+    var body = JSON.stringify({ "AID": ID, "ModifyBy": userId });
+    return await this.http.post(`${this.APIUrl}/GetStudentAdditionalQualiDataByID/${ID}/${userId}/${DepartmentID}/${key}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
     
 
 }

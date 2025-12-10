@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import * as XLSX from 'xlsx';
 import { StudentExamDetails } from '../../../Models/DashboardCardModel';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { EnumRole } from '../../../Common/GlobalConstants';
+import { enumExamStudentStatus, EnumRole } from '../../../Common/GlobalConstants';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { ReportService } from '../../../Services/Report/report.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -24,7 +24,7 @@ export class ItiStudentExamReportsComponent
   ErrorMessage: string = '';
   State: boolean = false;
   viewAdminDashboardList: StudentExamDetails[] = [];
-  displayedColumns: string[] = ['SrNo', 'SemesterName','StudentName', 'EnrollmentNo','FatherName', 'InstituteName', 'BranchName'];
+  displayedColumns: string[] = ['SrNo', 'SemesterName', 'StudentName', 'EnrollmentNo', 'FatherName', 'InstituteName', 'BranchName'];
   dataSource: MatTableDataSource<StudentExamDetails> = new MatTableDataSource();
   totalRecords: number = 0;
   pageSize: number = 10;
@@ -41,7 +41,7 @@ export class ItiStudentExamReportsComponent
   Table_SearchText: string = '';
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
   filterForm!: FormGroup;
-
+  ReportNameTitle: string = 'Student for Examination';
   constructor(
     private AdminReportsService: ReportService,
     private loaderService: LoaderService,
@@ -55,8 +55,13 @@ export class ItiStudentExamReportsComponent
       this.id = params.get('id');
       this.instituteId = params.get('instituteId');
     });
-    
 
+    if (this.id == enumExamStudentStatus.EligibleForExamination)
+    {
+
+      this.displayedColumns= ['SrNo', 'SemesterName', 'StudentName', 'EnrollmentNo', 'FatherName', 'InstituteName', 'BranchName', 'ChallanNo', 'ChallanDate', 'FAMarks', 'Remark'];
+      this.ReportNameTitle = "Eligible For Examination"
+    }
 
     this.GetAllData();
   }
@@ -140,10 +145,17 @@ export class ItiStudentExamReportsComponent
     const y = now.getFullYear();
     const m = String(now.getMonth() + 1).padStart(2, '0');
     const d = String(now.getDate()).padStart(2, '0');
-    XLSX.writeFile(wb, `Student_Examination_Report_${y}-${m}-${d}.xlsx`);
+
+    var fileName ="Student_Examination_Report"
+    if (this.id == enumExamStudentStatus.EligibleForExamination)
+    {
+      fileName ="Eligible_For_Examination_Report"
+    }
+    else if (this.id == enumExamStudentStatus.Addimited) {
+      fileName = "Total_Examination_Student_Report"
+    }
+    XLSX.writeFile(wb, `${fileName}_${y}-${m}-${d}.xlsx`);
   }
-
-
   async GetAllData() {
     try {
       this.loaderService.requestStarted();

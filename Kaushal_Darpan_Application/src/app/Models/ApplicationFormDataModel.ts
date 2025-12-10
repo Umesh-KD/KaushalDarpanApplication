@@ -33,7 +33,7 @@ export class LateralEntryQualificationModel {
   public BoardID: number = 0
   public BoardName: string = ''
   public PassingID: string = ''
-  public RollNumber: string = ''
+  public RollNumber?: string = ''
   public MarkType: number = 0
   public AggMaxMark: number = 0
   public Percentage: string = ''
@@ -47,16 +47,44 @@ export class LateralEntryQualificationModel {
   public BranchID?: number = 0
   public CoreBranchID?: number = 0
   public OtherDoc?:string=''
+
+  public EnrollmentNo?: string = ''
 }
 
 
+export class StudentAdditionalQualificationDataModel {
+  public  ApplicationQualificationId:number=0
+  public Qualification: string = ''
+  public StateID: number = 0
+  public BoardID: number = 0
+  public BoardName: string = ''
+  public PassingID: string = ''
+  public MarkType: number = 0
+  public AggMaxMark: number = 0
+  public Percentage: string = ''
+  public ClassSubject: string = ''
+  public AggObtMark: number = 0
+  public BoardStateID: number = 0
+  public BoardExamID: number = 0
+  public CourseID: number = 0
+  // public SubjectID: Lateralsubject[]=[]
+
+  public BranchID?: number = 0
+  public CoreBranchID?: number = 0
+  public OtherDoc?:string=''
+
+  public EnrollmentNo?: string = ''
+}
+
 export class StudentAdditionalQualificationModel{
+  public Modifyby:number=0
+  public StudentQualificationID:number=0;
   public DepartmentID:number=0
   public EnrollmentNo:string=''
   public InstituteID:number=0
   public StudentID:number=0
   public OtherDoc?:string=''
-  public QualificationList:LateralEntryQualificationModel[]=[]
+  public QualificationList:StudentAdditionalQualificationDataModel[]=[]
 }
 
 

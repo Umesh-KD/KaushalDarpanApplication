@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { EnumStatus, GlobalConstants } from '../../../Common/GlobalConstants';
@@ -26,19 +26,20 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
   constructor(private loaderService: LoaderService, private getAdmitCardService: GetAdmitCardService, private activatedRoute: ActivatedRoute,
     private reportService: ReportService, private toastrService: ToastrService, private appsettingConfig: AppsettingService, private ITITimeTableService: ITITimeTableService,
     private swat: SweetAlert2,
-    private http: HttpClient) { }
+    private http: HttpClient, private route: Router) { }
   sSOLoginDataModel = new SSOLoginDataModel();
   public ITITimeTableList: any = [];
   public SSOLoginDataModel = new SSOLoginDataModel()
   public GenerateAdmitCardsearchRequest = new GenerateAdmitCardSearchModel();
   public GenerateRollNosearchRequest = new DownloadnRollNoModel();
   public searchRequest = new ITITimeTableSearchModel();
-  public Status: number = 0
+  public Status: number = 0;
 
 
 
-  async ngOnInit()
-  {
+
+
+  async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetITITimeTableList()
   }
@@ -50,7 +51,7 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
       return
     }
     try {
-       //this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+      //this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
       this.loaderService.requestStarted();
       this.GenerateAdmitCardsearchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
       this.GenerateAdmitCardsearchRequest.DepartmentID = 2
@@ -62,8 +63,24 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
             this.loaderService.requestEnded();
             const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + data.Data;
             try {
-              window.open(fileUrl, '_blank');
-             // setTimeout(function () { window.location.reload(); }, 200)
+
+              try
+              {
+                this.swat.ConfirmationSuccess("Admit Card Generated Successfully", async (result: any) => {
+                  if (result.isConfirmed) {
+                    try {
+                      this.route.navigate(['/itiAdmitCard']);
+                    }
+                    catch (ex) {
+                      console.log(ex)
+                    }
+                  }
+                }, 'OK', false);
+              }
+              catch (ex) {
+                console.log(ex)
+                this.loaderService.requestEnded();
+              }
             }
             catch (ex) {
               console.log(ex)
@@ -71,7 +88,7 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
             }
           }
           else {
-            this.toastrService.error(data.ErrorMessage)
+            this.toastrService.error('Something went wrong')
             //    data.ErrorMessage
             this.loaderService.requestEnded();
           }
@@ -102,14 +119,21 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
             this.loaderService.requestEnded();
             const fileUrl = this.appsettingConfig.StaticFileRootPathURL + "/" + GlobalConstants.ReportsFolder + "/" + data.Data;
             try {
-              window.open(fileUrl, '_blank');
-              //setTimeout(function () { window.location.reload(); }, 200)
+              this.swat.ConfirmationSuccess("Roll List Generated Successfully", async (result: any) => {
+                if (result.isConfirmed) {
+                  try {
+                    this.route.navigate(['/itiRollList']);
+                  }
+                  catch (ex) {
+                    console.log(ex)
+                  }
+                }
+              },'OK',false);
             }
             catch (ex) {
               console.log(ex)
               this.loaderService.requestEnded();
             }
-
           }
           else {
             this.toastrService.error(data.ErrorMessage)
@@ -145,7 +169,7 @@ export class ITIAdmitcardAndRollNoBulkGenerateComponent {
       await this.ITITimeTableService.GetAllData(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-         // this.ITITimeTableList = data['Data'];
+          // this.ITITimeTableList = data['Data'];
           //this.SearchTimeTableList = [...data['Data']];
           this.Status = data['Data'][0]['Status']
 

@@ -3,9 +3,11 @@
   <div>
     <h4 class="text-slate-900 text-lg font-medium mb-2">Student for Examination</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Trainee</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Student for Examination</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">
+        {{ReportNameTitle}}
+      </a>
     </div>
   </div>
 </div>
@@ -93,7 +95,27 @@
           <td mat-cell *matCellDef="let element">{{ element.BranchName }}</td>
         </ng-container>
 
+        <ng-container matColumnDef="ChallanNo" *ngIf="this.id==13">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ChallanNo</th>
+          <td mat-cell *matCellDef="let element">{{ element.ChallanNo }}</td>
+        </ng-container>
 
+
+        <ng-container matColumnDef="ChallanDate" *ngIf="this.id==13">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ChallanDate</th>
+          <td mat-cell *matCellDef="let element">{{ element.ChallanDate }}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="FAMarks" *ngIf="this.id==13">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>FAMarks</th>
+          <td mat-cell *matCellDef="let element">{{ element.FAMarks }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Remark" *ngIf="this.id==13">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Remark</th>
+          <td mat-cell *matCellDef="let element">{{ element.Remark }}</td>
+        </ng-container>
 
         <!-- Table Header and Rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
