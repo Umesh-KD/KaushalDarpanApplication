@@ -476,7 +476,8 @@ export class PreviewFormComponent {
                 this.Message = data['Message'];
                 this.ErrorMessage = data['ErrorMessage'];
                 this.PDFURL = data['PDFURL'];
-                if (data.State == EnumStatus.Success) {
+                if (data.State == EnumStatus.Success)
+                {
                   this.Swal2.ConfirmationSuccess("Thank you! Your application payment was successful", async (result: any) => {
                     if (result.isConfirmed) {
                       this.isLoading = false;
