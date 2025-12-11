@@ -24,7 +24,8 @@ export class CollegeWiseExaminationRptComponent {
   displayedColumns: string[] = [
     'SrNo', 'CollegeName', 'TotalStudents',
     'SelectedForExamination', 'VerifiedForExamination',
-    'ExaminationFeePaid', 'EligibleForExamination', 'FirstYearExamination', 'SecondYearExamination'
+    'ExaminationFeePaid', 'EligibleForExamination', //'FirstYearExamination', 'SecondYearExamination',
+    'FirstSemExamination' ,'ThirdSemExamination', 'FifthSemExamination', 'SixthSemSpecExamination'
   ];
   dataSource: MatTableDataSource<CollegesWiseExaminationRptsModel> = new MatTableDataSource();
 
@@ -92,19 +93,19 @@ export class CollegeWiseExaminationRptComponent {
 
 
   exportToExcel(): void {
-    //const unwantedColumns = [
-    //  'EndTermID', 'InstituteID', 'Selected', 'SemesterID', 'Status', 'StreamID', 'StudentID'
-    //];
-    //const filteredData = this.viewAdminDashboardList.map(item => {
-    //  const filteredItem: any = {};
-    //  Object.keys(item).forEach(key => {
-    //    if (!unwantedColumns.includes(key)) {
-    //      filteredItem[key] = item[key];
-    //    }
-    //  });
-    //  return filteredItem;
-    //});
-    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.CollegeWiseExaminationRptModellList);
+    const unwantedColumns = [
+     'InstituteID', 'FirstYearExamination', 'SecondYearExamination'
+    ];
+    const filteredData = this.CollegeWiseExaminationRptModellList.map((item: any) => {
+     const filteredItem: any = {};
+     Object.keys(item).forEach(key => {
+       if (!unwantedColumns.includes(key)) {
+         filteredItem[key] = item[key];
+       }
+     });
+     return filteredItem;
+    });
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(filteredData);
     // Create a new Excel workbook this.PreExamStudentData
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
