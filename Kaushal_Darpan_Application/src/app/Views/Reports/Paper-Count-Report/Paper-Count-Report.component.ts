@@ -431,7 +431,7 @@ export class PaperCountReportComponent implements OnInit {
     }
   }
 
-  public priorityColumns: any = ['S.No', 'Branch', 'SemesterId', 'InstituteCode', 'ExamCenterCode', 'NoOfRegStudents', 'Semester', 'SubjectCode', 'SubjectName', ]; 
+  public priorityColumns: any = ['S.No', 'Branch', 'SemesterId', 'InstituteCode', 'ExamCenterCode',  'Semester', 'SubjectCode', 'SubjectName', 'NoOfRegStudents',]; 
   getColumnCategory = (column: string) => {
     // Check if the column is in the priority columns list
     if (this.priorityColumns.includes(column)) {
