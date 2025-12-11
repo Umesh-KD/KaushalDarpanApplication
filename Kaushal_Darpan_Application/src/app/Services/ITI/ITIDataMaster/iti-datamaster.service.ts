@@ -5,7 +5,7 @@ import { catchError, throwError } from 'rxjs';
 import { SeatIntakeDataModel, SeatIntakeSearchModel, ITICollegeTradeSearchModel } from '../../../Models/ITI/SeatIntakeDataModel';
 import { SanctionOrderModel } from '../../../Models/ITI/UserRequestModel';
 import { SeatIntakesDataListSearchModel } from '../../../Models/ITI/IITIDataMasterDataModel';
-import { ITIStudentCorrectionMasterSearchModel } from '../../../Models/StudentMasterModels';
+import { BTERStudentDetailsMasterSearchModel, ITIStudentCorrectionMasterSearchModel } from '../../../Models/StudentMasterModels';
 import { UploadTrainee_LogsModel } from '../../../Models/RevaluationModel';
 
 @Injectable({
@@ -53,6 +53,28 @@ export class ItiDataMasterService {
         ).toPromise();
     }
 
+    // ---------------route :  update-studentdetails start------------------------------------
+       
+    //Get BTER student list for correction
+    public async GetBTERStudentDetailsList(searchRequest: BTERStudentDetailsMasterSearchModel) {
+      var body = JSON.stringify(searchRequest);
+      return await this.http.post(`${this.APIUrl}/GetBTERStudentDetailsList`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+    public async GetStudentDetailsBYID(searchRequest: BTERStudentDetailsMasterSearchModel) {
+      var body = JSON.stringify(searchRequest);
+      return await this.http.post(`${this.APIUrl}/GetStudentDetailsBYID`, body, this.headersOptions)
+        .pipe(
+          catchError(this.handleErrorObservable)
+        ).toPromise();
+    }
+
+
+    // ---------------route :  update-studentdetails end------------------------------------
+       
 
   
          //Get studetn list eligible for placement all data
