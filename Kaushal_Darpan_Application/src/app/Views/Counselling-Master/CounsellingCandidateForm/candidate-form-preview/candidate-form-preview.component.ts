@@ -287,13 +287,13 @@ downloadPDF2() {
 
 
   html2canvas(element, {
-    scale: 3,         // Better clarity
+    scale: 1.5,         // Better clarity
     useCORS: true,
     allowTaint: true,
     logging: false
   }).then((canvas) => {
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/png',0.7);
 
     // Calculating A4 width scale
     const imgWidth = pageWidth;
