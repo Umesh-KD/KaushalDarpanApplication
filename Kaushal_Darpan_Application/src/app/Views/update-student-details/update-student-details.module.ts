@@ -5,6 +5,7 @@ import { LoaderModule } from '../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
 import { UpdateStudentDetailComponent } from './update-student-details.component';
 import { UpdateStudentDetailRoutingModule } from './update-student-details.routing.module';
+import { OTPModalModule } from '../otpmodal/otpmodal.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { UpdateStudentDetailRoutingModule } from './update-student-details.routi
     ReactiveFormsModule,
     LoaderModule,
     TableSearchFilterModule,
-    UpdateStudentDetailRoutingModule
+    UpdateStudentDetailRoutingModule,
+    OTPModalModule
 
   ]
 })
