@@ -1,28 +1,16 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { LoaderModule } from '../Shared/loader/loader.module';
-import { TableSearchFilterModule } from '../../Pipes/table-search-filter.module';
-import { UpdateStudentDetailsComponent } from './update-student-details.component';
-import { MaterialModule } from '../../material.module';
+import { UpdateStudentDetailComponent } from './update-student-details.component';
 
-const routes: Routes = [
-  {
-    path: '',
-    component: UpdateStudentDetailsComponent
-  }
-];
+
+
+
+
+const routes: Routes = [{ path: '', component: UpdateStudentDetailComponent }];
 
 @NgModule({
-  declarations: [
-    UpdateStudentDetailsComponent
-  ],
-  imports: [RouterModule.forChild(routes), FormsModule, ReactiveFormsModule, CommonModule, LoaderModule, TableSearchFilterModule,MaterialModule
-  ],
-  exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-
-
-export class UpdateStudentDetailsModule { }
+export class UpdateStudentDetailRoutingModule { }

@@ -409,72 +409,17 @@ export class PaperCountReportComponent implements OnInit {
                   // Otherwise, sort based on priority categories
                   return categoryA - categoryB;
                 });
-                debugger
-                if(this.requestData.Type == 2) {
-                  
-                  // Add 'Total' to each row
-                  this.GetfilteredList = this.CustomizeReportCoulmnDataPush.map((item: any, index: number) => {
-                    const filteredItem: any = { 'S.No': index + 1 };
-                    let rowTotal = 0; // To calculate the total of each row
-
-                    this.selectedNames.forEach((key) => {
-                      if (item[key] !== undefined) {
-                        filteredItem[key] = item[key];
-                        // Sum up the row values (only if they are numbers)
-                        if (!isNaN(Number(item[key])) && key !== 'SemesterId') {
-                          rowTotal += Number(item[key]);
-                        }
-                      }
-                    });
-
-                    // Add the Total column to the row
-                    filteredItem['Total'] = rowTotal;
-
-                    return filteredItem;
-                  });
-
-                  // Add a 'Total' row at the end of the table
-                  const totalRow: any = { 
-                    'S.No': 'Total', // Set the S.No to 'Total' text
-                    'Branch': 'Total', // Set the Branch column to 'Total' text
-                    'SemesterId': 'Total' // Set the SemesterId column to 'Total' text
-                  };
-
-                  // Calculate the sum for each numeric column (except 'Total')
+                
+                this.GetfilteredList = this.CustomizeReportCoulmnDataPush.map((item: any, index: number) => {
+                  const filteredItem: any = { 'S.No': index + 1 };
                   this.selectedNames.forEach((key) => {
-                    if (key !== 'Total' && key !== 'S.No' && key !== 'Branch' && key !== 'SemesterId') {
-                      const columnSum = this.CustomizeReportCoulmnDataPush.reduce((sum: number, item: any) => {
-                        const value = item[key];
-                        if (!isNaN(Number(value))) {
-                          sum += Number(value);
-                        }
-                        return sum;
-                      }, 0);
-
-                      totalRow[key] = columnSum;
+                    if (item[key] !== undefined) {
+                      filteredItem[key] = item[key];
                     }
                   });
+                  return filteredItem;
+                });
 
-                  // Add the total for the 'Total' column (sum of all rows' totals)
-                  totalRow['Total'] = this.CustomizeReportCoulmnDataPush.reduce((sum: number, item: any) => {
-                    const rowTotal = Object.values(item).filter(value => !isNaN(Number(value)) && value !== item['S.No'] && value !== item['Branch'] && value !== item['SemesterId']).reduce((sum: number, value: any) => sum + Number(value), 0);
-                    return sum + rowTotal;
-                  }, 0);
-
-                  // Push the 'Total' row to the data
-                  this.GetfilteredList.push(totalRow);
-                } 
-                else {
-                  this.GetfilteredList = this.CustomizeReportCoulmnDataPush.map((item: any, index: number) => {
-                    const filteredItem: any = { 'S.No': index + 1 };
-                    this.selectedNames.forEach((key) => {
-                      if (item[key] !== undefined) {
-                        filteredItem[key] = item[key];
-                      }
-                    });
-                    return filteredItem;
-                  });
-                }                
               }
             }, (error: any) => console.error(error));
         } catch (ex) {
@@ -579,53 +524,42 @@ export class PaperCountReportComponent implements OnInit {
     XLSX.utils.sheet_add_aoa(ws, [['Branch and Subject wise Student Report Nov 2025']], { origin: 'A2' });
 
     // Add the column headers (including 'Total')
-    const row1 = ['S.No', ...this.selectedNames, 'Total'];
+    const row1 = ['S.No', ...this.selectedNames];
     XLSX.utils.sheet_add_aoa(ws, [row1], { origin: 'A3' });
 
     // Add the data rows
     this.GetfilteredList.forEach((item: any, index: number) => {
       const row: any[] = [index + 1, ...this.selectedNames.map((key) => item[key] ?? '')];
-
-      // Calculate the total for each row (sum all numeric values, excluding 'SemesterId')
-      const rowTotal = this.selectedNames.reduce((sum: number, key: string) => {
-        if (key !== 'Total' && key !== 'SemesterId' && !isNaN(Number(item[key]))) {
-          return sum + Number(item[key]);
-        }
-        return sum;
-      }, 0);
-
-      // Add the total value to the last column
-      row.push(rowTotal);
       XLSX.utils.sheet_add_aoa(ws, [row], { origin: `A${4 + index}` });
     });
 
-    // Add the Total row (sum of each column)
-    const totalRow: any = {
-      'S.No': 'Total',
-      'Branch': 'Total',
-      'SemesterId': 'Total'
-    };
+    // // Add the Total row (sum of each column)
+    // const totalRow: any = {
+    //   'S.No': 'Total',
+    //   'Branch': 'Total',
+    //   'SemesterId': 'Total'
+    // };
 
-    // Sum the values for each column (excluding S.No, Branch, SemesterId, and Total)
-    this.selectedNames.forEach((key) => {
-      if (key !== 'Total' && key !== 'S.No' && key !== 'Branch' && key !== 'SemesterId') {
-        const columnSum = this.CustomizeReportCoulmnDataPush.reduce((sum: number, item: any) => {
-          const value = item[key];
-          if (!isNaN(Number(value))) {
-            sum += Number(value);
-          }
-          return sum;
-        }, 0);
-        totalRow[key] = columnSum;
-      }
-    });
+    // // Sum the values for each column (excluding S.No, Branch, SemesterId, and Total)
+    // this.selectedNames.forEach((key) => {
+    //   if (key !== 'Total' && key !== 'S.No' && key !== 'Branch' && key !== 'SemesterId') {
+    //     const columnSum = this.CustomizeReportCoulmnDataPush.reduce((sum: number, item: any) => {
+    //       const value = item[key];
+    //       if (!isNaN(Number(value))) {
+    //         sum += Number(value);
+    //       }
+    //       return sum;
+    //     }, 0);
+    //     totalRow[key] = columnSum;
+    //   }
+    // });
 
-    // Calculate the total for the 'Total' column (sum of all rows' totals)
-    totalRow['Total'] = this.GetfilteredList.reduce((sum: number, item: any) => {
-      const rowTotal = Object.values(item).filter(value => !isNaN(Number(value)) && value !== item['S.No'] && value !== item['Branch'] && value !== item['SemesterId'])
-        .reduce((sum: number, value: any) => sum + Number(value), 0);
-      return sum + rowTotal;
-    }, 0);
+    // // Calculate the total for the 'Total' column (sum of all rows' totals)
+    // totalRow['Total'] = this.GetfilteredList.reduce((sum: number, item: any) => {
+    //   const rowTotal = Object.values(item).filter(value => !isNaN(Number(value)) && value !== item['S.No'] && value !== item['Branch'] && value !== item['SemesterId'])
+    //     .reduce((sum: number, value: any) => sum + Number(value), 0);
+    //   return sum + rowTotal;
+    // }, 0);
 
     // Add the total row to the sheet as the last row
     // XLSX.utils.sheet_add_aoa(ws, [Object.values(totalRow)], { origin: `A${4 + this.GetfilteredList.length}` });

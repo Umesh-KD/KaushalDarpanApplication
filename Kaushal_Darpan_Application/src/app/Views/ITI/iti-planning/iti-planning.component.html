@@ -9,7 +9,7 @@
         <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
         <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
         <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
-        <a [routerLink]="['/ITICollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
+        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
         <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
         <div>
         </div>
@@ -762,8 +762,6 @@
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
-
-
           </div>
 
 
@@ -1118,6 +1116,7 @@
 
         
       </div>
+
 
     </div>
     <div *ngIf="sSOLoginDataModel.RoleID == _enumrole.ITIPrincipal && this.Type!=1 ||  sSOLoginDataModel.RoleID == _enumrole.Principal_NCVT && this.Type!=1 " class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 hide-in-pdf ">

@@ -1494,7 +1494,7 @@ const routes: Routes = [
       { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
      
 
-      { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.routing.module').then(m => m.UpdateStudentDetailsModule), title: 'update Student Details' },
+      { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.module').then(m => m.UpdateStudentDetailModule), title: 'update Student Details' },
       
       { path: 'student-employement-history', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
