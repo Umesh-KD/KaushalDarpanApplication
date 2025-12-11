@@ -1,106 +1,254 @@
+<!-- Page Title Start -->
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Details</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Master</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700">Student Details</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"> Student Details</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/Branches" class="text-sm font-medium text-slate-700" aria-current="page">Update Student Details</a>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Update Student Details</a>
     </div>
   </div>
 </div>
+<!-- Page Title End -->
 
 
 <div class="card">
   <div class="card-body p-5">
-
-    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light"><b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b></div>
-    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mb-8">
-      <div class="Search">
-        <div class="form-group row">
-          <label for="Search" class="text-gray-800 text-sm font-medium inline-block mb-1">Search</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-input ng-pristine ng-valid ng-touched" id="Search" (input)="applyFilter($event.target.value)" placeholder="Search...">
-          </div>
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name/EnrollmentNo/MobileNo</label>   
+          <input type="text" class="form-input" placeholder="Name/EnrollmentNo/MobileNo" id="Name" 
+            [(ngModel)]="searchRequest.Name"
+            (keyup.enter)="GetStudentDetailsList(1)">
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetStudentDetailsList(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
         </div>
       </div>
     </div>
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
-      <div class="flex justify-end flex-wrap items-center">
-        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
-          <i class="ti ti-download"></i> Export Execl
-        </a>
-      </div>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
     </div>
-    <div class="mat-elevation-z8 table-responsive">
-      <table mat-table [dataSource]="dataSource" matSort>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!-- [(ngModel)]="pageSize" -->
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetStudentDetailsList(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!-- <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div> -->
+    </div>
 
-        <ng-container matColumnDef="SrNo">
-          <th mat-header-cell *matHeaderCellDef width="80px"> Sr. No. </th>
-          <td mat-cell *matCellDef="let element; let i = index" width="80px">{{ i + 1 }}</td>
-        </ng-container>
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">NameHi</th>
+            <th class="text-left">EnrollmentNo</th>
+            <th class="text-left">Father's Name</th>
+             <th class="text-left">Father's NameHi</th>
+              <th class="text-left">Mother's Name</th>
+             <th class="text-left">Mother's NameHi</th>
+            <th class="text-left">DOB</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StudentName}}</td>
+              <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StudentNameHindi}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.EnrollmentNo}}</td>
 
-        <ng-container matColumnDef="StudentName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Student Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.StudentName}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="EnrollmentNo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Enrollment No </th>
-          <td mat-cell *matCellDef="let element"> {{element.EnrollmentNo}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="InstituteName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Institute Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.InstituteName}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="InstitutionManagementType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Institution Management </th>
-          <td mat-cell *matCellDef="let element"> {{element.InstitutionManagementType}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="Email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-          <td mat-cell *matCellDef="let element"> {{element.Email}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="FatherName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Father Name </th>
-          <td mat-cell *matCellDef="let element"> {{element.FatherName}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="DOB">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> DOB </th>
-          <td mat-cell *matCellDef="let element"> {{element.DOB }} </td>
-        </ng-container>
-
-        <!-- <ng-container matColumnDef="Age">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
-          <td mat-cell *matCellDef="let element"> {{element.Age}} </td>
-        </ng-container> -->
-
-        <ng-container matColumnDef="GenderName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
-          <td mat-cell *matCellDef="let element"> {{element.GenderName}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherNameHindi}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MotherName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.MotherNameHindi}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DOB | date:'yyyy-MM-dd'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            
+              <!-- @if(item.IsCollegeSubmitted)
+              {
+              <p class="text-center text-warning"><b>Update In Progress</b></p>
+              }
+              @else
+              { -->
+              <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                <!-- <a [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a> -->
+                  <a href="javascript:void(0);" title="Edit Profile" (click)="EditStudentDetails(MyModel_Action,item.StudentID)"><i class="ti ti-check"></i></a>
+                <!--<a href="javascript:void(0);" title="View & Update Company" *ngIf="(company.Status=='Pending' || company.Status=='Hold')" (click)="ViewandUpdate(MyModel_Action,company.ID)"><i class="ti ti-eye"></i></a>-->
+               
+              </div>
+              <!-- } -->
+            </td>
+          </tr> 
+        </tbody>
       </table>
-
-
-      <div class="overflow-x-auto mt-3">
-
-        <div class="alert alert-warning text-center" role="alert" *ngIf="totalRecords == 0">No Record Found</div>
-        <!-- Pagination Controls -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[10, 20, 50, 100, 500, 1000]"
-                       [length]="totalRecords" (page)="onPaginationChange($event)">
-        </mat-paginator>
+    </div>
+  <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  StudentList?.length }} of {{StudentList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetStudentDetailsList(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="StudentList[0]?.TotalRecords==0" (change)="GetStudentDetailsList(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetStudentDetailsList(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
       </div>
     </div>
+
+    <!--end pagination-->
   </div>
+</div>
+<!-- end row -->
+
+
+<ng-template #MyModel_Action let-modal class="w-full h-full fixed top-0 left-0 z-[80] transition-all duration-500 overflow-y-auto [--overlay-backdrop:static] hidden">
+  <div class="modal-content">
+    <form [formGroup]="formAction" id="formAction" class="form-horizontal">
+      <div class="card">
+        <div class="card-header flex justify-between items-center">
+          <b><i class="fa fa-plus"></i>&nbsp;Edit Student Profile Details</b>
+          <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
+        </div>
+
+        <div class="card-body">
+          <div class="mb-8">
+            <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+              
+              <!-- Name (English) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name (English)</label>
+                <input type="text" class="form-input" formControlName="nameEn" [disabled]="true" [(ngModel)]="requestAction.NameEn">
+              </div>
+
+              <!-- Name (Hindi) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name (Hindi)</label>
+                <input type="text" class="form-input" formControlName="nameHi"   [(ngModel)]="requestAction.NameHi">
+              </div>
+
+              <!-- Father's Name (English) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (English)</label>
+                <input type="text" class="form-input" formControlName="fatherNameEn" [disabled]="true"   [(ngModel)]="requestAction.FatherNameEn">
+              </div>
+
+              <!-- Father's Name (Hindi) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (Hindi)</label>
+                <input type="text" class="form-input" formControlName="fatherNameHi"  [(ngModel)]="requestAction.FatherNameHi">
+              </div>
+
+              <!-- Mother's Name (English) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (English)</label>
+                <input type="text" class="form-input" formControlName="motherNameEn" [disabled]="true"   [(ngModel)]="requestAction.motherNameEn">
+              </div>
+
+              <!-- Mother's Name (Hindi) -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Father's Name (Hindi)</label>
+                <input type="text" class="form-input" formControlName="motherNameHi"  [(ngModel)]="requestAction.motherNameHi">
+              </div>
+              
+
+              <!-- Enrollment No -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No</label>
+                <input type="text" class="form-input" formControlName="enrollmentNo" [disabled]="true"  [(ngModel)]="requestAction.EnrollmentNo">
+              </div>
+
+              <!-- Date of Birth -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Date of Birth</label>
+                <input type="date" class="form-input" formControlName="dob" [disabled]="true"  [(ngModel)]="requestAction.DOB">
+              </div>
+
+              <!-- Mobile Number -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number</label>
+                <input type="text" class="form-input" formControlName="mobileNo"   [(ngModel)]="requestAction.MobileNo">
+              </div>
+
+              <!-- Supporting Document -->
+              <!-- <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supporting Document</label>
+                <input type="text" class="form-input" formControlName="supportingDocument" [(ngModel)]="requestAction.SupportingDocument" >
+              </div> -->
+
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                for="fileStudentPhoto">Supporting Document</label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                        id="filepanPhoto" type="file" (change)="UploadDocument($event)" />
+                  <label for="filepanPhoto">                         
+                    <span>Choose File</span>
+                    {{ requestAction.SupportingDocument === '' ? 'No File Chosen' : requestAction.SupportingDocument }}
+                  </label>
+                  <div class="flex" *ngIf="requestAction.SupportingDocument !== ''">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL}}/StudentDetails//{{requestAction.SupportingDocument}}"
+                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                    <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
+                      (click)="DeleteDocument(row)">
+                      <i class="ti ti-trash"></i>
+                    </a>-->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Supporting Remark -->
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">Supporting Remark</label>
+                <textarea class="form-input" formControlName="supportingRemark"  [(ngModel)]="requestAction.SupportingRemark"></textarea>
+              </div>
+
+            </div>
+
+            <!-- <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3 text-center">
+              <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="SaveData()">Submit</button>
+              <button type="button" class="btn bg-danger text-white mt-6 me-1" (click)="CloseModalPopup()">Cancel</button>
+              
+            </div> -->
+
+            <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mt-3 text-center">
+              <div class="flex justify-center gap-3">
+                <button type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">Submit</button>
+                <button type="button" class="btn bg-danger text-white mt-6" (click)="CloseModalPopup()">Cancel</button>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
+</ng-template>
+
