@@ -463,6 +463,8 @@ const routes: Routes = [
       { path: 'knowmenu', loadChildren: () => import('./Views/Emitra/know-menu/know-menu.module').then(m => m.KnowMenuModule), title: 'Know Menu' },
       { path: 'applynow', loadChildren: () => import('./Views/Emitra/apply-now/apply-now.module').then(m => m.ApplyNowModule), title: 'Apply Now' },
       { path: 'knowmerit', loadChildren: () => import('./Views/Emitra/know-merit/know-merit.module').then(m => m.KnowMeritModule), title: 'Know Merit' },
+      { path: 'emitra-fee-payment-history', loadChildren: () => import('./Views/Emitra/emitra-fee-payment-list/emitra-fee-payment-list.module').then(m => m.EmitraFeePaymentListModule), title: 'Emitra Transaction' },
+
       /*      { path: 'knowmerititi', loadChildren: () => import('./Views/Emitra/know-merit-iti/know-merit-iti.module').then(m => m.KnowMeritITIModule), title: 'Know Merit' },*/
       { path: 'UserResponse', loadChildren: () => import('./Views/user-request/user-response/user-response.module').then(m => m.UserResponseModule) },
 

@@ -32,10 +32,11 @@ export class ItiPlanningListComponent {
   public _enumrole = EnumRole
   public CompanyMasterList: any = [];
   public CollegeID: number = 0;
+  public ITItypeID: number = 0;
   public InstituteID: number = 0;
   public Collegeid: number = 0;
   public ApprovedStatus: number = 0;
-
+  public ManagmentTypeList: any = [];
   requestAction = new ItiVerificationModel();
 
   sSOLoginDataModel = new SSOLoginDataModel();
@@ -51,6 +52,10 @@ export class ItiPlanningListComponent {
 
   public TodayDate = new Date()
   public SearchStudentDataFormGroup!: FormGroup;
+  
+  public AllCompanyMasterList: any[] = [];
+
+
 
   constructor(private commonMasterService: CommonFunctionService, private campusPostService: ITIsService, private loaderService: LoaderService,
     private modalService: NgbModal, private formBuilder: FormBuilder, private toastr: ToastrService, private activeroute: ActivatedRoute) {
@@ -75,32 +80,15 @@ export class ItiPlanningListComponent {
     }
     if (this.sSOLoginDataModel.RoleID == EnumRole.ITIPrincipal || this.sSOLoginDataModel.RoleID == EnumRole.Principal_NCVT) {
       this.CollegeID = this.InstituteID
-
+      //this.ITItypeID = this.ITItypeID
     } else {
       this.ApprovedStatus=2
     }
 
 
-    this.SearchStudentDataFormGroup = this.formBuilder.group(
-    {
-        StudentExamManagementTypeId: [{ value: '', disabled: false }],
-    })
-
-
-    if (this.sSOLoginDataModel.RoleID == EnumRole.DTETraing) {
-      this.isShowdrop = true;
-
-      this.SearchStudentDataFormGroup.get('StudentExamManagementTypeId')?.disable();
-
-    } else {
-      this.isShowdrop = false;
-      this.SearchStudentDataFormGroup.get('StudentExamManagementTypeId')?.enable();
-    }
-
-
-
     await this.GetIti()
     await this.btn_SearchClick();
+    await this.GetManagmentType();
   }
 
   get FormAction() { return this.formAction.controls; }
@@ -108,12 +96,12 @@ export class ItiPlanningListComponent {
 
 
   async btn_SearchClick() {
-    debugger    
+    debugger;
 
     try {
     
       this.loaderService.requestStarted();
-      await this.campusPostService.GetPlanningList(this.CollegeID, this.ApprovedStatus)
+      await this.campusPostService.GetPlanningList(this.CollegeID, this.ITItypeID, this.ApprovedStatus)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.CampusValidationListData = data['Data'];
@@ -154,14 +142,13 @@ export class ItiPlanningListComponent {
 
   async GetIti() {
     try {
-/*      this.searchrequest.ManagementTypeID=0*/
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('PrivateITICollege')
+      await this.commonMasterService.GetCommonMasterData('PrivateITICollege', this.ITItypeID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.CompanyMasterList = data['Data'];
-          this.request.CollegeID = 0
-
+          this.AllCompanyMasterList = data['Data'];   // full list
+          this.CompanyMasterList = this.AllCompanyMasterList; // default
+          this.request.CollegeID = 0;
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -175,14 +162,41 @@ export class ItiPlanningListComponent {
   }
 
 
+  //async btn_Clear() {
+  //  this.requestAction.InstituteID = 0;
+  //  this.requestAction.Status = 0;
+  //  this.requestAction.Remarks = '';
+  //  this.CollegeID = 0;
+  //  this.ApprovedStatus = 2;
+  //  await this.GetIti()
+
+  //}
+
+
   async btn_Clear() {
-    this.requestAction.InstituteID = 0;
-    this.requestAction.Status = 0;
-    this.requestAction.Remarks = '';
+    this.formAction.reset();
+    this.isSubmitted = false;
+
+    this.requestAction = {
+      InstituteID: 0,
+      Status: 0,
+      Remarks: '',
+      UserID: 0
+    };
+
     this.CollegeID = 0;
     this.ApprovedStatus = 2;
+    this.ITItypeID = 0; 
+    this.CampusValidationListData = []; 
 
+    await this.GetIti();
+
+    await this.btn_SearchClick();
   }
+
+
+
+
   async ViewHistory(content: any, ID: number) {
 
     this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' }).result.then((result) => {
@@ -268,5 +282,29 @@ export class ItiPlanningListComponent {
     this.formAction.controls['txtActionRemarks'].updateValueAndValidity();
 
   }
+
+  async GetManagmentType() {
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetManagType().then((data: any) => {
+        this.ManagmentTypeList = data.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.loaderService.requestEnded();
+    }
+  }
+
+
+  onCollegeChange(collegeId: number) {
+    this.CollegeID = +collegeId;
+    this.btn_SearchClick();
+  }
+
+  trackById(index: number, item: any): number {
+    return item.ID;  
+  }
+
 
 }
