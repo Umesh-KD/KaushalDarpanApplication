@@ -114,20 +114,26 @@ export class GenerateEnrollComponent implements OnInit {
     this.UserID = this.sSOLoginDataModel.UserID;
 
     this.RoleID = this.sSOLoginDataModel.RoleID;
-    this.selectedEndTermID = Number(this.activatedRoute.snapshot.queryParamMap.get("EndTermID") ?? 0);
-    this.currentStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("Status") ?? 0);
-    this.currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab") ?? 0);
+    this.selectedEndTermID = Number(this.activatedRoute.snapshot.queryParamMap.get("EndTermID")?.toString());
+    this.currentStatus = Number(this.activatedRoute.snapshot.queryParamMap.get("status")?.toString());
+    this.currentTab = Number(this.activatedRoute.snapshot.queryParamMap.get("tab")?.toString());
     this.GetPageName(this.currentTab);
 
     console.log(this.sSOLoginDataModel);
-    this.getSemesterMasterList();
-    this.getStreamMasterList();
-    // this.getExaminerData();
+    await this.getSemesterMasterList();
+    await this.getStreamMasterList();
+    // await this.getExaminerData();
     await this.GetVerifierStatusDDL();
-    this.getExamMasterList();
-    this.getInstituteMasterList();
-    this.GetVerifyRollData();
-    this.GetAllData();
+    await this.getExamMasterList();
+    await this.getInstituteMasterList();
+    await this.GetVerifyRollData();
+
+    //debugger
+    // for query string
+    if (isNaN(this.currentStatus) == false) {
+      this.searchRequest.VerifierStatus = this.currentStatus;
+    }
+    await this.GetAllData();
 
   }
   ngOnDestroy(): void {
@@ -337,7 +343,7 @@ export class GenerateEnrollComponent implements OnInit {
 
   async SaveAllData() {
     try {
-      debugger;
+      //debugger;
 
       //if any pending to publish
       //if (this.isAnyForwarded() || this.isAnyVerified()) {
@@ -434,7 +440,7 @@ export class GenerateEnrollComponent implements OnInit {
   }
 
   async OnPublish() {
-    debugger;
+    //debugger;
     this.isSubmitted = true;
     //
     /*    this.refreshBranchRefValidation(true);*/
@@ -557,7 +563,7 @@ export class GenerateEnrollComponent implements OnInit {
 
   //Start Section Model
   async openModalGenerateOTP(content: any) {
-    debugger;
+    //debugger;
     const isAnySelected = this.StudentList.some(x => x.Marked)
     if (!isAnySelected) {
       this.toastr.error('Please select at least one Student!');
@@ -770,7 +776,7 @@ export class GenerateEnrollComponent implements OnInit {
 
 
   exportToExcel(): void {
-    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Marked', 'StudentID', 'ApplicationID', 'StreamID', 'SemesterID', 'InstituteID', 'EndTermID', 'StudentEntryType', 'EnrollPublishOrder', 'EnrollVerifyerStatus', 'VerifyerStatusName'];
+    const unwantedColumns = ['ActiveStatus', 'DeleteStatus', 'CreatedBy', 'ModifyBy', 'ModifyDate', 'IPAddress', 'Marked', 'StudentID', 'ApplicationID', 'StreamID', 'SemesterID', 'InstituteID', 'EndTermID', 'StudentEntryType', 'EnrollPublishOrder', 'EnrollVerifyerStatus', 'VerifyerStatusName','MobileNo'];
     const filteredData = this.StudentList.map((item: any) => {
       const filteredItem: any = {};
       Object.keys(item).forEach(key => {
@@ -868,7 +874,7 @@ export class GenerateEnrollComponent implements OnInit {
 
   async ChangeEnRollNoStatus(action: string) {
     try {
-      debugger;
+      //debugger;
       this.RollStatusList = [];
       //session
       this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID;
@@ -937,7 +943,7 @@ export class GenerateEnrollComponent implements OnInit {
 
 
   ShowHideButtons(status: number) {
-    debugger;
+    //debugger;
     this.Enrollnostatus = status;
     if (status == EnumEnrollNoStatus.Generated) {
       this.ShowForwardedButton = true;
@@ -961,7 +967,7 @@ export class GenerateEnrollComponent implements OnInit {
 
 
   VerifyRollNumber() {
-    debugger;
+    //debugger;
     if (this.ddlRollListStatus > 0) {
       //if (this.ddlRollListStatus == EnumEnrollNoStatus.Reverted) {
       //  this.swal2.Confirmation("Are you sure you want to revert Enroll no list?", async (result: any) => {
@@ -1033,7 +1039,7 @@ export class GenerateEnrollComponent implements OnInit {
   }
 
   async ChangeEnRollNoStatusNew(action: string, Status: number, remark: string) {
-    debugger;
+    //debugger;
     try {
       this.StudentList = [];
       //session
@@ -1079,7 +1085,7 @@ export class GenerateEnrollComponent implements OnInit {
   }
 
   async VerifyOTPNew() {
-    debugger;
+    //debugger;
     if (this.OTP.length > 0) {
       if ((this.OTP == GlobalConstants.DefaultOTP) || (this.OTP == this.GeneratedOTP)) {
         try {

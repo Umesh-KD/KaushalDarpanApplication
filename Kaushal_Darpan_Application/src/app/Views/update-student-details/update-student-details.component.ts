@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 
@@ -18,6 +18,7 @@ import { UploadFileModel } from '../../Models/UploadFileModel';
 import { DocumentDetailsService } from '../../Common/document-details';
 import { AppsettingService } from '../../Common/appsetting.service';
 import {StudentdetailUpdateService} from '../../Services/StudentDetailUpdate/studentdetail-update.service'
+import { OTPModalComponent } from '../otpmodal/otpmodal.component';
 
 @Component({
     selector: 'update-student-details',
@@ -52,6 +53,8 @@ export class UpdateStudentDetailComponent implements OnInit {
   public Message: string = '';
   public ErrorMessage: string = '';
   public State: number = 0;
+
+   @ViewChild('otpModal') childComponent!: OTPModalComponent;
 
   constructor(
     private commonMasterService: CommonFunctionService, 
@@ -95,8 +98,7 @@ export class UpdateStudentDetailComponent implements OnInit {
    
    // this.searchRequest.AcademicYearID = this.sSOLoginDataModel.FinancialYearID
     await this.GetStudentDetailsList(1);
-    console.log("htththth")
-    console.log("dddd")
+  
   }
 
 
@@ -311,6 +313,19 @@ export class UpdateStudentDetailComponent implements OnInit {
         console.log(Ex);
       }
     }
+
+  openOTP(StudentExamPaperMarksID: number = 0) {
+    debugger
+    // this.childComponent.MobileNo = this.sSOLoginDataModel.Mobileno
+    this.childComponent.MobileNo="8334874706"
+    this.childComponent.OpenOTPPopup();
+
+    this.childComponent.onVerified.subscribe(() => {
+      console.log("otp verified on the page")
+
+      this.SaveData()
+    })
+  }
 
     async SaveData() {
       debugger
