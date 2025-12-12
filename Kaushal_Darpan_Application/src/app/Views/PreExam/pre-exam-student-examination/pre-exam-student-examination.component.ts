@@ -269,7 +269,7 @@ export class PreExamStudentExaminationComponent {
         ddlCategoryA_ID: [{ value: '', disabled: true }, [DropdownValidators]],
         ddlCategoryB_ID: [{ value: '', disabled: true }, [DropdownValidators]],
         txtDOB: [{ value: '', disabled: true }, Validators.required],
-        txtAbc: ['', [Validators.required, notZeroValidator()]],
+        txtAbc: ['',],
         txtEmail: [{ value: '' }],
         txtAadharNo: [{ value: '', disabled: true }],
         txtBhamashahNo: [{ value: '', disabled: true }],

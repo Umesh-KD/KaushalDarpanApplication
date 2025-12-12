@@ -183,7 +183,7 @@ export class StudentEnrollmentComponent {
         txtEmail: [''],
         txtAadharNo: [{ value: '', disabled: true },],
         //txtAbc: [{ value: '' }, Validators.required],
-        txtAbc: ['', [Validators.required, notZeroValidator()]],
+        txtAbc: [''],
         txtBhamashahNo: [{ value: '', disabled: true },],
         JanAadharNo: [{ value: '', disabled: true },],
         txtAddress: [''],

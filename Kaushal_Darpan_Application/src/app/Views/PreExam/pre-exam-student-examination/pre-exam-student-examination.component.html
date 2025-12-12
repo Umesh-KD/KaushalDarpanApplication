@@ -989,25 +989,15 @@
               </label>
               <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
-    <p *ngIf="EditStudentDataform.txtAbc.errors.required">
-      <i aria-hidden="true"></i> This field is
-      required .!
-    </p>
-    <p *ngIf="EditStudentDataform.txtAbc.errors.zeroValue">
-      <i aria-hidden="true"></i>  This field is
-      required .!
-    </p>
-  </div>-->
 
-              <div *ngIf="isSubmitted && EditStudentDataform.txtAbc.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted && EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors['required']">
                   This field is required!
                 </p>
                 <p *ngIf="EditStudentDataform.txtAbc.errors['zeroValue']">
                   Zero is not allowed!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
