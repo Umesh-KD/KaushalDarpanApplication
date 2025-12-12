@@ -1495,14 +1495,15 @@ const routes: Routes = [
      
 
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.module').then(m => m.UpdateStudentDetailModule), title: 'update Student Details' },
-      
+
       { path: 'student-employement-history', loadChildren: () => import('./Views/ITI/AdditionalDetails/employement-history/employement-history.module').then(m => m.StudentEmployementHistoryModule), title: 'Student Employement History' },
       { path: 'add-student-employement', loadChildren: () => import('./Views/ITI/AdditionalDetails/add-self-employement/add-self-employement.module').then(m => m.AddStudentEmployementModule), title: 'Add Student Employement' },
 
 
 
       {path: 'excel-operation', loadChildren: () => import('./Views/ITI/excel-operation/excel-operation.module').then(m => m.ExcelOperationModule), title: 'Excel Operation'},
-     
+      { path: 'jan-aadhar-detail', loadChildren: () => import('./Views/new-jan-aadhar/new-jan-aadhar.module').then(m => m.JanAadharDetailModule), title: 'Jan AAdhar Detail Details' },
+      
 
 
       { path: 'StaffWorkRegularArrangementReort', loadChildren: () => import('./Views/BTER/BTER-GOVT-Establish-Management/StaffWorkRegularArrangementReort/StaffWorkRegularArrangementReort.module').then(m => m.StaffWorkRegularArrangementReortModule) },
