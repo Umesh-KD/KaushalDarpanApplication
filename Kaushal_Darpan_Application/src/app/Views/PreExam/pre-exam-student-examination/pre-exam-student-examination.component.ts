@@ -2998,15 +2998,18 @@ export class PreExamStudentExaminationComponent {
     let Requestdata: any = this.PreExamStudentData.filter((e: any) => e.Selected == true)
 
     if(Requestdata.length > 0) {
+      this.Swal2.Confirmation("Are you sure to Notify Students?", async (result: any) => {
 
-      const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
-          StudentId: student.StudentID,
-          MobileNo: student.MobileNo,
-          StudentName: student.StudentName,
-          MessageType: "Exam_Fee_Reminder"
-      }));
+      //confirmed
+      if (result.isConfirmed) {
+        const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
+            StudentId: student.StudentID,
+            MobileNo: student.MobileNo,
+            StudentName: student.StudentName,
+            MessageType: "Exam_Fee_Reminder"
+        }));
 
-      this.smsMailService.NorifyStudent_VerifyForExamination(SMSrequest)
+        this.smsMailService.NorifyStudent_VerifyForExamination(SMSrequest)
         .then(async (data: any) => {
           if (data.State == EnumStatus.Success) {
             this.toastr.success("Notified successfully");
@@ -3016,6 +3019,8 @@ export class PreExamStudentExaminationComponent {
             console.log(data.ErrorMessage);
           }
         });
+      }
+    });      
     } else {
       this.toastr.error('Please select at least one student to notify')
       return

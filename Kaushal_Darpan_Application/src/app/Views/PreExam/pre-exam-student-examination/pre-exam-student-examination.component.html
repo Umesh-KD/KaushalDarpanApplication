@@ -53,7 +53,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester</label>
             <select class="form-select" id="StudentExamYear"
                     formControlName="ddlSemesterID"
-                    [(ngModel)]="request.Year_SemID">
+                    [(ngModel)]="request.Year_SemID"
+                    (change)="GetOptionalSubjectDDL()">
               <option value="0">--All--</option>
               <option *ngFor="let item of filteredSemesterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
@@ -67,8 +68,7 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
             <select class="form-select" id="StudentExamYear"
                     formControlName="ddlSemesterID"
-                    [(ngModel)]="request.Year_SemID"
-                    (change)="GetOptionalSubjectDDL()">
+                    [(ngModel)]="request.Year_SemID">
               <option value="0">--All--</option>
               <option value="7">1st Year</option>
               <option value="8">2nd Year</option>
