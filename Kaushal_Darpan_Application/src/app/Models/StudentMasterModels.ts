@@ -213,13 +213,19 @@ export interface EligibleStudentButPendingForVerification {
 }
 
 export interface ForSMSEnrollmentStudentMarkedModel extends RequestBaseModel {
-  StudentId: number;
-  Status: number;
-  RoleId: number;
+  StudentId?: number;
+  Status?: number;
+  RoleId?: number;
   MobileNo?: string;
   MessageType?: string;
   ApplicationNo?: string;
+}
 
+export interface ForSMSNotifyStudentModel {
+  StudentId?: number;
+  MobileNo?: string;
+  MessageType?: string;
+  StudentName?: string;
 }
 
 

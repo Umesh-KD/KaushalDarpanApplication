@@ -12,7 +12,6 @@ import { BterStudentsJoinStatusMarksService } from '../../Services/BterStudentJo
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
 import { DropdownValidators } from '../../Services/CustomValidators/custom-validators.service';
 import { LoaderService } from '../../Services/Loader/loader.service';
-import { SMSMailService } from '../../Services/SMSMail/smsmail.service';
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -70,7 +69,6 @@ export class WithdrawAllotmentComponent {
     private router: Router,
     private routers: ActivatedRoute,
     private modalService: NgbModal,
-    private sMSMailService: SMSMailService,
     private route: ActivatedRoute,
     private Swal2: SweetAlert2) {
   }
