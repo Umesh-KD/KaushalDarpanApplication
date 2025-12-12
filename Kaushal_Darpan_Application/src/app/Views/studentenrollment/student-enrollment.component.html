@@ -188,6 +188,19 @@
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
+      <div>
+        
+      </div>
+      <div>
+        <a href="javascript:void(0);" 
+          class="btn bg-info btn-sm text-white justify-end" 
+          (click)="NorifyStudent_VerifyForEnrollment()"
+          *ngIf="(request.StudentFilterStatusId == _enumExamStudentStatus.VerifiedForEnrollment || 
+                request.StudentFilterStatusId == _enumExamStudentStatus.SelectedForEnrollment)&& 
+                (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">
+          <i class="ti ti-clock" title="Snooze Notification"></i> Notify Students
+        </a>
+      </div>
 
     </div>
 

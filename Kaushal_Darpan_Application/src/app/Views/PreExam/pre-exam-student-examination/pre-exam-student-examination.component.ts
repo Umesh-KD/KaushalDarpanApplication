@@ -1,8 +1,8 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { AnnexureDataModel, OptionalSubjectRequestModel, PreExamStudentDataModel, PreExam_UpdateEnrollmentNoModel } from '../../../Models/PreExamStudentDataModel';
 import { SubjectSearchModel } from '../../../Models/SubjectMasterDataModel';
-import { M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
-import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType, EnumCourseType } from '../../../Common/GlobalConstants';
+import { ForSMSEnrollmentStudentMarkedModel, ForSMSNotifyStudentModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../../Models/StudentMasterModels';
+import { EnumFileUpload, EnumRole, EnumStatus, EnumStudentExamType, GlobalConstants, enumExamStudentStatus, EnumStudentType, EnumCourseType, EnumMessageType } from '../../../Common/GlobalConstants';
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
@@ -27,9 +27,11 @@ import { DocumentDetailsModel } from '../../../Models/DocumentDetailsModel';
 import { DocumentDetailsService } from '../../../Common/document-details';
 import { DataPagingListModel } from '../../../Models/DataPagingListModel';
 import { AfterViewInit } from '@angular/core';
-import { CommonDDLSubjectCodeMasterModel } from '../../../Models/CommonDDLSubjectMasterModel';
+import { CommonDDLSubjectCodeMasterModel, OptionalSubjectDDLDataModel } from '../../../Models/CommonDDLSubjectMasterModel';
 import { GenerateAdmitCardModel, GenerateAdmitCardSearchModel } from '../../../Models/GenerateAdmitCardDataModel';
 import { CampusPostMaster_Action } from '../../../Models/CampusPostDataModel';
+import { ApplicationMessageDataModel } from '../../../Models/ApplicationMessageDataModel';
+import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 
 declare function tableToExcel(table: any, name: any, fileName: any): any;
 
@@ -63,6 +65,7 @@ export class PreExamStudentExaminationComponent {
   public SelectedSubjectList: any = [];
   public SessionTypeList: any = [];
   public filteredSemesterList: any = [];
+  public OptionalSubjectDDLList: any = [];
 
   public StudentProfileDetailsData: any = [];
   public Student_QualificationDetailsData: any = [];
@@ -85,6 +88,8 @@ export class PreExamStudentExaminationComponent {
   AnnexureDataModel = new AnnexureDataModel();
   public _EnumRole = EnumRole;
   sSOLoginDataModel = new SSOLoginDataModel();
+  public messageModel = new ApplicationMessageDataModel();
+  public optionalSubRequest = new OptionalSubjectDDLDataModel();
   public Table_SearchText: string = "";
   modalReference: NgbModalRef | undefined;
   closeResult: string | undefined;
@@ -174,7 +179,8 @@ export class PreExamStudentExaminationComponent {
     private activatedRoute: ActivatedRoute,
     private reportService: ReportService,
     private http: HttpClient,
-    private documentDetailsService: DocumentDetailsService
+    private documentDetailsService: DocumentDetailsService,
+    private smsMailService: SMSMailService,
   ) {
 
 
@@ -242,7 +248,8 @@ export class PreExamStudentExaminationComponent {
         SessionType: [''],
         PromoteStatus: [''],
         StudentExamType: [''],
-        txtAbc: ['']
+        txtAbc: [''],
+        OptionalSubjectID: ['']
       })
 
     this.OptionalSubjectFormGroup = this.formBuilder.group(
@@ -330,6 +337,7 @@ export class PreExamStudentExaminationComponent {
     this.showImageDeleteButton()
     await this.GetMasterData();
     await this.GetDateConfig();
+    await this.GetOptionalSubjectDDL();
     this.request.IsYearly = this.sSOLoginDataModel.ExamScheme;
     //setTimeout(() => {
     //  this.GetPreExamStudent();
@@ -2976,6 +2984,56 @@ export class PreExamStudentExaminationComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State === EnumStatus.Success) {
           this.rejectAtBter_StudentDetails = data.Data[0]
+        } else {
+          this.toastr.error(data.ErrorMessage)
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  async NorifyStudent_VerifyForExamination() {
+    let Requestdata: any = this.PreExamStudentData.filter((e: any) => e.Selected == true)
+
+    if(Requestdata.length > 0) {
+
+      const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
+          StudentId: student.StudentID,
+          MobileNo: student.MobileNo,
+          StudentName: student.StudentName,
+          MessageType: "Exam_Fee_Reminder"
+      }));
+
+      this.smsMailService.NorifyStudent_VerifyForExamination(SMSrequest)
+        .then(async (data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.toastr.success("Notified successfully");
+          } else if (data.State == EnumStatus.Warning) {
+            this.toastr.warning("Something went wrong");
+          } else {
+            console.log(data.ErrorMessage);
+          }
+        });
+    } else {
+      this.toastr.error('Please select at least one student to notify')
+      return
+    }
+  }
+
+  async GetOptionalSubjectDDL() {
+    try {
+      this.optionalSubRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
+      this.optionalSubRequest.EndTermID = this.sSOLoginDataModel.EndTermID
+      this.optionalSubRequest.CourseType = this.sSOLoginDataModel.Eng_NonEng
+      this.optionalSubRequest.SemesterId = this.request.Year_SemID
+      this.optionalSubRequest.StreamId = this.request.BranchID
+
+      await this.commonMasterService.GetOptionalSubjectDDL(this.optionalSubRequest).then(async (data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if(data.State === EnumStatus.Success) {
+          this.OptionalSubjectDDLList = data.Data
         } else {
           this.toastr.error(data.ErrorMessage)
         }

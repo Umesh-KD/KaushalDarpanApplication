@@ -1,6 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { EnumFileUpload, EnumRole, EnumStatus, GlobalConstants, enumExamStudentStatus } from '../../Common/GlobalConstants';
-import { ForSMSEnrollmentStudentMarkedModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
+import { ForSMSEnrollmentStudentMarkedModel, ForSMSNotifyStudentModel, M_StudentMaster_QualificationDetailsModel, StudentMarkedModel, StudentMasterModel, Student_DataModel } from '../../Models/StudentMasterModels';
 import { ModalDismissReasons, NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { DropdownValidators, notZeroValidator } from '../../Services/CustomValidators/custom-validators.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -1966,6 +1966,34 @@ export class StudentEnrollmentComponent {
       })
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  async NorifyStudent_VerifyForEnrollment() {
+    let Requestdata: any = this.PreExamStudentData.filter((e: any) => e.Selected == true)
+
+    if(Requestdata.length > 0) {
+
+      const SMSrequest: ForSMSNotifyStudentModel[] = Requestdata.map((student: any) => ({
+          StudentId: student.StudentID,
+          MobileNo: student.MobileNo,
+          StudentName: student.StudentName,
+          MessageType: "Exam_Fee_Reminder"
+      }));
+
+      this.sMSMailService.NorifyStudent_VerifyForEnrollment(SMSrequest)
+        .then(async (data: any) => {
+          if (data.State == EnumStatus.Success) {
+            //this.toastr.success(this.Message);
+          } else if (data.State == EnumStatus.Warning) {
+            //this.toastr.warning(this.Message);
+          } else {
+            console.log(data.ErrorMessage);
+          }
+        });
+    } else {
+      this.toastr.error('Please select at least one student to notify')
+      return
     }
   }
 }
