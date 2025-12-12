@@ -42,6 +42,7 @@ export class RevealuationComponent {
   public dateConfiguration = new DateConfigurationModel()
   isStep2Disabled: boolean = false;
   isStep3Disabled: boolean = false;
+  public EndtermName: string = '';
 
 
   public transactionStatusDataModel = new TransactionStatusDataModel();
@@ -131,8 +132,8 @@ export class RevealuationComponent {
   async submitRollDob(stepper: MatStepper): Promise<void> {
     debugger;
 
-    this.searchRequest.RollNo = 1432;
-    this.searchRequest.DOB = '2001-05-27';
+    //this.searchRequest.RollNo = 1432;
+    //this.searchRequest.DOB = '2001-05-27';
 
     if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
       this.Swal2.Confirmation('Roll Number and Date of Birth are required '
@@ -152,6 +153,7 @@ export class RevealuationComponent {
 
           if (data.State === EnumStatus.Success) {
             this.Request = data['Data'][0];
+            this.EndtermName = data['Data'][0].EndTermName;
 
             if (!this.Request.IsReval) {
               this.Request.StudentName = data['Data'][0]['StudentName'];
@@ -482,18 +484,21 @@ export class RevealuationComponent {
 
   @ViewChild('SuccessModal') SuccessModal!: TemplateRef<any>;
   async RVLPayment() {
-    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
-      const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
-      if (!selectedItems || selectedItems.length === 0) {
-        this.Swal2.Confirmation("Please select at least one subject before submitting.", async () => { });
-        return;
-      }
-      const totalFee = selectedItems.reduce(
-        (sum: number, s: any) => sum + (s.FeeAmount || 0),
-        0
-      );
+    debugger
+    const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
+    if (!selectedItems || selectedItems.length === 0) {
+      this.Swal2.Confirmation("Please select at least one subject before submitting.", async () => { });
+      return;
+    }
+    const totalFee = selectedItems.reduce(
+      (sum: number, s: any) => sum + (s.FeeAmount || 0),
+      0
+    );
 
-      this.SelectedItemDataList = selectedItems;
+    this.SelectedItemDataList = selectedItems;
+
+    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+      
       this.SaveStudentRequest.RollNo = this.Request.RollNo;
       this.SaveStudentRequest.StudentID = this.Request.StudentID;
       this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
