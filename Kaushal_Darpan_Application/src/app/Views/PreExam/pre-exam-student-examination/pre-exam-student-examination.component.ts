@@ -302,20 +302,23 @@ export class PreExamStudentExaminationComponent {
       })
 
     this.formAction = this.formBuilder.group({
-        txtActionRemarks: ['', Validators.required],
-        OrderNo: ['', Validators.required],
-        OrderDate: ['', Validators.required],
-      })
+      txtActionRemarks: ['', Validators.required],
+      OrderNo: ['', Validators.required],
+      OrderDate: ['', Validators.required],
+    })
 
     this.requestStudent.QualificationDetails = [];
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
-    this.statusID = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
-    if (this.statusID > 0) {
-      this.request.StudentFilterStatusId = this.statusID
-    }
-
     this.InstituteID = Number(this.activatedRoute.snapshot.paramMap.get('instituteId') ?? 0);
+    //debugger
+    // handle for found both
+    let _studentFilterStatusId = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());// or
+    if (isNaN(_studentFilterStatusId) == true) {
+      _studentFilterStatusId = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());// either
+    }
+    this.statusID = _studentFilterStatusId;
+    //
 
     this.UserID = this.sSOLoginDataModel.UserID
     if (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon) {
@@ -343,11 +346,12 @@ export class PreExamStudentExaminationComponent {
     //  this.GetPreExamStudent();
     //}, 2000); 
     // for dashboard tiles search
-    let _studentFilterStatusId = Number(this.activatedRoute.snapshot.paramMap.get('id')?.toString());
 
-    if (isNaN(_studentFilterStatusId) == false) {
-      this.request.StudentFilterStatusId = _studentFilterStatusId;
+
+    if (isNaN(this.statusID) == false) {
+      this.request.StudentFilterStatusId = this.statusID;
       await this.btn_SearchClick();
+      this.SearchStudentDataFormGroup.get('ddlstatus')?.disable();
     }
 
 
@@ -1028,7 +1032,7 @@ export class PreExamStudentExaminationComponent {
     this.requestStudent.CreatedBy = this.sSOLoginDataModel.UserID;
     this.requestStudent.RoleID = this.sSOLoginDataModel.RoleID;
 
-    debugger
+    //debugger
 
     // verified
     if (this.IsVerified) {
@@ -1433,11 +1437,11 @@ export class PreExamStudentExaminationComponent {
   async SaveRejectAtBTER() {
 
     this.IsFormActionSubmitted = true;
-    if(this.formAction.invalid){
+    if (this.formAction.invalid) {
       this.toastr.error("Please fill required fields")
       return
     }
-    
+
     try {
       this.isSubmitted = true;
       this.loaderService.requestStarted();
@@ -2827,15 +2831,15 @@ export class PreExamStudentExaminationComponent {
 
   resetValidationUpdateEnrollment() {
     // clear
-      this.formUpdateEnrollmentNo.get('ddlBranch')?.clearValidators();
+    this.formUpdateEnrollmentNo.get('ddlBranch')?.clearValidators();
     // set
-    if (this.requestUpdateEnrollmentNo.SemesterID<=3) {
+    if (this.requestUpdateEnrollmentNo.SemesterID <= 3) {
       this.formUpdateEnrollmentNo.get('ddlBranch')?.setValidators([DropdownValidators]);
     }
     // update
     this.formUpdateEnrollmentNo.get('ddlBranch')?.updateValueAndValidity();
   }
-  
+
   async RejectAtBter_Remark() {
     this.Swal2.Confirmation("Are you sure to continue?", async (result: any) => {
 
@@ -2893,10 +2897,10 @@ export class PreExamStudentExaminationComponent {
       request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
       request.FileNameWithDynamicPath = 1
       await this.commonMasterService.GetDocumentDetails_RejectAtBter(request).then(async (data: any) => {
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.RejectDocumentDetail = data.Data
           this.requestRejectDoc = this.RejectDocumentDetail[0]
-        } else if(data.State === EnumStatus.Warning) {
+        } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
           this.toastr.error(data.ErrorMessage)
@@ -2915,7 +2919,7 @@ export class PreExamStudentExaminationComponent {
       // uploadModel.MinFileSize = item.MinFileSize ?? "";
       // uploadModel.MaxFileSize = item.MaxFileSize ?? "";
       // uploadModel.FolderName = item.FolderName ?? "";
-      debugger
+      //debugger
       let uploadModel: UploadBTERFileModel = {
         AcademicYear: this.requestRejectDoc.AcademicYear?.toString() ?? "0",
         DepartmentID: '1',
@@ -2935,7 +2939,7 @@ export class PreExamStudentExaminationComponent {
       //call
       await this.documentDetailsService.UploadBTERDocument(event, uploadModel)
         .then((data: any) => {
-          debugger
+          //debugger
           //
           if (data.State == EnumStatus.Success) {
             //add/update document in js list
@@ -2944,11 +2948,11 @@ export class PreExamStudentExaminationComponent {
             //   this.requestStudent.DocumentDetails[index].FileName = data.Data[0].FileName;
             //   this.requestStudent.DocumentDetails[index].Dis_FileName = data.Data[0].Dis_FileName;
             // }
-            if(name=="rejectPhoto") {
+            if (name == "rejectPhoto") {
               this.requestAction.SuspendDocumnet = data.Data[0]['FileName']
               this.requestAction.Dis_SuspendDoc = data.Data[0]['Dis_FileName']
             }
-              
+
             console.log(this.requestStudent.DocumentDetails)
             //reset file type
             event.target.value = null;
@@ -2975,14 +2979,14 @@ export class PreExamStudentExaminationComponent {
     });
   }
 
-  async GetRejectAtBter_StudentDetails( StudentID: number, StudentExamID: number) {
+  async GetRejectAtBter_StudentDetails(StudentID: number, StudentExamID: number) {
     const request: any = {}
     request.StudentID = StudentID
     request.StudentExamID = StudentExamID
     try {
       await this.preExamStudentExaminationService.GetRejectAtBter_StudentDetails(request).then(async (data: any) => {
         data = JSON.parse(JSON.stringify(data));
-        if(data.State === EnumStatus.Success) {
+        if (data.State === EnumStatus.Success) {
           this.rejectAtBter_StudentDetails = data.Data[0]
         } else {
           this.toastr.error(data.ErrorMessage)
