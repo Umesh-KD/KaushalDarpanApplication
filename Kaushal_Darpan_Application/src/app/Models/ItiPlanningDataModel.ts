@@ -112,3 +112,22 @@ export class ITI_PlanningCollegesSearchModel {
   public StudentExamManagementTypeId: number = 0;
   public CollegeID: number = 0;
 }
+
+
+export class ITIPlanningBankGuarantee {
+  public bankGuaranteeID: number = 0;
+  public CollageId: number = 0;
+  public BankName: string = '';
+  public bankGuaranteeNumber: number = 0;
+  public dateOfIssue: string = '';          
+  public maturityDate: string = '';         
+  public duration: string = '';
+  public amount: number = 0;
+  public bankAgreementDocument: string = '';
+  public numberOfUnit: number = 0;
+  public status: number = 0;
+  public remarks?: string = '' ;
+  public FinYearId?: number = 0 ;
+}
+
+

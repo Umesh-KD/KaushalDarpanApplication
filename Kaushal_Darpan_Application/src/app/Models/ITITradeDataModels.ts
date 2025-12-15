@@ -38,3 +38,20 @@ export class ITITradeSearchModel {
 
 
 }
+export class ITIPlanningBankGuarantee
+{
+  public BankGuaranteeID  :number =0
+  public CollageId: number = 0
+  public BankGuaranteeNumber: string = ''
+  public BankName: string = ''
+  public DateOfIssue: string = ''
+  public Maturitydate: string = ''
+  public Duration: string = ''
+  public Amount :number =0
+  public BankAgreementDocument: string = ''
+  public Status  :number =0
+  public Remarks: string = ''
+ }
+
+
+

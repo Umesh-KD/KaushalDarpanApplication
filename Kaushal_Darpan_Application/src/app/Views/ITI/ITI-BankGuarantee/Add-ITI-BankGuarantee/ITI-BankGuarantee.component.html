@@ -1,0 +1,171 @@
+<!--<div class="flex items-center justify-between flex-wrap mb-2">
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Update College Details</h4>
+</div>-->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Bank Guarantee</h4>
+  </div>
+  <a routerLink="/iti-bank-guarantee-list" class="inline-flex items-center btn bg-dark text-white btn-sm"><i class="ti ti-chevron-left"></i> Back</a>
+</div>
+
+<!--Page Title End-->
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="flex justify-between items-center mb-4 p-3 py-2 bg-light">
+      <b class="text-1xl-5">ITI Bank Guarantee</b>
+    </div>
+
+    <form [formGroup]="bankGuarantee" >
+      <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+        <div>
+          <label for="BankName">Bank Name:<span class="StarMarking">*</span></label>
+          <input formControlName="BankName" class="form-input" type="text" id="BankName	"
+                 placeholder="Issue Bank" [(ngModel)]="request.BankName">
+          <div *ngIf="isSubmitted && bankGuarantee.get('BankName').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('BankName').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="bankGuaranteeNumber">Bank Guarantee Number:<span class="StarMarking">*</span></label>
+          <input formControlName="bankGuaranteeNumber" class="form-input" type="text" id="bankGuaranteeNumber"
+                 (keypress)="numberOnly($event)" placeholder="Bank Guarantee Number" [(ngModel)]="request.bankGuaranteeNumber">
+          <div *ngIf="isSubmitted && bankGuarantee.get('bankGuaranteeNumber').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('bankGuaranteeNumber').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+
+
+        <div>
+          <label for="dateOfIssue">Date Of Issue:<span class="StarMarking">*</span></label>
+          <input formControlName="dateOfIssue" class="form-input" type="date" id="dateOfIssue"
+                (click)="openDatePicker($event)" placeholder="Date Of Issue" [(ngModel)]="request.dateOfIssue">
+          <div *ngIf="isSubmitted && bankGuarantee.get('dateOfIssue').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('dateOfIssue').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+
+        <div>
+          <label for="maturityDate">Maturity date:<span class="StarMarking">*</span></label>
+          <input formControlName="maturityDate" class="form-input" type="date" id="maturityDate"
+                 (click)="openDatePicker($event)" placeholder="Maturity date" [(ngModel)]="request.maturityDate">
+          <div *ngIf="isSubmitted && bankGuarantee.get('maturityDate').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('maturityDate').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="Duration">Duration:<span class="StarMarking">*</span></label>
+          <input formControlName="duration" class="form-input" type="text" id="duration"
+                  placeholder="Duration" [(ngModel)]="request.duration">
+          <div *ngIf="isSubmitted && bankGuarantee.get('duration').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('duration').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+        <div>
+          <label for="Amount">Amount:<span class="StarMarking">*</span></label>
+          <input formControlName="amount" class="form-input" type="text" id="amount"
+                 (keypress)="numberOnly($event)" placeholder="Amount" [(ngModel)]="request.amount">
+          <div *ngIf="isSubmitted && bankGuarantee.get('amount').errors" class="text-danger">
+            <p *ngIf="bankGuarantee.get('amount').errors.required">
+              <i aria-hidden="true"></i>This field is
+              required.
+            </p>
+          </div>
+        </div>
+
+        <!--<div>
+    <label for="fileStudentPhoto">Bank Agreement Document:<span class="StarMarking">*</span></label>
+    <div class="flex fileUploader">
+      <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+             id="fileStudentPhoto" formControlName="bankAgreementDocument" type="file" (change)="onFilechange($event,'Photo')">
+      <label for="fileStudentPhoto">
+        <span>Choose File</span>
+        {{request.bankAgreementDocument === '' ? 'No File Choosen' : request.bankAgreementDocument}}
+      </label>
+      <div class="flex">
+        <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.bankAgreementDocument}}"
+           *ngIf="this.request.bankAgreementDocument !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+      </div>
+    </div>
+  </div>-->
+
+
+
+
+
+
+
+
+
+
+        <div>
+          <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                 for="bankAgreementDocument">Bank Agreement Document<span class="StarMarking">*</span></label>
+          <div class="flex fileUploader">
+            <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                   id="bankAgreementDocument" formControlName="bankAgreementDocument" type="file" (change)="onFilechange($event,'bankDocument')">
+            <label for="bankAgreementDocument">
+              <span>Choose File</span>
+              {{request.bankAgreementDocument === '' ? 'No File Choosen' : request.bankAgreementDocument}}
+            </label>
+            <div class="flex">
+              <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.bankAgreementDocument}}"
+                 *ngIf="this.request.bankAgreementDocument !=''"
+                 class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+            </div>
+          </div>
+
+          <div *ngIf="bankGuarantee.controls.bankAgreementDocument.errors" class="text-danger">
+            <p>
+              <i aria-hidden="true"></i>This field is required .!
+            </p>
+          </div>
+
+        </div>
+
+
+
+
+
+
+        <div>
+          <label for="remarks">Remark:<span class="StarMarking">*</span></label>
+          <textarea formControlName="remarks" class="form-input" placeholder="remarks" type="text" [(ngModel)]="request.remarks">
+          </textarea>
+        </div>
+      </div>
+     
+
+      
+
+      <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6">
+        <div class="text-center">
+          <button type="submit" (click)="saveData()" class="btn bg-info text-white mt-6 me-1">Save</button>
+          <button type="button" id="btnReset" (click)="ResetControl()" class="btn bg-danger text-white">
+            <i class="ti ti-refresh"></i> Reset
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

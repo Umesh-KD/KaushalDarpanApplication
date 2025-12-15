@@ -140,8 +140,10 @@ export class ItiPlanningListComponent {
 
 
 
-  async GetIti() {
-    try {
+  async GetIti()
+  {
+    try
+    {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetCommonMasterData('PrivateITICollege', this.ITItypeID)
         .then((data: any) => {
@@ -150,6 +152,7 @@ export class ItiPlanningListComponent {
           this.CompanyMasterList = this.AllCompanyMasterList; // default
           this.request.CollegeID = 0;
         }, error => console.error(error));
+
     }
     catch (Ex) {
       console.log(Ex);
@@ -283,12 +286,27 @@ export class ItiPlanningListComponent {
 
   }
 
+  //async GetManagmentType() {
+  //  try {
+  //    this.loaderService.requestStarted();
+  //    await this.commonMasterService.GetManagType().then((data: any) => {
+  //      this.ManagmentTypeList = data.Data;
+  //      console.log('Data====>', this.ManagmentTypeList)
+  //    });
+  //  } catch (error) {
+  //    console.error(error);
+  //  } finally {
+  //    this.loaderService.requestEnded();
+  //  }
+  //}
   async GetManagmentType() {
     try {
       this.loaderService.requestStarted();
-      await this.commonMasterService.GetManagType().then((data: any) => {
-        this.ManagmentTypeList = data.Data;
-      });
+      const data: any = await this.commonMasterService.GetManagType();
+      this.ManagmentTypeList = data.Data.filter((item: any) =>
+        item.InstitutionManagementType !== 'PPP (Public Private Partnership)'
+      );
+      console.log('Filtered Data ====>', this.ManagmentTypeList);
     } catch (error) {
       console.error(error);
     } finally {
