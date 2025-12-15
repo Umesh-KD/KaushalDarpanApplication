@@ -1261,6 +1261,9 @@ const routes: Routes = [
 
       { path: 'iti-colleges-downloads', loadChildren: () => import('./Views/ITI/results/iti-college-download/iti-marksheet.module').then(m => m.ITImarksheetDownloadModule), title: 'ITIMarksheets' },
 
+      { path: 'iti-bank-guarantee', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
+      { path: 'iti-bank-guarantee/:id', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
+      { path: 'iti-bank-guarantee-list', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/list-iti-bankguarantee/list-iti-bankguarantee.module').then(m => m.listitibankguaranteeModule), title: 'ITI Bank Guarantee List' },
 
       { path: 'direct-allotment-list8/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list8' },
       { path: 'direct-allotment-list10/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list10' },
@@ -1268,8 +1271,7 @@ const routes: Routes = [
       { path: 'direct-student-allotment/:id/:TradeLevel', loadChildren: () => import('./Views/ITI/direct-allotment/direct-student-allotment/direct-student-allotment.module').then(m => m.VerifyStudentAllotModule) },
       /*{ path: 'AdminRollnumberList', loadChildren: () => import('./Views/generate-roll-AdminLevel/generate-roll-AdminLevelmodule').then(m => m.generateRollAdminLevelModule), title: 'List Rollnumber Show Admin' },*/
       { path: 'iti-student-pass-fail-result/:id', loadChildren: () => import('./Views/ITI/results/iti-student-pass-fail-result/iti-student-pass-fail-result.module').then(m => m.itiStudentPassFailResultModule), title: 'iti-student-pass-fail-result' },
-
-
+      
 
 
       { path: 'instructor', loadChildren: () => import('./Views/ITI/ITI_Instructor/iti-instructor/iti-instructor.module').then(m => m.ItiInstructorModule) },
