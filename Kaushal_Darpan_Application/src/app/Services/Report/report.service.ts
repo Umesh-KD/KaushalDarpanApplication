@@ -143,6 +143,14 @@ export class ReportService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetITIStudentReveal_FeeReceipt(TransactionID: number) {
+    return await this.http.get(this.APIUrl + "/GetITIStudentRevealFeeReceipt/" + TransactionID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
   public async GetCollegesWiseReportsData(request: CollegesWiseExaminationRptSearchModel) {
     return await this.http.post(this.APIUrl + "/GetCollegesWiseReports", request, this.headersOptions)
       .pipe(

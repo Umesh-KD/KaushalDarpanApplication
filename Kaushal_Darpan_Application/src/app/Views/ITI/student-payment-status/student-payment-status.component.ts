@@ -33,6 +33,7 @@ export class StudentPaymentStatusComponent implements OnInit {
   public PaymentModeBID: string = '';
   public UDF2_PURPOSE: string = '';
   public TransctionDate: string = '';
+  public RevalRequestID:number=0;
   public TransId: number = 0;
   public DepartmentID: number = 0;
   constructor(private router: ActivatedRoute,
@@ -50,6 +51,7 @@ export class StudentPaymentStatusComponent implements OnInit {
   async GetEmitraTransactionDetails() {
     ;
     try {
+      debugger
       this.loaderService.requestStarted();
       await this.emitraPaymentService.GetEmitraITITransactionDetails(this.PRNNo)
         .then((data: any) => {
@@ -63,7 +65,7 @@ export class StudentPaymentStatusComponent implements OnInit {
           this.TransctionDate = data['Data'][0]['TransctionDate'];
           this.TransId = data['Data'][0]['TransactionId'];
           this.DepartmentID = data['Data'][0]['DepartmentID'];
-
+          this.RevalRequestID=data['Data'][0]['RevalRequestID'];
         },
           (error: any) => console.error(error));
     }
@@ -79,13 +81,25 @@ export class StudentPaymentStatusComponent implements OnInit {
 
   async FeeReceipt() {
 
-    if (this.DepartmentID == EnumDepartment.ITI) {
-      this.GetITIStudentFeeReceipt()
-    }
-    else if (this.DepartmentID == EnumDepartment.BTER) {
+
+    debugger
+    if (this.DepartmentID == EnumDepartment.ITI ) 
+      {
+        if(this.RevalRequestID>0){
+          this.GetITIStudentReveal_FeeReceipt();
+        }
+        else{
+          this.GetITIStudentFeeReceipt();
+        }
+      
+      }
+    else if (this.DepartmentID == EnumDepartment.BTER)
+       {
       this.GetStudentFeeReceipt()
     }
   }
+
+
 
   async GetITIStudentFeeReceipt() {
     try {
@@ -118,6 +132,33 @@ export class StudentPaymentStatusComponent implements OnInit {
     try {
       this.loaderService.requestStarted();
       await this.reportService.GetStudentFeeReceipt(this.TransId)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          console.log(data);
+          if (data.State == EnumStatus.Success) {
+            this.DownloadFile(data.Data, 'file download');
+          }
+          else {
+            this.toastrService.error(data.ErrorMessage)
+            //    data.ErrorMessage
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async GetITIStudentReveal_FeeReceipt() {
+    try {
+      this.loaderService.requestStarted();
+      await this.reportService.GetITIStudentReveal_FeeReceipt(this.TransId)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           console.log(data);

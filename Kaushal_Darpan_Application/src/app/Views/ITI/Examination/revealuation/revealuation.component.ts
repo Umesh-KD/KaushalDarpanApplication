@@ -451,7 +451,7 @@ export class RevealuationComponent {
             this.emitraRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
             this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
             this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
-            this.emitraRequest.RevalRequestID=this.SaveStudentRequest.RevalRequestID;
+            this.emitraRequest.RevalRequestID=this.RevalRequestID;
             this.emitraRequest.FeeFor = "RevalFee";
             //common
 
@@ -532,6 +532,7 @@ export class RevealuationComponent {
                 // setTimeout(() => {
                 //   this.modalService.open(this.SuccessModal, { centered: true, backdrop: 'static' });
                 // }, 200);
+                this.RevalRequestID=response.Data[0].RevalRequestID;
                 await this.MultiPayment();
               }
               else {
