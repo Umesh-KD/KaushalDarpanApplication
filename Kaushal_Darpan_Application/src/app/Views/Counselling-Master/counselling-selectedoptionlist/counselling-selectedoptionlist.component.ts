@@ -386,6 +386,7 @@ export class CounsellingSelectedOptionListComponent implements OnInit {
         await this.CounsellingMasterService.GetCandidateList(this.searchRequest).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.StudentOptionList = data.Data;
+          console.log('StudentOptionList',this.StudentOptionList);
 
           this.totalRecord=this.StudentOptionList[0]?.TotalRecords;
           this.TotalPages = Math.ceil(this.totalRecord / this.pageSize);
