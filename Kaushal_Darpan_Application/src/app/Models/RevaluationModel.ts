@@ -50,6 +50,9 @@ export class SaveStudentDetailsModel {
   public IsReval: boolean = false;
   public ItemList: ItemsDetails[] = [];
 
+  public RevalRequestID:number=0;
+  public PaymentStatus:boolean=false;
+  public RevalStatus:number=0;
 
 }
 
