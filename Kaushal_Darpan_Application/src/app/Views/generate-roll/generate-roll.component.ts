@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GenerateRollData, GenerateRollSearchModel } from '../../Models/GenerateRollDataModels';
-import { EnumRollNoStatus, EnumStatus, GlobalConstants,EnumRole } from '../../Common/GlobalConstants';
+import { EnumRollNoStatus, EnumStatus, GlobalConstants, EnumRole } from '../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../Common/SweetAlert2';
 import { SSOLoginDataModel } from '../../Models/SSOLoginDataModel';
 import { CommonFunctionService } from '../../Services/CommonFunction/common-function.service';
@@ -103,7 +103,7 @@ export class GenerateRollComponent {
         ddlStream: [''],
         ddlStudentTypeID: [''],
         VerifierStatusID: [''],
-        IsYearly:['']
+        IsYearly: ['']
       })
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -113,7 +113,7 @@ export class GenerateRollComponent {
     await this.getSemesterMasterList();
     await this.getStreamMasterList();
     await this.ddlStream_Change();
-     
+
     await this.getExamMasterList();
     await this.getInstituteMasterList();
     await this.GetVerifierStatusDDL();
@@ -123,6 +123,13 @@ export class GenerateRollComponent {
         data = JSON.parse(JSON.stringify(data));
         this.SemesterMasterList = data['Data'];
       }, (error: any) => console.error(error));
+
+
+    let _studentFilterStatusId = Number(this.activatedRoute.snapshot.queryParamMap.get('status')?.toString());
+    if (isNaN(_studentFilterStatusId) == false) {
+      this.searchRequest.VerifierStatus = _studentFilterStatusId;
+      await this.GetAllData();
+    }
 
   }
 
@@ -372,7 +379,7 @@ export class GenerateRollComponent {
               });
           }
 
-        
+
         }
       });
     } catch (ex) {
@@ -1010,7 +1017,7 @@ export class GenerateRollComponent {
   }
 
   async ForwardRollNo() {
-    
+
     //if any pending to publish
     if (this.isAnyForwarded() || this.isAnyVerified()) {
       this.toastr.warning("Please clear the pending process of verifier then forward!");
@@ -1020,12 +1027,12 @@ export class GenerateRollComponent {
     //all temp roll no. generated
     let isAllRollNoNotGenerated = this.StudentList.some(x => x.RollNumber == '' || x.RollNumber == '0');
     let ZeroRollNo = this.StudentList.filter((x: any) => x.RollNumber == '0');
-    let ZeroRollNoMsg = ''  
-    if(ZeroRollNo?.length > 0){
+    let ZeroRollNoMsg = ''
+    if (ZeroRollNo?.length > 0) {
       ZeroRollNoMsg = `<br><br>Students do not have roll number: ${ZeroRollNo.map((x: any) => x.EnrollmentNo).join(', ')}`
     }
     if (isAllRollNoNotGenerated) {
-      this.toastr.warning("Please generate all student(s) roll number then forward!"+ ZeroRollNoMsg);
+      this.toastr.warning("Please generate all student(s) roll number then forward!" + ZeroRollNoMsg);
       return;
     }
 

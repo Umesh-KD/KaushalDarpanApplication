@@ -9,8 +9,6 @@ import { CODeploymentDataModel, CenterObserverSearchModel, CenterObserverDataMod
 import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
 import { CenterObserverService } from '../../../Services/CenterObserver/center-observer.service';
 import { LoaderService } from '../../../Services/Loader/loader.service';
-import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
-import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 
 @Component({
   selector: 'app-staff-center-observer',
@@ -53,7 +51,6 @@ export class StaffCenterObserverComponent {
     private loaderService: LoaderService,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private sMSMailService: SMSMailService,
     private route: ActivatedRoute,
     private appsettingConfig: AppsettingService,
     private fb: FormBuilder,

@@ -213,13 +213,19 @@ export interface EligibleStudentButPendingForVerification {
 }
 
 export interface ForSMSEnrollmentStudentMarkedModel extends RequestBaseModel {
-  StudentId: number;
-  Status: number;
-  RoleId: number;
+  StudentId?: number;
+  Status?: number;
+  RoleId?: number;
   MobileNo?: string;
   MessageType?: string;
   ApplicationNo?: string;
+}
 
+export interface ForSMSNotifyStudentModel {
+  StudentId?: number;
+  MobileNo?: string;
+  MessageType?: string;
+  StudentName?: string;
 }
 
 
@@ -252,6 +258,67 @@ export class ITIStudentCorrectionMasterSearchModel {
   public ErrorDescription?: string = '';
   public DateOfBirth?: string = '';
 
+}
+
+//----------------------------- route update-studentdetails  -----------------------------
+
+export class BTERStudentDetailsMasterSearchModel {
+  public StudentID:number=0;
+  public Name: string = '';
+  public UIDNumber: string = '';
+  public CandidateID: number = 0
+  public MobileNo: string = ''
+  public Email: string = ''
+  public CandidateFatherName: string = ''
+  public CandidateMotherName: string = ''
+  public Gender: number = 0;
+  public ModifyBy: number = 0;
+  public RoleID: number = 0;
+  public UserID: number = 0;
+  public DistrictID: number = 0;
+ // public DateOfBirth: string = ''
+ 
+  public InstituteID: number = 0;
+  public DepartmentID: number = 0;
+   public PageSize: number = 50
+  public PageNumber: number = 1
+
+  public SortOrder: string = '';
+  public SortColumn: string = '';
+  public action:string='';
+  public StateRegNumber?: string = '';
+  public ErrorDescription?: string = '';
+  public DateOfBirth?: string = '';
+  public EngNonEng: number = 0
+
+}
+
+export class BTERStudentProfileUpdateModel {
+  public StudentID: number = 0;
+    public EngNonEng: number = 0
+  // Basic Details
+  public NameEn: string = '';
+  public NameHi: string = '';
+
+  public FatherNameEn: string = '';
+  public FatherNameHi: string = '';
+  public motherNameEn: string = '';
+  public motherNameHi: string = '';
+
+  public EnrollmentNo: string = '';
+  public DOB: string = '';
+  public MobileNo: string = '';
+
+  // Supporting Information
+  public SupportingDocument: string = '';
+  public SupportingRemark: string = '';
+
+  // Common fields
+  public ModifyBy: number = 0;
+  public InstituteID: number = 0;
+  public DepartmentID: number = 0;
+  public RoleID: number = 0;
+  public action: string = '';
 }
 
 export class ChunksSearchModel

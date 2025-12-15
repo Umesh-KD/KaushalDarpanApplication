@@ -6,7 +6,6 @@ import { LoaderService } from '../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { CookieService } from 'ngx-cookie-service';
-import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { StudentService } from '../../../Services/Student/student.service';
 import { ToastrService } from 'ngx-toastr';
 import { StudentSearchModel } from '../../../Models/StudentSearchModel';
@@ -67,7 +66,6 @@ export class EmitraApplicationStatusComponent
     private studentService: ApplicationStatusService, 
     private modalService: NgbModal, 
     private toastrService: ToastrService,
-    private sMSMailService: SMSMailService, 
     private cookieService: CookieService, 
     private cdRef: ChangeDetectorRef, 
     private documentDetailsService: DocumentDetailsService,

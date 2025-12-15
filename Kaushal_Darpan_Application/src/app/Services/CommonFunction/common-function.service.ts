@@ -7,7 +7,7 @@ import { SSOLandingDataDataModel } from '../../Models/SSOLoginDataModel';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { SubjectSearchModel } from '../../Models/SubjectMasterDataModel';
 import { RequestBaseModel } from '../../Models/RequestBaseModel';
-import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel } from '../../Models/CommonDDLSubjectMasterModel';
+import { CommonDDLSubjectCodeMasterModel, CommonDDLSubjectMasterModel, OptionalSubjectDDLDataModel } from '../../Models/CommonDDLSubjectMasterModel';
 import { CommonSerialMasterRequestModel } from '../../Models/CommonSerialMasterRequestModel';
 import { DDL_InvigilatorSSOID_DataModel, ItiCollegesSearchModel, ItiStuAppSearchModelUpward, ItiTradeSearchModel, QualificationDDLDataModel, StreamDDL_InstituteWiseModel, TSPTehsilDataModel, UpwardMoment } from '../../Models/CommonMasterDataModel';
 import { BterCollegesSearchModel } from '../../Models/ApplicationFormDataModel';
@@ -2070,6 +2070,12 @@ export class CommonFunctionService {
       ).toPromise();
   }
 
-
+  public async GetOptionalSubjectDDL(request: OptionalSubjectDDLDataModel) {
+    var body = JSON.stringify(request);
+    return await this.http.post(this.APIUrl + '/GetALLOptionalSubjects', body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

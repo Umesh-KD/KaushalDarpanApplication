@@ -53,7 +53,8 @@
             <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year/Semester</label>
             <select class="form-select" id="StudentExamYear"
                     formControlName="ddlSemesterID"
-                    [(ngModel)]="request.Year_SemID">
+                    [(ngModel)]="request.Year_SemID"
+                    (change)="GetOptionalSubjectDDL()">
               <option value="0">--All--</option>
               <option *ngFor="let item of filteredSemesterList" value="{{item.SemesterID}}">{{item.SemesterName}}</option>
             </select>
@@ -126,7 +127,7 @@
       <option *ngFor="let item of StreamMasterList" value="{{item.StreamID}}">{{item.StreamName}}</option>
     </select>-->
             <ng-select [(ngModel)]="request.BranchID"
-                       formControlName="ddlStreamID" [clearable]="false">
+                       formControlName="ddlStreamID" [clearable]="false" (change)="GetOptionalSubjectDDL()">
               <ng-option [value]="0" selected>--All--</ng-option>
               @for (item of StreamMasterList; track item.StreamID) {
               <ng-option [value]="item.StreamID">{{item.StreamName}}</ng-option>
@@ -228,6 +229,15 @@
             <input class="form-input" type="text" id="StudentExamAbc" [(ngModel)]="request.AbcId" maxlength="12"
                    formControlName="txtAbc">
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Optional Subject</label>
+            <select class="form-select" id="StudentExamStudentType" [(ngModel)]="request.OptionalSubjectID"
+                    formControlName="OptionalSubjectID">
+              <option value="0">--All--</option>
+              <option *ngFor="let item of OptionalSubjectDDLList" value="{{item.SubjectID}}">{{item.SubjectCode}}</option>
+            </select>
+          </div>
         </div>
 
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3 mt-2">
@@ -289,6 +299,19 @@
       </div>
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+      </div>
+      <div>
+        
+      </div>
+      <div>
+        <a href="javascript:void(0);" 
+          class="btn bg-info btn-sm text-white justify-end" 
+          (click)="NorifyStudent_VerifyForExamination()"
+          *ngIf="(request.StudentFilterStatusId == _enumExamStudentStatus.VerifiedForExamination || 
+                request.StudentFilterStatusId == _enumExamStudentStatus.SelectedForExamination) && 
+                (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">
+          <i class="ti ti-clock" title="Snooze Notification"></i> Notify Students
+        </a>
       </div>
 
       <!--<div class="col-span-2 flex"
@@ -989,25 +1012,15 @@
               </label>
               <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <!--<div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
-    <p *ngIf="EditStudentDataform.txtAbc.errors.required">
-      <i aria-hidden="true"></i> This field is
-      required .!
-    </p>
-    <p *ngIf="EditStudentDataform.txtAbc.errors.zeroValue">
-      <i aria-hidden="true"></i>  This field is
-      required .!
-    </p>
-  </div>-->
 
-              <div *ngIf="isSubmitted && EditStudentDataform.txtAbc.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted && EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors['required']">
                   This field is required!
                 </p>
                 <p *ngIf="EditStudentDataform.txtAbc.errors['zeroValue']">
                   Zero is not allowed!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 
