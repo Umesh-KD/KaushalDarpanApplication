@@ -20,6 +20,8 @@ import { Router } from '@angular/router';
 import { CounsellingApplicationFormService } from '../../../Services/CounsellingApplicationForm/counselling-application-form.service';
 import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingApplicationFormDataModel';
 import { EnumRole } from '../../../Common/GlobalConstants';
+import { MenuService } from '../../../Services/Menu/menu.service';
+ import { ToastrModule } from 'ngx-toastr';
 @Component({
   selector: 'app-candidate-sso-mapping-module',
   standalone: false,
@@ -75,8 +77,9 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private dateMasterService: DateConfigService,
     private router: Router,
-    private counsellingApplicationFormService: CounsellingApplicationFormService
-    
+    private counsellingApplicationFormService: CounsellingApplicationFormService,
+    private menuService: MenuService,
+    private toastr: ToastrService
   ) { }
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
@@ -202,7 +205,28 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
   }
 
   async PayFees(item: any) { }
+async BackToSSO() {
+    console.log("BAck to SSO...");
+    sessionStorage.removeItem('userid');
+    sessionStorage.removeItem('LoginID');
+    sessionStorage.clear();
+    localStorage.clear();
+    try {
+      this.loaderService.requestStarted();
+      //await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
+      await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
+      this.modalService.dismissAll();
+    }
+    catch (Ex) {
+      console.log(Ex);
 
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 100);
+    }
+  }
   async VerifyOTP()
   {
     if (this.OTP.length > 0) {
@@ -227,9 +251,17 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
                 localStorage.setItem('SSOLoginUser', JSON.stringify(this.sSOLoginDataModel));
                 this.cookieService.set('LoginStatus', "OK");
                 this.modalService.dismissAll();
+                // setTimeout(() => {
+                //   this.router.navigate(['/CandidateApplicationList']);
+                // }, 1000);
                 setTimeout(() => {
-                  this.router.navigate(['/CandidateApplicationList']);
-                }, 1000);
+                  this.toastr.success(
+                  'Your SSO ID successfully mapped, kindly re-login',
+                  'Success'
+                  );
+                  this.BackToSSO();
+                // this.authService.logout(); // if exists
+                }, 500);
               }
               else
               {
