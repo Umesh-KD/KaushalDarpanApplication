@@ -175,7 +175,7 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
     const ext = url.split('.').pop()?.toLowerCase();
     this.isPdf = ext === 'pdf';
     this.isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext || '');
-
+    console.log("url:"+url);
     this.safePdfUrl = null;
     this.imageSrc = '';
     this.pdfUrl = url;
@@ -245,6 +245,8 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.InstituteOptionList = data.Data
+          console.log('InstituteOptionList',this.InstituteOptionList);
+          
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
