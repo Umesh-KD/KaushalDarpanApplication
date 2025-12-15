@@ -131,8 +131,7 @@ export class RevealuationComponent {
   async submitRollDob(stepper: MatStepper): Promise<void> {
     debugger;
 
-    this.searchRequest.RollNo = 1432;
-    this.searchRequest.DOB = '2001-05-27';
+
 
     if (!this.searchRequest.RollNo || !this.searchRequest.DOB) {
       this.Swal2.Confirmation('Roll Number and Date of Birth are required '
