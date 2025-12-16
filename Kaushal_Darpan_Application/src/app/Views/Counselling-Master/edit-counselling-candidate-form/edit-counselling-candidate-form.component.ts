@@ -31,12 +31,29 @@ export class EditCounsellingCandidateFormComponent {
   public CategoryAlist: any = []
   public maritalList: any = []
   public DistrictMasterList: any = []
+  public SpouseDistrictMasterList: any = []
+  public SpouseDistrictMasterByAdminList: any = []
 
   public request = new CounsellingApplicationFormDataModel();
   public requestfromAdmin = new CounsellingApplicationFormDataModel();
   public appRequest = new CounsellingApplicationSearchModel();
   public SSOLoginDataModel = new SSOLoginDataModel()
+public categoryBOptions = [
+  { id: 1, name: 'Widow' },
+  { id: 2, name: 'Divorcee' },
+  { id: 3, name: 'Single Women' },
+  { id: 4, name: 'None of above' }
+];
 
+public filteredCategoryBOptions = [...this.categoryBOptions];
+public categoryBOptionsN = [
+  { id: 1, name: 'Widow' },
+  { id: 2, name: 'Divorcee' },
+  { id: 3, name: 'Single Women' },
+  { id: 4, name: 'None of above' }
+];
+
+public filteredCategoryBOptionsN = [...this.categoryBOptionsN];
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -75,6 +92,7 @@ export class EditCounsellingCandidateFormComponent {
       NationalityID: [0, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
       IsMinority: ['',],
+      SpouseDistrictID: [0, [DropdownValidators]],
     });
     this.PersonalDetailFormEditAdmin = this.formBuilder.group({
 
@@ -90,6 +108,7 @@ export class EditCounsellingCandidateFormComponent {
       Add_IsSpouseInSameService: [''],
       Add_MaritalID: [0, [DropdownValidators]],
       Add_IsMinority: ['',],
+      SpouseDistrictIDByAdmin: [0, [DropdownValidators]],
     });
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
@@ -99,7 +118,8 @@ export class EditCounsellingCandidateFormComponent {
 
     this.PersonalDetailForm.disable();
     this.PersonalDetailFormEditAdmin.disable();
-
+this.filterCategoryB(this.request.MaritalID);
+this.filterCategoryBN(this.request.MaritialID_ByAdmin);
 
   }
 
@@ -252,6 +272,8 @@ export class EditCounsellingCandidateFormComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList = data['Data'];
+          this.SpouseDistrictMasterList = data['Data'];
+          this.SpouseDistrictMasterByAdminList = data['Data'];
         }, (error: any) => console.error(error));
     }
     catch (Ex) {
@@ -286,4 +308,72 @@ export class EditCounsellingCandidateFormComponent {
   async Back() {
     this.routers.navigate(['/CounsellingAllotmentList'])
   }
+  filterCategoryB(maritalId: any) {
+     maritalId = Number(maritalId);
+  // Reset selection
+  debugger;
+  this.PersonalDetailForm.get('CategoryB_ID')?.setValue(0);
+
+  if (maritalId == 146) { 
+    // Widow selected
+    this.filteredCategoryBOptions = this.categoryBOptions.filter(x => x.id !== 2);
+  } 
+  else if (maritalId == 64) { 
+    // Divorcee selected
+    this.filteredCategoryBOptions = this.categoryBOptions.filter(x => x.id !== 1);
+  } 
+  else {
+    // Default – show all
+    this.filteredCategoryBOptions = [...this.categoryBOptions];
+  }
+}
+ filterCategoryBByText(maritalText: string) {
+  this.PersonalDetailForm.get('CategoryB_ID')?.setValue(0);
+
+  if (maritalText === 'Widow') {
+    this.filteredCategoryBOptions =
+      this.categoryBOptions.filter(x => x.name !== 'Divorcee');
+  }
+  else if (maritalText === 'Divorcee') {
+    this.filteredCategoryBOptions =
+      this.categoryBOptions.filter(x => x.name !== 'Widow');
+  }
+  else {
+    this.filteredCategoryBOptions = [...this.categoryBOptions];
+  }
+}
+ filterCategoryBN(maritalIdN: any) {
+     maritalIdN = Number(maritalIdN);
+  // Reset selection
+  debugger;
+  this.PersonalDetailForm.get('Add_CategoryB_ID')?.setValue(0);
+
+  if (maritalIdN == 146) { 
+    // Widow selected
+    this.filteredCategoryBOptionsN = this.categoryBOptionsN.filter(x => x.id !== 2);
+  } 
+  else if (maritalIdN == 64) { 
+    // Divorcee selected
+    this.filteredCategoryBOptionsN = this.categoryBOptionsN.filter(x => x.id !== 1);
+  } 
+  else {
+    // Default – show all
+    this.filteredCategoryBOptionsN = [...this.categoryBOptionsN];
+  }
+}
+ filterCategoryBByTextN(maritalText: string) {
+  this.PersonalDetailForm.get('Add_CategoryB_ID')?.setValue(0);
+
+  if (maritalText === 'Widow') {
+    this.filteredCategoryBOptionsN =
+      this.categoryBOptionsN.filter(x => x.name !== 'Divorcee');
+  }
+  else if (maritalText === 'Divorcee') {
+    this.filteredCategoryBOptionsN =
+      this.categoryBOptionsN.filter(x => x.name !== 'Widow');
+  }
+  else {
+    this.filteredCategoryBOptionsN = [...this.categoryBOptionsN];
+  }
+}
 }
