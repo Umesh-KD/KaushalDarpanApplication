@@ -175,7 +175,7 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
     const ext = url.split('.').pop()?.toLowerCase();
     this.isPdf = ext === 'pdf';
     this.isImage = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'].includes(ext || '');
-
+    console.log("url:"+url);
     this.safePdfUrl = null;
     this.imageSrc = '';
     this.pdfUrl = url;

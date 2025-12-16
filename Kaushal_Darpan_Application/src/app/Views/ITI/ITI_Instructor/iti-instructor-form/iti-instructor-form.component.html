@@ -16,7 +16,8 @@
         <form [formGroup]="InstructorForm" id="HrMasterFormGroup" class="form-horizontal">
           <div class="mb-8">
 
-            <div *ngIf="this.sSOLoginDataModel?.RoleID != 20 && this.sSOLoginDataModel?.RoleID != 43" class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-4">
+            <!--*ngIf="this.sSOLoginDataModel?.RoleID != 20 && this.sSOLoginDataModel?.RoleID != 43"-->
+            <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 sm:grid-col-1 gap-3 mb-4">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO / UID<span class="StarMarking">*</span></label>
                 <div class="d-flex align-items-center justify-between">
@@ -948,7 +949,7 @@
                         <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + techRequest.TechDocument}}"
                            *ngIf="this.techRequest.TechDocument !=''"
                            class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                      </div>          
+                      </div>
                     </div>
 
                     <div *ngIf="isSubmitted && TechnicalForm.controls.TechDocument.errors" class="text-danger">
@@ -990,7 +991,7 @@
                 <div class="grid xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 sm:grid-col-1 gap-3 mt-3">
 
                   <div *ngIf="TechnicalForm.get('CITSCertified')?.value == '1'">
-                   
+
                     <div class="overflow-auto">
                       <table class="table table-bordered">
                         <thead>
@@ -1205,12 +1206,12 @@
                   </div>
                 </div>
                 <!--<div>
-    <label>Name of Employer<span class="StarMarking">*</span></label>
-    <input class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="employeeRequest.Employer_Name" formControlName="Employer_Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-    <div *ngIf="isEmp && EmploymentForm.controls.Employer_Name.errors" class="text-danger">
-      <p><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
-  </div>-->
+        <label>Name of Employer<span class="StarMarking">*</span></label>
+        <input class="form-input" placeholder=" Enter Employee Name " [(ngModel)]="employeeRequest.Employer_Name" formControlName="Employer_Name" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isEmp && EmploymentForm.controls.Employer_Name.errors" class="text-danger">
+          <p><i aria-hidden="true"></i>This field is required .!</p>
+        </div>
+      </div>-->
                 <div>
                   <label>Employer Address<span class="StarMarking">*</span></label>
                   <input class="form-input" placeholder=" Enter Employee Address " [(ngModel)]="employeeRequest.Employer_Address" formControlName="Employer_Address" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
@@ -1262,37 +1263,37 @@
 
 
                 <!--<div>
-    <label  class="me-3 mb-0" style="width: 201px;">Presently Working:</label>
-    <label >
-      <input type="radio" value="true" formControlName="Employer_presentlyWorking"
-             [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> Yes
-    </label>
-    <label style="margin-left: 25px;">
-      <input type="radio" value="false" formControlName="Employer_presentlyWorking"
-             [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> No
-    </label>
-    <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
-      <p>This field is required .!</p>
-    </div>
-  </div>
+        <label  class="me-3 mb-0" style="width: 201px;">Presently Working:</label>
+        <label >
+          <input type="radio" value="true" formControlName="Employer_presentlyWorking"
+                 [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> Yes
+        </label>
+        <label style="margin-left: 25px;">
+          <input type="radio" value="false" formControlName="Employer_presentlyWorking"
+                 [(ngModel)]="employeeRequest.Employer_presentlyWorking" ngModelOptions="{standalone: true}" /> No
+        </label>
+        <div *ngIf="isEmp && EmploymentForm.controls.Employer_presentlyWorking.errors" class="text-danger">
+          <p>This field is required .!</p>
+        </div>
+      </div>
 
 
-  <div>
-    <label>Date of Joining<span class="StarMarking">*</span></label>
-    <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_From" formControlName="Employment_From" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-    <div *ngIf="isEmp && EmploymentForm.controls.Employment_From.errors" class="text-danger">
-      <p><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
+      <div>
+        <label>Date of Joining<span class="StarMarking">*</span></label>
+        <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_From" formControlName="Employment_From" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isEmp && EmploymentForm.controls.Employment_From.errors" class="text-danger">
+          <p><i aria-hidden="true"></i>This field is required .!</p>
+        </div>
 
-  </div>
+      </div>
 
-  <div>
-    <label>Date of Leaving<span class="StarMarking">*</span></label>
-    <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_To" formControlName="Employment_To" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
-    <div *ngIf="isEmp && EmploymentForm.controls.Employment_To.errors" class="text-danger">
-      <p><i aria-hidden="true"></i>This field is required .!</p>
-    </div>
-  </div>-->
+      <div>
+        <label>Date of Leaving<span class="StarMarking">*</span></label>
+        <input (click)="openDatePicker($event)" class="form-input" type="date" [(ngModel)]="employeeRequest.Employment_To" formControlName="Employment_To" [readonly]="isViewMode" [ngStyle]="isViewMode ? {'background-color': '#f5f5f5', 'color': '#333'} : {}" />
+        <div *ngIf="isEmp && EmploymentForm.controls.Employment_To.errors" class="text-danger">
+          <p><i aria-hidden="true"></i>This field is required .!</p>
+        </div>
+      </div>-->
 
 
 
@@ -1323,7 +1324,7 @@
                 <!-- Show Date of Leaving only if radio selected = No -->
                 <div *ngIf="employeeRequest.Employer_presentlyWorking === 'false'">
                   <label>Date of Leaving<span class="StarMarking">*</span></label>
-                  <input (click)="openDatePicker($event)" type="date"  class="form-input" formControlName="Employment_To"
+                  <input (click)="openDatePicker($event)" type="date" class="form-input" formControlName="Employment_To"
                          [(ngModel)]="employeeRequest.Employment_To" />
                 </div>
 
@@ -1461,15 +1462,15 @@
 
 
             <!--<div *ngIf="isSSOVisible" class="form-check mt-3">
-              <input type="checkbox"
-                     class="form-check-input"
-                     id="ConsentToAssignAsExaminer"
-                     [(ngModel)]="request.ConsentToAssignAsExaminer"
-                     name="ConsentToAssignAsExaminer" formControlName="ConsentToAssignAsExaminer" />
-              <label class="form-check-label" for="ConsentToAssignAsExaminer">
-                Consent To Assign This Staff Member As An Examiner?
-              </label>
-            </div>-->
+    <input type="checkbox"
+           class="form-check-input"
+           id="ConsentToAssignAsExaminer"
+           [(ngModel)]="request.ConsentToAssignAsExaminer"
+           name="ConsentToAssignAsExaminer" formControlName="ConsentToAssignAsExaminer" />
+    <label class="form-check-label" for="ConsentToAssignAsExaminer">
+      Consent To Assign This Staff Member As An Examiner?
+    </label>
+  </div>-->
 
 
             <div *ngIf="isSSOVisible" class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 text-center mt-3">

@@ -1,4 +1,15 @@
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AppsettingService } from '../../../Common/appsetting.service';
+import { SweetAlert2 } from '../../../Common/SweetAlert2';
+import { EmitraFeePaymentListSearchModel } from '../../../Models/CommonDDLSubjectMasterModel';
+import { SSOLoginDataModel } from '../../../Models/SSOLoginDataModel';
+import { LoaderService } from '../../../Services/Loader/loader.service';
+import { ReportService } from '../../../Services/Report/report.service';
+import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
+import { EnumStatus } from '../../../Common/GlobalConstants';
 
 @Component({
   selector: 'app-emitra-fee-payment-list',
@@ -7,5 +18,161 @@ import { Component } from '@angular/core';
   styleUrl: './emitra-fee-payment-list.component.css'
 })
 export class EmitraFeePaymentListComponent {
+  sSOLoginDataModel = new SSOLoginDataModel();
+  searchRequest = new EmitraFeePaymentListSearchModel();
 
+  EmitraFeePaymentList: any = [];
+
+  //table feature default
+  public paginatedInTableData: any[] = [];//copy of main data
+  public currentInTablePage: number = 1;
+  public pageInTableSize: string = "50";
+  public totalInTablePage: number = 0;
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public AllInTableSelect: boolean = false;
+  public totalInTableRecord: number = 0;
+  //end table feature default
+
+  constructor(
+    private commonMasterService: CommonFunctionService,
+    private router: Router,
+    private toastr: ToastrService,
+    private loaderService: LoaderService,
+    private Swal2: SweetAlert2,
+    private reportService: ReportService,
+    private appsettingConfig: AppsettingService, 
+    private http: HttpClient, 
+  ) { }
+
+  async ngOnInit() {
+    this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    await this.EmitraFeePaymentList_GetData();
+  }
+
+  async EmitraFeePaymentList_GetData() {
+    try {
+      this.searchRequest.SSOID = this.sSOLoginDataModel.SSOID;
+      this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID;
+      this.searchRequest.UserID = this.sSOLoginDataModel.UserID;
+      await this.commonMasterService.EmitraFeePaymentList_GetData(this.searchRequest).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        if (data.State == EnumStatus.Success) {
+          this.EmitraFeePaymentList = data.Data;
+          //table feature load
+          this.loadInTable();
+          //end table feature load
+        } else {
+          this.toastr.error(data.ErrorMessage);
+        }
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async resetControl() {
+    this.searchRequest = new EmitraFeePaymentListSearchModel();
+    await this.EmitraFeePaymentList_GetData();
+  }
+
+  //table feature
+  calculateInTableTotalPage() {
+    this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
+  }
+  // (replace org.list here)
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.EmitraFeePaymentList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  // (replace org.list here)
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.EmitraFeePaymentList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
+  //main 
+  loadInTable() {
+    this.resetInTableValiable();
+    this.calculateInTableTotalPage();
+    this.updateInTablePaginatedData();
+  }
+  // (replace org. list here)
+  resetInTableValiable() {
+    this.paginatedInTableData = [];//copy of main data
+    this.currentInTablePage = 1;
+    this.totalInTablePage = 0;
+    this.sortInTableColumn = '';
+    this.sortInTableDirection = 'asc';
+    this.startInTableIndex = 0;
+    this.endInTableIndex = 0;
+    this.totalInTableRecord = this.EmitraFeePaymentList.length;
+  }
+  // (replace org.list here)
+  get totalInTableSelected(): number {
+    return this.EmitraFeePaymentList.filter((x: any) => x.Selected)?.length;
+  }
+  get sortInTableDirectionAero(): string {
+    return this.sortInTableDirection == 'asc' ? '&uarr;' : '&darr;';
+  }
+  //checked all (replace org. list here)
+  selectInTableAllCheckbox() {
+    this.EmitraFeePaymentList.forEach((x: any) => {
+      x.Selected = this.AllInTableSelect;
+    });
+  }
+  //checked single (replace org. list here)
+  selectInTableSingleCheckbox(isSelected: boolean, item: any) {
+    const data = this.EmitraFeePaymentList.filter((x: any) => x.TransactionId == item.TransactionId);
+    data.forEach((x: any) => {
+      x.Selected = isSelected;
+    });
+    //select all(toggle)
+    this.AllInTableSelect = this.EmitraFeePaymentList.every((r: any) => r.Selected);
+  }
+  // end table feature
 }

@@ -81,7 +81,7 @@
             <th class="text-left">Qualification</th>
              <th class="text-left name-col">Trade Name</th>
             <th class="text-left allotted-col">Allotted Institute</th>
-            <th class="text-left" style="display: none;">Final Allotted Institute</th> 
+            <th class="text-left allotted-col">Final Allotted Institute</th> 
             <th class="text-left cursorHand" title="Click to sorting" (click)="sortInTableData('StudentName')">
               Name
               <span class="shortingSpan" *ngIf="sortInTableColumn=='StudentName'" [innerHTML]="sortInTableDirectionAero"></span>
@@ -126,7 +126,7 @@
             <td align="left">{{row.Designation}}</td>
             <td align="left" class="name-col">{{row.TradeName}}</td>
             <td align="left" class="allotted-col">{{row.AllottedInstitute}}</td>
-            <td align="left" style="display: none;">{{row.FinalAllottedInstitute}}</td> 
+            <td align="left" class="allotted-col">{{row.FinalAllottedInstitute}}</td> 
             <td align="left" class="name-col">{{row.CandidateName}}</td>
             <td align="left" class="name-col">{{row.FatherName}}</td>
             <td align="left">{{row.Gender}}</td> 

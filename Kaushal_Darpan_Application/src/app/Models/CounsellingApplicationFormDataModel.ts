@@ -161,6 +161,7 @@ export class CounsellingApplicationPreviewDataModel {
     IsSpouseInSameService?: boolean = false;
     IsShahidDependent?: boolean = false;
     IsAnyIncurableDiseases?: boolean = false;
+    IsPhysicalHandicapped?:boolean = false;
     GenderName?: string = '';
     SelectionCategory?: string = '';
     InstituteDetailList?: InstituteListDataModel_Coun[] = [];

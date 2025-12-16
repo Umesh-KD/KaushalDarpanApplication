@@ -19,3 +19,15 @@ export class OptionalSubjectDDLDataModel {
   public SemesterId?: number = 0;
   public StreamId?: number = 0;
 }
+
+export class EmitraFeePaymentListSearchModel {
+  public TypeID?: number = 0;
+  public RoleID?: number = 0;
+  public UserID?: number = 0;
+  public FeeFor?: string = '';
+  public SSOID?: string = '';
+  public PRN?: string = '';
+  public TransctionDate?: string = '';
+  public StudentName?: string = '';
+  public TransctionStatus?: string = '';
+}
