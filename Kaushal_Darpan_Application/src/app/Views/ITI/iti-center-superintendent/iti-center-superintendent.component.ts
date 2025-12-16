@@ -17,6 +17,7 @@ import { ITICenterAllocationtDataModels } from '../../../Models/ITI/ITICenterAll
 import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { OTPModalComponent } from '../../otpmodal/otpmodal.component';
 import * as XLSX from 'xlsx';
+import { CommonVerifierApiDataModel } from '../../../Models/PublicInfoDataModel';
 @Component({
   selector: 'app-iti-center-superintendent',
   standalone: false,
@@ -27,7 +28,8 @@ export class ItiCenterSuperintendentComponent {
   commonMasterService = inject(CommonFunctionService);
   centerAllocationService = inject(ITICenterAllocationService);
   Swal2 = inject(SweetAlert2);
-
+  public requestSSoApi = new CommonVerifierApiDataModel();
+  public Isverifed: boolean = false
   GetRollService = inject(GetRollService);
   centerCreation = inject(CenterAllotmentService);
   toastr = inject(ToastrService);
@@ -64,6 +66,7 @@ export class ItiCenterSuperintendentComponent {
   Email:string=''
   MobileNumber:string=''
   Name:string=''
+  SSOID:string=''
   constructor(...args: unknown[]);
   constructor() { }
   _EnumRole = EnumRole;
@@ -166,9 +169,7 @@ export class ItiCenterSuperintendentComponent {
 
       this.assignedInstitutesReady = true;
       this.UserID = row && row.UserID > 0 ? row.UserID : 0;
-      if (this.UserID > 0) {
-        await this.FillDetails(this.UserID)
-      }
+    
  
       await this.modalService
         .open(content, { size: 'md', ariaLabelledBy: 'modal-basic-title', backdrop: 'static' })
@@ -227,8 +228,17 @@ export class ItiCenterSuperintendentComponent {
 
 
   AssignCenterSuperintendent() {
+    if (this.Isverifed == false) {
 
-    if (this.UserID >= 0 && this.UserID != null && this.UserID != undefined) {
+      this.toastr.error("Please Enter Valid SSOID")
+      return
+    }
+    if (this.SSOID == '') {
+      this.toastr.error("Please Enter Valid SSOID")
+      return
+    }
+
+  
       let obj = {
         CenterAssignedID: 0,
         CenterID: this.SelectCenterMaster.CenterID,
@@ -239,6 +249,11 @@ export class ItiCenterSuperintendentComponent {
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
         CreatedBy: this.sSOLoginDataModel.UserID,
         ModifyBy: this.sSOLoginDataModel.UserID,
+        SSOID: this.SSOID,
+        Name: this.Name,
+        MobileNumber: this.MobileNumber,
+        Email: this.Email
+
       }
       try {
         // //Call service to save data
@@ -266,7 +281,7 @@ export class ItiCenterSuperintendentComponent {
         console.log(ex);
         this.toastr.error("An unexpected error occurred.");
       }
-    }
+    
 
   }
   downloadPDF(type: any) {
@@ -517,6 +532,68 @@ export class ItiCenterSuperintendentComponent {
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
     XLSX.writeFile(wb, 'PreExamStudentsData.xlsx');
+  }
+
+
+
+
+  async SSOIDGetSomeDetails(SSOID: string): Promise<any> {
+    this.Isverifed = false
+    if (SSOID == "") {
+      this.toastr.error("Please Enter SSOID");
+      this.SSOID = ''
+      this.MobileNumber = ''
+      this.Email = ''
+      this.Name = ''
+      return;
+    }
+
+    const username = SSOID; // or hardcoded 'SIDDHA.AZAD'
+    const appName = 'madarsa.test';
+    const password = 'Test@1234';
+
+    /*const url = `https://ssotest.rajasthan.gov.in:4443/SSOREST/GetUserDetailJSON/${username}/${appName}/${password}`;*/
+
+    this.requestSSoApi.SSOID = username;
+    this.requestSSoApi.appName = appName;
+    this.requestSSoApi.password = password;
+
+
+
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        let response = JSON.parse(JSON.stringify(data));
+        if (response?.Data) {
+
+          let parsedData = JSON.parse(response.Data); // parse string inside Data
+          if (parsedData != null) {
+            this.Name = parsedData.displayName;
+            this.MobileNumber = parsedData.mobile;
+            this.SSOID = parsedData.SSOID;
+            this.Email = parsedData.mailPersonal;
+            this.Isverifed = true
+
+          }
+          else {
+            this.toastr.error("Record Not Found");
+            return;
+          }
+
+          //alert("SSOID: " + parsedData.SSOID); // show SSOID in alert
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+
+
   }
 
 
