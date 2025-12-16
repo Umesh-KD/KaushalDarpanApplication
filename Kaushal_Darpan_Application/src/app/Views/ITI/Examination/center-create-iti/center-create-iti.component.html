@@ -97,7 +97,11 @@
       <div class="mt-6">        
           <button class="btn bg-success text-white" (click)="OnSubmit()" type="button">Generate & Save</button>       
       </div>
-      <div></div>
+   
+        <div class="mt-8">
+          <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
+        </div>
+     
       <div class="mt-6" >
         <a href="javascript:void(0);" class="btn bg-success text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download Excel</a>
       </div>
@@ -111,6 +115,7 @@
               <input type="checkbox" class="checkboxSize" [(ngModel)]="AllInTableSelect" (change)="selectInTableAllCheckbox()" />
             </th>
 
+            <th class="text-left">Sr.No</th>
             <th class="text-left">College Name</th>
             <th class="text-left">Phone No.</th>
             <th class="text-left">Email Id</th>
@@ -126,7 +131,7 @@
             <td align="left">
               <input type="checkbox" name="MarkCheck" [(ngModel)]="college.Marked" />
             </td>
-
+            <td>{{idx+1}}</td>
             <td>{{ college.Institutename }}</td>
             <td>{{ college.MobileNumber }}</td>
             <td>{{ college.Email }}</td>
