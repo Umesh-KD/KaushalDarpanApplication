@@ -44,7 +44,7 @@ export class MasterLayoutComponent implements OnInit {
   public _EnumRole = EnumRole;
   public HostelID: number = 0;
   public _EnumDepartment = EnumDepartment;
-
+  public ssoToken: any;
 
   public FinancialYearID: number = 0;
   public EndTermID: number = 0;
@@ -73,7 +73,7 @@ export class MasterLayoutComponent implements OnInit {
   public requestRoleList = new RoleListRequestModel();
   public SessionTypeID: number = 0;    // new added 05082025
   public RequestBaseSearchModel = new RequestBaseModel();
-
+  readonly APIUrl = this.appsettingConfig.apiURL + "SSO";
   constructor(private breakpointObserver: BreakpointObserver, private el: ElementRef, @Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId: Object, private router: Router, private loaderService: LoaderService,
     private sanitizer: DomSanitizer, location: PlatformLocation, private idle: Idle, private modalService: NgbModal, private commonFunctionService: CommonFunctionService,
     private cookieService: CookieService, private menuService: MenuService, private http: HttpClient, private appsettingConfig: AppsettingService, private renderer: Renderer2,
@@ -867,6 +867,84 @@ export class MasterLayoutComponent implements OnInit {
       }
     })
   }
+  async backtoSignOut() {
+  try {      
+    this.ssoToken = localStorage.getItem('authtoken');
+        console.log('ssoToken logout- ',this.ssoToken);
+
+    sessionStorage.removeItem('UserID');
+    sessionStorage.removeItem('LoginID');
+    sessionStorage.clear();
+    localStorage.clear();
+    this.cookieService.set('LoginStatus', '');
+    this.cookieService.deleteAll(); 
+    this.loaderService.requestStarted();
+    const form = document.createElement('form');
+    form.method = 'POST';
+    //form.action = GlobalConstants.BacktoSSOURL_Logout?.toString();
+    form.action="https://ssotest.rajasthan.gov.in/signout";
+    // form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'userdetails';
+    input.value = this.ssoToken;
+
+    form.appendChild(input);
+    document.body.appendChild(form);
+   console.log('form logout- ',form);
+
+    form.submit();
+
+  } catch (ex) {
+    console.error('SSO Logout Error:', ex);
+  } finally {
+    this.loaderService.requestEnded();
+  }  
+}
+backToSSONew() {
+   //this.ssotoken = this.cookieService.get('RAJSSO');    
+    this.ssoToken = localStorage.getItem('authtoken');
+        console.log('ssoToken master layout- ',this.ssoToken);
+
+   const form = document.createElement('form');
+   form.method = 'POST';
+   //form.action = GlobalConstants.BacktoSSOURL?.toString();
+  //  form.action = this.appsettingConfig.BacktoSSOURL?.toString();
+   form.action="https://ssotest.rajasthan.gov.in/sso";
+   const input = document.createElement('input');
+   input.type = 'hidden';
+   input.name = 'userdetails';
+   input.value = this.ssoToken;
+
+   form.appendChild(input);
+   document.body.appendChild(form);
+   console.log('form layout- ',form);
+
+   form.submit();
+ }
+ async backtoSignOutNew() {
+ //localStorage.setItem('authtoken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUFIRU5EUkEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJTQUhVVE9OSyIsImp0aSI6IjkzZTEwODA3LTFkZGYtNDllOS05M2Y5LTMyZjVmZGE3OWQ0YiIsIlJvbGVJRHMiOiIiLCJSb2xlTmFtZXMiOiIiLCJleHAiOjE3NjYxMDE1NzksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCJ9.yf4FTaYBSQu_iPWTfNOMV59Pj_0BfCuCKoh0b8L5e_w');
+  const token = localStorage.getItem('authtoken');
+
+  // 1️⃣ Call backend (logging / audit)
+  if (token) {
+    await this.http.post(
+      this.APIUrl+'/SSOLogout_New',
+      token,
+      { headers: { 'Content-Type': 'application/json' } }
+    ).toPromise();
+  }
+
+  // 2️⃣ Clear browser storage
+  sessionStorage.clear();
+  localStorage.clear();
+  this.cookieService.deleteAll();
+
+  // 3️⃣ REAL SSO LOGOUT (browser redirect)
+  window.location.replace(
+    'https://ssotest.rajasthan.gov.in/signout'
+  );
+}
 
 }
 
