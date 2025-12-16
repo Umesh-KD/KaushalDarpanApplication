@@ -69,6 +69,8 @@ export class CounsellingApplicationFormDataModel {
   public MaritialID_ByAdmin?: number = 0;
   public CategoryA_ID_ByAdmin?: number = 0;
   public SelectionCategoryID_ByAdmin?: number = 0;
+  public SpouseDistrictID?: number = 0;
+  public SpouseDistrictIDByAdmin?: number = 0;
 }
 
 export class CounsellingApplicationSearchModel {
