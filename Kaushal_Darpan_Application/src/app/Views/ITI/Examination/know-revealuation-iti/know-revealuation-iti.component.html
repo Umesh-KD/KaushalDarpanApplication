@@ -15,7 +15,7 @@
     <div class="card bg-light mb-4">
       <div class="card-body text-center">
 
-        <h3 class="m-0">Revealuation Details </h3>
+        <h3 class="m-0">RTI Details </h3>
       </div>
     </div>
 
@@ -71,7 +71,7 @@
             <th class="text-left">Application No</th>
             <th class="text-left">Roll No</th>
             <th class="text-left">Student Exam</th>
-            <th class="text-left">Action</th>
+            <!-- <th class="text-left">Action</th> -->
             <th class="text-left">Reval Status</th>
             <th style="width:125px;">Action</th>
           </tr>
@@ -82,7 +82,7 @@
             <td>{{item.ApplicationNo}}</td>
             <td>{{item.RollNo}}</td>
             <td>{{item.StudentExamID}}</td>
-            <td>{{item.ActionID}}</td>
+            <!-- <td>{{item.ActionID}}</td> -->
             <td>{{item.RevalStatus}}</td>
             <td>
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -127,7 +127,7 @@
                 <th class="text-left">Sno</th>
                 <th class="text-left">Subject Code</th>
                 <th class="text-left">Subject Name</th>
-                <th class="text-left">Obtained Marks</th>
+                <!-- <th class="text-left">Obtained Marks</th> -->
                 <th class="text-left">File Document</th>
               </tr>
             </thead>
@@ -136,7 +136,7 @@
                 <td>{{idx+1}}</td>
                 <td>{{item.SubjectCode}}</td>
                 <td>{{item.SubjectName}}</td>
-                <td>{{item.ObtainedMarks}}</td>
+                <!-- <td>{{item.ObtainedMarks}}</td> -->
                 <td>
                   <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                     <a *ngIf="item.UploadedCopy && item.UploadedCopy.trim() !== ''"

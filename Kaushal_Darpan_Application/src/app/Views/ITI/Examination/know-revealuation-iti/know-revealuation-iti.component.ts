@@ -136,6 +136,7 @@ export class KnowRevealuationITIComponent {
     this.isShowGrid = false;
     this.request = new ITIStudentMeritInfoModel();
     this.studentDetailsModel = new StudentDetailsModel();
+    this.RVLApplicatiodata=[];
   }
 
 
