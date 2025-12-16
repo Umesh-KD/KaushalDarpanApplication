@@ -144,18 +144,20 @@ export class RevealuationComponent {
     }
 
 
-    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
+    this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) =>
+    {
       if (result.isConfirmed) {
         try {
         
 
           const data: any = await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest);
 
-          if (data.State === EnumStatus.Success) {
+          if (data.State === EnumStatus.Success)
+          {
             this.Request = data['Data'][0];
             this.EndtermName = data['Data'][0].EndTermName;
-
-            if (!this.Request.IsReval) {
+            if (!this.Request.IsReval)
+            {
               this.Request.StudentName = data['Data'][0]['StudentName'];
               this.StudentSemesterDetails = data['Data'];
               this.GetDateDataList();

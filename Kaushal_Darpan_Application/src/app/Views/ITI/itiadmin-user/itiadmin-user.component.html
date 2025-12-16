@@ -20,7 +20,7 @@
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <!--<a href="/AddCompany" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Marksheet Issue Date</a>-->
-        <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,0,0,0)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New ITI Admin User</a>
+        <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,0,0,0,0,0)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New ITI Admin User</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -76,10 +76,15 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr.No.</th>
+
+
             <th class="text-left">
-              Name
+              ITI Name
             </th>
-            <th class="text-left">SSO</th>
+            <th class="text-left">
+             Principal Name
+            </th>
+            <th class="text-left">SSOID</th>
             <th class="text-left">Email</th>
             <th class="text-left">Mobile Number</th>
             <th class="text-center">Action</th>
@@ -88,14 +93,15 @@
         <tbody>
           <tr *ngFor="let Admi of AdminUserList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{idx+1}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.CollegeName}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Name}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.SSOID}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{Admi.Email}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{maskMobileNumber(Admi.MobileNo)}}</td>
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
               <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
-                <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,Admi.UserID,Admi.UserAdditionID,Admi.ProfileID)" title="Edit"><i class="ti ti-pencil"></i></a>
-                <a href="javascript:void(0);" title="Delete" (click)="DeleteById(Admi.UserID,Admi.UserAdditionID,Admi.ProfileID)"><i class="ti ti-trash"></i></a>
+                <a href="javascript:void(0);" (click)="ViewandUpdate(MyModel_Action,Admi.UserID,Admi.UserAdditionID,Admi.ProfileID,Admi.InstituteID,Admi.RoleID)" title="Edit"><i class="ti ti-pencil"></i></a>
+                <!--<a href="javascript:void(0);" title="Delete" (click)="DeleteById(Admi.UserID,Admi.UserAdditionID,Admi.ProfileID)"><i class="ti ti-trash"></i></a>-->
 
               </div>
             </td>
@@ -210,11 +216,25 @@
                   </label>
                   <select id="ddlConter" class="form-select" [(ngModel)]="request.RoleID" formControlName="RoleID">
                     <option value="0">--Select--</option>
-                    <option value="{{_enumrole.AdministrartiveStaff}}">Administrative Staff</option>
-                    <option value="{{_enumrole.AdministrartiveStaff2}}">Administrative Staff 2</option>
+                    <option value="20">ITI Principal</option>
+                    <!--<option value="{{_enumrole.AdministrartiveStaff2}}">Administrative Staff 2</option>-->
 
                   </select>
                 </div>
+
+
+                <div class="">
+                  <label for="txtUserEmail" class="text-gray-800 text-sm font-medium inline-block mb-2">
+                    ITI<span class="StarMarking">*</span>
+                  </label>
+                  <select id="ddlConter" class="form-select" [(ngModel)]="request.InstituteID" formControlName="InstituteID">
+                    <option value="0">--Select--</option>
+                    <option *ngFor="let item of CollegeList" [value]="item.InstituteID">{{item.InstituteName}}</option>
+                    <!--<option value="{{_enumrole.AdministrartiveStaff2}}">Administrative Staff 2</option>-->
+
+                  </select>
+                </div>
+
 
 
               </div>
