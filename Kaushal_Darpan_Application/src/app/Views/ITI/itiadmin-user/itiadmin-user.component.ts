@@ -37,6 +37,7 @@ export class ITIAdminUserComponent {
   public ErrorMessage: string = '';
   public AdminUserFormGroup!: FormGroup;
   public AdminUserList: any = [];
+  public CollegeList: any = [];
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
   public requestSSoApi = new CommonVerifierApiDataModel();
@@ -59,6 +60,7 @@ export class ITIAdminUserComponent {
 
         txtUserEmail: ['', Validators.required],
         RoleID: ['', [DropdownValidators]],
+        InstituteID: [{ value: '', disabled: false }, [DropdownValidators]],
         txtSSOID: ['', [Validators.required, Validators.pattern(GlobalConstants.SSOIDPattern)]],
         //txtMobileNo: ['', Validators.required],
         txtMobileNo: [{ value: '', disabled: true }, Validators.required],
@@ -67,6 +69,7 @@ export class ITIAdminUserComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.ModifyBy = this.sSOLoginDataModel.UserID
     await this.GetAllData();
+    await this.GetAllDataITI();
 
 
   }
@@ -86,7 +89,7 @@ export class ITIAdminUserComponent {
     try {
       if (this.Isverifed == false) {
 
-        this.toastr.error("Please Enter Valid SSOID")
+        this.toastr.error("Please Verify SSOID")
         return
       }
       if (this.request.SSOID == '') {
@@ -105,7 +108,7 @@ export class ITIAdminUserComponent {
       this.request.CreatedBy = this.sSOLoginDataModel.UserID;
       this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID;
 
-        this.request.InstituteID = this.sSOLoginDataModel.InstituteID
+  /*      this.request.InstituteID = this.sSOLoginDataModel.InstituteID*/
       
       //save
       await this.adminUserService.SaveData(this.request)
@@ -154,7 +157,7 @@ export class ITIAdminUserComponent {
       this.sSOLoginDataModel.EndTermID = this.sSOLoginDataModel.EndTermID
       this.sSOLoginDataModel.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
       
 
       this.loaderService.requestStarted();
@@ -175,6 +178,31 @@ export class ITIAdminUserComponent {
   }
 
 
+  async GetAllDataITI() {
+    try {
+
+
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.Iticollege(2, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID,0).then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        debugger
+        this.CollegeList = data.Data;
+        console.log(this.AdminUserList, "marksheetlist")
+      }, (error: any) => console.error(error))
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
   // get all data
   async ClearSearchData() {
     this.searchRequest = new ITIAdminUserSearchModel();
@@ -182,15 +210,20 @@ export class ITIAdminUserComponent {
 
   }
 
-  async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number) {
+  async ViewandUpdate(content: any, UserID: number, UserAdditionID: number, ProfileID: number,InstituteID:number,RoleID:number=0) {
 
     //const initialState = {
     //  MarksheetIssueDataId: MarksheetIssueDataId,
     //  Type: "Admin",
     //};
+    debugger
     this.UserID = UserID;
     this.UserAdditionID = UserAdditionID;
     this.ProfileID = ProfileID;
+    this.request.ProfileID = ProfileID;
+    this.request.UserAdditionID = ProfileID;
+    this.request.InstituteID = InstituteID
+    this.request.RoleID = RoleID
 
     if (this.UserID > 0 || this.UserAdditionID > 0 || this.ProfileID > 0) {
       await this.GetById();
@@ -219,12 +252,13 @@ export class ITIAdminUserComponent {
           data = JSON.parse(JSON.stringify(data));
           console.log(data, "rrrrrrrr");
           ;
-          this.request = data['Data'];
+          //this.request = data['Data'];
           this.request.Name = data['Data']['Name'];
           this.request.MobileNo = data['Data']['MobileNo'];
           this.request.SSOID = data['Data']["SSOID"];
           this.request.Email = data['Data']["Email"];
 
+          console.log(this.request.InstituteID)
 
         }, (error: any) => console.error(error)
         );

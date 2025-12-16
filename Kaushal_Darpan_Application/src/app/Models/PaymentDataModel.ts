@@ -77,7 +77,7 @@ export class EmitraRequestDetails {
   public Amount: number = 0; 
   public EnrollFeeAmount?: number = 0; 
   public UserName: string = ''
-  public MobileNo: string = ''
+  public MobileNo?: string = ''
   public RegistrationNo: string = ''
   public SsoID: string = ''
   public RESPONSEJSON: string = ''
@@ -103,6 +103,9 @@ export class EmitraRequestDetails {
   public StudentFeesTransactionItems: StudentFeesTransactionItems[] = [];
   public InstituteID: number = 0;
   public InstituteIDEnc: string = '';
+
+
+  public RevalRequestID:number=0;
 }
 
 export class TransactionStatusDataModel

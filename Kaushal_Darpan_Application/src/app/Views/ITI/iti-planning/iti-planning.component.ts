@@ -444,6 +444,7 @@ export class ItiPlanningComponent {
 
 
   async GetDivisionMasterList() {
+    debugger;
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.GetDivisionMaster()
@@ -467,7 +468,7 @@ export class ItiPlanningComponent {
 
 
   async ddlDistrict_Change() {
-
+    debugger
     try {
       this.loaderService.requestStarted();
 
@@ -613,12 +614,14 @@ export class ItiPlanningComponent {
 
 
   async ddlState_Change() {
+    debugger
     try {
       this.loaderService.requestStarted();
       await this.commonMasterService.DistrictMaster_StateIDWise(this.request.RegOfficeStateID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.DistrictMasterList = data['Data'];
+          console.log('DistrictMasterList====>', this.DistrictMasterList)
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -1044,8 +1047,8 @@ export class ItiPlanningComponent {
 
 
   async GetById(ID: number) {
+    debugger
     try {
-      debugger;
       this.request.ItiAffiliationList = []
       this.request.ItiMembersModel=[]
       this.loaderService.requestStarted();
