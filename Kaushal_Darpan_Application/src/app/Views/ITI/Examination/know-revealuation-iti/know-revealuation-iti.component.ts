@@ -87,8 +87,8 @@ export class KnowRevealuationITIComponent {
   async ngOnInit() {
 
     this.RVLform = this.formBuilder.group({
-      ApplicationNo: ['', Validators.required],
-      RollNo: ['', Validators.required],
+      ApplicationNo: [''],
+      RollNo: [''],
 
     })
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -127,6 +127,9 @@ export class KnowRevealuationITIComponent {
   async onSearchClick() { await this.GetRVLApplicationNoData(); }
 
   async ResetControl() {
+    debugger
+    this.Request.ApplicationNo='';
+    this.Request.RollNo='';
     this.SemesterID = 0;
     this.StreamID = 0;
     this.ApplicationNo = '';
