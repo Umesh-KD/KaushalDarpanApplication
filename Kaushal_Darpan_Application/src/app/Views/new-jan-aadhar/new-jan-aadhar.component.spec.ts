@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {UpdateStudentDetailComponent } from './update-student-details.component';
+import {JanAadharDetailComponent } from './new-jan-aadhar.component';
 
 describe('CompanyMasterComponent', () => {
-  let component:  UpdateStudentDetailComponent;
-  let fixture: ComponentFixture<UpdateStudentDetailComponent>;
+  let component:  JanAadharDetailComponent;
+  let fixture: ComponentFixture<JanAadharDetailComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UpdateStudentDetailComponent]
+      declarations: [JanAadharDetailComponent]
     });
-    fixture = TestBed.createComponent(UpdateStudentDetailComponent);
+    fixture = TestBed.createComponent(JanAadharDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

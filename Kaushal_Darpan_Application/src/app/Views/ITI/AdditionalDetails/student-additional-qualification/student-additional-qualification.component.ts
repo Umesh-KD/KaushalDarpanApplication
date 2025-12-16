@@ -23,6 +23,8 @@ export class StudentAdditionalQualiComponent implements OnInit {
   public request = new StudentAdditionalQualificationModel();
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
+  public key:number=0;
+  public ID:number=0;
 
   public _EnumRole = EnumRole;
 
@@ -34,6 +36,17 @@ export class StudentAdditionalQualiComponent implements OnInit {
 
   async ngOnInit() {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
+    this.key = Number(this.router.snapshot.queryParamMap.get('key')?.toString());//student list key
+    this.ID = Number(this.router.snapshot.queryParamMap.get('ID')?.toString());//student list key
+   debugger
+   
+    if(this.ID!=0 && this.ID!=null && !Number.isNaN(this.ID)){
+       this.request.StudentQualificationID=this.ID;
+    }
+    else{
+       this.request.StudentQualificationID=0;
+    }
+   
     await this.GetStudentAdditionalQualiData();
   }
 

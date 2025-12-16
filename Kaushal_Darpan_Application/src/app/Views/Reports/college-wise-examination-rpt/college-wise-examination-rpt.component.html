@@ -95,7 +95,7 @@
       <ng-container matColumnDef="SelectedForExamination">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending for Verification </th>
         <td mat-cell *matCellDef="let element">
-          <a [routerLink]="'/studentexamination/' + 32 +'/'+ element.InstituteID">{{element.SelectedForExamination}}</a>
+          <a [routerLink]="'/studentexamination/' + 10 +'/'+ element.InstituteID">{{element.SelectedForExamination}}</a>
         </td>
       </ng-container>
 
@@ -113,7 +113,7 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Pending for Eligible </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="'/preexamstudent/' + 32 +'/'+ element.InstituteID">{{ element.PendingToExamination }}</a>-->
-          <a [routerLink]="'/studentexamination/' + 10 +'/'+ element.InstituteID">{{element.ExaminationFeePaid}}</a>
+          <a [routerLink]="'/studentexamination/' + 32 +'/'+ element.InstituteID">{{element.ExaminationFeePaid}}</a>
         </td>
       </ng-container>
 
@@ -127,15 +127,25 @@
       </ng-container>
 
       <!-- First Year Examination Column -->
-      <ng-container matColumnDef="FirstYearExamination">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> First Year Examination </th>
-        <td mat-cell *matCellDef="let element">{{ element.FirstYearExamination }}</td>
+      <ng-container matColumnDef="FirstSemExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 1st Semester Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.FirstSemExamination }}</td>
       </ng-container>
 
       <!-- Second Year Examination Column -->
-      <ng-container matColumnDef="SecondYearExamination">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Second Year Examination </th>
-        <td mat-cell *matCellDef="let element">{{ element.SecondYearExamination }}</td>
+      <ng-container matColumnDef="ThirdSemExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 3rd Semester Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.ThirdSemExamination }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="FifthSemExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 5th Semester Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.FifthSemExamination }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="SixthSemSpecExamination">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> 6rd Semester Special Examination </th>
+        <td mat-cell *matCellDef="let element">{{ element.SixthSemSpecExamination }}</td>
       </ng-container>
 
       <!-- Table Rows -->

@@ -29,9 +29,7 @@
               <tr>
                 <td>Papers</td>
                 <td>
-                  <span *ngIf="StudentProfileDetailsData[0]['StudentTypeID']==1">Theory &amp; Practical &amp; Optional Papers</span>
-                  <br />
-                  <span style="word-break: break-all;">({{StudentProfileDetailsData[0]['StudentPaper']}}) </span>
+                  <span style="word-break: break-all;">{{StudentProfileDetailsData[0]['StudentPaper']}} </span>
                 </td>
               </tr>
               <tr>

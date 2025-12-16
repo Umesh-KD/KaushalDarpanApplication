@@ -188,6 +188,19 @@
       <div>
         <span class="mt-2 block" style="font-size:18px">Selected(s): <b>{{totalInTableSelected}}</b></span>
       </div>
+      <div>
+        
+      </div>
+      <div>
+        <a href="javascript:void(0);" 
+          class="btn bg-info btn-sm text-white justify-end" 
+          (click)="NorifyStudent_VerifyForEnrollment()"
+          *ngIf="(request.StudentFilterStatusId == _enumExamStudentStatus.VerifiedForEnrollment || 
+                request.StudentFilterStatusId == _enumExamStudentStatus.SelectedForEnrollment)&& 
+                (sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon)">
+          <i class="ti ti-clock" title="Snooze Notification"></i> Notify Students
+        </a>
+      </div>
 
     </div>
 
@@ -284,7 +297,7 @@
             <!--<td align="left">{{row.StudentExamStatus}}</td>-->
             <td align="left">
               <span *ngIf="row.IsReturnHistory == 290">
-                is Return
+                Return (Enrollment)
               </span>
               <span *ngIf="row.IsReturnHistory != 290">
                 {{ row.StudentExamStatus }}
@@ -806,7 +819,7 @@
               </label>
               <input type="text" class="form-input" id="txtAbc" name="txtAbc" formControlName="txtAbc" maxlength="12"
                      [(ngModel)]="requestStudent.ABCID">
-              <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
+              <!-- <div *ngIf="isSubmitted&&EditStudentDataform.txtAbc.errors" class="text-danger">
                 <p *ngIf="EditStudentDataform.txtAbc.errors.required">
                   <i aria-hidden="true"></i> This field is
                   required .!
@@ -815,7 +828,7 @@
                   <i aria-hidden="true"></i>  This field is
                   required .!
                 </p>
-              </div>
+              </div> -->
             </div>
 
 

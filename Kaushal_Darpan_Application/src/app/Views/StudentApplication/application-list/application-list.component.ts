@@ -3,7 +3,6 @@ import { EnumConfigurationType, EnumCourseType, EnumCourseType1, EnumDepartment,
 import { VerificationDocumentDetailList } from '../../../Models/StudentVerificationDataModel';
 import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { StudentSearchModel } from '../../../Models/StudentSearchModel';
-import { SMSMailService } from '../../../Services/SMSMail/smsmail.service';
 import { AppsettingService } from '../../../Common/appsetting.service';
 import { CommonFunctionService } from '../../../Services/CommonFunction/common-function.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -87,7 +86,6 @@ export class ApplicationListComponent {
     public appsettingConfig: AppsettingService,
     private studentService: ApplicationStatusService, 
     private modalService: NgbModal,
-    private sMSMailService: SMSMailService, 
     private cookieService: CookieService, 
     private cdRef: ChangeDetectorRef, 
     private activeRoute: ActivatedRoute,

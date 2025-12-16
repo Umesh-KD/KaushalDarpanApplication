@@ -245,6 +245,8 @@ public instituteDetails: InstituteListDataModel_Coun[] = []
         data = JSON.parse(JSON.stringify(data));
         if (data.State === EnumStatus.Success) {
           this.InstituteOptionList = data.Data
+          console.log('InstituteOptionList',this.InstituteOptionList);
+          
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message)
         } else {
@@ -287,13 +289,13 @@ downloadPDF2() {
 
 
   html2canvas(element, {
-    scale: 3,         // Better clarity
+    scale: 1.5,         // Better clarity
     useCORS: true,
     allowTaint: true,
     logging: false
   }).then((canvas) => {
 
-    const imgData = canvas.toDataURL('image/png');
+    const imgData = canvas.toDataURL('image/png',0.7);
 
     // Calculating A4 width scale
     const imgWidth = pageWidth;

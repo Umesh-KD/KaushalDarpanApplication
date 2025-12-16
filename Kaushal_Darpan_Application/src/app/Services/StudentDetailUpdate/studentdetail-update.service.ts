@@ -5,6 +5,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { catchError, throwError } from 'rxjs';
 import { StudentEmploymentDetailsModel } from '../../Models/CompanyMasterDataModel';
 import { StudentAdditionalQualificationModel } from '../../Models/ApplicationFormDataModel';
+import { BTERStudentProfileUpdateModel } from '../../Models/StudentMasterModels';
 
 @Injectable({
   providedIn: 'root'
@@ -108,6 +109,26 @@ export class StudentdetailUpdateService {
       ).toPromise();
   }
 
+
+    public async GetStudentAdditionalQualiDataByID(ID: number, userId: number, DepartmentID: number = 0, key: number = 0) {
+    var body = JSON.stringify({ "AID": ID, "ModifyBy": userId });
+    return await this.http.post(`${this.APIUrl}/GetStudentAdditionalQualiDataByID/${ID}/${userId}/${DepartmentID}/${key}`, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
     
+
+  // --------------------------------route : update-studentdetails----------------------------------------
+
+     //save data
+   public async SaveStudentProfileData(request: BTERStudentProfileUpdateModel) {
+    debugger
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/SaveStudentProfileData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 
 }

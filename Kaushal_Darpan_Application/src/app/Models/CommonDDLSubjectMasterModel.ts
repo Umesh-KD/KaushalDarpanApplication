@@ -11,3 +11,11 @@ export class CommonDDLSubjectCodeMasterModel extends RequestBaseModel {
   public StudentExamID: number = 0;
   public SubjectType:number=0
 }
+
+export class OptionalSubjectDDLDataModel {
+  public DepartmentID?: number = 0;
+  public CourseType?: number = 0;
+  public EndTermID?: number = 0;
+  public SemesterId?: number = 0;
+  public StreamId?: number = 0;
+}

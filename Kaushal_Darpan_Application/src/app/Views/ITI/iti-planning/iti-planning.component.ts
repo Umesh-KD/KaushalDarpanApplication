@@ -90,6 +90,7 @@ export class ItiPlanningComponent {
   public Collegeid: number = 0
   public Type: number = 0
   @ViewChild('pdfTable', { static: false }) pdfTable!: ElementRef;
+  public StudentHistoryModelList: any = [];
   constructor(
     private formBuilder: FormBuilder,
     private loaderService: LoaderService,
@@ -103,6 +104,7 @@ export class ItiPlanningComponent {
     private modalService: NgbModal,
     private router: Router,
     private http: HttpClient,
+    private campusPostService: ITIsService
   ) { }
 
 
@@ -283,6 +285,7 @@ export class ItiPlanningComponent {
     this.GetcOmmonData()
     this.ItiMemberPost()
     this.setMinDate();
+    
   }
 
   get _ReportForm() { return this.ReportForm.controls; }
@@ -1047,6 +1050,7 @@ export class ItiPlanningComponent {
       this.request.ItiMembersModel=[]
       this.loaderService.requestStarted();
       const data: any = await this.ApplicationService.Get_ITIsPlanningData_ByID(ID);
+      this.ViewWorkflow(ID)
       const parsedData = JSON.parse(JSON.stringify(data));
 
       
@@ -1602,5 +1606,28 @@ export class ItiPlanningComponent {
         this.loaderService.requestEnded();
       }, 200);
     }
-  } 
+  }
+
+  async ViewWorkflow(CollegeID: number = 0) {
+    try {
+      this.loaderService.requestStarted();
+      await this.campusPostService.ViewWorkflow(CollegeID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.StudentHistoryModelList = data['Data'];
+
+          console.log('History',this.StudentHistoryModelList);
+
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 }

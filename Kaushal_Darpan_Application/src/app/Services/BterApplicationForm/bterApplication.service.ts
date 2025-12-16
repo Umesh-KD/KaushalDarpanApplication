@@ -249,6 +249,7 @@ export class BterApplicationForm {
 
    //save data
    public async UpdateStudentQualificationDetails(request: StudentAdditionalQualificationModel) {
+    debugger
     var body = JSON.stringify(request);
     return await this.http.post(`${this.APIUrl}/UpdateStudentQualificationDetails`, body, this.headersOptions)
       .pipe(

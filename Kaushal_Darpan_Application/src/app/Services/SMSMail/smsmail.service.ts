@@ -8,7 +8,7 @@ import { GlobalConstants } from '../../Common/GlobalConstants';
 import { AppsettingService } from '../../Common/appsetting.service';
 import { StudentSearchModel } from '../../Models/StudentSearchModel';
 import { ApplicationMessageDataModel } from '../../Models/ApplicationMessageDataModel';
-import { ForSMSEnrollmentStudentMarkedModel } from '../../Models/StudentMasterModels';
+import { ForSMSEnrollmentStudentMarkedModel, ForSMSNotifyStudentModel } from '../../Models/StudentMasterModels';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +54,24 @@ export class SMSMailService
     const body = JSON.stringify(request);
     debugger
     return this.http.post(`${this.APIUrl}/SendSMSForStudentEnrollmentData`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async NorifyStudent_VerifyForExamination(request: ForSMSNotifyStudentModel[]) {
+    const body = JSON.stringify(request);
+    debugger
+    return this.http.post(`${this.APIUrl}/NorifyStudent_VerifyForExamination`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async NorifyStudent_VerifyForEnrollment(request: ForSMSNotifyStudentModel[]) {
+    const body = JSON.stringify(request);
+    debugger
+    return this.http.post(`${this.APIUrl}/NorifyStudent_VerifyForEnrollment`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

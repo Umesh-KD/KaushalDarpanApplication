@@ -52,7 +52,7 @@ export class CenterCreateITIComponent implements OnInit {
 
   public CreateCenterForm!: FormGroup;
   public StartValue: number = 0;
-
+  public AllInTableSelect: boolean = false;
   constructor(private commonMasterService: CommonFunctionService,
     private Router: Router, private centerAllotmentService: CenterAllotmentService,
     private ItiCenterService: ItiCenterService,
@@ -339,4 +339,9 @@ export class CenterCreateITIComponent implements OnInit {
     }
   }
 
+  selectInTableAllCheckbox() {
+    this.CenterAllotList.forEach(x => {
+      x.Marked = this.AllInTableSelect;
+    });
+  }
 }

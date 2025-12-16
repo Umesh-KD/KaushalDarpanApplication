@@ -1,7 +1,8 @@
 
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Student Profile</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2" *ngIf="!isTPO">Student Profile</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2" *ngIf="isTPO">Additional Qualification</h4>
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" *ngIf="sSOLoginDataModel.DepartmentID == 1">
         BTER
@@ -10,14 +11,19 @@
         ITI
       </a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page"> Student Qualification</a>
+      <a routerLink="/dashboard" class="text-sm font-medium text-slate-700" aria-current="page" > Student Qualification</a>
     </div>
   </div>
   <!--<button type="submit" class="btn bg-success text-white btn-lg" (click)="openModal(modal_ApplyNow)"><i class="ti ti-plus"></i> Apply Now</button>-->
+
+   <a (click)="Back()" class="inline-flex items-center btn bg-dark text-white btn-sm">
+    <i class="ti ti-chevron-left"></i>
+    Back
+  </a>
 </div>
 <div *ngIf="IsShowDashboard">
   <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 gap-6 mb-6">
-    <div class="card">
+    <div *ngIf="!isTPO" class="card">
       <div class="card-body">
         <div class="Profilebox flex justify-between">
 
@@ -27,7 +33,7 @@
                  [src]="appsettingConfig.StaticFileRootPathURL + '/' + ProfileLists.FolderName + '/' + appsettingConfig.DepartmentBterFolder + '/' + ProfileLists.FileName" />
 
           </div> -->
-          <div class="userInfos">
+          <div  class="userInfos" >
             <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-1 gap-3">
               <div>
                 <label>Name:</label>
@@ -87,124 +93,6 @@
   <div class="card">
     <div class="card-body p-5">
       <div class="mb-8">
-
-        <!-- <form [formGroup]="qualificationForm" id="qualificationForm" class="form-horizontal">
-            
-          <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-            <b class="text-1xl-5"><i class="ti ti-plus"></i>Update Student Qualification</b>
-          </div>
-          <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Name <span class="StarMarking">*</span>
-              </label>
-              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name"
-                    [(ngModel)]="request.Name" formControlName="Name">
-              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Name.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.Name.errors.required">
-                  <i aria-hidden="true"></i> This field is
-                  required.!
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Website <span class="StarMarking">*</span>
-              </label>
-              <input type="email" class="form-input" placeholder="Enter Website" id="Website" name="Website"
-                    [(ngModel)]="request.Website" formControlName="Website">
-              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Website.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.Website.errors.required">
-                  <i aria-hidden="true"></i> This field is
-                  required.!
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                State <span class="StarMarking">*</span>
-              </label>
-              <select formControlName="ddlState" class="form-select" id="ddlState" [(ngModel)]="request.StateID"
-                      (change)="ddlState_Change()">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of StateMasterList" [value]="item.ID">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlState.errors" class="text-danger">
-                <p *ngIf="!_CompanyMasterFormGroup.ddlState.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                District<span class="StarMarking">*</span>
-              </label>
-              <select formControlName="ddlDistrict" class="form-select" id="ddlDistrict" [(ngModel)]="request.DistrictID">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of DistrictMasterList" [value]="item.ID">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlDistrict.errors" class="text-danger">
-                <p *ngIf="!_CompanyMasterFormGroup.ddlDistrict.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
-                </p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Company Type<span class="StarMarking">*</span>
-              </label>
-              <select formControlName="ddlCompanyType" class="form-select" id="ddlCompanyType" [(ngModel)]="request.CompanyTypeId">
-                <option value="0">--Select--</option>
-                <option *ngFor="let item of CompanyTypeList" [value]="item.ID">{{item.Name}}</option>
-              </select>
-              <div *ngIf="isqualificationformSubmitted&&_CompanyMasterFormGroup.ddlCompanyType.errors" class="text-danger">
-                <p *ngIf="!_CompanyMasterFormGroup.ddlCompanyType.errors.DropdownValidators">
-                  <i aria-hidden="true"></i>This
-                  field is required .!
-                </p>
-              </div>
-            </div>   
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                Address <span class="StarMarking">*</span>
-              </label>
-              <input type="text" class="form-input" placeholder="Enter Company Address" id="Address" name="Address"
-                    [(ngModel)]="request.Address" formControlName="Address">
-              <div *ngIf="isqualificationformSubmitted && _CompanyMasterFormGroup.Address.errors" class="text-danger">
-                <p *ngIf="_CompanyMasterFormGroup.Address.errors.required">
-                  <i aria-hidden="true"></i> This field is
-                  required.!
-                </p>
-              </div>
-            </div>
-            <div>
-              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    for="fileStudentPhoto">Photograph</label>
-              <div class="flex fileUploader">
-                <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                      id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
-                <label for="fileStudentPhoto">
-                  <span>Choose File</span>
-                  {{request.Dis_CompanyName === '' ? 'No File Choosen' : request.Dis_CompanyName}}
-                </label>
-                <div class="flex">
-                  <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.CompanyPhoto}}"
-                    *ngIf="this.request.CompanyPhoto !=''" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-        </form> -->
-
         <!-- to add multiple qualification  -->
 
         <form [formGroup]="qualificationForm" id="qualificationForm" class="form-horizontal mt-6">
@@ -213,30 +101,20 @@
           </div>
           <div class="grid xl:grid-cols-4 lg:grid-cols-4 md:grid-cols-3 gap-6">
 
-            <!-- <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name <span class="StarMarking">*</span></label>
-              <input type="text" class="form-input" placeholder="Enter Name" id="Name" name="Name" [(ngModel)]="personRequest.Name" formControlName="Name">
-              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.Name.errors" class="text-danger">
-                <p *ngIf="_HrMasterFormGroup.Name.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
+             <div *ngIf="isTPO">
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                Enrollment No. <span class="StarMarking">*</span>
+              </label>
+              <input type="text" class="form-input" placeholder="Enter Enrollment No" id="EnrollmentNo" name="EnrollmentNo"
+                    [(ngModel)]="request.EnrollmentNo" formControlName="EnrollmentNo">
+              <div *ngIf="isqualificationformSubmitted && _QualificationForm.EnrollmentNo.errors" class="text-danger">
+                <p *ngIf="_QualificationForm.EnrollmentNo.errors?.required">
+                  <i aria-hidden="true"></i> This field is
+                  required.!
+                </p>
               </div>
             </div>
 
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email <span class="StarMarking">*</span></label>
-              <input type="email" class="form-input" placeholder="Enter Email" id="EmailId" name="EmailId" [(ngModel)]="personRequest.EmailId" formControlName="EmailId">
-              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.EmailId.errors" class="text-danger">
-                <p *ngIf="_HrMasterFormGroup.EmailId.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-                <p *ngIf="_HrMasterFormGroup.EmailId.errors.pattern"><i aria-hidden="true"></i>Please enter a valid email address.</p>
-              </div>
-            </div>
-
-            <div>
-              <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile Number <span class="StarMarking">*</span></label>
-              <input autocomplete="off" class="form-input" placeholder="Enter Mobile No" id="MobileNo" name="MobileNo" [(ngModel)]="personRequest.MobileNo" formControlName="MobileNo" maxlength="10" (keypress)="validateNumber($event)">
-              <div *ngIf="isHrFormSubmitted && _HrMasterFormGroup.MobileNo.errors" class="text-danger">
-                <p *ngIf="_HrMasterFormGroup.MobileNo.errors.required"><i aria-hidden="true"></i> This field is required.!</p>
-              </div>
-            </div> -->
 
             <div>
               <label for="Board" class="text-gray-800 text-sm font-medium inline-block mb-2">Qualification:<span class="StarMarking">*</span></label>
@@ -284,9 +162,10 @@
               </div>
             </div>
 
+            <!-- (change)="passingYearValidation()" -->
             <div>
               <label for="YearofPassing" class="text-gray-800 text-sm font-medium inline-block mb-2">Year of Passing:<span class="StarMarking">*</span></label>
-              <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassyear" [(ngModel)]="request.PassingID" (change)="passingYearValidation()">
+              <select class="form-select" id="SupplementaryYofPass" formControlName="ddlPassyear" [(ngModel)]="request.PassingID" >
                 <option value="">Select Passing Year</option>
                 <option *ngFor="let item of PassingYearList" [value]="item.Year">{{item.Year}}</option>
               </select>

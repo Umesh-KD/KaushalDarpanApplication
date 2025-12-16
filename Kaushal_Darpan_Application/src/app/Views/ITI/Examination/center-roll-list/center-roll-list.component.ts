@@ -722,7 +722,7 @@ export class CenterRollListComponent {
 
 
 
-  async GenerateITIRollNumberList(Inst:number=0) {
+  async GenerateITIRollNumberList(Inst:number=0,Sem:number=0) {
     ;
     try {
       this.loaderService.requestStarted();
@@ -731,9 +731,11 @@ export class CenterRollListComponent {
       this.GenerateRollNosearchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
       this.GenerateRollNosearchRequest.CenterID = this.sSOLoginDataModel.InstituteID
       this.GenerateRollNosearchRequest.InstituteID = Inst
+      this.GenerateRollNosearchRequest.SemesterID = Sem
+
      
       await this.reportService.DownloadITIStudentRollNumberBulk_CenterWise(this.GenerateRollNosearchRequest)
-        .then((data: any) => {
+        .then((data: any) => {  
           data = JSON.parse(JSON.stringify(data));
           if (data.State == EnumStatus.Success) {
             this.loaderService.requestEnded();

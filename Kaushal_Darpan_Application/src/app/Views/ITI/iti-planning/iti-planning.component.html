@@ -9,7 +9,7 @@
         <a [routerLink]="['/AdminDashboardITI']" class="text-sm font-medium text-slate-700">Dashboard</a>
         <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
         <!--<a href="/ITICollageTrade" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>-->
-        <a [routerLink]="['/ITICollageTrade']" class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
+        <a class="text-sm font-medium text-slate-700" aria-current="page">ITI College Planning</a>
         <!--<a href="/ItiPlanningList" class="text-sm font-medium text-slate-700 btn btn-primary" aria-current="page">Back</a>-->
         <div>
         </div>
@@ -180,8 +180,8 @@
                      *ngIf="this.request.RegFileName  !=''"
                      class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                   <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                  (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                  *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+              (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+              *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
                 </div>
 
               </div>
@@ -251,8 +251,8 @@
                    *ngIf="this.member.IDFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -297,8 +297,8 @@
                    *ngIf="this.request.MemberIdProofName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -448,8 +448,8 @@
                    *ngIf="this.request.AgreementFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -470,8 +470,8 @@
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Street/Road/Lane</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="StreetRoadLane" [(ngModel)]="request.StreetRoadLane" placeholder="Enter Street/Road/Lane">
             <!--<div *ngIf="isSubmitted && _AddressFormGroup.StreetRoadLane.errors" class="text-danger">
-              <p *ngIf="_AddressFormGroup.StreetRoadLane.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>-->
+          <p *ngIf="_AddressFormGroup.StreetRoadLane.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>-->
           </div>
 
 
@@ -479,16 +479,16 @@
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Area/Locality/Sector</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="AreaLocalitySector" [(ngModel)]="request.AreaLocalitySector" placeholder=" Enter Area/Locality/Sector">
             <!--<div *ngIf="isSubmitted && _AddressFormGroup.AreaLocalitySector.errors" class="text-danger">
-              <p *ngIf="_AddressFormGroup.AreaLocalitySector.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>-->
+          <p *ngIf="_AddressFormGroup.AreaLocalitySector.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>-->
           </div>
 
           <div>
             <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">LandMark</label>
             <input type="text" class="form-input" id="ApplicationId" formControlName="LandMark" [(ngModel)]="request.LandMark" placeholder="Enter LandMark">
             <!--<div *ngIf="isSubmitted && _AddressFormGroup.LandMark.errors" class="text-danger">
-              <p *ngIf="_AddressFormGroup.LandMark.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>-->
+          <p *ngIf="_AddressFormGroup.LandMark.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>-->
           </div>
           <div>
             <label>Division<span class="StarMarking">*</span></label>
@@ -638,52 +638,52 @@
           </div>
 
           <!--<div *ngIf="request.AdministrativeId == 1 && request.UrbanRural==75">
-            <label for="CantonmentBoard">CantonmentBoard Name:<span class="StarMarking">*</span></label>
-            <input formControlName="CantonmentBoard" class="form-input" type="text" id="CantonmentBoard"
-                   placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
-            <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>
+        <label for="CantonmentBoard">CantonmentBoard Name:<span class="StarMarking">*</span></label>
+        <input formControlName="CantonmentBoard" class="form-input" type="text" id="CantonmentBoard"
+               placeholder="Enter CantonmentBoard Name" [(ngModel)]="request.CantonmentBoardName">
+        <div *ngIf="isSubmitted && instituteForm.get('CantonmentBoard').errors" class="text-danger">
+          <p *ngIf="instituteForm.get('CantonmentBoard').errors.required">
+            <i aria-hidden="true"></i>This field is
+            required.
+          </p>
+        </div>
+      </div>
 
-          <div *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
-            <label for="NagarNigam">Nagar Nigam Name:<span class="StarMarking">*</span></label>
-            <input formControlName="NagarNigam" class="form-input" type="text" id="NagarNigam"
-                   placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarNigam').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>
+      <div *ngIf="request.AdministrativeId == 2 && request.UrbanRural==75">
+        <label for="NagarNigam">Nagar Nigam Name:<span class="StarMarking">*</span></label>
+        <input formControlName="NagarNigam" class="form-input" type="text" id="NagarNigam"
+               placeholder="Enter NagarNigam Name" [(ngModel)]="request.NagarNigamName">
+        <div *ngIf="isSubmitted && instituteForm.get('NagarNigam').errors" class="text-danger">
+          <p *ngIf="instituteForm.get('NagarNigam').errors.required">
+            <i aria-hidden="true"></i>This field is
+            required.
+          </p>
+        </div>
+      </div>
 
-          <div *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
-            <label for="NagarPalika">Nagar Palika Name:<span class="StarMarking">*</span></label>
-            <input formControlName="NagarPalika" class="form-input" type="text" id="NagarPalika"
-                   placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarPalika').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>
+      <div *ngIf="request.AdministrativeId == 3 && request.UrbanRural==75">
+        <label for="NagarPalika">Nagar Palika Name:<span class="StarMarking">*</span></label>
+        <input formControlName="NagarPalika" class="form-input" type="text" id="NagarPalika"
+               placeholder="Enter NagarPalika Name" [(ngModel)]="request.NagarPalikaName">
+        <div *ngIf="isSubmitted && instituteForm.get('NagarPalika').errors" class="text-danger">
+          <p *ngIf="instituteForm.get('NagarPalika').errors.required">
+            <i aria-hidden="true"></i>This field is
+            required.
+          </p>
+        </div>
+      </div>
 
-          <div *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
-            <label for="NagarParishad">Nagar Parishad Name:<span class="StarMarking">*</span></label>
-            <input formControlName="NagarParishad" class="form-input" type="text" id="NagarParishad"
-                   placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
-            <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
-              <p *ngIf="instituteForm.get('NagarParishad').errors.required">
-                <i aria-hidden="true"></i>This field is
-                required.
-              </p>
-            </div>
-          </div>-->
+      <div *ngIf="request.AdministrativeId == 4 && request.UrbanRural==75">
+        <label for="NagarParishad">Nagar Parishad Name:<span class="StarMarking">*</span></label>
+        <input formControlName="NagarParishad" class="form-input" type="text" id="NagarParishad"
+               placeholder="Enter NagarParishad Name" [(ngModel)]="request.NagarParishadName">
+        <div *ngIf="isSubmitted && instituteForm.get('NagarParishad').errors" class="text-danger">
+          <p *ngIf="instituteForm.get('NagarParishad').errors.required">
+            <i aria-hidden="true"></i>This field is
+            required.
+          </p>
+        </div>
+      </div>-->
 
 
           <div>
@@ -734,8 +734,8 @@
                    *ngIf="this.request.LatLongFileName  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -762,8 +762,6 @@
                 <i aria-hidden="true"></i>This field is required .!
               </p>
             </div>
-
-
           </div>
 
 
@@ -885,10 +883,10 @@
             <input (keypress)="numberOnly($event)" formControlName="ContractDemand" class="form-input" type="text" id="Ward" placeholder="Enter Contarct Demand"
                    [(ngModel)]="request.ContractDemand" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
             <!-- <div *ngIf="isSubmitted&&_AddressFormGroup.ContractDemand.errors" class="text-danger">
-              <p *ngIf="_AddressFormGroup.ContractDemand.errors.required">
-                <i aria-hidden="true"></i>This field is required .!
-              </p>
-            </div> -->
+          <p *ngIf="_AddressFormGroup.ContractDemand.errors.required">
+            <i aria-hidden="true"></i>This field is required .!
+          </p>
+        </div> -->
           </div>
 
           <div>
@@ -932,8 +930,8 @@
                    *ngIf="this.request.Bill_Filename  !=''"
                    class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                 <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-                (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-                *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+            (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+            *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
               </div>
 
             </div>
@@ -969,12 +967,12 @@
           </div>
 
           <!--<div>
-            <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
-            <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate" [(ngModel)]="addmore.OrderDate">
-            <div *ngIf="isSubmitted &&_AffFormGroup.OrderDate.errors" class="text-danger">
-              <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-            </div>
-          </div>-->
+        <label for="ApplicationId" class="text-gray-800 text-sm font-medium inline-block mb-2">Order Date<span class="StarMarking">*</span></label>
+        <input type="date" class="form-input" id="ApplicationId" formControlName="OrderDate" [(ngModel)]="addmore.OrderDate">
+        <div *ngIf="isSubmitted &&_AffFormGroup.OrderDate.errors" class="text-danger">
+          <p *ngIf="_AffFormGroup.OrderDate.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+        </div>
+      </div>-->
 
 
 
@@ -1003,26 +1001,26 @@
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Affilation Document<span class="StarMarking">*</span> </label>
-            <div class="flex fileUploader">
-              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                     id="FileName" type="file" (change)="onFilechange($event,'FileName')" />
+        <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Affilation Document<span class="StarMarking">*</span> </label>
+        <div class="flex fileUploader">
+          <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                 id="FileName" type="file" (change)="onFilechange($event,'FileName')" />
 
-              <label for="FileName">
-                <span>Choose File</span>
-                {{ addmore.Dis_Filename === '' ? 'No File Chosen' : addmore.Dis_Filename }}
-              </label>
-              <div class="flex">
-                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + addmore.FileName}}"
-                   *ngIf="this.addmore.FileName  !=''"
-                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
+          <label for="FileName">
+            <span>Choose File</span>
+            {{ addmore.Dis_Filename === '' ? 'No File Chosen' : addmore.Dis_Filename }}
+          </label>
+          <div class="flex">
+            <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + addmore.FileName}}"
+               *ngIf="this.addmore.FileName  !=''"
+               class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>-->
           <!--<a href="javascript:void(0)" class="btn bg-danger text-white m-0"
-          (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
-          *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
+      (click)="DeleteImage(staffDetailsFormData.ProfilePhoto,'Photo')"
+      *ngIf="this.staffDetailsFormData.ProfilePhoto !=''"><i class="ti ti-trash"></i></a>-->
           <!--</div>
 
-            </div>
-          </div>-->
+        </div>
+      </div>-->
 
           <div class="pt-30">
             <button (click)="AddChoice2()" type="button" class="btn bg-primary text-white">
@@ -1080,6 +1078,44 @@
         </table>
       </div>
 
+
+
+      <div *ngIf="request.ItiAffiliationList.length>0" class="flex justify-between items-center flex-wrap mb-3 p-3 py-2 bg-light mt-4">
+        <b class="text-1xl-5">ITI Planning Details</b>
+      </div>
+
+      <div class="overflow-auto">
+        
+
+          <table class="w-full table-border" cellpadding="5">
+            <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700">
+              <tr class="text-left">
+                <th>Sr. No.</th>
+                <th>College Name</th>
+                <th>Status</th>
+                <th>Remark</th>
+                <th>Create Date</th>
+                <th>Action Date</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let student of StudentHistoryModelList; let idx=index;  ">
+                <td>{{idx+1}}</td>
+
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.CodeAndName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.StatusName}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.Remark}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.GenrateDate}}</td>
+                <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{student.ActionDate}}</td>
+
+              </tr>
+              <tr *ngIf="StudentHistoryModelList?.length === 0"><td colspan="15"><b>No Data Available </b>  </td></tr>
+            </tbody>
+          </table>
+
+        
+      </div>
 
 
     </div>
