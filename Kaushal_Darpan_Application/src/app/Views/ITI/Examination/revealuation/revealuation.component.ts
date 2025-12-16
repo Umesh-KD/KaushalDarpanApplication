@@ -43,6 +43,10 @@ export class RevealuationComponent {
   isStep2Disabled: boolean = false;
   isStep3Disabled: boolean = false;
   public EndtermName: string = '';
+  public RevalRequestID:number=0;
+  public PaymentStatus:boolean=false;
+  public RevalStatus:number=0;
+  public ApplicationNo:string='';
 
 
   public transactionStatusDataModel = new TransactionStatusDataModel();
@@ -152,8 +156,13 @@ export class RevealuationComponent {
           const data: any = await this.StudentRevaluation.GetStudentRevaluationDetails(this.searchRequest);
 
           if (data.State === EnumStatus.Success) {
+
             this.Request = data['Data'][0];
             this.EndtermName = data['Data'][0].EndTermName;
+            this.RevalRequestID=data['Data'][0].RevalRequestID;
+            this.PaymentStatus=data['Data'][0].PaymentStatus;
+            this.RevalStatus=data['Data'][0].RevalStatus;
+            
 
             if (!this.Request.IsReval) {
               this.Request.StudentName = data['Data'][0]['StudentName'];
@@ -397,7 +406,7 @@ export class RevealuationComponent {
 
 
   async MultiPayment() {
-
+    debugger
     this.totalAmount = 0;
     this.emitraRequest = new EmitraRequestDetails();
     this.studentDetailsModel = new StudentDetailsModel()
@@ -442,6 +451,7 @@ export class RevealuationComponent {
             this.emitraRequest.DepartmentID = this.studentDetailsModel.DepartmentID;
             this.emitraRequest.CourseTypeID = this.studentDetailsModel.CourseTypeID;
             this.emitraRequest.ExamStudentStatus = enumExamStudentStatus.Revaluation;
+            this.emitraRequest.RevalRequestID=this.RevalRequestID;
             this.emitraRequest.FeeFor = "RevalFee";
             //common
 
@@ -449,7 +459,7 @@ export class RevealuationComponent {
             //this.GetDateDataList();
             this.loaderService.requestStarted();
             try {
-              await this.emitraPaymentService.EmitraPayment(this.emitraRequest)
+              await this.emitraPaymentService.EmitraPaymentITI(this.emitraRequest)
                 .then(async (data: any) => {
                   data = JSON.parse(JSON.stringify(data));
                   this.State = data['State'];
@@ -482,7 +492,7 @@ export class RevealuationComponent {
 
   }
 
-  @ViewChild('SuccessModal') SuccessModal!: TemplateRef<any>;
+  // @ViewChild('SuccessModal') SuccessModal!: TemplateRef<any>;
   async RVLPayment() {
     debugger
     const selectedItems = this.GetStudentDetails.filter((x: any) => x.IsSelected);
@@ -499,30 +509,44 @@ export class RevealuationComponent {
 
     this.Swal2.Confirmation("Are you sure you want to Submit?", async (result: any) => {
       
-      this.SaveStudentRequest.RollNo = this.Request.RollNo;
-      this.SaveStudentRequest.StudentID = this.Request.StudentID;
-      this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
-      this.SaveStudentRequest.StudentType = this.Request.StudentType;
-      this.SaveStudentRequest.PaymentAmount = totalFee;
-      this.SaveStudentRequest.ItemList = this.SelectedItemDataList;
+      if(result.isConfirmed)
+      {
+        // if(this.RevalRequestID==0 && this.PaymentStatus==0)
+        // {
+             console.log("herereer");
+            this.SaveStudentRequest.RevalRequestID=this.RevalRequestID;
+            this.SaveStudentRequest.PaymentStatus=this.PaymentStatus;
+            this.SaveStudentRequest.RevalStatus=this.RevalStatus;
 
-      this.loaderService.requestStarted();
-      try {
-        const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
-        if (response?.State === "Success" || response?.State === 1) {
-          setTimeout(() => {
-            this.modalService.open(this.SuccessModal, { centered: true, backdrop: 'static' });
-          }, 200);
-        }
-        else {
-          this.Swal2.Confirmation("Revaluation request already exists for this Roll No!", async () => { });
-        }
-      } catch (error) {
-        console.error("Error saving :", error);
-        this.Swal2.Confirmation("An error occurred while saving. Please try again.", async () => { });
-      }
-      finally {
-        this.loaderService.requestEnded();
+            this.SaveStudentRequest.RollNo = this.Request.RollNo;
+            this.SaveStudentRequest.StudentID = this.Request.StudentID;
+            this.SaveStudentRequest.StudentExamID = this.Request.StudentExamID;
+            this.SaveStudentRequest.StudentType = this.Request.StudentType;
+            this.SaveStudentRequest.PaymentAmount = totalFee;
+            this.SaveStudentRequest.ItemList = this.SelectedItemDataList;
+
+            this.loaderService.requestStarted();
+            try {
+              const response: any = await this.StudentRevaluation.SaveRVLPaymentData(this.SaveStudentRequest);
+              if (response?.State === "Success" || response?.State === 1) {
+                // setTimeout(() => {
+                //   this.modalService.open(this.SuccessModal, { centered: true, backdrop: 'static' });
+                // }, 200);
+                this.RevalRequestID=response.Data[0].RevalRequestID;
+                await this.MultiPayment();
+              }
+              else {
+                this.ApplicationNo=response.Data[0].ApplicationNo;
+                this.Swal2.Confirmation(`Revaluation request already exists for this Roll No! Application No: ${this.ApplicationNo}`, async () => { });
+              }
+            } catch (error) {
+              console.error("Error saving :", error);
+              this.Swal2.Confirmation("An error occurred while saving. Please try again.", async () => { });
+            }
+            finally {
+              this.loaderService.requestEnded();
+            }
+        // }
       }
     });
   }

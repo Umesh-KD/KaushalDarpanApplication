@@ -285,8 +285,6 @@ export class PreviewFormComponent {
     if (this.sSOLoginDataModel.RoleID == EnumRole.Emitra || this.sSOLoginDataModel.UserType == EnumUserType.KIOSK ) {
       this.emitraRequest.IsKiosk = true;
     }
-    
-
 
     this.loaderService.requestStarted();
     try {
