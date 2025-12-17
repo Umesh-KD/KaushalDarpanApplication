@@ -688,13 +688,13 @@
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsSpouseInSameService" [value]="true"
-                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin" />
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(true)"  />
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
               <input type="radio" name="Add_IsSpouseInSameService" [value]="false"
-                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin" />
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(false)"  />
               <span>No</span>
             </label>
           </div>
