@@ -82,7 +82,7 @@ public filteredCategoryBOptions = [...this.categoryBOptions];
       NationalityID: [{ value: 0  }, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
       IsMinority: [{ value: '' }],
-      SpouseDistrictID: [0, [DropdownValidators]],
+      SpouseDistrictID: [0],
     });
 
     //this.PersonalDetailForm = this.formBuilder.group({
@@ -269,6 +269,7 @@ Designation?.disable();
         if (data.State === EnumStatus.Success) {
           // this.toastr.success(data.Message);
           this.request = data.Data
+        //  this.onSpouseServiceChange(this.request.IsSpouseInSameService);
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -340,6 +341,17 @@ Designation?.disable();
     this.filteredCategoryBOptions = [...this.categoryBOptions];
   }
 }
+onSpouseServiceChange(isInService?: boolean) {
+  const spouseDistrict = this.PersonalDetailForm.get('SpouseDistrictID');
 
+  if (isInService === true) {
+    spouseDistrict?.setValidators([DropdownValidators]);
+  } else {
+    spouseDistrict?.clearValidators();
+    spouseDistrict?.setValue(0);   // reset value
+  }
+
+  spouseDistrict?.updateValueAndValidity();
+}
 
 }

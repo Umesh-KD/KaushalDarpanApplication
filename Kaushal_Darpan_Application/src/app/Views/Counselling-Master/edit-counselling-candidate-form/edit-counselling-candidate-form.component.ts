@@ -92,7 +92,7 @@ public filteredCategoryBOptionsN = [...this.categoryBOptionsN];
       NationalityID: [0, [DropdownValidators]],
       MaritalID: [0, [DropdownValidators]],
       IsMinority: ['',],
-      SpouseDistrictID: [0, [DropdownValidators]],
+      SpouseDistrictID: [0],
     });
     this.PersonalDetailFormEditAdmin = this.formBuilder.group({
 
@@ -108,7 +108,7 @@ public filteredCategoryBOptionsN = [...this.categoryBOptionsN];
       Add_IsSpouseInSameService: [''],
       Add_MaritalID: [0, [DropdownValidators]],
       Add_IsMinority: ['',],
-      SpouseDistrictIDByAdmin: [0, [DropdownValidators]],
+      SpouseDistrictIDByAdmin: [0],
     });
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.CandidateID = Number(this.encryptionService.decryptData(this.activatedRoute.snapshot.queryParamMap.get('AppID') ?? "0"))
@@ -254,6 +254,7 @@ this.filterCategoryBN(this.request.MaritialID_ByAdmin);
           // this.toastr.success(data.Message);
           this.request = data.Data
           this.requestfromAdmin = data.Data
+          //this.onSpouseServiceChange(this.requestfromAdmin.IsSpouseInSameService_ByAdmin);
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {
@@ -375,5 +376,17 @@ this.filterCategoryBN(this.request.MaritialID_ByAdmin);
   else {
     this.filteredCategoryBOptionsN = [...this.categoryBOptionsN];
   }
+}
+onSpouseServiceChange(isInService?: boolean) {
+  const spouseDistrict = this.PersonalDetailFormEditAdmin.get('SpouseDistrictIDByAdmin');
+
+  if (isInService === true) {
+    spouseDistrict?.setValidators([DropdownValidators]);
+  } else {
+    spouseDistrict?.clearValidators();
+    spouseDistrict?.setValue(0);   // reset value
+  }
+
+  spouseDistrict?.updateValueAndValidity();
 }
 }

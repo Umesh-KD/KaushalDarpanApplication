@@ -422,13 +422,17 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
-                      [(ngModel)]="request.IsSpouseInSameService" />
+              <!-- <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService"  (change)="onSpouseServiceChange(true)" /> -->
+                      <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService"/>
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+              <!-- <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" (change)="onSpouseServiceChange(false)" /> -->
+                       <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
                       [(ngModel)]="request.IsSpouseInSameService" />
               <span>No</span>
             </label>
@@ -440,7 +444,7 @@
             </p>
           </div>
         </div>
-        <div *ngIf="request.MaritalID == 62 && request.IsSpouseInSameService==true">
+        <div *ngIf="request.MaritalID == 62 && request.IsSpouseInSameService==true" style="display: none;">
             <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
               जीवनसाथी सेवा जिला (Spouse Service District): <span class="StarMarking">*</span>
           </label>
