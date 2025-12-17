@@ -269,7 +269,7 @@ Designation?.disable();
         if (data.State === EnumStatus.Success) {
           // this.toastr.success(data.Message);
           this.request = data.Data
-          this.onSpouseServiceChange(this.request.IsSpouseInSameService);
+        //  this.onSpouseServiceChange(this.request.IsSpouseInSameService);
         } else if (data.State === EnumStatus.Warning) {
           this.toastr.warning(data.Message);
         } else {

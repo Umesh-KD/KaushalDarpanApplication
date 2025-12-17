@@ -428,7 +428,7 @@
             </p>
           </div>
         </div>
-        <div *ngIf="request.MaritalID == 62 && request.IsSpouseInSameService==true">
+        <div *ngIf="request.MaritalID == 62 && request.IsSpouseInSameService==true" style="display: none;">
             <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
               जीवनसाथी सेवा जिला (Spouse Service District): <span class="StarMarking">*</span>
           </label>
@@ -682,19 +682,23 @@
           </div>
         </div>
 
-        <div *ngIf="requestfromAdmin.MaritalID == 62 && requestfromAdmin.IsSpouseInSameService == true">
+        <div *ngIf="requestfromAdmin.MaritalID == 62 && requestfromAdmin.IsSpouseInSameService == true" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span
               class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsSpouseInSameService" [value]="true"
-                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(true)"  />
+              <!-- <input type="radio" name="Add_IsSpouseInSameService" [value]="true"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(true)"  /> -->
+                 <input type="radio" name="Add_IsSpouseInSameService" [value]="true"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"/>
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="Add_IsSpouseInSameService" [value]="false"
-                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(false)"  />
+              <!-- <input type="radio" name="Add_IsSpouseInSameService" [value]="false"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"  (change)="onSpouseServiceChange(false)"  /> -->
+                  <input type="radio" name="Add_IsSpouseInSameService" [value]="false"
+                formControlName="Add_IsSpouseInSameService" [(ngModel)]="requestfromAdmin.IsSpouseInSameService_ByAdmin"/>
               <span>No</span>
             </label>
           </div>
@@ -705,7 +709,7 @@
             </p>
           </div>
         </div>
-        <div *ngIf="requestfromAdmin.MaritalID == 62 && requestfromAdmin.IsSpouseInSameService_ByAdmin==true">
+        <div *ngIf="requestfromAdmin.MaritalID == 62 && requestfromAdmin.IsSpouseInSameService_ByAdmin==true" style="display: none;">
             <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
               जीवनसाथी सेवा जिला (Spouse Service District): <span class="StarMarking">*</span>
           </label>
