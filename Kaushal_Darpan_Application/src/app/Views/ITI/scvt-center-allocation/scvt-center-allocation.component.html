@@ -86,7 +86,7 @@
         <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <tr>
-              <th class="text-left">Mark</th>
+              <!--<th class="text-left">Mark</th>-->
               <th width="80px" align="left">Sr. No.</th>
               <th class="text-left">Center Name</th>
               <th class="text-left">CC Code</th>
@@ -97,9 +97,9 @@
           </thead>
           <tbody>
             <tr *ngFor="let row of CenterMasterList | tableSearchFilter: Table_SearchText; let idx = index;">
-              <td align="left">
+              <!--<td align="left">
                 <input type="checkbox" name="MarkCheck" [(ngModel)]="row.Marked" (change)="onCheckboxChange(row)" />
-              </td>
+              </td>-->
               <td>{{ idx + 1 }}</td>
               <td>{{ row.CenterName }} </td>
               <td>{{ row.CCCode }} </td>
