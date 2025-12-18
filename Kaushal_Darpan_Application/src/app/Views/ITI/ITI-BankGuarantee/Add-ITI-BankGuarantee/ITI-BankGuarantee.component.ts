@@ -36,7 +36,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
   UploadFileModel = new UploadFileModel();
   public CollageId: number = 0;
   public InstituteID: number = 0;
-  public bankGuaranteeId: number = 0;
+  public BankGuaranteeId: number = 0;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,13 +55,13 @@ export class ITIBankGuaranteeComponent implements OnInit {
   async ngOnInit() {
     this.bankGuarantee = this.formBuilder.group({
       BankName: ['', Validators.required],
-      bankGuaranteeNumber: ['', Validators.required],
+      BankGuaranteeNumber: ['', Validators.required],
       dateOfIssue: ['', Validators.required],
       maturityDate: ['', Validators.required],
       duration: ['', Validators.required],
       amount: [0, Validators.required],
-      bankAgreementDocument: [''],
-      remarks: ['']
+      BankAgreementDocument: [''],
+      Remarks: ['']
     });
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
@@ -69,31 +69,37 @@ export class ITIBankGuaranteeComponent implements OnInit {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.bankGuaranteeId = +id;
-        this.getBankGuaranteeById(this.bankGuaranteeId);
+        this.BankGuaranteeId = +id;
+        this.getBankGuaranteeById(this.BankGuaranteeId);
       }
     });
   }
-  async getBankGuaranteeById(id: number) {
+  private formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+    return dateStr.split('T')[0]; 
+  }
+
+
+  async getBankGuaranteeById(BankGuaranteeID: number) {
     debugger;
     try {
       this.loaderService.requestStarted();
 
-      await this.campusPostService.ITIPlanningBankGuaranteeById(id)   
+      await this.campusPostService.ITIPlanningBankGuaranteeGetByID(BankGuaranteeID)   
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          const record = data.Data;
+          const record = data.Data[0];
           this.request = record;
-
+          console.log('main data ===>',this.request)
           this.bankGuarantee.patchValue({
             BankName: record.BankName,
-            bankGuaranteeNumber: record.BankGuaranteeNumber,
-            dateOfIssue: record.DateOfIssue,
-            maturityDate: record.Maturitydate,
+            BankGuaranteeNumber: record.BankGuaranteeNumber,
+            dateOfIssue: this.formatDate(record.DateOfIssue),
+            maturityDate: this.formatDate(record.Maturitydate),
             duration: record.Duration,
             amount: record.Amount,
-            bankAgreementDocument: record.BankAgreementDocument,
-            remarks: record.Remarks
+            BankAgreementDocument: record.BankAgreementDocument,
+            Remarks: record.Remarks
           });
         });
 
@@ -109,37 +115,45 @@ export class ITIBankGuaranteeComponent implements OnInit {
   async saveData() {
     debugger;
     this.isSubmitted = true;
-    if (this.bankGuarantee.invalid) {
-      return console.log("error")
-    }
-  
-    this.isLoading = true;
-    this.request.CollageId = this.sSOLoginDataModel.InstituteID
-    this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID
-    try {
 
-      
-      //call
-      await this.campusPostService.SaveBankGuaranteeData(this.request)
-        .then((data: any) => {
-          this.State = data['State'];
-          this.Message = data['Message'];
-          this.ErrorMessage = data['ErrorMessage'];
-          if (this.State == EnumStatus.Success) {
-            this.toastr.success(this.Message)
-            this.routers.navigate(['/iti-bank-guarantee-list']);
-          }
-          else {
-            this.toastr.error(this.ErrorMessage)
-          }
-        })
+    if (this.bankGuarantee.invalid) {
+      return;
     }
-    catch (ex) { console.log(ex) }
-    finally {
+
+    this.isLoading = true;
+    this.loaderService.requestStarted();
+
+    this.request.CollageId = this.sSOLoginDataModel.InstituteID;
+    this.request.FinYearId = this.sSOLoginDataModel.FinancialYearID;
+
+    const isUpdate = this.request.BankGuaranteeID && this.request.BankGuaranteeID > 0;
+
+    try {
+      const data: any = await this.campusPostService.SaveBankGuaranteeData(this.request);
+
+      this.State = data.State;
+      this.Message = data.Message;
+      this.ErrorMessage = data.ErrorMessage;
+
+      if (this.State === EnumStatus.Success) {
+
+        const successMsg = isUpdate
+          ? 'Bank Guarantee updated successfully'
+          : 'Bank Guarantee saved successfully';
+
+        this.toastr.success(successMsg);
+        this.routers.navigate(['/iti-bank-guarantee-list']);
+      }
+      else {
+        this.toastr.error(this.ErrorMessage);
+      }
+
+    } catch (ex) {
+      console.error(ex);
+    } finally {
       setTimeout(() => {
         this.loaderService.requestEnded();
         this.isLoading = false;
-
       }, 200);
     }
   }
@@ -165,7 +179,7 @@ export class ITIBankGuaranteeComponent implements OnInit {
 
             if (this.State == EnumStatus.Success) {
               if (Type == "bankDocument") {
-                this.request.bankAgreementDocument = data['Data'][0]["FileName"];
+                this.request.BankAgreementDocument = data['Data'][0]["FileName"];
               }
               
               event.target.value = null;

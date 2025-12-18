@@ -909,8 +909,9 @@ backToSSONew() {
    const form = document.createElement('form');
    form.method = 'POST';
    //form.action = GlobalConstants.BacktoSSOURL?.toString();
-  //  form.action = this.appsettingConfig.BacktoSSOURL?.toString();
-   form.action="https://ssotest.rajasthan.gov.in/sso";
+   form.action = this.appsettingConfig.BacktoSSOURL?.toString();
+   console.log('Back to sso : '+this.appsettingConfig.BacktoSSOURL?.toString());
+   //form.action="https://ssotest.rajasthan.gov.in/sso";
    const input = document.createElement('input');
    input.type = 'hidden';
    input.name = 'userdetails';
@@ -924,13 +925,13 @@ backToSSONew() {
  }
  async backtoSignOutNew() {
  //localStorage.setItem('authtoken', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjAiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiTUFIRU5EUkEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9lbWFpbGFkZHJlc3MiOiJTQUhVVE9OSyIsImp0aSI6IjkzZTEwODA3LTFkZGYtNDllOS05M2Y5LTMyZjVmZGE3OWQ0YiIsIlJvbGVJRHMiOiIiLCJSb2xlTmFtZXMiOiIiLCJleHAiOjE3NjYxMDE1NzksImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTIzMCJ9.yf4FTaYBSQu_iPWTfNOMV59Pj_0BfCuCKoh0b8L5e_w');
-  const token = localStorage.getItem('authtoken');
+  this.ssoToken = localStorage.getItem('authtoken');
 
   // 1️⃣ Call backend (logging / audit)
-  if (token) {
+  if (this.ssoToken) {
     await this.http.post(
       this.APIUrl+'/SSOLogout_New',
-      token,
+      this.ssoToken,
       { headers: { 'Content-Type': 'application/json' } }
     ).toPromise();
   }
@@ -945,6 +946,31 @@ backToSSONew() {
     'https://ssotest.rajasthan.gov.in/signout'
   );
 }
+backtoSignOutNew_17122025() {
+   //this.ssotoken = this.cookieService.get('RAJSSO');    
+    this.ssoToken = localStorage.getItem('authtoken');
+        console.log('ssoToken master layout- ',this.ssoToken);
 
+   const form = document.createElement('form');
+   form.method = 'POST';
+   //form.action = GlobalConstants.BacktoSSOURL?.toString();
+   form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+   console.log('Logout to sso : '+this.appsettingConfig.BacktoSSOURL_Logout?.toString());
+   //form.action="https://ssotest.rajasthan.gov.in/signout";
+   const input = document.createElement('input');
+   input.type = 'hidden';
+   input.name = 'userdetails';
+   input.value = this.ssoToken;
+
+   form.appendChild(input);
+   document.body.appendChild(form);
+   console.log('form layout- ',form);
+
+   form.submit();
+
+    sessionStorage.clear();
+  localStorage.clear();
+  this.cookieService.deleteAll();
+ }
 }
 

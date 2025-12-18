@@ -122,7 +122,7 @@ export class DteAddItemsMasterComponent {
     await this.GetAllUnitData();
     if (this.ItemId > 0) {
       await this.GetByID(this.ItemId);
-      this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
+      // this.AddItemsRequestFormGroup.get('txtQuantity')?.disable();
       
     }
     this.request.voucherdate = this.todayDate;
@@ -247,6 +247,7 @@ export class DteAddItemsMasterComponent {
           await this.ddlEquipment_Change();
           this.request.EquipmentsId = data['Data']['EquipmentsId'];
           
+          await this.DGET_Details();
           this.request.CampanyName = data['Data']["CampanyName"];
 
           this.request.IdentificationMark = data['Data']["IdentificationMark"];
@@ -263,6 +264,7 @@ export class DteAddItemsMasterComponent {
           this.FilePath=data['Data']["BillFilePath"];
           this.Dis_FileName=data['Data']["BillFileName"];
           const rawDate = data['Data']["voucherdate"];
+          this.AddItemsRequestFormGroup.get('BillDocument')?.setValue(this.FileName);
 
           if (rawDate) {
             const dateObj = new Date(rawDate);
@@ -597,6 +599,7 @@ export class DteAddItemsMasterComponent {
             if (this.State == EnumStatus.Success) {
                 this.FileName = data.Data[0].FileName;
                 this.Dis_FileName = data.Data[0].Dis_FileName; 
+                this.FilePath = data.Data[0].FilePath;
                   this.AddItemsRequestFormGroup
               .get('BillDocument')
               ?.setValue(this.FileName);

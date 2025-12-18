@@ -129,7 +129,8 @@
               <td class="border p-2">
                 <label>
 
-                  <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'">
+                  <!-- <ng-container *ngIf="ItemDetailsList[i]?.EquipmentWorking === 2 || item.get('equipmentStatus')?.value === '2'"> -->
+                  <ng-container>
                     <input type="checkbox"
                            formControlName="isOption"
                            (click)="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />

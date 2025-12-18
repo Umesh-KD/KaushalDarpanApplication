@@ -26,8 +26,8 @@ export class ITIApprenticeshipWorkshopModel {
   public QuaterIncreaseEstablishment: string = '';
   public QuaterIncreaseSeat: string = '';
   public QuaterIncreaseStudent: string = '';
-  public Remarks: string = '';
-  public BeforeMonth: number = 0;
+  public Remarks : string = '';
+  public BeforeMonth : number = 0;
 
   public ApprenticeshipWorkshopMembersList: ITIAAA_SSODetailsModel[] = [];
 }

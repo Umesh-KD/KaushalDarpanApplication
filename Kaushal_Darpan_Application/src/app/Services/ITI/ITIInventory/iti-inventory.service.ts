@@ -9,7 +9,7 @@ import { DTEEquipmentsDataModel } from '../../../Models/DTEInventory/DTEEquipmen
 import { DTEItemUnitModel } from '../../../Models/DTEInventory/DTEItemUnitModel';
 import { DTEInventoryDashboardDataModel } from '../../../Models/DTEInventory/DTEInventoryDashboardDataModel';
 import { DTEIssuedSearchModel, DTEReturnItemSearchModel, DTEIssuedItemDataModel, DTEStoksSearchModel, ReturnDteItemDataModel } from '../../../Models/DTEInventory/DTEIssuedItemDataModel';
-import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels } from '../../../Models/DTEInventory/DTEItemsDataModels';
+import { DTEItemsSearchModel, DTEItemsDataModels, inventoryIssueHistorySearchModel, itemReturnModel, ItemsIssueReturnModels, inventoryIssueHistoryITISearchModel } from '../../../Models/DTEInventory/DTEItemsDataModels';
 import { AuctionDetailsModel, ItemsDetailsInterface } from '../../../Models/ItemsDataModels';
 
 @Injectable({
@@ -487,7 +487,7 @@ export class ITIInventoryService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
-  public async GetConsumeItemListNew(searchRequest: DTEItemsSearchModel) {
+  public async GetConsumeItemListNew(searchRequest: inventoryIssueHistoryITISearchModel) {
     var body = JSON.stringify(searchRequest);
     debugger;
     return await this.http.post(`${this.APIUrl}/GetConsumeItemListNew`, body, this.headersOptions)

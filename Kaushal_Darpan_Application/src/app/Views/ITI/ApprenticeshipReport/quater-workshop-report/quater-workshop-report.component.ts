@@ -35,6 +35,7 @@ export class QuaterWorkshopReportComponent {
   isOtherDocument: boolean = false
   isError: boolean = false;
   imageSrc: string | null = null;
+  public FinYearList: any = [];
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -60,6 +61,8 @@ export class QuaterWorkshopReportComponent {
     this.SSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     await this.GetDistrictMatserDDL()
     this.GetReportAllData();
+    this.YearDropdownData('FinancialYear_IIP');
+
   }
 
 
@@ -83,7 +86,8 @@ export class QuaterWorkshopReportComponent {
 
         Createdby: UserID,
         DistrictID: DistrictID,
-        QuaterID: this.request.QuaterID
+        QuaterID: this.request.QuaterID,
+        FinancialYearID: this.request.FinancialYearID
       };
 
 
@@ -244,6 +248,22 @@ export class QuaterWorkshopReportComponent {
   onImageError(event: any) {
     event.target.src = 'assets/images/dummyImg.jpg';
   }
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
 
+  ClearField() {
+    this.request.QuaterID = 0;
+    this.request.DistrictID = 0;
+    this.request.FinancialYearID = 0;
+    this.GetReportAllData();
+
+  }
 
 }

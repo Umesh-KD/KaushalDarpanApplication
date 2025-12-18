@@ -74,6 +74,7 @@ export class AddBterIssueItemComponent {
   public staff_ID:number =0;
   public ItemMasterList: any = [];
   public ItemMasterList1: any = [];
+  public IssuedItemList: any = [];
   isFileError: boolean = false;
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -959,7 +960,7 @@ export class AddBterIssueItemComponent {
     
      await this.GetAllDataIssuedItems();
 
-    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'lg', keyboard: true,centered: true});
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
 
     return;
   }

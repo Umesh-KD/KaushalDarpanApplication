@@ -115,18 +115,18 @@ export class ITI_PlanningCollegesSearchModel {
 
 
 export class ITIPlanningBankGuarantee {
-  public bankGuaranteeID: number = 0;
+  public BankGuaranteeID: number = 0;
   public CollageId: number = 0;
   public BankName: string = '';
-  public bankGuaranteeNumber: number = 0;
+  public BankGuaranteeNumber: string = '';
   public dateOfIssue: string = '';          
   public maturityDate: string = '';         
   public duration: string = '';
   public amount: number = 0;
-  public bankAgreementDocument: string = '';
+  public BankAgreementDocument: string = '';
   public numberOfUnit: number = 0;
   public status: number = 0;
-  public remarks?: string = '' ;
+  public Remarks?: string = '' ;
   public FinYearId?: number = 0 ;
 }
 

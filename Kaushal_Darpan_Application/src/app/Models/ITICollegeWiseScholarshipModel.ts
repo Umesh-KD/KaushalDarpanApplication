@@ -6,6 +6,7 @@ export class ITICollegeWiseScholarshipSearchModel {
   public Status: string = '';
   public ModifyBy: number = 0
   public RoleID: number = 0
+  public BranchID: number = 0
   public DepartmentID: number = 0;
   public InstituteID:number=0;
   public PageSize: number = 50

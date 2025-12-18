@@ -3,12 +3,12 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Bank Guarantee List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">ITI Bank Guarantee Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
       <a routerLink="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
-      <a routerLink="/iti-bank-guarantee-list" class="text-sm font-medium text-slate-700" aria-current="page">ITI Bank Guarantee List</a>
+      <a routerLink="/iti-bank-guarantee-list" class="text-sm font-medium text-slate-700" aria-current="page">ITI Bank Guarantee Report</a>
     </div>
   </div>
 </div>
@@ -19,8 +19,6 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
-        <!--*ngIf="sSOLoginDataModel.RoleID==43"-->
-        <a routerLink="/iti-bank-guarantee" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New Bank Guarantee</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -100,18 +98,18 @@
             <td>
               <span class="px-2 py-1 rounded text-xs font-semibold"
                     [ngClass]="
-  item.Status === 1
-    ? 'bg-green-100 text-green-700'
-    : item.Status === 2
-    ? 'bg-red-100 text-red-700'
-    : 'bg-yellow-100 text-yellow-700'
-">
+      item.Status === 1
+        ? 'bg-green-100 text-green-700'
+        : item.Status === 2
+        ? 'bg-red-100 text-red-700'
+        : 'bg-yellow-100 text-yellow-700'
+    ">
                 {{
-  item.Status === 1
-    ? 'Active'
-    : item.Status === 2
-    ? 'Returned'
-    : 'Pending'
+      item.Status === 1
+        ? 'Active'
+        : item.Status === 2
+        ? 'Returned'
+        : 'Pending'
                 }}
               </span>
             </td>
