@@ -284,9 +284,11 @@ export class ITIAddItemsMasterComponent {
       this.loaderService.requestStarted();
       //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
       //await this.commonFunctionService.StreamMaster()
-      let request: any = {}
-      request.action = "_getAllData";
-      await this.commonFunctionService.TradeListGetAllData(request)
+      let Searchrequests: any = {}
+      Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequests.TypeName = 'TradeList';
+      
+      await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(Searchrequests)
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
