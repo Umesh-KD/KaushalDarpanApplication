@@ -172,14 +172,17 @@
       <div class="card-body" >
         <div class="grid 2xl:grid-cols-3 xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-3">
 
+          <!--<div>
+    <label>Staff</label>
+    <select class="form-select" *ngIf="assignedInstitutesReady" [(ngModel)]="UserID" (change)="FillDetails(UserID)">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of assignedInstitutes" [value]="item.StaffID">{{item.Name}}</option>
+    </select>
+  </div>-->
           <div>
-            <label>Staff</label>
-            <select class="form-select" *ngIf="assignedInstitutesReady" [(ngModel)]="UserID" (change)="FillDetails(UserID)">
-              <option value="0">--All--</option>
-              <option *ngFor="let item of assignedInstitutes" [value]="item.StaffID">{{item.Name}}</option>
-            </select>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">SSO ID:<span class="StarMarking">*</span> </label>
+            <input class="form-input" type="text" placeholder="Enter SSOID" [(ngModel)]="SSOID" />
           </div>
-
 
 
 
@@ -187,26 +190,27 @@
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name: </label>
-            <input disabled class="form-input" type="text"  [(ngModel)]="Name" />
+            <input disabled class="form-input" type="text" [(ngModel)]="Name" />
           </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Email: </label>
-            <input disabled class="form-input" type="text"  [(ngModel)]="Email" />
+            <input disabled class="form-input" type="text" [(ngModel)]="Email" />
           </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Mobile No: </label>
-            <input disabled class="form-input" type="text"  [(ngModel)]="MobileNumber" />
+            <input disabled class="form-input" type="text" [(ngModel)]="MobileNumber" />
           </div>
 
           <!--<div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
-            <input disabled class="form-input" type="text"  [(ngModel)]="Post" />
-          </div>-->
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Post: </label>
+    <input disabled class="form-input" type="text"  [(ngModel)]="Post" />
+  </div>-->
 
 
           <div>
+            <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(SSOID)">GetDetails</button>
             <button type="button" class="btn bg-info text-white mt-6 me-1" (click)="AssignCenterSuperintendent()">
               {{UserID > 0 ? 'Update' : 'Submit'}}
             </button>

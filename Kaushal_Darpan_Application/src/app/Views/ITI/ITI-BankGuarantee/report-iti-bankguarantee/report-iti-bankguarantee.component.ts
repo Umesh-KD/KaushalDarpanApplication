@@ -15,12 +15,12 @@ import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataMode
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 @Component({
-  selector: 'app-list-iti-bankguarantee',
-  templateUrl: './list-iti-bankguarantee.component.html',
-  styleUrls: ['./list-iti-bankguarantee.component.css'],
+  selector: 'app-report-iti-bankguarantee',
+  templateUrl: './report-iti-bankguarantee.component.html',
+  styleUrls: ['./report-iti-bankguarantee.component.css'],
     standalone: false
 })
-export class listitibankguaranteeComponent {
+export class reportitibankguaranteeComponent {
   public State: number = -1;
   groupForm!: FormGroup;
   public Message: any = [];
@@ -37,8 +37,7 @@ export class listitibankguaranteeComponent {
   public searchRequest = new ITIPlanningBankGuarantee();
   public Table_SearchText: string = '';
   public tbl_txtSearch: string = '';
-  //table feature default
-  public paginatedInTableData: any[] = [];//copy of main data
+  public paginatedInTableData: any[] = [];
   public currentInTablePage: number = 1;
   public pageInTableSize: string = "50";
   public totalInTablePage: number = 0;
@@ -49,7 +48,6 @@ export class listitibankguaranteeComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
-  //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
     private campusPostService: ITIsService,
@@ -70,11 +68,7 @@ export class listitibankguaranteeComponent {
     this.sSOLoginDataModel.RoleID;
 
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
-
-
     this.getTradetblListList()
-
-    //this.GetTradeTypesList();
   }
 
   async GetTradeTypesList()
@@ -85,7 +79,6 @@ export class listitibankguaranteeComponent {
       await this.commonMasterService.GetTradeTypesList().then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         this.TradeTypesList = data.Data; 
-        //this.loadInTable();
       })
     } catch (error) {
       console.error(error);
@@ -97,12 +90,12 @@ export class listitibankguaranteeComponent {
   }
 
   async getTradetblListList() {
-    
+    debugger
     try {
       this.loaderService.requestStarted();
       this.searchRequest.BankGuaranteeID = 0;
 
-      await this.campusPostService.ITIPlanningBankGuaranteeList(this.searchRequest)
+      await this.campusPostService.ITIPlanningBankGuaranteeReport(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           this.State = data['State'];
@@ -139,7 +132,6 @@ export class listitibankguaranteeComponent {
 
   onEdit(Id: number): void {
 
-    // Navigate to the edit page with the institute ID
     this.Router.navigate(['/ititradeUpdate', Id]);
   }
 
@@ -149,10 +141,8 @@ export class listitibankguaranteeComponent {
 
     this.Swal2.Confirmation("Are you sure you want to delete this ?",
       async (result: any) => {
-        //confirmed
         if (result.isConfirmed) {
           try {
-            //Show Loading
             this.loaderService.requestStarted();
             await this.ItiTradeService.DeleteDataByID(TradeId, this.request.ModifyBy)
               .then(async (data: any) => {
@@ -164,7 +154,6 @@ export class listitibankguaranteeComponent {
 
                 if (this.State = EnumStatus.Success) {
                   this.toastr.success(this.Message)
-                  //reload
                   this.getTradetblListList();
                 }
                 else {
@@ -213,7 +202,6 @@ export class listitibankguaranteeComponent {
   calculateInTableTotalPage() {
     this.totalInTablePage = Math.ceil(this.totalInTableRecord / parseInt(this.pageInTableSize));
   }
-  // (replace org.list here)
   updateInTablePaginatedData() {
     this.loaderService.requestStarted();
     this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
@@ -255,7 +243,6 @@ export class listitibankguaranteeComponent {
       this.updateInTablePaginatedData();
     }
   }
-  // (replace org.list here)
   sortInTableData(field: string) {
     this.loaderService.requestStarted();
     this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
@@ -266,15 +253,13 @@ export class listitibankguaranteeComponent {
     this.sortInTableColumn = field;
     this.loaderService.requestEnded();
   }
-  //main 
   loadInTable() {
     this.resetInTableValiable();
     this.calculateInTableTotalPage();
     this.updateInTablePaginatedData();
   }
-  // (replace org. list here)
   resetInTableValiable() {
-    this.paginatedInTableData = [];//copy of main data
+    this.paginatedInTableData = [];
     this.currentInTablePage = 1;
     this.totalInTablePage = 0;
     this.sortInTableColumn = '';

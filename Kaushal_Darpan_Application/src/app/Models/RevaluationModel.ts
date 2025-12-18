@@ -119,8 +119,9 @@ export class RVLstudentListModel {
 export class StudentOptionItem {
   public RequestSubjectID: number=0;
   public StudentExamPaperMarksID: number=0;
-  public UploadedCopy: string='';  // Can be filename or null
+  public UploadedCopy?: string='';  // Can be filename or null
   public Remarks:string='';
+  // public RevalRequestID:number=0;
 }
 
 export class UploadTrainee_LogsModel{

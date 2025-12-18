@@ -344,4 +344,9 @@ export class CenterCreateITIComponent implements OnInit {
       x.Marked = this.AllInTableSelect;
     });
   }
+
+  get totalInTableSelected(): number {
+    return this.CenterAllotList.filter(x => x.Marked)?.length;
+  }
+
 }

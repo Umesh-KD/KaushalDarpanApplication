@@ -299,6 +299,18 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
 
   async UploadDocument(event: any) {
     try {
+
+      const passwordControl = this.examForm.get('Password');
+
+      // mark as touched so validation messages appear
+      passwordControl?.markAsTouched();
+
+      // ❌ If password has ANY validation error → stop here
+      if (passwordControl?.invalid) {
+        this.toastr.warning("Please Enter Correct Password First")
+        return;
+      }
+
       const formData = this.examForm.value as PaperUpload
       //upload model
       if (formData.Password != null && formData.Password != "" && formData.Password != undefined) {
@@ -317,13 +329,18 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
               this.documentDetails = data.Data;
               this.documentDetails[0].FileName = data.Data[0].FileName;
               this.documentDetails[0].Dis_FileName = data.Data[0].Dis_FileName;
+
+              this.examForm.get('Password')?.disable()
               console.log(this.documentDetails);
               this.examForm.patchValue({
                 FileName: this.documentDetails[0].FileName,
                 Dis_FileName: this.documentDetails[0].Dis_FileName
               })
               //reset file type
+         
               event.target.value = null;
+ 
+
             }
             if (data.State == EnumStatus.Error) {
               this.toastr.error(data.ErrorMessage)
@@ -358,6 +375,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
             if (index !== -1) {
               this.documentDetails[index].FileName = '';
               this.documentDetails[index].Dis_FileName = '';
+              this.documentDetails = []
+              this.examForm.get('Password')?.enable()
             }
             console.log(this.documentDetails)
           }

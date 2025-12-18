@@ -89,6 +89,7 @@
             <th class="text-left">Stream</th>       
             <th class="text-left">Application No</th>                      
             <th class="text-left">Payment Status</th>   
+            <th class="text-left">Reval Status</th>  
             <th class="text-center">Action</th>
           </tr>
         </thead>
@@ -103,12 +104,13 @@
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.StreamName}}</td>        
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.ApplicationNo}}</td>     
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.PaymentStatus}}</td>     
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{row.RevalStatus}}</td>  
             <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
 
               <div class="flex align-center justify-center actionBtns w-auto" style="width: auto !important">
                
                 <a href="javascript:void(0)" (click)="EditData(MyModel_EdiDetails,row)" title="View Institute Option Details"><i
-                class="ti ti-eye"></i> </a>
+                class="ti ti-list"></i> </a>
 
                 <!-- <a href="javascript:void(0)" (click)="redirectToEdit(row)" title="Edit Details">
                   <i class="ti ti-pencil"></i>

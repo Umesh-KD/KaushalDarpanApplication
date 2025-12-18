@@ -109,7 +109,7 @@
           <label for="MaritalID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             वैवाहिक स्थिति(Marital Status):<span class="StarMarking">*</span>
         </label>
-          <select class="form-select" id="MaritalID" formControlName="MaritalID" [(ngModel)]="request.MaritalID">
+          <select class="form-select" id="MaritalID" formControlName="MaritalID" [(ngModel)]="request.MaritalID" (change)="filterCategoryB($event.target.value)">
             <option value="0">Select (Marital Status)</option>
             <option *ngFor="let item of maritalList" value="{{item.ID}}">{{item.Name}}</option>
           </select>
@@ -242,14 +242,22 @@
           <label for="CategoryB_ID" class="text-gray-800 text-sm font-medium inline-block mb-2">
             श्रेणी बी(Category B)(Widow/Divorcee/Single Women) :<span class="StarMarking">*</span>
           </label>
-          <select class="form-select" formControlName="CategoryB_ID" [(ngModel)]="request.CategoryB_ID">
+          <!-- <select class="form-select" formControlName="CategoryB_ID" [(ngModel)]="request.CategoryB_ID">
             <option value="0">--Select--</option>
             <option value="1">Widow</option>
             <option value="2">Divorcee</option>
             <option value="3">Single Women</option>
-            <option value="4">None of above</option>
-            <!-- <option *ngFor="let item of CategoryAlist" value="{{item.CasteCategoryID}}">{{item.CasteCategoryName}}</option> -->
-          </select>
+            <option value="4">None of above</option> 
+          </select> -->
+          <select class="form-select"
+        formControlName="CategoryB_ID"
+        [(ngModel)]="request.CategoryB_ID">
+  <option value="0">--Select--</option>
+  <option *ngFor="let item of filteredCategoryBOptions"
+          [value]="item.id">
+    {{ item.name }}
+  </option>
+</select>
           <div *ngIf="isSubmitted && _PersonalDetailForm.CategoryB_ID.errors" class="text-danger">
             <p *ngIf="!_PersonalDetailForm.CategoryB_ID.errors.DropdownValidators">
               <i aria-hidden="false"></i>This field is required.!
@@ -414,13 +422,17 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-2">Is Spouse in service: <span class="StarMarking">*</span></label>
           <div class="flex gap-4">
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
-                      [(ngModel)]="request.IsSpouseInSameService" />
+              <!-- <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService"  (change)="onSpouseServiceChange(true)" /> -->
+                      <input type="radio" name="IsSpouseInSameService" [value]="true" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService"/>
               <span>Yes</span>
             </label>
 
             <label class="flex items-center space-x-2">
-              <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+              <!-- <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
+                      [(ngModel)]="request.IsSpouseInSameService" (change)="onSpouseServiceChange(false)" /> -->
+                       <input type="radio" name="IsSpouseInSameService" [value]="false" formControlName="IsSpouseInSameService"
                       [(ngModel)]="request.IsSpouseInSameService" />
               <span>No</span>
             </label>
@@ -432,7 +444,21 @@
             </p>
           </div>
         </div>
-
+        <div *ngIf="request.MaritalID == 62 && request.IsSpouseInSameService==true" style="display: none;">
+            <label for="ddlDistrict" class="text-gray-800 text-sm font-medium inline-block mb-2">
+              जीवनसाथी सेवा जिला (Spouse Service District): <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select" id="SpouseDistrictID" name="SpouseDistrictID" formControlName="SpouseDistrictID"
+                  [(ngModel)]="request.SpouseDistrictID">
+            <option value="0">Select District</option>
+            <option *ngFor="let item of SpouseDistrictMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <div *ngIf="isSubmitted && _PersonalDetailForm.SpouseDistrictID.errors" class="text-danger">
+            <p *ngIf="!_PersonalDetailForm.SpouseDistrictID.errors.DropdownValidators">
+              <i aria-hidden="false"></i>This field is required.!
+            </p>
+          </div>
+        </div>
       </div>
     </form>
   </div>

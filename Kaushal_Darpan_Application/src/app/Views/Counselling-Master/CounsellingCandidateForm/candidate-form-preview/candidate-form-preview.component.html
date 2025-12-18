@@ -240,9 +240,10 @@
   </div>
   <div class="card-footer text-center" >
     <!-- *ngIf="(request.IsFinalSubmit !== 2 && !(sSOLoginDataModel.RoleID == _EnumRole.Admin || sSOLoginDataModel.RoleID == _EnumRole.AdminNon))" -->
-    <button type="button" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
-    </button>
+    
     <button type="button" *ngIf="(sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="ViewDetails(MyModel_ViewDetailsPDF);"><i class="ti ti-eye"></i>Preview & Download
+    </button>
+    <button type="button" *ngIf="(request.IsFinalSubmit !== 2 && sSOLoginDataModel.RoleID == _EnumRole.CandidateRole)" class="btn bg-info text-white" (click)="FinalSubmit()"  [disabled]="!IsTermAndCondition"><i class="ti ti-lock"></i>Submit & Lock
     </button>
   </div>
 </div>

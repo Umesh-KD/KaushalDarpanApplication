@@ -64,7 +64,7 @@ export class TimeTableService {
       ).toPromise();
   }
   public async DeleteDataByID(PK_ID: number, ModifyBy: number, DepartmentID: number = 0) {
-    return await this.http.delete(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy + "/" + DepartmentID, this.headersOptions)
+    return await this.http.post(this.APIUrl + '/DeleteDataByID/' + PK_ID + "/" + ModifyBy + "/" + DepartmentID, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();

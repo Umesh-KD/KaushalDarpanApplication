@@ -22,6 +22,7 @@ import { CounsellingApplicationSearchModel } from '../../../Models/CounsellingAp
 import { EnumRole } from '../../../Common/GlobalConstants';
 import { MenuService } from '../../../Services/Menu/menu.service';
  import { ToastrModule } from 'ngx-toastr';
+ import { SSOLoginService } from '../../../Services/SSOLogin/ssologin.service';
 @Component({
   selector: 'app-candidate-sso-mapping-module',
   standalone: false,
@@ -58,6 +59,7 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
   DirectAdmissionMapKey: number = 0;
   BterMapKeyEng: number = 0;
   studentDetailsModel = new StudentDetailsModel();
+  public ssoToken: any;
   //Modal Boostrap.
   closeResult: string | undefined;
   modalReference: NgbModalRef | undefined;
@@ -79,7 +81,8 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
     private router: Router,
     private counsellingApplicationFormService: CounsellingApplicationFormService,
     private menuService: MenuService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private sSOLoginService:SSOLoginService
   ) { }
 
   timeLeft: number = GlobalConstants.DefaultTimerOTP; // Total countdown time in seconds (2 minutes)
@@ -112,6 +115,8 @@ export class CandidateSsoMappingModuleComponent implements OnInit, OnDestroy {
   }
 
   async ResetControl() {
+
+    
     this.SemesterID = 0;
     this.StreamID = 0;
     this.ApplicationNo = '';
@@ -214,7 +219,8 @@ async BackToSSO() {
     try {
       this.loaderService.requestStarted();
       //await this.menuService.BackToSSO(this.appsettingConfig.BacktoSSOURL?.toString());
-      await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
+      //await this.menuService.BackToSSO("https://ssotest.rajasthan.gov.in/sso");
+      await this.sSOLoginService.BackToSSO();
       this.modalService.dismissAll();
     }
     catch (Ex) {
@@ -227,6 +233,29 @@ async BackToSSO() {
       }, 100);
     }
   }
+
+  backToSSONew() {
+   //this.ssotoken = this.cookieService.get('RAJSSO');    
+    this.ssoToken = localStorage.getItem('authtoken');
+    console.log('ssoToken- ',this.ssoToken);
+    
+   const form = document.createElement('form');
+   form.method = 'POST';
+   //form.action = GlobalConstants.BacktoSSOURL?.toString();
+   form.action="https://ssotest.rajasthan.gov.in/sso";
+  //  form.action = this.appsettingConfig.BacktoSSOURL?.toString();
+   const input = document.createElement('input');
+   input.type = 'hidden';
+   input.name = 'userdetails';
+   input.value = this.ssoToken;
+
+   
+   form.appendChild(input);
+   document.body.appendChild(form);
+   console.log('form- ',form);
+
+   form.submit();
+ }
   async VerifyOTP()
   {
     if (this.OTP.length > 0) {
@@ -254,14 +283,20 @@ async BackToSSO() {
                 // setTimeout(() => {
                 //   this.router.navigate(['/CandidateApplicationList']);
                 // }, 1000);
-                setTimeout(() => {
-                  this.toastr.success(
-                  'Your SSO ID successfully mapped, kindly re-login',
-                  'Success'
-                  );
-                  this.BackToSSO();
+                // setTimeout(() => {
+                //   this.toastr.success(
+                //   'Your SSO ID successfully mapped, kindly re-login',
+                //   'Success'
+                //   );
+                // //  this.BackToSSO();
+                // this.backToSSONew();
+
                 // this.authService.logout(); // if exists
-                }, 500);
+                //}, 500);
+              const confirmed = confirm('Your SSO ID successfully mapped, kindly re-login');
+                if (confirmed) {
+                  this.backToSSONew();
+                }
               }
               else
               {
