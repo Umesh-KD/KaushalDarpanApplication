@@ -23,36 +23,74 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>   
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Name</label>
           <input type="text" class="form-input" placeholder="Name" id="Name" [(ngModel)]="searchRequest.Name">
         </div>
         <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>   
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Enrollment No.</label>
           <input type="text" class="form-input" placeholder="Enrollment" id="Enrollment" [(ngModel)]="searchRequest.Enrollment">
         </div>
         <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category" >
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
-            </select>
-        
-        </div>
-        
-           <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category</label>   
-          <input type="text" class="form-input" placeholder="Category" id="Category" [(ngModel)]="searchRequest.Category">
-        </div> -->
-        <!-- <div>
-          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
-          <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
-            <option value="">--All--</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Rejected">Rejected</option>
-            <option value="Hold">Hold</option>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Cast Category : <span class="StarMarking">*</span></label>
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="searchRequest.Category">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CategoryList" [ngValue]="item.CasteCategoryID">{{item.CasteCategoryName}}</option>
           </select>
-        </div> -->
+
+        </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Institute</label>
+          <select [disabled]="this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43" class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.InstituteID"
+                 >
+            <option value="0">--All--</option>
+            <option *ngFor="let item of InstituteMasterList" value="{{item.InstituteID}}">
+              {{item.InstituteName}}
+            </option>
+          </select>
+        </div>
+
+        <!--<div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Year</label>
+    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="request.FinacialYearID"
+      formControlName="ddlFinancialYearID">
+      <option value="0">--All--</option>
+      <option *ngFor="let item of FinancialYear" value="{{item.FinancialYearID}}">
+        {{
+        item.FinancialYearName
+        }}
+      </option>
+    </select>
+    <div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlFinancialYearID').errors" class="text-danger">
+      <p *ngIf="!SearchStudentDataFormGroup .get('ddlFinancialYearID').errors.required"><i
+          aria-hidden="true"></i>This field is required.</p>
+    </div>
+  </div>-->
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade</label>
+          <select class="form-select" id="StudentExamStreamId" [(ngModel)]="searchRequest.BranchID">
+            <option value="0">--All--</option>
+            <option *ngFor="let item of StreamMasterList" [value]="item.ID">{{item.Name}}</option>
+          </select>
+          <!--<div *ngIf="isSubmitted && SearchStudentDataFormGroup.get('ddlStreamID').errors" class="text-danger">
+      <p *ngIf="!SearchStudentDataFormGroup.get('ddlStreamID').errors.required"><i aria-hidden="true"></i>This
+        field is required.</p>
+    </div>-->
+        </div>
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category</label>
+    <input type="text" class="form-input" placeholder="Category" id="Category" [(ngModel)]="searchRequest.Category">
+  </div> -->
+        <!-- <div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Approved Status</label>
+    <select class="form-select" id="StudentExamInstituteId" [(ngModel)]="searchRequest.Status">
+      <option value="">--All--</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+      <option value="Hold">Hold</option>
+    </select>
+  </div> -->
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetEligibleStudentListData(1)">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">

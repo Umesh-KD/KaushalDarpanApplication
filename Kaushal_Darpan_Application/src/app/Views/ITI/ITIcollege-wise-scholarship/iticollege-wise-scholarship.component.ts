@@ -14,6 +14,7 @@ import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-boo
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddITICollegeWiseScholarshipModel, ITICollegeWiseScholarshipSearchModel } from '../../../Models/ITICollegeWiseScholarshipModel';
 import { ITICollegeWiseScholarshipService } from '../../../Services/ITICollegeWiseScholarship/iticollege-wise-scholarship.service';
+import { EnumRole } from '../../../Common/GlobalConstants';
 @Component({
     selector: 'iticollege-wise-scholarship',
     templateUrl: './iticollege-wise-scholarship.component.html',
@@ -27,7 +28,7 @@ export class ITICollegeWiseScholarshipComponent implements OnInit {
   // public instituteId:int=0;
   public sSOLoginDataModel = new SSOLoginDataModel();
   public ApprovedStatus: string = "0";
-
+  public isShowdrop: boolean=false
   // pagination
    pageNo: any = 1;
    pageSize: any = 50;
@@ -59,6 +60,9 @@ schemeTypes:any = [
   { id: 2, name: 'Scheme 2' },
   { id: 3, name: 'Scheme 3' }
 ];
+
+  public StreamMasterList:any=[]
+  public InstituteMasterList:any=[]
 
 SelectedStudent:any = {};
 
@@ -105,7 +109,19 @@ SelectedStudent:any = {};
       });
 
     await this.GetEligibleStudentListData(1);
-       
+
+    await this.GetMasterData()
+    await this.StreamMaster()
+
+    if (this.sSOLoginDataModel.RoleID == 20 || this.sSOLoginDataModel.RoleID == 43 ) {
+      this.isShowdrop = true;
+      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+
+    } else {
+      this.isShowdrop = false;
+
+    }
+   
   }
 
 
@@ -270,7 +286,7 @@ SelectedStudent:any = {};
       this.searchRequest.ModifyBy = this.sSOLoginDataModel.UserID
         this.searchRequest.RoleID = this.sSOLoginDataModel.RoleID
         this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
-        this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+  /*      this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID;*/
         console.log(this.searchRequest.Category);
       this.loaderService.requestStarted();
       await this.CollegeWiseScholarshipService.GetCollegeWiseScholarshipList(this.searchRequest).then((data: any) => {
@@ -468,5 +484,62 @@ SelectedStudent:any = {};
         }, 200);
       }
     }
+
+
+  async GetMasterData() {
+    try {
+      this.loaderService.requestStarted();
+     
+      await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.sSOLoginDataModel.RoleID == EnumRole.Principal) {
+            this.InstituteMasterList = data['Data'];
+            this.searchRequest.InstituteID = this.sSOLoginDataModel.InstituteID
+            this.InstituteMasterList = this.InstituteMasterList.filter((x: any) => { return x.InstituteID == this.searchRequest.InstituteID });
+            //console.log(this.sSOLoginDataModel.InstituteID,'ss1')
+            //console.log(this.InstituteMasterList,'ss2')
+          } else {
+            this.InstituteMasterList = data['Data'];
+            this.searchRequest.InstituteID = 0
+          }
+        }, (error: any) => console.error(error));
+
+
+ 
+
+
+
+
+
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  async StreamMaster() {
+    const MasterCode = "Lateral_Trade";
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+        const parsedData = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = parsedData.Data;
+      });
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
 }
