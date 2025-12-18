@@ -1264,6 +1264,7 @@ const routes: Routes = [
       { path: 'iti-bank-guarantee', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
       { path: 'iti-bank-guarantee/:id', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/Add-ITI-BankGuarantee/ITI-BankGuarantee.module').then(m => m.ITIBankGuaranteeModule) },
       { path: 'iti-bank-guarantee-list', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/list-iti-bankguarantee/list-iti-bankguarantee.module').then(m => m.listitibankguaranteeModule), title: 'ITI Bank Guarantee List' },
+      { path: 'iti-bank-guarantee-Report', loadChildren: () => import('./Views/ITI/ITI-BankGuarantee/report-iti-bankguarantee/report-iti-bankguarantee.module').then(m => m.reportitibankguaranteeModule), title: 'ITI Bank Guarantee Report' },
 
       { path: 'direct-allotment-list8/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list8' },
       { path: 'direct-allotment-list10/:id', loadChildren: () => import('./Views/ITI/direct-allotment/direct-allotment-list/direct-allotment-list.module').then(m => m.DirectAllotmentListModule), title: 'direct-allocation-list10' },
@@ -1340,7 +1341,7 @@ const routes: Routes = [
       { path: 'staff-management-report', loadChildren: () => import('./Views/Reports/staff-management-reports/staff-management-reports.module').then(m => m.StaffManagementReportsModule), title: 'staff-management-report' },
       { path: 'branch-wise-statistical-reports', loadChildren: () => import('./Views/Reports/bter-branch-wise-statistical-reports/bter-branch-wise-statistical-reports.module').then(m => m.BranchWiseStatisticalReportsModule), title: 'branch-wise-statistical-reports' },
 
-      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule) },
+      { path: 'PMNAM-MelaReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/pmnam-mela-report/pmnam-mela-report.module').then(m => m.PmnamMelaReportModule), title:'PMNUM' },
       { path: 'Workshop-progressReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report/workshop-progress-report.module').then(m => m.WorkshopProgressReportModule) },
 
 
@@ -1351,7 +1352,7 @@ const routes: Routes = [
       { path: 'ApprenticeshipRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report/apprenticeship-registration-report.module').then(m => m.ApprenticeshipRegistrationReportModule) },
       { path: 'ApprenticeshipRegistrationReport-list', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report-list/apprenticeship-registration-report-list.module').then(m => m.ApprenticeshipRegistrationReportListModule) },
 
-      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule) },
+      { path: 'Workshop-progressReport-List', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/workshop-progress-report-list/workshop-progress-report-list.module').then(m => m.WorkshopProgressReportListModule), title:'Workshop Progress Report By AAA' },
 
       { path: 'PaasoutRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/passout-registration-report/passout-registration-report.module').then(m => m.PassoutRegistrationReportModule) },
 

@@ -36,7 +36,34 @@
               </option>
             </select>
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              महीना <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select"
+                    id="MonthID"
+                    name="MonthID"
+                    [(ngModel)]="BeforeMonth">
+              <option value="">Choose Option</option>
+              <option value="1">जनवरी</option>
+              <option value="2">फ़रवरी</option>
+              <option value="3">मार्च</option>
+              <option value="4">अप्रैल</option>
+              <option value="5">मई</option>
+              <option value="6">जून</option>
+              <option value="7">जुलाई</option>
+              <option value="8">अगस्त</option>
+              <option value="9">सितंबर</option>
+              <option value="10">अक्टूबर</option>
+              <option value="11">नवंबर</option>
+              <option value="12">दिसंबर</option>
+            </select>
+          </div>
+
         </div>
+
+        
 
         <div class="flex justify-between flex-wrap items-center mb-3 mt-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-plus"></i>PMNAM Before Report</b>
@@ -94,6 +121,45 @@
             <input type="text" class="form-input" placeholder="Enter Number of Apprentices Appointed" [disabled]="IsDisable" [(ngModel)]="NumberofEmployedStudentAfter" onkeypress="if (isNaN( String.fromCharCode(event.keyCode)) || (event.keyCode == 32)) return false;">
           </div>
 
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="PNMMelaDocument">PNM मेला दस्तावेज़:<span class="StarMarking">*</span></label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="PNMMelaDocument" type="file" (change)="onFilechange($event,'MelaDocument')">
+              <label for="PNMMelaDocument">
+                <span>Choose File</span>
+                {{ PNMMelaDocument === '' ? 'No File Choosen' : PNMMelaDocument }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + PNMMelaDocument}}"
+                   *ngIf="PNMMelaDocument !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+          </div>
+
+
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                   for="provisionLetterDocument">प्रावधान पत्र दस्तावेज़:<span class="StarMarking">*</span></label>
+            <div class="flex fileUploader">
+              <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                     id="provisionLetterDocument" type="file" (change)="onFilechange($event,'provnLetterDocument')">
+              <label for="provisionLetterDocument">
+                <span>Choose File</span>
+                {{ provisionLetterDocument === '' ? 'No File Choosen' : provisionLetterDocument }}
+              </label>
+              <div class="flex">
+                <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + provisionLetterDocument}}"
+                   *ngIf="provisionLetterDocument !=''"
+                   class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+              </div>
+            </div>
+
+
+          </div>
         </div>
 
         <div class="grid 2xl:grid-cols-1 xl:grid-cols-1 lg:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3" *ngIf="SSOLoginDataModel.RoleID == 97 && IsDisable==false">

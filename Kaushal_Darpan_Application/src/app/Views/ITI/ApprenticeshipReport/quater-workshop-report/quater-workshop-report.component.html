@@ -38,6 +38,20 @@
           </select>
 
         </div>
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            वित्तीय वर्ष <span class="StarMarking">*</span>
+          </label>
+          <select [(ngModel)]="request.FinancialYearID"
+                  class="form-select">
+
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                    [ngValue]="item.FinancialYearID">
+              {{ item.FinancialYearName }}
+            </option>
+          </select>
+        </div>
 
 
         <div>
@@ -52,7 +66,7 @@
         </div>
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
-          <button type="button" class="btn bg-danger text-white mt-6">Cancel</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Cancel</button>
         </div>
 
       </div>

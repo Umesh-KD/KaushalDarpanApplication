@@ -142,11 +142,11 @@ export class ApprenticeReportServiceService {
   }
 
 
-  public async GetAllData(UserID:number=0,DistrictID:number=0) {
+  public async GetAllData(UserID: number = 0, DistrictID: number = 0, FinancialYearID: number = 0, BeforeMonth: number =0) {
     //var body = JSON.stringify(obj);
-    // console.log(body);
+    // console.log(body);  this.FinancialYearID, this.BeforeMonth
     const headers = { 'content-type': 'application/json' }
-    return await this.http.get(this.APIUrl + "/GetAllData/" + UserID + '/' + DistrictID, { 'headers': headers })
+    return await this.http.get(this.APIUrl + "/GetAllData/" + UserID + '/' + DistrictID + '/' + FinancialYearID + '/' + BeforeMonth, { 'headers': headers })
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
