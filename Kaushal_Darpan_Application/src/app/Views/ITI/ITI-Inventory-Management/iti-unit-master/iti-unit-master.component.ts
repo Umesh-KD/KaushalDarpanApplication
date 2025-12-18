@@ -163,6 +163,7 @@ export class ITIUnitMasterComponent {
     this.isSubmitted = false;
     this.request = new DTEItemUnitModel();
     this.RequestFormGroup.reset();
+    this.UnitId = 0;
     this.GetAllData();
   }
   async btnEdit_OnClick(UnitId: number) {

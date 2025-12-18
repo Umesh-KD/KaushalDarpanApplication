@@ -417,6 +417,7 @@ export class ITIAddItemsMasterComponent {
 
 
   async DGET_Details() {
+    debugger
      const selectedEquipment = this.EquipmentsDDLList.find(
       (item: any) => item.ID == this.request.EquipmentsId
     );

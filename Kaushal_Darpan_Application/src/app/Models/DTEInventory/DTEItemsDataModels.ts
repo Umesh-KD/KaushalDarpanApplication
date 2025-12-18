@@ -28,6 +28,7 @@ export class DTEItemsSearchModel {
   public OfficeID: number = 0;
   public StatusID: number = 0;
   public ItemType: number = 0;
+  public StaffID?: number = 0;
 }
 
 export class DTEItemsSearchModel1 {
@@ -107,6 +108,7 @@ export class inventoryIssueHistoryITISearchModel {
   public IssuedId: number = 0;
   public StreamID: number = 0;
   public ItemDetailsId: number =0;
+  public CollegeId?: number =0;
 }
 
 

@@ -171,6 +171,7 @@ export class ITICategoriesMasterComponent {
 
   async ResetControl() {
     this.isSubmitted = false;
+    this.ItemCategoryId = 0;
     this.request = new DTEItemCategoriesDataModels();
     this.CategoriesRequestFormGroup.reset();
   }
