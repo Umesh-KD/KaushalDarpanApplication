@@ -1347,7 +1347,7 @@ const routes: Routes = [
 
 
       { path: 'NodalWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/nodal-workshop-report/nodal-workshop-report.module').then(m => m.NodalWorkshopReportModule) },
-      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule) },
+      { path: 'QuaterWorkshopReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/quater-workshop-report/quater-workshop-report.module').then(m => m.QuaterWorkshopReportModule), title:'Quarterly progress report by regional officer' },
 
       { path: 'ApprenticeshipRegistrationReport', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report/apprenticeship-registration-report.module').then(m => m.ApprenticeshipRegistrationReportModule) },
       { path: 'ApprenticeshipRegistrationReport-list', loadChildren: () => import('./Views/ITI/ApprenticeshipReport/apprenticeship-registration-report-list/apprenticeship-registration-report-list.module').then(m => m.ApprenticeshipRegistrationReportListModule) },
