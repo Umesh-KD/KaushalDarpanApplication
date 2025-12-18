@@ -28,7 +28,7 @@
         </div>
 
         <!-- Institute (shows only when OfficeID == 11) -->
-        <div *ngIf="formData.OfficeID == 11">
+        <div *ngIf="formData.OfficeID == 21">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Institute:</label>
           <select class="form-select" formControlName="InstituteID" [(ngModel)]="formData.InstituteID">
             <option value="0">--Select--</option>
@@ -252,7 +252,7 @@
 <div class="card mt-3">
   <div class="card-body p-5">
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
-      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For  List</b>
+      <b class="text-1xl-5"><i class="ti ti-list"></i>Office Vacancy For List</b>
     </div>
     <div class="overflow-x-auto mt-4">
       <table class="table table-bordered" *ngIf="OfficeVacancyList.length > 0">
@@ -294,7 +294,7 @@
                 <span class="slider round"></span>
               </label>
               <button *ngIf="!IsView" class="btn bg-info text-white" (click)="Function_UpdateVacancyPost(modal_UpdateVacancyPost,leave)">Update</button>
-              <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(idx, leave.ID)">
+              <button *ngIf="leave.PostedSeat == 0" class="btn btn-danger btn-sm" (click)="removeLeave(leave.Index, leave.ID)">
                 Remove
               </button>
             </td>
