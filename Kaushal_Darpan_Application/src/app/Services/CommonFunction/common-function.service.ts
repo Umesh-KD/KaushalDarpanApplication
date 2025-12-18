@@ -1076,7 +1076,7 @@ export class CommonFunctionService {
 
   public async GetITITradeList() {
 
-    return await this.http.get(this.APIUrl + '/TradeListGetAllData/', this.headersOptions)
+    return await this.http.post(this.APIUrl + '/TradeListGetAllData/' , this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
