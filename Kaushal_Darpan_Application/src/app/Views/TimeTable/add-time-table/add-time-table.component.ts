@@ -585,7 +585,7 @@ export class AddTimeTableComponent   {
       console.log(this.subjectCodeDDLRequest, "this.subjectCodeDDLRequest")
       await this.commonMasterService.GetTimeTableSubjectCodeMasterDDL(this.subjectCodeDDLRequest)
         .then((data: any) => {
-          
+          debugger
           data = JSON.parse(JSON.stringify(data));
           this.SubjectCodeMasterDDLList = data['Data'];
           console.log("SubjectCodeMasterDDLList",this.SubjectCodeMasterDDLList )

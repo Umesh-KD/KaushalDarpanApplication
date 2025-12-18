@@ -909,8 +909,9 @@ backToSSONew() {
    const form = document.createElement('form');
    form.method = 'POST';
    //form.action = GlobalConstants.BacktoSSOURL?.toString();
-  //  form.action = this.appsettingConfig.BacktoSSOURL?.toString();
-   form.action="https://ssotest.rajasthan.gov.in/sso";
+   form.action = this.appsettingConfig.BacktoSSOURL?.toString();
+   console.log('Back to sso : '+this.appsettingConfig.BacktoSSOURL?.toString());
+   //form.action="https://ssotest.rajasthan.gov.in/sso";
    const input = document.createElement('input');
    input.type = 'hidden';
    input.name = 'userdetails';
@@ -953,8 +954,9 @@ backtoSignOutNew_17122025() {
    const form = document.createElement('form');
    form.method = 'POST';
    //form.action = GlobalConstants.BacktoSSOURL?.toString();
-  //  form.action = this.appsettingConfig.BacktoSSOURL?.toString();
-   form.action="https://ssotest.rajasthan.gov.in/signout";
+   form.action = this.appsettingConfig.BacktoSSOURL_Logout?.toString();
+   console.log('Logout to sso : '+this.appsettingConfig.BacktoSSOURL_Logout?.toString());
+   //form.action="https://ssotest.rajasthan.gov.in/signout";
    const input = document.createElement('input');
    input.type = 'hidden';
    input.name = 'userdetails';

@@ -187,12 +187,7 @@
                 <label>
                       <ng-container
                           *ngIf="
-                          item.Selected &&
-                          (
-                          ItemMasterList[i]?.equipmentStatus === 2 ||
-                          item.equipmentStatus === '2' ||
-                          item.equipmentStatus === 2
-                          );
+                          item.Selected ;
                           else notSelected"
                       >
                       <!-- formControlName="isOption" -->
