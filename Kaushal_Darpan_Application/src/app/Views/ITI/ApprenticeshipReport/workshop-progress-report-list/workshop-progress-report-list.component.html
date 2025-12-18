@@ -30,7 +30,7 @@
   
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-       
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने जिला  <span class="StarMarking">*</span></label>
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
@@ -39,9 +39,49 @@
             </select>
 
           </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              वित्तीय वर्ष <span class="StarMarking">*</span>
+            </label>
+            <select [(ngModel)]="FinancialYearID"
+                    class="form-select">
+
+              <option [ngValue]="0">Choose Option</option>
+              <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                      [ngValue]="item.FinancialYearID">
+                {{ item.FinancialYearName }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              महीना <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select"
+                    id="MonthID"
+                    name="MonthID"
+                    [(ngModel)]="BeforeMonth">
+              <option value="0">Choose Option</option>
+              <option value="1">जनवरी</option>
+              <option value="2">फ़रवरी</option>
+              <option value="3">मार्च</option>
+              <option value="4">अप्रैल</option>
+              <option value="5">मई</option>
+              <option value="6">जून</option>
+              <option value="7">जुलाई</option>
+              <option value="8">अगस्त</option>
+              <option value="9">सितंबर</option>
+              <option value="10">अक्टूबर</option>
+              <option value="11">नवंबर</option>
+              <option value="12">दिसंबर</option>
+            </select>
+          </div>
+
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Clear</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearField()">Cancel</button>
           </div>
 
         </div>
@@ -85,14 +125,16 @@
               <th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
               <!--<th *ngIf="SSOLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
               <th class="text-left">कार्यशाला की तिथि</th>
-              <th class="text-left">कार्यशाला आयोजन करने <br /> वाले जिलें का नाम</th>
-              <th class="text-left">कार्यशाला मे भाग लेने वाले जिलें</th>
+              <th class="text-left">कार्यशाला आयोजित करने <br /> वाले जिलें का नाम</th>
+              <th class="text-left">कार्यशाला मे भाग लेने वाले औ.प्र.सं. का नाम </th>
               <th class="text-left">कार्यशाला भाग लेने वाले प्रतिष्ठानों<br /> का नाम व पता </th>
               <th class="text-left">कार्यशाला मे भाग लेने वाले <br /> प्रतिनिधि का नाम ,पद व मो.नं.</th>
               <th class="text-left">विविध विवरण</th>
+              <th>कार्य प्रगति दस्तावेज़</th>
               <th class="text-left">कार्रवाई</th>
             </tr>
           </thead>
+          <!--{{RowAddedList | json}}-->
           <tbody>
             <tr *ngFor="let row of RowAddedList | tableSearchFilter:Table_SearchText; let idx=index; ">
               <td align="left">{{idx+1}}</td>
@@ -104,6 +146,15 @@
               <td>{{row.establishmentNameAddress}}</td>
               <td>{{row.representativeNameDesignationMobile}}</td>
               <td>{{row.Remars}}</td>
+
+              <td class="text-center">
+                <span *ngIf="!row.workProgressDocument" class="text-muted"></span>
+                <a *ngIf="row.workProgressDocument" href="{{appsettingConfig.StaticFileRootPathURL + '/' + row.workProgressDocument}}"
+                   target="_blank" class="btn bg-primary text-white btn-sm">
+                  <i class="ti ti-eye"></i>
+                </a>
+              </td>
+
               <td>
                 <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
                   <a *ngIf="SSOLoginDataModel.RoleID == 97" href="javascript:void(0)" title="view" (click)="EditData(row.PKID)"><i class="ti ti-eye"></i></a>

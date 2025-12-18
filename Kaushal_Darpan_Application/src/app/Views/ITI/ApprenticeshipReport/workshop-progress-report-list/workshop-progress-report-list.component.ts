@@ -57,7 +57,10 @@ export class WorkshopProgressReportListComponent {
   pageInTableSize: string = '50';
   startInTableIndex: number = 0;
   DistrictID: number = 0;
+  FinancialYearID: number = 0;
   _Userid: number = 0;
+  public FinYearList: any = [];
+  public BeforeMonth: number = 0;
   public searchRequest = new ITIApprenticeshipWorkshopModel();
 
   async ngOnInit() {
@@ -71,6 +74,7 @@ export class WorkshopProgressReportListComponent {
 
     this.GetReportAllData();
     this.GetDistrictMatserDDL();
+    this.YearDropdownData('FinancialYear_IIP');
   }
 
   async GetReportAllData() {
@@ -84,7 +88,9 @@ export class WorkshopProgressReportListComponent {
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
         RoleID: this.SSOLoginDataModel.RoleID,
         Createdby: this._Userid,
-        SearchDistrictID: this.DistrictID
+        SearchDistrictID: this.DistrictID,
+        FinancialYearID: this.FinancialYearID,
+        BeforeMonth: this.BeforeMonth || 0
       };
 
 
@@ -253,6 +259,8 @@ export class WorkshopProgressReportListComponent {
   ClearField()
   {
     this.DistrictID = 0;
+    this.FinancialYearID = 0;
+    this.BeforeMonth = 0;
     this.GetReportAllData();
 
   }
@@ -299,6 +307,15 @@ export class WorkshopProgressReportListComponent {
   generateFileName(extension: string): string {
     const timestamp = new Date().toISOString().replace(/[:.-]/g, '_'); // Replace invalid characters
     return `file_${timestamp}.${extension}`;
+  }
+  YearDropdownData(MasterCode: string): void {
+    this.commonMasterService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
   }
 
 

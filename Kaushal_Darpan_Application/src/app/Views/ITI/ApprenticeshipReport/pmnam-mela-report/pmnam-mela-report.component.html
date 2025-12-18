@@ -18,14 +18,14 @@
 
     <div class="card-body p-5">
 
-      <div *ngIf="ssoLoginDataModel.RoleID != 97" class="mb-8">
+      <div  class="mb-8">
         <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
-          <a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+          <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
 
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-  
+
 
 
           <div>
@@ -33,14 +33,52 @@
             <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
               <option value="0">Choose Option</option>
               <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
-
-
             </select>
-
           </div>
+
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              वित्तीय वर्ष <span class="StarMarking">*</span>
+            </label>
+            <select [(ngModel)]="FinancialYearID"
+                    class="form-select">
+
+              <option [ngValue]="0">Choose Option</option>
+              <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                      [ngValue]="item.FinancialYearID">
+                {{ item.FinancialYearName }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              महीना <span class="StarMarking">*</span>
+            </label>
+            <select class="form-select"
+                    id="MonthID"
+                    name="MonthID"
+                    [(ngModel)]="BeforeMonth">
+              <option value="0">Choose Option</option>
+              <option value="1">जनवरी</option>
+              <option value="2">फ़रवरी</option>
+              <option value="3">मार्च</option>
+              <option value="4">अप्रैल</option>
+              <option value="5">मई</option>
+              <option value="6">जून</option>
+              <option value="7">जुलाई</option>
+              <option value="8">अगस्त</option>
+              <option value="9">सितंबर</option>
+              <option value="10">अक्टूबर</option>
+              <option value="11">नवंबर</option>
+              <option value="12">दिसंबर</option>
+            </select>
+          </div>
+
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
-            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()" >Cancel</button>
+            <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Cancel</button>
           </div>
 
         </div>
@@ -78,6 +116,7 @@
               <th colspan="2" class="text-left">संस्थान द्वारा संपर्क किए गये प्रतिष्ठानों की संख्या</th>
               <th colspan="2" class="text-left">मेलें में उपस्थिति अभ्यार्थीयों की संख्या</th>
               <th colspan="2" class="text-left">प्राथमिक स्तर पर चयन अभ्यार्थीयों की संख्या </th>
+              <th>दिनांक</th>
               <th rowspan="2">कार्रवाई</th>
             </tr>
 
@@ -91,9 +130,10 @@
               <th class="text-left">महिला</th>
               <th class="text-left">पुरुष</th>
               <th class="text-left">महिला</th>
+              <th></th>
             </tr>
           </thead>
-
+          <!--{{DataList | json}}-->
           <tbody>
             <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index;">
               <td>{{idx+1}}</td>
@@ -107,6 +147,7 @@
               <td>{{row.CandidatespresentFemaleNo}}</td>
               <td>{{row.CandidatessselectedMaleNo}}</td>
               <td>{{row.CandidatessselectedFemaleNo}}</td>
+              <td> {{ row.PmnamMelaDate }}</td>
               <td>
                 <div class="flex align-center justify-center actionBtns">
                   <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="EditData(row)" title="Edit"><i class="ti ti-pencil"></i></a>-->
@@ -133,16 +174,60 @@
       </div>
       <div class="card-body">
         <div class=" ">
+
+          <div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+              <div>
+                <label class="text-gray-700 text-xs font-medium mb-1 block">
+                  वित्तीय वर्ष <span class="StarMarking">*</span>
+                </label>
+                <select [(ngModel)]="obj.FinancialYearID" class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 ">
+                  <option [ngValue]="0">Choose Option</option>
+                  <option *ngFor="let item of FinYearList"
+                          [ngValue]="item.FinancialYearID">
+                    {{ item.FinancialYearName }}
+                  </option>
+                </select>
+              </div>
+
+              <div>
+                <label class="text-gray-700 text-xs font-medium mb-1 block">
+                  महीना <span class="StarMarking">*</span>
+                </label>
+                <select class="form-select" [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 "
+                        [(ngModel)]="obj.BeforeMonth">
+                  <option value="">Choose Option</option>
+                  <option value="1">जनवरी</option>
+                  <option value="2">फ़रवरी</option>
+                  <option value="3">मार्च</option>
+                  <option value="4">अप्रैल</option>
+                  <option value="5">मई</option>
+                  <option value="6">जून</option>
+                  <option value="7">जुलाई</option>
+                  <option value="8">अगस्त</option>
+                  <option value="9">सितंबर</option>
+                  <option value="10">अक्टूबर</option>
+                  <option value="11">नवंबर</option>
+                  <option value="12">दिसंबर</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+
+
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">मेलें में सम्मलित हुए प्रतिष्ठानों की संख्या <span class="StarMarking">*</span></label>
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 " value="" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PoliticalEstablishmentspartNo" name="PoliticalEstablishmentspartNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0 " value="" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"
+                       [(ngModel)]="obj.PoliticalEstablishmentspartNo" name="PoliticalEstablishmentspartNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PrivateEstablishmentspartNo" name="PrivateEstablishmentspartNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentspartNo" name="PrivateEstablishmentspartNo">
               </div>
             </div>
           </div>
@@ -151,11 +236,11 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">राजकीय <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PoliticalEstablishmentscontactedNo" name="PoliticalEstablishmentscontactedNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="राजकीय संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PoliticalEstablishmentscontactedNo" name="PoliticalEstablishmentscontactedNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">निजी <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.PrivateEstablishmentscontactedNo" name="PrivateEstablishmentscontactedNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="निजी संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.PrivateEstablishmentscontactedNo" name="PrivateEstablishmentscontactedNo">
               </div>
             </div>
           </div>
@@ -164,11 +249,11 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatespresentMaleNo" name="CandidatespresentMaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentMaleNo" name="CandidatespresentMaleNo">
               </div>
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatespresentFemaleNo" name="CandidatespresentFemaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatespresentFemaleNo" name="CandidatespresentFemaleNo">
               </div>
             </div>
           </div>
@@ -177,12 +262,59 @@
             <div class="grid 2xl:grid-cols-2 xl:grid-cols-2 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 mb-5">
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">पुरुष <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="पुरुष संख्या" class="form-input ng-untouched ng-pristine ng-invalid" [(ngModel)]="obj.CandidatessselectedMaleNo" name="CandidatessselectedMaleNo">
               </div>
+
               <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">महिला <span class="StarMarking">*</span></label>
-                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number" placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"  [(ngModel)]="obj.CandidatessselectedFemaleNo" name="CandidatessselectedFemaleNo">
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="number"
+                       placeholder="महिला संख्या" class="form-input ng-untouched ng-pristine ng-invalid"
+                       [(ngModel)]="obj.CandidatessselectedFemaleNo" name="CandidatessselectedFemaleNo">
               </div>
+
+
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="PNMMelaDocumentreport">दस्तावेज़ अपलोड<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="PNMMelaDocumentreport" type="file" (change)="onFilechange($event,'PNMMelaDocreport')">
+                  <label for="PNMMelaDocumentreport">
+                    <span>Choose File</span>
+                    {{ obj.PNMMelaDocumentreport === '' ? 'No File Choosen' : obj.PNMMelaDocumentreport }}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + obj.PNMMelaDocumentreport}}"
+                       *ngIf="obj.PNMMelaDocumentreport !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                       for="provisionLetterDocumentreport">PNM मेला दस्तावेज़<span class="StarMarking">*</span></label>
+                <div class="flex fileUploader">
+                  <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                         id="provisionLetterDocumentreport" type="file" (change)="onFilechange($event,'provisionLetterDocureport')">
+                  <label for="provisionLetterDocumentreport">
+                    <span>Choose File</span>
+                    {{ obj.provisionLetterDocumentreport === '' ? 'No File Choosen' : obj.provisionLetterDocumentreport }}
+                  </label>
+                  <div class="flex">
+                    <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + obj.provisionLetterDocumentreport}}"
+                       *ngIf="obj.provisionLetterDocumentreport !=''"
+                       class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label class="text-gray-800 text-sm font-medium inline-block mb-1">दिनांक <span class="StarMarking">*</span></label>
+                <input [disabled]="ssoLoginDataModel.RoleID != 97 || obj.ID!=0" type="date" class="form-input ng-untouched ng-pristine ng-invalid"
+                       [(ngModel)]="obj.PmnamMelaDate" name="PmnamMelaDate">
+              </div>
+
             </div>
           </div>
         </div>

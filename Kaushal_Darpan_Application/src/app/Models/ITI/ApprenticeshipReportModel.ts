@@ -7,6 +7,8 @@ export class ApprenticeshipReportEntity {
   public CandidatespresentFemaleNo: string = '';
   public CandidatessselectedMaleNo: string = '';
   public CandidatessselectedFemaleNo: string = '';
+  public provisionMelaDoc: string = '';
+  public PNMMelaDoc: string = '';
   public ID: number = 0;
   public UserId: number = 0;
   public EndTermID : number = 0;
@@ -15,6 +17,12 @@ export class ApprenticeshipReportEntity {
   public Createdby: number = 0;
   public IsActive: number = 0;
   public InstituteID: number = 0;
+  public PNMMelaDocumentreport: string = '';
+  public provisionLetterDocumentreport: string = '';
+  public PmnamMelaDate: string = '';
+  public BeforeMonth: string = '';
+  public FinancialYearID: number = 0;
+  public MonthID: number = 0;
 }
 
 export class WorkshopProgressReportDataEntity

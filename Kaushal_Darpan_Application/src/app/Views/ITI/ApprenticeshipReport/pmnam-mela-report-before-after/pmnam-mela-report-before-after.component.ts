@@ -11,7 +11,6 @@ import { ReturnDteItemDataModel } from '../../../../Models/DTEInventory/DTEIssue
 import { ApprenticeReportServiceService } from '../../../../Services/ITI/ApprenticeReport/apprentice-report-service.service'
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 
-
 @Component({
   selector: 'app-pmnam-mela-report-before-after',
   standalone: false,
@@ -32,6 +31,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
     private routers: Router,
     private commonMasterService: CommonFunctionService,
     private ApprenticeShipRPTService: ApprenticeReportServiceService,
+    //private CommonFunctionService: CommonFunctionService,
 
 
   ) { }
@@ -46,12 +46,21 @@ export class PMNAMMelaReportBeforeAfterComponent {
   public AfterDate: string = '';
   //public FinancialYearID: number = 0;
   SelectedFinancialYearID: number = 0;
+  FinancialYearName: string = '';
+  MonthID: number = 0;
+  BeforeMonth: string= '';
   id: number = 0;
   public FinYearList: any = [];
 
   IsDisable: boolean = false;
   buttonLabel: string = 'Submit'
   public SSOLoginDataModel = new SSOLoginDataModel()
+  public PNMMelaDocument: string = '';
+  public provisionLetterDocument: string = '';
+
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
 
 
   async ngOnInit()
@@ -95,7 +104,10 @@ export class PMNAMMelaReportBeforeAfterComponent {
       PKID: this.id,
       BeforeDate: this.BeforeDate,
       AfterDate : this.AfterDate,
-      FinancialYearID: this.SelectedFinancialYearID
+      FinancialYearID: this.SelectedFinancialYearID,
+      BeforeMonth: this.BeforeMonth,
+      PNMMelaDocument: this.PNMMelaDocument,
+      provisionLetterDocument: this.provisionLetterDocument
     };
 
     try {
@@ -130,6 +142,9 @@ export class PMNAMMelaReportBeforeAfterComponent {
     this.EstablishmentsRegisterNoAfter = ""
     this.NumberofSeatAfter = ""
     this.NumberofEmployedStudentAfter = '';
+    this.PNMMelaDocument = '';
+    this.provisionLetterDocument = '';
+    this.MonthID = 0;
   }
 
 
@@ -143,6 +158,7 @@ export class PMNAMMelaReportBeforeAfterComponent {
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           debugger;
+          console.log('data ==>',data)
           if (data.Data.length > 0) {
             //this.DataList = data.Data
             this.EstablishmentsRegisterNoBefore = data.Data['0'].EstablishmentsRegisterNoBefore;
@@ -152,6 +168,11 @@ export class PMNAMMelaReportBeforeAfterComponent {
             this.EstablishmentsRegisterNoAfter = data.Data['0'].EstablishmentsRegisterNoAfter;
             this.NumberofSeatAfter = data.Data['0'].NumberofSeatAfter;
             this.NumberofEmployedStudentAfter = data.Data['0'].NumberofEmployedStudentAfter;
+            this.provisionLetterDocument = data.Data['0'].provisionLetterDocument;
+            this.PNMMelaDocument = data.Data['0'].PNMMelaDocument;
+            this.BeforeMonth = data.Data['0'].MonthID;
+            this.SelectedFinancialYearID = data.Data['0'].FinancialYearID;
+            this.FinancialYearName = String(this.SelectedFinancialYearID);
             this.id = data.Data['0'].ID;
 
             const ExamDate = new Date(data['Data'][0]['AfterDate']);
@@ -191,6 +212,56 @@ export class PMNAMMelaReportBeforeAfterComponent {
       this.FinYearList = data['Data'] || [];
       console.log('Fin Year List:', this.FinYearList);
     });
+  }
+
+
+
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    debugger
+    try {
+
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.loaderService.requestStarted();
+
+        await this.commonMasterService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "MelaDocument") {
+                this.PNMMelaDocument = data['Data'][0]["FileName"];
+              }
+
+              else if (Type == "provnLetterDocument") {
+                this.provisionLetterDocument = data['Data'][0]["FileName"];
+              }
+
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
   }
 
 }

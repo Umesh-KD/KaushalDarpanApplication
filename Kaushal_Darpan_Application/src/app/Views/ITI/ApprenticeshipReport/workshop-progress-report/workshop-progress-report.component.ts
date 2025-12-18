@@ -15,7 +15,7 @@ import { CommonFunctionService } from "../../../../Services/CommonFunction/commo
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { MatTableDataSource } from "@angular/material/table";
- 
+import { UploadFileModel } from '../../../../Models/UploadFileModel';
 
 import { ITI_ApprenticeshipDataModel } from '../../../../Models/ITI/ITI_ApprenticeshipDataModel';
 
@@ -36,9 +36,12 @@ export class WorkshopProgressReportComponent {
     private appsettingConfig: AppsettingService,
     private routers: Router,
     private ApprenticeShipRPTService: ApprenticeReportServiceService,
-    private CommonService: CommonFunctionService,
+    private CommonFunctionService: CommonFunctionService,
+    private commonMasterService: CommonFunctionService
   ) { }
-
+  public State: number = -1;
+  public Message: any = [];
+  public ErrorMessage: any = [];
   WrokshopReportFormGroup!: FormGroup;
   public DistrictMasterList: any = [];
   public ALLDistrictMasterList: any = [];
@@ -52,6 +55,10 @@ export class WorkshopProgressReportComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   public request = new ITI_ApprenticeshipDataModel()
   public SSOLoginDataModel = new SSOLoginDataModel()
+  UploadFileModel = new UploadFileModel();
+  public workProgressDocument: string = '';
+  public workProgressDocumentFile: File | null = null;
+
 
   ngOnInit(): void
   {
@@ -65,6 +72,7 @@ export class WorkshopProgressReportComponent {
       representativedesignation: ['', Validators.required],
       representativeMobile: ['', Validators.required ],
       Remars: ['', Validators.required],
+      workProgressDocument: [''],
 
 
     });
@@ -220,6 +228,7 @@ export class WorkshopProgressReportComponent {
       _representativeMobile:
         this.WrokshopReportFormGroup.value.representativeMobile,
       _Remars: this.WrokshopReportFormGroup.value.Remars,
+      _workProgressDocument: this.workProgressDocument,
 
       //  CHANGE 3
       _ORG_districtName: ORG_DistrictName,
@@ -237,6 +246,7 @@ export class WorkshopProgressReportComponent {
       _RoleID: this.SSOLoginDataModel.RoleID,
       _Createdby: this.SSOLoginDataModel.UserID,
     });
+    console.log(this.RowAddedList);
 
     this.clearAllAfterAddMore();
     return;
@@ -272,7 +282,7 @@ export class WorkshopProgressReportComponent {
 
       this.loaderService.requestStarted();
       if (this.SSOLoginDataModel.RoleID != 97) {
-        await this.CommonService.GetCommonMasterData('DistrictHindi')
+        await this.CommonFunctionService.GetCommonMasterData('DistrictHindi')
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictMasterList = data['Data'];
@@ -280,7 +290,7 @@ export class WorkshopProgressReportComponent {
           }, (error: any) => console.error(error)
           );
       } else {
-        await this.CommonService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
+        await this.CommonFunctionService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.DistrictMasterList = data['Data'];
@@ -306,7 +316,7 @@ export class WorkshopProgressReportComponent {
 
       this.loaderService.requestStarted();
      
-        await this.CommonService.GetCommonMasterData('DistrictHindi')
+      await this.CommonFunctionService.GetCommonMasterData('DistrictHindi')
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.ALLDistrictMasterList = data['Data'];
@@ -331,6 +341,9 @@ export class WorkshopProgressReportComponent {
     this.WrokshopReportFormGroup.patchValue({
       OrganisedDistrictName : 0
     });
+    this.workProgressDocumentFile = null;
+    this.workProgressDocument = '';
+    this.WrokshopReportFormGroup.get('workProgressDocument')?.reset();
   }
   ResetAll()
   {
@@ -406,7 +419,7 @@ export class WorkshopProgressReportComponent {
       await this.ApprenticeShipRPTService.Get_WorkshopProgressReportAllData(obj)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          debugger;
+      
           if (data.Data.length > 0)
           {
 
@@ -420,8 +433,10 @@ export class WorkshopProgressReportComponent {
               representativedesignation: data.Data['0'].representativedesignation,
               representativeMobile: data.Data['0'].representativeMobile,
               Remars: data.Data['0'].Remars,
-
             })
+            debugger;
+   
+            this.workProgressDocument = data.Data['0'].workProgressDocument
             this.IsUpdateCase = true;
             this.UpdateEditID = ReportID;
           }
@@ -494,6 +509,7 @@ export class WorkshopProgressReportComponent {
       _representativedesignation: this.WrokshopReportFormGroup.value.representativedesignation,
       _representativeMobile: this.WrokshopReportFormGroup.value.representativeMobile,
       _Remars: this.WrokshopReportFormGroup.value.Remars,
+      _workProgressDocument: this.WrokshopReportFormGroup.value.workProgressDocument,
       _ORG_districtName: ORG_DistrictName,
 
       _representativeNameAddressMobileno: this.WrokshopReportFormGroup.value.representativeName + "/" + this.WrokshopReportFormGroup.value.representativedesignation + "/" + this.WrokshopReportFormGroup.value.representativeMobile,
@@ -535,4 +551,50 @@ export class WorkshopProgressReportComponent {
 
 
   }
+
+
+  public file!: File;
+  async onFilechange(event: any, Type: string) {
+    debugger
+    try {
+
+      this.file = event.target.files[0];
+      if (this.file) {
+        this.loaderService.requestStarted();
+
+        await this.CommonFunctionService.UploadDocument(this.file)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+
+            this.State = data['State'];
+            this.Message = data['Message'];
+            this.ErrorMessage = data['ErrorMessage'];
+
+            if (this.State == EnumStatus.Success) {
+              if (Type == "wpDocument") {
+                this.workProgressDocument = data['Data'][0]["FileName"];
+              }
+
+              event.target.value = null;
+            }
+            if (this.State == EnumStatus.Error) {
+              this.toastr.error(this.ErrorMessage)
+            }
+            else if (this.State == EnumStatus.Warning) {
+              this.toastr.warning(this.ErrorMessage)
+            }
+          });
+      }
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      /*setTimeout(() => {*/
+      this.loaderService.requestEnded();
+      /*  }, 200);*/
+    }
+  }
+
+
 }
