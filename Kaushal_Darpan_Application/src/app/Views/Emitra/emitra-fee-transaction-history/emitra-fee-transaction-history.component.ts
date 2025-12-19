@@ -135,9 +135,11 @@ export class EmitraFeeTransactionHistoryComponent {
         SubOrderID: "",
         CreatedBy: this.sSOLoginDataModel.UserID,
         SSOID: this.sSOLoginDataModel.SSOID,
-        ExamStudentStatus: request.ExamStudentStatus
+        ExamStudentStatus: request.ExamStudentStatus,
+        IsEmitra: request.IsEmitra
         // ExamStudentStatus: request.TransctionStatus
       }
+      debugger
       await this.emitraPaymentService.GetTransactionStatus(obj)
         .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
@@ -406,7 +408,8 @@ export class EmitraFeeTransactionHistoryComponent {
         PRN: item.PRN,
         PaidAmount: item.PaidAmount,
         subsidyserviceid: item.subsidyserviceid,
-        DepartmentID: item.DepartmentID
+        DepartmentID: item.DepartmentID,
+        IsEmitra: item.IsEmitra
       }));
 
     console.log(this.selectedItems);
@@ -435,7 +438,8 @@ export class EmitraFeeTransactionHistoryComponent {
             SubOrderID: "",
             CreatedBy: this.sSOLoginDataModel.UserID,
             SSOID: this.sSOLoginDataModel.SSOID,
-            ExamStudentStatus: 0
+            ExamStudentStatus: 0,
+            IsEmitra: item.IsEmitra
           };
           await this.emitraPaymentService.EmitraApplicationVerifyPaymentStatus(obj)
             .then(async (data: any) => {

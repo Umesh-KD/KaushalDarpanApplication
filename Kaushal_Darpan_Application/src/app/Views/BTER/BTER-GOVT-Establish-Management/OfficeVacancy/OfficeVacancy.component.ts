@@ -28,7 +28,7 @@ export class OfficeVacancyComponent implements OnInit {
   public formData = new OfficeVacancyModel();
   public SearchData = new OfficeVacancyModel();
   public isSubmitted: boolean = false;
-
+ public isFinalSave:boolean=true;
 
   public deleteRequest = new OfficeVacancyModel();
 
@@ -158,8 +158,14 @@ export class OfficeVacancyComponent implements OnInit {
     });
 
 
-    const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
-    this.PostList = data['Data'];
+    await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.PostList = data['Data'];
+      console.log("PostList", this.PostList);
+    });
+
+    // const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
+    // this.PostList = data['Data'];
     
 
     const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
@@ -215,6 +221,7 @@ export class OfficeVacancyComponent implements OnInit {
 
     this.OfficeVacancyList.push(vacancyData); // Add to array
     this.OfficeVacancy = this.OfficeVacancyList;
+    this.isFinalSave=false;
     this.toastr.success("Vacancy added successfully.");
 
     this.AddOfficeVacancyForm.reset(); // Reset form after adding
@@ -224,7 +231,7 @@ export class OfficeVacancyComponent implements OnInit {
     this.loaderService.requestStarted();
     this.isLoading = true;
     this.isSubmitted = true;
-    
+
     if (this.OfficeVacancy.length === 0) {
       this.toastr.warning("Please add at least one valid vacancy before saving.");
       return;
@@ -240,7 +247,7 @@ export class OfficeVacancyComponent implements OnInit {
           this.OfficeVacancy = [];
           this.OfficeVacancyDataList();
           this.toastr.success('Data saved successfully!');
-
+          this.isFinalSave=true;
           window.location.reload();
            // Clear array after successful save
         } else {
@@ -269,7 +276,7 @@ export class OfficeVacancyComponent implements OnInit {
     if (index === undefined || index === null) {
       index = 0;
     }
-
+    // && index != 0
     if (ID == 0 && index != 0) {
 
       this.OfficeVacancyList = this.OfficeVacancyList.filter(item => item.Index !== index);
@@ -425,6 +432,7 @@ export class OfficeVacancyComponent implements OnInit {
   }
 
   async GetPostList() {
+    debugger;
     try {
       this.loaderService.requestStarted();
       const data: any = await this.commonMasterService.GetDesignationAndPostMaster();
@@ -448,19 +456,22 @@ export class OfficeVacancyComponent implements OnInit {
 
       if (userSubmitData) {
         this.formData = userSubmitData;
+console.log(this.formData.DesignationID);
+        // If fillupDesignation is async, await it
+        await this.fillupDesignation();
 
         if (this.formData.PostedSeat !== 0) {
 
           this.groupForm.get('OfficeID')?.disable();
           this.groupForm.get('StaffTypeID')?.disable();
-         /* this.groupForm.get('DesignationID')?.disable();*/
+          this.groupForm.get('DesignationID')?.disable();
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.disable();
           }
         } else {
           this.groupForm.get('OfficeID')?.enable();
           this.groupForm.get('StaffTypeID')?.enable();
-         /* this.groupForm.get('DesignationID')?.enable();*/
+         this.groupForm.get('DesignationID')?.enable();
           if (this.formData.InstituteID !== 0) {
             this.groupForm.get('InstituteID')?.enable();
           }
@@ -472,8 +483,7 @@ export class OfficeVacancyComponent implements OnInit {
         this.formData = new OfficeVacancyModel(); // or initialize with default values if needed
       }
 
-      // If fillupDesignation is async, await it
-      await this.fillupDesignation();
+   
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -487,6 +497,35 @@ export class OfficeVacancyComponent implements OnInit {
     this.modalReference?.close();
     this.formData = new OfficeVacancyModel();
     this.isSubmitted = false;
+  }
+  async LoadBasicData(){
+
+    await this.commonMasterService.DDL_OfficeMaster(this.sSOLoginDataModel.DepartmentID, 1)
+    .then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.OfficeList = data['Data'];
+      console.log(this.OfficeList, "OfficeList");
+    }, error => console.error(error));
+
+    await this.commonMasterService.InstituteMaster(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.InstituteMasterDDLList = data.Data;
+      console.log("InstituteMasterDDLList", this.InstituteMasterDDLList);
+    })
+
+
+    await this.commonMasterService.GetStaffTypeDDL().then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.StaffTypeList = data.Data;
+      console.log("StaffTypeList", this.StaffTypeList);
+    });
+
+
+    await this.commonMasterService.GetDesignationAndPostMaster().then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.PostList = data['Data'];
+      console.log("PostList", this.PostList);
+    });
   }
 
 
@@ -525,6 +564,73 @@ export class OfficeVacancyComponent implements OnInit {
 
 
         });
+      }
+      else if (this.formData.Index!=0){
+        debugger;
+        const formValues=this.groupForm.value;
+         // Validate required fields before adding
+        if (!formValues.Comments || !formValues.DesignationID || !formValues.OfficeID || !formValues.StaffTypeID || !formValues.TotalSeatID) {
+          this.toastr.warning("Please fill all required fields before adding.");
+          return;
+        }
+        await this.LoadBasicData();
+        const getoffice = this.OfficeList.find((item:any) => item.ID == formValues.OfficeID);
+        const getdesignation = this.PostList.find((item1: any) => item1.ID == formValues.DesignationID);
+        const getstaffType = this.StaffTypeList.find((item3: any) => item3.ID == formValues.StaffTypeID);
+        let getinstitute = [];
+
+        if (formValues.InstituteID && formValues.InstituteID !== 0) {
+          getinstitute = this.InstituteMasterDDLList.filter((item2: any) => item2.InstituteID == formValues.InstituteID) || [];
+        } else {
+          getinstitute = [];
+        }
+        const getinstituteName = getinstitute.length > 0 ? getinstitute[0].InstituteName : '';
+
+        console.log(getinstituteName); 
+        const vacancyData: OfficeVacancyModel = {
+          Comments: formValues.Comments,
+          DesignationID: formValues.DesignationID,
+          InstituteID: formValues.InstituteID || 0,  // fallback if null
+          OfficeID: formValues.OfficeID,
+          StaffTypeID: formValues.StaffTypeID,
+          TotalSeatID: formValues.TotalSeatID,
+          EndTermID: this.sSOLoginDataModel.EndTermID,
+          CreatedBy: this.sSOLoginDataModel.UserID,
+          DepartmentID: 1,
+          CourseTypeID: 1,
+          ActiveStatus: true,
+          DeleteStatus: false,
+          RTS: '',
+          ModifyBy: 0,
+          ModifyDate: '',
+          IPAddress: '',
+          ID: 0,
+          RemainingSeatID: 0,
+          OfficeName: getoffice.Name,
+          DesignationName: getdesignation.Name,
+          InstituteName: getinstituteName,
+          StaffTypeName: getstaffType.Name,
+          PostedSeat: 0,
+          PlanningID:0,
+          Index: this.tempIndex++,
+          TradeID: 0,
+          TradeName:''
+        };
+        console.log('Vacancy being added:', vacancyData);
+       // Remove existing record with same Index
+        this.OfficeVacancyList = this.OfficeVacancyList.filter(
+          (item: any) => item.Index !== this.formData.Index
+        );
+
+        // Push updated/new record
+        this.OfficeVacancyList.push(vacancyData);
+        this.toastr.success("Vacancy Updated successfully.");
+
+        // Optional: reset form & close modal
+        this.formData = new OfficeVacancyModel();
+        this.groupForm.reset();
+        this.CloseModal();
+
       }
       
 

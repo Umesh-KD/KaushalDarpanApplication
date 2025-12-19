@@ -121,8 +121,7 @@ export class TransactionStatusDataModel
   public SSOID: string = '';
   public ExamStudentStatus: number = 0;
   public ServiceID: number = 0;
-
-
+  public IsEmitra?: boolean = false;
 }
 export class TransactionSearchFilterModel
 {

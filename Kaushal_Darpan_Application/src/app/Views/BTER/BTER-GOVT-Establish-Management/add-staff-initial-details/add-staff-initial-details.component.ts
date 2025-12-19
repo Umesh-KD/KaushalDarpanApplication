@@ -107,6 +107,7 @@ export class AddStaffInitialDetailsComponent {
 
 
   async GetOfficeList() {
+    debugger;
     this.formData.OfficeID = 0;
     try {
       this.loaderService.requestStarted();
@@ -137,8 +138,18 @@ export class AddStaffInitialDetailsComponent {
 
 
   async GetOfficeWiselogic() {
+    debugger;
     if (this.formData.OfficeID == 17) {
       this.IsNodalOfficer = true;
+      this.IsGuestStaffoffice = false;
+      // this.IsGuestStaffoffice = true;
+    }
+    else if(this.formData.OfficeID==19)
+    {
+      this.IsNodalOfficer = false;
+      // this.formData.IsNodal = false;
+      // this.formData.IsGuestStaff = false;
+
       this.IsGuestStaffoffice = true;
     }
     else {
@@ -608,6 +619,7 @@ export class AddStaffInitialDetailsComponent {
   }
 
   async GetGuestHouseNameList() {
+    debugger;
     try {
       this.loaderService.requestStarted();
       await this.guestRoomManagmentService.GetGuestHouseNameList(this.searchRequest1)

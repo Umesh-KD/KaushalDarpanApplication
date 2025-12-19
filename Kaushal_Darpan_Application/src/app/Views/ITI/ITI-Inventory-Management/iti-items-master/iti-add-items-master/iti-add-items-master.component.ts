@@ -68,7 +68,7 @@ export class ITIAddItemsMasterComponent {
       ItemCategoryId: ['', [DropdownValidators]],
       EquipmentsId: ['0', [DropdownValidators]],
       ItemType: ['0', [DropdownValidators]],
-      TradeId: ['-1', [DropdownValidators]],
+      TradeId: ['0', [DropdownValidators]],
       IsConsume:[''],
       UnitId: [0],
       voucherdate: ['', Validators.required],
@@ -123,7 +123,7 @@ export class ITIAddItemsMasterComponent {
   }
 
   async saveData() {
-    debugger
+    
     this.request.DepartmentID = this.sSOLoginDataModel.DepartmentID
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
     this.request.OfficeID = this.sSOLoginDataModel.OfficeID;
@@ -200,22 +200,23 @@ export class ITIAddItemsMasterComponent {
   }
 
   async GetByID(id: number) {
-
+    debugger
     try {
       this.loaderService.requestStarted();
 
       await this.itiInventoryService.GetItemsMasterByID(id)
-        .then((data: any) => {
+        .then(async (data: any) => {
           data = JSON.parse(JSON.stringify(data));
           /*this.request.TradeId = data['Data']["TradeId"];*/
 
       
           this.request.ItemCategoryId = data['Data']["ItemCategoryId"];
           this.AddItemsRequestFormGroup.get('ItemCategoryId')?.setValue(this.request?.ItemCategoryId);
-        
+          
 
-          this.ddlEquipment_Change1();
+          await this.ddlEquipment_Change1();
           this.request.EquipmentsId = data['Data']["EquipmentsId"];
+          await this.DGET_Details();
           this.AddItemsRequestFormGroup.get('EquipmentsId')?.setValue(this.request?.EquipmentsId);
           this.request.CampanyName = data['Data']["CampanyName"];
           
@@ -226,6 +227,11 @@ export class ITIAddItemsMasterComponent {
           this.request.TotalPrice = data['Data']["TotalPrice"];
           this.request.CreatedBy = data['Data']["CreatedBy"];
           this.request.ModifyBy = data['Data']["ModifyBy"];
+          this.request.abbreviation = data['Data']["abbreviation"];
+          this.request.ItemType = data['Data']["ItemType"];
+          await this.GetTradeDDL();
+          this.request.TradeId = data['Data']["TradeId"];
+          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(this.request?.EquipmentsId);
           console.log('GetByID',data)
           // Update UI elements if necessary
           const btnSave = document.getElementById('btnSave');
@@ -273,20 +279,23 @@ export class ITIAddItemsMasterComponent {
 
 
   async GetTradeDDL() {
+    
     try {
       this.loaderService.requestStarted();
       //await this.ItiTradeService.GetAllData(this.searchTradeRequest)
       //await this.commonFunctionService.StreamMaster()
-      await this.commonFunctionService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, this.sSOLoginDataModel.InstituteID)
+      let Searchrequests: any = {}
+      Searchrequests.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequests.TypeName = 'TradeList';
+      
+      await this.itiInventoryService.GetAll_INV_GetCommonIssueDDL(Searchrequests)
         .then((data: any) => {
           console.log(data)
           data = JSON.parse(JSON.stringify(data));
-          //this.TradeDDLList = data['Data'];
-          //console.log(this.TradeDDLList)
-          const selectOption = { ID: -1, Name: '--Select--' };
-          this.TradeDDLList = [selectOption, ...data['Data']];
-          this.request.TradeId=-1
-          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(-1);  
+          this.TradeDDLList = data['Data'];
+          console.log(this.TradeDDLList)
+          // this.request.TradeId=-1
+          this.AddItemsRequestFormGroup.get('TradeId')?.setValue(0);  
         }, error => console.error(error));
     }
     catch (Ex) {
@@ -361,7 +370,7 @@ export class ITIAddItemsMasterComponent {
   async ddlEquipment_Change() {
     try {
       this.loaderService.requestStarted();
-      debugger
+      
       const categoryId = this.AddItemsRequestFormGroup.get('ItemCategoryId')?.value;
 
       if (!categoryId || categoryId === 0) {
@@ -390,7 +399,7 @@ export class ITIAddItemsMasterComponent {
   async ddlEquipment_Change1() {
     try {
       this.loaderService.requestStarted();
-      debugger
+      
       const categoryId = this.AddItemsRequestFormGroup.get('ItemCategoryId')?.value;
 
       if (!categoryId || categoryId === 0) {
@@ -417,7 +426,7 @@ export class ITIAddItemsMasterComponent {
 
 
   async DGET_Details() {
-    debugger
+    
      const selectedEquipment = this.EquipmentsDDLList.find(
       (item: any) => item.ID == this.request.EquipmentsId
     );
@@ -505,7 +514,7 @@ export class ITIAddItemsMasterComponent {
     this.calculateTotalPrice();
   }
   //onQuantityChange(newQuantity: number) {
-  //  debugger
+  //  
   //  // Check if the input quantity is greater than maxQty
   //  if (newQuantity > this.maxQty) {
   //    this.request.Quantity = this.maxQty; // Limit the quantity to maxQty

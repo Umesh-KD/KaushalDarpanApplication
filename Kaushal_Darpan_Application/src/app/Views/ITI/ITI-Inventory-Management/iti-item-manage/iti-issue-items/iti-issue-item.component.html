@@ -46,6 +46,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Trade List:</label>
           <select class="form-select" id="TradeID" [(ngModel)]="Searchrequests.TradeId"
             (change)="GetCategoryDDL()">
+            <option value="0"> --- Choose Trade --- </option>
             <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">
               {{ item.TradeName }}
             </option>

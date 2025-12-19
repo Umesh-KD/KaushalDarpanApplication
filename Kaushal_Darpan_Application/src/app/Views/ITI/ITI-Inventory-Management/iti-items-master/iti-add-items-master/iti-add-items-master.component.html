@@ -69,7 +69,7 @@
             Item Type: <span class="StarMarking">*</span>
           </label>
           <ng-select formControlName="ItemType" [(ngModel)]="request.ItemType" [items]="ItemtypeList" bindLabel="Name"
-                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
+                     bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false" (change)="GetTradeDDL()"
                      [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
           </ng-select>
 
@@ -257,14 +257,28 @@
         </div>
 
 
-        <div *ngIf="request.ItemType==2" >
+        <!-- <div *ngIf="request.ItemType==2" >
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             Trade: <span class="StarMarking">*</span>
           </label>
-          <ng-select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
+          <select formControlName="TradeId" [(ngModel)]="request.TradeId" [items]="TradeDDLList" bindLabel="Name"
                      bindValue="ID" placeholder="--Select--" [searchable]="true" [clearable]="false"
                      [searchFn]="customSearch" [loading]="isLoading" [loadingText]="'Loading...'">
-          </ng-select>
+          </select>
+
+          <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
+            <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
+              <i aria-hidden="true"></i>This field is required.
+            </p>
+          </div>
+        </div> -->
+
+        <div *ngIf="request.ItemType==2">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
+          <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
+            <option value="0"> --- Select ---</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.Id">{{item.TradeName}}</option>
+          </select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
             <p *ngIf="!_AddItemsRequestFormGroup.TradeId.errors.DropdownValidators">
@@ -296,7 +310,8 @@
           <label for="TotalPrice" class="text-gray-800 text-sm font-medium inline-block mb-2">
             Abbreviation: <span class="StarMarking">*</span>
           </label>
-          <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
+          <input type="text" class="form-input uppercase" id="abbreviation" name="abbreviation" 
+            formControlName="abbreviation" [(ngModel)]="request.abbreviation" maxlength="20">
 
         </div>
 
