@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { EnumEMProfileStatus, EnumDepartment, EnumStatus, GlobalConstants, EnumRole } from '../../../../Common/GlobalConstants';
-import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
+import { BTER_DesignationWiseBranchDataModel, BTER_EM_AddStaffDetailsDataModel, BTER_EM_GetPersonalDetailByUserID, Bter_Govt_EM_UserRequestHistoryListSearchDataModel, Bter_RequestUpdateStatus, BTERGovtEMStaff_ServiceDetailsOfPersonalModel } from '../../../../Models/BTER/BTER_EstablishManagementDataModel';
 import { LoaderService } from '../../../../Services/Loader/loader.service';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
 import { SSOLoginDataModel } from '../../../../Models/SSOLoginDataModel';
@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { StaffDetailsDataModel, StaffSubjectList } from '../../../../Models/StaffMasterDataModel';
 import { CommonVerifierApiDataModel } from '../../../../Models/PublicInfoDataModel';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-bter-em-add-staff-details',
@@ -31,6 +32,7 @@ export class BterEMAddStaffDetailsComponent {
   AddedServiceList: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
   AddedServiceListAdded: BTERGovtEMStaff_ServiceDetailsOfPersonalModel[] = [];
   public Addrequest = new StaffSubjectList();
+  public userID:number=0;
   public InstituteMasterDDLList: any = [];
   public DesignationMasterDDLList: any = [];
   public RoleMasterDDLList: any = [];
@@ -52,6 +54,12 @@ export class BterEMAddStaffDetailsComponent {
   public DesignationWiseBranchList: any [] = [];
   staffDetailsFormData = new StaffDetailsDataModel();
   _DesignationWiseBranchDataModel = new BTER_DesignationWiseBranchDataModel();
+
+  
+  public searchRequestUserProfileStatus = new Bter_Govt_EM_UserRequestHistoryListSearchDataModel();
+  public UserProfileStatusHistoryList: any = [];
+  modalReference: NgbModalRef | undefined;
+
   public IsOptional: boolean = false
   _enumDepartment = EnumDepartment
   public ExamTypeHeading = '';
@@ -67,10 +75,12 @@ export class BterEMAddStaffDetailsComponent {
     private commonMasterService: CommonFunctionService,
     private bterEstablishManagementService: BTEREstablishManagementService,
     private toastr: ToastrService,
+    private modalService: NgbModal,
     private router: Router,
   ) {}
 
   async ngOnInit() {
+
 
     this.StaffMasterFormGroup = this.formBuilder.group({
       InstituteID: [{ value: 0, disabled: true }],
@@ -123,6 +133,8 @@ export class BterEMAddStaffDetailsComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.request.InstituteID = this.sSOLoginDataModel.InstituteID;
    
+    this.userID=this.sSOLoginDataModel.UserID;
+
     debugger
     try {
       this.loaderService.requestStarted();
@@ -367,6 +379,8 @@ export class BterEMAddStaffDetailsComponent {
         data = JSON.parse(JSON.stringify(data));
         if(data.State == EnumStatus.Success) {
           this.request = data.Data[0];
+          console.log(this.request.DateOfBirth);
+          console.log(this.StaffMasterFormGroup.get('DateOfBirth')?.value);
           /*this.staffDetailsFormData.StaffSubjectListModel = request.*/
           console.log("GetPersonalDetailByUserID", this.request);
           debugger
@@ -529,6 +543,39 @@ export class BterEMAddStaffDetailsComponent {
     }
   }
 
+  async onUserProfileStatusHistorylist(model: any, StaffUserID: number) {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      this.searchRequestUserProfileStatus.StaffUserID = StaffUserID;
+      this.searchRequestUserProfileStatus.DepartmentID = this.sSOLoginDataModel.DepartmentID;
+      await this.bterEstablishManagementService.UserProfileStatusHistoryList(this.searchRequestUserProfileStatus)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.UserProfileStatusHistoryList = data.Data;
+          this.UserProfileStatusHistoryList=this.UserProfileStatusHistoryList.filter((item:any)=>item.UserProfileStatus==='Revert');
+
+        }, (error: any) => console.error(error))
+
+      console.log(StaffUserID, "modal");
+      this.modalReference = this.modalService.open(model, { size: 'lg', backdrop: 'static' });
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalProfileStatuslist() {
+    this.modalService.dismissAll();
+    this.modalReference?.close();
+    this.isSubmitted = false;
+  }
+
   async CancelData() { }
 
 
@@ -675,7 +722,7 @@ export class BterEMAddStaffDetailsComponent {
 
 
     try {
-
+      debugger
       this.loaderService.requestStarted();
       await this.commonMasterService.CommonVerifierApiSSOIDGetSomeDetails(this.requestSSoApi).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
@@ -713,8 +760,10 @@ export class BterEMAddStaffDetailsComponent {
 
               // Format DateOfBirth as yyyy-MM-dd
               const dob = new Date(year, month - 1, day);
-              this.request.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
-
+              if(this.request.DateOfBirth==null || this.request.DateOfBirth==undefined){
+                this.request.DateOfBirth = dob.toISOString().split('T')[0]; // yyyy-MM-dd format
+              }
+           
               // Calculate retirement year
               const retirementYear = year + 60;
 
@@ -782,6 +831,8 @@ export class BterEMAddStaffDetailsComponent {
   openDatePicker(event: any) {
     event.target.showPicker();
   }
+
+
 }
 
 
