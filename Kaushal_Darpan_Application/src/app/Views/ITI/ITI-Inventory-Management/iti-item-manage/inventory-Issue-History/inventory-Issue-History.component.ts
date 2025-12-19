@@ -72,13 +72,13 @@ export class inventoryIssueHistoryComponent {
   }
 
   async GetAllData() {
-    debugger
     try {
       this.loaderService.requestStarted();
 
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
+      this.Searchrequest.ReturnStatus = 2; // for all data
      // this.Searchrequest.staffID = 1;
 
       await this.itiInventoryService.GetAllinventoryIssueHistoryNew(this.Searchrequest)

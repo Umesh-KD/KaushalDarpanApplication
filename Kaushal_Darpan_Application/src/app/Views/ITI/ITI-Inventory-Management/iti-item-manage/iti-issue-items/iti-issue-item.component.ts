@@ -63,6 +63,7 @@ export class AddItiIssueItemComponent {
   public AllInTableSelect: boolean = false;
   public ItemsDataList: any = [];
   public selectedDataList: any[] = [];
+  public ItemMasterList: any[] = [];
   public staff_ID:number =0;
   constructor(
     private toastr: ToastrService,
@@ -734,5 +735,41 @@ export class AddItiIssueItemComponent {
       this.toastr.warning(`Equipment with item code (${item.ItemCode}) is serial-based & missing Equipment Code. Please alot equipment code first using stock register.`);
         }
     }
+  }
+
+  async ShowIssuedItemsList(content: any) {    
+     await this.GetAllinventoryIssueHistoryNew();
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
+    return;
+  }
+
+  async GetAllinventoryIssueHistoryNew() {
+    try {
+      this.loaderService.requestStarted();
+      let Searchrequest: any = {}
+      Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequest.ReturnStatus = 0;
+
+      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(Searchrequest)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.ItemMasterList = data.Data || [];
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup_IssueHistory() {
+    this.modalService.dismissAll();
   }
 }

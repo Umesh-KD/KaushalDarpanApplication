@@ -124,8 +124,8 @@
             <!-- <td align="left">{{ item.DueDate | date:'dd-MM-yyyy' }}</td> -->
             <td align="left">{{ item.ReturnDate | date:'dd-MM-yyyy' }}</td> 
             <td align="left">
-                <span [ngClass]="item.ConditionOnReturn == 1 ? 'badge-working' : item.ConditionOnReturn == 2 ? 'badge-notworking' : 'badge-forrepair'">
-                  {{ item.ConditionOnReturn == 1 ? 'Working' : item.ConditionOnReturn == 2 ?  'Not Working' : 'For Repair' }}
+                <span [ngClass]="item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0  ? 'badge-working' : item.ConditionOnReturn == 2 ? 'badge-notworking' : 'badge-forrepair'">
+                  {{ item.ConditionOnReturn == 1 || item.ConditionOnReturn == 0 ? 'Working' : item.ConditionOnReturn == 2 ?  'Not Working' : 'For Repair' }}
                 </span>
             </td> 
             <td align="left">
