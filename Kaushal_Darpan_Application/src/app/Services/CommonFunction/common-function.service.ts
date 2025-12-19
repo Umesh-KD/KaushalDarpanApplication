@@ -2085,4 +2085,13 @@ export class CommonFunctionService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+
+  public async GetZonalID(UserID: number, EndTermID: number = 0) {
+    return await this.http.get(this.APIUrl + '/GetZonalID/' + UserID + '/' + EndTermID, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
 }
