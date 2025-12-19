@@ -294,7 +294,8 @@ export class StudentPaperReportComponent {
   //}
   exportToExcel(): void {
     const unwantedColumns = [
-      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass', 'EnrollmentNo1','StudentName1'
+      'StudentID', 'StudentExamID', 'StudentExamPaperMarksID', 'StudentExamPaperID', 'rowclass', 'EnrollmentNo1', 'StudentName1'
+      ,'Name'
     ];
 
     const filteredData = this.TheoryMarksRptDataList.map((item: any) => {
