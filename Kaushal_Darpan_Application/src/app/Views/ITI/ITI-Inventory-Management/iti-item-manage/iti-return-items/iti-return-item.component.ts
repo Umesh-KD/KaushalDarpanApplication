@@ -46,7 +46,7 @@ export class AddItiReturnItemComponent {
   public selectedItemMasterList: any[] = [];
   //public today: Date = new Date();
   public submitRequest = new ItemsIssueReturnModels();
-  
+  modalReference: NgbModalRef | undefined;
 
   //ItemMasterListt = [
   //  {
@@ -323,8 +323,8 @@ debugger;
 
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
-async confirmReturnNew() {
-  const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
+  async confirmReturnNew() {
+    const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
       this.toastr.warning("Please select at least one item to return.", "Warning", {
@@ -332,28 +332,14 @@ async confirmReturnNew() {
       });
       return;
     }
-      this.selectedItemMasterList = this.ItemMasterList.filter((item:any) => item.Selected);
-      this.selectedItemMasterList = this.ItemMasterList
-  .filter((item: any) => item.Selected)
-  .map((item: any) => ({
-    ...item,
-    StaffId: this.Searchrequest.staffID
-  }));
+    this.selectedItemMasterList = this.ItemMasterList.filter((item:any) => item.Selected);
+    this.selectedItemMasterList = this.ItemMasterList.filter((item: any) => item.Selected).map((item: any) => ({
+      ...item,
+      StaffId: this.Searchrequest.staffID,
+    }));
     console.table(this.selectedItemMasterList);
     await this.confirmReturn(this.selectedItemMasterList);
-    // this.loaderService.requestStarted();
-    //       this.isLoading = true;
-
-    //       this.submitRequest.StaffId = this.Searchrequest.staffID;
-    //       this.submitRequest.Remarks = this.returnModel.Remarks || "";
-    //       this.submitRequest.ItemCategoryId = 0;
-    //       this.submitRequest.ReturnDate = this.returnModel.ReturnDate;
-    //       //this.submitRequest.ConditionAtReturn = this.returnModel.ItemCondition;
-    //       this.submitRequest.ItemList = this.selectedItemMasterList;
-    //       this.submitRequest.SelectedCount = this.selectedItemMasterList.length;
-
-    //       console.log("Returning items:", this.submitRequest);
-}
+  }
   async confirmReturn(arr: any) {
     debugger;
 
@@ -422,7 +408,40 @@ async confirmReturnNew() {
     }
   }
 
+  async ShowIssuedItemsList(content: any) {    
+     await this.GetAllinventoryIssueHistoryNew();
+    this.modalReference = this.modalService.open(content, {backdrop: 'static', size: 'xl', keyboard: true,centered: true});
+    return;
+  }
 
+  async GetAllinventoryIssueHistoryNew() {
+    try {
+      this.loaderService.requestStarted();
+      let Searchrequest: any = {}
+      Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
+      Searchrequest.ReturnStatus = 1;
 
+      await this.itiInventoryService.GetAllinventoryIssueHistoryNew(Searchrequest)
+        .then((data: any) => {
+          if (data.State == EnumStatus.Success) {
+            this.ItemMasterList = data.Data || [];
+          } else {
+            console.error("No data returned from API");
+          }
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+  CloseModalPopup_ReturnHistory() {
+    this.modalService.dismissAll();
+  }
 }
 

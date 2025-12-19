@@ -158,13 +158,23 @@
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">ITI Name  <span class="StarMarking">*</span></label>
-          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade('ALL')">
+          <!--<select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.InstituteID" (change)="GetTrade('ALL')">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of FilteredInstituteList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-          </select>
+          </select>-->
+
+          <ng-select [(ngModel)]="request.InstituteID"
+                   (change)="GetTrade('ALL')"
+                     [clearable]="false">
+            <ng-option [value]="0" selected>--All--</ng-option>
+            <ng-container *ngFor="let item of FilteredInstituteList;">
+              <ng-option [value]="item.InstituteID">{{item.InstituteName}}</ng-option>
+            </ng-container>
+          </ng-select>
+
         </div>
 
-        <div class="mb-8">
+        <div class="mb-8 mt-4">
           <label>Select Trade<span class="text-danger">*</span></label>
           <ng-multiselect-dropdown [placeholder]="'Choose Option'"
                                    [settings]="settingsMultiselect"

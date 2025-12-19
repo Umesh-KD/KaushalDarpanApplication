@@ -90,6 +90,7 @@ export class inventoryIssueHistorySearchModel {
   public IssuedId: number = 0;
   public StreamID: number = 0;  
   public LabID? : number = 0;
+  public ReturnStatus? : number = 2;
   public actionName? : string='';
 }
 export class inventoryIssueHistoryITISearchModel {

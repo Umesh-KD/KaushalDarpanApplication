@@ -22,6 +22,7 @@ export class ITIApprenticeshipWorkshopModel {
   public CreatedBy: number = 0;
   public FinancialYearID: number = 0;
   public EndTermID: number = 0;
+  public ZoneID: number = 0;
 
   public QuaterIncreaseEstablishment: string = '';
   public QuaterIncreaseSeat: string = '';

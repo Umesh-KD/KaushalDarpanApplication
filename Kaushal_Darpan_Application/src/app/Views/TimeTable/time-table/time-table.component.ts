@@ -269,7 +269,8 @@ export class TimeTableComponent implements OnInit {
           try {
             this.loaderService.requestStarted();
 
-            await this.TimeTableService.DeleteDataByID(InstitudeID, this.UserID, this.sSOLoginDataModel.DepartmentID)
+            await this.TimeTableService.DeleteDataByID
+              (InstitudeID, this.UserID, this.sSOLoginDataModel.DepartmentID)
               .then(async (data: any) => {
                 data = JSON.parse(JSON.stringify(data));
                 console.log(data);

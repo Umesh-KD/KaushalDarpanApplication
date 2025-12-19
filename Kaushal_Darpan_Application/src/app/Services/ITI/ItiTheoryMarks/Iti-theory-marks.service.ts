@@ -78,4 +78,12 @@ export class ItiTheoryMarksService {
       ).toPromise();
   }
 
+
+  public async GetTraineeStudent(searchRequest: TheoryMarksSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTraineeStudent`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
