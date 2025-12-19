@@ -25,6 +25,24 @@
         <div class="grid xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-2 gap-6">
 
 
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+              वित्तीय वर्ष <span class="StarMarking">*</span>
+            </label>
+            <select [(ngModel)]="request.FinancialYearID" formControlName="FinancialYearID"
+                    class="form-select">
+
+              <option [ngValue]="0">Choose Option</option>
+              <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                      [ngValue]="item.FinancialYearID">
+                {{ item.FinancialYearName }}
+              </option>
+            </select>
+            <div *ngIf="isSubmitted && _ScholarshipFormGroup.FinancialYearID.errors" class="text-danger">
+              <p *ngIf="!_ScholarshipFormGroup.FinancialYearID.errors.DropdownValidators"><i aria-hidden="true"></i>This field is required.!</p>
+            </div>
+          </div>
+
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">त्रैमासिक अवधि  <span class="StarMarking">*</span></label>
@@ -86,20 +104,20 @@
             </div>
 
             <div class="mt-6">
-              <button  type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.ParticipateSsoid)">GetDetails & Add More</button>
+              <button type="button" class="btn bg-info text-white" (click)="SSOIDGetSomeDetails(request.ParticipateSsoid)">GetDetails & Add More</button>
             </div>
           </div>
 
 
 
           <!--<div>
-      <label class="text-gray-800 text-sm font-medium inline-block mb-1">भाग लेने वाले AAA का नाम :<span class="StarMarking">*</span> </label>
-      <input class="form-input" type="text" placeholder="Enter Name" formControlName="ParticipateName" [(ngModel)]="request.ParticipateName" />
-      <div *ngIf="isSubmitted && _ScholarshipFormGroup.ParticipateName.errors" class="text-danger">
-        <p *ngIf="_ScholarshipFormGroup.ParticipateName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
-      </div>
+    <label class="text-gray-800 text-sm font-medium inline-block mb-1">भाग लेने वाले AAA का नाम :<span class="StarMarking">*</span> </label>
+    <input class="form-input" type="text" placeholder="Enter Name" formControlName="ParticipateName" [(ngModel)]="request.ParticipateName" />
+    <div *ngIf="isSubmitted && _ScholarshipFormGroup.ParticipateName.errors" class="text-danger">
+      <p *ngIf="_ScholarshipFormGroup.ParticipateName.errors.required"><i aria-hidden="true"></i>This field is required.!</p>
+    </div>
 
-    </div>-->
+  </div>-->
 
 
 
@@ -313,7 +331,7 @@
               त्रैमास के दौरान शिक्षु पोर्टल पर फ्रेशर शिक्षुओं के पंजीयन की संख्या (सूची संलग्न करे)
             </label>
             <div class="flex fileUploader">
-              <input [disabled]="sSOLoginDataModel.RoleID != 97 || ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              <input [disabled]="sSOLoginDataModel.RoleID != 100 || ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="fileStudentPhoto" type="file" (change)="onFilechange($event,'Photo')">
               <label for="fileStudentPhoto">
                 <span>Choose File</span>
@@ -336,7 +354,7 @@
               त्रैमास के दौरान आई. टी. आई ग्रेजुए ट के पोर्टल पर पंजीय न की संख्या (सूची संलग्न करे)
             </label>
             <div class="flex fileUploader">
-              <input [disabled]="sSOLoginDataModel.RoleID != 97 ||ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+              <input [disabled]="sSOLoginDataModel.RoleID != 100 ||ID!=0" class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                      id="fileStudentPhoto2" type="file" (change)="onFilechange($event,'Photo2')">
               <label for="fileStudentPhoto2">
                 <span>Choose File</span>
@@ -368,10 +386,10 @@
 
 
 
-            <button *ngIf="sSOLoginDataModel.RoleID == 97 && ID==0" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">
+            <button *ngIf="sSOLoginDataModel.RoleID == 100 && ID==0" type="button" class="btn bg-info text-white mt-6" (click)="SaveData()">
               Save
             </button>
-            <button *ngIf="sSOLoginDataModel.RoleID == 97 && ID==0" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
+            <button *ngIf="sSOLoginDataModel.RoleID == 100 && ID==0" type="button" class="btn bg-danger text-white mt-6" (click)="ResetControls()">
               <i class="ti ti-refresh"></i>
               Reset
             </button>
