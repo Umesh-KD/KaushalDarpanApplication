@@ -126,7 +126,7 @@ export class StudentPaperReportComponent {
       // //call
       this.loaderService.requestStarted();
 
-      await this.TheoryMarksService.  (this.searchRequest)
+      await this.TheoryMarksService.GetTraineeStudent(this.searchRequest)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
 
