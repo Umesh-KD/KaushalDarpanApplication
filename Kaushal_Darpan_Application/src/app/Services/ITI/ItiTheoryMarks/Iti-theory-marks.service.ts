@@ -80,7 +80,7 @@ export class ItiTheoryMarksService {
 
 
   public async GetTraineeStudent(searchRequest: TheoryMarksSearchModel) {
-    var body = JSON.stringify(searchRequest); 
+    var body = JSON.stringify(searchRequest);
     return await this.http.post(`${this.APIUrl}/GetTraineeStudent`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
