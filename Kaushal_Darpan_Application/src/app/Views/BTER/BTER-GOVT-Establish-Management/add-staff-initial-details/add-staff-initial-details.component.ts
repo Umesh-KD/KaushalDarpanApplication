@@ -168,11 +168,26 @@ export class AddStaffInitialDetailsComponent {
     this.GetRoleMasterData();
 
     if (this.formData.IsNodal == true) {
+      this.formData.StaffTypeID=30;
+      this.StaffTypeChangePost();
+          // ✅ Disable dropdown
+          
+  // this.f['StaffType'].setValue(30);
+  // this.f['StaffType'].disable();
+
+      this._AddStaffBasicDetailFromGroup['StaffType'].disable();
+    // staffTypeControl.disable();
       await this.GetInstituteMaster();
+        // ✅ Filter only Govt institutes (1)
+      this.InstituteMasterDDL = this.InstituteMasterDDL.filter(
+        (item: any) => item.InstitutionManagementTypeID === 1
+      );
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].setValidators([DropdownValidators]);
       this.formData.RoleID = 7;
-    } else {
+      // 1- govt. 5- pvt
+  } else {
       this.formData.IsNodal = false;
+      this._AddStaffBasicDetailFromGroup['StaffType'].enable();
       this.AddStaffBasicDetailFromGroup.controls['InstituteID'].clearValidators();
       this.formData.InstituteID = 0;
       this.formData.RoleID = 0;
@@ -205,22 +220,53 @@ export class AddStaffInitialDetailsComponent {
     }
   }
 
-  GetInstituteMaster() {
+  async GetInstituteMaster() {
+    debugger
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.InstituteMaster(
+        this.sSOLoginDataModel.DepartmentID,
+        this.sSOLoginDataModel.Eng_NonEng,
+        this.sSOLoginDataModel.EndTermID
+      )
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          if (data.State == EnumStatus.Success) {
+            const instituteList = Array.isArray(data?.Data) ? data.Data : [];
+            this.InstituteMasterDDL = instituteList;
+          }
+          else if (data.State == EnumStatus.Warning) {                       
+            this.toastr.warning(data.Message, '', { timeOut: 5000 });
+          }
+          else {
+            this.toastr.error(data.ErrorMessage, '', { timeOut: 5000 });
+          }
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
     //const officeList = [
     //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID :17},
     //  { InstituteID: 10002, InstituteName: 'BTER', OfficeTypeID: 18 },
     //  { InstituteID: 10003, InstituteName: 'TTC', OfficeTypeID: 19 }
     //];
-
-    this.commonMasterService.InstituteMaster(
-      this.sSOLoginDataModel.DepartmentID,
-      this.sSOLoginDataModel.Eng_NonEng,
-      this.sSOLoginDataModel.EndTermID
-    ).then((response: any) => {
-      const instituteList = Array.isArray(response?.Data) ? response.Data : [];
-      this.InstituteMasterDDL = instituteList;
-      //this.InstituteMasterDDL = officeList.concat(instituteList);
-    });
+    debugger;
+    // this.commonMasterService.InstituteMaster(
+    //   this.sSOLoginDataModel.DepartmentID,
+    //   this.sSOLoginDataModel.Eng_NonEng,
+    //   this.sSOLoginDataModel.EndTermID
+    // ).then((response: any) => {
+    //   const instituteList = Array.isArray(response?.Data) ? response.Data : [];
+    //   this.InstituteMasterDDL = instituteList;
+    //   //this.InstituteMasterDDL = officeList.concat(instituteList);
+    // });
   }
 
 
