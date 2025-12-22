@@ -20,7 +20,7 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
         <div class="flex gap-2">
            <a href="javascript:void(0);" (click)="ShowIssuedItemsList(Items_Details_Issue)"  class="btn bg-info btn-sm text-white">
-            <i class="ti ti-excel"></i> List of Issued Items
+            <i class="ti ti-excel"></i> List of Returned Items
           </a>
         </div>
       </div>
@@ -99,7 +99,7 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th class="text-left">
-              <input type="checkbox" (change)="toggleAll($event)" />  select All
+              <input type="checkbox" (change)="toggleAll($event)" />
             </th>
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
@@ -116,7 +116,7 @@
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">
-              <input type="checkbox" [(ngModel)]="item.Selected" />
+              <input type="checkbox" [(ngModel)]="item.Selected" *ngIf="item.InvStatus !== 1" />
             </td>
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
@@ -268,7 +268,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx=index;">
+          <tr *ngFor="let item of ItemMasterList1 | tableSearchFilter:Table_SearchText; let idx=index;">
             <td align="left">{{ idx+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
@@ -297,7 +297,7 @@
               </span>
             </td>
           </tr>
-          <tr *ngIf="ItemMasterList?.length==0">
+          <tr *ngIf="ItemMasterList1?.length==0">
             <td colspan="10">
               No Record Found
             </td>

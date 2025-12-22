@@ -435,10 +435,10 @@ export class AddItiIssueItemComponent {
     }
   }
   onItemToggle(item: any) {
-    
+    debugger
     if (item.Selected) {
       // Add if not already present
-      if (!this.SelectedItems.find(x => x.ItemDetailsId === item.ItemDetailsId)) {
+      if (!this.SelectedItems.find(x => x.ItemId === item.ItemId)) {
         this.SelectedItems.push({
           ItemId: item.ItemId,
           ItemName: item.CampanyName,
