@@ -277,7 +277,7 @@
           <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Trade: </label>
           <select class="form-select" [(ngModel)]="request.TradeId" formControlName="TradeId">
             <option value="0"> --- Select ---</option>
-            <option *ngFor="let item of TradeDDLList" [value]="item.Id">{{item.TradeName}}</option>
+            <option *ngFor="let item of TradeDDLList" [value]="item.TradeId">{{item.TradeName}}</option>
           </select>
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.TradeId.errors" class="text-danger">
