@@ -506,10 +506,16 @@
                   <option *ngFor="let item of OfficeWorkList" [value]="item.ID">{{item.Name}}</option>
                 </select>
 
-                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.WorkOfficeID.errors" class="text-danger">
+                <!-- <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.WorkOfficeID.errors" class="text-danger">
                   <p *ngIf="!_StaffMasterFormGroup.WorkOfficeID.errors.DropdownValidators">
                     <i aria-hidden="true"></i>This field is
                     required .!
+                  </p>
+                </div> -->
+
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.WorkOfficeID.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroup.WorkOfficeID.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
               </div>
@@ -518,7 +524,7 @@
 
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(true)" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking" />
+                    <input type="radio" name="IsExtraWorking" (change)="WorkAccordingonSalaryDrawnChange(true)" [value]="true" formControlName="IsExtraWorking" [(ngModel)]="approveRequest.IsExtraWorking"   />
                     <span>Work Arrangement</span>
                   </label>
 
@@ -537,15 +543,15 @@
 
               <div *ngIf="approveRequest.IsExtraWorking === true">
                 <label class="text-gray-800 text-sm font-medium inline-block mb-2">Employee working on against post Y/N</label>
-
+                <!-- (change)="onEmpWorkingChange(true)" -->
                 <div class="flex gap-4">
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(true)" />
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="true" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" />
                     <span>Yes</span>
                   </label>
 
                   <label class="flex items-center space-x-2">
-                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" (change)="onEmpWorkingChange(false)" />
+                    <input type="radio" name="IsEmpWorkingOnPost" [value]="false" formControlName="IsEmpWorkingOnPost" [(ngModel)]="approveRequest.IsEmpWorkingOnPost" />
                     <span>No</span>
                   </label>
                 </div>
@@ -799,7 +805,7 @@
                 <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection<span class="StarMarking">*</span></label>
                 <select class="form-select" name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" >
                   <option value="0">Choose Option</option>
-                  <option *ngFor="let row of GenderList" [value]="row.ID">{{row.Name}}</option>
+                  <option *ngFor="let row of CategoryList" [value]="row.CasteCategoryID">{{row.CasteCategoryName}}</option>
                 </select>
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SelectionCategory.errors" class="text-danger">
                   <p *ngIf="!_StaffMasterFormGroup.SelectionCategory.errors.DropdownValidators">

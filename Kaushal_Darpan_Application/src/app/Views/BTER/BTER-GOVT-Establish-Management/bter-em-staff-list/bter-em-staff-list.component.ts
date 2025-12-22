@@ -13,6 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DropdownValidators } from '../../../../Services/CustomValidators/custom-validators.service';
 import { RequestUpdateStatus } from '../../../../Models/ITIGovtEMStaffMasterDataModel';
 import { UserRequestService } from '../../../../Services/UserRequest/user-request.service';
+import { __values } from 'tslib';
 
 @Component({
   selector: 'app-bter-em-staff-list',
@@ -27,6 +28,7 @@ export class BTEREMStaffListComponent {
   StaffMasterFormGroup!: FormGroup;
   StaffMasterFormGroupGuestHouse!: FormGroup;
   public StaffTypeList: any = [];
+  public CategoryList: any = [];
   public OfficeList: any = [];
   public OfficeWorkList: any = [];
   public LevelList: any = [];
@@ -93,15 +95,15 @@ export class BTEREMStaffListComponent {
       SalaryDrawnInstituteID: [0, [DropdownValidators]],
 
       Name: ['', [Validators.required]],
-      SanctionedPosts: ['', [Validators.required]],
-      IsWorking: ['', [Validators.required]],
-      IsVacant: ['', [Validators.required]],
+      // SanctionedPosts: ['', [Validators.required]],
+      // IsWorking: ['', [Validators.required]],
+      // IsVacant: ['', [Validators.required]],
       IsExtraWorking: ['', [Validators.required]],
       IsEmpWorkingOnPost: ['', [Validators.required]],
-      IsEmpWorkingOnDeputationFromOther: ['', [Validators.required]],
+      IsEmpWorkingOnDeputationFromOther: [''],
       IsEmpWorkingOnDeputationToOther: ['', [Validators.required]],
       IsSalaryDrawnFromSamePost: ['', [Validators.required]],
-      IsSalaryDrawnFromOtherInstitute: ['', [Validators.required]],
+      IsSalaryDrawnFromOtherInstitute: [''],
       AnyCourtCasePending: ['', [Validators.required]],
       AnyDisciplinaryActionPending: ['', [Validators.required]],
       ExtraOrdinaryLeave: ['', [Validators.required]],
@@ -155,6 +157,7 @@ export class BTEREMStaffListComponent {
     await this.GetStaffTypeData();
     await this.GetDesignationMasterData();
     await this.getInstituteMasterList();
+    await this.GetCategroyData();
     this.approveRequest.WorkOfficeID = 0;
   }
 
@@ -181,6 +184,8 @@ export class BTEREMStaffListComponent {
       }, 200);
     }
   }
+
+
   GetInstituteMaster() {
     //const officeList = [
     //  { InstituteID: 10001, InstituteName: 'DTE', OfficeTypeID: 17 },
@@ -215,6 +220,27 @@ export class BTEREMStaffListComponent {
       }, 200);
     }
   }
+
+  async GetCategroyData() {
+    debugger;
+    try {
+      this.loaderService.requestStarted();
+      await this.commonMasterService.DDL_AllCasteCategoryA()
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.CategoryList = data['Data'];
+      }, (error: any) => console.error(error)
+      );
+
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
 
   async BTER_EM_GetStaffList() {
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID
@@ -509,13 +535,17 @@ export class BTEREMStaffListComponent {
   }
   async refreshValidators() {
     debugger
+    // if(this.approveRequest.IsSalaryDrawnFromSamePost==true){
+    //   this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([DropdownValidators]);
+    // }
     if (this.approveRequest.IsEmpWorkingOnDeputationFromOther == false) {
       this.StaffMasterFormGroup.get('EmpInstituteID')?.removeValidators([DropdownValidators]);
+      // this.
     }
     if (this.approveRequest.IsEmpWorkingOnDeputationToOther == false) {
       this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.removeValidators([DropdownValidators]);
     }
-    if (this.approveRequest.IsSalaryDrawnFromSamePost == false) {
+    if (this.approveRequest.IsSalaryDrawnFromSamePost == true) {
       this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([DropdownValidators]);
     }
     if (this.approveRequest.IsSalaryDrawnFromOtherInstitute == false) {
@@ -524,21 +554,45 @@ export class BTEREMStaffListComponent {
     if (this.approveRequest.HigherEduPermission == false) {
       this.StaffMasterFormGroup.get('HigherEduInstitute')?.removeValidators([Validators.required]);
     }
+    if (this.approveRequest.IsExtraWorking == false) {
+      this.StaffMasterFormGroup.get('IsEmpWorkingOnPost')?.removeValidators([Validators.required]);
+      // this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([Validators.required]);
+      this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.removeValidators([Validators.required]);
+    
+    }
+
+    this.StaffMasterFormGroup.get('IsEmpWorkingOnPost')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('EmpInstituteID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('EmpDeputatedInstituteID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.updateValueAndValidity();
     this.StaffMasterFormGroup.get('HigherEduInstitute')?.updateValueAndValidity();
+    // this.StaffMasterFormGroup.get('IsSalaryDrawnFromSamePost')?.updateValueAndValidity();
   }
   async ApproveStaffProfile() {
     debugger
     await this.refreshValidators();
     this.isApproveSubmitted = true;
-    //if (this.StaffMasterFormGroup.invalid) {
-      
-
-    //  return;
-    //}
+    if (this.StaffMasterFormGroup.invalid) {  
+      // console.log(this.StaffMasterFormGroup.get('IsEmpWorkingOnDeputationFromOther')?.value);
+        if(this.StaffMasterFormGroup.invalid){
+          Object.keys(this.StaffMasterFormGroup.controls).forEach(key => {
+            const control = this.StaffMasterFormGroup.get(key);
+        
+            if (control?.invalid) {
+              console.log('Invalid Field:', key);
+              console.log('Errors:', control.errors);
+            }
+          });
+          Object.values(this.StaffMasterFormGroup.controls).forEach(control => {
+            control.markAsTouched();
+            control.markAsDirty();
+          });
+          this.toastr.error("Please fill all the Required fields");
+          return 
+        }
+     return;
+    }
     this.loaderService.requestStarted();
     this.approveRequest.StaffUserID = this.requestUser.StaffUserID;
     this.approveRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
@@ -804,14 +858,30 @@ export class BTEREMStaffListComponent {
       // If salary is drawn from same post 'Yes', working on post should be 'No'
       this.approveRequest.IsSalaryDrawnFromSamePost = false;
       this.approveRequest.IsSalaryDrawnFromOtherInstitute = true;
-
-    } else {
+      if (this.approveRequest.IsExtraWorking == true) {
+        this.StaffMasterFormGroup.get('IsEmpWorkingOnPost')?.setValidators([Validators.required]);
+      }
+    } 
+    else {
       // If salary is drawn from same post 'No', working on post should be 'Yes'
       this.approveRequest.IsSalaryDrawnFromSamePost = true;
       this.approveRequest.IsSalaryDrawnFromOtherInstitute = false;
+      if (this.approveRequest.IsExtraWorking == false) {
+        this.StaffMasterFormGroup.get('IsEmpWorkingOnPost')?.removeValidators([Validators.required]);
+        // this.StaffMasterFormGroup.get('SalaryDrawnPostID')?.removeValidators([Validators.required]);
+        this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.removeValidators([Validators.required]);
+      
+      }
+    
     }
+    this.StaffMasterFormGroup.get('IsEmpWorkingOnPost')?.updateValueAndValidity();
+    this.StaffMasterFormGroup.get('SalaryDrawnInstituteID')?.updateValueAndValidity();
+
   }
 
+
+  // this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].setValidators([DropdownValidators]);
+  // this.StaffMasterFormGroupGuestHouse.controls['DesignationID'].clearValidators();
 
   async openModal_ApproveStaffProfileGuestHouse(content: any, StaffUserID: number, SSOID: any, type: boolean, RoleID: number) {
     debugger
