@@ -487,7 +487,7 @@ export class AddBterIssueItemComponent {
     
   try {
     this.loaderService.requestStarted();
-     debugger;
+     ;
     const searchdata: DTEItemsSearchModel1 = {
       DepartmentID: this.sSOLoginDataModel.DepartmentID || 0,
       EndTermID: this.sSOLoginDataModel.EndTermID || 0,
@@ -694,8 +694,8 @@ export class AddBterIssueItemComponent {
           //
           
           if (this.State == EnumStatus.Success) {
-              this.FileName = data.Data[0].FileName;
-              this.Dis_FileName = data.Data[0].Dis_FileName;
+            this.FileName = data.Data[0].FileName;
+            this.Dis_FileName = data.Data[0].Dis_FileName;
             console.log(this.SelectedItems)
             event.target.value = null;
           }
@@ -923,7 +923,7 @@ export class AddBterIssueItemComponent {
     }
   }
   async GetAllDataIssuedItems() {
-    debugger
+    
     try {
       this.loaderService.requestStarted();
 
@@ -931,6 +931,7 @@ export class AddBterIssueItemComponent {
       this.Searchrequests.TradeId = this.Searchrequests.TradeId;
       this.Searchrequests.staffID = this.Searchrequests.staffID;
       this.Searchrequests.actionName='GetIssueItemList';
+      this.Searchrequests.ReturnStatus = 0;
      // this.Searchrequest.staffID = 1;
 
       await this.bterInventoryService.GetAllInventoryIssueReturnItemList(this.Searchrequests)

@@ -156,10 +156,7 @@ export class DteLaboratoryMasterComponent {
       const data: any = await this.bterInventoryService.GetAll_INV_GetCommonIssueDDL(this.Searchrequests);
 
       if (data && data.State === EnumStatus.Success) {
-        this.staffDDLList = [
-          { staffID: 0, staffName: 'Choose Staff' },
-          ...data.Data
-        ];
+        this.staffDDLList = data.Data
 
         this.Searchrequests.staffID = 0;
         console.log('staff list ==>', this.staffDDLList);

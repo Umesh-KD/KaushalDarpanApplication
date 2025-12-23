@@ -122,7 +122,7 @@
                      min="1"
                      placeholder="Enter Qty" (change)="validateQuantity(item)">
             </td>
-            <td *ngIf="Searchrequests.ItemType === 0">
+            <td *ngIf="Searchrequests.ItemType == 0">
                  <span style="cursor: pointer; color: blue;" (click)="ShowSubmitIssue(Submit_Details_Issue,item.ItemId,Searchrequests.staffID)">
                 {{item.Quantity}}
               </span>
@@ -145,7 +145,7 @@
             {{ Dis_FileName === '' ? 'No File Choosen' : Dis_FileName }}
           </label>
           <div class="flex">
-            <a href="{{ appsettingConfig.StaticFileRootPathURL + '/' + FileName }}"
+            <a href="{{ appsettingConfig.StaticFileRootPathURL + '/Students/' + FileName }}"
                *ngIf="this.FileName!=''" class="btn bg-primary text-white m-0" target="_blank">
               <i class="ti ti-eye"></i>
             </a>
