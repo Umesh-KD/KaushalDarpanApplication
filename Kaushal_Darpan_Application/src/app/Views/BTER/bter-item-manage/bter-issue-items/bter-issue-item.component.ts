@@ -452,7 +452,7 @@ export class AddBterIssueItemComponent {
         Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng || 0,
         RoleID: this.sSOLoginDataModel.RoleID || 0,
         CollegeId: this.sSOLoginDataModel.InstituteID || 0,
-        ItemType: this.Searchrequests.ItemType || 0,
+        ItemType: this.Searchrequests.ItemType || 2,
         EquipmentsId: 0,
         OfficeID: 0,
         StatusID: 0,

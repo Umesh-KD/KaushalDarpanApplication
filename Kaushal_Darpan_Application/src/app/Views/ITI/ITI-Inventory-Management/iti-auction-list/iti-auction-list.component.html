@@ -158,7 +158,7 @@
             Auction Date :
           </label>
           <input class="form-input" formControlName="txtAuctionDate" placeholder="Auction Date" type="date"
-                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [attr.min]="minDate">
+                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [max]="minDate">
           <div *ngIf="isSubmitted&&_AuctionFormGroup.txtAuctionDate.errors" class="text-danger">
             <p *ngIf="_AuctionFormGroup.txtAuctionDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>

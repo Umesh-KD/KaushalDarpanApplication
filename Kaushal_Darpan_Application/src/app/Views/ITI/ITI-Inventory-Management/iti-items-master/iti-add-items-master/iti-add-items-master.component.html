@@ -183,6 +183,7 @@
                  class="form-input"
                  formControlName="voucherdate"
                  [(ngModel)]="request.voucherdate"
+                 [max]="todayDate"
                   />
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">

@@ -20,31 +20,6 @@
         <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
-
-
-
-        <!--<div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Issued From:</label>
-    <select class="form-select" id="issuedTo" [(ngModel)]="Searchrequest.IssuedId">
-      <option [value]="0">Select</option>
-      <option [value]="1">Office</option>
-      <option [value]="2">Staff</option>
-      <option [value]="3">Department</option>
-    </select>
-  </div>
-
-
-
-  <div>
-    <label class="text-gray-800 text-sm font-medium inline-block mb-1">Staff List:</label>
-    <select class="form-select" id="StaffID" [(ngModel)]="Searchrequest.staffID"
-            (change)="GetAllData()">
-      <option *ngFor="let item of staffDDLList" [value]="item.staffID">
-        {{ item.staffName }}
-      </option>
-    </select>
-  </div>-->
-
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Return From:</label>
           <select class="form-select"
@@ -81,12 +56,7 @@
               {{ item.StreamName }}
             </option>
           </select>
-
         </div>
-
-
-        
-
         <div>
           <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" id="btnReset" (click)="ResetControl()">Cancel</button>
@@ -151,7 +121,6 @@
             <th class="text-left">Issue Date</th>
             <th class="text-left">Issue To</th>
             <th class="text-left">Equipment Working</th> 
-            <th class="text-left">Is Eligible For Auction</th>
           </tr>
         </thead>
         <tbody>
@@ -182,21 +151,6 @@
                   </div>
                 </div>
                    
-              </td>
-              <td class="border p-2">
-                <label>
-                      <ng-container
-                          *ngIf="
-                          item.Selected ;
-                          else notSelected"
-                      >
-                      <!-- formControlName="isOption" -->
-                    <input type="checkbox"
-                           name="isOption" [(ngModel)]="item.isOption"
-                           (click)="ItemMasterList[i]?.AuctionStatus === '1' || ItemMasterList[i]?.AuctionStatus == 1 ? $event.preventDefault() : null" />
-                    Is Auction
-                  </ng-container>
-                </label>
               </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
