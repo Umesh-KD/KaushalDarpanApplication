@@ -103,7 +103,8 @@ export class BtereEMRequestAddComponent implements OnInit {
           ddlStaffType: ['', [DropdownValidators]],
           DDlReqRoleID: [{ value: '' }, [DropdownValidators]],
           txtEmployeeName: [{ value: '', disabled: true }],
-          txtEmployeeNumber: [{ value: '', disabled: true }],
+        //   txtEmployeeNumber: [{ value: '', disabled: true }],
+        txtEmployeeNumber: [''],
           txtEmployeeDesignation: [{ value: '', disabled: true }],
           txtIsPensionable: [false],
           txtNumberOfPensionable: ['']

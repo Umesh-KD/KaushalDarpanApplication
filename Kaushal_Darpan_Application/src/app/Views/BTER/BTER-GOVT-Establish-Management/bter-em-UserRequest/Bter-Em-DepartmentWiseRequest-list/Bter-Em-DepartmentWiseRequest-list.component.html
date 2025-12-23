@@ -305,7 +305,8 @@
                 Last Working Date: <span class="StarMarking">*</span>
               </label>
               <input type="date" class="form-input" [(ngModel)]="RequestUpdateStatus.LastWorkingDate" formControlName="txtLastworkingDate"
-                     [attr.max]="today">
+                     >
+                     <!-- [attr.max]="today" -->
               <div *ngIf="isSubmitted && groupForm.controls.txtLastworkingDate.errors" class="text-danger">
                 <p *ngIf="groupForm.controls.txtLastworkingDate.errors.required"><i aria-hidden="true"></i>This field is required .!</p>
               </div>
