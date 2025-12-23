@@ -51,7 +51,10 @@ import { ITIInventoryManagementDashboardModule } from '../ITI/ITI-Inventory-Mana
 import { IssuetrackerDashboardModule } from '../BTER/IssueTracker-dashboard/issuetracker-dashboard.module';
 import { dashboardIssueTrackerModule } from '../dashboard-issue-tracker/dashboard-issue-tracker.module';
 import { BTERHODDashboardModule } from '../BTER-HOD-Dashboard/BTER-HOD-Dashboard.module';
+import { ApprenticeshipDirectorNCVTDashboardModule } from '../ITI/iti-ApprenticeshipDirectorNCVTDashboard/iti-ApprenticeshipDirectorNCVTDashboard.module';
 
+
+/// work here 
 
 
 
@@ -103,7 +106,8 @@ import { BTERHODDashboardModule } from '../BTER-HOD-Dashboard/BTER-HOD-Dashboard
     
     
       dashboardIssueTrackerModule,
-    BTERHODDashboardModule
+    BTERHODDashboardModule,
+    ApprenticeshipDirectorNCVTDashboardModule
   ]
 })
 export class dashboardModule { }

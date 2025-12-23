@@ -270,4 +270,12 @@ public async GetAllInventoryIssueReturnItemList(searchRequest: inventoryIssueHis
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async DTE_INV_SaveLabItemReturn(submitRequest: ItemsIssueReturnModels) {
+    var body = JSON.stringify(submitRequest);
+    return await this.http.post(`${this.APIUrl}/DTE_INV_SaveLabItemReturn`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

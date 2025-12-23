@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
+import { EnumRole, EnumStatus, GlobalConstants } from '../../../../Common/GlobalConstants';
 import { FormGroup } from '@angular/forms';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -13,6 +13,7 @@ import { HttpClient } from '@angular/common/http';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 import { ToastrService } from 'ngx-toastr';
 import { DteItemsMasterService } from '../../../../Services/DTEInventory/DTEItemsMaster/dteitems-master.service';
+import { DTELaboratoryMasterService } from '../../../../Services/DTEInventory/DTELaboratoryMaster/dtelaboratory-master.service';
 
 
 @Component({
@@ -36,14 +37,10 @@ export class bterinventoryIssueHistoryComponent {
   public CategoryDDLList: any = [];
   public TradeDDLList: any = [];
   public staffDDLList: any = [];
+  public LabDetailsData: any = [];
   public ItemId: number = 0;
   public UserID: number = 0;
   public today: Date = new Date();
-
-
-
-
-
 
   constructor(
     private toastr: ToastrService,
@@ -56,31 +53,31 @@ export class bterinventoryIssueHistoryComponent {
     private Swal2: SweetAlert2,
     private bterInventoryService: DteItemsMasterService,
     private modalService: NgbModal,
-    private commonMasterService: CommonFunctionService
+    private commonMasterService: CommonFunctionService,
+    private LaboratoryMasterService: DTELaboratoryMasterService,
   ) { }
 
   async ngOnInit() {
-
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;    
-    
+
     await this.GetAllData();
     await this.GetTradeDDL();
     await this.GetCategoryDDL();
     await this.GetStaffDDL();
   }
 
-  async GetAllData() {
-    debugger
+  async GetAllData() {    
     try {
       this.loaderService.requestStarted();
-
       this.Searchrequest.InstituteID = this.sSOLoginDataModel.InstituteID;
       this.Searchrequest.TradeId = this.Searchrequest.TradeId;
       this.Searchrequest.staffID = this.Searchrequest.staffID;
-     // this.Searchrequest.staffID = 1;
-
+      if(this.sSOLoginDataModel.RoleID === EnumRole.BterLabIncharge){
+        this.Searchrequest.UserID = this.sSOLoginDataModel.UserID;
+        this.Searchrequest.RoleID = this.sSOLoginDataModel.RoleID;
+      }
       await this.bterInventoryService.GetAllinventoryIssueHistory(this.Searchrequest)
         .then((data: any) => {
           if (data) {
@@ -199,7 +196,7 @@ export class bterinventoryIssueHistoryComponent {
   }
 
   exportToExcel(): void {
-    debugger
+    
     if (!this.ItemMasterList || this.ItemMasterList.length === 0) {
       this.toastr.warning("No data available to export.");
       return;

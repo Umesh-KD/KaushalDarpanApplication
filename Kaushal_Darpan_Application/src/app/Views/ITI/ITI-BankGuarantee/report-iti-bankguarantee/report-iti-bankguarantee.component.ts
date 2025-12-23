@@ -11,7 +11,7 @@ import { ItiTradeService } from '../../../../Services/iti-trade/iti-trade.servic
 import { EnumStatus } from '../../../../Common/GlobalConstants';
 import { SweetAlert2 } from '../../../../Common/SweetAlert2';
 import { CommonFunctionService } from '../../../../Services/CommonFunction/common-function.service';
-import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataModel';
+import { ITIPlanningBankGuarantee, ITIPlanningBankGuaranteeReturn } from '../../../../Models/ItiPlanningDataModel';
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
 @Component({
@@ -35,6 +35,7 @@ export class reportitibankguaranteeComponent {
   public TradeData: ITITradeSearchModel[] = [];
   request = new ITITradeDataModels()
   public searchRequest = new ITIPlanningBankGuarantee();
+  public searchRequestReturn = new ITIPlanningBankGuaranteeReturn();
   public Table_SearchText: string = '';
   public tbl_txtSearch: string = '';
   public paginatedInTableData: any[] = [];
@@ -94,6 +95,7 @@ export class reportitibankguaranteeComponent {
     try {
       this.loaderService.requestStarted();
       this.searchRequest.BankGuaranteeID = 0;
+      this.searchRequest.CollageId = this.sSOLoginDataModel.InstituteID;
 
       await this.campusPostService.ITIPlanningBankGuaranteeReport(this.searchRequest)
         .then((data: any) => {
@@ -133,6 +135,42 @@ export class reportitibankguaranteeComponent {
   onEdit(Id: number): void {
 
     this.Router.navigate(['/ititradeUpdate', Id]);
+  }
+
+
+  async return(BankGuaranteeID: number) {
+    debugger
+    this.Swal2.Confirmation("Are you sure you want to return this ?",
+      async (result: any) => {
+        if (result.isConfirmed) {
+        try {
+          this.loaderService.requestStarted();
+          this.searchRequestReturn.BankGuaranteeID = BankGuaranteeID;
+          this.searchRequestReturn.status = 2;
+
+          await this.campusPostService.ITIPlanningBankGuaranteeReturn(this.searchRequestReturn)
+            .then((data: any) => {
+              data = JSON.parse(JSON.stringify(data));
+              this.State = data['State'];
+              this.Message = data['Message'];
+              this.ErrorMessage = data['ErrorMessage'];
+              this.BankGuaranteeList = data['Data'];
+
+              this.getTradetblListList();
+
+              console.log('Bank Gaurentee ===>', this.BankGuaranteeList)
+            }, error => console.error(error));
+
+        } catch (ex) {
+          console.log(ex);
+        }
+        finally {
+          setTimeout(() => {
+            this.loaderService.requestEnded();
+          }, 200);
+        }
+      }
+    });
   }
 
 
@@ -284,6 +322,8 @@ export class reportitibankguaranteeComponent {
       }, 200);
     }
   }
+
+  
   onBankNameChange(value: string) {
     this.searchRequest.BankName = value;
     this.searchRequest.BankGuaranteeNumber = value;

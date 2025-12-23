@@ -14,5 +14,8 @@ export class WebsiteSettingDataModel extends RequestBaseModel{
     public IPAddress: string = ''
     public DepartmentSubID: number = 0;
     public DUTC_ID?: number = 0
-    public IsActive?: boolean = false
+  public IsActive?: boolean = false
+
+  public LevelID?: number = 0
+  public CreatedByRoleID?: number = 0
 }

@@ -14,6 +14,7 @@ import { CommonFunctionService } from '../../../../Services/CommonFunction/commo
 import { ITIPlanningBankGuarantee } from '../../../../Models/ItiPlanningDataModel';
 import { ITIsService } from '../../../../Services/ITIs/itis.service';
 import { AppsettingService } from '../../../../Common/appsetting.service';
+import { ItiCollegesSearchModel } from '../../../../Models/CommonMasterDataModel';
 @Component({
   selector: 'app-list-iti-bankguarantee',
   templateUrl: './list-iti-bankguarantee.component.html',
@@ -49,6 +50,9 @@ export class listitibankguaranteeComponent {
   public AllInTableSelect: boolean = false;
   public totalInTableRecord: number = 0;
   public sSOLoginDataModel = new SSOLoginDataModel();
+  InstituteMasterDDL: any[] = [];
+  public CollegeMasterList: any = [];
+  public collegeRequest = new ItiCollegesSearchModel();
   //end table feature default
   constructor(
     private commonMasterService: CommonFunctionService,
@@ -72,8 +76,8 @@ export class listitibankguaranteeComponent {
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
 
 
-    this.getTradetblListList()
-
+    this.getbankguaranteeList()
+    await this.ddlITIColleges();
     //this.GetTradeTypesList();
   }
 
@@ -96,7 +100,7 @@ export class listitibankguaranteeComponent {
     }
   }
 
-  async getTradetblListList() {
+  async getbankguaranteeList() {
     
     try {
       this.loaderService.requestStarted();
@@ -128,13 +132,15 @@ export class listitibankguaranteeComponent {
 
   onCancel(): void {
     
-    
+    this.searchRequest.status = 0
+    this.searchRequest.dayWise = 0
+    this.searchRequest.CollageId = 0
   }
 
   onResetCancel(): void
   {
     this.onCancel();
-    this.getTradetblListList();
+    this.getbankguaranteeList();
   }
 
   onEdit(Id: number): void {
@@ -165,7 +171,7 @@ export class listitibankguaranteeComponent {
                 if (this.State = EnumStatus.Success) {
                   this.toastr.success(this.Message)
                   //reload
-                  this.getTradetblListList();
+                  this.getbankguaranteeList();
                 }
                 else {
                   this.toastr.error(this.ErrorMessage)
@@ -302,7 +308,53 @@ export class listitibankguaranteeComponent {
   onBankNameChange(value: string) {
     this.searchRequest.BankName = value;
     this.searchRequest.BankGuaranteeNumber = value;
-    this.getTradetblListList();
+    this.getbankguaranteeList();
+  }
+
+  GetStaff_InstituteWise() {
+    this.searchRequest.CollageId = this.sSOLoginDataModel.InstituteID;
+    this.commonMasterService.ITIGetStaff_InstituteWise(this.searchRequest).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      debugger;
+      this.InstituteMasterDDL = data.Data;
+      //this.ExaminerDDL = [{ StaffID: 1, Name: 'Staff 1', SSOID: 'Staff1' },{ StaffID: 2, Name: 'Staff 2', SSOID: 'Staff2' },{ StaffID: 3, Name: 'Staff 3', SSOID: 'Staff3' }];
+    })
+  }
+
+
+  GovtITICollege_DistrictWise(ID: any) {
+    debugger
+    this.InstituteMasterDDL = []
+    this.searchRequest.CollageId = this.sSOLoginDataModel.InstituteID;
+    this.commonMasterService.GovtITICollege_DistrictWise(ID, this.sSOLoginDataModel.EndTermID).then((data: any) => {
+      data = JSON.parse(JSON.stringify(data));
+      this.InstituteMasterDDL = data.Data;
+      console.log("this.InstituteMasterDDL", this.InstituteMasterDDL)
+    })
+  }
+
+  async ddlITIColleges() {
+    try {
+
+      this.loaderService.requestStarted();
+      this.collegeRequest.action = "_getDataITIcollege";
+      this.collegeRequest.DistrictID = 0;
+      this.collegeRequest.ManagementTypeID = 0;
+      await this.commonMasterService.ItiCollegesGetAllData(this.collegeRequest)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CollegeMasterList = data['Data'];
+          console.log('College Master List', this.CollegeMasterList)
+        }, error => console.error(error));
+    }
+    catch (Ex) {
+      console.log(Ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 }

@@ -183,6 +183,7 @@
                  class="form-input"
                  formControlName="voucherdate"
                  [(ngModel)]="request.voucherdate"
+                 [max]="todayDate"
                   />
 
           <div *ngIf="isSubmitted && _AddItemsRequestFormGroup.voucherdate.errors" class="text-danger">
@@ -316,11 +317,11 @@
         </div>
 
         <!-- <div *ngIf="request.ItemType==2"class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> -->
-            <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> 
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12 mb-3"> 
           <label class="block">IsConsumable </label>
           <label class="inline-flex items-center cursor-pointer toggleCheckBox Active statusActiveInActive">
             <input class="sr-only peer" type="checkbox" id="Active" formControlName="IsConsume"
-                   [(ngModel)]="request.IsConsume" [checked]="request.IsConsume">
+                   [(ngModel)]="request.IsConsume" [checked]="request.IsConsume" readonly>
             <span class="toggleIcon">
               <span class="toggleTitle"></span>
             </span>

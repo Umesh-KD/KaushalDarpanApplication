@@ -6,6 +6,8 @@ import { listitibankguaranteeComponent } from './list-iti-bankguarantee.componen
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoaderModule } from '../../../Shared/loader/loader.module';
 import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.module';
+
+import { NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 @NgModule({
   declarations: [
     listitibankguaranteeComponent
@@ -17,6 +19,7 @@ import { TableSearchFilterModule } from '../../../../Pipes/table-search-filter.m
     LoaderModule,
     ReactiveFormsModule,
     TableSearchFilterModule
+    , NgSelectModule, NgLabelTemplateDirective, NgOptionTemplateDirective, NgSelectComponent
   ]
 })
 export class listitibankguaranteeModule { }

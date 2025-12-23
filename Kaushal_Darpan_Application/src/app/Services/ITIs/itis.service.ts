@@ -5,7 +5,7 @@ import { AppsettingService } from '../../Common/appsetting.service';
 import { ITIsDataModels, ITIsSearchModel } from '../../Models/ITIsDataModels';
 import { ITITradeSearchModel } from '../../Models/ITITradeDataModels';
 import { ItiReportDataModel } from '../../Models/ITI/ItiReportDataModel';
-import { ITI_PlanningCollegesModel, ITIPlanningBankGuarantee, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
+import { ITI_PlanningCollegesModel, ITIPlanningBankGuarantee, ITIPlanningBankGuaranteeReturn, ItiVerificationModel } from '../../Models/ItiPlanningDataModel';
 import { bterCollegeSearchModel, ItiCollegeModel, ITICollegeSearchModel } from '../../Models/ITI/ITIStudentMeritInfoDataModel';
 import { ItiPlanningSearchModel } from '../../Models/SSOLoginDataModel';
 
@@ -244,6 +244,14 @@ export class ITIsService {
   public async ITIPlanningBankGuaranteeGetByID(Id: number) {
 
     return await this.http.get(this.APIUrl + "/ITIPlanningBankGuaranteeGetByID/" + Id + "/", this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+  public async ITIPlanningBankGuaranteeReturn(searchRequestReturn: ITIPlanningBankGuaranteeReturn) {
+    var body = JSON.stringify(searchRequestReturn);
+    return await this.http.post(`${this.APIUrl}/ITIPlanningBankGuaranteeReturn`, body, this.headersOptions)
       .pipe(
         catchError(this.handleErrorObservable)
       ).toPromise();
