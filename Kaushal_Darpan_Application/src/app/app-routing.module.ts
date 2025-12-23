@@ -1494,6 +1494,7 @@ const routes: Routes = [
       { path: 'update-enrollresponse-bulkexcel', loadChildren: () => import('./Views/ITI/update-enrollresponse-bulkexcel/update-enrollresponse-bulkexcel.module').then(m => m.UpdateEnrollResponseBulkExcelModule), title: 'Update EnrollResponse BulkExcel'},
       { path: 'update-student-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/update-student-qualification/update-student-qualification.module').then(m => m.UpdateStudentQualificationModule), title: 'update student additional qualification' },
       { path: 'student-additional-qualification', loadChildren: () => import('./Views/ITI/AdditionalDetails/student-additional-qualification/student-additional-qualification.module').then(m => m.StudentAdditionalQualiModule), title: 'student additional qualification' },
+      { path: 'duplicate-doc', loadChildren: () => import('./Views/duplicate-document/duplicate-document.module').then(m => m.DuplicateDocumentModule), title: 'Duplicate Document' },
      
 
       { path: 'update-studentdetails', loadChildren: () => import('./Views/update-student-details/update-student-details.module').then(m => m.UpdateStudentDetailModule), title: 'update Student Details' },

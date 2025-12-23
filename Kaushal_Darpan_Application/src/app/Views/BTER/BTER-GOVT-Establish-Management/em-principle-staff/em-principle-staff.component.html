@@ -918,20 +918,28 @@
                 </div>
               </div>
 
-              <div>
+              <!-- <div>
                 <label class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection <span class="StarMarking">*</span></label>
-                <!-- <select class="form-select " name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory"
-            [(ngModel)]="approveRequest.SelectionCategory">
-      <option value="0">Choose Option</option>
-      <option *ngFor="let item of InstituteMasterDDLList" [value]="item.InstituteID">{{item.InstituteName}}</option>
-    </select> -->
-
-                <input class="form-input" placeholder="Higher Education Institute" name="SelectionCategory" id="SelectionCategory"
+                <input class="form-input" placeholder="Select Category" name="SelectionCategory" id="SelectionCategory"
                        formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" />
                 <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SelectionCategory.errors" class="text-danger">
                   <p *ngIf="_StaffMasterFormGroup.SelectionCategory.errors.required">
                     <i aria-hidden="true"></i>This field is
                     required .!
+                  </p>
+                </div>
+              </div> -->
+
+              
+              <div>
+                <label for="SelectionCategory" class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection<span class="StarMarking">*</span></label>
+                <select class="form-select" name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" >
+                  <option value="0">Choose Option</option>
+                  <option *ngFor="let row of CategoryList" [value]="row.CasteCategoryID">{{row.CasteCategoryName}}</option>
+                </select>
+                <div *ngIf="isApproveSubmitted&&_StaffMasterFormGroup.SelectionCategory.errors" class="text-danger">
+                  <p *ngIf="!_StaffMasterFormGroup.SelectionCategory.errors.DropdownValidators">
+                    <i aria-hidden="true"></i>This field is required .!
                   </p>
                 </div>
               </div>
