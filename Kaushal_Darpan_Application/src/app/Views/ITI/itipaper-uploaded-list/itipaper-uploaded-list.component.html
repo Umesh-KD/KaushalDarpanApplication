@@ -112,7 +112,7 @@
             <td mat-cell *matCellDef="let element">
               <div class="flex align-center actionBtns w-auto ">
 
-                <a href="javascript:void(0)" title="View" (click)="ViewCenterDetail(MyModel_ViewCenterDtls,element.PaperUploadID)"><i class="ti ti-eye"></i></a>
+                <!--<a href="javascript:void(0)" title="View" (click)="ViewCenterDetail(MyModel_ViewCenterDtls,element.PaperUploadID)"><i class="ti ti-eye"></i></a>-->
                 <a href="javascript:void(0)" title="View" (click)="ViewCenterDetail(MyModel_ViewCenterDtls,element.PaperUploadID)"><i class="ti ti-eye"></i></a>
                 <a href="javascript:void(0)" title="Download Center Detail" (click)="DownloadCenterDtlsInExcel(element.PaperUploadID)"><i class="fa fa-download"></i></a>
                 <!--<button class="btn text-success btn-sm ">Download</button>-->
@@ -185,6 +185,9 @@
     <div class="card">
       <div class="card-header flex justify-between  items-center">
         <b><i class="fa fa-plus"></i> Center Detail</b>
+        <button type="button" class="btn btn-primary" style="margin-left: 625px;" title="Export Center Detail" (click)="exportToExcelCenterDetail()">
+          <i class="fa fa-download"></i> Download
+        </button>
         <button class="btn bg-info text-white" (click)="CloseModalPopup()"><i class="ti ti-x"></i></button>
       </div>
       <div class="card-body">
@@ -214,8 +217,8 @@
                   <td align="center">{{row.CenterSuperIntendenctName}}</td>
                   <td align="left">{{row.MobileNo}}</td>
                   <!--<td align="center" class="text-success">
-                    <input type="checkbox" [checked]="row.IsDownload" disabled />
-                  </td>-->
+        <input type="checkbox" [checked]="row.IsDownload" disabled />
+      </td>-->
                   <td align="center">
                     <i [ngClass]="row.IsDownload ? 'text-success fa fa-check' : 'text-danger fa fa-remove'"></i>
                   </td>

@@ -63,6 +63,7 @@ export class ExamPaperDownloadComponent
         if (data.Data.length > 0) {
           this.CenterWisePaperList = data.Data;
           this.loaderService.requestEnded();
+          console.log('Center Wise Paper List ===>', this.CenterWisePaperList);
         }
         else
         {

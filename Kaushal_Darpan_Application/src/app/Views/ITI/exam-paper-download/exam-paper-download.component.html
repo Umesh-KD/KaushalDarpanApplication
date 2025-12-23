@@ -72,6 +72,7 @@
                 <th class="text-left">Semester/Year</th>
                 <th class="text-left">Center Name</th>
                 <th class="text-left">Paper Download Date & Time</th>
+                <th class="text-left">Password</th>
                 <th class="text-left">Download Paper</th>
               </tr>
             </thead>
@@ -86,6 +87,7 @@
                     <td>{{item.TradeName }}</td>
                     <td>{{item.SemesterName }}</td>
                     <td>{{item.CenterName }}</td>
+                    <td>{{item.Password}}</td>
                     <td>{{item.PaperDate }}</td>
                     <td>
                       <div class="flex align-center justify-center actionBtns w-auto" style="width:auto !important">
@@ -100,14 +102,14 @@
 
 
                   <!--<tr >
-                    <td colspan="4"><em>No professors assigned</em></td>
-                  </tr>-->
+          <td colspan="4"><em>No professors assigned</em></td>
+        </tr>-->
                 </ng-container>
               </ng-container>
 
               <ng-template #noData>
                 <tr>
-                  <td colspan="7">No data available.</td>
+                  <td colspan="8">No data available.</td>
                 </tr>
               </ng-template>
 

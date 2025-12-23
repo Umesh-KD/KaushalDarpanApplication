@@ -37,4 +37,12 @@ export class Home2Service {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+
+  public async GetDynamicUploadContentApprenticeship(searchRequest: DynamicUploadContentListsModal) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetDynamicUploadContentApprenticeship`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
