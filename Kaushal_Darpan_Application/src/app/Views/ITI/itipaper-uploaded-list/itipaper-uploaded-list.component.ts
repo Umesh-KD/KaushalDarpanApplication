@@ -53,7 +53,7 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
   sSOLoginDataModel!: any;
   startDate = new Date();
   searchRequestPaper = new RequestBaseModel()
-  displayedColumns: string[] = ['SrNo', 'ExamName', 'StreamName', 'SemesterName', 'PaperDate', 'CenterCode'];
+  displayedColumns: string[] = ['SrNo', 'ExamName', 'StreamName',  'PaperCode', 'SemesterName', 'PaperDate', 'CenterCode'];
   dataSource = new MatTableDataSource<PaperUploadInterface>([]);
   filterForm: FormGroup | undefined;
   instituteId: any;
@@ -404,15 +404,19 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  DeletePaperUpload(PaperUploadID: number) {
-    this.swal.Confirmation("Are You sure to delete file?", async (result: any) => {
-      if (result.isConfirmed) {
+  DeletePaperUpload(PaperUploadID: number)
+  {
+    this.swal.Confirmation("Are You sure to delete file?", async (result: any) =>
+    {
+      if (result.isConfirmed)
+      {
         let obj =
         {
           Action: "_DeleteUploadedPapers",
           PaperUploadID: PaperUploadID
         };
-        try {
+        try
+        {
           await this.apiService.DeletePaperUpload(obj).then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             if (data.State == EnumStatus.Success) {
@@ -422,7 +426,6 @@ export class ITIPaperUploadedListComponent implements OnInit, AfterViewInit {
             else {
               this.toastr.error('someting went wrong');
             }
-
           });
         } catch (error) {
           console.error(error);
