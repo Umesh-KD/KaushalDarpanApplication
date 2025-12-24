@@ -115,7 +115,6 @@ export class ITIBankGuaranteeComponent implements OnInit {
   async saveData() {
     debugger;
     this.isSubmitted = true;
-
     if (this.bankGuarantee.invalid) {
       return;
     }

@@ -297,7 +297,11 @@ debugger;
 
   toggleAll(event: any) {
     const checked = event.target.checked;
-    this.ItemMasterList.forEach((item: any) => item.Selected = checked);
+    this.ItemMasterList.forEach((item: any) => {
+      if(item.InvStatus !== 1) {
+        item.Selected = checked
+      }
+    });
   }
 
   openReturnModal(content: any) {
@@ -324,6 +328,7 @@ debugger;
     this.modalService.open(content, { size: 'lg', backdrop: 'static' });
   }
   async confirmReturnNew() {
+    debugger
     const selectedItems = this.ItemMasterList.filter((x: any) => x.Selected);
 
     if (selectedItems.length === 0) {
@@ -424,7 +429,7 @@ debugger;
       await this.itiInventoryService.GetAllinventoryIssueHistoryNew(Searchrequest)
         .then((data: any) => {
           if (data.State == EnumStatus.Success) {
-            this.ItemMasterList = data.Data || [];
+            this.ItemMasterList1 = data.Data || [];
           } else {
             console.error("No data returned from API");
           }

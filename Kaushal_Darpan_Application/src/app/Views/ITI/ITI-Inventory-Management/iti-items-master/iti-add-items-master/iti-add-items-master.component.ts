@@ -74,7 +74,8 @@ export class ITIAddItemsMasterComponent {
       voucherdate: ['', Validators.required],
       abbreviation: [''],
     });
-
+    // this.AddItemsRequestFormGroup.controls.get("IsConsume").disable();
+    this.AddItemsRequestFormGroup.get('IsConsume')?.disable();
     this.ItemId = Number(this.activatedRoute.snapshot.queryParamMap.get('id')?.toString());
     this.sSOLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     this.UserID = this.sSOLoginDataModel.UserID;

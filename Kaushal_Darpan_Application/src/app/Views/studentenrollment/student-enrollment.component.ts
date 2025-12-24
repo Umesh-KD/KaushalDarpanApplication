@@ -920,7 +920,7 @@ export class StudentEnrollmentComponent {
       }
       // eligible for enrollment
       if (this.request.StudentFilterStatusId == enumExamStudentStatus.EnrolledFeePaid) {
-        if (this.status == enumExamStudentStatus.EligibleForEnrollment && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng)) {
+        if (this.status == enumExamStudentStatus.EligibleForEnrollment && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge || this.sSOLoginDataModel.RoleID == EnumRole.ExaminationIncharge_NonEng || this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng)) {
           await this.SaveEligibleForEnrollment();
         }
         else {

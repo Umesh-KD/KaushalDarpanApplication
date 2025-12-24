@@ -56,6 +56,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   isAllSelected = false;   // new addded 18062025
+
+  CenterListPaperWise: any[] = [];
   constructor(private fb: FormBuilder,
     private toastr: ToastrService,
     private menuService: MenuService,
@@ -81,14 +83,14 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       PaperUploadID: [null],
       ExamID: ['', Validators.required],
       ExamName: ['', Validators.required],
-      StreamID: ['', Validators.required],
+      StreamID: ['0'],
       SemesterID: ['', Validators.required],
       Password: ['', [
         Validators.required,
         Validators.minLength(8),
         Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')
       ]],
-      PaperID: [''],
+      PaperID: ['0', Validators.required],
      /* FinancialYearID: ['', Validators.required],*/
       FileName: [''],
       PaperDate: ['', Validators.required],
@@ -121,11 +123,6 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     //    this.StreamMasterList = data['Data'];
     //  }, (error: any) => console.error(error));
 
-    this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0)
-      .then((data: any) => {
-        data = JSON.parse(JSON.stringify(data));
-        this.StreamMasterList = data['Data'];
-      }, (error: any) => console.error(error));
 
 
     
@@ -239,6 +236,44 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     }
   }
 
+  async GetTradeWisePapers(StreamID:number)
+  {
+
+    if (StreamID == 0)
+    {
+      this.examForm.get('PaperID')?.reset('0');
+    }
+
+    const formData = this.examForm.value as PaperUpload;
+    let obj =
+    {
+      Action:"_getPapersList",
+      EndTermID: this.sSOLoginDataModel.EndTermID,
+      DepartmentID: this.sSOLoginDataModel.DepartmentID,
+      Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+      SemesterID: formData.SemesterID,
+      TradeID: StreamID,
+
+    };
+    try
+    {
+      await this.apiService.GetTradeWisePapers(obj).then((data: any) =>
+      {
+        data = JSON.parse(JSON.stringify(data));
+        this.PaperMasterList = data.Data;
+        console.log("Ravi Data",this.PaperMasterList)
+      
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+
+
+
+
   onPaginationChange(event: PageEvent): void {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1;
@@ -252,6 +287,11 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     const sSOLoginDataModel = JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     if (this.examForm.valid) {
       const formData = this.examForm.value as PaperUpload;
+
+      debugger;
+      const Pcode = this.PaperMasterList
+        .find(f => f.PaperID == formData.PaperID)
+        ?.SubjectCode;
 
       let obj = {
         PaperUploadID: formData.PaperUploadID,
@@ -272,7 +312,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         EndTermID: sSOLoginDataModel.EndTermID,
         IPAddress: sSOLoginDataModel.IpPhone,
         CourseType: sSOLoginDataModel.Eng_NonEng,
-        ModifyDate: new Date()
+        ModifyDate: new Date(),
+        PaperCode: Pcode
       };
 
       try {
@@ -443,7 +484,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
     const selected = event.value;
     const allIDs = this.CenterMasterList.map((item: { ID: any; }) => item.ID);
 
-    if (selected.includes('ALL')) {
+    if (selected.includes('ALL'))
+    {
       if (this.isAllSelected) {
         // Unselect all
         this.examForm.get('CenterCode')?.setValue([]);
@@ -457,8 +499,112 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
       this.isAllSelected = selected.length === allIDs.length;
     }
   }
-  togglePassword() {
+  togglePassword()
+  {
     this.showPassword = !this.showPassword;
   }
+
+  getSteram(event: any): void
+  {
+    this.getTradeList(event);
+  }
+
+
+  getTradeList(semesterid: number) {
+    this.commonMasterService.ItiTrade(this.sSOLoginDataModel.DepartmentID, this.sSOLoginDataModel.Eng_NonEng, this.sSOLoginDataModel.EndTermID, 0, 0, semesterid)
+      .then((data: any) => {
+        data = JSON.parse(JSON.stringify(data));
+        this.StreamMasterList = data['Data'];
+      }, (error: any) => console.error(error));
+
+  }
+
+
+
+  seletDeselectCenters(event: any) {
+
+    debugger;
+    this.isAllSelected = false;
+    const selected = event;
+    const allIDs = this.CenterMasterList.map((item: { ID: any; }) => item.ID);
+    if (selected=="0")
+    {
+      if (this.isAllSelected) {
+        // Unselect all
+        this.examForm.get('CenterCode')?.setValue([]);
+        this.isAllSelected = false;
+      }
+      else
+      {
+        // Select all
+        this.examForm.get('CenterCode')?.setValue(allIDs);
+        this.isAllSelected = true;
+      }
+    } else
+    {
+      this.examForm.get('CenterCode')?.setValue([]);
+      this.isAllSelected = false;
+    }
+  }
+
+
+  async GetCenterDatapaperWise(PaperID: number)
+  {
+    const formData = this.examForm.value as PaperUpload;
+    debugger;
+
+    if (formData.StreamID == 0) {
+      return;
+    }
+    if (PaperID > 0)
+    {
+
+      let obj =
+      {
+        Action: "_getCenterIdPaperWise",
+        EndTermID: this.sSOLoginDataModel.EndTermID,
+        DepartmentID: this.sSOLoginDataModel.DepartmentID,
+        Eng_NonEng: this.sSOLoginDataModel.Eng_NonEng,
+        SemesterID: formData.SemesterID,
+        PaperID: PaperID
+      };
+      try {
+        await this.apiService.GetTradeWisePapers(obj).then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.CenterListPaperWise = data.Data;
+          this.selectCenterAcordigntoPapers();
+
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    else
+    {
+      this.examForm.get('CenterCode')?.setValue([]);
+    }
+  }
+
+  selectCenterAcordigntoPapers()
+  {
+
+    debugger;
+    const allIDs = this.CenterListPaperWise.map((item: { CenterID: any; }) => item.CenterID);
+    if (allIDs.length>0)
+    {
+        this.examForm.get('CenterCode')?.setValue(allIDs);
+      
+    } else
+    {
+      this.examForm.get('CenterCode')?.setValue([]);
+
+    }
+
+  }
+
+
+
+
+
 
 }

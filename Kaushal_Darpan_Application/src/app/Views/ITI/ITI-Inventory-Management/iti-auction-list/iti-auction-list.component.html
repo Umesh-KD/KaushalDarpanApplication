@@ -61,11 +61,11 @@
       <table class="table table-border w-full table-auto" cellpadding="5">
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
-            <th class="text-left">
+            <!-- <th class="text-left">
               <input type="checkbox"
                      [checked]="AllSelect"
                      (change)="checkUncheckAll($event.target.checked)">
-            </th>
+            </th> -->
             <th class="text-left">SR NO</th>
             <th class="text-left">Category</th>
             <th class="text-left">College Name</th>
@@ -81,18 +81,13 @@
         <!--{{ItemMasterList | json}}-->
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let idx = index;">
-            <td align="left">
-              <!--<input type="checkbox"
-         name="MarkCheck"
-         [(ngModel)]="item.Selected"
-
-         *ngIf="!(item.IsOption == '1' && item.AuctionStatus == '1')" />-->
+            <!-- <td align="left">
               <input type="checkbox"
                      name="MarkCheck"
                      [(ngModel)]="item.Selected"
                      (ngModelChange)="updateSelectedRows()"
                      *ngIf="!(item.IsOption == '1' && item.AuctionStatus == '1')" />
-            </td>
+            </td> -->
             <td align="left">{{idx+1}}</td>
             <td align="left">{{item.ItemCategoryName}}</td>
             <td align="left">{{item.CollegeName}}</td>
@@ -163,7 +158,7 @@
             Auction Date :
           </label>
           <input class="form-input" formControlName="txtAuctionDate" placeholder="Auction Date" type="date"
-                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [attr.min]="minDate">
+                 id="txtAuctionDate" [(ngModel)]="request.AuctionDate" [max]="minDate">
           <div *ngIf="isSubmitted&&_AuctionFormGroup.txtAuctionDate.errors" class="text-danger">
             <p *ngIf="_AuctionFormGroup.txtAuctionDate.errors.required"><i aria-hidden="true"></i> This field is required .!</p>
           </div>

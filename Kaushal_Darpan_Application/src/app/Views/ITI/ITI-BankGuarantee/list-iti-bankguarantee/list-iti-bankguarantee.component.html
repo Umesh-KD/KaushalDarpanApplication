@@ -26,19 +26,53 @@
 
 
 
-        <div>
+        <!--<div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Name:</label>
-          <input type="text" class="form-input" placeholder="Enter Bank Name"  [(ngModel)]="searchRequest.BankName" (ngModelChange)="onBankNameChange($event)">
+          <input type="text" class="form-input" placeholder="Enter Bank Name" [(ngModel)]="searchRequest.BankName" (ngModelChange)="onBankNameChange($event)">
         </div>
 
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">Bank Guarantee Number:</label>
           <input type="text" class="form-input" placeholder="Enter Bank Guarantee Number" [(ngModel)]="searchRequest.BankGuaranteeNumber">
-        </div>
-
+        </div>-->
 
         <div>
-          <button type="button" class="btn bg-info text-white mt-6" (click)="getTradetblListList()">Search</button>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            Status
+          </label>
+          <select class="form-select" [(ngModel)]="searchRequest.status">
+            <option value="0">Pending</option>
+            <option value="1">Active</option>
+            <option value="2">Return</option>
+            
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1"> ITI College: </label>
+          <select class="form-select w-full" name="ddlCollegeID" [(ngModel)]="searchRequest.CollageId">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of CollegeMasterList" [value]="item.Id">
+              {{item.Name}}
+            </option>
+          </select>
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            date Wise:
+          </label>
+          <select class="form-select"
+                  [(ngModel)]="searchRequest.dayWise">
+            <option value="0">-- Select Day Wise --</option>
+            <option value="30">30 Day's</option>
+            <option value="15">15 Day's</option>
+            <option value="7">7 Day's</option>
+          </select>
+        </div>
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="getbankguaranteeList()">Search</button>
           <button type="button" class="btn bg-danger text-white mt-6" (click)="onResetCancel()">Reset</button>
         </div>
 
@@ -77,6 +111,7 @@
             <th class="text-center">#</th>
             <th class="text-center">Bank Guarantee Number</th>
             <th class="text-center">Bank Name</th>
+            <th class="text-center">College  Name</th>
             <th class="text-center">Date Of Issue</th>
             <th class="text-center">Maturity Date</th>
             <th class="text-center">Duration</th>
@@ -92,6 +127,7 @@
             <td class="text-center">{{(startInTableIndex+1)+idx}}</td>
             <td class="text-center">{{item.BankGuaranteeNumber}}</td>
             <td class="text-center">{{item.BankName}}</td>
+            <td class="text-center">{{item.CollageId}}</td>
             <td class="text-center">{{item.DateOfIssue}}</td>
             <td class="text-center">{{item.Maturitydate}}</td>
             <td class="text-center">{{item.Duration}}</td>

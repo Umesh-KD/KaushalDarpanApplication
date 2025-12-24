@@ -85,13 +85,15 @@ export class inventoryIssueHistorySearchModel {
   public serialNo: number = 0;
   public departmentID: number = 0;
   public ItemCategoryId: number = 0;
-  public ItemType: number = 0;
+  public ItemType: number = 2;
   public EquipmentsId: number = 0;
   public IssuedId: number = 0;
   public StreamID: number = 0;  
   public LabID? : number = 0;
   public ReturnStatus? : number = 2;
   public actionName? : string='';
+  public UserID? : number = 0;
+  public RoleID? : number = 0;
 }
 export class inventoryIssueHistoryITISearchModel {
   public InstituteID: number = 0;

@@ -1298,7 +1298,7 @@ export class PreExamStudentExaminationComponent {
       }
       // eligible for 
       if (this.request.StudentFilterStatusId == enumExamStudentStatus.ExaminationFeesPaid) {
-        if (this.status == enumExamStudentStatus.EligibleForExamination && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon)) {
+        if (this.status == enumExamStudentStatus.EligibleForExamination && (this.sSOLoginDataModel.RoleID == EnumRole.Principal || this.sSOLoginDataModel.RoleID == EnumRole.PrincipalNon || this.sSOLoginDataModel.RoleID == EnumRole.Registrar || this.sSOLoginDataModel.RoleID == EnumRole.Registrar_NonEng)) {
           await this.SaveEligibleForExamination();
         }
         else {

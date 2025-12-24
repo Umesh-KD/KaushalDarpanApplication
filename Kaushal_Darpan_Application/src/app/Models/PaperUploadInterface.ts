@@ -40,5 +40,7 @@ export interface PaperUploadInterface {
   FinancialYearName: string
   SemesterName: string
   StreamName: string
-  PaperType: string
+  PaperType: string,
+  PaperCode: string
+
 }

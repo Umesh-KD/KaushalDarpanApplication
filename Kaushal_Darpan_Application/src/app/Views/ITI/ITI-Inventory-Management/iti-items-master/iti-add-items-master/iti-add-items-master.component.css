@@ -1,0 +1,16 @@
+/* Ensure the checkbox is visually disabled and can't be interacted with */
+input[disabled] {
+  pointer-events: none; /* Disable all interaction */
+  opacity: 0.5; /* Make it appear grayed out */
+}
+
+/* Add a disabled cursor to the entire label to prevent clicks */
+label[for="Active"] {
+  cursor: not-allowed;
+}
+
+/* Adjust the toggle icon for disabled state */
+input[disabled] + .toggleIcon {
+  opacity: 0.5; /* Faded look */
+  pointer-events: none; /* Ensure no interaction with the toggle icon */
+}

@@ -18,8 +18,8 @@
 
     <div class="card-body p-5">
 
-      <div  class="mb-8">
-        <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
           <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
 
@@ -120,8 +120,25 @@
           <a *ngIf="ssoLoginDataModel.RoleID == 97 ||ssoLoginDataModel.RoleID == 212" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
         </div>
       </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." />
+        </div>
+      </div>
       <div class="overflow-x-auto mt-3">
-        
+
         <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <!-- First header row for group titles with colspan -->
@@ -177,6 +194,23 @@
             </tr>
           </tbody>
         </table>
+
+        <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+          <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                   [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+          </div>
+        </div>
+        <!--end pagination-->
+
+
       </div>
     </div>
 

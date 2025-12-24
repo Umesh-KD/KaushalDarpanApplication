@@ -70,6 +70,16 @@ export class ItiTradeService {
       ).toPromise();
   }
 
+
+  public async GetTradeWisePapers(searchRequest: any) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(`${this.APIUrl}/GetTradeWisePapers`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
+
+
   public async SavePaperUploadData(request: any) {
     var body = JSON.stringify(request);
 
@@ -119,4 +129,13 @@ export class ItiTradeService {
       ).toPromise();
   }
 
+
+
+  public async DeletePaperUpload(request: any) {
+    var body = JSON.stringify(request);
+    return await this.http.post(`${this.APIUrl}/DeletePaperUpload`, body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }

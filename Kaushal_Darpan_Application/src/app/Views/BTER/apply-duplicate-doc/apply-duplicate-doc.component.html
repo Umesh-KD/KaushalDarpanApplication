@@ -25,15 +25,11 @@
       <form [formGroup]="GrievanceFormGroup">
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div>
+          <!-- <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
               Document <span class="StarMarking">*</span>
             </label>
             <select class="form-select" [(ngModel)]="request.DocumentID" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
-              <!-- <select class="form-select" formControlName="ddlDocumentID" (change)="FeeAmount('DuplicateDocStudentWise')"> -->
-              <!-- <option value=0 selected>--Choose Option--</option>
-              <option value="1" selected>Marksheet</option>
-              <option value="2" selected>Migration</option> -->
                <option value=0>--Choose Option--</option>
               <option *ngFor="let item of DocumentTypeList" [value]="item.DocumentID">{{item.DocumentName}}</option>
             </select>
@@ -43,7 +39,22 @@
                 .!
               </p>
             </div>
-          </div>
+          </div> -->
+
+          <!-- [(ngModel)]="request.DocumentID" -->
+            <div >
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1"> Document <span class="StarMarking">*</span></label>
+              <select class="form-select"  formControlName="ddlDocumentID" [(ngModel)]="request.DocumentID" (change)="FeeAmount('DuplicateDocStudentWise')">
+                <option value="0">--Select--</option>
+                <option *ngFor="let item of DocumentTypeList1" [value]="item.DocumentID">{{item.DocumentName}}</option>
+              </select>
+              <div *ngIf="isSubmitted&&form.ddlDocumentID.errors" class="text-danger">
+                <p *ngIf="!form.ddlDocumentID.errors.DropdownValidators">
+                  <i aria-hidden="true"></i>This
+                  field is required .!
+                </p>
+              </div>
+            </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">Semester<span class="StarMarking">*</span></label>
@@ -68,7 +79,7 @@
               <!-- <select class="form-select" formControlName="ddlDepartmentID" (change)="ondepartmentChange()">  -->
               <option value=0 selected>--Choose Option--</option>
               <option value=1 selected>BTER</option>
-              <option value=2 selected>Nodel Center</option>
+              <option value=2 selected>Nodal Center</option>
             </select>
             <div *ngIf="isSubmitted&&form.ddlDepartmentID.errors" class="text-danger">
               <p *ngIf="!form.ddlDepartmentID.errors.DropdownValidators">
@@ -164,19 +175,23 @@
             <th class="text-left" style="width:100px">S.No</th>
             <th class="text-left">Student Name</th>
             <th class="text-left">Student ID</th>
-            <th class="text-left">Service ID</th>
+            <!-- <th class="text-left">Service ID</th> -->
             <th class="text-left">Fees Amount</th>
             <th class="text-left">Apply For</th>
+            <th class="text-left">Payment Status</th>
+            
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of PaymentDetailtList let idx=index;">
+          <!-- previously used this "PaymentDetailtList"   -->
+          <tr *ngFor="let item of DocumentTypeList let idx=index;">
             <td>{{idx+1}}</td>
             <td align="left">{{item.UserName}}</td>
-            <td align="left">{{item.StudentID}}</td>
-            <td align="left">{{item.ServiceID}}</td>
-            <td align="left">{{item.Amount}}</td>
-            <td align="left">{{item.FeeFor}}</td>
+            <td align="left">{{item.Student_Id}}</td>
+            <!-- <td align="left">{{item.ServiceID}}</td> -->
+            <td align="left">{{item.FeeAmount}}</td>
+            <td align="left">{{item.Name}}</td>
+            <td align="left"> {{ item.paymentstatus === 0 ? 'Pending' : 'Success' }}</td>
           </tr>
         </tbody>
       </table>
