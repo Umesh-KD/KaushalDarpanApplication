@@ -200,7 +200,8 @@ export enum EnumRole {
   ITI_Placement_TPO =229,
   ITI_Placement_Admin=233,
   AdministrartiveStaff=235,
-  AdministrartiveStaff2=236
+  AdministrartiveStaff2 = 236,
+
 
 }
 

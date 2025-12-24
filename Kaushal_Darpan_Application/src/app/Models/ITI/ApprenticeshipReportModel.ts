@@ -23,6 +23,8 @@ export class ApprenticeshipReportEntity {
   public BeforeMonth: string = '';
   public FinancialYearID: number = 0;
   public MonthID: number = 0;
+  public ZoneID:number=0
+  public DistrictID:number=0
 }
 
 export class WorkshopProgressReportDataEntity
@@ -59,6 +61,10 @@ export interface ApprenticeshipEntry {
   Createdby: number;
   PKID: number,
   NumberOfRegistrationDoc: string;
+  TypeID: number,
+  FinnacialYearID: number,
+  Nameofapprentices:string
+
 }
 export interface ApprenticeshipSubmission {
   apprenticeshipEntries: ApprenticeshipEntry[];

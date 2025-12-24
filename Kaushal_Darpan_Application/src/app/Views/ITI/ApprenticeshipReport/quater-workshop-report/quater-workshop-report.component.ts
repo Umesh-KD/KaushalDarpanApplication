@@ -37,6 +37,7 @@ export class QuaterWorkshopReportComponent {
   isError: boolean = false;
   imageSrc: string | null = null;
   public FinYearList: any = [];
+  public _enumrole = EnumRole
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -80,15 +81,17 @@ export class QuaterWorkshopReportComponent {
       if (this.SSOLoginDataModel.RoleID != 97) {
         UserID = 0
         DistrictID = this.request.DistrictID
+
       } else {
-        UserID = this.SSOLoginDataModel.UserID
+        UserID = 0
         DistrictID = this.SSOLoginDataModel.DistrictID
+
       }
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
         RoleID: this.SSOLoginDataModel.RoleID,
-
+        ZoneID: this.request.ZoneID,
         Createdby: UserID,
         DistrictID: DistrictID,
         QuaterID: this.request.QuaterID,
@@ -167,15 +170,27 @@ export class QuaterWorkshopReportComponent {
 
   async GetDistrictMatserDDL() {
     try {
+      if (this.SSOLoginDataModel.RoleID != 97) {
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.DistrictLisrt = data['Data'];
-          console.log(this.DistrictLisrt)
-        }, (error: any) => console.error(error)
-        );
+
+        this.loaderService.requestStarted();
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+            console.log(this.DistrictLisrt)
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+            console.log(this.DistrictLisrt)
+          }, (error: any) => console.error(error)
+          );
+      }
     }
     catch (ex) {
       console.log(ex);
@@ -222,8 +237,9 @@ export class QuaterWorkshopReportComponent {
       await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
         .then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
-          this.request.ZoneID = data['Data'][0]['DivisionID'];
-          if (this.SSOLoginDataModel.RoleID = 100) {
+   
+          if (this.SSOLoginDataModel.RoleID == 100) {
+            this.request.ZoneID = data['Data'][0]['DivisionID'];
             this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
              this.GetDistrictMatserDDL()
           }

@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">PMNAM Mela Report List (Before/After)</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a class="text-sm font-medium text-slate-700" aria-current="page">PMNAM Mela Report List</a>
     </div>
@@ -27,13 +27,13 @@
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-        
+
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             वित्तीय वर्ष <span class="StarMarking">*</span>
           </label>
           <select [(ngModel)]="request.FinancialYearID"
-                  class="form-select" >
+                  class="form-select">
 
             <option [ngValue]="0">Choose Option</option>
             <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
@@ -67,6 +67,19 @@
           </select>
         </div>
 
+
+
+
+        <div *ngIf="SSOLoginDataModel.RoleID !=97">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+          <select [disabled]="SSOLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="request.ZoneID" (change)="GetDistrictMatserDDL()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+          </select>
+
+        </div>
         <div>
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">
             जिला <span class="StarMarking">*</span>
