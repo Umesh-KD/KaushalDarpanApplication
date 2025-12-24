@@ -39,6 +39,7 @@ export class PMNAMMelaReportBeforeAfterListComponent {
   startInTableIndex: number = 0;
   _Userid: number = 0;
   public FinYearList: any = [];
+  public ZoneList: any = [];
   formData: any = {
     FinancialYearID: 0  
   };
@@ -73,17 +74,75 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     else {
       this._Userid = this.SSOLoginDataModel.UserID
     }
-    await this.GetDistrictMatserDDL()
+ 
     await this.YearDropdownData('FinancialYear_IIP');
-
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
+    await this.GetDistrictMatserDDL()
     this.GetReportAllData();
+  }
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.SSOLoginDataModel.RoleID == 100) {
+            this.request.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.request.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 
   async GetReportAllData() {
     debugger;
     try {
-     // this.loaderService.requestStarted();
+      // this.loaderService.requestStarted();
+      if (this.SSOLoginDataModel.RoleID == 97) {
+        this.request.DistrictID = this.SSOLoginDataModel.DistrictID
+      }
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
         DepartmentID: this.SSOLoginDataModel.DepartmentID,
@@ -91,7 +150,8 @@ export class PMNAMMelaReportBeforeAfterListComponent {
         Createdby: this._Userid,
         DistrictID: this.request.DistrictID,
         FinancialYearID: this.request.FinancialYearID,
-        BeforeMonth: this.request.BeforeMonth || 0
+        BeforeMonth: this.request.BeforeMonth || 0,
+        ZoneID: this.request.ZoneID
       };
       await this.ApprenticeShipRPTService.GetPMNAM_BeforeAfterAllData(obj)
         .then((data: any) => {
@@ -121,15 +181,27 @@ export class PMNAMMelaReportBeforeAfterListComponent {
     
   async GetDistrictMatserDDL() {
     try {
+      if (this.SSOLoginDataModel.RoleID != 97) {
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('DistrictHindi')
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.DistrictList = data['Data'];
-          console.log('District List',this.DistrictList)
-        }, (error: any) => console.error(error)
-        );
+
+        this.loaderService.requestStarted();
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.request.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+            console.log(this.DistrictList)
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictList = data['Data'];
+            console.log(this.DistrictList)
+          }, (error: any) => console.error(error)
+          );
+      }
     }
     catch (ex) {
       console.log(ex);

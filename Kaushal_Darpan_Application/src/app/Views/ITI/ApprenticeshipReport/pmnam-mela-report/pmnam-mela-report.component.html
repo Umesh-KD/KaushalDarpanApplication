@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">PMNUM Mela Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/PMNAM-MelaReport" class="text-sm font-medium text-slate-700" aria-current="page">PMNUM Mela Report</a>
     </div>
@@ -28,13 +28,7 @@
 
 
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
+
 
 
           <div>
@@ -75,6 +69,29 @@
               <option value="12">दिसंबर</option>
             </select>
           </div>
+
+
+
+          <div *ngIf="ssoLoginDataModel.RoleID !=97">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+              <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+            </select>
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+
+
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
@@ -293,7 +310,7 @@
 
               <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                       for="provisionLetterDocumentreport">PNM मेला दस्तावेज़<span class="StarMarking">*</span></label>
+                       for="provisionLetterDocumentreport">PNM प्रावधिक पत्र<span class="StarMarking">*</span></label>
                 <div class="flex fileUploader">
                   <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                          id="provisionLetterDocumentreport" type="file" (change)="onFilechange($event,'provisionLetterDocureport')">

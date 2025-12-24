@@ -21,7 +21,7 @@
     <div class="mb-8">
       <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
         <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
-        <a *ngIf="SSOLoginDataModel.RoleID == 100" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
+        <a *ngIf="SSOLoginDataModel.RoleID==_enumrole.ITIZonalOfficer" (click)="GoToReportEntryPage()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>
       </div>
       <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
@@ -35,6 +35,7 @@
             <option [ngValue]="0">Choose Option</option>
             <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
                     [ngValue]="item.FinancialYearID">
+                   
               {{ item.FinancialYearName }}
             </option>
           </select>
@@ -55,9 +56,9 @@
 
         </div>
 
-        <div>
+        <div *ngIf="SSOLoginDataModel.RoleID !=97">
           <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
-          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.ZoneID" (change)="GetDistrictMatserDDL()">
+          <select [disabled]="SSOLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="request.ZoneID" (change)="GetDistrictMatserDDL()">
             <option value="0">Choose Option</option>
             <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
 
@@ -111,6 +112,7 @@
             <tr>
               <th class="text-left whitespace-nowrap">Sr. No</th>
               <th class="text-left">जिला</th>
+              <th class="text-left">AAA का नाम</th>
               <!--<th class="text-left"><span class="main-heading">भाग लेने वाले AAA का नाम</span></th>-->
               <th class="text-left">कार्यशाला की तिथि</th>
               <th class="text-left"><span class="main-heading">कार्यशाला मे दिये गये प्रजेंटेशन / जानक ारी का संक्षिप्त विवरण</span></th>
@@ -156,6 +158,7 @@
 
               <td align="left">{{idx+1}}</td>
               <td>{{row.DistrictName}}</td>
+              <td>{{row.AAAMemberNames}}</td>
               <!--<td>{{row.ParticipateName}}</td>-->
               <td class="whitespace-nowrap">{{row.WorkshopDateFormatted}}</td>
               <td><span>{{row.workshopdetail}}</span></td>

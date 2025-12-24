@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">Apprenticeship Registration List</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <a href="" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a class="text-sm font-medium text-slate-700" aria-current="page">Registration Process Report</a>
     </div>
@@ -16,6 +16,90 @@
 
 <div class="card">
   <div class="card-body p-5">
+
+
+
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
+        <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
+
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+
+
+
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            वित्तीय वर्ष <span class="StarMarking">*</span>
+          </label>
+          <select [(ngModel)]="FinancialYearID"
+                  class="form-select">
+
+            <option [ngValue]="0">Choose Option</option>
+            <option *ngFor="let item of FinYearList; trackBy: trackByFinancialYear"
+                    [ngValue]="item.FinancialYearID">
+              {{ item.FinancialYearName }}
+            </option>
+          </select>
+        </div>
+
+       
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+            आवृत्ति <span class="StarMarking">*</span>
+          </label>
+          <select class="form-select"
+                  id="MonthID"
+                  name="MonthID"
+                  [(ngModel)]="TypeID">
+            <option value="0">Choose Option</option>
+            <option value="1">Annualy</option>
+            <option value="2">Monthly</option>
+            <option value="3">Weekly</option>
+            <option value="4">Daily</option>
+
+          </select>
+        </div>
+
+        <div *ngIf="ssoLoginDataModel.RoleID !=97">
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+          <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="ZoneID" (change)="GetDistrictMatserDDL()">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+          </select>
+
+        </div>
+
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+          <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+            <option value="0">Choose Option</option>
+            <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+          </select>
+        </div>
+
+
+
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Cancel</button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+
+
+
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i>Apprenticeship Registration Report List </b>
 
@@ -49,16 +133,32 @@
         <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
           <tr>
             <th>Sr No</th>
+            <th class="text-left">आवृत्ति</th>
             <th *ngIf="ssoLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का नाम</th>
             <!--<th *ngIf="ssoLoginDataModel.RoleID != 97" class="text-left">नोडल अधिकारी का जिला</th>-->
             <th>संस्थान का नाम</th>
             <th>पोर्टल पर पंजीकरण करने की तिथि</th>
             <th>व्यवसाय का नाम</th>
             <th>व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या</th>
-            <th>पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या</th>
+            <th class="text-left"  colspan="2">पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या</th>
+
             <th>दस्तावेज़</th>
             <th>विविध विवरण</th>
             <th>कार्रवाई</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+       
+            <th class="text-left whitespace-nowrap">नाम</th>
+            <th class="text-left whitespace-nowrap">प्ष्संख्या</th>
+
+            <th></th>
+            <th></th>
+            <th></th>
           </tr>
 
         </thead>
@@ -66,12 +166,14 @@
           <tr *ngFor="let row of DataList | tableSearchFilter:Table_SearchText; let idx=index; ">
 
             <td align="left">{{idx+1}}</td>
+            <td align="left">{{row.TypeName}}</td>
             <td *ngIf="ssoLoginDataModel.RoleID != 97" align="left">{{row.NodalOfficerName}}</td>
             <!--<td *ngIf="ssoLoginDataModel.RoleID != 97" align="left">{{row.NodalOfficerDistrictName}}</td>-->
             <td>{{row.Nameofinstitute}}</td>
             <td>{{row.Dateofregistration}}</td>
             <td>{{row.BusinessName}}</td>
             <td>{{row.NumberofTrainees}}</td>
+            <td>{{row.Numberofapprentices}}</td>
             <td>{{row.Numberofapprentices}}</td>
             <td class="border px-4 py-2">
               <a target="_blank" href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.NumberOfRegistrationDoc}}">View</a>

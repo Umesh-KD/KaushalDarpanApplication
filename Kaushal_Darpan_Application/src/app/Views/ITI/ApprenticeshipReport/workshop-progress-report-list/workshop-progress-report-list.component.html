@@ -1,10 +1,10 @@
 <!-- Page Title Start -->
 <div class="flex items-center justify-between flex-wrap gap-2 mb-6">
   <div>
-    <h4 class="text-slate-900 text-lg font-medium mb-2">Workshop Progress Report List</h4>
+    <h4 class="text-slate-900 text-lg font-medium mb-2">Workshop Progress Report By AAA</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a href="" class="text-sm font-medium text-slate-700">ITI</a>
+      <a href="/dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a class="text-sm font-medium text-slate-700" aria-current="page">Progress Report List</a>
     </div>
@@ -31,14 +31,6 @@
         </div>
         <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने जिला  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
-            </select>
-
-          </div>
 
           <div>
             <label class="text-gray-800 text-sm font-medium inline-block mb-1">
@@ -78,6 +70,29 @@
               <option value="12">दिसंबर</option>
             </select>
           </div>
+
+
+          <div *ngIf="SSOLoginDataModel.RoleID !=97">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+            <select [disabled]="SSOLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="ZoneID" (change)="GetDistrictMatserDDL()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+            </select>
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">कार्यशाला आयोजन करने जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+            </select>
+
+          </div>
+
+
 
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetReportAllData()">Search</button>
