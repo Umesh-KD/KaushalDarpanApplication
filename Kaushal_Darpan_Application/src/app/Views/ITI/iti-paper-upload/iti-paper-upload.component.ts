@@ -291,7 +291,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         .find(f => f.PaperID == formData.PaperID)
         ?.SubjectCode;
 
-      let obj = {
+      let obj =
+      {
         PaperUploadID: formData.PaperUploadID,
         ExamID: formData.ExamID,
         ExamName: formData.ExamName,
@@ -301,7 +302,6 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         PaperID: formData.PaperID,
         FinancialYearID: sSOLoginDataModel.FinancialYearID,
         PaperDate: formData.PaperDate,
-
         FileName: this.documentDetails[0].FileName,
         Dis_FileName: this.documentDetails[0].Dis_FileName,
         CenterCode: formData.CenterCode.toString(),
@@ -314,8 +314,8 @@ export class ItiPaperUploadComponent implements OnInit, AfterViewInit {
         ModifyDate: new Date(),
         PaperCode: Pcode
       };
-
-      try {
+      try
+      {
         await this.apiService.SavePaperUploadData(obj).then((data: any) => {
           data = JSON.parse(JSON.stringify(data));
           if (data.Data == 1) {
