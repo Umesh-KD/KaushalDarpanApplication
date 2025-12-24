@@ -53,7 +53,7 @@ export class ApprenticeshipRegistrationReportList {
   public ZoneID:number=0
   public DistrictID:number=0
   public TypeID:number=0
-  _Userid :number =0
+
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
