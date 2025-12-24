@@ -247,7 +247,11 @@ export class ReturnLabItemComponent {
 
   toggleAll(event: any) {
     const checked = event.target.checked;
-    this.ItemMasterList.forEach((item: any) => item.Selected = checked);
+    this.ItemMasterList.forEach((item: any) => {
+      if(item.Status_LabIncharge == 0) {
+        item.Selected = checked
+      }
+    });
   }
 
   openReturnModal(content: any) {
@@ -289,8 +293,7 @@ export class ReturnLabItemComponent {
 
 
   async confirmReturn(arr: any) {
-    ;
-    this.Swal2.Confirmation("Are you sure you want to return the selected items?", async (result: any) => {
+    this.Swal2.Confirmation("Are you sure you want to Update selected items?", async (result: any) => {
       if (result.isConfirmed) {
         try {
           this.loaderService.requestStarted();

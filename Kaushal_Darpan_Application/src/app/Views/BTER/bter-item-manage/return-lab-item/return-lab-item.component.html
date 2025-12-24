@@ -67,18 +67,13 @@
     <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
       <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
       <div class="flex gap-2">
-        <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
+        <!-- <a href="javascript:void(0);" (click)="exportToExcel()" class="btn bg-info btn-sm text-white">
           <i class="ti ti-excel"></i> Export Excel
-        </a>
-        <!-- <a href="javascript:void(0);"
-           (click)="openReturnModal(returnModal)"
-           class="btn bg-warning btn-sm text-white">
-          <i class="ti ti-rotate-ccw"></i> Return
         </a> -->
         <a href="javascript:void(0);"
            (click)="confirmReturnNew()"
            class="btn bg-warning btn-sm text-white">
-          <i class="ti ti-rotate-ccw"></i> Return
+          <i class="ti ti-rotate-ccw"></i> Update Selected
         </a>
       </div>
     </div>
@@ -94,7 +89,7 @@
         </select>
 
         <!-- Text -->
-        <span class="StarMarking">Show only “Permanent” items</span>
+        <!-- <span class="StarMarking">Show only “Permanent” items</span> -->
       </div>
       <div class="">
           
@@ -117,41 +112,58 @@
             <th class="text-left">SNO</th>
             <th class="text-left">Name</th>
             <th class="text-left">Item</th>
-            <th class="text-left">Qty</th>
+            <th class="text-left">Item Type</th>
+            <th class="text-left">Issued Quantity</th>
+            <th class="text-left">Consumed Quantity</th>
+            <th class="text-left">Remaining Quantity</th>
             <th class="text-left">Issue Date</th>
-            <th class="text-left">Issue To</th>
+            <!-- <th class="text-left">Issue To</th> -->
             <th class="text-left">Equipment Working</th> 
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let item of ItemMasterList | tableSearchFilter:Table_SearchText; let i=index;">
             <td align="left">
-              <input type="checkbox" [(ngModel)]="item.Selected" />
+              <input type="checkbox" [(ngModel)]="item.Selected" *ngIf="item.Status_LabIncharge == 0" />
             </td>
             <td align="left">{{ i+1}}</td>
             <td align="left">{{ item.Name}}</td>
             <td align="left">{{ item.ItemCategoryName}}</td>
+            <td align="left">{{ item.ItemTypeName}}</td>
             <td align="left">{{ item.Quantity}}</td>
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
-            <td class="border p-2">
-               <div *ngIf="item.Selected; else notSelected">
-                  <label>Equipment Working: <span class="StarMarking">*</span></label>
-                  <!--{{ItemDetailsList[i]?.AuctionStatus |json}}-->
+            <td align="left">
+              <div>
+                <!-- <label>Equipment Working: <span class="StarMarking">*</span></label> -->
+                <input type="text" 
+                  class="form-input" 
+                  [(ngModel)]="item.UsedQuantity" 
+                  name="UsedQuantity" 
+                  placeholder="Enter Used Quantity"
+                  *ngIf="item.IsConsume == 1"
+                  required />
 
-                     <!-- [disabled]="ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1"  -->
-                        <!-- [ngClass]="{'bg-gray-200 cursor-not-allowed': ItemDetailsList[i]?.AuctionStatus === '1' || ItemDetailsList[i]?.AuctionStatus == 1}"> -->
-                  <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
+                <div *ngIf="isSubmitted && !item.UsedQuantity" class="text-danger">
+                  <p>Please select a status.</p>
+                </div>
+              </div>
+            </td>
+            <td align="left">{{ item.RemainingQunatity}}</td>
+            <td align="left">{{ item.IssueDate | date:'dd-MM-yyyy' }}</td>
+            <!-- <td align="left">{{ item.ReturnIssueDate | date:'dd-MM-yyyy' }}</td> -->
+            <td class="border p-2">
+              <div *ngIf="(item.Selected || item.Status_LabIncharge == 1) && item.IsConsume == 0; else notSelected">
+                <label>Equipment Working: <span class="StarMarking">*</span></label>
+                <select class="form-select" [(ngModel)]="item.equipmentStatus" name="equipmentStatus" required> 
                   <option value="1">Working</option>
                   <option value="2">Not Working</option>
-                  </select>
+                </select>
 
-                  <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
+                <div *ngIf="isSubmitted && !item.equipmentStatus" class="text-danger">
                   <p>Please select a status.</p>
-                  </div>
                 </div>
-                   
-              </td>
+              </div>
+                  
+            </td>
           </tr>
           <tr *ngIf="ItemMasterList?.length==0">
             <td colspan="10" class="text-center">

@@ -121,7 +121,6 @@ export class BterDuplicateCertificateComponent {
     this.ReportTypelist = [
       { ID: 1, Name: 'Duplicate Provisional Certificate', URL: 'duplicate-provisional-certificate' },
       { ID: 2, Name: 'Duplicate Marksheet', URL: 'duplicate-marksheet' },
-      
     ];
   }
 

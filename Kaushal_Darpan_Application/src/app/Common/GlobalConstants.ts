@@ -135,6 +135,7 @@ export enum EnumRole {
   ITIPrivateTeacher = 62,
   ITILabIncharge = 63,
   StoreKeeper = 201,
+  BTER_StoreIncharge = 238,
   ITIClerk = 66,
   ITIAccountant = 67,
   ITIAAO = 68,
@@ -181,7 +182,7 @@ export enum EnumRole {
   DTETrainingT4Scheme = 219,
   DTETrainingE4Planning = 220,
   BterStaff = 223,
-    Apprenticeship = 212,
+  Apprenticeship = 212,
 
   ITCell_Eng = 206,
   ITCell_NonEng = 210, 
