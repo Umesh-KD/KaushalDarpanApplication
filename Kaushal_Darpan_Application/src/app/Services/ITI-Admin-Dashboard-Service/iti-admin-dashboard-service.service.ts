@@ -75,4 +75,12 @@ export class ITIAdminDashboardServiceService {
         catchError(this.handleErrorObservable)
       ).toPromise();
   }
+  public async GetApprenticeshipDirectorNCVTData(searchRequest: ITIAdminDashboardSearchModel) {
+    var body = JSON.stringify(searchRequest);
+    return await this.http.post(this.APIUrl + "/GetApprenticeshipDirectorNCVTData", body, this.headersOptions)
+      .pipe(
+        catchError(this.handleErrorObservable)
+      ).toPromise();
+  }
 }
+

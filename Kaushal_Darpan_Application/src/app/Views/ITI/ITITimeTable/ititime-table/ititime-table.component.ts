@@ -203,7 +203,7 @@ export class ITITimeTableComponent {
     this.GetITITimeTableList();
   }
   async GetITITimeTableList() {
-    
+    debugger
     this.searchRequest.DepartmentID = this.sSOLoginDataModel.DepartmentID;
     this.searchRequest.EndTermID = this.sSOLoginDataModel.EndTermID
     this.searchRequest.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng

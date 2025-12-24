@@ -802,7 +802,7 @@
               </div>
 
               <div>
-                <label for="ddlGender" class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection<span class="StarMarking">*</span></label>
+                <label for="SelectionCategory" class="text-gray-800 text-sm font-medium inline-block mb-1">Category of Selection<span class="StarMarking">*</span></label>
                 <select class="form-select" name="SelectionCategory" id="SelectionCategory" formControlName="SelectionCategory" [(ngModel)]="approveRequest.SelectionCategory" >
                   <option value="0">Choose Option</option>
                   <option *ngFor="let row of CategoryList" [value]="row.CasteCategoryID">{{row.CasteCategoryName}}</option>

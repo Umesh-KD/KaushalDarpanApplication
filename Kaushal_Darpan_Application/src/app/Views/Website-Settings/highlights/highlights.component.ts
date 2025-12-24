@@ -7,7 +7,7 @@ import { SweetAlert2 } from '../../../Common/SweetAlert2';
 import { ToastrService } from 'ngx-toastr';
 import { WebsiteSettingDataModel } from '../../../Models/BTER/WebsiteSettingsDataModel';
 import { WebsiteSettingsService } from '../../../Services/BTER/WebsiteSettings/website-settings.service';
-import { EnumDepartment, EnumStatus, EnumWS_DepartmentSub } from '../../../Common/GlobalConstants';
+import { EnumDepartment, EnumRole, EnumStatus, EnumWS_DepartmentSub } from '../../../Common/GlobalConstants';
 import { DropdownValidators } from '../../../Services/CustomValidators/custom-validators.service';
 import { RequestBaseModel } from '../../../Models/RequestBaseModel';
 import { AppsettingService } from '../../../Common/appsetting.service';
@@ -53,6 +53,15 @@ export class HighlightsComponent {
     this.todayDate = new Date().toISOString().substring(0, 16);
     this.GetDynamicUploadTypeDDL();
     this.GetAllData();
+    debugger
+    if (this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship || this.sSOLoginDataModel.RoleID == EnumRole.Apprenticeship) {
+      debugger
+
+      this.request.TypeID = 6
+      this.HighlightsFromGroup.get('TypeID')?.disable();
+    } else {
+      this.HighlightsFromGroup.get('TypeID')?.enable();
+    }
   }
 
   get _HighlightsFromGroup() { return this.HighlightsFromGroup.controls; }
@@ -66,6 +75,7 @@ export class HighlightsComponent {
   }
 
   async SaveData() {
+    
     this.isFormSubmitted = true;
     if(this.HighlightsFromGroup.invalid){
       this.toastr.error("Please Fill Required Fields")
@@ -77,6 +87,12 @@ export class HighlightsComponent {
     this.request.EndTermID = this.sSOLoginDataModel.EndTermID
     this.request.Eng_NonEng = this.sSOLoginDataModel.Eng_NonEng
     this.request.UserID = this.sSOLoginDataModel.UserID
+
+
+    this.request.LevelID = this.sSOLoginDataModel.LevelId
+    this.request.CreatedByRoleID = this.sSOLoginDataModel.RoleID
+
+
 
     try {
       this.loaderService.requestStarted();
@@ -100,7 +116,7 @@ export class HighlightsComponent {
     }
     console.log("request",this.request)
   }
-
+    
   async GetDynamicUploadTypeDDL() {
 
     try {
@@ -177,7 +193,7 @@ export class HighlightsComponent {
   }
 
   async GetAllData() {
-
+    
     try {
       this.loaderService.requestStarted();
       this.request.EndTermID = this.sSOLoginDataModel.EndTermID

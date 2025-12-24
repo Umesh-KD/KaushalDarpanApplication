@@ -460,6 +460,12 @@ export class NodalWorkshopReportComponent {
                 this.request.DisWorkshopPdf = data['Data'][0]["Dis_FileName"];
                 this.request.WorkshopPdf = data['Data'][0]["FileName"];
               }
+
+              else if (Type == "Photo4") {
+                this.request.AdditionalDocument = data['Data'][0]["Dis_FileName"];
+                this.request.DisAdditionalDocument = data['Data'][0]["FileName"];
+              }
+
               //else if (Type == "Sign") {
               //  this.request.Dis_CompanyName = data['Data'][0]["Dis_FileName"];
               //  this.request.CompanyPhoto = data['Data'][0]["FileName"];

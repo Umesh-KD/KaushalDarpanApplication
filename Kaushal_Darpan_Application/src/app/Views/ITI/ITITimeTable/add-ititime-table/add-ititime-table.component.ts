@@ -175,7 +175,7 @@ export class AddITITimeTableComponent {
           .then((data: any) => {
             data = JSON.parse(JSON.stringify(data));
             this.ExamShiftList = data['Data'];
-            console.log("this.ExamShiftList", this.ExamShiftList)
+            console.log("this.ExamShiftList ==>", this.ExamShiftList)
           }, error => console.error(error));
       }
       catch (Ex) {

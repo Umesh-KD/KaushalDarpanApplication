@@ -58,8 +58,10 @@ export class WorkshopProgressReportListComponent {
   startInTableIndex: number = 0;
   DistrictID: number = 0;
   FinancialYearID: number = 0;
+  ZoneID: number = 0;
   _Userid: number = 0;
   public FinYearList: any = [];
+  public ZoneList: any = [];
   public BeforeMonth: number = 0;
   public searchRequest = new ITIApprenticeshipWorkshopModel();
 
@@ -72,16 +74,77 @@ export class WorkshopProgressReportListComponent {
       this._Userid = this.SSOLoginDataModel.UserID
     }
 
-    this.GetReportAllData();
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
     this.GetDistrictMatserDDL();
+
+    this.GetReportAllData();
     this.YearDropdownData('FinancialYear_IIP');
   }
 
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetZonalID(this.SSOLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.SSOLoginDataModel.RoleID == 100) {
+            this.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
   async GetReportAllData() {
-    debugger;
+ 
     try {
       // this.loaderService.requestStarted();
-      
+
+      if (this.SSOLoginDataModel.RoleID == 97) {
+        this.DistrictID = this.SSOLoginDataModel.DistrictID
+      }
 
       let obj = {
         EndTermID: this.SSOLoginDataModel.EndTermID,
@@ -90,7 +153,8 @@ export class WorkshopProgressReportListComponent {
         Createdby: this._Userid,
         SearchDistrictID: this.DistrictID,
         FinancialYearID: this.FinancialYearID,
-        BeforeMonth: this.BeforeMonth || 0
+        BeforeMonth: this.BeforeMonth || 0,
+        ZoneID: this.ZoneID
       };
 
 
@@ -233,18 +297,29 @@ export class WorkshopProgressReportListComponent {
     this.loaderService.requestEnded();
   }
 
-
   async GetDistrictMatserDDL() {
     try {
+      if (this.SSOLoginDataModel.RoleID != 97) {
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('DistrictHindi')
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.DistrictLisrt = data['Data'];
-          console.log(this.DistrictLisrt)
-        }, (error: any) => console.error(error)
-        );
+
+        this.loaderService.requestStarted();
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+      
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.SSOLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+     
+          }, (error: any) => console.error(error)
+          );
+      }
     }
     catch (ex) {
       console.log(ex);

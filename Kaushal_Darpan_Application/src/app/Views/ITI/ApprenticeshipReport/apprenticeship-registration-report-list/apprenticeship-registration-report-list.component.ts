@@ -28,13 +28,32 @@ import { ITIApprenticeshipModule } from '../../ITI-Apprenticeship/iti-apprentice
 export class ApprenticeshipRegistrationReportList {
   public TradeList: any = [];
   public DataList: any = [];
+  public FinYearList: any = [];
+  public DistrictLisrt: any = [];
+  public ZoneList: any = [];
   public Table_SearchText: string = '';
   isAllSelected = false;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   public ssoLoginDataModel = new SSOLoginDataModel();
   public searchRequest = new ITIApprenticeshipModule();
-  _Userid :number =0
+  _Userid: number = 0
+  startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public totalInTableRecord: number = 0;
+  public currentInTablePage: number = 1;
+  public paginatedInTableData: any[] = [];
+  pageInTableSize: string = '50';
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+
+  public totalInTablePage: number = 0;
+  public FinancialYearID:number=0
+  public MonthID:number=0
+  public ZoneID:number=0
+  public DistrictID:number=0
+  public TypeID:number=0
+
   constructor(
     private formBuilder: FormBuilder,
     private toastr: ToastrService,
@@ -63,8 +82,11 @@ export class ApprenticeshipRegistrationReportList {
     else {
       this._Userid = this.ssoLoginDataModel.UserID
     }
-
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
+    this.GetDistrictMatserDDL();
     this.GetReportAllData();
+    this.YearDropdownData('FinancialYear_IIP');
   }
 
 
@@ -72,12 +94,22 @@ export class ApprenticeshipRegistrationReportList {
     debugger;
     try {
       // this.loaderService.requestStarted();
+      if (this.ssoLoginDataModel.RoleID == 97) {
+        this.DistrictID = this.ssoLoginDataModel.DistrictID
+      }
 
       let obj = {
         EndTermID: this.ssoLoginDataModel.EndTermID,
         DepartmentID: this.ssoLoginDataModel.DepartmentID,
         RoleID: this.ssoLoginDataModel.RoleID,
-        Createdby: this._Userid
+        Createdby: this._Userid,
+        FinancialYearID: this.FinancialYearID,
+        MonthID: this.MonthID,
+        TypeID: this.TypeID,
+        ZoneID: this.ZoneID,
+        DistrictID: this.DistrictID,
+
+
       };
 
 
@@ -191,4 +223,161 @@ export class ApprenticeshipRegistrationReportList {
     return `file_${timestamp}.${extension}`;
   }
 
+
+  YearDropdownData(MasterCode: string): void {
+    this.CommonService.GetCommonMasterData(MasterCode).then((data: any) => {
+      this.FinYearList = data['Data'] || [];
+      console.log('Fin Year List:', this.FinYearList);
+    });
+  }
+  trackByFinancialYear(index: number, item: any): number {
+    return item.FinancialYearID;
+  }
+
+  async Reset() {
+
+  }
+
+  async GetDistrictMatserDDL() {
+    try {
+      if (this.ssoLoginDataModel.RoleID != 97) {
+
+
+        this.loaderService.requestStarted();
+        await this.CommonService.GetCommonMasterData('DistrictHindi', this.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.CommonService.GetCommonMasterData('NodalDistrict', this.ssoLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+
+          }, (error: any) => console.error(error)
+          );
+      }
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.CommonService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.CommonService.GetZonalID(this.ssoLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.ssoLoginDataModel.RoleID == 100) {
+            this.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.DataList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.DataList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
+  }
 }

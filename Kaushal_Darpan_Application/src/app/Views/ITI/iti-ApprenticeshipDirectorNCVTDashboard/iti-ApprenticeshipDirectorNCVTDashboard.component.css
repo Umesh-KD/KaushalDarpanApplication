@@ -1,0 +1,31 @@
+/* Card fixed height */
+.notification-card {
+  height: 400px; /* you can change */
+}
+
+/* 50% height scrolling area */
+.notification-scroll {
+  height: 50%;
+  overflow-y: auto;
+}
+
+/* Smooth auto scroll */
+.notification-scroll {
+  animation: scrollUp 15s linear infinite;
+}
+
+  /* Pause on hover */
+  .notification-scroll:hover {
+    animation-play-state: paused;
+  }
+
+/* Scroll animation */
+@keyframes scrollUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-50%);
+  }
+}

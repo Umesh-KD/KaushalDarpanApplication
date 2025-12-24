@@ -4,7 +4,7 @@
     <h4 class="text-slate-900 text-lg font-medium mb-2">PMNUM Mela Report</h4>
 
     <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
-      <a routerLink="/AdminDashboardITI" class="text-sm font-medium text-slate-700">Dashboard</a>
+      <a routerLink="/Dashboard" class="text-sm font-medium text-slate-700">Dashboard</a>
       <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
       <a routerLink="/PMNAM-MelaReport" class="text-sm font-medium text-slate-700" aria-current="page">PMNUM Mela Report</a>
     </div>
@@ -18,8 +18,8 @@
 
     <div class="card-body p-5">
 
-      <div  class="mb-8">
-        <div  class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <div class="mb-8">
+        <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
           <b class="text-1xl-5"><i class="ti ti-list"></i>Enter Search Criteria</b>
           <!--<a *ngIf="ssoLoginDataModel.RoleID == 97" (click)="OpenModalPopup(MyModel_ViewDetails)" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a>-->
 
@@ -28,13 +28,7 @@
 
 
 
-          <div>
-            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
-            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
-              <option value="0">Choose Option</option>
-              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
-            </select>
-          </div>
+
 
 
           <div>
@@ -76,6 +70,29 @@
             </select>
           </div>
 
+
+
+          <div *ngIf="ssoLoginDataModel.RoleID !=97">
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">क्षेत्र<span class="StarMarking">*</span></label>
+              <select [disabled]="ssoLoginDataModel.RoleID == 100" class="form-select" id="PlacementCompanyI1D" name="PlacementCompanyI1D" [(ngModel)]="obj.ZoneID" (change)="GetDistrictMatserDDL()">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of ZoneList" [value]="item.ID">{{item.Name}}</option>
+
+
+            </select>
+
+          </div>
+
+          <div>
+            <label class="text-gray-800 text-sm font-medium inline-block mb-1">जिला  <span class="StarMarking">*</span></label>
+            <select class="form-select" id="PlacementCompanyID" name="PlacementCompanyID" [(ngModel)]="DistrictID">
+              <option value="0">Choose Option</option>
+              <option *ngFor="let item of DistrictLisrt" [value]="item.ID">{{item.Name}}</option>
+            </select>
+          </div>
+
+
+
           <div>
             <button type="button" class="btn bg-info text-white mt-6" (click)="GetAllData()">Search</button>
             <button type="button" class="btn bg-danger text-white mt-6" (click)="Reset()">Cancel</button>
@@ -103,8 +120,25 @@
           <a *ngIf="ssoLoginDataModel.RoleID == 97 ||ssoLoginDataModel.RoleID == 212" (click)="DownloadPMNAMReport()" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Download Report</a>
         </div>
       </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div class="">
+          <select id="ddlConter" class="form-select  couterDropDown">
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+          </select>
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+        </div>
+        <div class="">
+          <input class="form-input" placeholder="Search..." />
+        </div>
+      </div>
       <div class="overflow-x-auto mt-3">
-        
+
         <table class="table table-border w-full table-auto" cellpadding="5">
           <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
             <!-- First header row for group titles with colspan -->
@@ -160,6 +194,23 @@
             </tr>
           </tbody>
         </table>
+
+        <!--pagination-->
+        <div class="p-3 paginationBox flex items-center justify-end w-full">
+          <span class="block">Record {{startInTableIndex+1}} - {{endInTableIndex}} of {{totalInTableRecord}}</span>
+          <div class="paginationBoxItems flex items-center">
+            <button (click)="firstInTablePage()" [disabled]="currentInTablePage==1">First</button>
+            <button (click)="previousInTablePage()" [disabled]="currentInTablePage==1">Previous</button>
+            <input type="number" min="1" max="{{totalInTablePage}}" title="Enter page no." [(ngModel)]="currentInTablePage"
+                   [disabled]="totalInTablePage==0" (change)="randamInTablePage()" />
+            <span class="text-nowrap">Page {{currentInTablePage}} of {{totalInTablePage}}</span>
+            <button (click)="nextInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Next</button>
+            <button (click)="lastInTablePage()" [disabled]="currentInTablePage==totalInTablePage || totalInTablePage==0">Last</button>
+          </div>
+        </div>
+        <!--end pagination-->
+
+
       </div>
     </div>
 
@@ -293,7 +344,7 @@
 
               <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                       for="provisionLetterDocumentreport">PNM मेला दस्तावेज़<span class="StarMarking">*</span></label>
+                       for="provisionLetterDocumentreport">PNM प्रावधिक पत्र<span class="StarMarking">*</span></label>
                 <div class="flex fileUploader">
                   <input class="block form-input w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                          id="provisionLetterDocumentreport" type="file" (change)="onFilechange($event,'provisionLetterDocureport')">

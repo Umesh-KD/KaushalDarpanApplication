@@ -63,8 +63,10 @@ export class ApprenticeshipRegistrationReport {
       BusinessName: [[], this.atLeastOneSelectedValidator()],
       NumberofTrainees: ['', Validators.required],
       Numberofapprentices: ['', Validators.required],
+      Nameofapprentices: ['', Validators.required],
       Remarks: ['', Validators.required],
-      NumberOfRegistrationDoc: ['', Validators.required]
+      NumberOfRegistrationDoc: ['', Validators.required],
+      TypeID: [0, [DropdownValidators]]
     });
     this.ssoLoginDataModel = await JSON.parse(String(localStorage.getItem('SSOLoginUser')));
     //this.GetTradeMatserDDL();
@@ -97,7 +99,7 @@ export class ApprenticeshipRegistrationReport {
       } else {
         // Select All
         this.isAllSelected = true;
-        const allIds = this.TradeList.map((item: { ID: any; }) => item.ID);
+        const allIds = this.TradeList.map((item: { Id: any; }) => item.Id);
         this.ApprenticeshipReportFormGroup.get('BusinessName')?.setValue(allIds);
        
       }
@@ -124,7 +126,7 @@ export class ApprenticeshipRegistrationReport {
     var InstituteID = this.ApprenticeshipReportFormGroup.value.Nameofinstitute;
     try {
       this.loaderService.requestStarted();
-      await this.CommonService.ItiTrade(DepartmentID, 0, this.ssoLoginDataModel.EndTermID, InstituteID)
+      await this.CommonService.GetITITradeList()
         .then((data: any) => {
           debugger
           data = JSON.parse(JSON.stringify(data));
@@ -146,7 +148,10 @@ export class ApprenticeshipRegistrationReport {
   async AddRow() {
     debugger;
     this.ApprenticeshipReportFormGroup.value.NumberOfRegistrationDoc = this.request.FileName;
-    if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 || this.ApprenticeshipReportFormGroup.value.BusinessName.length  == null)
+    if (this.ApprenticeshipReportFormGroup.value.BusinessName.length == 0 ||
+      this.ApprenticeshipReportFormGroup.value.BusinessName.length == null
+
+    )
     {
       this.toastr.warning("Please Fill All Required Fileds !");
       return;
@@ -239,7 +244,8 @@ export class ApprenticeshipRegistrationReport {
       DepartmentID: this.ssoLoginDataModel?.DepartmentID || 0,
       RoleID: this.ssoLoginDataModel?.RoleID || 0,
       Createdby: this.ssoLoginDataModel?.UserID || 0,
-      PKID: 0
+      PKID: 0,
+      FinnacialYearID: this.ssoLoginDataModel.FinancialYearID
     };
 
     const payload = {

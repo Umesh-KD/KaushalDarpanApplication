@@ -23,6 +23,30 @@
         <form [formGroup]="ApprenticeshipReportFormGroup">
 
           <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3">
+
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                आवृत्ति <span class="StarMarking">*</span>
+              </label>
+              <select class="form-select"
+                      id="MonthID"
+                      name="MonthID"
+                       formControlName="TypeID">
+                <option value="0">Choose Option</option>
+                <option value="1">Annualy</option>
+                <option value="2">Monthly</option>
+                <option value="3">Weekly</option>
+                <option value="4">Daily</option>
+
+              </select>
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('TypeID')?.hasError('DropdownValidators')
+                   && ApprenticeshipReportFormGroup.get('TypeID')?.touched">
+                This field is required
+              </div>
+            </div>
+
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1"> संस्थान का नाम : <span class="StarMarking">*</span></label>
               <!--<input type="text" formControlName="Nameofinstitute" class="form-input" placeholder="Name of Institute">-->
@@ -32,7 +56,8 @@
                 </option>
                 <option *ngFor="let row of CollegeList " [value]="row.ID">{{row.Name}}</option>
               </select>
-              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Nameofinstitute')?.hasError('required') && ApprenticeshipReportFormGroup.get('Nameofinstitute')?.touched">
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Nameofinstitute')?.hasError('required')
+                   && ApprenticeshipReportFormGroup.get('Nameofinstitute')?.touched">
                 This field is required
               </div>
             </div>
@@ -49,8 +74,8 @@
                 <mat-option *ngIf="TradeList?.length > 0" [value]="'ALL'">
                   {{ isAllSelected ? 'Unselect All' : 'Select All' }}
                 </mat-option>
-                <mat-option *ngFor="let item of TradeList" [value]="item.ID" [disabled]="isAllSelected">
-                  {{ item.Name}}
+                <mat-option *ngFor="let item of TradeList" [value]="item.Id" [disabled]="isAllSelected">
+                  {{ item.TradeName}}
                 </mat-option>
               </mat-select>
               <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('BusinessName')?.hasError('required') && ApprenticeshipReportFormGroup.get('BusinessName')?.touched">
@@ -60,18 +85,38 @@
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">व्यवसाय मे कुल प्रशिक्षणार्थियों की संख्या: <span class="StarMarking">*</span></label>
               <input type="number" class="form-input" placeholder="Total number of trainees in the trade" formControlName="NumberofTrainees">
-              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('NumberofTrainees')?.hasError('required') && ApprenticeshipReportFormGroup.get('NumberofTrainees')?.touched">
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('NumberofTrainees')?.hasError('required')
+                   && ApprenticeshipReportFormGroup.get('NumberofTrainees')?.touched">
                 This field is required
               </div>
             </div>
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
-                पोर्टल पर पंजीकृत किये शिक्षुओं का नाम व पंजीकरण संख्या: <span class="StarMarking">*</span>
+                पोर्टल पर पंजीकृत किये शिक्षुओं का नाम: <span class="StarMarking">*</span>
+              </label>
+
+              <div>
+                <input type="number" class="form-input" placeholder="Name of Registration" formControlName="Nameofapprentices">
+              </div>
+              <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Nameofapprentices')?.hasError('required')
+                   && ApprenticeshipReportFormGroup.get('Nameofapprentices')?.touched">
+                This field is required
+              </div>
+            </div>
+
+            <div>
+              <label class="text-gray-800 text-sm font-medium inline-block mb-1">
+                पोर्टल पर पंजीकृत किये शिक्षुओं का पंजीकरण संख्या: <span class="StarMarking">*</span>
               </label>
               <div>
                 <input type="number" class="form-input" placeholder="Total number of Registration" formControlName="Numberofapprentices">
+                <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Numberofapprentices')?.hasError('required')
+                     && ApprenticeshipReportFormGroup.get('Numberofapprentices')?.touched">
+                  This field is required
+                </div>
               </div>
-              </div>
+            </div>
+
             <div>
               <label class="text-gray-800 text-sm font-medium inline-block mb-1">
                 Document: <span class="StarMarking">*</span>
@@ -88,9 +133,9 @@
                 <div *ngIf="this.request.FileName !=''" class="flex">
                   <a href="{{appsettingConfig.StaticFileRootPathURL + '/' + request.FileName}}" class="btn bg-primary text-white m-0" target="_blank"><i class="ti ti-eye"></i></a>
                   <!--<a href="javascript:void(0);" class="btn bg-danger text-white m-0"
-         (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
-        <i class="ti ti-trash"></i>
-      </a>-->
+           (click)="DeleteImage(request.CompanyPhoto,'Photo')" *ngIf="this.request.CompanyPhoto !=''">
+          <i class="ti ti-trash"></i>
+        </a>-->
                 </div>
               </div>
               <div class="text-danger" *ngIf="ApprenticeshipReportFormGroup.get('Numberofapprentices')?.hasError('required') && ApprenticeshipReportFormGroup.get('Numberofapprentices')?.touched">
@@ -124,7 +169,8 @@
               <th class="border px-4 py-2">पंजीकरण तिथि</th>
               <th class="border px-4 py-2">व्यवसाय</th>
               <th class="border px-4 py-2">प्रशिक्षार्थियों की संख्या</th>
-              <th class="border px-4 py-2">शिक्षु विवरण</th>
+              <th class="border px-4 py-2">शिक्षुओं का नाम </th>
+              <th class="border px-4 py-2">पंजीकरण शिक्षु की संख्या </th>
               <th class="border px-4 py-2">दस्तावेज़</th>
               <th class="border px-4 py-2">विवरण</th>
               <th class="border px-4 py-2">कार्य</th>
@@ -140,6 +186,7 @@
                 </ul>
               </td>
               <td class="border px-4 py-2">{{ row.NumberofTrainees }}</td>
+              <td class="border px-4 py-2">{{ row.Nameofapprentices }}</td>
               <td class="border px-4 py-2">{{ row.Numberofapprentices }}</td>
               <td class="border px-4 py-2">
               <a target="_blank" href="{{ appsettingConfig.StaticFileRootPathURL + '/' + row.NumberOfRegistrationDoc}}">View</a></td>

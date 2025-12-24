@@ -1,0 +1,128 @@
+<!-- Page Title Start -->
+
+<div class="flex items-center justify-between flex-wrap gap-2 mb-6">
+  <div>
+    <h4 class="text-slate-900 text-lg font-medium mb-2"> Duplicate Document</h4>
+
+    <div class="md:flex hidden items-center gap-3 text-sm font-semibold">
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700"> Duplicate Document</a>
+      <i class="material-symbols-rounded text-xl flex-shrink-0 text-slate-500">chevron_right</i>
+      <a href="javascript:void(0);" class="text-sm font-medium text-slate-700" aria-current="page">Duplicate Document List</a>
+    </div>
+  </div>
+</div>
+<!-- Page Title End -->
+
+
+<div class="card">
+  <div class="card-body p-5">
+    <div class="mb-8">
+      <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+        <b class="text-1xl-5"><i class="ti ti-search"></i> Enter Search Criteria</b>
+        <!-- <a [routerLink]="'/AddCompany'"  [queryParams]="{key:1}" class="btn bg-success btn-sm text-white"><i class="ti ti-plus"></i>Add New</a> -->
+      </div>
+      <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+        <div>
+          <label class="text-gray-800 text-sm font-medium inline-block mb-1">Search by Name</label>   
+          <input type="text" class="form-input" placeholder="Name" id="Name" 
+            [(ngModel)]="searchRequest.Name"
+            (keyup.enter)="GetDuplicateDocInstituteWise(1)">
+        </div>
+        <div>
+          <button type="button" class="btn bg-info text-white mt-6" (click)="GetDuplicateDocInstituteWise(1)">Search</button>
+          <button type="button" class="btn bg-danger text-white mt-6" (click)="ClearSearchData()">
+            <i class="ti ti-refresh"></i>
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-between flex-wrap items-center mb-3 p-3 py-2 bg-light">
+      <b class="text-1xl-5"><i class="ti ti-list"></i> Search Results</b>
+      <a href="javascript:void(0);" class="btn bg-info btn-sm text-white" (click)="exportToExcel()"><i class="ti ti-download"></i> Download</a>
+    </div>
+    <div class="grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-3">
+      <div class="">
+        <!-- [(ngModel)]="pageSize" -->
+        <select id="ddlConter" class="form-select  couterDropDown" [(ngModel)]="pageSize" (change)="GetDuplicateDocInstituteWise(1)">
+          <option value="50">50</option>
+          <option value="100">100</option>
+          <option value="500">500</option>
+          <option value="1000">1000</option>
+        </select>
+      </div>
+      <div class=""></div>
+      <div class=""></div>
+      <!-- <div class="">
+        <input class="form-input" placeholder="Search....." [(ngModel)]="Table_SearchText" />
+      </div> -->
+    </div>
+
+    <div class="overflow-auto mt-3">
+      <table class="table table-border w-full" cellpadding="5">
+        <thead class="bg-light/40 border-b border-gray-100 dark:bg-light/5 dark:border-b-gray-700 h-10">
+          <tr>
+            <th>Sr. No.</th>
+            <!-- <th class="text-left" style="width:100px">S.No</th> -->
+            <th class="text-left">Student Name</th>
+            <th class="text-left">Student ID</th>
+            <!-- <th class="text-left">Service ID</th> -->
+            <th class="text-left">Fees Amount</th>
+            <th class="text-left">Apply For</th>
+            <th class="text-left">Payment Status</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of StudentList  | tableSearchFilter:Table_SearchText;let idx=index;  ">
+            <td>{{idx+1}}</td>
+            <td align="left">{{item.UserName}}</td>
+            <td align="left">{{item.Student_Id}}</td>
+            <!-- <td align="left">{{item.ServiceID}}</td> -->
+            <td align="left">{{item.FeeAmount}}</td>
+            <td align="left">{{item.Name}}</td>
+            <td align="left"> {{ item.paymentstatus === 0 ? 'Pending' : 'Success' }}</td>
+            <!-- <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.StateRegNumber}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.Name}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.FatherGuardianName}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.DateOfBirth | date:'yyyy-MM-dd'}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.UIDNumber}}</td>
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">{{item.ErrorDescription}}</td> -->
+            <td class="lg:whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+            
+              @if(item.paymentstatus==0)
+              {
+              <p class="text-center text-warning"><b>Payment Is Pending</b></p>
+              }
+              @else
+              {
+              <div class="flex align-center justify-center actionBtns w-auto" style="witdh:auto !important">
+                <!-- <a [routerLink]="'/EditStudentCorrection'" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a> -->
+                <a [routerLink]="" [queryParams]="{ID:item.StudentID, key:1}" title="Edit"><i class="ti ti-pencil"></i></a>
+              </div>
+              } 
+            </td> 
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <!--pagination-->
+    <div class="p-3 paginationBox flex items-center justify-end w-full">
+      <span class="block">
+        Record {{ (pageNo - 1) * pageSize +  1 }} - {{ (pageNo - 1) * pageSize +  StudentList?.length }} of {{StudentList[0]?.TotalRecords}}
+      </span>
+      <div class="paginationBoxItems flex items-center">
+        <button (click)="GetDuplicateDocInstituteWise(1)" [disabled]="pageNo==1">First</button>
+        <button (click)="previousData()" [disabled]="pageNo==1">Previous</button>
+        <input type="number" min="1" max="100" title="Enter page no." [(ngModel)]="pageNo"
+               [disabled]="StudentList[0]?.TotalRecords==0" (change)="GetDuplicateDocInstituteWise(pageNo)" />
+        <span class="text-nowrap">Page {{pageNo}} of {{TotalPages}}</span>
+        <button (click)="nextData()">Next</button>
+        <button (click)="GetDuplicateDocInstituteWise(TotalPages)" [disabled]="pageNo==TotalPages || TotalPages==0">Last</button>
+      </div>
+    </div>
+
+    <!--end pagination-->
+  </div>
+</div>
+<!-- end row -->

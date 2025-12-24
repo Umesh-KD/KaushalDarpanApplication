@@ -41,7 +41,17 @@ export class PmnamMelaReportComponent {
   public Message: any = [];
   public ErrorMessage: any = [];
   public FinYearList: any = [];
+  startInTableIndex: number = 0;
+  public endInTableIndex: number = 0;
+  public totalInTableRecord: number = 0;
+  public currentInTablePage: number = 1;
+  public paginatedInTableData: any[] = [];
+  pageInTableSize: string = '50';
+  public sortInTableColumn: string = '';
+  public sortInTableDirection: string = 'asc';
+  public ZoneList: any = [];
 
+  public totalInTablePage: number = 0;
 
   constructor(
     private modalService: NgbModal,
@@ -64,9 +74,67 @@ export class PmnamMelaReportComponent {
       this.GetReportDatabyID(parseInt(Editid));
       console.log(Editid);
     }
-    this.GetAllData();
+
+
+    await this.GetDivisMatserDDL()
+    await this.GetzonalID()
     this.GetDistrictMatserDDL();
+    this.GetAllData();
     this.YearDropdownData('FinancialYear_IIP');
+  }
+
+
+
+
+  async GetDivisMatserDDL() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetCommonMasterData('ZoneHindi')
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+          this.ZoneList = data['Data'];
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
+  }
+
+
+
+  async GetzonalID() {
+    try {
+
+      this.loaderService.requestStarted();
+      await this.commonMasterService.GetZonalID(this.ssoLoginDataModel.UserID)
+        .then((data: any) => {
+          data = JSON.parse(JSON.stringify(data));
+
+          if (this.ssoLoginDataModel.RoleID == 100) {
+            this.obj.ZoneID = data['Data'][0]['DivisionID'];
+            this.ZoneList = this.ZoneList.filter((e: any) => e.ID == this.obj.ZoneID)
+            this.GetDistrictMatserDDL()
+          }
+          console.log(this.ZoneList)
+        }, (error: any) => console.error(error)
+        );
+    }
+    catch (ex) {
+      console.log(ex);
+    }
+    finally {
+      setTimeout(() => {
+        this.loaderService.requestEnded();
+      }, 200);
+    }
   }
 
 
@@ -83,18 +151,29 @@ export class PmnamMelaReportComponent {
       }
     );
   }
-
   async GetDistrictMatserDDL() {
     try {
+      if (this.ssoLoginDataModel.RoleID != 97) {
 
-      this.loaderService.requestStarted();
-      await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.ssoLoginDataModel.InstituteID)
-        .then((data: any) => {
-          data = JSON.parse(JSON.stringify(data));
-          this.DistrictLisrt = data['Data'];
-          console.log(this.DistrictLisrt)
-        }, (error: any) => console.error(error)
-        );
+
+        this.loaderService.requestStarted();
+        await this.commonMasterService.GetCommonMasterData('DistrictHindi', this.obj.ZoneID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+            console.log(this.DistrictLisrt)
+          }, (error: any) => console.error(error)
+          );
+
+      } else {
+        await this.commonMasterService.GetCommonMasterData('NodalDistrict', this.ssoLoginDataModel.DistrictID)
+          .then((data: any) => {
+            data = JSON.parse(JSON.stringify(data));
+            this.DistrictLisrt = data['Data'];
+            console.log(this.DistrictLisrt)
+          }, (error: any) => console.error(error)
+          );
+      }
     }
     catch (ex) {
       console.log(ex);
@@ -119,7 +198,8 @@ export class PmnamMelaReportComponent {
   }
   CloseModalPopup(isNavigate: boolean) {
     this.modalService.dismissAll();
-      this.obj = new ApprenticeshipReportEntity();
+    this.obj = new ApprenticeshipReportEntity();
+     this.GetzonalID()
   }
   async SaveData() {
     debugger
@@ -141,7 +221,8 @@ export class PmnamMelaReportComponent {
     this.obj.PmnamMelaDate = this.obj.PmnamMelaDate;
     this.obj.FinancialYearID = this.obj.FinancialYearID;
     this.obj.BeforeMonth = this.obj.BeforeMonth;
-    debugger
+    this.obj.DistrictID = this.ssoLoginDataModel.DistrictID
+   
     try {
       this.loaderService.requestStarted();
       await this.ApprenticeReportServiceService.Save_PMNUM_Mela_Report(this.obj).then((data: any) => {
@@ -230,8 +311,9 @@ export class PmnamMelaReportComponent {
         UserID = this.ssoLoginDataModel.UserID
       }
 
+
       this.loaderService.requestStarted();
-      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID, this.FinancialYearID, this.BeforeMonth).then((data: any) => {
+      await this.ApprenticeReportServiceService.GetAllData(UserID, this.DistrictID, this.FinancialYearID, this.BeforeMonth, this.obj.ZoneID).then((data: any) => {
         data = JSON.parse(JSON.stringify(data));
         if (data.Data) {
           this.DataList = data.Data;
@@ -424,5 +506,58 @@ export class PmnamMelaReportComponent {
   }
   trackByFinancialYear(index: number, item: any): number {
     return item.FinancialYearID;
+  }
+  previousInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage--;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  nextInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage++;
+      this.updateInTablePaginatedData();
+    }
+  }
+  firstInTablePage() {
+    if (this.currentInTablePage > 1) {
+      this.currentInTablePage = 1;
+      this.updateInTablePaginatedData();
+    }
+  }
+  updateInTablePaginatedData() {
+    this.loaderService.requestStarted();
+    this.startInTableIndex = (this.currentInTablePage - 1) * parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.startInTableIndex + parseInt(this.pageInTableSize);
+    this.endInTableIndex = this.endInTableIndex > this.totalInTableRecord ? this.totalInTableRecord : this.endInTableIndex;
+    this.paginatedInTableData = [...this.DataList].slice(this.startInTableIndex, this.endInTableIndex);
+    this.loaderService.requestEnded();
+  }
+
+  randamInTablePage() {
+    if (this.currentInTablePage <= 0 || this.currentInTablePage > this.totalInTablePage) {
+      this.currentInTablePage = 1;
+    }
+    if (this.currentInTablePage > 0 && this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.updateInTablePaginatedData();
+    }
+  }
+  lastInTablePage() {
+    if (this.currentInTablePage < this.totalInTablePage && this.totalInTablePage > 0) {
+      this.currentInTablePage = this.totalInTablePage;
+      this.updateInTablePaginatedData();
+    }
+  }
+
+  sortInTableData(field: string) {
+    this.loaderService.requestStarted();
+    this.sortInTableDirection = this.sortInTableDirection == 'asc' ? 'desc' : 'asc';
+    this.paginatedInTableData = ([...this.DataList] as any[]).sort((a, b) => {
+      const comparison = a[field] < b[field] ? -1 : a[field] > b[field] ? 1 : 0;
+      return this.sortInTableDirection == 'asc' ? comparison : -comparison;
+    }).slice(this.startInTableIndex, this.endInTableIndex);
+    this.sortInTableColumn = field;
+    this.loaderService.requestEnded();
   }
 }
